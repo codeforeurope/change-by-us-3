@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+{% block validateSignup %}
+{% endblock %}
+{% endblock %}
+
+{% block topnav %}
+
+<div id="streamtop">
+    <div class="container-narrow">
+    <div class="container-narrow">
+        <div class="masthead">
+      <ul class="nav nav-pills pull-left">    
+        <form method="post" action="/stream/sort">
+          <input type="hidden" name="project_id" value="">
+          <li ><input class="btn btn-success" type="submit" id="header-text" value="View Dashboard"></li>
+        </form>
+      </ul>
+
+            <ul class="nav nav-pills pull-right">
+                <li><a href="/" id="header-text">View ChangeBy.us</a></li>
+                <li class="dropdown custom">
+                    <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
+                    <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                        <li><a role="menuitem" href="/project/create">Create a project</a></li>
+                        <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
+                        <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
+                        <li><a role="menuitem" href="/logout">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- <header class="jumbotron subhead"> -->
+
+  <div class="pagination-centered" id="main-container">
+  <h1><strong>Set Up Fundraising</strong></h1>
+  <br/>
+</div>
+
+  <h2>Tell us about your fundraising needs!</h2>
+<br/>
+
+<form method="POST" class="form-project" action="/project/review">
+
+  <label> For: {{name}}</label>
+  <br/>
+  <input type="hidden" name="account_id" value="{{account_id}}"></input>
+  <input type="hidden" name="project_id" value="{{project_id}}"></input>
+
+    <label>Goal: $</label>
+  <input type="text" maxlength="5" name="goal" id="serif" placeholder="$$$" class="input-xxlarge">
+
+  <label> What will the money be used for?</label>
+
+  <textarea rows="8" name="description" maxlength="600" id="serif" placeholder="We want to raise money for..." class="input-xxlarge"></textarea>
+
+  <br/>
+
+  <input type="submit" class="btn btn-large" value="Save and Continue">
+
+</form>
+
+
+{% endblock %}

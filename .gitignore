@@ -1,0 +1,40 @@
+
+# Eclipse and IDE files
+.metadata
+.project
+.pydevproject
+.settings
+
+# Vim files
+*.swp
+*.swo
+
+# Compiled files and hidden files
+.DS_Store
+*.pyc
+
+# Configuration files are generated from template
+# The generated files should not be in git
+rcfile.*
+!rcfile.sample
+*.cfg
+!*.tmpl
+
+# We don't want to commit the configuration file
+config.yml
+
+# Ignore mongo data files
+data/
+data.replica*/
+
+# But we want script data
+!script/data/
+
+# We don't need log files
+*.log
+*.log.*
+
+# Ignore merge-original files
+*.orig
+
+

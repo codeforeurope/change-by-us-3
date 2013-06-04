@@ -1,0 +1,9 @@
+# you will need to create a facebook app so users can sign in through facebook 
+# and post to facebook.  Take those credentials and put them here.
+
+# the facebook app will need to be made public (no sandbox mode) and have
+# publish_stream permissions
+
+CONSUMER_KEY: {{ CONSUMER_KEY }}
+CONSUMER_SECRET: {{ CONSUMER_SECRET }}
+

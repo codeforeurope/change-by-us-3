@@ -1,0 +1,90 @@
+# example: my_mongodb
+MONGODB_DB: {{ MONGODB_DB }}
+# example: mongohq.com
+MONGODB_HOST: {{ MONGODB_HOST }}
+# example: 10074
+MONGODB_PORT: {{ MONGODB_PORT }}
+# example: user
+MONGODB_USERNAME: {{ MONGODB_USERNAME }}
+# example: pass
+MONGODB_PASSWORD: {{ MONGODB_PASSWORD }}
+
+# If you enable Debug, errors will flow up to the UI and be visible.
+# If you disable Debug, the end user will always get a nice 500 server error
+# example: True
+DEBUG: {{ DEBUG }}
+
+# needed to make secure flask communication
+# example: flasksecret
+SECRET_KEY: {{ SECRET_KEY }}
+# keep this true it tracks when users logged in, etc
+# example: True
+SECURITY_TRACKABLE: {{ SECURITY_TRACKABLE }}
+# lets users recover their passwords through email
+# example: True
+SECURITY_RECOVERABLE: {{ SECURITY_RECOVERABLE }}
+# example: 'Reset your changeby.us password'
+SECURITY_EMAIL_SUBJECT_PASSWORD_RESET: {{ SECURITY_EMAIL_SUBJECT_PASSWORD_RESET }}
+# example: sha512_crypt
+SECURITY_PASSWORD_HASH: {{ SECURITY_PASSWORD_HASH }}
+# a salt for the passwords
+# example: customwebsitesalt
+SECURITY_PASSWORD_SALT: {{ SECURITY_PASSWORD_SALT }}
+# set to 'signup.html'
+SECURITY_LOGIN_USER_TEMPLATE: {{ SECURITY_LOGIN_USER_TEMPLATE }}
+
+# to allow flask security to send emails you will need to get an email account
+# and configure it with these settings
+# example: 'smtp.gmail.com'
+MAIL_SERVER: {{ MAIL_SERVER }}
+# example: 465
+MAIL_PORT: {{ MAIL_PORT }}
+# example: True
+MAIL_USE_SSL: {{ MAIL_USE_SSL }}
+# example: my.gmail.login
+MAIL_USERNAME: {{ MAIL_USERNAME }}
+# example: my.gmail.password
+MAIL_PASSWORD: {{ MAIL_PASSWORD }}
+
+# set this to false until we integrate flask WTF
+CSRF_ENABLED: {{ CSRF_ENABLED }}
+
+# max size for content (image) in bytes
+# 3145728 = 3 mb
+# example: 3145728
+MAX_CONTENT_LENGTH: {{ MAX_CONTENT_LENGTH }}
+# folder to store uploaded images
+# example: /home/user/site/content
+UPLOADED_PHOTOS_DEST: {{ UPLOADED_PHOTOS_DEST }}
+
+# note that this image is expected in different sizes.  
+# Check helpers.py for info.
+# example: 
+#    name: Honeycomb.jpg, expect: 1020.320.Honeycomb.jpg 160.50.Honeycomb.jpg   300.94.Honeycomb.jpg
+DEFAULT_PROJECT_IMAGE: {{ DEFAULT_PROJECT_IMAGE }}
+
+# flask logging settings
+LOGGING:
+    # example: 25
+    SIZE_MB: {{ LOGGING_SIZE_MB }}
+    # example: Debug
+    LEVEL: {{ LOGGING_LEVEL }}
+    # example: 10
+    ROTATIONS: {{ LOGGING_ROTATIONS }}
+    # example 'cbu.log'
+    NAME: {{ LOGGING_NAME }}
+
+# our encryption settings, uses a split key method to encrypt 
+# social platform keys.  This can be disabled
+ENCRYPTION:
+    # Once you turn Encryption on you should not turn it off
+    # example: True
+    ENABLED: {{ ENCRYPTION_ENABLED }}
+    # example: 'AES'
+    TYPE: '{{ ENCRYPTION_TYPE }}'
+    # example: '535bfgffsgsfgfgf'
+    LOCAL_KEY: {{ ENCRYPTION_LOCAL_KEY }}
+    # example: 'https://a-website.com/path/to/your/remote/key.txt'
+    REMOTE_KEY_URL: {{ ENCRYPTION_REMOTE_KEY_URL }}
+    # example: '53535999333'
+    IV: '{{ ENCRYPTION_IV }}'

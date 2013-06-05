@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+"""
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
 import os
 from flask import Blueprint, request, render_template, current_app, redirect, url_for, g
 from flask.ext.login import login_required, current_user

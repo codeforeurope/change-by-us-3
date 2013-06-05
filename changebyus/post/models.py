@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-    Change By Us Models
-    ~~~~~~~~~~~~~~~~~~~
-
-    :copyright (c) 2011 Local Projects. All rights reserved.
-
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from datetime import datetime
 from mongoengine import signals

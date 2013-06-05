@@ -6,6 +6,20 @@ Global type comments (what the cbu project is, what it's capable of) is being
  added as we move, so for now bear with what we have.
 
 
+## License
+
+The ChangeByUs codebase is open source, licensed under the Affero GNU Public License. Please see the LEGAL/ folder for more details.
+
+https://github.com/blossom/lettuce-webdriver-setup
+
+## Credits
+The following organizations (and individuals) contributed to ChangeByUs:
+* [Local Projects](http://localprojects.net) envisioned and designed Change By Us for the city of New York. 
+* [Knight Foundation](http://www.knightfoundation.org/) funding for this project 
+* [blossom / lettuce-webdriver-setup](https://github.com/blossom/lettuce-webdriver-setup) which was used as the basis for our auto-testing
+* [imwilsonxu / fbone](https://github.com/imwilsonxu/fbone) helped us provide a flask structure for this project
+
+
 ### requirements
 * virtualenv and virtualenvwrapper
 * python

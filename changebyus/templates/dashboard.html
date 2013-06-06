@@ -18,7 +18,17 @@
 
 				<div class="hidden-desktop visible-phone">
 					<div id="mobile-header">
+						<ul class="nav nav-pills pull-left">
+							<form method="post" action="/stream/sort">
+							<input type="hidden" name="project_id" value="">
+							<li ><input type="image" src="/static/img/dashboard.png" style="width: 30px; height: 30"></li>
+						</form>
+						</ul>
+
 						<ul class="nav nav-pills pull-right">
+							<li style="padding-top: 0px">
+								<a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
+							</li>
 							<li class="dropdown custom">
 								<a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
 								<ul id="divNewNotifications" class="dropdown-menu wide-drops">

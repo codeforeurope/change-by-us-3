@@ -50,6 +50,7 @@ def user_profile_view(display_name):
     projects = _get_user_involved_projects(user[0].id)
     email = user[0].email
     public_email = user[0].public_email
+    description = user[0].user_description
 
     return render_template('profile.html', 
         display_name = display_name, 
@@ -57,5 +58,6 @@ def user_profile_view(display_name):
         last_name=last_name,
         projects=projects,
         email=email,
-        public_email=public_email
+        public_email=public_email,
+        description=description
         )

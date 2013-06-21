@@ -87,7 +87,10 @@
     {% if public_email == True %}
     <a href="mailto:{{email}}"><i class="icon-envelope"></i></a>
     {% endif %}
+    <p> {{ description }} </p>
 </div>
+
+<br/>
 
 {% for project in projects %}
 

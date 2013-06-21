@@ -58,3 +58,6 @@ The following organizations (and individuals) contributed to ChangeByUs:
   This needs to be troubleshooted on a per-machine basis, for now.
 
   A few random google searches will provide lots of info as this is a common issue
+  I have had luck by installing libjpeg62 libjpeg62-dev before setting up the python
+  virtual environment (ie pillow install)
+

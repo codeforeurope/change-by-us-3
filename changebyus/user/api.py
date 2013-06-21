@@ -115,14 +115,20 @@ def update_email_route():
     else:
         public_email = False
 
-    _update_email(user_id=g.user.id, email=email, public_email=public_email)
+    if request.form.has_key('description'):
+        edit_user_description = request.form['description']
+    else:
+        edit_user_description = ''
+
+    _update_email(user_id=g.user.id, email=email, public_email=public_email, description=edit_user_description)
 
     return redirect(url_for('stream_view.projects_view'))
 
 
 def _update_email(user_id=None,
                   email=None,
-                  public_email=None):
+                  public_email=None,
+                  description=None):
     """
     ABOUT
         Method to update users email settings
@@ -147,6 +153,9 @@ def _update_email(user_id=None,
         user.email = email
     if public_email is not None:
         user.public_email = public_email
+    if description:
+        user.user_description = description
+
 
     user.save()
 
@@ -209,8 +218,6 @@ def _add_facebook(user_id=None,
     user.save()
 
     return True
-
-
 
 @user_api.route('/create', methods = ['POST'])
 def api_create_user():

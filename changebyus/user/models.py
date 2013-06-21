@@ -67,7 +67,6 @@ class User(db.Document, UserMixin, EntityMixin):
     twitter_token = db.StringField(max_length=400)
     twitter_token_secret = db.StringField(max_length=400)
 
-
     # trackable fields
     last_login_at = db.DateTimeField()
     current_login_at = db.DateTimeField()

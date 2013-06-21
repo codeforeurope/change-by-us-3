@@ -80,13 +80,17 @@ class User(db.Document, UserMixin, EntityMixin):
     first_name = db.StringField(max_length=20)
     last_name = db.StringField(max_length=20)
 
+    #visible profile information
+    user_description = db.StringField(max_length=600)
+
     def as_dict(self):
         return {'id': str(self.id),
                 'email': self.email,
                 'public_email': self.public_email,
                 'display_name': self.display_name,
                 'first_name': self.first_name,
-                'last_name': self.last_name}
+                'last_name': self.last_name,
+                'user_description': self.user_description}
                 
     @classmethod    
     def pre_save(cls, sender, document, **kwargs):

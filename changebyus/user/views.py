@@ -42,6 +42,9 @@ def user_profile_view(display_name):
     if user.count() == 0:
         abort(404)
 
+    if user.count() > 1:
+        abort(500)
+
     first_name = user[0].first_name
     last_name = user[0].last_name
     projects = _get_user_involved_projects(user[0].id)

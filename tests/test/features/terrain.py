@@ -20,7 +20,7 @@ with the same project, such as posting updates, creating fundraising and donatin
 @before.all
 def setup_browser():
 	if world.browser == None:
-		world.browser = webdriver.Chrome()
+		world.browser = webdriver.Firefox()
 
 	world.browser.maximize_window();
 

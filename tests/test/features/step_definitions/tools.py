@@ -10,8 +10,8 @@ def email_generator():
     email = string_generator(2) + '@' + timestamp_generator() + '.com'
     return email
 
-def password_generator():
-    return string_generator(5)
+def password_generator(size=5):
+    return string_generator(size)
 
 def timestamp_generator():
     tm = time.gmtime()

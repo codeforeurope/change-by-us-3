@@ -7,8 +7,8 @@ from datetime import datetime
 from mongoengine import signals
 
 from ..extensions import db
-from ..helpers import swap_null_id
-from ..models_common import EntityMixin
+from ..helpers.mongotools import swap_null_id
+from ..mixin import EntityMixin
 from ..project.models import Project
 from ..user.models import User
 

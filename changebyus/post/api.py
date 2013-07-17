@@ -13,7 +13,7 @@ from ..facebook.facebook import _post_user_facebook_feed
 from ..twitter.twitter import _post_user_twitter_update
 from ..bitly.api import _get_bitly_url
 
-from ..helpers import db_list_to_dict_list
+from ..helpers.mongotools import db_list_to_dict_list
 
 from ..stream.api import _get_user_stream
 

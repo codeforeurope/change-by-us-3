@@ -35,9 +35,12 @@ from .frontend import frontend_view
 from .encryption import assemble_key
 from .extensions import db, login_manager
 
-from helpers import Flask, get_shared_config
+from .helpers.configtools import get_shared_config, Flask
 
 from .stripe import stripe_view
+
+import changebyus
+# needed for our own context
 
 """
 ========
@@ -166,8 +169,8 @@ def configure_app(app):
     ABOUT
         This routine loads configuration files
     """
-    app.config.from_yaml(get_shared_config('config/config.yml'))
-    app.settings = yaml.load(file(get_shared_config('config/config.yml')))
+    app.config.from_yaml( get_shared_config(changebyus, 'config/config.yml') )
+    app.settings = yaml.load( file(get_shared_config(changebyus, 'config/config.yml')) )
 
 
 def configure_hook(app):

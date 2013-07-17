@@ -10,7 +10,7 @@ from mongoengine import signals
 from flask import current_app
 
 from ..extensions import db
-from ..helpers import swap_null_id
+from ..helpers.mongotools import swap_null_id
 from ..models_common import EntityMixin
 
 from ..encryption import aes_encrypt, aes_decrypt

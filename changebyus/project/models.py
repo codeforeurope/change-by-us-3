@@ -7,7 +7,7 @@ from datetime import datetime
 from mongoengine import signals
 
 from ..extensions import db
-from ..helpers import swap_null_id
+from ..helpers.mongotools import swap_null_id
 from ..models_common import EntityMixin
 from ..user.models import User
 from ..stripe.models import StripeAccount

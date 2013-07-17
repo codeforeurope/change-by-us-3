@@ -9,7 +9,7 @@ from flask.ext.login import login_required, current_user, login_user
 
 from ..user.api import User
 from ..user.api import _create_user, _add_facebook, _is_email_in_use
-from ..helpers import string_generator
+from ..helpers.stringtools import string_generator
 
 from flask import current_app, session
 from flask_oauth import OAuth

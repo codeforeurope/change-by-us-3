@@ -8,7 +8,8 @@ from flask.ext.login import login_required, current_user, login_user
 from flask.ext.security.utils import encrypt_password
 
 from .models import User
-from ..helpers import gen_ok, gen_blank_ok, db_list_to_dict_list, jsonify
+from ..helpers.flasktools import gen_ok, gen_blank_ok, jsonify
+from ..helpers.mongotools import db_list_to_dict_list 
 
 user_api = Blueprint('user_api', __name__, url_prefix='/api/user')
 

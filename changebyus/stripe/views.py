@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, redirect, url_for, g
 from flask import current_app, request, session, abort
 from flask.ext.login import login_required, current_user, login_user
 
-from ..helpers import gen_blank_ok
+from ..helpers.flasktools import gen_blank_ok
 
 from .api import _capture_event_details, _get_account_balance_percentage
 from .models import StripeAccount, StripeDonation, StripeLink

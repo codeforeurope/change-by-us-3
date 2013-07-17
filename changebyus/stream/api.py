@@ -9,7 +9,8 @@ from flask.ext.login import login_required, current_user, login_user
 from ..project.api import _get_user_involved_projects
 from ..post.models import ProjectPost
 
-from ..helpers import gen_ok, gen_blank_ok, db_list_to_dict_list
+from ..helpers.flasktools import gen_ok, gen_blank_ok
+from ..helpers.mongotools import db_list_to_dict_list
 
 stream_api = Blueprint('stream_api', __name__, url_prefix='/api/stream')
 

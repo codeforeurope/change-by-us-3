@@ -8,10 +8,9 @@ from flask.ext.login import login_required, current_user, logout_user, login_use
 
 from ..user.models import User
 from ..project.api import api_get_projects
-from ..helpers import gen_blank_ok
+from ..helpers.flasktools import gen_blank_ok
 
 frontend_view = Blueprint('frontend_view', __name__)
-
 
 """
 ==============

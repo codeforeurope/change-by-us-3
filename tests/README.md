@@ -29,7 +29,6 @@ Setting up a mac for testing:
   * do 'workon ...' for changing the environment
   * install requirements
       `pip install -r requirements.txt`  
-      `pip install requests` (currently missing from requirements.txt of cbu3)
   * run the python file, current commands you can pass:
       -b    sets the browser to use, options: chrome, firefox
       -t    tells the program to run specific features (e.g. -t CBU-A)

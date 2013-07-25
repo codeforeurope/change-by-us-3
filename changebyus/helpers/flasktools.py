@@ -18,14 +18,31 @@ def get_form(var):
         return None
 
 
-def jsonify(d, indent=None):
+def jsonify_response(input_dict, status_code = 200, status = 'OK', indent=None):
     """ 
     ABOUT
         Had to created our own jsonify method because the flask version
         defaults to indent=2 if not a XHTTP resquest.
+        Also this routine allows us to enforce a response structure of
+    INPUT
+        input_dictionary
+        status_code
+        error message
+        indent
+    OUTPUT
+        Flask response with structure
+        {
+            status_code = 200,
+            status = "OK",
+            ... [data]
+        }
     """
-    return current_app.response_class(json.dumps(d, indent=indent), 
-                                      mimetype='application/json')
+    resp =  current_app.response_class(json.dumps(d, indent=indent), 
+                                       mimetype='application/json')
+
+    resp.status = status
+    resp.status_code = status_code
+    return resp
 
 
 def gen_blank_ok():
@@ -37,21 +54,6 @@ def gen_blank_ok():
     OUTPUT
         Blank web response, status code 200
     """
-    resp = jsonify({})
-    resp.status_code = 200
 
-    return resp
-
-
-def gen_ok(resp):
-    """
-    ABOUT
-        Just injects a 200 code into an already existing response
-    INPUT
-        Flask response
-    OUTPUT
-        Same Flask response with 200 status code
-    """
-    resp.status_code = 200
-
+    resp = jsonify_response( { } )
     return resp

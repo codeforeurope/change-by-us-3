@@ -188,7 +188,11 @@ def api_view_project_users(pid):
     """
     users = _get_users_for_project(pid)
 
-    return users
+
+    # TODO test the crap out of this one
+
+    return gen_ok( jsonify( users ) )
+
 
 @project_api.route('/user/<id>/ownedprojects')
 @login_required

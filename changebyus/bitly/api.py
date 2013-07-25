@@ -60,3 +60,4 @@ def _get_bitly_url(original_url):
         return ''
 
     return json['data']['url']
+    

@@ -63,7 +63,7 @@ def api_get_project_posts(id):
     for p in posts:
         posts.append( p.as_dict())
 
-    return gen_ok( jsonify(posts=posts))
+    return gen_ok( jsonify(posts=posts) )
 
 
 

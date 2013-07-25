@@ -345,6 +345,9 @@ def api_edit_user(id):
     
     return gen_ok( jsonify( u.as_dict()))
 
+
+
+# TODO what is this doing here?
 @user_api.route('/encrypt', methods = ['POST', 'GET'])
 def api_encrypt():
     """

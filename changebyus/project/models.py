@@ -44,6 +44,7 @@ class Municipality(db.Document):
         return swap_null_id( self._data)
 
 
+# TODO this should not be here
 def gen_image_uris(image_uri):
     """
     Helper that will take a root image uri and create a named touple

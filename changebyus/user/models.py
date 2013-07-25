@@ -30,10 +30,7 @@ dependent on
 
 class Role(db.Document, RoleMixin):
     """
-    In the future we will have website administrators, multiple project owners,
-    etc.  These roles will let us identify who has what permission, and this
-    should eventually allow us to do permission checks using @decorators
-    rather than the in function checks we do now.
+    This allows us to define user roles, such as "Admin"
     """
     name = db.StringField(max_length=80, unique=True)
     description = db.StringField(max_length=255)
@@ -44,6 +41,11 @@ class User(db.Document, UserMixin, EntityMixin):
     This contains all there is to know about one of our users.
     Passwords are encrypted on save, and additionally we encrypt
     social tokens just to be secure.
+
+    We do not enforce uniqueness in code.  In our case this is 
+    because twitter accounts do not provide email, and we also
+    allow users to sign up via email w/ no social identity,
+    so there is no guarantee for any type of uniqueness in model.
     """
 
     # global account information, but alas twitter doesn't provide
@@ -83,6 +85,19 @@ class User(db.Document, UserMixin, EntityMixin):
     user_description = db.StringField(max_length=600)
 
     def as_dict(self):
+        data = self._data
+        # set the id
+        if data.has_key(None): delete data[None]
+        data['id'] = self.id
+        # delete the sensitive stuff
+        delete data['password']
+        delete data['facebook_token']
+        delete data['twitter_token']
+        delete data['twitter_token_secret']
+
+        return data
+
+
         return {'id': str(self.id),
                 'email': self.email,
                 'public_email': self.public_email,

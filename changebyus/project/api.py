@@ -123,6 +123,7 @@ def api_get_project(id):
     if p.count() > 0:
         return gen_ok( jsonify( p.as_dict()))
     else:
+        # TODO make this not_found routine, it makes sense
         return not_found()
 
 @project_api.route('/<id>/edit', methods = ['POST'])

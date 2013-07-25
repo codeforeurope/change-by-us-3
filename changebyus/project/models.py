@@ -28,23 +28,8 @@ For the most part it is pretty straight forward.
 
 """
 
-class Municipality(db.Document):
-    """
-    Municipality will eventually be turned into an object that represents 
-    a location in a geo-database.  This will help us normalize location
-    information and eventually search given a region, or coordinate and distance, etc
-    """
-    city = db.StringField(max_length=20)
-    state = db.StringField(max_length=20)
-    zipcode = db.StringField(max_length=20)
-    # service unique identifier
-    geo_identifier = db.StringField(max_length=100)
 
-    def as_dict(self):
-        return swap_null_id( self._data)
-
-
-# TODO this should not be here
+# TODO this should not be here, we need a cleaner solution to this
 def gen_image_uris(image_uri):
     """
     Helper that will take a root image uri and create a named touple
@@ -66,7 +51,31 @@ def gen_image_uris(image_uri):
 
     return images
 
+
+class Municipality(db.Document):
+    """
+    Municipality will eventually be turned into an object that represents 
+    a location in a geo-database.  This will help us normalize location
+    information and eventually search given a region, or coordinate and distance, etc
+    """
+    city = db.StringField(max_length=20)
+    state = db.StringField(max_length=20)
+    zipcode = db.StringField(max_length=20)
+    # service unique identifier
+    geo_identifier = db.StringField(max_length=100)
+
+    def as_dict(self):
+        return swap_null_id( self._data)
+
     
+class Role(db.Document, RoleMixin):
+    """
+    This allows us to define project roles, such as "Organizer"
+    """
+    name = db.StringField(max_length=80, unique=True)
+    description = db.StringField(max_length=255)
+
+
 class Project(db.Document, EntityMixin):
     """
     Project model.  Pretty straight forward.  For image_uri we
@@ -75,8 +84,9 @@ class Project(db.Document, EntityMixin):
     """
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(max_length=600)
+    # TODO how do we migrate this?
     municipality = db.StringField(max_length=5)
-    image_uri = db.StringField()
+    image_uri = db.StringField() # TODO change this
     #municipality = db.ReferenceField(Municipality)
     owner = db.ReferenceField(User)
 
@@ -111,7 +121,7 @@ class UserProjectLink(db.Document, EntityMixin):
     """
     user = db.ReferenceField(User)
     project = db.ReferenceField(Project)
-    user_left = db.BooleanField(default = False)
+    role = db.ListField(db.ReferenceField(Role), default=[])
 
     def as_dict(self):
         return swap_null_id(self._data)

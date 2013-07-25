@@ -40,43 +40,6 @@ class SocialMediaObject(db.EmbeddedDocument):
         return swap_null_id(self._data)
 
 
-class Address(db.EmbeddedDocument):
-    """
-    ABOUT
-        This is a temporary store mainly used for one time events.
-        When we say temporary we mean it's not going to be standardized
-        to a zipcode or postal address, it's just for users to view for a 
-        specific address such as "The park on spring street".
-    """
-    name = db.StringField(max_length=50)
-    address = db.StringField(max_length=50)
-    neighborhood = db.StringField(max_length=50)
-    city = db.StringField(max_length=20)
-    state = db.StringField(max_length=20)
-    zipcode = db.StringField(max_length=10)
-
-    def as_dict(self):
-        return swap_null_id(self._data)
-
-
-class Event(db.EmbeddedDocument):
-    """
-    ABOUT
-        Stores information on a one time event related to a post.  Ie I post
-        about a cleanup event that is going to occur at a local park
-    TODO
-        Properly integrate the Address model into this rather than just storing
-        the location string
-    """
-    event_type = db.StringField(max_length=10)  # 
-    address = db.StringField(max_length=100)
-    #address = db.EmbeddedDocument(Address)
-    occurs_at = db.DateTimeField()
-
-    def as_dict(self):
-        return swap_null_id(self._data)
-
-
 class ProjectPost(db.Document, EntityMixin):
     """
     ABOUT
@@ -98,7 +61,10 @@ class ProjectPost(db.Document, EntityMixin):
     event = db.EmbeddedDocumentField(Event)
 
     public = db.BooleanField(default=True)
-    
+
+    # allow responses
+    responses = db.ListField(db.ReferenceField(ProjectPost), default=[])
+
     def as_dict(self):
         return {'id': str(self.id),
                 'title': self.title,

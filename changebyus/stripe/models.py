@@ -123,6 +123,7 @@ class StripeLink(db.Document, EntityMixin):
     """
     customer_id = db.StringField(max_length=50)
     email = db.StringField(max_length=50)
+    # link the donation to a user, if we have such information
     user = db.ReferenceField(User)
 
     def as_dict(self):

@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, curren
 from flask.ext.login import login_required, current_user
 
 from .models import StripeAccount, StripeDonation, StripeLink
-from ..helpers.flasktools import gen_ok, gen_blank_ok
+from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
 
 import requests

@@ -14,7 +14,7 @@ def swap_null_id(d):
         del d[None]
 
 
-def db_list_to_dict_list(db_list):
+def db_list_to_dict_list(l):
     """
     ABOUT
         Convert a list of database objects into their .as_dict objects
@@ -23,6 +23,7 @@ def db_list_to_dict_list(db_list):
     OUTPUT 
         List of python dictionary objects
     """
+
     dict_list = []
     for db_item in db_list:
         dict_list.append( db_item.as_dict())

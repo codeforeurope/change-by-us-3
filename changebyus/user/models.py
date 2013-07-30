@@ -10,10 +10,10 @@ from mongoengine import signals
 from flask import current_app
 
 from ..extensions import db
-from ..helpers.mongotools import swap_null_id
-from ..models_common import EntityMixin
 
-from ..encryption import aes_encrypt, aes_decrypt
+from ..helpers.mongotools import swap_null_id
+from ..helpers.mixin import handle_decryption, handle_initial_encryption
+from ..helpers.mixin import handle_update_encryption, EntityMixin
 
 """
 =================
@@ -27,8 +27,11 @@ dependent on
 
 """
 
+# Python 3 allows ENUM's, eventually move to that
+class Roles:
+    ADMIN = "ADMIN"
 
-class Role(db.Document, RoleMixin):
+class Role(db.EmbeddedDocument):
     """
     This allows us to define user roles, such as "Admin"
     """
@@ -58,7 +61,7 @@ class User(db.Document, UserMixin, EntityMixin):
     password = db.StringField(max_length=255)
     active = db.BooleanField(default=True)
     confirmed_at = db.DateTimeField()
-    roles = db.ListField(db.ReferenceField(Role), default=[])
+    roles = db.ListField(db.EmbeddedDocumentField(Role), default=[])
     
     # facebook login information
     facebook_id = db.IntField()
@@ -84,90 +87,48 @@ class User(db.Document, UserMixin, EntityMixin):
     #visible profile information
     user_description = db.StringField(max_length=600)
 
-    def as_dict(self):
-        data = self._data
-        # set the id
-        if data.has_key(None): delete data[None]
-        data['id'] = self.id
-        # delete the sensitive stuff
-        delete data['password']
-        delete data['facebook_token']
-        delete data['twitter_token']
-        delete data['twitter_token_secret']
+    # fields that will not be returned by the as_dict routine 
+    PRIVATE_FIELDS = [
+    'password',
+    'facebook_token',
+    'facebook_id',
+    'twitter_id',
+    'twitter_token',
+    'twitter_token_secret',
+    'last_login_ip',
+    'current_login_ip',
+    ]
 
-        return data
+    # list of fields we want encrypted by our encryption tool.
+    # this should not be the standard method of password encryption.
+    ENCRYPTED_FIELDS = [
+    'twitter_token',
+    'twitter_token_secret',
+    'facebook_token'
+    ]
+      
+    # we override the as_dict to handle the email logic
+    def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
+        resp = encode_model(exclude_nulls, recursive, depth, **kwargs)
+        if not self.public_email:
+            resp.email = None
 
+        return resp
 
-        return {'id': str(self.id),
-                'email': self.email,
-                'public_email': self.public_email,
-                'display_name': self.display_name,
-                'first_name': self.first_name,
-                'last_name': self.last_name,
-                'user_description': self.user_description}
-                
     @classmethod    
     def pre_save(cls, sender, document, **kwargs):
         EntityMixin.pre_save(sender, document)
         
         if document.is_new():
             document.password = encrypt_password(document.password)
-
-            if current_app.config['ENCRYPTION']['ENABLED']:
-
-                document.twitter_token = aes_encrypt(document.twitter_token, 
-                                                     current_app.config['ENCRYPTION']['KEY'], 
-                                                     current_app.config['ENCRYPTION']['IV'])
-
-                document.twitter_token_secret = aes_encrypt(document.twitter_token_secret, 
-                                                            current_app.config['ENCRYPTION']['KEY'], 
-                                                            current_app.config['ENCRYPTION']['IV'])
-
-                document.facebook_token = aes_encrypt(document.facebook_token, 
-                                                      current_app.config['ENCRYPTION']['KEY'], 
-                                                      current_app.config['ENCRYPTION']['IV'])
-            
+            handle_initial_encryption(document, ENCRYPTED_FIELDS)
 
         elif document.__dict__.has_key('_changed_fields'):
-
-            if current_app.config['ENCRYPTION']['ENABLED']:
-
-                if 'twitter_token' in document.__dict__['_changed_fields']:
-                    document.twitter_token = aes_encrypt(document.twitter_token, 
-                                                         current_app.config['ENCRYPTION']['KEY'], 
-                                                         current_app.config['ENCRYPTION']['IV'])
-
-                if 'twitter_token_secret' in document.__dict__['_changed_fields']:
-                    document.twitter_token_secret = aes_encrypt(document.twitter_token_secret, 
-                                                                current_app.config['ENCRYPTION']['KEY'], 
-                                                                current_app.config['ENCRYPTION']['IV'])
-
-                if 'facebook_token' in document.__dict__['_changed_fields']:
-                    document.facebook_token = aes_encrypt(document.facebook_token, 
-                                                          current_app.config['ENCRYPTION']['KEY'], 
-                                                          current_app.config['ENCRYPTION']['IV'])
-                
+            handle_update_encryption(document, ENCRYPTED_FIELDS)
 
     @classmethod    
     def post_init(cls, sender, document, **kwargs):
-        
-        if current_app.config['ENCRYPTION']['ENABLED']:
-
-            # only decrypt saved documents
-            if document.id is not None:
-                    
-                document.twitter_token = aes_decrypt(document.twitter_token, 
-                                                     current_app.config['ENCRYPTION']['KEY'], 
-                                                     current_app.config['ENCRYPTION']['IV'])
-
-                document.twitter_token_secret = aes_decrypt(document.twitter_token_secret, 
-                                                            current_app.config['ENCRYPTION']['KEY'], 
-                                                            current_app.config['ENCRYPTION']['IV'])
-
-                document.facebook_token = aes_decrypt(document.facebook_token, 
-                                                      current_app.config['ENCRYPTION']['KEY'], 
-                                                      current_app.config['ENCRYPTION']['IV'])
-
+        handle_decryption(document, ENCRYPTED_FIELDS)
 
 
 signals.post_init.connect(User.post_init, sender=User)

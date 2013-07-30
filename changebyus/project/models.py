@@ -8,7 +8,7 @@ from mongoengine import signals
 
 from ..extensions import db
 from ..helpers.mongotools import swap_null_id
-from ..models_common import EntityMixin
+from ..helpers.mixin import EntityMixin
 from ..user.models import User
 from ..stripe.models import StripeAccount
 
@@ -52,26 +52,16 @@ def gen_image_uris(image_uri):
     return images
 
 
-class Municipality(db.Document):
-    """
-    Municipality will eventually be turned into an object that represents 
-    a location in a geo-database.  This will help us normalize location
-    information and eventually search given a region, or coordinate and distance, etc
-    """
-    city = db.StringField(max_length=20)
-    state = db.StringField(max_length=20)
-    zipcode = db.StringField(max_length=20)
-    # service unique identifier
-    geo_identifier = db.StringField(max_length=100)
-
-    def as_dict(self):
-        return swap_null_id( self._data)
-
+# Python 3 allows ENUM's, eventually move to that
+class Roles:
+    ORGANIZER = "ORGANIZER"
+    MEMBER = "MEMBER"
     
-class Role(db.Document, RoleMixin):
+class Role(db.EmbeddedDocument):
     """
     This allows us to define project roles, such as "Organizer"
     """
+    user = db.ReferenceField(User)
     name = db.StringField(max_length=80, unique=True)
     description = db.StringField(max_length=255)
 
@@ -84,8 +74,7 @@ class Project(db.Document, EntityMixin):
     """
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(max_length=600)
-    # TODO how do we migrate this?
-    municipality = db.StringField(max_length=5)
+
     image_uri = db.StringField() # TODO change this
     #municipality = db.ReferenceField(Municipality)
     owner = db.ReferenceField(User)
@@ -93,25 +82,28 @@ class Project(db.Document, EntityMixin):
     stripe_account = db.ReferenceField(StripeAccount)
     retired_stripe_accounts = db.ListField()
 
-    def as_dict(self):
+    # list of members and organizers etc.
+    # we map a User to a Role
+    # TODO fix this mofo
+    user_roles = db.DictField()  #db.ListField(db.embeddedDocument(Role))
+
+    # Geo JSON Field
+    geo_location = db.PointField()
+
+    def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
+        resp = encode_model(exclude_nulls, recursive, depth, **kwargs)
 
         image_uris = gen_image_uris(self.image_uri)
 
-        return {'id': str(self.id),
-                'name': self.name,
-                'description': self.description,
-                'municipality': self.municipality,
-                'created_at': self.created_at.isoformat(),
-                # this is a little hacky
-                'image_uri': image_uris.uri,
-                'image_uri_large': image_uris.large_uri,
-                'image_uri_medium': image_uris.medium_uri,
-                'image_uri_small': image_uris.small_uri,
-                'owner': self.owner.as_dict(),
-                'owner_id': self.owner.id,
-                'stripe_account': self.stripe_account.as_dict() if self.stripe_account else None }
+        # TODO cloudify this
+        resp['image_uri_large'] = image_uris.large_uri
+        resp['image_uri_medium'] = image_uris.medium_uri
+        resp['image_uri_small'] = image_uris.small_uri
+
+        return resp
 
 
+'''
 class UserProjectLink(db.Document, EntityMixin):
     """
     UserProjectLink model.  This lets us keep track of what projects
@@ -125,12 +117,9 @@ class UserProjectLink(db.Document, EntityMixin):
 
     def as_dict(self):
         return swap_null_id(self._data)
-
-
-
+'''
 
 signals.pre_save.connect(Project.pre_save, sender=Project)
-signals.pre_save.connect(UserProjectLink.pre_save, sender=UserProjectLink)
 """
 The presave routine filles in timestamps for us
 """

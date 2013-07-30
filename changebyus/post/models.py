@@ -8,7 +8,7 @@ from mongoengine import signals
 
 from ..extensions import db
 from ..helpers.mongotools import swap_null_id
-from ..mixin import EntityMixin
+from ..helpers.mixin import EntityMixin
 from ..project.models import Project
 from ..user.models import User
 

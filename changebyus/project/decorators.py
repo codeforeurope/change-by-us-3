@@ -31,10 +31,12 @@ def _check_for_role(project, user, roles_list):
 
     
 
-def project_exists(f, project_id):
+def project_exists(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         
+        project_id = request.form['project_id']
+
         errStr = ''
         if project_id is None:
             errStr = "project_id can not be blank."

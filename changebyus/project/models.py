@@ -7,8 +7,7 @@ from datetime import datetime
 from mongoengine import signals
 
 from ..extensions import db
-from ..helpers.mongotools import swap_null_id
-from ..helpers.mixin import EntityMixin
+from ..helpers.mixin import EntityMixin, encode_model
 from ..user.models import User
 from ..stripe.models import StripeAccount
 
@@ -91,7 +90,7 @@ class Project(db.Document, EntityMixin):
     geo_location = db.PointField()
 
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(exclude_nulls, recursive, depth, **kwargs)
+        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
 
         image_uris = gen_image_uris(self.image_uri)
 

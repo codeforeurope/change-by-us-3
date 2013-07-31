@@ -8,7 +8,7 @@ from flask.ext.login import login_required, current_user, login_user
 from flask.ext.security.utils import encrypt_password
 
 from .models import User
-from .helpers import *
+from .helpers import _create_user
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list 
@@ -43,11 +43,11 @@ def api_create_user():
         errStr = "You can not create an account when logged in."
         return jsonify_response( ReturnStruct(msg = errStr, success = False) )
 
-    email = get_form('email')
-    password = get_form('password')
-    display_name = get_form('display_name')
-    first_name = get_form('first_name')
-    last_name = get_form('last_name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    display_name = request.form.get('display_name')
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
 
     errStr = ''
     display_name_user = User.objects(display_name=display_name)
@@ -61,7 +61,7 @@ def api_create_user():
         errStr += "Sorry, email address '{0}' is already in use.".format(email)
 
     if len(errStr) > 0:
-        return jsonify_response( ReturnStruct(msg = errStr, success = False) )  
+        return jsonify_response( ReturnStructure(msg = errStr, success = False) )  
 
     u = _create_user(email=email,
                      password=password,
@@ -73,9 +73,9 @@ def api_create_user():
 
     # if the user signed up from a page of importance, such as a project page
     # then send them back to where they came from
-    return jsonify_response( ReturnStruct(msg = "User Created.",
-                                          success = True,
-                                          data = u.as_dict() ))
+    return jsonify_response( ReturnStructure(msg = "User Created.",
+                                             success = True,
+                                             data = u.as_dict() ))
 
 
 @user_api.route('/<id>')    

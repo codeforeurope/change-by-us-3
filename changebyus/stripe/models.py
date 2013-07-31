@@ -8,7 +8,6 @@ from mongoengine import signals
 
 from ..extensions import db
 
-from ..helpers.mongotools import swap_null_id
 from ..helpers.mixin import handle_decryption, handle_initial_encryption
 from ..helpers.mixin import handle_update_encryption, EntityMixin
 

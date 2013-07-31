@@ -7,7 +7,7 @@ from flask import Blueprint, request, render_template, redirect, url_for, g, cur
 from flask.ext.login import login_required, current_user
 
 from .models import Project
-from .api import _user_involved_in_project
+from .helpers import _user_involved_in_project
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
 
 project_view = Blueprint('project_view', __name__, url_prefix='/project')

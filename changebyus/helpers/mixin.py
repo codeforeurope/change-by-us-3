@@ -3,12 +3,21 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
+import datetime
 
 from ..extensions import db
 from .encryption import *
 from flask import current_app
 
+from mongoengine import Document, EmbeddedDocument
+from mongoengine.dereference import DeReference
+from mongoengine.fields import ReferenceField
+from mongoengine.queryset import QuerySet
+
+from types import ModuleType
+from itertools import groupby
+
+import bson
 
 """
 ====================
@@ -30,8 +39,8 @@ class EntityMixin(object):
     @classmethod    
     def pre_save(cls, sender, document, **kwargs):
         if not document.created_at:
-            document.created_at = datetime.utcnow()
-        document.updated_at = datetime.utcnow() 
+            document.created_at = datetime.datetime.utcnow()
+        document.updated_at = datetime.datetime.utcnow() 
         
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
         resp = encode_model(self, exclude_nulls=True, recursive=False, depth=1, **kwargs)
@@ -65,7 +74,7 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
         kwargs['delete_keys'] = []
 
     # insert the objects private fields into delete keys
-    if hasattr(a, 'PRIVATE_FIELDS'):
+    if hasattr(obj, 'PRIVATE_FIELDS'):
         kwargs['delete_keys'] += obj.PRIVATE_FIELDS
       
     if obj is None:

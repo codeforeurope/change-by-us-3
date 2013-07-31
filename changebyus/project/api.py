@@ -3,15 +3,21 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, render_template, redirect, url_for, request, current_app, g, abort
+from flask import (Blueprint, render_template, redirect, 
+                   url_for, request, current_app, g, abort)
+
 from flask.ext.login import login_required, current_user, login_user
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure, get_form
+from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
+                           SubmitField, Required, ValidationError)
+
+
+from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.imagetools import generate_thumbnails
 
 from .models import Project
-from .helpers import *
+from .helpers import _get_users_for_project
 from .decorators import *
 
 from ..stripe.models import StripeAccount
@@ -37,6 +43,13 @@ images, etc.
 
 """
 
+class CreateProjectForm(Form):
+
+    name = TextField("name", validators=[Required()])
+    description = TextAreaField("description", validators=[Required()])
+    location = TextField("location", validators=[Required()])
+    photo = FileField("photo")
+
 
 @project_api.route('/create', methods = ['POST'])
 @login_required
@@ -59,17 +72,28 @@ def api_create_project():
         This should be returned to a pure api form and only return the Json object
     """
 
-    name = get_form('name')
-    description = get_form('description')
-    municipality = get_form('location')
+    form = CreateProjectForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    name = form.name.gettext()
+    description = form.description.gettext()
+    location = form.location.gettext()
+
+    print dir(name)
+    print name
 
     owner = User.objects.with_id(g.user.id)
+
+    image_uri = None
 
     # TODO TODO cloudize our photos
 
     # photo is optional
     if 'photo' in request.files:
-        photo = request.files.get('photo')
+        photo = form.photo
 
         if len(photo.filename) > 3:
 
@@ -89,7 +113,9 @@ def api_create_project():
 
     project = Project.objects(name=name)
     if project.count() > 0:
-        return render_template('error.html', error="Sorry, the name '{0}'' is already used.".format(name))
+        errStr = "Sorry, the name '{0}' is already in use.".format(name)
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
     # TODO verify all info
     p = Project( name = name, 
@@ -111,7 +137,7 @@ def api_create_project():
 
 @project_api.route('/<id>')
 @project_exists
-def api_get_project(id):
+def api_get_project(project_id):
     """
     ABOUT
         Gets information on a given object
@@ -124,17 +150,30 @@ def api_get_project(id):
     PRECONDITIONS
         None
     """
-    p = Project.objects.with_id(id)
+    p = Project.objects.with_id(project_id)
 
     return jsonify_response( ReturnStructure( success = False,
                                               msg = "Not Found" ))
+
+class CreateProjectForm(Form):
+
+    name = TextField("title", validators=[Required()])
+    description = TextAreaField("description", validators=[Required()])
+    location = TextField("location", validators=[Required()])
+    photo = FileField("photo")
+
+
+class EditProjectForm(Form):
+
+    project_id = TextField("project_id", validators=[Required()])
+    name = TextField("")
 
 
 @project_api.route('/edit', methods = ['POST'])
 @login_required
 @project_exists
 @project_organizer
-def api_edit_project(id):
+def api_edit_project():
     """
     ABOUT
         Edit an existing project
@@ -150,12 +189,20 @@ def api_edit_project(id):
         Test to be sure the type of object comparison we use functions, test in general
     """
 
-    project_id = get_form('project_id')
-    name = get_form('name')
-    description = get_form('description')
-    municipality = get_form('location')
+    project_id = request.form.get('project_id')
+    name = request.form.get('name')
+    description = request.form.get('description')
+    municipality = request.form.get('location')
 
-    p = Project.objects.with_id(id)
+    p = Project.objects.with_id(project_id)
+
+
+    if name:
+        name_text = Project.objects(name = name)
+        if name_text.count() > 0 and name_text[0] != p:
+            msg = "Project name {0} is already in use.".format(name)
+            return jsonify_response( ReturnStructure( success = False,
+                                                  msg = msg ))
 
     if name: p.name = name
     if description: p.description = description
@@ -164,7 +211,7 @@ def api_edit_project(id):
     p.save()
 
     infoStr = "User {0} has edited project {1} with request {2}".format(g.user.id,
-                                                                        id,
+                                                                        project_id,
                                                                         str(request.form))
     current_app.logger.info(infoStr)
 
@@ -174,10 +221,11 @@ def api_edit_project(id):
 
 
 
-@project_api.route('/<id>/users')
+@project_api.route('/<project_id>/users')
 # return a list of users given a project
 @login_required
-def api_view_project_users(pid):
+@project_exists
+def api_view_project_users(project_id):
     """
     ABOUT
         Get a list of users who belong to a given project
@@ -190,7 +238,8 @@ def api_view_project_users(pid):
     PRECONDITIONS
         User is logged in
     """
-    users = _get_users_for_project(pid)
+
+    users = _get_users_for_project(project_id)
 
     return jsonify_response( ReturnStructure( success = True,
                                               msg = 'OK',
@@ -199,7 +248,7 @@ def api_view_project_users(pid):
 
 @project_api.route('/user/<id>/ownedprojects')
 @login_required
-def api_edit_user(id):
+def api_owned_projects(id):
     """
     ABOUT
         Get a list of projects owned by a given user
@@ -222,7 +271,7 @@ def api_edit_user(id):
 @project_api.route('/user/<id>/joinedprojects')
 @login_required
 # TODO should we restrict this further than login required?
-def api_edit_user(id):
+def api_joined_projects(id):
     """
     ABOUT
         Get a list of projects a user has joined
@@ -334,17 +383,18 @@ def api_get_projects(limit = None, municipality = None, alphabetical = None):
     """
 
 
-@project_api.route('/<id>/join', methods = ['POST'])
+@project_api.route('/join', methods = ['POST'])
 # TODO add membership required decorator
 @login_required
-def api_join_project(id):
+@project_exists
+def api_join_project():
     """
     ABOUT
         Allows a user to join a project
     METHOD
         Post
     INPUT
-        project id (via url)
+        project_id
     OUTPUT
         Currently a rendered tempalte for the project.  Should in the future return a Jsonified OK statement.
     PRECONDITIONS
@@ -352,6 +402,12 @@ def api_join_project(id):
     TODO
         Convert to a pure API routine where we only join the user and return a status code
     """
+    project_id = request.form.get('project_id')
+
+    project = Project.objects.with_id(project_id)
+    roles = project.roles
+    #if roles.has_key(g.user.id):
+
     
     return jsonify_response( ReturnStructure( success = False,
                                               msg = 'Not Implemented Yet',

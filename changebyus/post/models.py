@@ -7,7 +7,6 @@ from datetime import datetime
 from mongoengine import signals
 
 from ..extensions import db
-from ..helpers.mongotools import swap_null_id
 from ..helpers.mixin import EntityMixin
 from ..project.models import Project
 from ..user.models import User
@@ -58,12 +57,11 @@ class ProjectPost(db.Document, EntityMixin):
     image_uri = db.StringField()
 
     social_object = db.EmbeddedDocumentField(SocialMediaObject)
-    event = db.EmbeddedDocumentField(Event)
 
     public = db.BooleanField(default=True)
 
     # allow responses
-    responses = db.ListField(db.ReferenceField(ProjectPost), default=[])
+    responses = db.ListField(db.ReferenceField('self'), default=[])
 
     def as_dict(self):
         return {'id': str(self.id),

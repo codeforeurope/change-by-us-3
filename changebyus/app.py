@@ -24,7 +24,7 @@ from flaskext.uploads import UploadSet, configure_uploads, IMAGES
 
 from flask_oauth import OAuth
 
-from .post import post_view, post_api
+from .post import post_api
 from .project import project_view, project_api
 from .facebook import facebook_view
 from .twitter import twitter_view
@@ -32,7 +32,7 @@ from .stream import stream_view, stream_api
 from .user import user_view, user_api
 from .frontend import frontend_view
 
-from .encryption import assemble_key
+from .helpers.encryption import assemble_key
 from .extensions import db, login_manager
 
 from .helpers.configtools import get_shared_config, Flask
@@ -61,7 +61,6 @@ __all__ = ['create_app']
 
 DEFAULT_BLUEPRINTS = (
     frontend_view,
-    post_view,
     post_api,
     project_view, 
     project_api,
@@ -213,44 +212,8 @@ def configure_security(app):
 
     @identity_loaded.connect_via(app)
     def on_identity_loaded(sender, identity):
-        # Set the default state
-        g.user = None
-
-        if identity.name is None:
-            return
-
-        # Ok we're ok to proceed now ...
-        if isinstance(identity.name, (bson.ObjectId)):
-            user = User.objects(id=identity.name)
-        elif isinstance(identity.name, (str, unicode)):
-            user = User.objects(email=identity.name)
-
-        if user.count() > 1:
-            app.logger.error("Got more than one match for user login %s" % identity.name)
-            raise Exception("[on_identity_loaded] Error getting login information. Please contact an administrator")
-            g.user = None
-        elif user.count() == 0:
-            g.user = None
-        else:
-            user = user.first()
-
-            if hasattr(user, 'id'):
-                identity.provides.add(UserNeed(user.id))
-
-            # Assuming the User model has a list of roles, update the
-            # identity with the roles that the user provides
-            if hasattr(user, 'roles'):
-                for role in user.roles:
-                    identity.provides.add(RoleNeed(role.name))
-
-            # Assuming the User model has a list of posts the user
-            # has authored, add the needs to the identity
-            if hasattr(user, 'posts'):
-                for post in user.posts:
-                    identity.provides.add(EditBlogPostNeed(unicode(post.id)))
-
-            identity.user = user
-            g.user = user
+        user = User.objects.with_id(identity.user.id)
+        g.user = user
 
     # set the user load clalback
     @login_manager.user_loader

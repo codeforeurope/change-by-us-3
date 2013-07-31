@@ -8,7 +8,7 @@ from flask import Blueprint, request, render_template, current_app, redirect, ur
 from flask.ext.login import login_required, current_user
 
 from .api import _get_user_stream
-from ..project.api import _get_user_involved_projects, _get_project_users_and_common_projects
+from ..project.helpers import _get_user_involved_projects, _get_project_users_and_common_projects
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
 from ..facebook.facebook import _get_fb_user_name_and_thumbnail

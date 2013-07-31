@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .models import *
+from .models import Project
 from flask import g, current_app
 
 # True is user is owner or member of project

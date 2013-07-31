@@ -8,7 +8,7 @@ from flask import current_app, request
 from flask.ext.login import login_required, current_user, login_user
 
 from ..user.models import User
-from ..user.api import _create_user, _add_twitter
+from ..user.helpers import _create_user, _add_twitter
 from ..helpers.stringtools import string_generator
 
 from flask import current_app, session

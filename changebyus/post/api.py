@@ -8,6 +8,8 @@ from flask import url_for, g, current_app
 
 from flask.ext.login import login_required, current_user
 
+from flask_mail import Message
+
 from .models import ProjectPost, Project, User, SocialMediaObject
 from ..facebook.facebook import _post_user_facebook_feed
 from ..twitter.twitter import _post_user_twitter_update
@@ -17,8 +19,8 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 from ..stream.api import _get_user_stream
 
-from ..project.api import _get_user_involved_projects, _get_project_users_and_common_projects
-from ..project.api import _user_involved_in_project
+from ..project.helpers import _get_user_involved_projects, _get_project_users_and_common_projects
+from ..project.helpers import _user_involved_in_project
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -37,6 +39,18 @@ Posts can be public or private, and can have a link to social platforms, ie
 a twitter_post_id and a facebook_post_id, however the actual social posting
 is handled by other modules
 """
+
+@post_api.route('/tester')
+def test_send_email():
+    msg = Message("Hello",
+                  recipients=["lucasvickers@gmail.com"],
+                  sender=(current_app.config['DEFAULT_MAIL_SENDER_NAME'],
+                          current_app.config['DEFAULT_MAIL_SENDER']))
+
+    msg.body = "hi"
+    msg.html = "<b>html</b>"
+    current_app.mail.send(msg)
+
 
 @post_api.route('/project/<id>/listposts')
 @login_required

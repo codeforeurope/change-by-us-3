@@ -5,18 +5,6 @@ try:
 except ImportError:
     import json
 
-def get_form(var):
-    """
-    ABOUT
-        Helper that returns the form value or None if it doesn't exist
-    TODO
-        Apply this to CBU, there are places we do this check explicitly
-    """
-    if var in request.form and request.form[var]:
-        return request.form[var]
-    else:
-        return None
-
 
 class ReturnStructure():
 

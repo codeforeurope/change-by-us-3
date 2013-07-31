@@ -11,7 +11,6 @@ from flask import current_app
 
 from ..extensions import db
 
-from ..helpers.mongotools import swap_null_id
 from ..helpers.mixin import handle_decryption, handle_initial_encryption
 from ..helpers.mixin import handle_update_encryption, EntityMixin
 
@@ -121,14 +120,14 @@ class User(db.Document, UserMixin, EntityMixin):
         
         if document.is_new():
             document.password = encrypt_password(document.password)
-            handle_initial_encryption(document, ENCRYPTED_FIELDS)
+            handle_initial_encryption(document, document.ENCRYPTED_FIELDS)
 
         elif document.__dict__.has_key('_changed_fields'):
-            handle_update_encryption(document, ENCRYPTED_FIELDS)
+            handle_update_encryption(document, document.ENCRYPTED_FIELDS)
 
     @classmethod    
     def post_init(cls, sender, document, **kwargs):
-        handle_decryption(document, ENCRYPTED_FIELDS)
+        handle_decryption(document, document.ENCRYPTED_FIELDS)
 
 
 signals.post_init.connect(User.post_init, sender=User)

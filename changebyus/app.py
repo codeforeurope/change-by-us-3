@@ -20,6 +20,7 @@ from flask import Flask, request, render_template, current_app, g, jsonify
 from flask.ext.security import Security, MongoEngineUserDatastore, login_required
 from flask.ext.principal import identity_loaded, Identity, Permission, RoleNeed, UserNeed
 from flask.ext.login import LoginManager, current_user
+from flaskext.csrf import csrf
 from flaskext.uploads import UploadSet, configure_uploads, IMAGES
 
 from flask_oauth import OAuth
@@ -93,6 +94,7 @@ def create_app(app_name=None, blueprints=None):
     configure_blueprints(app, blueprints)
     configure_mail(app)
     configure_security(app)
+    configure_csrf(app)
     configure_error_handlers(app)
     configure_media_uploads(app)
     configure_encryption(app)
@@ -197,6 +199,11 @@ def configure_mail(app):
         Configures our mail client, mostly needed for Flask-Security
     """
     app.mail = Mail(app)
+
+def configure_csrf(app):
+    # enable CSRF
+    if app.config.get('CSRF_ENABLED'):
+        csrf(app)
 
 
 # Setup Flask-Security

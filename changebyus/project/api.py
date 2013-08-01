@@ -16,7 +16,7 @@ from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.imagetools import generate_thumbnails
 
-from .models import Project
+from .models import Project, Roles, Role
 from .helpers import _get_users_for_project
 from .decorators import *
 
@@ -78,12 +78,9 @@ def api_create_project():
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    name = form.name.gettext()
-    description = form.description.gettext()
-    location = form.location.gettext()
-
-    print dir(name)
-    print name
+    name = request.form.get('name')
+    description = request.form.get('description')
+    location = request.form.get('location')
 
     owner = User.objects.with_id(g.user.id)
 
@@ -93,7 +90,7 @@ def api_create_project():
 
     # photo is optional
     if 'photo' in request.files:
-        photo = form.photo
+        photo = request.files.get('photo')
 
         if len(photo.filename) > 3:
 
@@ -155,18 +152,13 @@ def api_get_project(project_id):
     return jsonify_response( ReturnStructure( success = False,
                                               msg = "Not Found" ))
 
-class CreateProjectForm(Form):
+
+class EditProjectForm(Form):
 
     name = TextField("title", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
     location = TextField("location", validators=[Required()])
-    photo = FileField("photo")
-
-
-class EditProjectForm(Form):
-
-    project_id = TextField("project_id", validators=[Required()])
-    name = TextField("")
+    photo = FileField("photo")    
 
 
 @project_api.route('/edit', methods = ['POST'])
@@ -180,7 +172,7 @@ def api_edit_project():
     METHOD
         Post
     INPUT
-        project_id, name, description, location
+        project_id (required), name, description, location, photo
     OUTPUT
         Json representation of the modified project.
     PRECONDITIONS
@@ -196,7 +188,6 @@ def api_edit_project():
 
     p = Project.objects.with_id(project_id)
 
-
     if name:
         name_text = Project.objects(name = name)
         if name_text.count() > 0 and name_text[0] != p:
@@ -207,6 +198,23 @@ def api_edit_project():
     if name: p.name = name
     if description: p.description = description
     if municipality: p.municipality = municipality
+
+
+    # TODO cloudize this and remove the dupe code
+    if 'photo' in request.files:
+        photo = request.files.get('photo')
+
+        if len(photo.filename) > 3:
+
+            try:
+                filename = current_app.uploaded_photos.save(photo)
+                filepath = current_app.uploaded_photos.path(filename)
+                generate_thumbnails(filepath)
+            except UploadNotAllowed:
+                abort(403)
+
+            p.image_uri = urlparse(current_app.uploaded_photos.url(filename)).path
+
 
     p.save()
 
@@ -232,7 +240,7 @@ def api_view_project_users(project_id):
     METHOD
         Get
     INPUT
-        project id
+        project_id
     OUTPUT
         Json list of user objects
     PRECONDITIONS
@@ -246,39 +254,39 @@ def api_view_project_users(project_id):
                                               data = users ))
 
 
-@project_api.route('/user/<id>/ownedprojects')
+@project_api.route('/user/<user_id>/ownedprojects')
 @login_required
-def api_owned_projects(id):
+def api_owned_projects(user_id):
     """
     ABOUT
         Get a list of projects owned by a given user
     METHOD
         Get
     INPUT
-        User id
+        user_id
     OUTPUT
         Json list of project objects
     PRECONDITIONS
         User is logged in
     """
-    projects = _get_user_owned_projects(id)
+    projects = _get_user_owned_projects(user_id)
 
     return jsonify_response( ReturnStructure( success = True,
                                               msg = 'OK',
                                               data = projects ) )
 
 
-@project_api.route('/user/<id>/joinedprojects')
+@project_api.route('/user/<user_id>/joinedprojects')
 @login_required
 # TODO should we restrict this further than login required?
-def api_joined_projects(id):
+def api_joined_projects(user_id):
     """
     ABOUT
         Get a list of projects a user has joined
     METHOD
         Get
     INPUT
-        User id
+        user_id
     OUTPUT
         Json list of project objects
     PRECONDITIONS
@@ -286,17 +294,18 @@ def api_joined_projects(id):
     """
 
     # TODO fix this
-    pList = _get_user_joined_projects(id)
+    pList = _get_user_joined_projects(user_id)
 
     return jsonify_response( ReturnStructure( success = True,
                                               msg = 'OK',
                                               data = projects ) )
 
 
-@project_api.route('/<id>/users_and_common_projects')
+@project_api.route('/<project_id>/users_and_common_projects')
 # return a list of users given a project and projects in common
 @login_required
-def api_view_project_users_common_projects(pid):
+@project_exists
+def api_view_project_users_common_projects(project_id):
     """
     ABOUT
         Get a list of users in a project and the projects they have in common
@@ -305,13 +314,13 @@ def api_view_project_users_common_projects(pid):
     METHOD
         Get
     INPUT
-        project id
+        project_id
     OUTPUT
         Json list of users and their common projects
     PRECONDITIONS
         User is logged in
     """
-    return_list = _get_project_users_and_common_projects(project_id=pid, 
+    return_list = _get_project_users_and_common_projects(project_id=project_id, 
                                                          user_id=g.user.id)
 
     return jsonify_response( ReturnStructure( success = True,
@@ -406,12 +415,30 @@ def api_join_project():
 
     project = Project.objects.with_id(project_id)
     roles = project.roles
-    #if roles.has_key(g.user.id):
+    
+    if roles.has_key(g.user.id):
+        role = roles[g.user.id]
+
+        return jsonify_response( ReturnStructure( success = True,
+                                                  msg = 'User is already invoved in project.',
+                                                  data = role ) )
+
+    user = User.objects.with_id(g.user.id)
+
+    role = Role(user = user,
+                name = Roles.MEMBER,
+                description = "Project Member")
+
+    project.roles[g.user.id] = role
+    project.save()
+
+    infoStr = "User {0} joined project {1}.".format(g.user.id, project_id)
+    current_app.logger.info(infoStr)
 
     
-    return jsonify_response( ReturnStructure( success = False,
-                                              msg = 'Not Implemented Yet',
-                                              data = projects_list ) )
+    return jsonify_response( ReturnStructure( success = True,
+                                              msg = 'User joined project.',
+                                              data = role ) )
 
     """
     project = Project.objects.with_id(id)

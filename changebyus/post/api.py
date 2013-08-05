@@ -19,8 +19,10 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 from ..stream.api import _get_user_stream
 
-from ..project.helpers import _get_user_involved_projects, _get_project_users_and_common_projects
-from ..project.helpers import _user_involved_in_project
+from ..project.helpers import ( _get_user_involved_projects, _get_project_users_and_common_projects,
+                                _user_involved_in_project )
+
+from ..project.decorators import project_exists
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -40,6 +42,11 @@ a twitter_post_id and a facebook_post_id, however the actual social posting
 is handled by other modules
 """
 
+@post_api.route('/test/<id>')
+def testerrr(id):
+    print "tester    ", id
+
+
 @post_api.route('/tester')
 def test_send_email():
     msg = Message("Hello",
@@ -52,34 +59,33 @@ def test_send_email():
     current_app.mail.send(msg)
 
 
-@post_api.route('/project/<id>/listposts')
+@post_api.route('/project/<project_id>/listposts')
 @login_required
-def api_get_project_posts(id):
+@project_exists
+def api_get_project_posts(project_id):
     """
     ABOUT
-        Given a project id, return the posts for that project that the current
-        user posted.  ie view your contributions to a project
+        Given a project id, return the posts for that project that are visible to the user.
+        Visibility depends on membership
     METHOD
         Get
     INPUT
-        Project ID
+        project_id
     OUTPUT
-        Json list of posts.  Blank if user is not a member of project or has not posted.
+        List of posts and all responses to that post
     PRECONDITIONS
         User is logged in
     TODO
         Add filtering for the user, ie max number of posts, search by string, etc
     """
-    posts = ProjectPost.objects( user = User.objects.with_id(g.user.id),
-                                 project = id)
+    
+    posts = ProjectPost.objects( project = project_id )
 
-    posts = []
-    for p in posts:
-        posts.append( p.as_dict())
+    # manually traverse to ensure all children are populated
+    #for post in posts:
 
-    return gen_ok( jsonify(posts=posts) )
-
-
+    return jsonify_response( ReturnStructure( success = False,
+                                              msg = "Not yet implemented" ) )
 
 
 @post_api.route('/addprojectpost', methods = ['POST'])

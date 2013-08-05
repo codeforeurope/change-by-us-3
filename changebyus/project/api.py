@@ -16,7 +16,7 @@ from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.imagetools import generate_thumbnails
 
-from .models import Project, Roles, Role
+from .models import Project, Roles, ACTIVE_ROLES
 from .helpers import _get_users_for_project
 from .decorators import *
 
@@ -62,14 +62,9 @@ def api_create_project():
     INPUT
         Name, Description, Location, photo (as file)
     OUTPUT
-        Currently it redirects to the project_view_id template, but this needs
-        to be corrected so it returns a Json object representing the project.
-        If no image is uploaded the default image (specified in 
-        config.yml:DEFAULT_PROJECT_IMAGE will be used
+        ReturnStructure response with outcome results.
     PRECONDITIONS
         User is logged in
-    TODO
-        This should be returned to a pure api form and only return the Json object
     """
 
     form = CreateProjectForm()
@@ -143,14 +138,20 @@ def api_get_project(project_id):
     INPUT
         project id
     OUTPUT
-        Json representation of the project
+        ReturnStructure response with outcome results.
     PRECONDITIONS
         None
     """
     p = Project.objects.with_id(project_id)
 
-    return jsonify_response( ReturnStructure( success = False,
-                                              msg = "Not Found" ))
+    if p is None:
+
+        return jsonify_response( ReturnStructure( success = False,
+                                                  msg = "Not Found" ))
+
+    return jsonify_response( ReturnStrucutre( success = True,
+                                              msg = "Project Found",
+                                              data = p.as_dict() ))
 
 
 class EditProjectForm(Form):
@@ -177,9 +178,13 @@ def api_edit_project():
         Json representation of the modified project.
     PRECONDITIONS
         User is logged in and owns the project
-    TODO
-        Test to be sure the type of object comparison we use functions, test in general
     """
+
+    form = EditProjectForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
     project_id = request.form.get('project_id')
     name = request.form.get('name')
@@ -301,6 +306,7 @@ def api_joined_projects(user_id):
                                               data = projects ) )
 
 
+
 @project_api.route('/<project_id>/users_and_common_projects')
 # return a list of users given a project and projects in common
 @login_required
@@ -392,6 +398,9 @@ def api_get_projects(limit = None, municipality = None, alphabetical = None):
     """
 
 
+class JoinProjectForm(Form):
+    project_id = TextField("project_id", validators=[Required()])
+
 @project_api.route('/join', methods = ['POST'])
 # TODO add membership required decorator
 @login_required
@@ -405,78 +414,44 @@ def api_join_project():
     INPUT
         project_id
     OUTPUT
-        Currently a rendered tempalte for the project.  Should in the future return a Jsonified OK statement.
+        ReturnStructure response with results
     PRECONDITIONS
         User is logged in
-    TODO
-        Convert to a pure API routine where we only join the user and return a status code
     """
+
+    form = JoinProjectForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
     project_id = request.form.get('project_id')
-
-    project = Project.objects.with_id(project_id)
-    roles = project.roles
-    
-    if roles.has_key(g.user.id):
-        role = roles[g.user.id]
-
-        return jsonify_response( ReturnStructure( success = True,
-                                                  msg = 'User is already invoved in project.',
-                                                  data = role ) )
-
     user = User.objects.with_id(g.user.id)
-
-    role = Role(user = user,
-                name = Roles.MEMBER,
-                description = "Project Member")
-
-    project.roles[g.user.id] = role
-    project.save()
-
-    infoStr = "User {0} joined project {1}.".format(g.user.id, project_id)
-    current_app.logger.info(infoStr)
-
-    
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'User joined project.',
-                                              data = role ) )
-
-    """
-    project = Project.objects.with_id(id)
-    user = User.objects.with_id(g.user.id)
-
-    if project.owner == user:
-        return forbidden_request("Owner can not join their own project.")
 
     old_upl = UserProjectLink.objects(user = user,
                                       project = project)
 
-    if old_upl.count() > 0:
-
-        if old_upl.count() > 1:
-            errStr = "Multiple project links for user {0} and project {1}".format(user.id,
-                                                                                  project.id)
-            current_app.logger.error(errStr)
-
-        doc = old_upl.first()
-        doc.user_left = False
-        doc.save()
-
-    else:
-
-        upl = UserProjectLink(user = user,
-                              project = project,
-                              user_left = False)
-
-        upl.save()
-
-    #return gen_blank_ok()
-    return redirect(url_for('project_view.project_view_id', id = project.id))
-    """
 
 
-@project_api.route('/<id>/leave', methods = ['POST'])
+    if project.owner == user or old_upl.count() == 1:
+        return jsonify_response( ReturnStructure( success = True,
+                                                  msg = 'User is already invoved in project.' ) )
+    upl = UserProjectLink(user = user,
+                          project = project,
+                          role = Roles.MEMBER)
+    upl.save()
+
+    return jsonify_response( ReturnStructure( success = True,
+                                              msg = 'User joined project.' ) )
+
+
+class LeaveProjectForm(Form):
+    project_id = TextField("project_id", validators=[Required()])
+
+@project_api.route('/leave', methods = ['POST'])
 @login_required
-def api_leave_project(id):
+@project_exists
+def api_leave_project():
     """
     ABOUT
         Allows a user to leave a project
@@ -488,34 +463,97 @@ def api_leave_project(id):
         Currently a rendered tempalte for the project.  Should in the future return a Jsonified OK statement.
     PRECONDITIONS
         User is logged in, user is a member of the project.
-    TODO
-        Convert to a pure API routine where we only unjoin the user and return a status code
     """
 
-    return jsonify_response( ReturnStructure( success = False,
-                                          msg = 'Not Implemented Yet',
-                                          data = projects_list ) )
+    form = LeaveProjectForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    project_id = request.form.get('project_id')
+    project = Project.objects.with_id(project_id)
+
+
+    if project.owner.id == g.user.id:
+        return jsonify_response( ReturnStructure( success = False,
+                                                  msg = 'Project owner can not leave the project.' ) )
     
+    links = UserProjectLink.objects( user = g.user.id,
+                                    project = project_id)
+
+
+    if links.count() == 0:
+        return jsonify_response( ReturnStructure( success = True,
+                                                  msg = 'User was not involved in project.' ) )
+    if links.count() > 1:
+        warnStr = "Warning, user {0} has multiple user_project_links on project {1}".format(g.user.id,
+                                                                                            project_id)
+        current_app.logger.warn(warnStr)
+
+    for link in links:
+        link.delete()
+
+    return jsonify_response( ReturnStructure( success = True ) )
+
+
+class ChangeUserRoleForm(Form):
+    project_id = TextField("project_id", validators=[Required()])
+    user_id = TextField("user_id", validators=[Required()])
+    user_role = TextField("user_role", validators=[Required()])
+
+@project_api.route('/change_user_role', methods = ['POSTS'])
+@login_required
+@project_exists
+@project_organizer
+def api_change_user_role():
     """
-    link = UserProjectLink.objects( user = g.user.id,
-                                    project = id)
+    ABOUT
+        Allows a organizer of project to change another project members role
+    METHOD
+        Post
+    INPUT
+        project_id
+        user_id
+        user_role
+    OUTPUT
+        ReturnStructure response with results
+    PRECONDITIONS
+        User is logged in, user is an organizer of the project.
+    """
 
-    if link.count() > 0:
-        if link.count() > 1:
-            errStr = "Multiple project links for user {0} and project {1}".format(user.id,
-                                                                                  project.id)
-            current_app.logger.error(errStr)
+    form = ChangeUserRoleForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-        doc = link.first()
-        doc.user_left = True
-        doc.save()
+    project_id = request.form.get('project_id')
+    user_id = request.form.get('user_id')
+    role = request.form.get('role_name').upper()
 
+    if role not in ACTIVE_ROLES:
+        errStr = "role_name was not one of {0}".ACTIVE_ROLES
+        return jsonify_response( ReturnStructure( success = False,
+                                                  msg = errStr ) )
+
+    if project.owner.id == user_id:
+        errStr = "Can not change project owner role."
+        return jsonify_response( ReturnStructure( success = False,
+                                                  msg = errStr) ) 
+
+    upl = UserProjectLink(user = user_id,
+                          project = project_id)
     
-    # TODO we should error if they aren't part of the project
-    # return gen_blank_ok()
-    return redirect(url_for('project_view.project_view_id', id = id))
-    """
+    if upl.count() == 0:
+        msg = "User is not involved in project."
+        return jsonify_response( ReturnStructure( success = False,
+                                                  msg = msg ) )
 
+    upl[0].role = role
+    upl[0].save()
 
-
+    msg = "User has been given role of {0} on project".format(role)
+    return jsonify_response( ReturnStructure( success = True,
+                                              msg = msg ) )
 

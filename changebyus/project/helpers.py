@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .models import Project
+from .models import Project, Roles, ACTIVE_ROLES
 from flask import g, current_app
+
 
 # True is user is owner or member of project
 def _user_involved_in_project( project_id = None, 
@@ -19,44 +20,53 @@ def _user_involved_in_project( project_id = None,
     """
     
     project = Project.objects.with_id(project_id)
-    user = User.objects.with_id(user_id)
+    if project == None:
+        return False
 
-    if project.owner == user:
+    if project.owner.id == user.id:
         return True
 
-    # only look for links that the user_left is False, ie the user is still joined
-    project_link = UserProjectLink.objects( user = user,
-                                            project = project,
-                                            user_left = False)
+    upl = UserProjectLink.objects(user = user_id,
+                                  project = project_id)
 
-    if project_link.count() > 0:
-        if project_link.count() > 1:
-            errStr = "User {0} has multiple project links on project {1}".format(user_id, project_id)
-            current_app.logger.error(errStr)
+    if upl.count() == 0:
+        return False
 
-        # user_left = False means they are in the project
+    if upl[0].role in ACTIVE_ROLES:
         return True
 
+    warnStr = "User {0} has role in project {1} but it's of unknown type {2}".format(user_id,
+                                                                                     project_id,
+                                                                                     upl[0].role)
+    current_app.logger.warn(warnStr)
     return False
 
 
-def _get_users_for_project( pid ):
+def _get_users_for_project( project_id = None ):
     """
     ABOUT
         Get a list of users in a given project, including owner
     METHOD
         Native Python
     INPUT
-        project id
+        project_id
     OUTPUT
         List of dictionaries of user representations
     """
 
+    project = Project.objects.with_id(project_id)
+    if project == None:
+        return []
+
     users = []
- 
- 	# TODO rewrite this
- 
-    return users
+    users.append( project.owner )
+
+    upls = UserProjectLink.objects(project = project_id)
+    for upl in upls:
+        if upl.role in ACTIVE_ROLES:
+            users.append( upl.user )
+
+    return db_list_to_dict_list(users)
 
 
 def _get_project_users_and_common_projects(project_id = None, user_id = None):
@@ -73,6 +83,7 @@ def _get_project_users_and_common_projects(project_id = None, user_id = None):
         List of dictionary objects that represent users and the projects 
         that user has in common with you
     """
+
     # if no project_id provided, just work on the user projects
     if project_id is None or project_id == '':
         projects = _get_user_involved_projects(user_id)
@@ -88,7 +99,7 @@ def _get_project_users_and_common_projects(project_id = None, user_id = None):
 
     # now for each project get the users who are joined
     links = UserProjectLink.objects(project__in = project_id_list,
-                                    user_left = False)
+                                    role__in = ACTIVE_ROLES)
 
     user_projects = Project.objects(id__in = project_id_list)
 
@@ -132,8 +143,7 @@ def _get_project_users_and_common_projects(project_id = None, user_id = None):
 
 
 
-
-def _get_user_owned_projects(id):
+def _get_user_owned_projects(user_id):
     """
     ABOUT
         Get a list of projects a given user owns
@@ -144,8 +154,7 @@ def _get_user_owned_projects(id):
     OUTPUT
         list of dictionary objects representing projects
     """
-    u = User.objects.with_id(id)
-    projects = Project.objects( owner = u )
+    projects = Project.objects( owner = user_id )
 
     return db_list_to_dict_list(projects)
 
@@ -168,22 +177,22 @@ def _check_user_owns_project(user_id=None, project_id=None):
     return project.owner.id == user_id
 
 
-def _get_user_joined_projects(id):
+def _get_user_joined_projects(user_id):
     """
     ABOUT
         Get a list of projects a user is member of
     METHOD
         Native Python
     INPUT
-        user id
+        user_id
     OUTPUT
         list of dictionary objects representing projects
     """
 
-    # TODO fix this
-    projects = []
+    projectLinks = UserProjectLink.objects( user = user_id,
+                                            role__in = ACTIVE_ROLES )
 
-    return db_list_to_dict_list( projects )
+    return db_list_to_dict_list(projectLinks)
 
 
 
@@ -203,7 +212,7 @@ def _get_user_involved_projects(id):
 
     ownedProjects = Project.objects( owner = u )
     joinedLinks = projectLinks = UserProjectLink.objects( user = u,
-                                                          user_left = False )
+                                                          role__in = ACTIVE_ROLES )
 
     projects = set(ownedProjects)
     for link in joinedLinks:

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
-from .models import *
+from .models import Project, Roles, UserProjectLink, ACTIVE_ROLES
 from ..helpers.flasktools import *
 
 from flask import g, request, current_app
@@ -9,25 +9,33 @@ from flask import g, request, current_app
 # TODO add site owner
 
 def _is_owner(project, user_id):
+    if not isinstance(project, Project):
+        project = Project.objects.with_id(project)
+
     return project.owner.id == user_id
 
 def _is_member(project, user_id):
     if _is_owner(project, user_id): 
         return True
-    return _check_for_roles(project, user_id, [Roles.MEMBER, Roles.ORGANIZER])
+
+    return _check_for_roles(project, user_id, ACTIVE_ROLES)
 
 def _is_organizer(project, user_id):
     if _is_owner(project, user_id):
         return True
+    
     return _check_for_roles(project, user_id, [Roles.ORGANIZER])
 
 def _check_for_roles(project, user_id, roles_list):
-    roles = project.user_roles
-    if not roles.has_key(user):
+
+    project_id = project.id if isinstance(project, Project) else project
+    upl = UserProjectLink( user = user_id,
+                           project = project_id )
+
+    if upl.count() == 0:
         return False
 
-    role = roles[user_id]
-    if role.name in roles_list:
+    if upl[0].role in roles_list:
         return True
 
     return False
@@ -64,12 +72,12 @@ def project_exists(f):
    return decorated_function
 
 
-def group_membership_required(f):
+def project_member(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
-        if _is_member(project, g.user):
+        if _is_member(project_id, g.user.id):
             return f(*args, **kwargs)
 
         errStr = "User is not a member of project {0}".format(project_id)
@@ -77,13 +85,14 @@ def group_membership_required(f):
                                                   msg = errStr ))
     return decorated_function
 
+
 def project_ownership(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         project = Project.objects.with_id(project_id)
-        if _is_owner(project, g.user):
+        if _is_owner(project, g.user.id):
             return f(*args, **kwargs)
 
         errStr = "User is not owner of project {0}".format(project_id)
@@ -100,8 +109,7 @@ def project_organizer(f):
 
         project = Project.objects.with_id(project_id)
 
-        print "decorator says g.user is ", isinstance(g.user, User)
-        if _is_organizer(project, g.user):
+        if _is_organizer(project, g.user.id):
             return f(*args, **kwargs)
 
         errStr = "User is not an organizer of project {0}".format(project_id)

@@ -51,18 +51,13 @@ def gen_image_uris(image_uri):
     return images
 
 
+
 # Python 3 allows ENUM's, eventually move to that
 class Roles:
     ORGANIZER = "ORGANIZER"
     MEMBER = "MEMBER"
-    
-class Role(db.EmbeddedDocument):
-    """
-    This allows us to define project roles, such as "Organizer"
-    """
-    user = db.ReferenceField(User)
-    name = db.StringField(max_length=80, unique=True)
-    description = db.StringField(max_length=255)
+
+ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
 
 
 class Project(db.Document, EntityMixin):
@@ -81,13 +76,13 @@ class Project(db.Document, EntityMixin):
     stripe_account = db.ReferenceField(StripeAccount)
     retired_stripe_accounts = db.ListField()
 
-    # list of members and organizers etc.
-    # we map a User to a Role
-    # TODO fix this mofo
-    user_roles = db.DictField()  #db.ListField(db.embeddedDocument(Role))
-
     # Geo JSON Field
     geo_location = db.PointField()
+
+
+    PRIVATE_FIELDS = [
+    'retired_stripe_accounts',
+    ]
 
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
         resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
@@ -102,7 +97,6 @@ class Project(db.Document, EntityMixin):
         return resp
 
 
-'''
 class UserProjectLink(db.Document, EntityMixin):
     """
     UserProjectLink model.  This lets us keep track of what projects
@@ -112,13 +106,11 @@ class UserProjectLink(db.Document, EntityMixin):
     """
     user = db.ReferenceField(User)
     project = db.ReferenceField(Project)
-    role = db.ListField(db.ReferenceField(Role), default=[])
+    role = db.StringField()
 
-    def as_dict(self):
-        return swap_null_id(self._data)
-'''
 
 signals.pre_save.connect(Project.pre_save, sender=Project)
+signals.pre_save.connect(UserProjectLink.pre_save, sender=UserProjectLink)
 """
 The presave routine filles in timestamps for us
 """

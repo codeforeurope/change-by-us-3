@@ -86,6 +86,8 @@ class User(db.Document, UserMixin, EntityMixin):
     #visible profile information
     user_description = db.StringField(max_length=600)
 
+    # TODO add the user contact preferences
+
     # fields that will not be returned by the as_dict routine 
     PRIVATE_FIELDS = [
     'password',

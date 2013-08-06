@@ -73,9 +73,7 @@ def api_create_user():
 
     # if the user signed up from a page of importance, such as a project page
     # then send them back to where they came from
-    return jsonify_response( ReturnStructure(msg = "User Created.",
-                                             success = True,
-                                             data = u.as_dict() ))
+    return jsonify_response( ReturnStructure( data = u.as_dict() ))
 
 
 @user_api.route('/<id>')    
@@ -105,9 +103,7 @@ def api_get_user(id):
 
     else:
 
-        ret = ReturnSctucture( msg = "User found.",
-                               success = True,
-                               data = u.as_dict() )
+        ret = ReturnSctucture( data = u.as_dict() )
 
         # Remove email from visibility
         if not u.public_email:

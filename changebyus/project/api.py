@@ -122,9 +122,7 @@ def api_create_project():
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)
     current_app.logger.info(infoStr)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = p.as_dict() ))
+    return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
 
 @project_api.route('/<id>')
@@ -149,9 +147,7 @@ def api_get_project(project_id):
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = "Not Found" ))
 
-    return jsonify_response( ReturnStrucutre( success = True,
-                                              msg = "Project Found",
-                                              data = p.as_dict() ))
+    return jsonify_response( ReturnStrucutre( data = p.as_dict() ))
 
 
 class EditProjectForm(Form):
@@ -198,7 +194,7 @@ def api_edit_project():
         if name_text.count() > 0 and name_text[0] != p:
             msg = "Project name {0} is already in use.".format(name)
             return jsonify_response( ReturnStructure( success = False,
-                                                  msg = msg ))
+                                                      msg = msg ))
 
     if name: p.name = name
     if description: p.description = description
@@ -228,9 +224,7 @@ def api_edit_project():
                                                                         str(request.form))
     current_app.logger.info(infoStr)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = p.as_dict() ))
+    return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
 
 
@@ -254,9 +248,7 @@ def api_view_project_users(project_id):
 
     users = _get_users_for_project(project_id)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = users ))
+    return jsonify_response( ReturnStructure( data = users ))
 
 
 @project_api.route('/user/<user_id>/ownedprojects')
@@ -276,9 +268,7 @@ def api_owned_projects(user_id):
     """
     projects = _get_user_owned_projects(user_id)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = projects ) )
+    return jsonify_response( ReturnStructure( data = projects ) )
 
 
 @project_api.route('/user/<user_id>/joinedprojects')
@@ -301,9 +291,7 @@ def api_joined_projects(user_id):
     # TODO fix this
     pList = _get_user_joined_projects(user_id)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = projects ) )
+    return jsonify_response( ReturnStructure( data = projects ) )
 
 
 
@@ -329,9 +317,7 @@ def api_view_project_users_common_projects(project_id):
     return_list = _get_project_users_and_common_projects(project_id=project_id, 
                                                          user_id=g.user.id)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = return_list ) )
+    return jsonify_response( ReturnStructure( data = return_list ) )
 
 
 @project_api.route('/list')
@@ -359,9 +345,7 @@ def api_get_projects(limit = None, municipality = None, alphabetical = None):
     projects = Project.objects()
     projects_list = db_list_to_dict_list(projects)
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'OK',
-                                              data = projects_list ) )
+    return jsonify_response( ReturnStructure( data = projects_list ) )
 
     """
     # TODO add filtering / max / etc
@@ -441,8 +425,7 @@ def api_join_project():
                           role = Roles.MEMBER)
     upl.save()
 
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = 'User joined project.' ) )
+    return jsonify_response( ReturnStructure( success = True) )
 
 
 class LeaveProjectForm(Form):
@@ -494,7 +477,8 @@ def api_leave_project():
     for link in links:
         link.delete()
 
-    return jsonify_response( ReturnStructure( success = True ) )
+    return jsonify_response( ReturnStructure( ) )
+
 
 
 class ChangeUserRoleForm(Form):
@@ -553,7 +537,5 @@ def api_change_user_role():
     upl[0].role = role
     upl[0].save()
 
-    msg = "User has been given role of {0} on project".format(role)
-    return jsonify_response( ReturnStructure( success = True,
-                                              msg = msg ) )
+    return jsonify_response( ReturnStructure( ) )
 

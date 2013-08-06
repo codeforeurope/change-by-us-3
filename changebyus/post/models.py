@@ -62,7 +62,7 @@ class ProjectPost(db.Document, EntityMixin):
     responses = db.ListField(db.ReferenceField('self'), default=[])
 
     # having a populated parent field tells us this is a response
-    parent = db.ReferenceField(db.ReferenceField('self'))
+    parent = db.ReferenceField('self')
 
 
 signals.pre_save.connect(ProjectPost.pre_save, sender=ProjectPost)

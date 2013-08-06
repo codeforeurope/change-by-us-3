@@ -59,10 +59,10 @@ def test_send_email():
     current_app.mail.send(msg)
 
 
-@post_api.route('/project/<project_id>/listposts')
+@post_api.route('/project/<project_id>/listposts/<number_posts>')
 @login_required
 @project_exists
-def api_get_project_posts(project_id):
+def api_get_project_posts(project_id, number_posts):
     """
     ABOUT
         Given a project id, return the posts for that project that are visible to the user.
@@ -79,34 +79,17 @@ def api_get_project_posts(project_id):
         Add filtering for the user, ie max number of posts, search by string, etc
     """
     
-    posts = ProjectPost.objects( project = project_id )
 
-    # manually traverse to ensure all children are populated
-    #for post in posts:
+    membership = _user_involved_in_project(project_id = project_id,
+                                           user_id = g.user.id)
 
-    return jsonify_response( ReturnStructure( success = False,
-                                              msg = "Not yet implemented" ) )
+    posts = _get_posts_for_project(project_id = project_id,
+                                   private_posts = membership)
 
-
-@post_api.route('/addprojectpost', methods = ['POST'])
-@login_required
-def api_add_project_post_no_id():
-    """
-    ABOUT
-        Just a wrapper for the /project/<id>/addpost url
-    METHOD
-        Post
-    INPUT
-        project_id, see api_add_project_post()
-    OUTPUT
-        see api_add_project_post()
-    PRECONDITIONS
-        User is logged in  
-    """
-    return api_add_project_post(request.form['project_id'])
+    return jsonify_response( ReturnStructure( data = posts ) )
 
 
-@post_api.route('/project/<id>/addpost', methods = ['POST'])
+@post_api.route('/add_post', methods = ['POST'])
 @login_required
 def api_add_project_post(id):
     """
@@ -221,7 +204,7 @@ def api_add_project_post(id):
 
 
 
-@post_api.route('/<id>/edit', methods = ['POST'])
+@post_api.route('/edit', methods = ['POST'])
 @login_required
 def api_edit_post(id):
     """
@@ -263,6 +246,12 @@ def api_edit_post(id):
     current_app.logger.info(infoStr)
 
     return gen_ok( jsonify( post.as_dict()))
+
+
+@post_api.route('/delete', methods = ['POSTS'])
+@login_required
+def api_delete_post(id):
+    pass
 
 
 def _get_project_post_stream(id=None, private_data=False):

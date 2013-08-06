@@ -191,8 +191,11 @@ def _get_user_joined_projects(user_id):
 
     projectLinks = UserProjectLink.objects( user = user_id,
                                             role__in = ACTIVE_ROLES )
+    projects = []
+    for pl in projectLinks:
+        projects.append(pl.project)
 
-    return db_list_to_dict_list(projectLinks)
+    return db_list_to_dict_list(projects)
 
 
 

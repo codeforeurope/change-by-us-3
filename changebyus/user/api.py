@@ -165,7 +165,6 @@ def api_edit_user(id):
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )
 
 
-
 # TODO what is this doing here?
 # make sure things work with it commented out
 '''

@@ -31,7 +31,7 @@ from .facebook import facebook_view
 from .twitter import twitter_view
 from .stream import stream_view, stream_api
 from .user import user_view, user_api
-from .frontend import frontend_view
+from .frontend import frontend_view, frontend_api
 
 from .helpers.encryption import assemble_key
 from .extensions import db, login_manager
@@ -62,6 +62,7 @@ __all__ = ['create_app']
 
 DEFAULT_BLUEPRINTS = (
     frontend_view,
+    frontend_api,
     post_api,
     project_view, 
     project_api,

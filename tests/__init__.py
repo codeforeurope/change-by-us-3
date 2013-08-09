@@ -17,9 +17,12 @@
 """
 from flask.ext.testing import TestCase
 from changebyus import app as cbu_app
+from testtools import *
 
+from simplejson.decoder import JSONDecodeError
 import datetime
 import os
+import simplejson as json
 
 class BaseTestCase(TestCase):
     """Base TestClass for application"""
@@ -39,7 +42,11 @@ class BaseTestCase(TestCase):
         return response
 
     def create_app(self):
-        return cbu_app()
+        #print "cbu_app ", dir(cbu_app)
+        cbu_app.settings['TESTING'] = self.TESTING
+        cbu_app.settings['CSRF_ENABLED'] = self.CSRF_ENABLED
+
+        return cbu_app
     
     def setUp(self):
         pass

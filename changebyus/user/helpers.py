@@ -2,6 +2,10 @@
 
 from .models import User
 
+from flask import current_app
+from flask.ext.security.utils import ( encrypt_password, verify_password,
+                                       verify_and_update_password )
+
 def _is_email_in_use(email=None):
     """
     ABOUT
@@ -126,3 +130,28 @@ def _add_facebook(user_id=None,
     user.save()
 
     return True
+
+
+def _get_user_by_email(email=None):
+
+    user = User.objects(email = email)
+    if user.count() == 0:
+        return None
+
+    if user.count() > 1:
+        errStr = "ERROR, email {0} is in the User system twice.".format(email)
+        current_app.logger.error(errStr)
+        return None
+
+    return user[0]
+
+def _verify_user_password(user=None, password=None):
+
+    if not isinstance(user, User):
+        user = User.objects.with_id(user)
+
+    #def verify_password(password, password_hash):
+    #return _pwd_context.verify(get_hmac(password), password_hash)
+
+    return verify_and_update_password(password, user)
+

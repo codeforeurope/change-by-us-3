@@ -329,7 +329,6 @@ def _unlink_stripe_account(project_id=None):
     return True
 
 
-
 def _check_stripe_account_link(stripe_user_id=None):
     """
     ABOUT

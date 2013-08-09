@@ -26,6 +26,7 @@ passlib==1.6.1
 pycrypto==2.6
 pymongo==2.5.2
 requests==1.2.0
+simplejson==3.3.0
 stripe==1.7.10
 twill==0.9
 wsgiref==0.1.2

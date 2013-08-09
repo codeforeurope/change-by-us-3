@@ -13,7 +13,13 @@ import datetime
 import flask
 
 from nose.tools import assert_equal, assert_true, assert_false, with_setup
+
 from tests import BaseTestCase
+
+from tests import (string_generator, email_generator, password_generator,
+                   timestamp_generator, name_generator, text_generator,
+                   unicode_generator, unicode_email_generator)
+
 
 class LoginTest(BaseTestCase):
     #
@@ -29,26 +35,29 @@ class LoginTest(BaseTestCase):
     #                                 content_type="application/json")
     #
         
+    def s(self, field, val):
+        self.vars[field] = val
 
-    def setup_func():
-        "set up test fixtures"
+    def g(self, field):
+        return self.vars[field]
 
-    def teardown_func():
-        "tear down test fixtures"
+    def setUp(self):
+        print "set up test fixtures"
+        setattr(self, "vars", {})
+        self.s('email', email_generator())
+        self.s('password', password_generator())
 
-    @with_setup(setup_func, teardown_func)
-    def test():
-        "test ..."
+        self.s('email', 'tom@tom.net')
+        self.s('password', 'tom')
+
+    def test(self):
+
+        #create_user
+
+        data = {'email':self.g('email'), 
+                'password':self.g('password')}
+        resp = self.POST('/login', data = data)
+        print "login response is ", resp
 
 
-    def login(self):
-        print "hi we logged in"
-        assert True
-
-
-class LogoutTest(LoginTest):
-
-    def logout(self):
-        print "hi we logged out"
-        assert True
         

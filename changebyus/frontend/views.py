@@ -46,16 +46,3 @@ def signup_view():
         (sign up through twitter, sign up through facebook) we did this our own way
     """
     return render_template('signup.html')
-
-
-@frontend_view.route('/logout')
-def user_logout():
-    """
-    ABOUT
-        In retrospect there is probably a native flask-security url that does this...
-    TODO
-        Check if this can be retired easily
-    """
-    logout_user();
-
-    return redirect(url_for('frontend_view.home'))

@@ -17,7 +17,7 @@ from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.imagetools import generate_thumbnails
 
 from .models import Project, Roles, ACTIVE_ROLES
-from .helpers import _get_users_for_project
+from .helpers import _get_users_for_project, _get_user_joined_projects
 from .decorators import *
 
 from ..stripe.models import StripeAccount
@@ -77,6 +77,8 @@ def api_create_project():
     description = request.form.get('description')
     location = request.form.get('location')
 
+    # TODO fix the location stuff
+
     owner = User.objects.with_id(g.user.id)
 
     image_uri = None
@@ -109,10 +111,9 @@ def api_create_project():
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    # TODO verify all info
+    # TODO work on geo stuff
     p = Project( name = name, 
                  description = description, 
-                 municipality = municipality, 
                  owner = owner)
 
     if image_uri:
@@ -125,7 +126,7 @@ def api_create_project():
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
 
-@project_api.route('/<id>')
+@project_api.route('/<project_id>')
 @project_exists
 def api_get_project(project_id):
     """
@@ -147,14 +148,15 @@ def api_get_project(project_id):
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = "Not Found" ))
 
-    return jsonify_response( ReturnStrucutre( data = p.as_dict() ))
+    return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
 
 class EditProjectForm(Form):
 
-    name = TextField("title", validators=[Required()])
-    description = TextAreaField("description", validators=[Required()])
-    location = TextField("location", validators=[Required()])
+    project_id = TextField("project_id")
+    name = TextField("title",)
+    description = TextAreaField("description")
+    location = TextField("location")
     photo = FileField("photo")    
 
 
@@ -185,7 +187,7 @@ def api_edit_project():
     project_id = request.form.get('project_id')
     name = request.form.get('name')
     description = request.form.get('description')
-    municipality = request.form.get('location')
+    location = request.form.get('location')
 
     p = Project.objects.with_id(project_id)
 
@@ -198,8 +200,8 @@ def api_edit_project():
 
     if name: p.name = name
     if description: p.description = description
-    if municipality: p.municipality = municipality
 
+    # TODO add the geo region stuff
 
     # TODO cloudize this and remove the dupe code
     if 'photo' in request.files:
@@ -291,7 +293,7 @@ def api_joined_projects(user_id):
     # TODO fix this
     pList = _get_user_joined_projects(user_id)
 
-    return jsonify_response( ReturnStructure( data = projects ) )
+    return jsonify_response( ReturnStructure( data = pList ) )
 
 
 
@@ -410,7 +412,9 @@ def api_join_project():
                                                   msg = errStr ) )
 
     project_id = request.form.get('project_id')
+
     user = User.objects.with_id(g.user.id)
+    project = Project.objects.with_id(project_id)
 
     old_upl = UserProjectLink.objects(user = user,
                                       project = project)
@@ -486,7 +490,7 @@ class ChangeUserRoleForm(Form):
     user_id = TextField("user_id", validators=[Required()])
     user_role = TextField("user_role", validators=[Required()])
 
-@project_api.route('/change_user_role', methods = ['POSTS'])
+@project_api.route('/change_user_role', methods = ['POST'])
 @login_required
 @project_exists
 @project_organizer
@@ -514,28 +518,31 @@ def api_change_user_role():
 
     project_id = request.form.get('project_id')
     user_id = request.form.get('user_id')
-    role = request.form.get('role_name').upper()
+    role = request.form.get('user_role').upper()
 
     if role not in ACTIVE_ROLES:
         errStr = "role_name was not one of {0}".ACTIVE_ROLES
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = errStr ) )
 
+    project = Project.objects.with_id(project_id)
+
     if project.owner.id == user_id:
         errStr = "Can not change project owner role."
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = errStr) ) 
 
-    upl = UserProjectLink(user = user_id,
-                          project = project_id)
+    upl = UserProjectLink.objects( user = user_id,
+                                   project = project_id )
     
     if upl.count() == 0:
         msg = "User is not involved in project."
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = msg ) )
 
-    upl[0].role = role
-    upl[0].save()
+    updated_link = upl[0]
+    updated_link.role = role
+    updated_link.save()
 
     return jsonify_response( ReturnStructure( ) )
 

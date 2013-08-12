@@ -1,6 +1,9 @@
 import string
 import hashlib
 
+
+bool_strings = ['true', '1', 't', 'y']
+
 def string_generator(size=6, chars=string.ascii_uppercase + string.digits):
     """
     ABOUT

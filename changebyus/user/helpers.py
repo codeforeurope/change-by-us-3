@@ -102,6 +102,7 @@ def _add_twitter(user_id=None,
     user.save()
 
     return True
+    
 
 def _add_facebook(user_id=None,
                   facebook_id=None,
@@ -144,6 +145,7 @@ def _get_user_by_email(email=None):
         return None
 
     return user[0]
+
 
 def _verify_user_password(user=None, password=None):
 

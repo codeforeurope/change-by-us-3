@@ -11,8 +11,8 @@ from flask import current_app
 
 from ..extensions import db
 
-from ..helpers.mixin import handle_decryption, handle_initial_encryption
-from ..helpers.mixin import handle_update_encryption, EntityMixin
+from ..helpers.mixin import ( handle_decryption, handle_initial_encryption,
+                              handle_update_encryption, EntityMixin, encode_model )
 
 """
 =================
@@ -110,9 +110,9 @@ class User(db.Document, UserMixin, EntityMixin):
       
     # we override the as_dict to handle the email logic
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(exclude_nulls, recursive, depth, **kwargs)
-        if not self.public_email:
-            resp.email = None
+        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
+        if not self['public_email']:
+            resp['email'] = None
 
         return resp
 

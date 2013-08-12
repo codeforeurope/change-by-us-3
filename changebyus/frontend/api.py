@@ -35,8 +35,6 @@ class LoginForm(Form):
 @frontend_api.route('/login', methods = ['POST'])
 def user_login():
 
-    print "we hit our login method"
-
     form = LoginForm()
     if not form.validate():
         errStr = "Request container errors."
@@ -48,11 +46,12 @@ def user_login():
 
     user = _get_user_by_email(email = email)
 
-    if _verify_user_password(user = user, password = password):
-        login_user(user)
+    if not _verify_user_password(user = user, password = password):
+        jsonify_response( ReturnStructure( msg = 'Unsuccessful', 
+                                           success = False ) )
 
-    print g.user.email
-
+    login_user(user)
+    
     return jsonify_response( ReturnStructure( ) )
 
 

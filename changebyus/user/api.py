@@ -9,6 +9,11 @@ from flask.ext.security.utils import encrypt_password
 
 from .models import User
 from .helpers import _create_user
+from ..helpers.stringtools import bool_strings
+
+from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, 
+                            SubmitField, Required, ValidationError, 
+                            PasswordField,  )
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list 
@@ -23,6 +28,15 @@ User API
 Users and projects are the core components of CBU.  This user api lets
 other modules create/modify/edit user information through various routines.
 """
+
+class CreateUserForm(Form):
+
+    email = TextField("email", validators=[Required()])
+    password = PasswordField("password", validators=[Required()])
+    display_name = TextField("display_name", validators=[Required()])
+    first_name = TextField("first_name", validators=[Required()])
+    last_name = TextField("last_name", validators=[Required()])
+
 
 @user_api.route('/create', methods = ['POST'])
 def api_create_user():
@@ -42,6 +56,12 @@ def api_create_user():
     if not g.user.is_anonymous():
         errStr = "You can not create an account when logged in."
         return jsonify_response( ReturnStruct(msg = errStr, success = False) )
+
+    form = CreateUserForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
     email = request.form.get('email')
     password = request.form.get('password')
@@ -114,18 +134,24 @@ def api_get_user(id):
         return jsonify_response( ret )
 
 
+class EditUserForm(Form):
 
+    email = TextField("email")
+    public_email = TextField("public_email")
+    password = PasswordField("password")
+    display_name = TextField("display_name")
+    first_name = TextField("first_name")
+    last_name = TextField("last_name")
 
 @user_api.route('/edit', methods = ['POST'])
 @login_required
-def api_edit_user(id):
+def api_edit_user():
     """
     ABOUT
         Routine to edit a user record
     METHOD
         POST
     INPUT
-        REQUIRED: id
         OPTIONAL: email, public_email, password, display_name, first_name, last_name
     OUTPUT
         User record upon success
@@ -133,34 +159,33 @@ def api_edit_user(id):
         API key exists in the config file
     """
 
-    u = User.objects.with_id(id)
-    errMsg = ''
+    form = EditUserForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-    if( u.count() == 0 ):
-        errStr = "Unable to find user with id {0}.".format(id)
+    u = User.objects.with_id(g.user.id)
 
-    if g.user.id != u.id:
-        errStr = "You can only edit the currently logged in user."
+    public_email = request.form.get('public_email')
+    if public_email:
+        u.public_email = request.form.get('public_email').lower() in bool_strings
 
-    if len(errStr) > 0:
-        return jsonify_response( ReturnStructure( success = False, msg = errStr ) )
-
-    email = get_form('email')
-    public_email = get_form('public_email')
-    password = get_form('password')
-    display_name = get_form('display_name')
-    first_name = get_form('first_name')
-    last_name = get_form('last_name')
+    email = request.form.get('email')
+    password = request.form.get('password')
+    display_name = request.form.get('display_name')
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
 
     if email: u.email = email
-    if public_email: u.public_email = public_email
     if password: u.password = password
     if display_name: u.display_name = display_name
     if first_name: u.first_name = first_name
     if last_name: u.last_name = last_name
 
     u.save()
-    
+
+
     # defaults to success and 'OK'
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )
 

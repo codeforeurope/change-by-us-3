@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
-from .models import Project, Roles, ACTIVE_ROLES
+from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 from flask import g, current_app
+from ..helpers.mongotools import db_list_to_dict_list
 
 
 # True is user is owner or member of project

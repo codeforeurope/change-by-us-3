@@ -25,7 +25,7 @@ from flaskext.uploads import UploadSet, configure_uploads, IMAGES
 
 from flask_oauth import OAuth
 
-from .post import post_api
+from .post import post_api, post_discussion_api, post_update_api
 from .project import project_view, project_api
 from .facebook import facebook_view
 from .twitter import twitter_view
@@ -64,6 +64,8 @@ DEFAULT_BLUEPRINTS = (
     frontend_view,
     frontend_api,
     post_api,
+    post_discussion_api,
+    post_update_api,
     project_view, 
     project_api,
     facebook_view,

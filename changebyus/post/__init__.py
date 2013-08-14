@@ -5,3 +5,5 @@
 """
 
 from .api import post_api
+from .api_discussion import post_discussion_api
+from .api_update import post_update_api

@@ -22,7 +22,7 @@ from tests import (string_generator, email_generator, password_generator,
 
 
 
-class LoginClass():
+class UserClass():
 
     def __init__(self):
 
@@ -58,6 +58,21 @@ class LoginClass():
         resp = client.POST('/login', data = login)
         client.assertTrue( resp['success'] )
 
+    def joinProject(self, client, project_id):
+
+        join = { 'project_id' : project_id }
+        resp = client.POST('/api/project/join', data = join)
+        client.assertTrue( resp['success'] )
+
+        resp = client.GET( '/api/project/user/{0}/joinedprojects'.format(self.user_id) )
+        
+        joined = False
+        for project in resp['data']:
+            if project['id'] == project_id:
+                joined = True
+
+        client.assertTrue( joined )
+
 
 class UserTests(BaseTestCase):
     #
@@ -74,7 +89,7 @@ class UserTests(BaseTestCase):
     #
 
     def setUp(self):
-        self.user = LoginClass()
+        self.user = UserClass()
     
     def test_login_update(self):
         self.user.createUser(self)
@@ -94,7 +109,7 @@ class UserTests(BaseTestCase):
         self.assertTrue( resp['data']['email'] == None)
 
 
-class ProjectClass(BaseTestCase):
+class ProjectClass():
 
     def __init__(self):
         self.name = name_generator()
@@ -113,12 +128,43 @@ class ProjectClass(BaseTestCase):
 
         self.project_id = resp['data']['id']   
 
+        resp = client.GET( '/api/project/{0}'.format(self.project_id) )
+        client.assertTrue( resp['data']['description'] == self.description )
+
+    def edit(self, client, expected = True):
+
+        edit = { 'project_id' : self.project_id,
+                 'name' : self.name,
+                 'description' : self.description,
+                 'location' : self.location }
+
+        resp = client.POST('/api/project/edit', data = edit)
+
+        if expected:
+            client.assertTrue( resp['success'] )
+            print resp
+            client.assertTrue( resp['data']['name'] == self.name )
+            client.assertTrue( resp['data']['description'] == self.description )
+            # todo GEO stuff
+            #client.assertTrue( resp['data']['location'] == self.location )
+        else:
+            client.assertFalse( resp['success'] )
+
+    def changeRoll(self, client, project_id, user_id, roll):
+
+        role = { 'project_id' : project_id,
+                 'user_id' : user_id,
+                 'user_role' : roll }
+
+        resp = client.POST('/api/project/change_user_role', data = role)
+        
+        client.assertTrue( resp['success'] )
 
 class ProjectTests(BaseTestCase):
 
     def setUp(self):
-        self.owner = LoginClass()
-        self.member = LoginClass()
+        self.owner = UserClass()
+        self.member = UserClass()
         self.project = ProjectClass()
 
     def test_projects(self):
@@ -126,60 +172,168 @@ class ProjectTests(BaseTestCase):
         self.owner.createUser(self)
         self.project.createProject(self)
 
-        resp = self.GET( '/api/project/{0}'.format(self.project.project_id) )
-        self.assertTrue( resp['data']['description'] == self.project.description )
-
-        # edit the project
+        #### edit the project
         self.project.name = name_generator()
-
-        edit = { 'project_id' : self.project.project_id,
-                 'name' : self.project.name }
-
-        resp = self.POST('/api/project/edit', data = edit)
-        self.assertTrue( resp['success'] )
-        self.assertTrue( resp['data']['name'] == self.project.name )
-
+        self.project.edit(self)
         resp = self.GET('/logout')
-        self.assertTrue( resp['success'] )
 
-        # now join as diff user
+        #### now join as diff user
         self.member.createUser(self) 
-
-        join = { 'project_id' : self.project.project_id }
-        resp = self.POST('/api/project/join', data = join)
-        self.assertTrue( resp['success'] )
-
-        resp = self.GET( '/api/project/user/{0}/joinedprojects'.format(self.member.user_id) )
-        self.assertTrue( self.project.project_id == resp['data'][0]['id'] )
-
-        edit = { 'project_id' : self.project.project_id,
-                 'name' : 'bad name' }
-
-        resp = self.POST('/api/project/edit', data = edit)
-        self.assertFalse( resp['success'] )
-
-        # login as owner
+        self.member.joinProject(self, self.project.project_id)
+        self.project.edit(self, expected = False)
         self.GET('/logout')
+
+        #### login as owner
         self.owner.login(self)
 
-        # make our member an organizer
-        role = { 'project_id' : self.project.project_id,
-                 'user_id' : self.member.user_id,
-                 'user_role' : 'ORGANIZER' }
-        resp = self.POST('/api/project/change_user_role', data = role)
-        self.assertTrue( resp['success'] )
+        #### make our member an organizer
+        self.project.changeRoll( self,
+                                 self.project.project_id,
+                                 self.member.user_id,
+                                 'ORGANIZER' )
 
-        # log back in as the member/organizer
+        #### log back in as the member/organizer
         self.GET('/logout')
         self.member.login(self)
 
-        # change project name
+        #### change project name
         self.project.name = name_generator()
         edit = { 'project_id' : self.project.project_id,
                  'name' : self.project.name }
 
         resp = self.POST('/api/project/edit', data = edit)
         self.assertTrue( resp['success'] )
+
+
+class PostClass():
+
+    def __init__(self):
+       pass
+
+    def prepareUpdate(self, project_id):
+        self.update_title = name_generator()
+        self.update_description = text_generator(100)
+        self.update_project_id = project_id 
+
+    def prepareDiscussion(self, project_id):
+        self.discussion_title = name_generator()
+        self.discussion_description = text_generator(100)
+        self.discussion_project_id = project_id 
+
+    def createUpdate(self, 
+                     client, 
+                     project_id, 
+                     response_to=None,
+                     expected=True):
+
+        self.prepareUpdate(project_id)
+
+
+        update = { 'title' : self.update_title,
+                   'description' : self.update_description,
+                   'project_id' : self.update_project_id }
+
+        if response_to:
+            update[ 'response_to_id' : response_to ]
+
+        resp = client.POST('/api/post/add_update', data = update)
+        print resp
+        if expected:
+            client.assertTrue( resp['success'] )
+            self.discussion_id = resp['data']['id']
+        else:
+            client.assertFalse( resp['success'] )
+
+
+    def createDiscussion(self,
+                         client, 
+                         project_id, 
+                         response_to=None,
+                         expected=True):
+        
+        self.prepareDiscussion(project_id)
+
+        update = { 'title' : self.discussion_title,
+                   'description' : self.discussion_description,
+                   'project_id' : self.discussion_project_id }
+
+        if response_to:
+            update[ 'response_to_id' : response_to ]
+
+        resp = client.POST('/api/post/add_discussion', data = update)
+        print resp
+        if expected:
+            client.assertTrue( resp['success'] )
+            self.discussion_id = resp['data']['id']
+        else:
+            client.assertFalse( resp['success'] )
+
+
+
+class PostTests(BaseTestCase):
+
+    def setUp(self):
+        self.owner = UserClass()
+        self.member = UserClass()
+        self.project = ProjectClass()
+        self.owner_post = PostClass()
+        self.member_post = PostClass()
+
+    def test_posts(self):
+        
+        self.owner.createUser(self)
+        self.project.createProject(self)
+        self.owner_post.createDiscussion(self, self.project.project_id)
+        self.owner_post.createUpdate(self, self.project.project_id)
+
+        # make sure user doesn't have permissions to update or post
+        self.GET('/logout')
+        self.member.createUser(self)
+        self.member_post.createUpdate(self, 
+                                      self.project.project_id,
+                                      expected = False)
+        self.member_post.createDiscussion(self,
+                                          self.project.project_id,
+                                          expected = False)
+
+        self.member.joinProject( self, 
+                                 self.project.project_id)
+
+        # now make user a member of the project
+        self.GET('/logout')
+        self.owner.login(self)
+        self.project.changeRoll( self,
+                                 self.project.project_id,
+                                 self.member.user_id,
+                                 'MEMBER' )
+        self.GET('/logout')
+        self.member.login(self)
+
+        self.member_post.createUpdate(self, 
+                                      self.project.project_id,
+                                      expected = False)
+        self.member_post.createDiscussion(self,
+                                          self.project.project_id,
+                                          expected = True)
+        self.GET('/logout')
+
+        # now make the member an organizer and try
+        self.owner.login(self)
+        self.project.changeRoll( self,
+                                 self.project.project_id,
+                                 self.member.user_id,
+                                 'ORGANIZER' )
+
+        self.GET('/logout')
+        self.member.login(self)
+
+        self.member_post.createUpdate(self, 
+                                      self.project.project_id,
+                                      expected = True)
+        self.member_post.createDiscussion(self,
+                                          self.project.project_id,
+                                          expected = True)
+        self.GET('/logout')
 
 
 

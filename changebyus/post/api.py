@@ -8,9 +8,14 @@ from flask import url_for, g, current_app
 
 from flask.ext.login import login_required, current_user
 
+from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
+                           SubmitField, Required, ValidationError, FieldList)
+
 from flask_mail import Message
 
 from .models import ProjectPost, Project, User, SocialMediaObject
+from .decorators import post_delete_permission, post_edit_permission, post_exists 
+
 from ..facebook.facebook import _post_user_facebook_feed
 from ..twitter.twitter import _post_user_twitter_update
 from ..bitly.api import _get_bitly_url
@@ -22,7 +27,7 @@ from ..stream.api import _get_user_stream
 from ..project.helpers import ( _get_user_involved_projects, _get_project_users_and_common_projects,
                                 _user_involved_in_project )
 
-from ..project.decorators import project_exists
+from ..project.decorators import project_exists, project_member
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -42,11 +47,6 @@ a twitter_post_id and a facebook_post_id, however the actual social posting
 is handled by other modules
 """
 
-@post_api.route('/test/<id>')
-def testerrr(id):
-    print "tester    ", id
-
-
 @post_api.route('/tester')
 def test_send_email():
     msg = Message("Hello",
@@ -57,6 +57,38 @@ def test_send_email():
     msg.body = "hi"
     msg.html = "<b>html</b>"
     current_app.mail.send(msg)
+
+
+@post_api.route('/project/<project_id>/listposts')
+@login_required
+@project_exists
+def api_get_project_posts_fixed(project_id):
+    """
+    ABOUT
+        Given a project id, return a fixed number of posts for that project that 
+        are visible to the user.  Visibility depends on membership
+    METHOD
+        Get
+    INPUT
+        project_id
+    OUTPUT
+        List of posts and all responses to that post
+    PRECONDITIONS
+        User is logged in
+    TODO
+        Add filtering for the user, ie max number of posts, search by string, etc
+    """
+
+    # 10 posts
+    membership = _user_involved_in_project(project_id = project_id,
+                                           user_id = g.user.id)
+
+    posts = _get_posts_for_project(project_id = project_id,
+                                   private_posts = membership,
+                                   max_posts = 10)
+
+    return jsonify_response( ReturnStructure( data = posts ) )
+
 
 
 @post_api.route('/project/<project_id>/listposts/<number_posts>')
@@ -70,7 +102,7 @@ def api_get_project_posts(project_id, number_posts):
     METHOD
         Get
     INPUT
-        project_id
+        project_id, number_posts
     OUTPUT
         List of posts and all responses to that post
     PRECONDITIONS
@@ -80,140 +112,90 @@ def api_get_project_posts(project_id, number_posts):
     """
     
 
-    membership = _user_involved_in_project(project_id = project_id,
-                                           user_id = g.user.id)
+    membership = _user_involved_in_project( project_id = project_id,
+                                            user_id = g.user.id )
 
-    posts = _get_posts_for_project(project_id = project_id,
-                                   private_posts = membership)
+    posts = _get_posts_for_project( project_id = project_id,
+                                    private_posts = membership,
+                                    max_posts = number_posts )
 
     return jsonify_response( ReturnStructure( data = posts ) )
 
 
+class CreateProjectPostForm(Form):
+    title = TextField("title", validators=[Required()])
+    description = TextAreaField("description", validators=[Required()])
+    social_sharing = FieldList( TextField("social_sharing"), min_entries=0 )
+    project_id = TextField("project_id", validators=[Required()])
+    response_to_id = TextField("response_to_id")
+    visibility = TextField("visibility")
+
+
 @post_api.route('/add_post', methods = ['POST'])
 @login_required
-def api_add_project_post(id):
+@project_exists
+@project_member
+def api_add_project_post():
     """
     ABOUT
         Method to add a post to a give project
     METHOD
         Post
     INPUT
-        title, description, share to ['facebook', 'twitter', 'private', 'public']
+        title - REQUIRED, 
+        description - REQUIRED, 
+        project_id - REQUIRED,
+        social_sharing ['facebook', 'twitter'] - LIST, optional, 
+        visibility 'public' or 'private'.  If not supplied defaults to private or
+          if this is a response_to post, defaults to the response_to post visibility
+        response_to_id - original post ID,
     OUTPUT
-        A render of the 'stream.html' html file viewing posts for a given project.
-        This should become a pure API routine and just return a status code
+        Results
     PRECONDITIONS
         User is logged in, user is a member or owner of the project
-    TODO
-        Convert to a pure API routine where we only create the post and return a status code.
-        Create a group_member decoratoe so we don't explicitly need to check for membership in code
-        Do verification on the title and description
     """
-    title = request.form['title']
-    description = request.form['description']
+
+    form = CreateProjectPostForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    title = request.form.get('title')
+    description = request.form.get('description')
     social_sharing = request.form.getlist('share_to')
-    user = User.objects.with_id(g.user.id)
-    project = Project.objects().with_id(id)
-
-    if project is None:
-        current_app.logger.warning("Called with a bad project_id of {0}".format(id))
-
-    if not _user_involved_in_project(project_id=project.id, user_id=g.user.id):
-        infoStr = "User {0} tried to post to project {1} they are not involved with.".format(g.user.id,
-                                                                                             project.id)
-        current_app.logger.info(infoStr)
-        abort(403)
+    project_id = request.form.get('project_id')
+    response_to_id = request.form.get('response_to_id')
+    visibility = requests.form.get('visibility')
 
 
-    pp = ProjectPost( project = project, 
-                      user = user,
-                      title = title, 
-                      description = description)
-
-    # save once to ensure record
-    pp.save()
-
-    project_url = url_for('project_view.project_view_id', id=id, _external=True)
-
-    # do social posts as necessary
-    fb_post = None
-    if 'facebook' in social_sharing:
-
-        # socialMediaObject is an optional embedded field
-        if pp.social_object == None:
-            pp.social_object = SocialMediaObject()
-        
-        fb_post = _post_user_facebook_feed(link=project_url,
-                                       name=title,
-                                       description=description)
-
-        if fb_post[0]:
-            pp.social_object.facebook_id = str(fb_post[1])
+    return _create_project_post(title = title,
+                                description = description,
+                                social_sharing = social_sharing,
+                                project_id = project_id,
+                                response_to_id = response_to_id,
+                                visibility = visibility)
 
 
-    twitter_tweet = None
-    if 'twitter' in social_sharing:
 
-        # socialMediaObject is an optional embedded field
-        if pp.social_object == None:
-            pp.social_object = SocialMediaObject()
-
-        shortened_url = _get_bitly_url(project_url)
-    
-        tweet_base = " posted to " + project.name + " on ChangeBy.Us " + shortened_url
-        tweet = title[0:140-len(tweet_base)] + tweet_base
-
-        twitter_tweet = _post_user_twitter_update(status=tweet)
-
-        if twitter_tweet[0]:
-            pp.social_object.twitter_id = str(twitter_tweet[1])
-
-
-    if 'private' in social_sharing and 'public' not in social_sharing:
-        pp.public = False
-
-
-    # save after social stuff in case we changed it
-    pp.save()
-
-    infoStr = "Post for project {0} created by user {1} description {2}".format(id,
-                                                                                g.user.id,
-                                                                                pp.description)
-    current_app.logger.info(infoStr)
-
-    projects = _get_user_involved_projects(g.user.id)
-    posts = _get_user_stream(g.user.id)
-    members = _get_project_users_and_common_projects(None, g.user.id)
-
-    
-    # prepare the dictionary for rendering, do a little manipulating
-    for project in projects:
-        if project.has_key('stripe_account') and project['stripe_account'] is not None:
-            project['account_id'] = project['stripe_account']['id']
-            project['balance'], project['percentage'] = \
-                _get_account_balance_percentage(project['account_id'])
-
-            project['access_token'] = project['stripe_account']['access_token']                
-            project['account_key'] = project['stripe_account']['publishable_key']
-            project['stripe_description'] = project['stripe_account']['description']
-
-    return render_template('stream.html', data = projects, posts = posts, members = members, newPost=True, twitter=twitter_tweet, fb=fb_post)
-
-    #TEMPORARY CHANGE
-    #return gen_ok( jsonify( pp.as_dict()))
-
+class EditProjectPostForm(Form):
+    post_id = TextField("post_id", validators=[Required()])
+    title = TextField("title")
+    description = TextAreaField("description")
 
 
 @post_api.route('/edit', methods = ['POST'])
 @login_required
-def api_edit_post(id):
+@post_exists
+@post_edit_permission
+def api_edit_post():
     """
     ABOUT
         Allow for the editing of an existing post
     METHOD
         Post
     INPUT
-        post id, title, description
+        post_id, title, description
     OUTPUT
         Json structure representing the modified post
     PRECONDITIONS
@@ -222,60 +204,55 @@ def api_edit_post(id):
         Allow updating of related events, images, and most importantly update
         social posts.
     """
-    post = ProjectPost.objects.with_id(id)
-    if post.count() == 0:
-        return not_found("Post does not exist")
 
-    curr_user = Users.objects.with_id(g.user.id)
+    form = EditProjectPostForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-    # TODO does a reference field get looked up when I get object?
-    # TODO test this id logic, probably wrong, plus I'm sure I need to 
-    # de-reference the fields
-    if post.user is not curr_user and post.project.owner is not curr_user:
-        return no_permission("You are not the poster or group owner")
 
-    title = request.form['title']
-    description = request.form['description']
+    post_id = request.form.get('post_id')
+    description = request.form.get('description')
+    title = request.form.get('title')
 
-    # TODO handle social link updating
-    if title: post.title = title
+    post = ProjectPost.objects.with_id(post_id)
+
     if description: post.description = description
+    if title: post.title = title
+
     post.save()
 
     infoStr = "Post {0} edited by {1}.".format(id, g.user.id)
     current_app.logger.info(infoStr)
 
-    return gen_ok( jsonify( post.as_dict()))
+    return jsonify_response( ReturnStructure( data = post.as_dict() ) )
 
+
+
+
+class DeleteProjectPostForm(Form):
+    post_id = TextField("post_id", validators=[Required()])
 
 @post_api.route('/delete', methods = ['POSTS'])
 @login_required
-def api_delete_post(id):
-    pass
+@post_exists
+@post_delete_permission
+def api_delete_post():
 
+    form = DeleteProjectPostForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-def _get_project_post_stream(id=None, private_data=False):
-    """
-    ABOUT
-        Get a list of all the posts for a given project.  Either include
-        or don't include the private posts
-    METHOD
-        Get
-    INPUT
-        project id, private_data boolean
-    OUTPUT
-        Python Dict list of project posts
-    PRECONDITIONS
-        None
-    """
-    project = Project.objects.with_id(id)
+    post_id = requests.form.get('post_id')
 
-    if private_data:
-        # force a created_at sort, especially important for imported data
-        posts = ProjectPost.objects(project=project).order_by('-created_at')
-    else:
-        posts = ProjectPost.objects(project=project,
-                                    public=True).order_by('-created_at')
+    post = ProjectPosts.objects.with_id( post_id )
+    post.delete()
 
-    return db_list_to_dict_list(posts)
+    infoStr = "User {0} deleted post {1}".format(g.user.id, post_id)
+    current_app.logger.info(infoStr)
+
+    return jsonify_response( ReturnStructure( ) )
 

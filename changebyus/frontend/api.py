@@ -46,9 +46,9 @@ def user_login():
 
     user = _get_user_by_email(email = email)
 
-    if not _verify_user_password(user = user, password = password):
-        jsonify_response( ReturnStructure( msg = 'Unsuccessful', 
-                                           success = False ) )
+    if user is None or not _verify_user_password(user = user, password = password):
+        return jsonify_response( ReturnStructure( msg = 'Unsuccessful', 
+                                                  success = False ) )
 
     login_user(user)
     

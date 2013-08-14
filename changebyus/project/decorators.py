@@ -32,12 +32,8 @@ def _check_for_roles(project, user_id, roles_list):
     upl = UserProjectLink.objects( user = user_id,
                                    project = project_id )
 
-    print "links: ", upl.count()
-
     if upl.count() == 0:
         return False
-
-    print "upl ", upl[0].role
 
     if upl[0].role in roles_list:
         return True

@@ -15,13 +15,14 @@ from .api import CreateProjectPostForm
 from .helpers import _create_project_post
 
 from ..project.decorators import project_exists, project_member
+from ..helpers.flasktools import ReturnStructure, jsonify_response
+from ..helpers.mongotools import db_list_to_dict_list
+
 
 post_update_api = Blueprint('post_update_api', __name__, url_prefix='/api/post')
 
 @post_update_api.route('/project/<project_id>/list_updates')
-@login_required
 @project_exists
-@project_member
 def api_get_project_updates_fixed(project_id):
     """
     ABOUT
@@ -39,18 +40,16 @@ def api_get_project_updates_fixed(project_id):
 
     # LV TODO LV TODO need to handle responses diff
 
-    posts = Projects.objects( parent = None, 
-                              project = project_id,
-                              public = True )[0:10]
+    posts = ProjectPost.objects( parent_id = None, 
+                                 project = project_id,
+                                 public = True )[0:10]
 
-    return jsonify_response( ReturnStructure( data = posts ) )
+    return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )
 
 
 
 @post_update_api.route('/project/<project_id>/list_updates/<number_posts>')
-@login_required
 @project_exists
-@project_member
 def api_get_project_updates(project_id, number_posts):
     """
     ABOUT
@@ -70,11 +69,11 @@ def api_get_project_updates(project_id, number_posts):
     # LV TODO LV TODO need to handle responses diff
     
 
-    posts = Projects.objects( parent = None, 
+    posts = Projects.objects( parent_id = None, 
                               project = project_id,
                               public = True )[0:number_posts]
 
-    return jsonify_response( ReturnStructure( data = posts ) )
+    return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )
 
 
 

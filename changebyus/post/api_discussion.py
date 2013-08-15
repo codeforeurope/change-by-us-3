@@ -16,6 +16,8 @@ from .helpers import _create_project_post
 from .decorators import post_delete_permission, post_edit_permission, post_exists 
 
 from ..project.decorators import project_exists, project_member
+from ..helpers.flasktools import ReturnStructure, jsonify_response
+from ..helpers.mongotools import db_list_to_dict_list
 
 post_discussion_api = Blueprint('post_discussion_api', __name__, url_prefix='/api/post')
 
@@ -37,11 +39,11 @@ def api_get_project_discussions_fixed(project_id):
         User is logged in, user a member of the project
     """
 
-    posts = Projects.objects( parent = None, 
-                              project = project_id,
-                              public = False )[0:10]
+    posts = ProjectPost.objects( parent_id = None, 
+                                 project = project_id,
+                                 public = False )[0:10]
 
-    return jsonify_response( ReturnStructure( data = posts ) )
+    return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )
 
 
 
@@ -66,11 +68,11 @@ def api_get_project_discussions(project_id, number_posts):
     """
     
 
-    posts = Projects.objects( parent = None, 
+    posts = Projects.objects( parent_id = None, 
                               project = project_id,
                               public = False )[0:number_posts]
 
-    return jsonify_response( ReturnStructure( data = posts ) )
+    return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )
 
 
 

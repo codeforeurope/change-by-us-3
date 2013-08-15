@@ -110,7 +110,7 @@ def _create_project_post(title = None,
                                                       msg = errStr ) )
 
         # just overwrite the current visibility for responses
-        is_private_post = not post.public
+        is_private_post = not original_post.public
      
 
     pp = ProjectPost( project = project, 
@@ -120,12 +120,12 @@ def _create_project_post(title = None,
                       public = not is_private_post)
 
     if is_response_post:
-        pp.parent = original_post
 
+        pp.parent_id = str(original_post.id)
         # save to get database_id
         pp.save()
-        original_post.responses.append(pp)
 
+        original_post.responses.append(pp)
         original_post.save()
 
 
@@ -169,7 +169,6 @@ def _create_project_post(title = None,
 
             if twitter_tweet[0]:
                 pp.social_object.twitter_id = str(twitter_tweet[1])
-
 
 
     # save after social stuff in case we changed it

@@ -3,6 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
+
 import datetime
 
 from ..extensions import db
@@ -23,10 +24,6 @@ import bson
 ====================
 Common Model Objects
 ====================
-
-Timestamps to be mixed in with a MongoDB object, and the pre_save
-routine that will populate them
-
 """
 
 class EntityMixin(object):
@@ -43,7 +40,11 @@ class EntityMixin(object):
         document.updated_at = datetime.datetime.utcnow() 
         
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, exclude_nulls=True, recursive=False, depth=1, **kwargs)
+        resp = encode_model(self, 
+                            exclude_nulls=exclude_nulls, 
+                            recursive=recursive, 
+                            depth=depth, 
+                            **kwargs)
         return resp
     
 
@@ -59,10 +60,18 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
     kwargs:
         current_depth: for internal recursion
     """
+
+    from ..project.models import *
+    from ..user.models import *
+    from ..post.models import *
+
+    print "current depth is ", kwargs.get('current_depth')
+
     if (  kwargs.get('current_depth') is not None and
           kwargs.get('current_depth') > 0 and
           kwargs.get('current_depth') >= depth and 
           recursive is True ):
+        print "setting recursive to FALSE"
         recursive = False
     else:
         if kwargs.get('current_depth') is None: 
@@ -99,7 +108,7 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
                         out[k] = v
                     else:
                         out[k] = encode_model(v, recursive=recursive, 
-                                              depth=depth, **kwargs)
+                                                 depth=depth, **kwargs)
                     
         # To avoid breaking loop flow, do at the end of looping
         for delkey in kwargs.get('delete_keys'):
@@ -123,6 +132,9 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
         out = [ (g,list(l)) for g,l in obj ]
     elif isinstance(obj, (list)):
         # GeoPointField is also a list!
+        # TODO TODO
+        # we should only recurse on these if they are simple types
+        # and we're in recurse.  We need to rethink this to protect it
         out = [encode_model(item, recursive=recursive, depth=depth, **kwargs) 
                for item in obj]
     elif isinstance(obj, (dict)):
@@ -133,11 +145,13 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
         out = str(obj)
     elif isinstance(obj, (str, unicode)):
         out = obj
-    elif isinstance(obj, (datetime.datetime)):
+    elif isinstance(obj, (datetime)):
         out = str(obj)
     elif isinstance(obj, (bool, int, float, long)):
         out = obj
     elif isinstance(obj, bson.DBRef):
+        print "recursive is ", recursive
+
         if recursive:
             # If we recurse deep enough, we don't have access to the model object
             # so we need to look it up in the globals.
@@ -145,23 +159,27 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
             # WARN: This means we assume that all models have been imported 
             Context = globals().get(''.join([x.capitalize() 
                                              for x in obj.collection.split('_')]))
+            print "found context to be ", Context
+            print "from data ", obj.collection
             try:
-                if kwargs.get('current_depth') == depth:
+                if kwargs.get('current_depth') >= depth:
+                    print "haulting due to depth"
                     doc = Context.objects(id=obj.id).first()
                     if doc: doc = doc._data
-                else:    
+                else:
+                    print "context is ", Context.objects() 
                     doc = Context.objects(id=obj.id).first()
-                out = encode_model(obj=doc, recursive=False, depth=depth, **kwargs)
+                out = encode_model(obj=obj, recursive=recursive, depth=depth, **kwargs)
             except Exception:
-                app.logger.error('Vars: context=%s, id=%s, depth=%s' % 
-                                 (str(obj.collection), str(obj.id), depth),
-                                 exc_info=True)
+                current_app.logger.error('Vars: context=%s, id=%s, depth=%s' % 
+                                         (str(obj.collection), str(obj.id), depth),
+                                          exc_info=True)
                 out = str(obj)
         else:
             out = {'collection': obj.collection, 'id': str(obj.id)}
 
     else:
-        app.logger.debug("Could not JSON-encode type '%s': %s" % 
+        current_app.logger.debug("Could not JSON-encode type '%s': %s" % 
                          (type(obj), str(obj)))
         out = str(obj)
         

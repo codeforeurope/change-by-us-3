@@ -91,7 +91,8 @@ class UserTests(BaseTestCase):
     def setUp(self):
         self.user = UserClass()
     
-    def test_login_update(self):
+    #def test_login_update(self):
+    def login_update(self):
         self.user.createUser(self)
         self.GET('/logout')
         self.user.login(self)
@@ -157,7 +158,7 @@ class ProjectClass():
                  'user_role' : roll }
 
         resp = client.POST('/api/project/change_user_role', data = role)
-        
+
         client.assertTrue( resp['success'] )
 
 class ProjectTests(BaseTestCase):
@@ -167,7 +168,8 @@ class ProjectTests(BaseTestCase):
         self.member = UserClass()
         self.project = ProjectClass()
 
-    def test_projects(self):
+    #def test_projects(self):
+    def projects(self):
 
         self.owner.createUser(self)
         self.project.createProject(self)
@@ -234,13 +236,13 @@ class PostClass():
                    'project_id' : self.update_project_id }
 
         if response_to:
-            update[ 'response_to_id' : response_to ]
+            update['response_to_id'] =  response_to
 
         resp = client.POST('/api/post/add_update', data = update)
         print resp
         if expected:
             client.assertTrue( resp['success'] )
-            self.discussion_id = resp['data']['id']
+            self.update_id = resp['data']['id']
         else:
             client.assertFalse( resp['success'] )
 
@@ -258,7 +260,7 @@ class PostClass():
                    'project_id' : self.discussion_project_id }
 
         if response_to:
-            update[ 'response_to_id' : response_to ]
+            update['response_to_id'] = response_to
 
         resp = client.POST('/api/post/add_discussion', data = update)
         print resp
@@ -275,12 +277,15 @@ class PostTests(BaseTestCase):
     def setUp(self):
         self.owner = UserClass()
         self.member = UserClass()
+        self.responder = UserClass()
+
         self.project = ProjectClass()
+       
         self.owner_post = PostClass()
         self.member_post = PostClass()
+        self.response_post = PostClass()
 
     def test_posts(self):
-        
         self.owner.createUser(self)
         self.project.createProject(self)
         self.owner_post.createDiscussion(self, self.project.project_id)
@@ -335,8 +340,47 @@ class PostTests(BaseTestCase):
                                           expected = True)
         self.GET('/logout')
 
+        # now work on responses
+        self.responder.createUser( self )
+
+        # try posting as non-member
+        self.response_post.createUpdate( self,
+                                         self.project.project_id,
+                                         response_to = self.owner_post.update_id,
+                                         expected = False )
+
+        self.response_post.createDiscussion( self,
+                                             self.project.project_id,
+                                             response_to = self.owner_post.discussion_id,
+                                             expected = False )
 
 
+        # now join project
+        self.responder.joinProject( self, self.project.project_id )
+
+        # and retry the posts
+        self.response_post.createUpdate( self,
+                                         self.project.project_id,
+                                         response_to = self.owner_post.update_id )
+
+        self.response_post.createDiscussion( self,
+                                             self.project.project_id,
+                                             response_to = self.owner_post.discussion_id )
+
+
+        # now be sure we get the data formatted as we like it
+
+
+        print "\n\n\n\n\n\n********** DECODING **********\n\n\n"
+
+        from pprint import pprint
+        updates_url = '/api/post/project/{0}/list_updates'.format(self.project.project_id)
+        updates = self.GET( updates_url )
+        pprint(updates)
+      
+        discussions_url = '/api/post/project/{0}/list_discussions'.format(self.project.project_id)
+        discussions = self.GET( discussions_url )
+        pprint(discussions)
 
 
         

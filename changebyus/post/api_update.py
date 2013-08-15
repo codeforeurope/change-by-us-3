@@ -37,9 +37,6 @@ def api_get_project_updates_fixed(project_id):
         User is logged in, user a member of the project
     """
 
-
-    # LV TODO LV TODO need to handle responses diff
-
     posts = ProjectPost.objects( parent_id = None, 
                                  project = project_id,
                                  public = True )[0:10]
@@ -65,9 +62,6 @@ def api_get_project_updates(project_id, number_posts):
     TODO
         Add filtering for the user, ie max number of posts, search by string, etc
     """
-
-    # LV TODO LV TODO need to handle responses diff
-    
 
     posts = Projects.objects( parent_id = None, 
                               project = project_id,

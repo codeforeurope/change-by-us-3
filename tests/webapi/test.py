@@ -376,11 +376,38 @@ class PostTests(BaseTestCase):
         from pprint import pprint
         updates_url = '/api/post/project/{0}/list_updates'.format(self.project.project_id)
         updates = self.GET( updates_url )
-        pprint(updates)
+        self.assertTrue( updates['success'] )
+
+        success = False
+        for update in updates['data']:
+            if update['id'] == self.response_post.update_id:
+                success = False
+                print "Found the response at top level, failing."
+                break
+            if update['id'] == self.owner_post.update_id:
+                if update['responses'][0]['id'] == self.response_post.update_id:
+                    success = True
+
+        self.assertTrue( success )
+
       
         discussions_url = '/api/post/project/{0}/list_discussions'.format(self.project.project_id)
         discussions = self.GET( discussions_url )
-        pprint(discussions)
+        self.assertTrue( updates['success'] )
+
+        pprint(updates)
+
+        success = False
+        for update in discussions['data']:
+            if update['id'] == self.response_post.discussion_id:
+                success = False
+                print "Found the response at top level, failing."
+                break
+            if update['id'] == self.owner_post.discussion_id:
+                if update['responses'][0]['id'] == self.response_post.discussion_id:
+                    success = True
+
+        self.assertTrue( success )
 
 
         

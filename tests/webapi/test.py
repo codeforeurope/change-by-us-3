@@ -91,8 +91,8 @@ class UserTests(BaseTestCase):
     def setUp(self):
         self.user = UserClass()
     
-    #def test_login_update(self):
-    def login_update(self):
+    def test_login_update(self):
+    #def login_update(self):
         self.user.createUser(self)
         self.GET('/logout')
         self.user.login(self)
@@ -168,8 +168,8 @@ class ProjectTests(BaseTestCase):
         self.member = UserClass()
         self.project = ProjectClass()
 
-    #def test_projects(self):
-    def projects(self):
+    def test_projects(self):
+    #def projects(self):
 
         self.owner.createUser(self)
         self.project.createProject(self)

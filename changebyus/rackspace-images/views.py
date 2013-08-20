@@ -9,16 +9,9 @@ import yaml
 import pyrax
 
 from flask import send_file
+from .helpers import _get_rackspace_container
 
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/rackspace.yml'))
-
-
-pyrax.set_setting("identity_type", "rackspace")
-pyrax.set_credentials(settings['RACKSPACE_USERNAME'], settings['RACKSPACE_KEY'])
-
-cf = pyrax.cloudfiles
-container = cf.get_container( settings['RACKSPACE_CONTAINER'] )
+container = _get_rackspace_container()
 
 rackspace_image_view = Blueprint(  'rackspace_image_view', url_prefix=settings['HOSTED_IMAGE_BASE_URL'])
 

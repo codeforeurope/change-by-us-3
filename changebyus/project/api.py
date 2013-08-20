@@ -17,7 +17,9 @@ from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.imagetools import generate_thumbnails
 
 from .models import Project, Roles, ACTIVE_ROLES
-from .helpers import _get_users_for_project, _get_user_joined_projects
+from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
+                       _create_project, _edit_project )
+
 from .decorators import *
 
 from ..stripe.models import StripeAccount

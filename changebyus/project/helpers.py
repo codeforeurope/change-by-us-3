@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
-from flask import g, current_app
+
+from flask import g, current_app, request
+
+from ..user.models import User
 from ..helpers.mongotools import db_list_to_dict_list
+from ..helpers.flasktools import jsonify_response, ReturnStructure
+
+from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 
 
 def _create_project( resource = False ):

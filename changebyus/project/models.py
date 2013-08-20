@@ -79,6 +79,10 @@ class Project(db.Document, EntityMixin):
     # Geo JSON Field
     geo_location = db.PointField()
 
+    # NOTE: This is very CBU specific
+    # a project is either a project or a resource
+    # resource is different on the UI side and does slightly less
+    resource = db.BooleanField(default=False)
 
     PRIVATE_FIELDS = [
     'retired_stripe_accounts',

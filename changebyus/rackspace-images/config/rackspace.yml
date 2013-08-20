@@ -1,0 +1,6 @@
+RACKSPACE_USERNAME: changebyus
+RACKSPACE_KEY: a81e7d8c0e2e324d223af711023ed2f6
+RACKSPACE_CONTAINER_NAME: 'cbu-lucas'
+HOSTED_IMAGE_BASE_URL: /rimages
+HOSTED_IMAGES_LOCAL_DIR: /tmp
+ALLOWED_EXTENSIONS: ['.jpg', '.gif', '.png', '.jpeg', '.jpe', '.svg', '.bmp']

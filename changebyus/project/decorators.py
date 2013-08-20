@@ -54,8 +54,9 @@ def project_exists(f):
    
         try:
             project = Project.objects.with_id(project_id)
+            # TODO remove this for non CBU
             if project is None:
-                errStr = "project {0} does not exist.".format(project_id)
+                errStr = "Project {0} does not exist.".format(project_id)
                 return jsonify_response( ReturnStructure( success = False,
                                                           msg = errStr ))
         

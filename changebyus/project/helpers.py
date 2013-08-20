@@ -5,6 +5,109 @@ from flask import g, current_app
 from ..helpers.mongotools import db_list_to_dict_list
 
 
+def _create_project( resource = False ):
+
+    name = request.form.get('name')
+    description = request.form.get('description')
+    location = request.form.get('location')
+
+    # TODO fix the location stuff
+
+    owner = User.objects.with_id(g.user.id)
+
+    image_uri = None
+
+    # TODO TODO cloudize our photos
+
+    # photo is optional
+    if 'photo' in request.files:
+        photo = request.files.get('photo')
+
+        if len(photo.filename) > 3:
+
+            try:
+                filename = current_app.uploaded_photos.save(photo)
+                filepath = current_app.uploaded_photos.path(filename)
+                generate_thumbnails(filepath)
+            except UploadNotAllowed:
+                abort(403)
+
+            image_uri = urlparse(current_app.uploaded_photos.url(filename)).path
+
+        else:
+            # again, photo optional
+            image_uri = None
+
+
+    project = Project.objects(name=name)
+    if project.count() > 0:
+        errStr = "Sorry, the name '{0}' is already in use.".format(name)
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    # TODO work on geo stuff
+    p = Project( name = name, 
+                 description = description, 
+                 owner = owner,
+                 resource = resource )
+
+    if image_uri:
+        p.image_uri = image_uri
+
+    p.save()
+    infoStr = "User {0} has created project called {1}".format(g.user.id, name)
+    current_app.logger.info(infoStr)
+
+    return jsonify_response( ReturnStructure( data = p.as_dict() ))
+
+
+def _edit_project():
+    
+    project_id = request.form.get('project_id')
+    name = request.form.get('name')
+    description = request.form.get('description')
+    location = request.form.get('location')
+
+    p = Project.objects.with_id(project_id)
+
+    if name:
+        name_text = Project.objects(name = name)
+        if name_text.count() > 0 and name_text[0] != p:
+            msg = "Project name {0} is already in use.".format(name)
+            return jsonify_response( ReturnStructure( success = False,
+                                                      msg = msg ))
+
+    if name: p.name = name
+    if description: p.description = description
+
+    # TODO add the geo region stuff
+
+    # TODO cloudize this and remove the dupe code
+    if 'photo' in request.files:
+        photo = request.files.get('photo')
+
+        if len(photo.filename) > 3:
+
+            try:
+                filename = current_app.uploaded_photos.save(photo)
+                filepath = current_app.uploaded_photos.path(filename)
+                generate_thumbnails(filepath)
+            except UploadNotAllowed:
+                abort(403)
+
+            p.image_uri = urlparse(current_app.uploaded_photos.url(filename)).path
+
+
+    p.save()
+
+    infoStr = "User {0} has edited project {1} with request {2}".format(g.user.id,
+                                                                        project_id,
+                                                                        str(request.form))
+    current_app.logger.info(infoStr)
+
+    return jsonify_response( ReturnStructure( data = p.as_dict() ))
+
+
 # True is user is owner or member of project
 def _user_involved_in_project( project_id = None, 
                                user_id = None):

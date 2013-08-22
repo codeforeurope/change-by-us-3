@@ -89,7 +89,9 @@ def api_add_project_update():
     OUTPUT
         Results
     PRECONDITIONS
-        User is logged in, user is a member or owner of the project
+        User is logged in, user is a member or owner of the project.
+
+        ONLY organizers can create updates. Members can only respond
     """
 
     form = CreateProjectPostForm()

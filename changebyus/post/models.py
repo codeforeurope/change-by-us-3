@@ -67,7 +67,7 @@ class ProjectPost(db.Document, EntityMixin):
     # despite this being slightly non-ideal.  It's more for reference anyway
     parent_id = db.StringField()
 
-
+    
     # default to recursive for this model, and allow one level of recursion
     def as_dict(self, exclude_nulls=True, recursive=True, depth=2, **kwargs ):
 

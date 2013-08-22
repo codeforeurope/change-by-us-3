@@ -6,9 +6,10 @@ from flask import g, current_app, request
 from ..user.models import User
 from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.flasktools import jsonify_response, ReturnStructure
+from ..rackspaceimages.helpers import _upload_image as _upload_rackspace_image
+from ..helpers.imagetools import generate_thumbnails
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
-
 
 def _create_project( resource = False ):
 
@@ -20,9 +21,13 @@ def _create_project( resource = False ):
 
     owner = User.objects.with_id(g.user.id)
 
-    image_uri = None
+    project = Project.objects(name=name)
+    if project.count() > 0:
+        errStr = "Sorry, the name '{0}' is already in use.".format(name)
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-    # TODO TODO cloudize our photos
+    image_uri = None
 
     # photo is optional
     if 'photo' in request.files:
@@ -31,9 +36,31 @@ def _create_project( resource = False ):
         if len(photo.filename) > 3:
 
             try:
-                filename = current_app.uploaded_photos.save(photo)
-                filepath = current_app.uploaded_photos.path(filename)
-                generate_thumbnails(filepath)
+                result = _upload_rackspace_image( photo )
+
+                if result.success:
+                    file_name = result.name
+                    file_path = result.path
+                    image_uri = result.uri 
+
+                    sizeLarge = 1020,320
+                    sizeMed = 300, 94
+                    sizeSmall = 160, 50
+
+                    sizes = [ sizeLarge, sizeMed, sizeSmall ]
+
+                    thumbnails = generate_thumbnails( file_path, sizes )
+
+                    for thumbnail in thumbnails:
+                        if not _upload_rackspace_image( thumbnail.image, 
+                                                        thumbnail.name ).success:
+
+                            return jsonify_response( ReturnStructure ( success = False ) )
+
+                else:
+                    return jsonify_response( ReturnStructure ( success = False ) )
+
+
             except UploadNotAllowed:
                 abort(403)
 
@@ -42,13 +69,6 @@ def _create_project( resource = False ):
         else:
             # again, photo optional
             image_uri = None
-
-
-    project = Project.objects(name=name)
-    if project.count() > 0:
-        errStr = "Sorry, the name '{0}' is already in use.".format(name)
-        return jsonify_response( ReturnStructure( success = False, 
-                                                  msg = errStr ) )
 
     # TODO work on geo stuff
     p = Project( name = name, 

@@ -38,6 +38,35 @@ class Role(db.EmbeddedDocument):
     description = db.StringField(max_length=255)
 
 
+class UserNotifications(db.EmbeddedDocument):
+    """
+    Lets us keep track of a users notification preferences.
+    """
+
+    # joins a project I own or organize
+    joins_my_project = db.BooleanField(default = True)
+    # update to a project I own or organize
+    posts_update_to_my_project = db.BooleanField(default = True)
+    # response to an update I created
+    responds_to_my_update = db.BooleanField(default = True)
+    # response to a update I commented on
+    responds_to_my_comment = db.BooleanField(default = True)
+    # someone flags my account or project as inappropriate
+    flags_me = db.BooleanField(default = True)
+
+
+    # someone posts a discussion on a project I own or organize
+    posts_discussion = db.BooleanField(default = True)
+    # someone responds to a discussion on a project I own or organize
+    responds_to_a_discussion = db.BooleanField(default = True)
+
+    # someone joins a project I'm involved in (owner, member, organizer)
+    joins_common_project(default = False)
+    # someone posts an update to a project I'm involved in (owner, member, organizer)
+    posts_update_common_project(defualt = False)
+
+
+
 class User(db.Document, UserMixin, EntityMixin):
     """
     This contains all there is to know about one of our users.
@@ -85,6 +114,8 @@ class User(db.Document, UserMixin, EntityMixin):
 
     #visible profile information
     user_description = db.StringField(max_length=600)
+
+    notifications = db.EmbeddedDocumentField( UserNotifications )
 
     # TODO add the user contact preferences
 

@@ -14,7 +14,6 @@ from flask.ext.wtf import (Form, TextField, TextAreaField, FileField,
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
-from ..helpers.imagetools import generate_thumbnails
 
 from .models import Project, Roles, ACTIVE_ROLES
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, 

@@ -22,8 +22,8 @@ Web facing views for interacting with projects.
 
 """
 
-@project_view.route('/<id>')
-def project_view_id(id):
+@project_view.route('/<project_id>')
+def project_view_id(project_id):
     """
     ABOUT:
         View a project for a given id
@@ -47,7 +47,7 @@ def project_view_id(id):
 
     from ..post.api import _get_project_post_stream
     
-    project = Project.objects.with_id(id)
+    project = Project.objects.with_id(project_id)
     if project is None:
         abort(404)
 

@@ -1,8 +1,16 @@
 import os
 from PIL import Image
 from PIL import ImageOps
+from flask import current_app
 
-def generate_thumbnails(filepath):
+
+class NamedImage():
+    def __init__( name=None, image=None ):
+        self.name = name
+        self.image = image
+
+
+def generate_thumbnails( filepath, sizes ):
     """
     ABOUT
         Routine that will take a full sized image path and generate
@@ -17,33 +25,32 @@ def generate_thumbnails(filepath):
     """
 
     # note if you change these guys you need to change templates and the project model
-    sizeLarge = 1020,320
-    sizeMed = 300, 94
-    sizeSmall = 160, 50
 
     try:
 
+        images = []
+
         img = Image.open(filepath)
- 
+
         path, image = os.path.split(filepath)
+        base, extension = os.path.splitext(image)
 
-        path_large = os.path.join(path, '1020.320.' + image)
-        img = ImageOps.fit(image=img, size=sizeLarge, method=Image.ANTIALIAS)
-        img.save(path_large, img.format)
+        for size in sizes:
+            sizeStr = ".{0}.{1}".format( sizes[0], sizes[1] )
+            name = base + sizeStr + extension
+            img = ImageOps.fit( image=img, size=size, method=Image.ANTIALIAS )
 
-        path_medium = os.path.join(path, '300.94.' + image)
-        img = ImageOps.fit(image=img, size=sizeMed, method=Image.ANTIALIAS)
-        img.save(path_medium, img.format)
+            resource = NamedImage( image=img, name=name )
+            images.push_back(resource)
 
-        path_small = os.path.join(path, '160.50.' + image)
-        img = ImageOps.fit(image=img, size=sizeSmall, method=Image.ANTIALIAS)
-        img.save(path_small, img.format)
-
-        return True
+        return images
 
     except IOError as e:
-        print "IOError ", e
-        return False
+
+        current_app.logger.exception(e)
+
+        return []
+
 
 
 def generate_blurred_bg():

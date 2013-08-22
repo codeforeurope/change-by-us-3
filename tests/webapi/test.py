@@ -319,7 +319,7 @@ class PostTests(BaseTestCase):
                                       expected = False)
         self.member_post.createDiscussion(self,
                                           self.project.project_id,
-                                          expected = True)
+                                          expected = False)
         self.GET('/logout')
 
         # now make the member an organizer and try
@@ -365,7 +365,8 @@ class PostTests(BaseTestCase):
 
         self.response_post.createDiscussion( self,
                                              self.project.project_id,
-                                             response_to = self.owner_post.discussion_id )
+                                             response_to = self.owner_post.discussion_id,
+                                             expected = False )
 
 
         # now be sure we get the data formatted as we like it
@@ -396,16 +397,6 @@ class PostTests(BaseTestCase):
         self.assertTrue( updates['success'] )
 
         pprint(updates)
-
-        success = False
-        for update in discussions['data']:
-            if update['id'] == self.response_post.discussion_id:
-                success = False
-                print "Found the response at top level, failing."
-                break
-            if update['id'] == self.owner_post.discussion_id:
-                if update['responses'][0]['id'] == self.response_post.discussion_id:
-                    success = True
 
         self.assertTrue( success )
 

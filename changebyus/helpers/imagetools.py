@@ -10,7 +10,14 @@ class NamedImage():
         self.image = image
 
 
-def generate_thumbnails( filepath, sizes ):
+class ImageManipulator:
+    def __init__(dict_name = None, converter = None, prefix = None):
+        self.dict_name = dict_name
+        self.converter = converter
+        self.prefix = prefix
+
+
+def generate_thumbnail( filepath, size ):
     """
     ABOUT
         Routine that will take a full sized image path and generate
@@ -25,6 +32,8 @@ def generate_thumbnails( filepath, sizes ):
     """
 
     # note if you change these guys you need to change templates and the project model
+
+    # TODO change it so it only takes a size
 
     try:
 
@@ -52,9 +61,10 @@ def generate_thumbnails( filepath, sizes ):
         return []
 
 
-
 def generate_blurred_bg():
     # LV TODO
+    pass
 
-    return False;
-
+def generate_circled_crop():
+    # LV TODO
+    pass

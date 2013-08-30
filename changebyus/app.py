@@ -265,7 +265,7 @@ def configure_rackspace_assets(app=None):
     for cloud based hosting made easy
     """
 
-    app.config['CDN_DOMAIN'] = _get_rackspace_url
+    app.config['CDN_DOMAIN'] = _get_rackspace_url()
     CDN(app)
     
 

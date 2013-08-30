@@ -31,15 +31,15 @@ For the most part it is pretty straight forward.
 
 project_images = [ 
     
-    ImageManipulator(dict_name = 'image_url_large',
+    ImageManipulator(dict_name = "image_url_large",
                      converter = lambda x: generate_thumbnail(x, [1020, 320]),
                      prefix = "1020.320"),
 
-    ImageManipulator(dict_name = 'image_url_medium',
+    ImageManipulator(dict_name = "image_url_medium",
                      converter = lambda x: generate_thumbnail(x, [300, 94]),
                      prefix = "300.94"),
 
-    ImageManipulator(dict_name = 'image_url_small',
+    ImageManipulator(dict_name = "image_url_small",
                      converter = lambda x: generate_thumbnail(x, [160, 50]),
                      prefix = "160.50")
 ]
@@ -47,6 +47,7 @@ project_images = [
 
 # TODO this should not be here, we need a cleaner solution to this
 def gen_image_urls(image_url):
+    
     """
     Helper that will take a root image url and create a named touple
     of image url's based on various sizes.  Note that these various

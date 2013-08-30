@@ -7,7 +7,7 @@ from ..user.models import User
 from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..rackspaceimages.helpers import _upload_image as _upload_rackspace_image
-from ..helpers.imagetools import generate_thumbnails
+from ..helpers.imagetools import generate_thumbnail
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 
@@ -44,7 +44,6 @@ def _create_project( resource = False ):
                     image_url = result.url
 
 
-
                     from .models import project_images
 
                     for manipulator in project_images:
@@ -62,11 +61,11 @@ def _create_project( resource = False ):
             except UploadNotAllowed:
                 abort(403)
 
-            image_url = result.
+            file_name = result.file_name
 
         else:
             # again, photo optional
-            image_url = None
+            file_name = result.file_name
 
     # TODO work on geo stuff
     p = Project( name = name, 
@@ -74,8 +73,11 @@ def _create_project( resource = False ):
                  owner = owner,
                  resource = resource )
 
-    if image_url:
-        p.image_name = file_name
+
+    # we don't store the URL because the URL can change depending on what
+    # rackspace container we wish to use
+    if file_name:
+        p.image_name = file_nane
 
     p.save()
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)
@@ -105,6 +107,7 @@ def _edit_project():
 
     # TODO add the geo region stuff
 
+
     # TODO cloudize this and remove the dupe code
     if 'photo' in request.files:
         photo = request.files.get('photo')
@@ -114,6 +117,9 @@ def _edit_project():
             try:
                 filename = current_app.uploaded_photos.save(photo)
                 filepath = current_app.uploaded_photos.path(filename)
+
+                #LV TODO we need to not repeat this image processing
+
                 generate_thumbnails(filepath)
             except UploadNotAllowed:
                 abort(403)

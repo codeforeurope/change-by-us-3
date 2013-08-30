@@ -5,13 +5,13 @@ from flask import current_app
 
 
 class NamedImage():
-    def __init__( name=None, image=None ):
+    def __init__(self, name=None, image=None ):
         self.name = name
         self.image = image
 
 
-class ImageManipulator:
-    def __init__(dict_name = None, converter = None, prefix = None):
+class ImageManipulator():
+    def __init__(self, dict_name = None, converter = None, prefix = None):
         self.dict_name = dict_name
         self.converter = converter
         self.prefix = prefix

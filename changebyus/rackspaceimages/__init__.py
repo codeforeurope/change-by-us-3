@@ -5,4 +5,4 @@
 """
 
 from .views import rackspace_image_view
-from .helpers import *
+from .helpers import _get_rackspace_url

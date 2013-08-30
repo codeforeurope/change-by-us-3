@@ -37,6 +37,13 @@ def _get_rackspace_container():
 container = _get_rackspace_container()
 
 
+def _get_rackspace_url():
+    return container.cdn_uri
+
+
+
+
+
 def string_generator(size=6, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 
@@ -47,9 +54,6 @@ def lowercase_ext(filename):
         return main + '.' + ext.lower()
     else:
         return filename.lower()
-
-def _get_rackspace_url():
-    return container.cdn_url
 
 def _does_rackspace_file_exist(file_name):
 

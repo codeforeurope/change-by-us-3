@@ -30,6 +30,8 @@ def _get_rackspace_container():
     cf = pyrax.cloudfiles
     container = cf.create_container( settings['RACKSPACE_CONTAINER'] )
 
+    container.make_public()
+
     return container
 
 container = _get_rackspace_container()
@@ -46,6 +48,8 @@ def lowercase_ext(filename):
     else:
         return filename.lower()
 
+def _get_rackspace_url():
+    return container.cdn_url
 
 def _does_rackspace_file_exist(file_name):
 
@@ -59,7 +63,7 @@ def _does_rackspace_file_exist(file_name):
 
 
 # simple return type
-UploadedImage = namedtuple('UploadedImage', 'success path name uri')
+UploadedImage = namedtuple('UploadedImage', 'success path name url')
 
 
 def _upload_image( resource, resource_name = None):
@@ -180,8 +184,8 @@ def _upload_image( resource, resource_name = None):
         return UploadedImage( False, '', '', '' )
 
 
-    uri = settings['HOSTED_IMAGE_BASE_URI'] + '/' + new_file
-    return UploadedImage( True, full_file_path, new_file, uri )
+    url = settings['HOSTED_IMAGE_BASE_URL'] + '/' + new_file
+    return UploadedImage( True, full_file_path, new_file, url )
 
     
 

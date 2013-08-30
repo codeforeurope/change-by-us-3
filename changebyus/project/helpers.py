@@ -27,7 +27,7 @@ def _create_project( resource = False ):
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    image_uri = None
+    file_name = None
 
     # photo is optional
     if 'photo' in request.files:
@@ -41,34 +41,32 @@ def _create_project( resource = False ):
                 if result.success:
                     file_name = result.name
                     file_path = result.path
-                    image_uri = result.uri 
+                    image_url = result.url
 
-                    sizeLarge = 1020,320
-                    sizeMed = 300, 94
-                    sizeSmall = 160, 50
 
-                    sizes = [ sizeLarge, sizeMed, sizeSmall ]
 
-                    thumbnails = generate_thumbnails( file_path, sizes )
+                    from .models import project_images
 
-                    for thumbnail in thumbnails:
-                        if not _upload_rackspace_image( thumbnail.image, 
-                                                        thumbnail.name ).success:
+                    for manipulator in project_images:
+
+                        manip_image = manipulator.converter(file_path)
+                        manip_image_name = manipulator.prefix + '.' + file_name
+
+                        if not _upload_rackspace_image( manip_image, 
+                                                        manip_image_name).success:
 
                             return jsonify_response( ReturnStructure ( success = False ) )
-
                 else:
                     return jsonify_response( ReturnStructure ( success = False ) )
-
 
             except UploadNotAllowed:
                 abort(403)
 
-            image_uri = urlparse(current_app.uploaded_photos.url(filename)).path
+            image_url = result.
 
         else:
             # again, photo optional
-            image_uri = None
+            image_url = None
 
     # TODO work on geo stuff
     p = Project( name = name, 
@@ -76,8 +74,8 @@ def _create_project( resource = False ):
                  owner = owner,
                  resource = resource )
 
-    if image_uri:
-        p.image_uri = image_uri
+    if image_url:
+        p.image_name = file_name
 
     p.save()
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)
@@ -120,7 +118,7 @@ def _edit_project():
             except UploadNotAllowed:
                 abort(403)
 
-            p.image_uri = urlparse(current_app.uploaded_photos.url(filename)).path
+            p.image_url = urlparse(current_app.uploaded_photos.url(filename)).path
 
 
     p.save()

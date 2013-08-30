@@ -31,11 +31,41 @@ This is a webservice that will send large urls to bitly and return the
 shortened url.  The use case is rather obvious.
 """
 
+    # update to a project I own or organize
+    posts_update_to_my_project = db.BooleanField(default = True)
+    # response to an update I created
+    responds_to_my_update = db.BooleanField(default = True)
+    # response to a update I commented on
+    responds_to_my_comment = db.BooleanField(default = True)
+    # someone flags my account or project as inappropriate
+    flags_me = db.BooleanField(default = True)
+
+
+    # someone posts a discussion on a project I own or organize
+    posts_discussion = db.BooleanField(default = True)
+    # someone responds to a discussion on a project I own or organize
+    responds_to_a_discussion = db.BooleanField(default = True)
+
+    # someone posts an update to a project I'm involved in (owner, member, organizer)
+    posts_update_common_project(defualt = False)
+
+
+def _notify_flagged_project(project_id=None):
+    pass
+
+def _notify_flagged_user(user_id=None):
+    """
+        break it down based on what can get flagged
+    """
+    pass
+
+
 def _notify_project_join(project_id=None):
     """
-    Just notify the project owner of a join.
+    Handles:
+        joins_my_project
+        joins_common_project
 
-    Possibly in the future we want to notify organizers as well
     """
     project = Project.objects.with_id( project_id )
     if project is None:

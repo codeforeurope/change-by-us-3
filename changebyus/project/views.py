@@ -210,7 +210,7 @@ def stripe_review_info():
 
     # we want to pass the fundraiser view the small 160x50 image
     project_dict = project.as_dict()
-    project_image = project_dict['image_uri_small']
+    project_image = project_dict['image_url_small']
     
     return render_template('fundraise_review.html', funding = funding_goal, project_id=project_id, description = description, name=project.name, 
                            image_url=project_image, balance = balance, percentage = percentage)

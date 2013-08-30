@@ -10,6 +10,7 @@ from ..extensions import db
 from ..helpers.mixin import EntityMixin, encode_model
 from ..user.models import User
 from ..stripe.models import StripeAccount
+from ..helpers.imagetools import ImageManipulator, generate_thumbnail
 
 from flask import current_app
 
@@ -28,25 +29,41 @@ For the most part it is pretty straight forward.
 """
 
 
+project_images = [ 
+    
+    ImageManipulator(dict_name = 'image_url_large',
+                     converter = lambda x: generate_thumbnail(x, [1020, 320]),
+                     prefix = "1020.320"),
+
+    ImageManipulator(dict_name = 'image_url_medium',
+                     converter = lambda x: generate_thumbnail(x, [300, 94]),
+                     prefix = "300.94"),
+
+    ImageManipulator(dict_name = 'image_url_small',
+                     converter = lambda x: generate_thumbnail(x, [160, 50]),
+                     prefix = "160.50")
+]
+
+
 # TODO this should not be here, we need a cleaner solution to this
-def gen_image_uris(image_uri):
+def gen_image_urls(image_url):
     """
-    Helper that will take a root image uri and create a named touple
-    of image uri's based on various sizes.  Note that these various
+    Helper that will take a root image url and create a named touple
+    of image url's based on various sizes.  Note that these various
     sizes will need to be synced with the sizes in templates and in
     helpers.py: generate_thumbnails
     """
 
-    Thumbnails = namedtuple('Thumbnails', 'uri large_uri medium_uri small_uri')
+    Thumbnails = namedtuple('Thumbnails', 'url large_url medium_url small_url')
 
-    root_image = image_uri if image_uri is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
+    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
 
     path, image = os.path.split(root_image)
-    large_uri = os.path.join(path, '1020.320.' + image)
-    medium_uri = os.path.join(path, '300.94.' + image)
-    small_uri = os.path.join(path, '160.50.' + image)
+    large_url = os.path.join(path, '1020.320.' + image)
+    medium_url = os.path.join(path, '300.94.' + image)
+    small_url = os.path.join(path, '160.50.' + image)
 
-    images = Thumbnails(root_image, large_uri, medium_uri, small_uri)
+    images = Thumbnails(root_image, large_url, medium_url, small_url)
 
     return images
 
@@ -62,14 +79,14 @@ ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
 
 class Project(db.Document, EntityMixin):
     """
-    Project model.  Pretty straight forward.  For image_uri we
-    store the uri (/images/image.jpg) so that we can move data between
+    Project model.  Pretty straight forward.  For image_url we
+    store the url (/images/image.jpg) so that we can move data between
     servers and domains pretty easily
     """
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(max_length=600)
 
-    image_uri = db.StringField() # TODO change this
+    image_name = db.StringField()
     #municipality = db.ReferenceField(Municipality)
     owner = db.ReferenceField(User)
 
@@ -91,12 +108,12 @@ class Project(db.Document, EntityMixin):
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
         resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
 
-        image_uris = gen_image_uris(self.image_uri)
+        image_urls = gen_image_urls(self.image_url)
 
         # TODO cloudify this
-        resp['image_uri_large'] = image_uris.large_uri
-        resp['image_uri_medium'] = image_uris.medium_uri
-        resp['image_uri_small'] = image_uris.small_uri
+        resp['image_url_large'] = image_urls.large_url
+        resp['image_url_medium'] = image_urls.medium_url
+        resp['image_url_small'] = image_urls.small_url
 
         return resp
 

@@ -4,7 +4,6 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-
 import os
 import yaml
 import inspect
@@ -21,6 +20,7 @@ from flask.ext.security import Security, MongoEngineUserDatastore, login_require
 from flask.ext.principal import identity_loaded, Identity, Permission, RoleNeed, UserNeed
 from flask.ext.login import LoginManager, current_user
 from flaskext.csrf import csrf
+from flask.ext.cdn import CDN
 #from flaskext.uploads import UploadSet, configure_uploads, IMAGES
 
 from flask_oauth import OAuth
@@ -32,7 +32,7 @@ from .twitter import twitter_view
 from .stream import stream_view, stream_api
 from .user import user_view, user_api
 from .frontend import frontend_view, frontend_api
-from .rackspaceimages import rackspace_image_view
+from .rackspaceimages import rackspace_image_view, _get_rackspace_url
 
 from .helpers.encryption import assemble_key
 from .extensions import db, login_manager
@@ -102,6 +102,7 @@ def create_app(app_name=None, blueprints=None):
     configure_csrf(app)
     configure_error_handlers(app)
     #configure_media_uploads(app)
+    configure_rackspace_assets(app)
     configure_encryption(app)
 
     if app.config['DEBUG'] == True:
@@ -256,6 +257,16 @@ def configure_media_uploads(app=None):
     uploaded_photos = UploadSet('photos', IMAGES)
     configure_uploads(app, uploaded_photos)
     app.uploaded_photos = uploaded_photos
+    
+
+def configure_rackspace_assets(app=None):
+    """
+    Enables our rackspaceimages package and links it with the flask-cdn
+    for cloud based hosting made easy
+    """
+
+    app.config['CDN_DOMAIN'] = _get_rackspace_url
+    CDN(app)
     
 
 def configure_encryption(app=None):

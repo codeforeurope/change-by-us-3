@@ -52,7 +52,7 @@ class ProjectPost(db.Document, EntityMixin):
 
     title = db.StringField(max_length=60) 
     description = db.StringField(max_length=600)
-    image_uri = db.StringField()
+    image_url = db.StringField()
 
     social_object = db.EmbeddedDocumentField(SocialMediaObject)
 
@@ -74,9 +74,9 @@ class ProjectPost(db.Document, EntityMixin):
         return {'id': str(self.id),
                 'title': self.title,
                 'description': self.description,
-                'image_uri': self.image_uri,
+                'image_url': self.image_url,
                 'created_at': self.created_at.isoformat(),
-                'project_name': self.project.name,
+                'project_namei': self.project.name,
                 'project_id': str(self.project.id),
                 # TODO migrate this way from project_name, project_id, etc
                 # and all towards post.project...
@@ -89,6 +89,7 @@ class ProjectPost(db.Document, EntityMixin):
 
 
         """
+        TODO TODO remove this
         # TODO fixs w/ sundar
 
         resp = encode_model(self, 

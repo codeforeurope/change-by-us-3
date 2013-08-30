@@ -61,9 +61,9 @@ class UserNotifications(db.EmbeddedDocument):
     responds_to_a_discussion = db.BooleanField(default = True)
 
     # someone joins a project I'm involved in (owner, member, organizer)
-    joins_common_project(default = False)
+    joins_common_project = db.BooleanField(default = False)
     # someone posts an update to a project I'm involved in (owner, member, organizer)
-    posts_update_common_project(defualt = False)
+    posts_update_common_project = db.BooleanField(default = False)
 
 
 

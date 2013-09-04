@@ -9,6 +9,29 @@ from ..helpers.flasktools import jsonify_response, ReturnStructure
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 
+import requests
+import simplejson as json
+
+def _get_lat_lon_from_location(loc):
+    """
+    Returns lat/lon pair as a list from google maps api.
+    Theoretically any valid location string would work, but
+    we're expecting zipcode here.
+    """
+    r = requests.get("http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false" % loc)
+    latlon = []
+    
+    if (r.status_code == 200):
+        d = json.loads(r.text)
+        
+        try:
+            lld = d['results'][0]['geometry']['location']
+            latlon = [lld['lat'], lld['lng']]
+        except:
+            latlon = []
+
+    return latlon
+
 
 def _create_project( resource = False ):
 
@@ -16,7 +39,10 @@ def _create_project( resource = False ):
     description = request.form.get('description')
     location = request.form.get('location')
 
-    # TODO fix the location stuff
+    if (location):
+        geo_location = _get_lat_lon_from_location(location)
+    else:
+        geo_location = []
 
     owner = User.objects.with_id(g.user.id)
 
@@ -50,11 +76,11 @@ def _create_project( resource = False ):
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    # TODO work on geo stuff
     p = Project( name = name, 
                  description = description, 
                  owner = owner,
-                 resource = resource )
+                 resource = resource,
+                 geo_location = geo_location )
 
     if image_uri:
         p.image_uri = image_uri

@@ -1,6 +1,5 @@
 """
 TODOS
-* make text search optional
 * create some wrappers
 """
 from math import radians, cos, sin, asin, sqrt
@@ -11,7 +10,7 @@ EARTH_RADIUS_KM = 6363
 
 def search(db,
            collection,
-           text,
+           text = None,
            geo_field = None,
            geo_center = None,
            geo_dist = None,
@@ -29,22 +28,32 @@ def search(db,
     filters = _build_filters(geo_field, geo_center, geo_dist,
                              addl_filters, units)
 
-    search_data = db.command("text",
-                             collection,
-                             search = text,
-                             project = project,
-                             filter = filters)
+    if (text):
+        search_data = db.command("text",
+                                 collection,
+                                 search = text,
+                                 project = project,
+                                 filter = filters)['results']
+    else:
+        search_data = db[collection].find(filters, project)
+        
     data = {}
 
-    for x in search_data['results']:
-        id = str(x['obj']['_id'])
-        data[id] = {k: str(v) for k, v in x['obj'].iteritems()}
-        data[id]['score'] = x['score']
+    for x in search_data:
+        if (text):
+            obj = x['obj']
+            score = x['score']
+        else:
+            obj = x
+
+        id = str(obj['_id'])
+        
+        data[id] = {k: str(v) for k, v in obj.iteritems()}
 
         if (is_geo):
             data[id]['dist'] = haversine(geo_center[0], geo_center[1],
-                                         x['obj']['geo_location']['coordinates'][0],
-                                         x['obj']['geo_location']['coordinates'][1],
+                                         obj['geo_location']['coordinates'][0],
+                                         obj['geo_location']['coordinates'][1],
                                          units)
 
     return data

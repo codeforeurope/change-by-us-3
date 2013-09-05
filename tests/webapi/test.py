@@ -431,6 +431,15 @@ class SearchTest(BaseTestCase):
                 
         self.assertTrue(len(results) > 0)
         
+    def test_geo_search(self):
+        search_url = "{0}?loc={2}&d={3}".format(self.url, 
+                                              self.search_string,
+                                              self.search_loc,
+                                              self.search_dist)
+        results = self.GET(search_url)
+                
+        self.assertTrue(len(results) > 0)
+        
     def test_text_geo_search(self):
         search_url = "{0}?s={1}&loc={2}&d={3}".format(self.url, 
                                                       self.search_string,

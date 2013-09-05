@@ -1,25 +1,22 @@
 """
 TODOS 
-* make this mongoengine independent because we're just drilling
-  down to the pymongo db object anyhow
 * make text search optional
 * allow for choosing units
 * create some wrappers
 """
-from mongoengine import Document
 from math import radians, cos, sin, asin, sqrt
 
 EARTH_RADIUS_MI = 3961
 EARTH_RADIUS_KM = 6363
 
-def search(collection, 
+def search(db,
+           collection, 
            text,
            geo_field = None, 
            geo_center = None, 
            geo_dist = None,
            addl_filters = None,
            fields = None):
-    d = Document._get_db()
     is_geo = False
     
     if (geo_field and geo_center and geo_dist):
@@ -30,11 +27,11 @@ def search(collection,
     project = _build_projection(fields)
     filters = _build_filters(geo_field, geo_center, geo_dist, addl_filters)
     
-    search_data = d.command("text", 
-                            collection, 
-                            search = text, 
-                            project = project,
-                            filter = filters)
+    search_data = db.command("text", 
+                             collection, 
+                             search = text, 
+                             project = project,
+                             filter = filters)
     data = {}
     
     for x in search_data['results']:

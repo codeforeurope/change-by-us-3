@@ -30,7 +30,7 @@ from ..stripe.api import _get_account_balance_percentage
 from ..user.models import User
 
 from flaskext.uploads import UploadNotAllowed
-
+from mongoengine.connection import _get_db
 from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
@@ -91,7 +91,8 @@ def api_search_projects():
     if (search_type == 'project'):
         addl_filters.update({"resource": False})
     
-    search_data = search(collection = "project", 
+    search_data = search(db = _get_db(),
+                         collection = "project", 
                          text = text, 
                          geo_field = "geo_location", 
                          geo_center = geo_center, 

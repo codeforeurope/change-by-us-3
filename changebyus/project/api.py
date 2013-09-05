@@ -98,7 +98,8 @@ def api_search_projects():
                          geo_center = geo_center, 
                          geo_dist = geo_dist, 
                          addl_filters = addl_filters,
-                         fields = ['name', 'resource', 'geo_location'])
+                         fields = ['name', 'resource', 'geo_location'],
+                         units = 'mi')
 
     return jsonify_response(ReturnStructure(data = search_data))
 

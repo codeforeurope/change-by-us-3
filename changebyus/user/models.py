@@ -117,7 +117,13 @@ class User(db.Document, UserMixin, EntityMixin):
 
     notifications = db.EmbeddedDocumentField( UserNotifications )
 
-    # TODO add the user contact preferences
+    meta = {
+        'indexes': [
+            {'fields': ['display_name'], 'unique': True },
+            {'fields': ['email'], 'unique': True, 'sparse' : True }
+        ],
+    }
+
 
     # fields that will not be returned by the as_dict routine 
     PRIVATE_FIELDS = [

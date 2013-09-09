@@ -31,31 +31,18 @@ This is a webservice that will send large urls to bitly and return the
 shortened url.  The use case is rather obvious.
 """
 
-    # update to a project I own or organize
-    posts_update_to_my_project = db.BooleanField(default = True)
-    # response to an update I created
-    responds_to_my_update = db.BooleanField(default = True)
-    # response to a update I commented on
-    responds_to_my_comment = db.BooleanField(default = True)
-    # someone flags my account or project as inappropriate
-    flags_me = db.BooleanField(default = True)
-
-
-    # someone posts a discussion on a project I own or organize
-    posts_discussion = db.BooleanField(default = True)
-    # someone responds to a discussion on a project I own or organize
-    responds_to_a_discussion = db.BooleanField(default = True)
-
-    # someone posts an update to a project I'm involved in (owner, member, organizer)
-    posts_update_common_project(defualt = False)
-
-
 def _notify_flagged_project(project_id=None):
+    """
+        flags_me
+    """
+
     pass
 
 def _notify_flagged_user(user_id=None):
     """
-        break it down based on what can get flagged
+        - break it down based on what can get flagged.  TBD
+
+        flags_me
     """
     pass
 
@@ -73,7 +60,7 @@ def _notify_project_join(project_id=None):
 
     owner = project.owner
     if owner.notifications.joins_my_project and owner.email:
-        pass
+        msg = Message("User joined CBU project")
         #email..
 
 """
@@ -91,10 +78,19 @@ def test_send_email():
     return True
 """
 
-def _notify_post_response(post_id=None):
+def _notify_post(post_id=None):
     """
     Notify the original poster and all poster responders that there's been
     another response
+
+
+    responds_to_my_comment
+    responds_to_my_update
+    responds_to_a_discussion
+    posts_update_to_my_project
+    posts_discussion
+    posts_update_common_project
+
     """
     
     newest_post = ProjectPost.objects.with_id(post_id)

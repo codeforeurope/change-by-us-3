@@ -7,12 +7,17 @@ from datetime import datetime
 from mongoengine import signals
 
 from ..extensions import db
-from ..helpers.mixin import EntityMixin, encode_model
 from ..user.models import User
 from ..stripe.models import StripeAccount
 from ..helpers.imagetools import ImageManipulator, generate_thumbnail
+from ..helpers.stringtools import slugify
+
+from ..helpers.mixin import ( handle_decryption, handle_initial_encryption,
+                              handle_update_encryption, EntityMixin, encode_model )
+
 
 from flask import current_app
+from flask.ext.cdn import url_for
 
 import os
 from collections import namedtuple
@@ -47,24 +52,21 @@ project_images = [
 
 # TODO this should not be here, we need a cleaner solution to this
 def gen_image_urls(image_url):
-    
+
     """
-    Helper that will take a root image url and create a named touple
-    of image url's based on various sizes.  Note that these various
-    sizes will need to be synced with the sizes in templates and in
-    helpers.py: generate_thumbnails
+    Helper that will take a root image name, and given our image manipulators
+    assign names
     """
 
-    Thumbnails = namedtuple('Thumbnails', 'url large_url medium_url small_url')
+    images = {}
 
+    # TODO move the default project image to the cloud
     root_image = image_url if image_url is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
 
-    path, image = os.path.split(root_image)
-    large_url = os.path.join(path, '1020.320.' + image)
-    medium_url = os.path.join(path, '300.94.' + image)
-    small_url = os.path.join(path, '160.50.' + image)
-
-    images = Thumbnails(root_image, large_url, medium_url, small_url)
+    for manipulator in project_images:
+        name = manipulator.prefix + "." + root_image
+        print "URL FOR: ", name, " = ", url_for( 'static', filename = name ) 
+        images [ name ] = url_for( 'static', filename = name )
 
     return images
 
@@ -102,19 +104,51 @@ class Project(db.Document, EntityMixin):
     # resource is different on the UI side and does slightly less
     resource = db.BooleanField(default=False)
 
+    slug = db.StringField(unique=True)
+
+
+    meta = {
+        'indexes': [
+            {'fields': ['name'], 'unique': True },
+            {'fields': ['slug'], 'unique': True },
+            {'fields': ['name', 'slug'], 'unique': True },
+        ],
+    }
+
+
     PRIVATE_FIELDS = [
     'retired_stripe_accounts',
     ]
 
+    ENCRYPTED_FIELDS = []
+
+
+    @classmethod    
+    def pre_save(cls, sender, document, **kwargs):
+        EntityMixin.pre_save(sender, document)
+        
+        if document.is_new():
+            # ensure it's properly slugged
+            slug = slugify( document.name )
+        elif document.__dict__.has_key('_changed_fields'):
+            slug = slugify( document.name )
+
+
+
+    @classmethod    
+    def post_init(cls, sender, document, **kwargs):
+        handle_decryption(document, document.ENCRYPTED_FIELDS)
+
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
         resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
 
-        image_urls = gen_image_urls(self.image_url)
+        image_urls = gen_image_urls(self.image_name)
 
-        # TODO cloudify this
-        resp['image_url_large'] = image_urls.large_url
-        resp['image_url_medium'] = image_urls.medium_url
-        resp['image_url_small'] = image_urls.small_url
+        for image, url in image_urls.iteritems():
+            resp[image] = url
+
+        from pprint import pprint
+        pprint(resp)
 
         return resp
 
@@ -130,8 +164,18 @@ class UserProjectLink(db.Document, EntityMixin):
     project = db.ReferenceField(Project)
     role = db.StringField()
 
+    meta = {
+        'indexes': [
+            {'fields': ['user'], 'unique': False },
+            {'fields': ['project'], 'unique': False },
+            {'fields': ['user', 'project'], 'unique': True },
+        ],
+    }
 
+
+signals.post_init.connect(Project.post_init, sender=Project)
 signals.pre_save.connect(Project.pre_save, sender=Project)
+
 signals.pre_save.connect(UserProjectLink.pre_save, sender=UserProjectLink)
 """
 The presave routine filles in timestamps for us

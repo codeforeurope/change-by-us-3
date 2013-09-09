@@ -12,7 +12,10 @@ from __future__ import with_statement
 import datetime
 import flask
 
-from nose.tools import assert_equal, assert_true, assert_false, with_setup
+from nose.tools import ( assert_equal as _assert_equal, 
+                         assert_true as _assert_true, 
+                         assert_false as _assert_false, 
+                         with_setup )
 
 from tests import BaseTestCase
 
@@ -20,6 +23,32 @@ from tests import (string_generator, email_generator, password_generator,
                    timestamp_generator, name_generator, text_generator,
                    unicode_generator, unicode_email_generator)
 
+
+class AssertClass(BaseTestCase):
+
+  def assertTrueMsg(self, value, msg):
+    try:
+      self.assertTrue(value)
+
+    except Exception as e:
+      print "Exception msg: ", msg
+      raise e
+
+  def assertFalseMsg(self, value, msg):
+    try:
+      self.assertFalse(value)
+
+    except Exception as e:
+      print "Exception msg: ", msg
+      raise e
+
+  def assertEqualMsg(self, value, msg):
+    try:
+      self.assertEqual(value)
+
+    except Exception as e:
+      print "Exception msg: ", msg
+      raise e
 
 
 class UserClass():
@@ -47,8 +76,9 @@ class UserClass():
                   'last_name' : self.lname}
 
         resp = client.POST('/api/user/create', data = create)
-        client.assertTrue( resp['success'] )
+        client.assertTrueMsg( resp['success'], resp['msg'] )
         self.user_id = resp['data']['id']
+        self.data = resp['data']
 
 
     def login(self, client):
@@ -56,13 +86,13 @@ class UserClass():
                  'password' : self.pw}
 
         resp = client.POST('/login', data = login)
-        client.assertTrue( resp['success'] )
+        client.assertTrueMsg( resp['success'], resp['msg'] )
 
     def joinProject(self, client, project_id):
 
         join = { 'project_id' : project_id }
         resp = client.POST('/api/project/join', data = join)
-        client.assertTrue( resp['success'] )
+        client.assertTrueMsg( resp['success'], resp['msg'] )
 
         resp = client.GET( '/api/project/user/{0}/joinedprojects'.format(self.user_id) )
         
@@ -74,19 +104,7 @@ class UserClass():
         client.assertTrue( joined )
 
 
-class UserTests(BaseTestCase):
-    #
-    # """Use the template below for new test cases"""
-    # def dummy_test(self):
-    #     """Template to start from"""
-    #     response = self.client.get('/resource/to/call', environ_overrides={'REMOTE_ADDR': '127.0.0.1'})
-    #     data = json.loads(response.data)
-    #     self.assertTrue(data.get('code') == 200, str(data))
-    #                  }
-    #     response = self.client.post('/post/resource', data=json_data, 
-    #                                 environ_overrides={'REMOTE_ADDR': '127.0.0.1'}, 
-    #                                 content_type="application/json")
-    #
+class UserTests(AssertClass):
 
     def setUp(self):
         self.user = UserClass()
@@ -100,14 +118,14 @@ class UserTests(BaseTestCase):
         # change email permissions
         update = {'public_email': True}
         resp = self.POST('/api/user/edit', data = update)
-        self.assertTrue( resp['success'] )
-        self.assertTrue( resp['data']['email'] == self.user.email )
+        self.assertTrueMsg( resp['success'], resp['msg'] )
+        self.assertTrueMsg( resp['data']['email'] == self.user.email, resp['msg'] )
 
         update = {'public_email': False}
         resp = self.POST('/api/user/edit', data = update)
-        self.assertTrue( resp['success'] )
+        self.assertTrueMsg( resp['success'], resp['msg'] )
 
-        self.assertTrue( resp['data']['email'] == None)
+        self.assertTrueMsg( resp['data']['email'] == None, resp['msg'])
 
 
 class ProjectClass():
@@ -124,13 +142,14 @@ class ProjectClass():
 
         resp = client.POST('/api/project/create', data = create)
   
-        client.assertTrue( resp['success'] )
-        client.assertTrue( resp['data']['name'] == self.name )
+        client.assertTrueMsg( resp['success'] , resp['msg'])
+        client.assertTrueMsg( resp['data']['name'] == self.name, resp['msg'] )
 
-        self.project_id = resp['data']['id']   
+        self.project_id = resp['data']['id']
+        self.data = resp['data']
 
         resp = client.GET( '/api/project/{0}'.format(self.project_id) )
-        client.assertTrue( resp['data']['description'] == self.description )
+        client.assertTrueMsg( resp['data']['description'] == self.description, resp['msg'] )
 
     def edit(self, client, expected = True):
 
@@ -142,14 +161,15 @@ class ProjectClass():
         resp = client.POST('/api/project/edit', data = edit)
 
         if expected:
-            client.assertTrue( resp['success'] )
+            client.assertTrueMsg( resp['success'], resp['msg'] )
             print resp
-            client.assertTrue( resp['data']['name'] == self.name )
-            client.assertTrue( resp['data']['description'] == self.description )
+            client.assertTrueMsg( resp['data']['name'] == self.name, resp['msg'] )
+            client.assertTrueMsg( resp['data']['description'] == self.description, resp['msg'] )
+            self.data = resp['data']
             # todo GEO stuff
-            #client.assertTrue( resp['data']['location'] == self.location )
+            #client.assertTrueMsg( resp['data']['location'] == self.location, resp['msg'] )
         else:
-            client.assertFalse( resp['success'] )
+            client.assertFalse( resp['success'], resp['msg'] )
 
     def changeRoll(self, client, project_id, user_id, roll):
 
@@ -159,9 +179,9 @@ class ProjectClass():
 
         resp = client.POST('/api/project/change_user_role', data = role)
 
-        client.assertTrue( resp['success'] )
+        client.assertTrueMsg( resp['success'], resp['msg'] )
 
-class ProjectTests(BaseTestCase):
+class ProjectTests(AssertClass):
 
     def setUp(self):
         self.owner = UserClass()
@@ -169,14 +189,20 @@ class ProjectTests(BaseTestCase):
         self.project = ProjectClass()
 
     def test_projects(self):
-    #def projects(self):
 
         self.owner.createUser(self)
         self.project.createProject(self)
 
+        # test the slug
+        slug = self.GET('/api/project/slug/{0}'.format(self.project.data['slug']))
+        self.assertTrueMsg( slug['data']['slug'] == self.project.data['slug'], slug['msg'] )
+
         #### edit the project
         self.project.name = name_generator()
         self.project.edit(self)
+
+        # re-test the slug
+
         resp = self.GET('/logout')
 
         #### now join as diff user
@@ -199,12 +225,9 @@ class ProjectTests(BaseTestCase):
         self.member.login(self)
 
         #### change project name
+        # TODO can't this just be project.edit
         self.project.name = name_generator()
-        edit = { 'project_id' : self.project.project_id,
-                 'name' : self.project.name }
-
-        resp = self.POST('/api/project/edit', data = edit)
-        self.assertTrue( resp['success'] )
+        self.project.edit( self, expected = True )
 
 
 class PostClass():
@@ -241,10 +264,12 @@ class PostClass():
         resp = client.POST('/api/post/add_update', data = update)
         print resp
         if expected:
-            client.assertTrue( resp['success'] )
+            client.assertTrueMsg( resp['success'], resp['msg'] )
             self.update_id = resp['data']['id']
+            self.data = resp['data']
         else:
-            client.assertFalse( resp['success'] )
+            client.assertFalseMsg( resp['success'], resp['msg'] )
+
 
 
     def createDiscussion(self,
@@ -265,14 +290,15 @@ class PostClass():
         resp = client.POST('/api/post/add_discussion', data = update)
         print resp
         if expected:
-            client.assertTrue( resp['success'] )
+            client.assertTrueMsg( resp['success'], resp['msg'] )
             self.discussion_id = resp['data']['id']
+            self.data = resp['data']
         else:
-            client.assertFalse( resp['success'] )
+            client.assertFalseMsg( resp['success'], resp['msg'] )
 
 
 
-class PostTests(BaseTestCase):
+class PostTests(AssertClass):
 
     def setUp(self):
         self.owner = UserClass()
@@ -377,7 +403,7 @@ class PostTests(BaseTestCase):
         from pprint import pprint
         updates_url = '/api/post/project/{0}/list_updates'.format(self.project.project_id)
         updates = self.GET( updates_url )
-        self.assertTrue( updates['success'] )
+        self.assertTrueMsg( updates['success'], updates['msg'] )
 
         success = False
         for update in updates['data']:
@@ -389,16 +415,16 @@ class PostTests(BaseTestCase):
                 if update['responses'][0]['id'] == self.response_post.update_id:
                     success = True
 
-        self.assertTrue( success )
+        self.assertTrueMsg( success, updates['msg'] )
 
       
         discussions_url = '/api/post/project/{0}/list_discussions'.format(self.project.project_id)
         discussions = self.GET( discussions_url )
-        self.assertTrue( updates['success'] )
+        self.assertTrueMsg( updates['success'], updates['msg'] )
 
         pprint(updates)
 
-        self.assertTrue( success )
+        self.assertTrueMsg( success, updates['msg'] )
 
 
         

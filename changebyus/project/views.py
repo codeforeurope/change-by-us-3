@@ -22,6 +22,7 @@ Web facing views for interacting with projects.
 
 """
 
+
 @project_view.route('/<project_id>')
 def project_view_id(project_id):
     """

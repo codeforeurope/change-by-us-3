@@ -8,6 +8,7 @@ from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..rackspaceimages.helpers import _upload_image as _upload_rackspace_image
 from ..helpers.imagetools import generate_thumbnail
+from ..helpers.stringtools import slugify
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 
@@ -20,12 +21,38 @@ def _create_project( resource = False ):
     # TODO fix the location stuff
 
     owner = User.objects.with_id(g.user.id)
+    slug = slugify(name)
 
-    project = Project.objects(name=name)
+    project = Project.objects(name = name,
+                              slug = slug )
+
+    from pprint import pprint
+    pprint( project )
+    print project.count()
+
     if project.count() > 0:
         errStr = "Sorry, the name '{0}' is already in use.".format(name)
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
+
+    # TODO work on geo stuff
+    p = Project( name = name, 
+                 description = description, 
+                 owner = owner,
+                 resource = resource,
+                 slug = slug )
+
+
+    try:
+        p.save()
+    except Exception as e:
+        infoStr = "Hit race condition saving project with name {0}".format(name)
+        current_app.logger.info(infoStr)
+        current_app.logger.exception(e)
+
+        errStr = "Sorry, the name '{0}' is already in use.".format(name)
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )        
 
     file_name = None
 
@@ -42,7 +69,6 @@ def _create_project( resource = False ):
                     file_name = result.name
                     file_path = result.path
                     image_url = result.url
-
 
                     from .models import project_images
 
@@ -66,12 +92,6 @@ def _create_project( resource = False ):
         else:
             # again, photo optional
             file_name = result.file_name
-
-    # TODO work on geo stuff
-    p = Project( name = name, 
-                 description = description, 
-                 owner = owner,
-                 resource = resource )
 
 
     # we don't store the URL because the URL can change depending on what
@@ -105,26 +125,53 @@ def _edit_project():
     if name: p.name = name
     if description: p.description = description
 
-    # TODO add the geo region stuff
+    # handle image manipulation stuff
 
+    file_name = None
 
-    # TODO cloudize this and remove the dupe code
+    # photo is optional
     if 'photo' in request.files:
         photo = request.files.get('photo')
 
         if len(photo.filename) > 3:
 
             try:
-                filename = current_app.uploaded_photos.save(photo)
-                filepath = current_app.uploaded_photos.path(filename)
+                result = _upload_rackspace_image( photo )
 
-                #LV TODO we need to not repeat this image processing
+                if result.success:
+                    file_name = result.name
+                    file_path = result.path
+                    image_url = result.url
 
-                generate_thumbnails(filepath)
+                    from .models import project_images
+
+                    for manipulator in project_images:
+
+                        manip_image = manipulator.converter(file_path)
+                        manip_image_name = manipulator.prefix + '.' + file_name
+
+                        if not _upload_rackspace_image( manip_image, 
+                                                        manip_image_name).success:
+
+                            return jsonify_response( ReturnStructure ( success = False ) )
+                else:
+                    return jsonify_response( ReturnStructure ( success = False ) )
+
             except UploadNotAllowed:
                 abort(403)
 
-            p.image_url = urlparse(current_app.uploaded_photos.url(filename)).path
+            file_name = result.file_name
+
+        else:
+            # again, photo optional
+            file_name = result.file_name
+
+
+    # we don't store the URL because the URL can change depending on what
+    # rackspace container we wish to use
+    if file_name:
+        p.image_name = file_nane
+        
 
 
     p.save()

@@ -41,9 +41,6 @@ def _get_rackspace_url():
     return container.cdn_uri
 
 
-
-
-
 def string_generator(size=6, chars=string.ascii_lowercase + string.digits):
     return ''.join(random.choice(chars) for x in range(size))
 

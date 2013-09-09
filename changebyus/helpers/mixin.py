@@ -60,18 +60,10 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
     kwargs:
         current_depth: for internal recursion
     """
-
-    from ..project.models import *
-    from ..user.models import *
-    from ..post.models import *
-
-    print "current depth is ", kwargs.get('current_depth')
-
     if (  kwargs.get('current_depth') is not None and
           kwargs.get('current_depth') > 0 and
           kwargs.get('current_depth') >= depth and 
           recursive is True ):
-        print "setting recursive to FALSE"
         recursive = False
     else:
         if kwargs.get('current_depth') is None: 
@@ -81,10 +73,6 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
     # Dynamic keys to pass up the recursion stack
     if kwargs.get('delete_keys') is None: 
         kwargs['delete_keys'] = []
-
-    # insert the objects private fields into delete keys
-    if hasattr(obj, 'PRIVATE_FIELDS'):
-        kwargs['delete_keys'] += obj.PRIVATE_FIELDS
       
     if obj is None:
         return obj
@@ -107,8 +95,24 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
                     if isinstance(v, (str, unicode, float, int)):
                         out[k] = v
                     else:
-                        out[k] = encode_model(v, recursive=recursive, 
-                                                 depth=depth, **kwargs)
+                        # Check to see if this is an event. If it is, we want to put the dates
+                        # in a nice format for the front end (list of all dates -> [start, end] tuple)
+                        already_encoded = False
+                        if obj.__class__.__name__ == "Events" and k == "dates":
+                            earliest_date = None
+                            latest_date = None
+                            for date in v:
+                                if not earliest_date or date < earliest_date:
+                                    earliest_date = date
+                                if not latest_date or date > latest_date:
+                                    latest_date = date
+                            if earliest_date and latest_date:
+                                out[k] = encode_model([earliest_date,latest_date], recursive=recursive, 
+                                                      depth=depth, **kwargs)
+                                already_encoded = True
+                        if not already_encoded:
+                            out[k] = encode_model(v, recursive=recursive, 
+                                                  depth=depth, **kwargs)
                     
         # To avoid breaking loop flow, do at the end of looping
         for delkey in kwargs.get('delete_keys'):
@@ -132,9 +136,6 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
         out = [ (g,list(l)) for g,l in obj ]
     elif isinstance(obj, (list)):
         # GeoPointField is also a list!
-        # TODO TODO
-        # we should only recurse on these if they are simple types
-        # and we're in recurse.  We need to rethink this to protect it
         out = [encode_model(item, recursive=recursive, depth=depth, **kwargs) 
                for item in obj]
     elif isinstance(obj, (dict)):
@@ -145,45 +146,72 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
         out = str(obj)
     elif isinstance(obj, (str, unicode)):
         out = obj
-    elif isinstance(obj, (datetime)):
+    elif isinstance(obj, (datetime.datetime)):
         out = str(obj)
     elif isinstance(obj, (bool, int, float, long)):
         out = obj
     elif isinstance(obj, bson.DBRef):
-        print "recursive is ", recursive
-
         if recursive:
-            # If we recurse deep enough, we don't have access to the model object
-            # so we need to look it up in the globals.
-            #
-            # WARN: This means we assume that all models have been imported 
-            Context = globals().get(''.join([x.capitalize() 
-                                             for x in obj.collection.split('_')]))
-            print "found context to be ", Context
-            print "from data ", obj.collection
-            try:
-                if kwargs.get('current_depth') >= depth:
-                    print "haulting due to depth"
-                    doc = Context.objects(id=obj.id).first()
-                    if doc: doc = doc._data
-                else:
-                    print "context is ", Context.objects() 
-                    doc = Context.objects(id=obj.id).first()
-                out = encode_model(obj=obj, recursive=recursive, depth=depth, **kwargs)
-            except Exception:
-                current_app.logger.error('Vars: context=%s, id=%s, depth=%s' % 
-                                         (str(obj.collection), str(obj.id), depth),
-                                          exc_info=True)
+            # We have to do a bit of lazy-loading here because the 
+            # Mixin needs to know about the model class to load
+            # which we could not have told it about before, due to circular
+            # references
+            # We can do this every time because:
+            #   "When Python imports a module, it first checks the module 
+            #    registry (sys.modules) to see if the module is already imported"
+            model = lazy_load_model_classes(obj.collection)
+            Context = globals().get(model)
+            
+            if not Context:
+                app.logger.error("Programming error! "
+                                 "Missing Context (or import) for %s" % obj.collection)
                 out = str(obj)
+            else:
+                try:
+                    doc = Context.objects(id=obj.id).first()
+                    if kwargs.get('current_depth') == depth:
+                        if doc: doc = doc._data
+                    
+                    out = encode_model(obj=doc, recursive=recursive, depth=depth, **kwargs)
+                except Exception:
+                    app.logger.error('Vars: context=%s, id=%s, depth=%s' % 
+                                     (str(obj.collection), str(obj.id), depth),
+                                     exc_info=True)
+                    out = str(obj)
+                
         else:
             out = {'collection': obj.collection, 'id': str(obj.id)}
 
     else:
-        current_app.logger.debug("Could not JSON-encode type '%s': %s" % 
+        app.logger.debug("Could not JSON-encode type '%s': %s" % 
                          (type(obj), str(obj)))
         out = str(obj)
         
     return out
+
+def lazy_load_model_classes(collection):
+    """Lazily load modules as necessary"""
+    # Ref: http://stackoverflow.com/questions/3372361/dynamic-loading-of-modules-then-using-from-x-import-on-loaded-module
+    classname = ''.join([ x.capitalize() for x in collection.split('_') ])
+    
+    # No need to load if it's already present
+    if classname in globals().keys():
+        return classname
+    
+    model_path = u"timescapes.%s.models" % (collection)
+    # import all release models into (global) namespace
+    try:
+        exec("from %s import %s" % (model_path, classname)) in globals()
+    except Exception as exc:
+        app.logger.error("Exception lazy loading %s" % collection, exc_info=True)
+
+    if classname not in globals().keys():
+        app.logger.error("Programming error! "
+                         "Missing Context (or import) for %s => %s."
+                         "%s vs %s" % (obj.collection, model, globals().keys(), model),
+                         exc_info=True)
+
+    return classname
 
 
 def handle_initial_encryption(document, encrypted_fields):

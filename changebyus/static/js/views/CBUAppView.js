@@ -1,15 +1,18 @@
-define(["underscore", "backbone", "jquery","views/ProjectView", "collection/ProjectListCollection"], function(_, Backbone, $, ProjectView, ProjectListCollection) {
+// ,"views/ProjectView", "collection/ProjectListCollection" 
+// , ProjectView, ProjectListCollection
+define(["underscore", "backbone", "jquery"], function(_, Backbone, $) {
     
-    var templateUrl = '/static';
+    //var templateUrl = '/static';
     
     var CBUAppView = Backbone.View.extend({
+        /*
         Projects: new ProjectListCollection(),
 
         initialize: function(options) {
             var self = this,
                 parentElt = options.appendTo || $('body');
                 
-            templateUrl = options.templateUrl || templateUrl;
+            templateUrl = options.templateUrl || '/static';
             
             parentElt.template(templateUrl + '/templates/discover.html', {}, function() {
                 self.Projects.bind('reset', self.addAll, self);
@@ -25,9 +28,11 @@ define(["underscore", "backbone", "jquery","views/ProjectView", "collection/Proj
         addAll: function() {
             this.Projects.each(this.addOne);
         },
+        */
     });
 
     return CBUAppView;
+    
 });
 
 

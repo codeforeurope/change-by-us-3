@@ -171,6 +171,20 @@ def configure_logging(app):
     app.logger.addHandler(handler)
 
 
+    if not app.debug:
+        
+        hostname = socket.gethostname()
+        mail_handler = SMTPHandler( app.settings['MAIL_SERVER'],
+                                    app.settings['MAIL_USERNAME'],
+                                    [ app.settings['REPORTING_EMAIL'] ], 
+                                    'CBU Issue on {0}'.format(hostname),
+                                    credentials = app.settings['MAIL_PASSWORD'],
+                                    secure = app.settings['MAIL_USE_SSL'] )
+
+        mail_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(mail_handler)
+
+
 def configure_app(app):
     """
     ABOUT

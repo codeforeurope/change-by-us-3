@@ -1,0 +1,551 @@
+<!doctype html>
+<html lang = "en">
+<head>
+{% block head %}
+	<meta charset = "utf-8">
+	<title>Change By Us</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href='http://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Merriweather:400,700,300' rel='stylesheet' type='text/css'>
+
+	<link href="/static/css/style-merged.css" rel="stylesheet">
+	<link href="/static/css/bootstrap-select.css" rel="stylesheet">
+
+	<style type="text/css" media="screen"> </style>
+	<link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
+
+	{% block maxlength %}
+	<script>
+
+	window.onload = function() { 
+		var txts = document.getElementsByTagName('TEXTAREA') 
+
+		for(var i = 0, l = txts.length; i < l; i++) {
+			if(/^[0-9]+$/.test(txts[i].getAttribute("maxlength"))) { 
+				var func = function() { 
+					var len = parseInt(this.getAttribute("maxlength"), 10); 
+
+					if(this.value.length > len) { 
+						alert('Maximum length exceeded: ' + len); 
+						this.value = this.value.substr(0, len); 
+						return false; 
+					} 
+				}
+
+				txts[i].onkeyup = func;
+				txts[i].onblur = func;
+			} 
+		} 
+		var txts = document.getElementsByTagName('TEXT', 'EMAIL') 
+
+		for(var i = 0, l = txts.length; i < l; i++) {
+			if(/^[0-9]+$/.test(txts[i].getAttribute("maxlength"))) { 
+				var func = function() { 
+					var len = parseInt(this.getAttribute("maxlength"), 10); 
+
+					if(this.value.length > len) { 
+						alert('Maximum length exceeded: ' + len); 
+						this.value = this.value.substr(0, len); 
+						return false; 
+					} 
+				}
+
+				txts[i].onkeyup = func;
+				txts[i].onblur = func;
+			} 
+		} 
+	}
+	</script>
+	{% endblock %}
+
+	{% block validateCreateProject %}
+	<script>
+
+	function ValidateCreateProject()
+	{
+		var name = document.createproject.name;
+		var description = document.createproject.description;
+		var location = document.createproject.location;
+		var image = document.createproject.photo;
+
+		if (name.value == "")
+		{
+			window.alert("Please enter a project name.");
+			name.focus();
+			return false;
+		}
+
+		if (description.value == "")
+		{
+			window.alert("Please enter a project description.");
+			description.focus();
+			return false;
+		}
+
+		if (location.value == "")
+		{
+			window.alert("Please enter a project location.");
+			location.focus();
+			return false;
+		}
+
+		return true;
+		
+	}
+	</script>
+
+	{% endblock %}
+
+	{% block validateSignup %}
+
+	<script>
+
+	function ValidateContactForm()
+	{
+		var email = document.signin.email;
+		var displayname = document.signin.display_name;
+		var password = document.signin.password;
+
+		if (email.value.indexOf("@", 0) < 0)
+		{
+			window.alert("Please enter a valid e-mail address.");
+			email.focus();
+			return false;
+		}
+		
+		if (email.value.indexOf(".", 0) < 0)
+		{
+			window.alert("Please enter a valid e-mail address.");
+			email.focus();
+			return false;
+		}
+
+		if (displayname.value == "")
+		{
+			window.alert("Please enter a username.");
+			displayname.focus();
+			return false;
+		}
+
+		if (password.value == "")
+		{
+			window.alert("Please enter a password.");
+			password.focus();
+			return false;
+		}
+
+		return true;
+		
+	}
+	</script>
+
+	{% endblock %}
+
+	{% block validatePost %}
+	<script>
+
+	function ValidatePost()
+	{
+		var id = document.addpost.project_id;
+		var title = document.addpost.title;
+		var description = document.addpost.description;
+
+		if (id.value == "")
+		{
+			window.alert("Please select a project.");
+			id.focus();
+			return false;
+		}
+		
+		if (title.value == "")
+		{
+			window.alert("Please enter a post title.");
+			title.focus();
+			return false;
+		}
+		if (description.value == "")
+		{
+			window.alert("Please enter an update.");
+			description.focus();
+			return false;
+		}
+		
+		return true;
+		
+	}
+	</script>
+
+	{% endblock %}
+
+	<script>
+
+	function convertDate(t) {
+		var dateRE = /(\d+)-(\d+)-(\d+)T(\d+):(\d+):(\d+)([+\-]\d+):(\d+)/;
+		var match = t.match(dateRE);
+		var nums = [], item, date;
+		if (match) {
+			for (var i = 1; i < match.length; i++) {
+				nums.push(parseInt(match[i], 10));
+			}
+			if (nums[7] < 0) {
+				nums[8] *= -1;
+			}
+			return(new Date(nums[0], nums[1] - 1, nums[2], nums[3] - nums[6], nums[4] - nums[7], nums[5]));
+		}
+	}
+
+	</script>
+
+	<script type="text/javascript">
+	function unhide(divID) {
+		var item = document.getElementById(divID);
+		if (item) {
+			item.className=(item.className=='hidden')?'unhidden':'hidden';
+		}
+	}
+	</script>
+
+{% endblock %} <!-- head -->
+</head>
+
+
+<body>
+
+	{% block topnav %}
+	{% endblock %} <!--topnav-->
+
+	{% block topnav_stream %}
+	{% endblock %} <!-- topnav-stream -->
+
+
+	<div class = "container-narrow" id = "frame">
+
+		{% block content %}
+		{% endblock %}
+	</div>
+
+	{% block postModal %}
+	{% endblock %}
+
+	<!-- split modal -->
+	<div id="splitModal" class="modal hide fade" tabindex="-1" data-width="760">
+	  <div class="modal-body">
+	    <div class="row-fluid">
+	      <div class="span6">
+	        <h4>Sign Up</h4>
+		<div class="modal-body">
+			<form method="post" name="signin" class="form-signin" action="/api/user/create" onsubmit="return ValidateContactForm();">
+				{% if project %}
+				<input type="hidden" name="next" value="/project/{{project.id}}"></input>
+				{% endif %}
+				<input type="text" maxlength="50" class="input-block-level" id="signup-display-name" name="display_name" placeholder="Username">
+				<input type="text" maxlength="20" class="input-block-level" id="signup-first-name" name="first_name" placeholder="First name">
+				<input type="text" maxlength="20" class="input-block-level" id="signup-last-name" name="last_name" placeholder="Last name">
+				<input type="email" maxlength="100" class="input-block-level" id="signup-email" name="email" placeholder="Email address">
+				<input type="password" maxlength="20" class="input-block-level" id="signup-password" name="password" placeholder="Password">
+				<input type="submit" class="btn btn-large"  value="Sign Up">
+			</form>
+			<a class="btn btn-info" href="/social/facebook/login"> Sign Up With Facebook </a>
+			<br/>
+			<a class="btn btn-info" href="/social/twitter/login" style="margin-top: 10px"> Sign Up With Twitter </a>
+
+
+		</div>
+	      </div>
+	      <div class="span6">
+	        <h4>Log In</h4>
+			<div class="modal-body">
+				<form method="post" class="form-signin" action="/login">
+					{% if project %}
+					<input type="hidden" name="next" value="/project/{{project.id}}"></input>
+					{% endif %}
+					<input type="email" class="input-block-level" id="login-email" name="email" placeholder="Email address">
+					<input type="password" class="input-block-level" id="login-password" name="password" placeholder="Password">
+
+					<input type="submit" class="btn btn-large"  value="Log In">
+				</form>
+				<p><a href="/reset">Forgot password?</a></p>
+
+				<a class="btn btn-info" href="/social/facebook/login"> Log In With Facebook </a>
+				<br/>
+				<a class="btn btn-info" href="/social/twitter/login" style="margin-top: 10px"> Log In With Twitter </a>
+
+			</div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="modal-footer">
+	    <button type="btn" data-dismiss="modal" class="btn">Close</button>
+	  </div>
+	</div>
+
+	<!-- login modal -->
+	<div id="loginModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="SignupModal" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Log In to Change By Us</h3>
+		</div>
+		<div class="modal-body">
+			<form method="post" class="form-signin" action="/login">
+				<input type="email" class="input-block-level" id="login-email" name="email" placeholder="Email address">
+				<input type="password" class="input-block-level" id="login-password" name="password" placeholder="Password">
+
+				<input type="submit" class="btn btn-large"  value="Log In">
+			</form>
+			 <p><a href="/reset">Forgot password?</a></p>
+			<a class="btn btn-info" href="/social/facebook/login"> Log In With Facebook </a>
+			<br/>
+			<br/>
+			<a class="btn btn-info" href="/social/twitter/login" style="margin-left:15px"> Log In With Twitter </a>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+
+	<!-- signup modal -->
+	<div id="signupModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="SignupModal" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Sign Up for Change By Us</h3>
+		</div>
+		<div class="modal-body">
+			<form method="post" name="signin" class="form-signin" action="/api/user/create" onsubmit="return ValidateContactForm();">
+				{% if project %}
+				<input type="hidden" name="next" value="/project/{{project.id}}"></input>
+				{% endif %}
+				<input type="text" maxlength="50" class="input-block-level" id="signup-display-name" name="display_name" placeholder="Username">
+				<input type="text" maxlength="20" class="input-block-level" id="signup-first-name" name="first_name" placeholder="First name">
+				<input type="text" maxlength="20" class="input-block-level" id="signup-last-name" name="last_name" placeholder="Last name">
+				<input type="email" maxlength="100" class="input-block-level" id="signup-email" name="email" placeholder="Email address">
+				<input type="password" maxlength="20" class="input-block-level" id="signup-password" name="password" placeholder="Password">
+				<input type="submit" class="btn btn-large"  value="Sign Up">
+			</form>
+			<a class="btn btn-info" href="/social/facebook/login"> Sign Up With Facebook </a>
+			<a class="btn btn-info" href="/social/twitter/login" style="margin-left:15px"> Sign Up With Twitter </a>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+
+	<!-- payment modal -->
+	<div id="paymentModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="SignupModal" aria-hidden="true" >
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			<h3 id="myModalLabel">Make a Donation</h3>
+		</div>
+
+		<div class="modal-body">
+			<form action="/stripe/charge" method="POST" id="payment-form">
+				<span class="payment-errors"></span>
+				{% if project %}
+				<input type="hidden" name="project_id" id="charge-project-id" value="{{project.id}}"></input>
+				{% else %}
+				{% endif %}
+				<input type="hidden" name="access_token" id="charge-access-token" value="{{access_token}}"></input>
+				<input type="hidden" name="stripe_id" id="charge-account-id" value="{{account_id}}"></input>
+				<div class="form-inline">
+					<label>
+						<span>Donation Amount: $</span>
+						<input type="text" size="20" style="width: 50px" id="charge-amount" name="amount"/>
+					</label>
+				</div>
+
+				<div class="form-row">
+					<label>
+						<span>Card Number:</span>
+						<input type="text" size="20" style="width:200px" id="charge-card-number" data-stripe="number"/>
+					</label>
+				</div>
+
+				<div class="form-inline">
+					<label>
+						<span>CVC:</span>
+						<input type="text" size="4" style="width: 50px" id="charge-cvc" data-stripe="cvc"/>
+					</label>
+				</div>
+
+				<div class="form-inline">
+					<label>
+						<span>Email address:</span>
+						<input type="text" size="4" style="width: 300px" id="charge-email" name="email"/>
+					</label>
+				</div>
+
+				<div class="form-inline">
+					<label>
+						<span>Expiration (MM/YYYY)</span>
+					</label>
+					<input type="text" size="2" style="width: 50px" id="charge-expiry-month" data-stripe="exp-month"/>
+					<span> / </span>
+					<input type="text" style="width: 100px" size="4" id="charge-expiry-year" data-stripe="exp-year"/>
+				</div>
+
+				<input type="submit" class="btn btn-large" value="Submit Payment"></input>
+			</form>
+
+		</div>
+		<div class="modal-footer">
+			<button class="btn" data-dismiss="modal">Close</button>
+		</div>
+	</div>
+
+
+
+
+	<!-- ========= -->
+	<!-- Libraries -->
+	<!-- ========= -->
+	<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+	<script src="/static/js/jquery.js"></script>
+
+	<script src="/static/js/jquery-form.js"></script>
+	<script src="/static/js/jquery.tinysort.js"></script>
+	<script src="/static/js/bootstrap-select.js"></script>
+	<script src="/static/js/bootstrap-modal.js"></script>
+	<script src="/static/js/bootstrap-dropdown.js"></script>
+	<script src="/static/js/bootstrap-button.js"></script>
+	<script src="/static/js/bootstrap-tab.js"></script>
+	<script src="/static/js/select-post.js"></script>
+	<script src="/static/js/bootstrap-collapse.js"></script>
+	<script src="/static/js/bootstrap-fileupload.js"></script>
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js" type="text/javascript"></script>
+	<script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+
+ <script type="text/javascript">
+  // This identifies your website in the createToken call below
+  Stripe.setPublishableKey("{{key}}");
+
+  var stripeResponseHandler = function(status, response) {
+  	var $form = $('#payment-form');
+
+  	if (response.error) 
+  	{
+	    // Show the errors on the form
+	    $form.find('.payment-errors').text(response.error.message);
+	    $form.find('button').prop('disabled', false);
+	}
+	else 
+	{
+	    // token contains id, last4, and card type
+	    var token = response.id;
+	    // Insert the token into the form so it gets submitted to the server
+	    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+	    // and submit
+	    $form.get(0).submit();
+	}
+};
+
+jQuery(function($) {
+	$('#payment-form').submit(function(event) {
+		var $form = $(this);
+
+	    // Disable the submit button to prevent repeated clicks
+	    $form.find('button').prop('disabled', true);
+
+	    Stripe.createToken($form, stripeResponseHandler);
+
+		    // Prevent the form from submitting with the default action
+		    return false;
+		});
+});
+
+ </script>
+
+<!-- Function to append hidden elements into form submittals -->
+<script type="text/javascript">
+$(document).ready(function () {
+	$('div.btn-group').on('click', 'button[data-name]', function() {
+		var select = $(this).data('name');
+		var elem = $('#realform > input[name="'+select+'"]');
+		if(elem.length !== 0)
+			elem.remove();
+		if(elem.attr('value') !== select)
+			$('<input type="hidden" name="'+select+'" value="'+select+'" />').appendTo('#realform');
+	});
+});
+</script>
+
+<!-- Function to launch modal on reload of post page -->
+<script type="text/javascript">
+    $(window).load(function(){
+        $('#postingModal').modal('show');
+    });
+</script>
+
+<script type="text/javascript">
+    $(window).load(function(){
+		$('#sortLatest').addClass('active');
+    });
+</script>
+
+<!-- Function to assign div class to dropdown-select script -->
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.selectpicker').selectpicker();
+});
+</script>
+
+
+<!--Function to load page to a specific tab within stream-->
+<script type="text/javascript">	
+    $(window).load(function(){
+	    window.location.hash = "#{{ tab }}";
+
+	// Javascript to enable link to tab
+	var hash = document.location.hash;
+	var prefix = "tab_";
+	if (hash) {
+		console.log('blah');
+	    $('.nav-tabs a[href='+hash.replace(prefix,"")+']').tab('show');
+	} 
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.selectWide').SelectWide();
+});
+</script>
+
+<!-- Function to convert timestamp to formatted datetime in stream -->
+<script>
+function changeDate($element) {
+	var date = new Date($element.html());
+	$element.html(date.toLocaleDateString() + " " + date.toLocaleTimeString());
+}
+
+function localizeDates($elements) {
+	$elements.each(function(i, element) { 
+		changeDate($(element));
+	});
+}
+
+$(function(){
+	localizeDates($('span.datetime'));
+});
+</script>
+
+<!-- Google Analytics -->
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-40526478-1', 'changeby.us');
+  ga('send', 'pageview');
+</script>
+
+<!-- Get Satisfaction -->
+<div id="getsat-widget-5537"></div>
+<script type="text/javascript" src="https://loader.engage.gsfn.us/loader.js"></script>
+<script type="text/javascript">
+if (typeof GSFN !== "undefined") { GSFN.loadWidget(5537,{"containerId":"getsat-widget-5537"}); }
+</script>
+</body>
+</html>

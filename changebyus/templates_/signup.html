@@ -1,0 +1,67 @@
+ {% extends "layout.html" %}
+
+{% block head %}
+  {{ super() }}
+  {% block validatePost %}{% endblock %}
+{% endblock %}
+
+{% block topnav %}
+
+<div id = "topnav">
+  <div class="container-narrow">
+    <div class="masthead">
+      <ul class="nav nav-pills pull-left">
+        <li><a href="/" id="header-text"><strong>Change By Us</strong></a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+{% from "security/_macros.html" import render_field_with_errors, render_field %}
+{% include "security/_messages.html" %}
+
+{% if error_string %}
+<p class="lead" style="padding-top: 30px">{{ error_string }}</p>
+{% else %}
+<p class="lead" style="padding-top: 30px">Please log in before continuing!</p>
+{% endif %}
+
+<div class="span5 pull-left">
+   <div class="jumbotron">
+   <p class="lead">Sign up</p>
+ </div>
+ <form method="post" name="signin" class="form-signin" action="/api/user/create">
+  <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username">
+  <input type="text" class="input-block-level" name="first_name" id="signup-first-name" placeholder="First name">
+  <input type="text" class="input-block-level" name="last_name" id="signup-last-name" placeholder="Last name">
+  <input type="email" class="input-block-level" name="email" id="signup-email"  placeholder="Email address">
+  <input type="password" class="input-block-level" name="password" id="signup-password" placeholder="Password">
+
+<input type="submit" class="btn btn-large"  value="Sign Up">
+</form>
+<a class="btn btn-info" href="/social/facebook/login"> Sign Up With Facebook </a>
+<a class="btn btn-info" href="/social/twitter/login" style="margin-left:15px"> Sign Up With Twitter </a>
+
+</div>
+
+<div class="span4 pull-right">
+  <div class="jumbotron">
+   <p class="lead">Log In</p>
+ </div>
+      <form method="post" class="form-signin" action="/login">
+        <input type="email" class="input-block-level" id="login-email" name="email" placeholder="Email address">
+        <input type="password" class="input-block-level" id="login-password" name="password" placeholder="Password">
+
+        <input type="submit" class="btn btn-large"  value="Log In">
+      </form>
+      <p><a href="/reset">Forgot password?</a></p>
+      <a class="btn btn-info" href="/social/facebook/login"> Log In With Facebook </a>
+      <a class="btn btn-info" href="/social/twitter/login" style="margin-left:15px"> Log In With Twitter </a>
+
+</div>
+
+{% endblock %}

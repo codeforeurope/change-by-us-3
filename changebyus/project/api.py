@@ -15,9 +15,11 @@ from flask.ext.wtf import (Form, TextField, TextAreaField, FileField,
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
 
+from ..mongo_search import search
+
 from .models import Project, Roles, ACTIVE_ROLES
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
-                       _create_project, _edit_project )
+                       _create_project, _edit_project, _get_lat_lon_from_location )
 
 from .decorators import *
 
@@ -27,7 +29,7 @@ from ..stripe.api import _get_account_balance_percentage
 from ..user.models import User
 
 from flaskext.uploads import UploadNotAllowed
-
+from mongoengine.connection import _get_db
 from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
@@ -49,6 +51,56 @@ class CreateProjectForm(Form):
     description = TextAreaField("description", validators=[Required()])
     location = TextField("location", validators=[Required()])
     photo = FileField("photo")
+
+
+@project_api.route('/search')
+def api_search_projects():
+    """
+    ABOUT
+        search projects and/or resources
+    METHOD
+        GET
+    INPUT
+        s = text to search
+        loc = location to search
+        d = radius from location (assumes miles)
+        cat = category to search
+        type = 'project' or 'resource' (searches both if omitted)
+    OUTPUT
+        ReturnStructure response with outcome results.
+    PRECONDITIONS
+        None
+    """    
+    text = request.args.get('s')
+    loc = request.args.get('loc')
+    geo_dist = request.args.get('d')
+    cat = request.args.get('cat')
+    search_type = request.args.get('type')
+    
+    latlon = _get_lat_lon_from_location(loc)
+    geo_center = [latlon[0], latlon[1]]
+    
+    addl_filters = {}
+    
+    if (cat):
+        addl_filters.update({"category": cat})
+    
+    if (search_type == 'resource'):
+        addl_filters.update({"resource": True})
+    if (search_type == 'project'):
+        addl_filters.update({"resource": False})
+    
+    search_data = search(db = _get_db(),
+                         collection = "project", 
+                         text = text, 
+                         geo_field = "geo_location", 
+                         geo_center = geo_center, 
+                         geo_dist = geo_dist, 
+                         addl_filters = addl_filters,
+                         fields = ['name', 'resource', 'geo_location'],
+                         units = 'mi')
+
+    return jsonify_response(ReturnStructure(data = search_data))
 
 
 @project_api.route('/create', methods = ['POST'])

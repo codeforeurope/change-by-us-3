@@ -12,13 +12,39 @@ from ..helpers.stringtools import slugify
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 
+import requests
+import simplejson as json
+
+def _get_lat_lon_from_location(loc):
+    """
+    Returns lat/lon pair as a list from google maps api.
+    Theoretically any valid location string would work, but
+    we're expecting zipcode here.
+    """
+    r = requests.get("http://maps.googleapis.com/maps/api/geocode/json?address=%s&sensor=false" % loc)
+    latlon = []
+    
+    if (r.status_code == 200):
+        d = json.loads(r.text)
+        
+        try:
+            lld = d['results'][0]['geometry']['location']
+            latlon = [lld['lat'], lld['lng']]
+        except:
+            latlon = []
+
+    return latlon
+
 def _create_project( resource = False ):
 
     name = request.form.get('name')
     description = request.form.get('description')
     location = request.form.get('location')
 
-    # TODO fix the location stuff
+    if (location):
+        geo_location = _get_lat_lon_from_location(location)
+    else:
+        geo_location = []
 
     owner = User.objects.with_id(g.user.id)
     slug = slugify(name)
@@ -93,11 +119,11 @@ def _create_project( resource = False ):
             # again, photo optional
             file_name = result.file_name
 
-
     # we don't store the URL because the URL can change depending on what
     # rackspace container we wish to use
     if file_name:
         p.image_name = file_nane
+
 
     p.save()
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)

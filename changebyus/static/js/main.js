@@ -1,16 +1,17 @@
 require.config({
-  baseUrl: "/static/js",
-  paths: {
-    "backbone": "ext/backbone/backbone", 
-    "bootstrap": "ext/bootstrap/bootstrap",
-    "jquery": "ext/jquery/jquery", 
-    "underscore": "ext/underscore/underscore",
-    "template": "ext/jquery/template"
-  }
+    baseUrl: "/static/js",
+    paths: {
+        "jquery": "ext/jquery/jquery", 
+        "underscore": "ext/underscore/underscore-min",
+        "backbone": "ext/backbone/backbone-min", 
+        "bootstrap": "ext/bootstrap/bootstrap",
+        "template": "ext/jquery/template",
+        "app":  "views/CBUAppView"
+    }
 });
 
-require(['jquery', 'views/CBUAppView'], function() {
-   $(document).ready(function() {
-       window.App = new CBUApp({ appendTo: $('body') });
+require(["jquery","app"], function($, CBUAppView) {
+    $(document).ready(function() {
+       window.CBUAppView = new CBUAppView({ appendTo: $('body') });
     });
 });

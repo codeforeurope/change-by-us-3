@@ -1,0 +1,242 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+{% block validatePost %}
+{% endblock %}
+{% endblock %}
+
+{% block topnav %}
+
+
+
+  {% if login == false %}
+
+  <div id="streamtop">
+    <div class="container-narrow">
+      <div class="container-narrow">
+      <div class="masthead">
+        <div class="hidden-phone">
+          <ul class="nav nav-pills pull-left">    
+            <form method="post" action="/stream/sort">
+              <input type="hidden" name="project_id" value="">
+              <li ><input class="btn btn-success" type="submit" id="header-text" value="View Dashboard"></li>
+            </form>
+          </ul>
+        </div>
+
+        <div class="hidden-desktop hidden-tablet visible-phone">
+          <div id="mobile-header">
+            <ul class="nav nav-pills pull-left">
+              <form method="post" action="/stream/sort">
+              <input type="hidden" name="project_id" value="">
+              <li ><input type="image" src="/static/img/dashboard.png" style="width: 30px; height: 30"></li>
+            </form>
+            </ul>
+
+            <ul class="nav nav-pills pull-right">
+              <li style="padding-top: 0px">
+                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
+              </li>
+              <li class="dropdown custom">
+                <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
+                <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                  <li><a role="menuitem" href="/project/create">Create a project</a></li>
+                  <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
+                  <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
+                  <li><a role="menuitem" href="/logout">Log Out</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hidden-phone visible-desktop visible-tablet">
+          <ul class="nav nav-pills pull-right">
+            <li><a href="/" id="header-text">View ChangeBy.us</a></li>
+            <li class="dropdown custom">
+              <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
+              <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                <li><a role="menuitem" href="/project/create">Create a project</a></li>
+                <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
+                <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
+                <li><a role="menuitem" href="/logout">Log Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+
+<div id = "topnav">
+  <div class="container-narrow">
+  <div class="masthead">
+    <ul class="nav nav-pills pull-right">
+
+      <li><a data-toggle="modal" href="#signupModal" id="header-text"><strong>Sign Up</strong></a></li>
+      <li><a data-toggle="modal" href="#loginModal" id="header-text"><strong>Log In</strong></a></li>
+
+    </ul>
+    <ul class="nav nav-pills pull-left">
+      <li><a href="/" id="header-text"><strong>Change By Us</strong></a></li>
+    </ul>
+  </div>
+ </div>
+</div>
+
+  {% endif %}
+
+
+
+{% endblock %}
+
+{% block content %}
+
+{% if project %}
+<div class="jumbotron" id="project-page-description">
+
+<br/>
+  <img src="{{project.image_uri_large}}"></img>
+  <p class="lead-project">{{ project.name }}</p>
+  <p id="serif"> {{ project.description }} </p>
+
+  {% if involved %}
+
+  <div class="btn-group" style="margin-top: 30px">
+
+  <form method="post" style="display: inline-block" class="form-project" action="/stream/sort">
+    <input type="hidden" name="project_id" value="{{ project.id }}"></input>
+    <input class="btn btn-large" type="submit" value="Post"></input>
+  </form>
+
+{% if project.owner_id != current_user.id %}
+  <form method="post" style="display: inline-block; padding-left: 30px" class="form-project" action="/api/project/{{project.id}}/leave">
+    <input type="hidden" name="project_id" value="{{ project.id }}"></input>
+    <input class="btn btn-info" type="submit" value="Leave Project"></input>
+  </form>
+
+{% endif %}
+
+</div>
+
+  {% else %}
+
+  {% if login == false %}
+
+  <form method="post" class="form-join" action="/api/project/{{ project.id }}/join">
+    <input type="submit" class="btn btn-large" value="Join Us">
+  </form>
+
+  {% else %}
+
+    <a class="btn btn-large" data-toggle="modal" href="#splitModal">Sign Up to Join</a>
+
+
+  {% endif %}
+
+  {% endif %}
+</div> <!-- jumbotron -->
+{% else %}
+<p>Something has gone wrong, there's no project here</p>
+{% endif  %}
+
+
+<!-- /////////////////////////////////////////
+////////////////////////////////////////
+FUNDRAISING
+/////////////////////////////////////////
+//////////////////////////////////////// -->
+
+
+{% if (project.stripe_account == None and project.owner_id == current_user.id) or (project.stripe_account !=None) %}
+
+  <div class="span10">
+    <div class="hr-thin"></div>
+  </div>
+
+  <div class="span9" id="project-page-funding">
+    {% if project.stripe_account == None %}
+
+      {% if project.owner_id == current_user.id %}
+
+      <p id="header-text">Want to fundraise for this project?</p>
+
+      <form method="post" action="/project/fundraising">
+        <!-- if there is no fundraising data yet, prompt the owner to create one -->
+        <input type="hidden" name="project_id" value="{{project.id}}"></input>
+        <input type="submit" class="btn btn-block-funding" value="Set Up Fundraising">
+      </form>
+
+      {% else %}
+      <p id="header-text"> There's no fundraising set up for this project. </p>
+      {% endif %}
+
+    {% else %}
+
+    <div class="span9" style="margin-top:60px; margin-bottom: 60px">
+
+      <p class="lead-project">Donate to this project</p>
+
+      <div class="span3 pull-left">
+
+      <br/>
+      <p id="header-text"><strong>${{project.stripe_account.current_amount}}0 [amount donated so far]</strong></p>
+
+      <!-- if a Stripe fundraising account has been set up -->
+      <div class="progress progress-info" style="margin-top: 0px">
+        <div class="bar" style="width: {{percentage}}%"></div>
+      </div>
+
+      <p>Donated towards our ${{project.stripe_account.goal}}0 funding goal</p>
+
+
+        <br/>
+        <a class="btn btn-large" data-toggle="modal" href="#paymentModal">Donate</a>
+
+
+      </div>
+      <div class="span5 pull-right">
+        <p id="serif">{{ description }} </p>
+      </div>
+    </div>
+
+  {% endif %}
+
+  </div>
+{% endif %}
+
+<div class="span10">
+  <div class="hr-thin"></div>
+</div>
+
+
+{% if posts %}
+
+{% for post in posts %}
+
+<div class="span9">
+
+<h3> <strong> {{ post.title|e }} </strong> </h3>
+
+
+<span class="datetime">{{post.created_at|e}}</span>
+<span>by {{post.user_display_name|e}} </span>
+
+<p id="project-page-post">{{post.description|e }} </p>
+<div class="hr-thin"></div>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+<!-- <p id="project-page-posts"> No one has posted to this project yet!</p> -->
+{% endif %}
+
+
+{% endblock %}

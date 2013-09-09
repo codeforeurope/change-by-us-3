@@ -21,7 +21,7 @@ from tests import BaseTestCase
 
 from tests import (string_generator, email_generator, password_generator,
                    timestamp_generator, name_generator, text_generator,
-                   unicode_generator, unicode_email_generator)
+                   unicode_generator, unicode_email_generator, zipcode_generator)
 
 
 class AssertClass(BaseTestCase):
@@ -133,7 +133,7 @@ class ProjectClass():
     def __init__(self):
         self.name = name_generator()
         self.description = text_generator(100)
-        self.location = 11101
+        self.location = zipcode_generator()
 
     def createProject(self, client):
         create = { 'name' : self.name,
@@ -426,5 +426,44 @@ class PostTests(AssertClass):
 
         self.assertTrueMsg( success, updates['msg'] )
 
+class SearchTest(BaseTestCase):
+    """
+    All tests currently assume projects created with project tests, 
+    i.e. they have 'lorem' in the text and a location in NYC
+    """
+    search_string = "lorem"
+    search_loc = "11217"
+    search_dist = "10"
+    url = "/api/project/search"
 
+    def test_text_search(self):
+        search_url = "{0}?s={1}".format(self.url, self.search_string)
+        results = self.GET(search_url)
+                
+        self.assertTrue(len(results) > 0)
+
+#   COMMENTED OUT pending writing a test for creating resources
+#     def test_text_resource_search(self):
+#         search_url = "{0}?s={1}&type=resource".format(self.url, self.search_string)
+#         results = self.GET(search_url)
+#                 
+#         self.assertTrue(len(results) > 0)
         
+    def test_geo_search(self):
+        search_url = "{0}?loc={2}&d={3}".format(self.url, 
+                                              self.search_string,
+                                              self.search_loc,
+                                              self.search_dist)
+        results = self.GET(search_url)
+                
+        self.assertTrue(len(results) > 0)
+        
+    def test_text_geo_search(self):
+        search_url = "{0}?s={1}&loc={2}&d={3}".format(self.url, 
+                                                      self.search_string,
+                                                      self.search_loc,
+                                                      self.search_dist)
+        results = self.GET(search_url)
+                
+        self.assertTrue(len(results) > 0)
+    

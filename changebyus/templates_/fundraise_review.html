@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block head %}
+{{ super() }}
+{% block validateSignup %}
+{% endblock %}
+{% endblock %}
+
+{% block topnav %}
+
+<div id="streamtop">
+    <div class="container-narrow">
+    <div class="container-narrow">
+        <div class="masthead">
+      <ul class="nav nav-pills pull-left">    
+        <form method="post" action="/stream/sort">
+          <input type="hidden" name="project_id" value="">
+          <li ><input class="btn btn-success" type="submit" id="header-text" value="View Dashboard"></li>
+        </form>
+      </ul>
+
+            <ul class="nav nav-pills pull-right">
+                <li><a href="/" id="header-text">View ChangeBy.us</a></li>
+                <li class="dropdown custom">
+                    <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
+                    <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                        <li><a role="menuitem" href="/project/create">Create a project</a></li>
+                        <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
+                        <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
+                        <li><a role="menuitem" href="/logout">Log Out</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="jumbotron" id="main-container">
+  <h1><strong>Review</strong></h1>
+  <br/>
+</div>
+
+
+<a href="/project/{{project_id}}"><img src="{{image_uri_small}}" style="width: 160px; height: 50px;"></img></a>
+
+
+<div class="span9" style="margin-top:60px; margin-bottom: 60px">
+
+  <p id="header-text">Fundraising Progress for {{name}}</p>
+
+  <div class="span4 pull-left">
+
+<br/>
+    <p id="header-text"><strong>${{balance}}0 [amount donated so far]</strong></p>
+
+    <!-- if a Stripe fundraising account has been set up -->
+    <div class="progress progress-info" style="margin-top: 10px">
+      <div class="bar" style="width: {{percentage}}%"></div>
+    </div> 
+
+    <p>Donated towards our ${{funding}} funding goal</p>
+
+    <br/>
+<a class="btn btn-large" href="/project/{{project_id}}"> Publish to Project</a>
+
+
+  </div>
+    <div class="span5 pull-right">
+    <p id="serif">What your money will go towards:</p>
+    <p id="serif">{{ description }} </p>
+  </div>
+</div>
+
+{% endblock %}

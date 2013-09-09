@@ -1,0 +1,40 @@
+<div id="streamtop">
+          <ul class="pull-left">    
+            <form method="post" action="/stream/sort">
+              <input type="hidden" name="project_id" value="">
+              <li ><input class="btn btn-success" type="submit" id="header-text" value="Username placeholder"></li>
+          </form>
+      </ul>
+
+          <ul class="nav nav-pills pull-right">
+            <li><a href="/" id="header-text">Stream</a></li>
+            <li class="dropdown custom">
+              <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">City</span> <span class="caret"></span></a>
+              <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                <li><a role="menuitem" href="/project/create">Create a project</a></li>
+              </ul>
+            </li>
+          </ul>
+</div>
+
+<div id="body-container">
+    <div class="title">
+        <h1>Projects / Resources</h1>
+    </div>
+
+    <div class="content">
+        <div id="create-todo">
+            <input id="new-todo" placeholder="Search for Projects" type="text" />
+            <span class="ui-tooltip-top" style="display:none;">Press Enter to save this task</span>
+        </div>
+
+        <div id="Projects">
+            <ul id="todo-list"></ul>
+        </div>
+
+        <div id="todo-stats"></div>
+
+        <div id="Resources">
+        </div>
+    </div>
+</div>

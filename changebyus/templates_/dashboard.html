@@ -1,0 +1,169 @@
+{% extends "layout.html" %}
+
+{% block topnav %}
+{{ super() }}
+
+<div id="streamtop">
+	<div class="container-narrow">
+		<div class="container-narrow">
+      <div class="masthead">
+        <div class="hidden-phone">
+          <ul class="nav nav-pills pull-left">    
+            <form method="post" action="/stream/sort">
+              <input type="hidden" name="project_id" value="">
+              <li ><input class="btn btn-success" type="submit" id="header-text" value="View Dashboard"></li>
+            </form>
+          </ul>
+        </div>
+
+        <div class="hidden-desktop hidden-tablet visible-phone">
+          <div id="mobile-header">
+            <ul class="nav nav-pills pull-left">
+              <form method="post" action="/stream/sort">
+              <input type="hidden" name="project_id" value="">
+              <li ><input type="image" src="/static/img/dashboard.png" style="width: 30px; height: 30"></li>
+            </form>
+            </ul>
+
+            <ul class="nav nav-pills pull-right">
+              <li style="padding-top: 0px">
+                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
+              </li>
+              <li class="dropdown custom">
+                <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
+                <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                  <li><a role="menuitem" href="/project/create">Create a project</a></li>
+                  <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
+                  <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
+                  <li><a role="menuitem" href="/logout">Log Out</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="hidden-phone visible-desktop visible-tablet">
+          <ul class="nav nav-pills pull-right">
+            <li><a href="/" id="header-text">View ChangeBy.us</a></li>
+            <li class="dropdown custom">
+              <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
+              <ul id="divNewNotifications" class="dropdown-menu wide-drops">
+                <li><a role="menuitem" href="/project/create">Create a project</a></li>
+                <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
+                <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
+                <li><a role="menuitem" href="/logout">Log Out</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block content %}
+
+
+<div class="pagination-centered" id="main-container">
+
+	<p class="lead-thin-center"><strong>Welcome to your dashboard!</strong></p>
+	<br/>
+	<p class="lead-small">Get started by linking by your social accounts so you can post to your friends and family directly from your stream.</p>
+
+	{% if current_user.facebook_id == None %}
+	<div class="span9" style="margin-top:60px">
+		<div class="span4 pull-left" style="text-align: left">
+		<img src='/static/img/icon_facebook.png'></img>
+		<span id="header-text">Connect to Facebook</span>
+		</div>
+		<div class="span4 pull-right">
+			<a class="btn btn-block" id="mobile-button" href='/social/facebook/link'>Connect</a>
+		</div>
+	</div>
+	{% else %}
+	<div class="span9" style="margin-top:60px">
+		<div class="span4 pull-left" style="text-align: left">
+		<img src="{{fb_image}}"></img>
+		<span id="header-text">Facebook: {{fb_name}}</span>
+		</div>
+		<div class="span4 pull-right">
+			<a class="btn btn-block-inverse" id="mobile-button" href='/social/facebook/disconnect'>Disconnect</a>
+		</div>
+	</div>
+	{% endif %}
+
+	{% if current_user.twitter_id == None %}
+	<div class="span9" style="margin-bottom: 60px">
+		<div class="span4 pull-left" style="text-align: left">
+		<img src='/static/img/icon_twitter.png'></img>
+		<span id="header-text">Connect to Twitter</span>
+		</div>
+		<div class="span4 pull-right">
+			<a class="btn btn-block" id="mobile-button" href='/social/twitter/link'>Connect</a>
+		</div>
+	</div>	{% else %}
+	<div class="span9" style="margin-bottom: 60px">
+		<div class="span4 pull-left" style="text-align: left">
+		<img src="{{t_image}}"></img>
+		<span id="header-text"> @{{t_name}}</span>
+		</div>
+		<div class="span4 pull-right">
+			<a class="btn btn-block-inverse" id="mobile-button" href='/social/twitter/disconnect'>Disconnect</a>
+		</div>
+	</div>	{% endif %}
+
+	<div class="span9">
+
+		<form method="post" enctype=multipart/form-data class="form-project" name=
+		"createproject" action="/api/user/update">
+
+		<div class="span4 pull-left" style="text-align: left">
+
+			<label id="left-align"> Your email: </label>
+			<input type="text" maxlength="30" name="edit_email" id="edit_email" placeholder="{{current_user.email}}" class="input-xlarge">
+			<br/>
+
+		</div>
+
+		<div class="span4 pull-right" style="text-align: left; padding-bottom: 20px">
+			<label class="checkbox">
+				{% if current_user.public_email == True %}
+				<input type="checkbox" name="edit_public" checked> Display this email address within project dashboards so other members can email me
+				{% else %}
+				<input type="checkbox" name="edit_public"> Display this email address within project dashboards so other members can email me
+				{% endif %}
+			</label>
+		</div>
+
+        <div class="span8 pull-left" style="text-align: left">
+
+            <label id="left-align"> Your email: </label>
+            <input type="text" maxlength="30" name="description" id="description" placeholder="{{current_user.user_description}}" class="input-xlarge">
+            <br/>
+
+        </div>
+
+		<br/>
+
+		<div class="pagination-centered" style="margin-top: 30px">
+			<input type="submit" class="btn btn-block" value="Done"</input>
+		</div>
+	</form>
+
+	</div>
+
+<div class="span9">
+	<div class="pagination-centered">
+	<p>You can also link your accounts later using "My Social Accounts" under your username.</p>
+	</div>
+</div>
+
+</div>
+
+{% endblock %}
+
+</body>
+</html>

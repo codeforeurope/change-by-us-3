@@ -21,7 +21,7 @@ rcfile.*
 !*.tmpl
 
 # We don't want to commit the configuration file
-config.yml
+*.yml
 
 # Ignore mongo data files
 data/

@@ -52,7 +52,7 @@ class ProjectPost(db.Document, EntityMixin):
 
     title = db.StringField(max_length=60) 
     description = db.StringField(max_length=600)
-    image_uri = db.StringField()
+    image_url = db.StringField()
 
     social_object = db.EmbeddedDocumentField(SocialMediaObject)
 
@@ -67,38 +67,13 @@ class ProjectPost(db.Document, EntityMixin):
     # despite this being slightly non-ideal.  It's more for reference anyway
     parent_id = db.StringField()
 
-
-    # default to recursive for this model, and allow one level of recursion
-    def as_dict(self, exclude_nulls=True, recursive=True, depth=2, **kwargs ):
-
-        return {'id': str(self.id),
-                'title': self.title,
-                'description': self.description,
-                'image_uri': self.image_uri,
-                'created_at': self.created_at.isoformat(),
-                'project_name': self.project.name,
-                'project_id': str(self.project.id),
-                # TODO migrate this way from project_name, project_id, etc
-                # and all towards post.project...
-                'project': self.project.as_dict(),
-                'user_display_name' : self.user.display_name,
-                'public' : self.public,
-                'parent_id' : self.parent_id,
-                'responses' : db_list_to_dict_list(self.responses)
-                 }
-
-
-        """
-        # TODO fixs w/ sundar
-
-        resp = encode_model(self, 
-                            exclude_nulls=exclude_nulls, 
-                            recursive=recursive, 
-                            depth=depth, 
-                            **kwargs)
-        return resp
-        """
-
+    meta = {
+        'indexes': [
+            {'fields': ['project'], 'unique': False },
+            {'fields': ['project', 'parent_id'], 'unique': False },
+            {'fields': ['project', 'public'], 'unique': False },
+        ],
+    }
 
 signals.pre_save.connect(ProjectPost.pre_save, sender=ProjectPost)
 """

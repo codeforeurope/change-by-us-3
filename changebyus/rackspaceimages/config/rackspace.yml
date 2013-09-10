@@ -1,0 +1,9 @@
+RACKSPACE_USERNAME: changebyus
+RACKSPACE_KEY: a81e7d8c0e2e324d223af711023ed2f6
+RACKSPACE_CONTAINER: 'cbu-lucas'
+# url used for locally finding resources.  Will cause a redirect
+# to the cloud based asset
+HOSTED_IMAGE_BASE_URI: /rimages
+# where to upload assets to locally
+HOSTED_IMAGES_LOCAL_DIR: /tmp
+ALLOWED_EXTENSIONS: ['.jpg', '.gif', '.png', '.jpeg', '.jpe', '.svg', '.bmp']

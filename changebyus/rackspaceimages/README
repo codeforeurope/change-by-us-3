@@ -1,0 +1,10 @@
+Handles the local uploading of images.
+This image is then uploaded to the rackspace container.
+
+If an image is requested, we first attempt to redirect to
+rackspace, if that fails we will redirect locally, which may
+generate a 404.
+
+This can easily be integrated with flask-cdn allowing for
+url_for('static', 'photo.jpg') which will redirect to photo.jpg
+in the rackspace container that is configured

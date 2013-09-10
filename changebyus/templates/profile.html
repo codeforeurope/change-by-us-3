@@ -34,7 +34,7 @@
 
             <ul class="nav nav-pills pull-right">
               <li style="padding-top: 0px">
-                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
+                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px">@include monteRegular;</a>
               </li>
               <li class="dropdown custom">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
@@ -95,7 +95,7 @@
 {% for project in projects %}
 
 <p>{{ project.name }}</p>
-<img src="{{project.image_uri_small}}"></img>
+<img src="{{project.image_uri_small}}">@include monteRegular;
 
 {% endfor %}
 {% endblock %}

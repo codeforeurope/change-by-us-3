@@ -45,25 +45,32 @@ def project_exists(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
         project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        project_slug = request.form.get('project_slug') or request.view_args.get('project_slug')
 
         errStr = ''
-        if project_id is None:
-            errStr = "project_id can not be blank."
+        if project_id is None and project_slug is None:
+            errStr = "project_id and project_slug can not be blank."
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
    
         try:
-            project = Project.objects.with_id(project_id)
-            # TODO remove this for non CBU
+            if project_id:
+                project = Project.objects.with_id(project_id)
+
+            else:
+                project = Project.objects(slug = project_slug)
+
             if project is None:
                 errStr = "Project {0} does not exist.".format(project_id)
                 return jsonify_response( ReturnStructure( success = False,
                                                           msg = errStr ))
         
         except Exception as e:
-            infoStr = "Exception looking up project of id {0}".format(project_id)
+            infoStr = "Exception looking up project of id {0} or slug {1}".format(project_id,
+                                                                                  project_slug)
             current_app.logger.info(infoStr)
-            errStr = "Project {0} does not exist.".format(project_id)
+            
+            errStr = "Project id {0} slug {1} does not exist.".format(project_id, project_slug)
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
 

@@ -14,7 +14,6 @@ from flask.ext.wtf import (Form, TextField, TextAreaField, FileField,
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
-from ..helpers.imagetools import generate_thumbnails
 
 from ..mongo_search import search
 
@@ -129,12 +128,37 @@ def api_create_project():
     return _create_project()
 
 
+@project_api.route('/slug/<project_slug>')
+@project_exists
+def api_get_project_slug(project_slug):
+    """
+    ABOUT
+        Gets information on a given project via slug name
+    METHOD
+        GET
+    INPUT
+        project id
+    OUTPUT
+        ReturnStructure response with outcome results.
+    PRECONDITIONS
+        None
+    """
+    p = Project.objects(slug = project_slug)
+
+    if p.count() == 0 or p.count() > 1:
+        warnStr = "Project of slug {0} returned {1} objects.".format(project_slug,
+                                                                     p.count())
+        current_app.logger.warn(warnStr)
+
+    return jsonify_response( ReturnStructure( data = p[0].as_dict() ))
+
+
 @project_api.route('/<project_id>')
 @project_exists
 def api_get_project(project_id):
     """
     ABOUT
-        Gets information on a given object
+        Gets information on a given project
     METHOD
         GET
     INPUT
@@ -145,11 +169,6 @@ def api_get_project(project_id):
         None
     """
     p = Project.objects.with_id(project_id)
-
-    if p is None:
-
-        return jsonify_response( ReturnStructure( success = False,
-                                                  msg = "Not Found" ))
 
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 

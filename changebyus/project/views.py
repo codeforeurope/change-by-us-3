@@ -22,8 +22,9 @@ Web facing views for interacting with projects.
 
 """
 
-@project_view.route('/<id>')
-def project_view_id(id):
+
+@project_view.route('/<project_id>')
+def project_view_id(project_id):
     """
     ABOUT:
         View a project for a given id
@@ -47,7 +48,7 @@ def project_view_id(id):
 
     from ..post.api import _get_project_post_stream
     
-    project = Project.objects.with_id(id)
+    project = Project.objects.with_id(project_id)
     if project is None:
         abort(404)
 
@@ -210,7 +211,7 @@ def stripe_review_info():
 
     # we want to pass the fundraiser view the small 160x50 image
     project_dict = project.as_dict()
-    project_image = project_dict['image_uri_small']
+    project_image = project_dict['image_url_small']
     
     return render_template('fundraise_review.html', funding = funding_goal, project_id=project_id, description = description, name=project.name, 
                            image_url=project_image, balance = balance, percentage = percentage)

@@ -6,7 +6,6 @@ from flask import g, current_app, request
 from ..user.models import User
 from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.flasktools import jsonify_response, ReturnStructure
-from ..rackspaceimages.helpers import _upload_image as _upload_rackspace_image
 from ..helpers.imagetools import generate_thumbnail
 from ..helpers.stringtools import slugify
 

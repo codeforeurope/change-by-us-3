@@ -11,8 +11,6 @@ from flask.ext.login import login_required, current_user
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
                            SubmitField, Required, ValidationError, FieldList)
 
-from flask_mail import Message
-
 from .models import ProjectPost, Project, User, SocialMediaObject
 from .decorators import post_delete_permission, post_edit_permission, post_exists 
 

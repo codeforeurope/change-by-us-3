@@ -34,7 +34,7 @@
 
             <ul class="nav nav-pills pull-right">
               <li style="padding-top: 0px">
-                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
+                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px">@include monteRegular;</a>
               </li>
               <li class="dropdown custom">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
@@ -238,7 +238,7 @@
                 {% for post in posts %}
                 <div class="span10" id="stream-container">
                     <div id="stream-thumbnails">
-                        <a href="/project/{{post.project_id}}"><img src="{{post.project.image_uri_small}}" style="width: 160px; height: 50px;"></img></a>
+                        <a href="/project/{{post.project_id}}"><img src="{{post.project.image_uri_small}}" style="width: 160px; height: 50px;">@include monteRegular;</a>
                         <p><a href="/project/{{post.project_id}}">{{post.project_name}} </a></p>
                     </div>
                     <div class="span7">
@@ -316,7 +316,7 @@
                     {% for common in member.common_projects %}
                     <div class="span2 pull-right" id="member-thumbnails">
                         <a href="/project/{{common.id}}">
-                            <img src="{{common.image_uri_small}}" style="width: 160px; height: 50px;"></img>
+                            <img src="{{common.image_uri_small}}" style="width: 160px; height: 50px;">@include monteRegular;
                             <p>{{common.name|e}}</p>
                         </a>
                     </div>
@@ -382,7 +382,7 @@
                     {% if project.owner_id == current_user.id %}
                         <div class="span9" id="stream-container">
                             <div id="stream-thumbnails" style="margin: 15px">
-                                <a href="/project/{{project.id}}"><img src="{{project.image_uri_small}}" style="width: 160px; height: 50px;"></img></a>
+                                <a href="/project/{{project.id}}"><img src="{{project.image_uri_small}}" style="width: 160px; height: 50px;">@include monteRegular;</a>
                                 <p id="thumbnail-label"><a href="/project/{{project.id}}">{{project.name}} </a></p>
                             </div>
                             <div class="span6">
@@ -423,7 +423,7 @@
                 {% if project.owner_id != current_user.id %}
                 <div class="span9" id="stream-container">
                     <div id="stream-thumbnails">
-                        <a href="/project/{{project.id}}"><img src="{{project.image_uri_small}}" style="width: 160px; height: 50px;"></img></a>
+                        <a href="/project/{{project.id}}"><img src="{{project.image_uri_small}}" style="width: 160px; height: 50px;">@include monteRegular;</a>
                         <p id="thumbnail-label"><a href="/project/{{project.id}}">{{project.name}} </a></p>
                     </div>
                     <div class="span6">
@@ -458,7 +458,7 @@
                 {% if project.id == filter %}
                 <div class="span9" id="stream-container">
                     <div id="stream-thumbnails">
-                        <a href="/project/{{project.id}}"><img src="{{project.image_uri_small}}" style="width: 160px; height: 50px;"></img></a>
+                        <a href="/project/{{project.id}}"><img src="{{project.image_uri_small}}" style="width: 160px; height: 50px;">@include monteRegular;</a>
                         <p id="thumbnail-label"><a href="/project/{{project.id}}">{{project.name}} </a></p>
                     </div>
                     <div class="span6">

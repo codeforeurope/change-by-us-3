@@ -10,8 +10,9 @@ require.config({
     }
 });
 
-require(["jquery","app"], function($, CBUAppView) {
+require(["jquery","app", "collection/ProjectListCollection"], function($, CBUAppView, ProjectListCollection) {
     $(document).ready(function() {
-       window.CBUAppView = new CBUAppView({ appendTo: $('body') });
+        var projects = new ProjectListCollection();
+        window.CBUAppView = new CBUAppView({ parent:'#frame', collection:projects });
     });
 });

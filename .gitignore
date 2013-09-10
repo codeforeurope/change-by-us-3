@@ -38,3 +38,33 @@ data.replica*/
 *.orig
 
 
+changebyus/bitly/config/bitly.yml
+changebyus/facebook/config/facebook.yml
+changebyus/rackspace/rackspace.yml
+changebyus/stripe/config/stripe.yml
+changebyus/twitter/config/twitter.yml
+wsgi.py
+changebyus3/.Python
+changebyus3/lib/python2.7/*
+changebyus3/bin/activate
+changebyus3/bin/activate.csh
+changebyus3/bin/activate.fish
+changebyus3/bin/activate_this.py  
+changebyus3/bin/easy_install
+changebyus3/bin/easy_install-2.7
+changebyus3/bin/nosetests
+changebyus3/bin/nosetests-2.7
+changebyus3/man/man1/nosetests.1
+changebyus3/bin/pilconvert.py
+changebyus3/bin/pildriver.py
+changebyus3/bin/pilfile.py
+changebyus3/bin/pilfont.py
+changebyus3/bin/pilprint.py
+changebyus3/bin/pip
+changebyus3/bin/pip-2.7
+changebyus3/bin/python
+changebyus3/bin/python2
+changebyus3/bin/python2.7
+changebyus3/include/python2.7
+changebyus3/bin/twill-fork
+changebyus3/bin/twill-sh

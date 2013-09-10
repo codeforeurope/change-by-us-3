@@ -5,12 +5,16 @@
 """
 from flask import Blueprint, current_app
 
+from flask_mail import Message
+from flask.ext.flask_cdn import url_for
+
 import requests
 import yaml
 import os
 import inspect
 import requests
 import urllib
+import smtplib
 
 from sets import Set
 
@@ -21,6 +25,7 @@ from ..post.models import ProjectPost
 notifications_api = Blueprint('notificiations_api', __name__, url_prefix='/api/notifications')
 
 BASE_URL = 'https://api-ssl.bitly.com'
+
 
 """
 =========================
@@ -44,41 +49,53 @@ def _notify_flagged_user(user_id=None):
 
         flags_me
     """
+
     pass
 
 
-def _notify_project_join(project_id=None):
+def _notify_project_join(project_id=None, user=None):
     """
     Handles:
         joins_my_project
         joins_common_project
 
     """
+
+    emails = []
+
     project = Project.objects.with_id( project_id )
     if project is None:
         return False
 
     owner = project.owner
     if owner.notifications.joins_my_project and owner.email:
-        msg = Message("User joined CBU project")
-        #email..
+        emails.append( owner.email )
 
-"""
-@post_api.route('/tester')
-def test_send_email():
-    msg = Message("Hello",
-                  recipients=["lucasvickers@gmail.com"],
-                  sender=(current_app.config['DEFAULT_MAIL_SENDER_NAME'],
-                          current_app.config['DEFAULT_MAIL_SENDER']))
+    users = UserProjectLink.objects(project = project)
+    for user in users:
+        if user.notifications.joins_common_project and user.email:
+            emails.append( user.email )
 
-    msg.body = "hi"
-    msg.html = "<b>html</b>"
-    current_app.mail.send(msg)
+    # TODO send the actual email
 
-    return True
-"""
+    if len(emails) > 0):
+        msg = Message("User has joined the CBU Project \"{0}\".".format( project.name ),
+                      recipients = emails)
 
-def _notify_post(post_id=None):
+        msg.body = "Hello,\n"
+        msg.body += "The user {0} has joined CBU project {1}.\n".format(user.display_name, project.name)
+        msg.body += "Please visit the project at {2}".format( url_for('api_get_project_slug', project_slug = project.slug) )
+
+        msg.html = "Hello,<br>"
+        msg.html += "The user {0} has joined <a href = \"{1}\">CBU project {2}.</a><br>".format( user.display_name, 
+                                                                                                 url_for('api_get_project_slug', project_slug = project.slug),
+                                                                                                 project.name )
+        msg.html += "Please visit the project by clicking the link above.<br>"
+
+        current_app.mail.send(msg)
+
+
+def _notify_post(post_id=None, user=None):
     """
     Notify the original poster and all poster responders that there's been
     another response

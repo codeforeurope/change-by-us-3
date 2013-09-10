@@ -32,7 +32,6 @@ from .twitter import twitter_view
 from .stream import stream_view, stream_api
 from .user import user_view, user_api
 from .frontend import frontend_view, frontend_api
-from .rackspaceimages import rackspace_image_view, _get_rackspace_url
 
 from .helpers.encryption import assemble_key
 from .extensions import db, login_manager
@@ -76,7 +75,6 @@ DEFAULT_BLUEPRINTS = (
     stream_api,
     user_view,
     user_api,
-    rackspace_image_view,
 )
 
 def create_app(app_name=None, blueprints=None):
@@ -278,8 +276,7 @@ def configure_rackspace_assets(app=None):
     Enables our rackspaceimages package and links it with the flask-cdn
     for cloud based hosting made easy
     """
-
-    app.config['CDN_DOMAIN'] = _get_rackspace_url()
+    
     CDN(app)
     
 

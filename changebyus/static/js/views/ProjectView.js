@@ -5,8 +5,8 @@ define(["underscore", "backbone", "jquery"], function(_, Backbone, $) {
         tagName:  "li",
 
         render: function() {
-            var self = this;
-            $(self.el).template('/static/templates/project.html', self.model.toJSON(), function() {});
+        	var dataObj = {data:this.model.toJSON()}
+            $(this.el).template('/static/templates/project.html', dataObj, function() {});
             return this;
         }
     });

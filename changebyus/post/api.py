@@ -27,7 +27,9 @@ from ..stream.api import _get_user_stream
 from ..project.helpers import ( _get_user_involved_projects, _get_project_users_and_common_projects,
                                 _user_involved_in_project )
 
-from ..project.decorators import project_exists, project_member
+from ..project.decorators import ( project_exists, project_member, 
+                                   _is_organizer as _is_project_organizer )
+
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -47,20 +49,8 @@ a twitter_post_id and a facebook_post_id, however the actual social posting
 is handled by other modules
 """
 
-@post_api.route('/tester')
-def test_send_email():
-    msg = Message("Hello",
-                  recipients=["lucasvickers@gmail.com"],
-                  sender=(current_app.config['DEFAULT_MAIL_SENDER_NAME'],
-                          current_app.config['DEFAULT_MAIL_SENDER']))
-
-    msg.body = "hi"
-    msg.html = "<b>html</b>"
-    current_app.mail.send(msg)
-
 
 @post_api.route('/project/<project_id>/listposts')
-@login_required
 @project_exists
 def api_get_project_posts_fixed(project_id):
     """
@@ -80,19 +70,20 @@ def api_get_project_posts_fixed(project_id):
     """
 
     # 10 posts
-    membership = _user_involved_in_project(project_id = project_id,
-                                           user_id = g.user.id)
+    if g.user.is_anonymous():
+        private_posts = False
+    else:
+        private_posts = _is_project_organizer( project_id, g.user.id )
 
-    posts = _get_posts_for_project(project_id = project_id,
-                                   private_posts = membership,
-                                   max_posts = 10)
+    posts = _get_posts_for_project( project_id = project_id,
+                                    private_posts = private_posts,
+                                    max_posts = 10 )
 
     return jsonify_response( ReturnStructure( data = posts ) )
 
 
 
 @post_api.route('/project/<project_id>/listposts/<number_posts>')
-@login_required
 @project_exists
 def api_get_project_posts(project_id, number_posts):
     """
@@ -112,11 +103,13 @@ def api_get_project_posts(project_id, number_posts):
     """
     
 
-    membership = _user_involved_in_project( project_id = project_id,
-                                            user_id = g.user.id )
+    if g.user.is_anonymous() :
+        private_posts = False
+    else:
+        private_posts = _is_project_organizer( project_id, g.user.id )
 
     posts = _get_posts_for_project( project_id = project_id,
-                                    private_posts = membership,
+                                    private_posts = private_posts,
                                     max_posts = number_posts )
 
     return jsonify_response( ReturnStructure( data = posts ) )
@@ -146,8 +139,11 @@ def api_add_project_post():
         description - REQUIRED, 
         project_id - REQUIRED,
         social_sharing ['facebook', 'twitter'] - LIST, optional, 
+        
         visibility 'public' or 'private'.  If not supplied defaults to private or
-          if this is a response_to post, defaults to the response_to post visibility
+          if this is a response_to post, defaults to the response_to post visibility.
+          Also only organizers can amke private posts.
+
         response_to_id - original post ID,
     OUTPUT
         Results

@@ -48,6 +48,7 @@ class StripeAccount(db.Document, EntityMixin):
 
     goal = db.FloatField(default=0)
     current_amount = db.FloatField(default=0)
+    
                 
     ENCRYPTED_FIELDS = [
     'access_token'
@@ -76,20 +77,11 @@ class StripeDonation(db.Document, EntityMixin):
     and if applicable the user who made the donation.
     """
     account = db.ReferenceField(StripeAccount)
-    
     amount = db.FloatField()
     stripe_charge_id = db.StringField(max_length=50)
     name = db.StringField(max_length=50)
     email = db.StringField(max_length=50)
     user = db.ReferenceField(User)
-
-    def as_dict(self):
-        return {'id': str(self.id),
-                'account': self.account.as_dict(),
-                'name': self.name,
-                'email': self.email,
-                'user' : self.user.as_dict() if self.user else None,
-                'amount': self.amount if self.amount else 0}
 
 
 class StripeLink(db.Document, EntityMixin):
@@ -109,7 +101,9 @@ class StripeLink(db.Document, EntityMixin):
 
 signals.post_init.connect(StripeAccount.post_init, sender=StripeAccount)
 signals.pre_save.connect(StripeAccount.pre_save, sender=StripeAccount)
+
 signals.pre_save.connect(StripeDonation.pre_save, sender=StripeDonation)
+
 signals.pre_save.connect(StripeLink.pre_save, sender=StripeLink)
 """
 The presave routine filles in timestamps for us

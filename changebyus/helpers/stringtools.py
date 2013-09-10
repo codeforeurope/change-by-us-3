@@ -1,6 +1,8 @@
 import string
 import hashlib
 
+import re
+from unidecode import unidecode
 
 bool_strings = ['true', '1', 't', 'y']
 
@@ -25,3 +27,14 @@ def hash_string(s):
     sha1 = hashlib.sha1()
     sha1.update(s)
     return sha1.hexdigest()
+
+
+_punct_re = re.compile(r'[\t !"#$%&\'()*\-/<=>?@\[\\\]^_`{|},.]+')
+
+def slugify(text, delim=u'-'):
+    """Generates an ASCII-only slug."""
+    result = []
+    for word in _punct_re.split(text.lower()):
+        result.extend(unidecode(word).split())
+
+    return unicode(delim.join(result))

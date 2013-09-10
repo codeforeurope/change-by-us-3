@@ -4,4 +4,4 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-from .views import rackspace_image_view
+from .api import notifications_api

@@ -15,11 +15,11 @@ def _get_posts_for_project(project_id = None,
 
 	if private_posts:
 		posts = Project.objects( parent = None, 
-			                     project = project_id )
+			                     project = project_id )[0:max_posts]
 	else:
 		posts = Projects.objects( parent = None, 
 			                      project = project_id,
-			                      public = True )
+			                      public = True )[0:max_posts]
 
 
 
@@ -50,12 +50,26 @@ def _get_project_post_stream(id=None, private_data=False):
 
 
 
+
+
 def _create_project_post(title = None,
                          description = None,
                          social_sharing = None,
                          project_id = None,
                          response_to_id = None,
                          visibility = None):
+
+
+    """
+    RULES
+    Only organizers can create updates
+    Members can respond to updates
+
+    Only organizers can create discussions
+    Only orgnizers can respond to discussions
+
+    """
+
 
     # a little validation
     errStr = ''
@@ -73,10 +87,11 @@ def _create_project_post(title = None,
 
 
     # verify the user has permission for the post.
-    # we have logic where you need to be an organizer to make a public post,
-    # only public initial posts (not responses) can be sent to social media
-    # but anyone can respond to anything 
-    # this could be changed for your specific application
+    # - we have logic where you need to be an organizer to make a public post,
+    #   only public initial posts (not responses) can be sent to social media
+    # - you need to be an organizer to post or respond to a discussion and they
+    #   can not be posted to social media.
+    # - this could be changed for your specific application
     is_response_post = response_to_id is not None
     is_organizer = _is_project_organizer(project, user.id)
     is_private_post = True if visibility is None else visibility.lower() == 'private'
@@ -86,13 +101,11 @@ def _create_project_post(title = None,
 
     # organizers can do anything
     if is_organizer: permission = True
-    # anyone can make a private post
-    if is_private_post: permission = True
     # anyone can respond to a post
-    if is_response_post: permission = True
+    elif is_response_post and not is_private_post: permission = True
 
     # now double check social posting logic
-    if is_social_post and (not is_organizer or is_response_post):
+    if is_social_post and not is_private_post and (not is_organizer or is_response_post):
         permission = False
 
     if not permission:

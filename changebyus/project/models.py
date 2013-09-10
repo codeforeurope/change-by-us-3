@@ -60,13 +60,12 @@ def gen_image_urls(image_url):
 
     images = {}
 
-    # TODO move the default project image to the cloud
     root_image = image_url if image_url is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
 
     for manipulator in project_images:
         name = manipulator.prefix + "." + root_image
         print "URL FOR: ", name, " = ", url_for( 'static', filename = name ) 
-        images [ name ] = url_for( 'static', filename = name )
+        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
 
     return images
 

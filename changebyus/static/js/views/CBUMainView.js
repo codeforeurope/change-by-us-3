@@ -3,22 +3,27 @@ define(["underscore", "backbone", "jquery", "template","views/ProjectView", "col
     
     var CBUAppView = Backbone.View.extend({
 
+        parent: 'body',
+        templateDir: '/static',
+        viewData: {},
+        collection: {},
+
         initialize: function(options) {
-            var templateDir = options.templateDir || '/static';
-            this.parent     = options.parent || this.parent;
-            this.collection = options.collection || this.collection;
-            this.render(templateDir);
+            this.templateDir = options.templateDir || this.templateDir;
+            this.parent      = options.parent || this.parent; 
+            this.viewData    = options.viewData || this.viewData; 
+            this.collection  = options.collection || new ProjectListCollection();
+            this.render();
         },
 
-        render:function(templateDir, parentElt){
+        render:function(){
             var self = this;
             this.$el = $("<div class='projects-main'/>");
-            this.$el.template(templateDir + '/templates/main.html', {}, function() {
+            this.$el.template(this.templateDir + '/templates/main.html', {}, function() {
                 self.collection.on('reset', self.addAll, self);
                 self.collection.fetch({reset: true});
             });
-            $(this.parent).prepend(this.$el);
-            console.log("render this.$el",this.$el);
+            $(this.parent).prepend(this.$el); 
         },
 
         addOne: function(projectModel) {

@@ -1,5 +1,5 @@
 
-define(["underscore", "backbone", "jquery", "template","BannerSearchView"], function(_, Backbone, $, temp, BannerSearchView) {
+define(["underscore", "backbone", "jquery", "template","views/partials/BannerSearchView"], function(_, Backbone, $, temp, BannerSearchView) {
     
     var CBUDiscoverView = Backbone.View.extend({
 

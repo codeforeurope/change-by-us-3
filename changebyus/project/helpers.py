@@ -14,6 +14,14 @@ from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 import requests
 import simplejson as json
 
+
+def _get_slug_url(project_id = None):
+    """
+    Given a project_id get the slug url for the project or resource
+    """
+
+    return "**** ONCE FRONTEND IN PLACE YOU REALLY SHOULD FIX THIS BUDDY TODO LV TODO"
+
 def _get_lat_lon_from_location(loc):
     """
     Returns lat/lon pair as a list from google maps api.
@@ -427,6 +435,27 @@ def _get_user_involved_projects(id):
         projects.add(link.project)
 
     return db_list_to_dict_list(projects)
+
+
+def _get_project_organizers(project_id):
+    return _get_users_for_role(project_id, Roles.ORGANIZER)
+
+def _get_project_members(project_id):
+    return _get_users_for_role(project_id, Roles.MEMBER)
+
+def _get_users_for_role(project_id, role):
+
+    project = Project.objects.with_id( project_id )
+    if project is None:
+        return []
+
+    users = []
+    links = UserProjectLink.objects( project = project )
+    for link in links:
+        if link.role == role:
+            users.append( link.user )
+
+    return db_list_to_dict_list( users )
 
 
 

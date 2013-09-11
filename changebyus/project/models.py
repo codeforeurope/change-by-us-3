@@ -64,7 +64,6 @@ def gen_image_urls(image_url):
 
     for manipulator in project_images:
         name = manipulator.prefix + "." + root_image
-        print "URL FOR: ", name, " = ", url_for( 'static', filename = name ) 
         images [ manipulator.dict_name ] = url_for( 'static', filename = name )
 
     return images

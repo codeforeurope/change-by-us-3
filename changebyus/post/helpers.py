@@ -6,6 +6,9 @@ from flask import g, current_app
 from ..user.models import User
 from ..helpers.flasktools import ReturnStructure, jsonify_response
 from ..project.decorators import _is_organizer as _is_project_organizer
+from ..notifications.api import _notify_post
+
+from flask.ext.cdn import url_for
 
 from .models import Project, ProjectPost, SocialMediaObject
 
@@ -191,6 +194,8 @@ def _create_project_post(title = None,
                                                                                 g.user.id,
                                                                                 pp.description)
     current_app.logger.info(infoStr)
+
+    _notify_post( post_id = pp.id )
 
     return jsonify_response( ReturnStructure( data = pp.as_dict() ))
 

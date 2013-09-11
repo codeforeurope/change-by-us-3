@@ -4,4 +4,6 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from .api import project_api
+from .api_resources import resource_api
+
 from .views import project_view

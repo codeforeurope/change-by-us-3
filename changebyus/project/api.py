@@ -4,13 +4,12 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from flask import (Blueprint, render_template, redirect, 
-                   url_for, request, current_app, g, abort)
+                   request, current_app, g, abort)
 
 from flask.ext.login import login_required, current_user, login_user
 
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
                            SubmitField, Required, ValidationError)
-
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
@@ -28,6 +27,8 @@ from ..stripe.api import _get_account_balance_percentage
 
 from ..user.models import User
 
+from ..notifications.api import _notify_project_join
+
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
 from urlparse import urlparse
@@ -44,14 +45,6 @@ Projects are the heart of the CBU website.  Projects incorporate funding, member
 images, etc.
 
 """
-
-class CreateProjectForm(Form):
-
-    name = TextField("name", validators=[Required()])
-    description = TextAreaField("description", validators=[Required()])
-    location = TextField("location", validators=[Required()])
-    photo = FileField("photo")
-
 
 @project_api.route('/search')
 def api_search_projects():
@@ -101,6 +94,14 @@ def api_search_projects():
                          units = 'mi')
 
     return jsonify_response(ReturnStructure(data = search_data))
+
+
+class CreateProjectForm(Form):
+
+    name = TextField("name", validators=[Required()])
+    description = TextAreaField("description", validators=[Required()])
+    location = TextField("location", validators=[Required()])
+    photo = FileField("photo")
 
 
 @project_api.route('/create', methods = ['POST'])
@@ -408,6 +409,9 @@ def api_join_project():
                           project = project,
                           role = Roles.MEMBER)
     upl.save()
+
+    _notify_project_join( project_id = project.id,
+                          user_name = user.display_name)
 
     return jsonify_response( ReturnStructure( success = True) )
 

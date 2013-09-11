@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .models import User
+from .models import User, UserNotifications
 
 from flask import current_app
 from flask.ext.security.utils import ( encrypt_password, verify_password,
@@ -67,6 +67,8 @@ def _create_user(email=None,
         u.first_name = first_name
     if last_name:
         u.last_name = last_name
+
+    u.notifications = UserNotifications()
 
     u.save()
 

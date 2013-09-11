@@ -5,11 +5,12 @@ define(["underscore", "backbone", "jquery"], function(_, Backbone, $) {
         tagName:  "li",
 
         render: function() {
-        	var dataObj = {data:this.model.toJSON()}
-            $(this.el).template('/static/templates/project.html', dataObj, function() {});
+        	var dataObj = {data:this.model.toJSON()};
+            $(this.el).template('/static/templates/project.html', {data:dataObj}, function() {});
             return this;
         }
     });
 
     return ProjectView;
 });
+ 

@@ -35,7 +35,7 @@
 
             <ul class="nav nav-pills pull-right">
               <li style="padding-top: 0px">
-                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px">@include monteRegular;</a>
+                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
               </li>
               <li class="dropdown custom">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
@@ -163,13 +163,43 @@ $('.active').removeClass('active'); $(this).addClass('active');">Latest Projects
 
 <div class="visible-phone hidden-desktop">
 <ul id="projects-display" class="thumbnails">
-   
+  {% for project in projects %}
+    <li class="span3" id="index-icons">
+    <div class="thumbnail">
+      <input type="hidden" class="id" value="{{ project.id }}" />
+      <input type="hidden" class="name" value="{{ project.name }}" />
+      <input type="hidden" class="municipality" value="{{ project.municipality }}" />
+      <a href='/project/{{ project.id|e }}'><img src="{{project.image_uri_medium}}" style="width: 250px; height: 94px;"></a>
+      <p class="emphasis"><a href='/project/{{ project.id|e }}'><strong> {{ project.name|e }} </strong></a></p>
+      <br/>
+    </div>
+  </li>
+  </li>
+  {% else %}
+  <p> No projects are currently available to see.</p>
+
+  {% endfor %}
 </ul>
 </div>
 
 <div class="hidden-phone visible-desktop">
  <ul id="projects-display" class="thumbnails">
-  
+  {% for project in projects %}
+  <li class="span3" id="index-icons">
+    <div class="thumbnail">
+      <input type="hidden" class="id" value="{{ project.id }}" />
+      <input type="hidden" class="name" value="{{ project.name }}" />
+      <input type="hidden" class="municipality" value="{{ project.municipality }}" />
+      <a href='/project/{{ project.id|e }}'><img src="{{project.image_uri_medium}}" style="width: 300px; height: 94px;"></a>
+      <p class="emphasis"><a href='/project/{{ project.id|e }}'><strong> {{ project.name|e }} </strong></a></p>
+      <br/>
+    </div>
+
+  </li>
+  {% else %}
+  <p> No projects are currently available to see.</p>
+
+  {% endfor %}
 </ul>
 </div>
 <div id="view-more" class="unhidden"><a onclick="$('#projects-display').animate({height:'100%'}, 500); unhide('view-less'); unhide('view-more')"><strong>View More </strong></a></div>
@@ -180,12 +210,12 @@ $('.active').removeClass('active'); $(this).addClass('active');">Latest Projects
 
 <div class="span5">
   <p><b><i>Created by:</i></b></p>
-  <img src="/static/img/creators.png">@include monteRegular;
+  <img src="/static/img/creators.png"></img>
 </div>
 
 <div class="span5">
   <p><b><i>Supported by:</i></b></p>
-  <img src="/static/img/supporters-1.png">@include monteRegular;
+  <img src="/static/img/supporters-1.png"></img>
 </div>
 
 </div> <!--container-narrow -->

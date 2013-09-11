@@ -1,5 +1,5 @@
 
-define(["underscore", "backbone", "jquery", "template","views/ProjectView", "collection/ProjectListCollection" ], function(_, Backbone, $, temp, ProjectView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template","views/ProjectView","views/partials/BannerImageView", "collection/ProjectListCollection" ], function(_, Backbone, $, temp, ProjectView, BannerImageView, ProjectListCollection) {
     
     var CBUAppView = Backbone.View.extend({
 
@@ -24,6 +24,11 @@ define(["underscore", "backbone", "jquery", "template","views/ProjectView", "col
                 self.collection.fetch({reset: true});
             });
             $(this.parent).prepend(this.$el); 
+
+            // banner image here
+            // var bannerParent = $(????)
+            // var bannerImageView = new BannerImageView({parent:bannerParent})
+
         },
 
         addOne: function(projectModel) {

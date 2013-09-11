@@ -1,17 +1,17 @@
 require.config({
     baseUrl: "/static/js",
     paths: {
-        "jquery":     "ext/jquery/jquery", 
-        "underscore": "ext/underscore/underscore-min",
-        "backbone":   "ext/backbone/backbone-min", 
-        "bootstrap":  "ext/bootstrap/bootstrap",
-        "template":   "ext/jquery/template",
-        "main":       "views/CBUMainView",
-        "discover":   "views/CBUDiscoverView"
+        "jquery":        "ext/jquery/jquery", 
+        "underscore":    "ext/underscore/underscore-min",
+        "backbone":      "ext/backbone/backbone-min", 
+        "bootstrap":     "ext/bootstrap/bootstrap",
+        "template":      "ext/jquery/template",
+        "main-view":     "views/CBUMainView",
+        "discover-view": "views/CBUDiscoverView"
     }
 });
 
-require(["jquery","main", "discover","collection/ProjectListCollection"], function($, CBUMainView, CBUDiscoverView) {
+require(["jquery","main-view", "discover-view","collection/ProjectListCollection"], function($, CBUMainView, CBUDiscoverView) {
     $(document).ready(function() {
 
         var path = window.location.pathname;

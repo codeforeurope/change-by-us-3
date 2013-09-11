@@ -438,7 +438,7 @@
 			});
 
 
-			// Function to append hidden elements into form submittals -->
+			// Function to append hidden elements into form submittals 
 			$('div.btn-group').on('click', 'button[data-name]', function() {
 				var select = $(this).data('name');
 				var elem = $('#realform > input[name="'+select+'"]');
@@ -453,10 +453,10 @@
 
 			$('#sortLatest').addClass('active');
 
-			// Function to assign div class to dropdown-select script -->
+			// Function to assign div class to dropdown-select script 
 			$('.selectpicker').selectpicker();
 
-			// Function to load page to a specific tab within stream-->
+			// Function to load page to a specific tab within stream 
 			window.location.hash = "#{{ tab }}";
 
 			// Javascript to enable link to tab
@@ -490,6 +490,10 @@
 	<script type="text/javascript">
 	if (typeof GSFN !== "undefined") { GSFN.loadWidget(5537,{"containerId":"getsat-widget-5537"}); }
 	</script>
+
+
 	<script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script> <!-- -->
+
+
 </body>
 </html>

@@ -1,7 +1,7 @@
 
 define(["underscore", "backbone", "jquery", "template","views/ProjectView","views/partials/BannerImageView", "collection/ProjectListCollection" ], function(_, Backbone, $, temp, ProjectView, BannerImageView, ProjectListCollection) {
     
-    var CBUAppView = Backbone.View.extend({
+    var CBUMainView = Backbone.View.extend({
 
         parent: 'body',
         templateDir: '/static',
@@ -44,7 +44,7 @@ define(["underscore", "backbone", "jquery", "template","views/ProjectView","view
         }
     });
 
-    return CBUAppView;
+    return CBUMainView;
     
 });
 

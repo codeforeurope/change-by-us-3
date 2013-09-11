@@ -9,7 +9,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         initialize: function(options) {
             this.templateDir = options.templateDir || this.templateDir;
             this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData; 
+            this.viewData    = options.viewData || this.viewData;  // not sure is this would be the correct one this.model.toJSON()
             this.render();
         },
 

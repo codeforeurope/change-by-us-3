@@ -103,6 +103,14 @@ class UserClass():
 
         client.assertTrue( joined )
 
+    def followResource(self, client, resource_id):
+
+        join = { 'project_id' : resource_id }
+        resp = client.POST('/api/resource/follow', data = join)
+        #print "RESPONSE FOR JOIN RESOURCE IS ", resp
+        client.assertTrueMsg( resp['success'], resp['msg'] )
+
+
 
 class UserTests(AssertClass):
 
@@ -135,7 +143,11 @@ class ProjectClass():
         self.description = text_generator(100)
         self.location = zipcode_generator()
 
-    def createProject(self, client):
+    def createResource(self, client):
+        self.createProject(client, resource = True)
+
+    def createProject(self, client, resource = False):
+
         create = { 'name' : self.name,
                    'description' : self.description,
                    'location' : self.location }
@@ -181,12 +193,14 @@ class ProjectClass():
 
         client.assertTrueMsg( resp['success'], resp['msg'] )
 
+
 class ProjectTests(AssertClass):
 
     def setUp(self):
         self.owner = UserClass()
         self.member = UserClass()
         self.project = ProjectClass()
+        self.resource = ProjectClass()
 
     def test_projects(self):
 
@@ -228,6 +242,16 @@ class ProjectTests(AssertClass):
         # TODO can't this just be project.edit
         self.project.name = name_generator()
         self.project.edit( self, expected = True )
+
+        #### now try to create a resource
+        self.GET('/logout')
+        self.owner.login(self)
+        self.resource.createResource(self)
+        self.GET('/logout')
+
+        self.member.login(self)
+        self.member.followResource(self, self.resource.project_id)
+
 
 
 class PostClass():
@@ -425,6 +449,7 @@ class PostTests(AssertClass):
         pprint(updates)
 
         self.assertTrueMsg( success, updates['msg'] )
+
 
 class SearchTest(BaseTestCase):
     """

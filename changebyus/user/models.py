@@ -30,6 +30,7 @@ dependent on
 class Roles:
     ADMIN = "ADMIN"
 
+
 class Role(db.EmbeddedDocument):
     """
     This allows us to define user roles, such as "Admin"
@@ -64,7 +65,6 @@ class UserNotifications(db.EmbeddedDocument):
     joins_common_project = db.BooleanField(default = False)
     # someone posts an update to a project I'm involved in (owner, member, organizer)
     posts_update_common_project = db.BooleanField(default = False)
-
 
 
 class User(db.Document, UserMixin, EntityMixin):

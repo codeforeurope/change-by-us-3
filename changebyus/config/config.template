@@ -1,3 +1,6 @@
+# used for generating external urls
+SERVER_NAME = {{ SERVER_NAME }}
+
 # example: my_mongodb
 MONGODB_DB: {{ MONGODB_DB }}
 # example: mongohq.com
@@ -43,6 +46,8 @@ MAIL_PORT: {{ MAIL_PORT }}
 MAIL_USE_SSL: {{ MAIL_USE_SSL }}
 # example: my.gmail.login
 MAIL_USERNAME: {{ MAIL_USERNAME }}
+# who is sending the email, should probably be same as mail_username
+MAIL_DEFAULT_SENDER: {{ MAIL_DEFAULT_SENDER }}
 # example: my.gmail.password
 MAIL_PASSWORD: {{ MAIL_PASSWORD }}
 

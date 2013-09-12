@@ -20,7 +20,7 @@ require(["jquery","main-view", "discover-view","create-view"],
 
             if (path.indexOf('/discover')>-1){
                 window.CBUAppView = new CBUDiscoverView({ parent:'#frame' });
-            } if (path.indexOf('/create')>-1){
+            } else if (path.indexOf('/create')>-1){
                 window.CBUAppView = new CBUCreateProjectView({ parent:'#frame' });
             } else {
                 window.CBUAppView = new CBUMainView({ parent:'#frame' });

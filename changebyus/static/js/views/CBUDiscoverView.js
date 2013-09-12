@@ -19,7 +19,7 @@ define(["underscore", "backbone", "jquery", "template","views/partials/BannerSea
         render:function(){
             // var self = this;
             this.$el = $("<div class='discover'/>");
-            this.$el.template(this.templateDir + '/templates/discover.html', {data:viewData}, function() {  });
+            this.$el.template(this.templateDir + '/templates/discover.html', {data:this.viewData}, function() {  });
             $(this.parent).append(this.$el); 
 
             var bannerParent = this.$el.find(".content");

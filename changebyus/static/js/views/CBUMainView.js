@@ -26,8 +26,8 @@ define(["underscore", "backbone", "jquery", "template","views/ProjectView","view
             $(this.parent).prepend(this.$el); 
 
             // banner image here
-            // var bannerParent = $(????)
-            // var bannerImageView = new BannerImageView({parent:bannerParent})
+            var bannerParent = "#frame"
+            var bannerImageView = new BannerImageView({parent:bannerParent})
 
         },
 

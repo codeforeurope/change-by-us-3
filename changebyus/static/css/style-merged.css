@@ -3388,7 +3388,11 @@ a.badge:focus {
   /*padding: 20px;*/
 
 }
-  .body-container h1 {
+
+.content {
+
+}
+  .content h1 {
     font-size: 36px;
     font-weight: bold;
     text-align: center;
@@ -3396,14 +3400,14 @@ a.badge:focus {
     line-height: 1;
   }
 
-  .body-container h2 {
+  .content h2 {
     font-size: 60px;
     font-weight: normal;
     text-align: center;
     padding: 25px;
   }
 
-  .body-container h3 {
+  .content h3 {
     font-size: 25px;
     color: #9b9b9b;
     font-weight: 100;
@@ -3489,6 +3493,29 @@ a.badge:focus {
   background: url("/static/img/community-text.png") no-repeat;
 }
 
+.homepage-block-info {
+  width: 1500px;
+  margin: 0 auto;
+  background-color:#ecb827;
+  height: 762px;
+}
+
+  .homepage-block-info h2 {
+    font-size: 60px;
+    font-weight: normal;
+    text-align: center;
+    padding: 40px;
+    color: #ffffff;
+  }
+
+  .homepage-block-info h3 {
+    font-size: 25px;
+    color: #f4e291;
+    font-weight: 100;
+    text-align: center;
+    /*padding: 10px;*/
+  }
+
 #main-container{
   margin-top: 30px;
   width: 950px;
@@ -3516,34 +3543,6 @@ a.badge:focus {
   text-align: left;
 }
 
-#error-message{
-  font-size: 26px;
-  line-height: 30px;
-  padding-top: 30px;
-  padding-bottom: 10px;
-}
-
-#member-item{
-  width:978px;
-  height: 90px;
-  padding: 20px;
-  border: 1px solid #000;
-}
-
-#member-icon{
-  width: 100px;
-  float: left;
-  border: 1px solid #000;
-  margin-right: 10px;
-}
-
-#member-name{
-  width:200px;
-  float: left;
-  border:1px solid #000;
-  vertical-align: 50%;
-  padding-top:20px;
-}
 
 
 #serif,

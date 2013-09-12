@@ -20,7 +20,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
             this.$el = $("<div class='project'/>");
             this.$el.template(this.templateDir + '/templates/project.html', {data:this.viewData}, function() {});
             $(this.parent).append(this.$el); 
-        },
+        }
  
     });
 

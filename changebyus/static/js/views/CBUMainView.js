@@ -22,23 +22,27 @@ define(["underscore", "backbone", "jquery", "template","form","views/ProjectView
             this.$el.template(this.templateDir + '/templates/main.html', {}, function() {
                 $(self.parent).prepend(self.$el);
                 var bannerParent = self.$el.find(".body-container-wide");
-                var bannerImageView = new BannerImageView({parent:bannerParent});
-
-                // AJAXIFY THE SINGUP FORM
-                var $signup = $('form[name=signup]');
-                $signup.ajaxForm(function(response) { 
-                    console.log(response);
-                }); 
-
-                // AJAXIFY THE SIGNIN FORM
-                var $signin = $('form[name=signin]');
-                $signin.ajaxForm(function(response) { 
-                    console.log(response);
-                }); 
+                var bannerImageView = new BannerImageView({parent:bannerParent}); 
 
                 self.collection.on('reset', self.addAll, self);
                 self.collection.fetch({reset: true});
+
+                self.ajaxForm();
             });
+        },
+
+        ajaxForm:function(){ 
+            // AJAXIFY THE SINGUP FORM
+            var $signup = $('form[name=signup]');
+            $signup.ajaxForm(function(response) { 
+                console.log(response);
+            }); 
+
+            // AJAXIFY THE SIGNIN FORM
+            var $signin = $('form[name=signin]');
+            $signin.ajaxForm(function(response) { 
+                console.log(response);
+            }); 
         },
 
         addOne: function(projectModel) {

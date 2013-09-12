@@ -17,13 +17,14 @@ define(["underscore", "backbone", "jquery", "template","views/partials/BannerSea
         },
 
         render:function(){
-            // var self = this;
+            var self = this;
             this.$el = $("<div class='discover'/>");
             this.$el.template(this.templateDir + '/templates/discover.html', {data:this.viewData}, function() {  });
             $(this.parent).append(this.$el); 
-
-            var bannerParent = this.$el.find(".content");
-            this.bannerSearchView = new BannerSearchView({parent:bannerParent});
+ 
+            var searchParent = $(".body-container-wide", this.$el);
+            var bannerSearchView = new BannerSearchView({parent:searchParent}); 
+            
         }
     });
 

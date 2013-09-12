@@ -47,6 +47,10 @@ def signup_view():
     """
     return render_template('signup.html')
 
+@frontend_view.route('/login')
+def login_view():
+    return render_template('index.html');
+
 
 @frontend_view.route('/discover')
 def discover_view():

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-from flask import g, current_app, request
+from flask import g, current_app, request, abort
 
 from ..user.models import User
 from ..helpers.mongotools import db_list_to_dict_list
@@ -10,6 +10,8 @@ from ..helpers.imagetools import generate_thumbnail
 from ..helpers.stringtools import slugify
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
+
+from flask.ext.cdn_rackspace import upload_rackspace_image
 
 import requests
 import simplejson as json
@@ -96,7 +98,7 @@ def _create_project( resource = False ):
         if len(photo.filename) > 3:
 
             try:
-                result = _upload_rackspace_image( photo )
+                result = upload_rackspace_image( photo )
 
                 if result.success:
                     file_name = result.name
@@ -110,17 +112,21 @@ def _create_project( resource = False ):
                         manip_image = manipulator.converter(file_path)
                         manip_image_name = manipulator.prefix + '.' + file_name
 
-                        if not _upload_rackspace_image( manip_image, 
-                                                        manip_image_name).success:
+
+                        if not upload_rackspace_image( manip_image.image, 
+                                                       manip_image_name).success:
 
                             return jsonify_response( ReturnStructure ( success = False ) )
                 else:
                     return jsonify_response( ReturnStructure ( success = False ) )
 
-            except UploadNotAllowed:
-                abort(403)
+            except Exception as e:
+                current_app.logger.exception(e)
+                msg = "An error occured."
+                return jsonify_response( ReturnStructure( success = False, 
+                                                          msg = msg ) )
 
-            file_name = result.file_name
+            file_name = result.name
 
         else:
             # again, photo optional
@@ -129,7 +135,7 @@ def _create_project( resource = False ):
     # we don't store the URL because the URL can change depending on what
     # rackspace container we wish to use
     if file_name:
-        p.image_name = file_nane
+        p.image_name = file_name
 
 
     p.save()
@@ -169,7 +175,7 @@ def _edit_project():
         if len(photo.filename) > 3:
 
             try:
-                result = _upload_rackspace_image( photo )
+                result = upload_rackspace_image( photo )
 
                 if result.success:
                     file_name = result.name
@@ -183,8 +189,8 @@ def _edit_project():
                         manip_image = manipulator.converter(file_path)
                         manip_image_name = manipulator.prefix + '.' + file_name
 
-                        if not _upload_rackspace_image( manip_image, 
-                                                        manip_image_name).success:
+                        if not upload_rackspace_image( manip_image, 
+                                                       manip_image_name).success:
 
                             return jsonify_response( ReturnStructure ( success = False ) )
                 else:

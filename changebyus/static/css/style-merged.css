@@ -3228,59 +3228,6 @@ a.badge:focus {
   top: 0;
 }
 
-.progress {
-  height: 20px;
-  width: 260px;
-  margin-top: 30px;
-  /*margin-bottom: 20px;*/
-  vertical-align: center;
-  overflow: hidden;
-  background-color: #f7f7f7;
-  border: 3px solid #323232;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-}
-
-.progress .bar {
-  float: left;
-  width: 0;
-  height: 100%;
-  font-size: 12px;
-  color: #ffffff;
-  text-align: center;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-  background-color: #0e90d2;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-
-.progress.active .bar {
-  -webkit-animation: progress-bar-stripes 2s linear infinite;
-  -moz-animation: progress-bar-stripes 2s linear infinite;
-  -ms-animation: progress-bar-stripes 2s linear infinite;
-  -o-animation: progress-bar-stripes 2s linear infinite;
-  animation: progress-bar-stripes 2s linear infinite;
-}
-
-
-.progress-success .bar,
-.progress .bar-success {
-  background-color: #5eb95e;
-}
-
-.progress-success.progress-striped .bar,
-.progress-striped .bar-success {
-  background-color: #62c462;
-}
-
-.progress-info .bar,
-.progress .bar-info {
-  background-color: #323232;
-}
-
 .accordion {
   margin-bottom: 20px;
 }
@@ -3447,6 +3394,21 @@ a.badge:focus {
     text-align: center;
     padding: 20px 0 30px 0;
     line-height: 1;
+  }
+
+  .body-container h2 {
+    font-size: 60px;
+    font-weight: normal;
+    text-align: center;
+    padding: 25px;
+  }
+
+  .body-container h3 {
+    font-size: 25px;
+    color: #9b9b9b;
+    font-weight: 100;
+    text-align: center;
+    /*padding: 10px;*/
   }
 
 .project-square {

@@ -46,3 +46,10 @@ def signup_view():
         (sign up through twitter, sign up through facebook) we did this our own way
     """
     return render_template('signup.html')
+
+@frontend_view.route('/discover')
+def discover_view():
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)

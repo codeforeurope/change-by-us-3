@@ -7,20 +7,23 @@ require.config({
         "bootstrap":     "ext/bootstrap/bootstrap",
         "template":      "ext/jquery/template",
         "main-view":     "views/CBUMainView",
-        "discover-view": "views/CBUDiscoverView"
+        "discover-view": "views/CBUDiscoverView",
+        "create-view":   "views/CBUCreateProjectView"
     }
 });
 
-require(["jquery","main-view", "discover-view","collection/ProjectListCollection"], function($, CBUMainView, CBUDiscoverView) {
-    $(document).ready(function() {
+require(["jquery","main-view", "discover-view","create-view"], 
+    function($, CBUMainView, CBUDiscoverView, CBUCreateProjectView) {
+        $(document).ready(function() {
 
-        var path = window.location.pathname;
+            var path = window.location.pathname;
 
-        if (path.indexOf('/discover')>-1){
-            window.CBUAppView = new CBUDiscoverView({ parent:'#frame' });
-        } else {
-            window.CBUAppView = new CBUMainView({ parent:'#frame' });
-        }
-       
-    });
+            if (path.indexOf('/discover')>-1){
+                window.CBUAppView = new CBUDiscoverView({ parent:'#frame' });
+            } if (path.indexOf('/create')>-1){
+                window.CBUAppView = new CBUCreateProjectView({ parent:'#frame' });
+            } else {
+                window.CBUAppView = new CBUMainView({ parent:'#frame' });
+            }
+        });
 });

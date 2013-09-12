@@ -1,6 +1,6 @@
 
 
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template","form","views/partials/CreateProjectModalView"], function(_, Backbone, $, temp, form, CreateProjectModalView) {
     
     var CBUCreateProjectView = Backbone.View.extend({
 
@@ -18,8 +18,31 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         render:function(){
             var self = this;
             this.$el = $("<div class='create-project'/>");
-            this.$el.template(this.templateDir + '/templates/partials-universal/create-form.html', {data:this.viewData}, function() {});
-            $(this.parent).append(this.$el); 
+            this.$el.template(this.templateDir + '/templates/partials-universal/create-form.html', {data:this.viewData}, function() {
+                self.ajaxForm();
+            });
+            $(this.parent).append(this.$el);
+        },
+            
+        ajaxForm:function(){ 
+            var $submit = $('input[type=submit]');
+            var $form = $('form[name=createproject]');
+
+            var options = { 
+                beforeSubmit: function() { 
+                    $submit.prop('disabled', true);
+                },
+                success: function(res) { 
+                    console.log('res',res);
+                    
+                    var createProjectModalView = new CreateProjectModalView({viewData:res})
+
+                    $submit.prop('disabled', false); 
+                    if (res.success){ $form.resetForm(); }
+                }
+            }
+
+            $form.ajaxForm(options);
         }
  
     });

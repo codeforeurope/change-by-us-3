@@ -1,5 +1,5 @@
 
-define(["underscore", "backbone", "jquery", "template","views/ProjectView","views/partials/BannerImageView", "collection/ProjectListCollection" ], function(_, Backbone, $, temp, ProjectView, BannerImageView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template","form","views/ProjectView","views/partials/BannerImageView", "collection/ProjectListCollection" ], function(_, Backbone, $, temp, form, ProjectView, BannerImageView, ProjectListCollection) {
     
     var CBUMainView = Backbone.View.extend({
 
@@ -23,6 +23,18 @@ define(["underscore", "backbone", "jquery", "template","views/ProjectView","view
                 $(self.parent).prepend(self.$el);
                 var bannerParent = self.$el.find(".body-container-wide");
                 var bannerImageView = new BannerImageView({parent:bannerParent});
+
+                // AJAXIFY THE SINGUP FORM
+                var $signup = $('form[name=signup]');
+                $signup.ajaxForm(function(response) { 
+                    console.log(response);
+                }); 
+
+                // AJAXIFY THE SIGNIN FORM
+                var $signin = $('form[name=signin]');
+                $signin.ajaxForm(function(response) { 
+                    console.log(response);
+                }); 
 
                 self.collection.on('reset', self.addAll, self);
                 self.collection.fetch({reset: true});

@@ -207,7 +207,7 @@
 	      <div class="span6">
 	        <h4>Sign Up</h4>
 		<div class="modal-body">
-			<form method="post" name="signin" class="form-signin" action="/api/user/create" onsubmit="return ValidateContactForm();">
+			<form method="post" name="signin" id="signup" class="form-signin" action="/api/user/create" onsubmit="return ValidateContactForm();">
 				{% if project %}
 				<input type="hidden" name="next" value="/project/{{project.id}}"></input>
 				{% endif %}
@@ -228,7 +228,7 @@
 	      <div class="span6">
 	        <h4>Log In</h4>
 			<div class="modal-body">
-				<form method="post" class="form-signin" action="/login">
+				<form method="post" id="signin" class="form-signin" action="/login">
 					{% if project %}
 					<input type="hidden" name="next" value="/project/{{project.id}}"></input>
 					{% endif %}

@@ -47,8 +47,17 @@ def signup_view():
     """
     return render_template('signup.html')
 
+
 @frontend_view.route('/discover')
 def discover_view():
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)
+
+
+@frontend_view.route('/create')
+def create_project_view():
     if g.user.is_anonymous():
         return render_template('index.html', login = True)
     else:

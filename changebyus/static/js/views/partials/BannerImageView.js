@@ -18,6 +18,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
             this.$el = $("<div class='banner-image'/>");
             this.$el.template(this.templateDir + '/templates/partials-homepage/banner-image.html', {data:this.viewData}, function() {});
             $(this.parent).append(this.$el); 
+            console.log($(this.parent),this.$el);
         }
  
     });

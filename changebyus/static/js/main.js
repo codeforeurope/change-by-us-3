@@ -6,6 +6,7 @@ require.config({
         "backbone":      "ext/backbone/backbone-min", 
         "bootstrap":     "ext/bootstrap/bootstrap",
         "template":      "ext/jquery/template",
+        "form":          "ext/jquery/jquery.form.min",
         "main-view":     "views/CBUMainView",
         "discover-view": "views/CBUDiscoverView",
         "create-view":   "views/CBUCreateProjectView"

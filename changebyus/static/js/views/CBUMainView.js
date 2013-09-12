@@ -20,15 +20,13 @@ define(["underscore", "backbone", "jquery", "template","views/ProjectView","view
             var self = this;
             this.$el = $("<div class='projects-main'/>");
             this.$el.template(this.templateDir + '/templates/main.html', {}, function() {
+                $(self.parent).prepend(self.$el);
+                var bannerParent = self.$el.find(".body-container-wide", this.$el);
+                var bannerImageView = new BannerImageView({parent:bannerParent});
+
                 self.collection.on('reset', self.addAll, self);
                 self.collection.fetch({reset: true});
             });
-            $(this.parent).prepend(this.$el); 
-
-            // banner image here
-            var bannerParent = "#frame"
-            var bannerImageView = new BannerImageView({parent:bannerParent})
-
         },
 
         addOne: function(projectModel) {

@@ -37,28 +37,25 @@ def generate_thumbnail( filepath, size ):
 
     try:
 
-        images = []
-
         img = Image.open(filepath)
 
         path, image = os.path.split(filepath)
         base, extension = os.path.splitext(image)
 
-        for size in sizes:
-            sizeStr = ".{0}.{1}".format( sizes[0], sizes[1] )
-            name = base + sizeStr + extension
-            img = ImageOps.fit( image=img, size=size, method=Image.ANTIALIAS )
 
-            resource = NamedImage( image=img, name=name )
-            images.push_back(resource)
+        sizeStr = ".{0}.{1}".format( size[0], size[1] )
+        name = base + sizeStr + extension
+        img = ImageOps.fit( image=img, size=size, method=Image.ANTIALIAS )
 
-        return images
+        resource = NamedImage( image=img, name=name )
+
+        return resource
 
     except IOError as e:
 
         current_app.logger.exception(e)
 
-        return []
+        return None
 
 
 def generate_blurred_bg():

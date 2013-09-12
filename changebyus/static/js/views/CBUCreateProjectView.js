@@ -16,10 +16,10 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         },
 
         render:function(){
-            //var self = this;
-            //this.$el = $("<div class='create-project'/>");
-            //this.$el.template(this.templateDir + '/templates/partials-universal/create-form.html', {data:this.viewData}, function() {});
-            //$(this.parent).append(this.$el); 
+            var self = this;
+            this.$el = $("<div class='create-project'/>");
+            this.$el.template(this.templateDir + '/templates/partials-universal/create-form.html', {data:this.viewData}, function() {});
+            $(this.parent).append(this.$el); 
         }
  
     });

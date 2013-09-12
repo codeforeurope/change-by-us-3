@@ -124,7 +124,7 @@ def _create_project( resource = False ):
 
         else:
             # again, photo optional
-            file_name = result.file_name
+            file_name = None
 
     # we don't store the URL because the URL can change depending on what
     # rackspace container we wish to use

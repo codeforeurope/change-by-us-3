@@ -24,7 +24,7 @@ define(["underscore", "backbone", "jquery", "template","views/partials/BannerSea
 
             var bannerParent = this.$el.find(".content");
             this.bannerSearchView = new BannerSearchView({parent:bannerParent});
-        },
+        }
     });
 
     return CBUDiscoverView;

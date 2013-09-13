@@ -39,12 +39,12 @@ For the most part it is pretty straight forward.
 project_images = [ 
     
     ImageManipulator(dict_name = "image_url_large_rect",
-                     converter = lambda x: generate_thumbnail(x, [1020, 430]),
+                     converter = lambda x: generate_thumbnail(x, [1020, 430], blurs = 5),
                      prefix = "1020.430",
                      extension = ".jpg"),
 
     ImageManipulator(dict_name = "image_url_medium_rect",
-                     converter = lambda x: generate_thumbnail(x, [1020, 170]),
+                     converter = lambda x: generate_thumbnail(x, [1020, 170], blurs = 5),
                      prefix = "1020.170",
                      extension = ".jpg"),
 

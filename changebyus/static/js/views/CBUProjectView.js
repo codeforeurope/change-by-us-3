@@ -41,21 +41,32 @@ define(["underscore",
 
         render:function(){
             var self = this;
+
             this.$el = $("<div class='project'/>");
             this.$el.template(this.templateDir + '/templates/project.html', {data:this.viewData}, function() {
                 self.addSubViews();
             });
+
             $(this.parent).append(this.$el); 
         },
 
         addSubViews:function(){
-            var projectCalendarCollection = new ProjectCalendarCollection(); 
-            var projectMemberCollection   = new ProjectMemberCollection(); 
-            var projectUpdatesCollection  = new ProjectUpdatesCollection();
+            var self = this;
+            var headerData = {}; // todo: add header data;
+            var $header = $("<div class='project-header'/>");
 
-            this.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
-            this.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
-            this.projectUpdatesView  = new projectUpdatesView({collection:projectUpdatesCollection});
+            $header.template(this.templateDir + '/templates/partials-project/project-header.html', {data:headerData}, function() {
+                var projectCalendarCollection = new ProjectCalendarCollection(); 
+                var projectMemberCollection   = new ProjectMemberCollection(); 
+                var projectUpdatesCollection  = new ProjectUpdatesCollection();
+
+                self.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
+                self.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
+                self.projectUpdatesView  = new projectUpdatesView({collection:projectUpdatesCollection});
+            });
+
+            this.$el.append($header);
+            
         },
 
         toggleSubView:function(view){

@@ -1,4 +1,5 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template"], 
+    function(_, Backbone, $, temp) {
     
     var BannerSearchView = Backbone.View.extend({
 

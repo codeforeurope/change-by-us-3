@@ -15,6 +15,7 @@ from flask.ext.cdn_rackspace import upload_rackspace_image
 
 import requests
 import simplejson as json
+import os
 
 
 def _get_slug_url(project_id = None):
@@ -61,9 +62,11 @@ def _create_project( resource = False ):
     project = Project.objects(name = name,
                               slug = slug )
 
+    """
     from pprint import pprint
     pprint( project )
     print project.count()
+    """
 
     if project.count() > 0:
         errStr = "Sorry, the name '{0}' is already in use.".format(name)
@@ -110,8 +113,13 @@ def _create_project( resource = False ):
                     for manipulator in project_images:
 
                         manip_image = manipulator.converter(file_path)
-                        manip_image_name = manipulator.prefix + '.' + file_name
+                        base, extension = os.path.splitext(file_name)
+                        print base
+                        print extension
+                        print manip_image.extension
+                        manip_image_name = manipulator.prefix + '.' + base + manip_image.extension
 
+                        print manip_image_name
 
                         if not upload_rackspace_image( manip_image.image, 
                                                        manip_image_name).success:

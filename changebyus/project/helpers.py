@@ -250,7 +250,7 @@ def _user_involved_in_project( project_id = None,
     if project == None:
         return False
 
-    if project.owner.id == user.id:
+    if project.owner.id == user_id:
         return True
 
     upl = UserProjectLink.objects(user = user_id,

@@ -757,6 +757,7 @@ h6 {
 
 ul,
 ol {
+  padding: 0;
   list-style: none;
 
 }
@@ -3456,12 +3457,27 @@ a.badge:focus {
     position: relative;
   }
 
-  .project .feature-image .h1 {
+  .project .feature-image .overlay-h1 {
     color: #ffffff;
     position: absolute;
-    top: 200px;
-    left: 200px;
+    font-size: 48px;
+    font-weight: bold;
+    top: 100px;
+    left: 300px;
     width: 100%;
+  }
+  .project .feature-image .overlay-h2 {
+    color: #ffffff;
+    position: absolute;
+    font-size: 18px;
+    font-family: "Merriweather", serif;
+    top: 150px;
+    left: 300px;
+    width: 650px;
+    line-height: 24px;
+  }
+  .project.feature-image .overlay-backdrop {
+    background-color: #ffffff;
   }
 
 .search-box {

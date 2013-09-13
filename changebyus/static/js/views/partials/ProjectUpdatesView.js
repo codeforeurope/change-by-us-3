@@ -7,7 +7,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectS
             $(this.parent).append(this.$el); 
         },
         addOne: function(model) {
-            // override in subview
+            var view = new Partial();//to do 
+            this.$el.append(view);
         }
  
     });

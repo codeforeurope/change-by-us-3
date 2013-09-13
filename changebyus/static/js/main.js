@@ -9,12 +9,13 @@ require.config({
         "form":          "ext/jquery/jquery.form.min",
         "main-view":     "views/CBUMainView",
         "discover-view": "views/CBUDiscoverView",
-        "create-view":   "views/CBUCreateProjectView"
+        "create-view":   "views/CBUCreateProjectView",
+        "project-view":  "views/CBUProjectView"
     }
 });
 
-require(["jquery","main-view", "discover-view","create-view"], 
-    function($, CBUMainView, CBUDiscoverView, CBUCreateProjectView) {
+require(["jquery","main-view", "discover-view","create-view","project-view"], 
+    function($, CBUMainView, CBUDiscoverView, CBUCreateProjectView, CBUProjectView) {
         $(document).ready(function() {
 
             var path = window.location.pathname;
@@ -23,6 +24,8 @@ require(["jquery","main-view", "discover-view","create-view"],
                 window.CBUAppView = new CBUDiscoverView({ parent:'#frame' });
             } else if (path.indexOf('/create')>-1){
                 window.CBUAppView = new CBUCreateProjectView({ parent:'#frame' });
+            } else if (path.indexOf('/project')>-1){
+                window.CBUAppView = new CBUProjectView({ parent:'#frame' });
             } else {
                 window.CBUAppView = new CBUMainView({ parent:'#frame' });
             }

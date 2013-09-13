@@ -5,13 +5,14 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         parent: 'body',
         templateDir: '/static',
         viewData:{},
-        isDataLoaded:false
-        ajaxRequest:null
+        isDataLoaded:false,
 
         initialize: function(options) {
             this.templateDir = options.templateDir || this.templateDir;
             this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData; 
+            this.viewData    = options.viewData || this.viewData;
+
+            this.render();
         },
 
         show:function(){
@@ -30,14 +31,14 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
             // override in subview
         },
 
-        addOne: function(projectModel) {
+        addOne: function(model) {
             // override in subview
         },
 
         addAll: function() {
             var self = this;
-            this.collection.each(function(projectModel){
-                self.addOne(projectModel);
+            this.collection.each(function(model){
+                self.addOne(model);
             });
             this.isDataLoaded = true;
         }

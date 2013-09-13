@@ -326,6 +326,8 @@ def api_get_projects(limit = None, municipality = None, alphabetical = None):
     """
 
     projects = Project.objects()
+    if limit:
+        projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)
 
     return jsonify_response( ReturnStructure( data = projects_list ) )

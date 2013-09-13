@@ -1,4 +1,3 @@
-
 define(["underscore", 
         "backbone", 
         "jquery", 
@@ -59,5 +58,3 @@ define(["underscore",
     return CBUDiscoverView;
     
 });
-
-

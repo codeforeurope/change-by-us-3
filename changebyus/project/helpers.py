@@ -114,12 +114,7 @@ def _create_project( resource = False ):
 
                         manip_image = manipulator.converter(file_path)
                         base, extension = os.path.splitext(file_name)
-                        print base
-                        print extension
-                        print manip_image.extension
-                        manip_image_name = manipulator.prefix + '.' + base + manip_image.extension
-
-                        print manip_image_name
+                        manip_image_name = manipulator.prefix + '.' + base + manipulator.extension
 
                         if not upload_rackspace_image( manip_image.image, 
                                                        manip_image_name).success:

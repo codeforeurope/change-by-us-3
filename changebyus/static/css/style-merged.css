@@ -3391,6 +3391,52 @@ a.badge:focus {
 
 }
 
+.create {
+  padding-top: 20px;
+}
+
+  .create h1 {
+    font-size: 60px;
+    font-weight: normal;
+    text-align: left;
+    padding-top: 25px;
+    padding-bottom: 30px;
+  }
+
+  .create h2 {
+    font-size: 20px;
+    line-height: 16px;
+    font-weight: lighter;
+  }
+
+  .create p{
+    color: #9c9c9c;
+    font-size: 16px;
+  }
+
+  .create .form-container {
+    padding: 30px;
+    margin-top: 30px;
+    width:100%;
+    height: 480px;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+  }
+
+  .create .label {
+    font-family: "BebasNeue", serif;
+    margin-top: 20px;
+  }
+
+  .create .form-left {
+    float: left;
+  }
+
+  .create .form-right {
+    float: right;
+  }
+
 .content {
 
 }

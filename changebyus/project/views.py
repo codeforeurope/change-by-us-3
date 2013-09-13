@@ -46,7 +46,7 @@ def project_view_id(project_id):
     circular include.  We do our best to contain it only to the function itself
     """
 
-    from ..post.api import _get_project_post_stream
+    from ..post.helpers import _get_project_post_stream
     
     project = Project.objects.with_id(project_id)
     if project is None:
@@ -77,7 +77,7 @@ def project_view_id(project_id):
         account_id, balance, percentage, account_key, description, access_token = None, None, None, None, None, None
 
     if g.user.is_anonymous():
-        return render_template('project_view.html', 
+        return render_template('index.html', 
             project = project.as_dict(), 
             posts = posts, 
             involved = involved, 
@@ -89,7 +89,7 @@ def project_view_id(project_id):
             access_token=access_token,
             account_id=account_id)
     else:
-        return render_template('project_view.html', 
+        return render_template('index.html', 
             project = project.as_dict(), 
             posts = posts, 
             involved = involved, 

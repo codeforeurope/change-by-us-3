@@ -2,6 +2,7 @@ define(["underscore", "backbone", "model/ProjectMemberModel"], function(_, Backb
 
     var ProjectMemberCollection = Backbone.Collection.extend({
         model: ProjectMemberModel, 
+        url:"/api/project/"+window.projectID+"/user",
         parse: function(response) {
             return response.data;
         }

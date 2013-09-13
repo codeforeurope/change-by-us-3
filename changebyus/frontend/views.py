@@ -45,7 +45,7 @@ def signup_view():
         process, but due to our integration of social network account creation
         (sign up through twitter, sign up through facebook) we did this our own way
     """
-    return render_template('signup.html')
+    return render_template('index.html')
 
 @frontend_view.route('/login')
 def login_view():

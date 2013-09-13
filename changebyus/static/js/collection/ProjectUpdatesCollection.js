@@ -1,8 +1,7 @@
-define(["underscore", "backbone", "model/ProjectMemberModel"], function(_, Backbone, ProjectUpdatesModel) {
+define(["underscore", "backbone", "model/ProjectUpdateModel"], function(_, Backbone, ProjectUpdateModel) {
 
     var ProjectUpdatesCollection = Backbone.Collection.extend({
-        model: ProjectUpdatesModel,
-        url: '/api/project/:id/list_calendar',
+        model: ProjectUpdateModel, 
         parse: function(response) {
             return response.data;
         }

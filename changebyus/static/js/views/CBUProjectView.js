@@ -6,9 +6,9 @@ define(["underscore",
         "views/partials/ProjectCalenderView",
         "views/partials/ProjectMembersView",
         "views/partials/ProjectUpdatesView",
-        "views/collection/ProjectCalendarCollection",
-        "views/collection/ProjectMemberCollection",
-        "views/collection/ProjectUpdatesCollection"
+        "collection/ProjectCalendarCollection",
+        "collection/ProjectMemberCollection",
+        "collection/ProjectUpdatesCollection"
         ],
 
  function(_, 
@@ -49,9 +49,9 @@ define(["underscore",
         },
 
         addSubViews:function(){
-            var projectCalendarCollection = new ProjectCalendarCollection();
-            var projectMemberCollection   = new ProjectMemberCollection();
-            var projectUpdatesCollection  = new ProjectUpdatesCollection();
+            var projectCalendarCollection = new ProjectCalendarCollection({url:"/api/project/"+window.projectID+"/list_updates"}); 
+            var projectMemberCollection   = new ProjectMemberCollection({url:"/api/project/"+window.projectID+"/user"}); 
+            var projectUpdatesCollection  = new ProjectUpdatesCollection({url:"/api/project/"+window.projectID+"/calendar"});
 
             this.projectCalenderView = new ProjectCalenderView({parent:"#project-calender",collection:projectCalendarCollection});
             this.projectMembersView  = new ProjectMembersView({parent:"#project-members",collection:projectMemberCollection});

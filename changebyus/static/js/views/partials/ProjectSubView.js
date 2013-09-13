@@ -1,4 +1,5 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template"], 
+    function(_, Backbone, $, temp) {
     
     var ProjectSubView = Backbone.View.extend({
 

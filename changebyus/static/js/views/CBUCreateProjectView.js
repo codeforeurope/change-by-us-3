@@ -1,6 +1,7 @@
 
 
-define(["underscore", "backbone", "jquery", "template","form","views/partials/CreateProjectModalView"], function(_, Backbone, $, temp, form, CreateProjectModalView) {
+define(["underscore", "backbone", "jquery", "template","form","views/partials/CreateProjectModalView"], 
+    function(_, Backbone, $, temp, form, CreateProjectModalView) {
     
     var CBUCreateProjectView = Backbone.View.extend({
 

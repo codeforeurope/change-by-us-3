@@ -4,6 +4,7 @@ from flask import g, current_app
 
 
 from ..user.models import User
+from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.flasktools import ReturnStructure, jsonify_response
 from ..project.decorators import _is_organizer as _is_project_organizer
 from ..notifications.api import _notify_post

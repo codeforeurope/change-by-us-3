@@ -757,8 +757,6 @@ h6 {
 
 ul,
 ol {
-  padding: 0;
-  margin: 0 0 10px 25px;
   list-style: none;
 
 }
@@ -3417,6 +3415,11 @@ a.badge:focus {
     text-align: center;
     /*padding: 10px;*/
   }
+
+.projects {
+  padding: none;
+  margin: none;
+}
 
 .project-square {
   height: 525px;

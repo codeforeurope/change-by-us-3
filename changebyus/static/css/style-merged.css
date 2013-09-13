@@ -757,8 +757,6 @@ h6 {
 
 ul,
 ol {
-  padding: 0;
-  margin: 0 0 10px 25px;
   list-style: none;
 
 }
@@ -914,12 +912,15 @@ input[type="url"],
 input[type="search"],
 .uneditable-input {
   display: inline-block;
-  height: 20px;
+  height: 50px;
   padding: 4px 6px;
   margin-bottom: 10px;
-  font-size: 14px;
+  font-family: "Merriweather", serif;
+  font-weight: 100;
+  color: #fdfdfd;
+  font-size: 16px;
   line-height: 30px;
-  color: #555555;
+  border-radius: 4px;
 }
 
 input,
@@ -3415,6 +3416,11 @@ a.badge:focus {
     /*padding: 10px;*/
   }
 
+.projects {
+  padding: none;
+  margin: none;
+}
+
 .project-square {
   height: 525px;
   width: 330px;
@@ -3486,20 +3492,51 @@ a.badge:focus {
 .search-projects {
   width: 300px;
   margin-right: 10px;
+  /*float: left;*/
+}
+
+.search-forms {
   float: left;
 }
 
+  .search-forms .input-label {
+    font-size: 14px;
+    color: #8a8a8a;
+  }
+
+  .search-forms .btn {
+    margin-top: 30px;
+    padding-top: 20px;
+    width: 40px;
+    height: 35px;
+    color: #ffffff;
+    font-size: 24px;
+    background-color: #77cbd0;
+    border-radius: 4px;
+  }
+
 .banner-search {
-  width: 780px;
-  border: 1px solid #000;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-.discover-header {
-  width: 200px;
+.discover-header-right {
+  margin-left: 15px;
+  width: 230px;
   height: 200px;
-  border: 1px solid #000;
-
+  float: right;
 }
+  .discover-header-right .btn {
+    width: 210px;
+    height: 40px;
+    line-height: 20px
+    margin: none;
+    padding-top: 20px;
+    font-size: 24px;
+    background-color: #ecb827;
+    color: #ffffff;
+    border-radius: 4px;
+  }
 
 .header-links {
   padding-right: 20px;

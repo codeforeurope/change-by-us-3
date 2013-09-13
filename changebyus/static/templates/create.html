@@ -1,29 +1,4 @@
-<div id="body-container">
+<div class="body-container">
 
-<form method="post" enctype=multipart/form-data class="form-project" name=
-"createproject" action="/api/project/create">
-
-    <label> What is the name of your project? </label>
-    <input type="text" maxlength="30" name="name" id="project_name" placeholder="Project Name" class="input-xxlarge">
-
-    <label> Tell us about your project (150 words or less):</label>
-
-    <textarea rows="8" name="description" maxlength="600" id="project_description" placeholder="Project Description" class="input-xxlarge"></textarea>
-
-    <label> Where is your project?</label>
-    <input type="text" maxlength="5" name="location" id="project_location" placeholder="Enter Zip Code" class="input-xxlarge">
-
-    <label> Upload a project thumbnail image.</label>
-    <div class="fileupload fileupload-new" data-provides="fileupload">
-        <div class="fileupload-new thumbnail" style="width: 50px; height: 50px;"><img src="/static/img/50.50.placeholder.gif" /></div>
-        <div class="fileupload-preview fileupload-exists thumbnail" style="width: 50px; height: 50px;"></div>
-        <span class="btn btn-file"><span class="fileupload-new">Select image</span><span class="fileupload-exists">Change</span><input type="file" id="project_image" name="photo"/></span>
-        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-    </div>
-
-    <br/>
-
-    <input type="submit" class="btn btn-large" value="Create">
-
-</form>
+    
 </div>

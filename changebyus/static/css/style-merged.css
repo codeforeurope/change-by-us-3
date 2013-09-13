@@ -2441,7 +2441,7 @@ input[type="submit"].btn.btn-mini {
   float: left;
   padding-right:8px;
   padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 20px;
   line-height: 20px;
   height: 20px;
 }
@@ -2456,61 +2456,6 @@ input[type="submit"].btn.btn-mini {
   border: none !important;
 }
 
-/*POSTS / MEMBERS / FUNDRAISING TOGGLE TABS*/
-
-.nav-tabs > li {
-  float: left;
-  padding-right:0px;
-  padding-top: none;
-  padding-bottom: 8px;
-  line-height: 20px;
-  height: 20px;
-}
-
-.nav-tabs > li > a {
-  padding-top: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 4px;
-  float: right;
-  background-color: #eaeaea;
-}
-
-.nav-tabs {
-  width: 100%;
-  border-bottom: 1px solid #000;
-}
-
-.nav-tabs > li {
-  margin-bottom: -1px;
-  float: right;
-  margin-right: none;
-  margin-left:3px;
-}
-
-.nav-tabs > li > a:hover {
-  border-color: #eeeeee;
-}
-
-.nav-tabs > .active > a,
-.nav-tabs > .active > a:hover,
-.nav-tabs > .active > a:focus {
-  background-color: white;
-  cursor: default;
-  border: none;
-  padding-top: 4px;
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-bottom: 4px;
-  border-top: 1px solid #eaeaea;
-  border-left: 1px solid #eaeaea;
-  border-right: 1px solid #eaeaea;
-}
-
-.nav-tabs .open .dropdown-toggle,
-.nav > li.dropdown.open.active > a:hover {
-  width:320px;
-}
 
 /*GENERAL NAV*/
 
@@ -3357,14 +3302,6 @@ a.badge:focus {
   position: fixed;
 }
 
-.masthead {
-  padding-bottom: 20px;
-  margin-bottom:10px;
-  font-size: 26px;
-  font-weight: bold;
-  color: #ffffff;
-}
-
 .emphasis {
   font-size: 16px;
   letter-spacing: .1em;
@@ -3390,6 +3327,59 @@ a.badge:focus {
   /*padding: 20px;*/
 
 }
+
+.create {
+  padding-top: 20px;
+}
+
+  .create h1 {
+    font-size: 60px;
+    font-weight: normal;
+    text-align: left;
+    padding-top: 25px;
+    padding-bottom: 30px;
+  }
+
+  .create h2 {
+    font-size: 20px;
+    line-height: 16px;
+    font-weight: lighter;
+  }
+
+  .create p{
+    color: #9c9c9c;
+    font-size: 16px;
+  }
+
+  .create .form-container {
+    padding: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width:100%;
+    height: 480px;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+  }
+
+  .create .label {
+    font-family: "BebasNeue", serif;
+    margin-top: 20px;
+  }
+
+  .create .form-left {
+    float: left;
+  }
+
+  .create .form-right {
+    float: right;
+  }
+
+  .create .btn {
+    background-color: #ecb827;
+    padding: 20px 40px;
+    font-size: 26px;
+    }
 
 .content {
 
@@ -3430,6 +3420,7 @@ a.badge:focus {
   border-radius: 4px;
   float: left;
   margin-right: 15px;
+  margin-bottom: 15px;
 }
 
 .project-icon {
@@ -3449,7 +3440,15 @@ a.badge:focus {
 
 .project{
 
-}
+}  
+
+  .project h1 {
+    font-size: 60px;
+    font-weight: normal;
+    text-align: left;
+    padding-top: 25px;
+    padding-bottom: 30px;
+  }
 
   .project .feature-image {
     width: 1000px;
@@ -3478,6 +3477,33 @@ a.badge:focus {
   }
   .project.feature-image .overlay-backdrop {
     background-color: #ffffff;
+  }
+
+  .project .tabs {
+
+  }
+
+  .project .updates {
+    padding-top: 50px;
+  }
+
+  .project .members {
+    padding-top: 50px;
+  }
+
+  .project .calendar {
+    padding-top: 50px;
+  }
+
+  .project .project-container {
+    padding: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width:100%;
+    height: auto;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
   }
 
 .search-box {
@@ -3557,6 +3583,7 @@ a.badge:focus {
 .header-links {
   padding-right: 20px;
   padding-left: 20px;
+  padding-bottom: 20px;
   text-decoration: bold;
 }
 
@@ -3577,10 +3604,11 @@ a.badge:focus {
 }
 
 .homepage-block-info {
-  width: 1500px;
-  margin: 0 auto;
+  width: 100%;
+  margin-top: 20px;
   background-color:#ecb827;
   height: 762px;
+  float:left;
 }
 
   .homepage-block-info h2 {
@@ -3599,31 +3627,73 @@ a.badge:focus {
     /*padding: 10px;*/
   }
 
-#main-container{
-  margin-top: 30px;
-  width: 950px;
-}
+.login {
 
-#topnav {
-  padding-top: 30px;
-  padding-bottom: 30px;
-  /*background-color: #ffffff;*/
+}
+  .login h1 {
+    font-size: 60px;
+    font-weight: bold;
+    text-align: center;
+    padding-top: 25px;
+    padding-bottom: 30px;
+  }
+
+  .login h2 {
+    font-size: 20px;
+    line-height: 16px;
+    text-align: center;
+    font-weight: lighter;
+  }
+
+  .login p{
+    color: #9c9c9c;
+    font-size: 16px;
+  }
+
+  .login .form-container {
+    padding: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width:100%;
+    height: 680px;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
+    text-align: center;
+  }
+
+  .login .form-container .centered {
+    width: 500px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 250px;
+  }
+
+  .login .label {
+    font-family: "BebasNeue", serif;
+    margin-top: 20px;
+  }
+
+  .login .form-left {
+    float: left;
+  }
+
+  .login .form-right {
+    float: right;
+  }
+
+  .login .btn {
+    background-color: #ecb827;
+    padding: 20px 40px;
+    font-size: 26px;
+    }
+
+
+.topnav {
+  padding-top: 10px;
+  font-size: 24px;
+  padding-bottom: 80px;
   background-color:#77cbd0;
-  /*border-bottom: 1px solid #000*/
-}
-
-#title-field{
-  margin-bottom: 0px;
-  border-bottom: none;
-  font-family: "Merriweather", serif;
-}
-
-#update-field{
-  margin-top: 0px;
-}
-
-#left-align{
-  text-align: left;
 }
 
 

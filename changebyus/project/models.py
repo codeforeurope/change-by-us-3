@@ -9,7 +9,9 @@ from mongoengine import signals
 from ..extensions import db
 from ..user.models import User
 from ..stripe.models import StripeAccount
-from ..helpers.imagetools import ImageManipulator, generate_thumbnail
+from ..helpers.imagetools import ( ImageManipulator, generate_thumbnail, 
+                                   generate_ellipse_png )
+
 from ..helpers.stringtools import slugify
 
 from ..helpers.mixin import ( handle_decryption, handle_initial_encryption,
@@ -36,17 +38,26 @@ For the most part it is pretty straight forward.
 
 project_images = [ 
     
-    ImageManipulator(dict_name = "image_url_large",
-                     converter = lambda x: generate_thumbnail(x, [1020, 320]),
-                     prefix = "1020.320"),
+    ImageManipulator(dict_name = "image_url_large_rect",
+                     converter = lambda x: generate_thumbnail(x, [1020, 430]),
+                     prefix = "1020.430",
+                     extension = ".jpg"),
 
-    ImageManipulator(dict_name = "image_url_medium",
-                     converter = lambda x: generate_thumbnail(x, [300, 94]),
-                     prefix = "300.94"),
+    ImageManipulator(dict_name = "image_url_medium_rect",
+                     converter = lambda x: generate_thumbnail(x, [1020, 170]),
+                     prefix = "1020.170",
+                     extension = ".jpg"),
 
-    ImageManipulator(dict_name = "image_url_small",
-                     converter = lambda x: generate_thumbnail(x, [160, 50]),
-                     prefix = "160.50")
+    ImageManipulator(dict_name = "image_url_small_square",
+                     converter = lambda x: generate_thumbnail(x, [300, 300]),
+                     prefix = "300.300",
+                     extension = ".jpg"),
+
+    ImageManipulator(dict_name = "image_url_round",
+                     converter = lambda x: generate_ellipse_png(x, [250, 250]),
+                     prefix = "250.250",
+                     extension = ".png"),
+
 ]
 
 
@@ -144,9 +155,6 @@ class Project(db.Document, EntityMixin):
 
         for image, url in image_urls.iteritems():
             resp[image] = url
-
-        from pprint import pprint
-        pprint(resp)
 
         return resp
 

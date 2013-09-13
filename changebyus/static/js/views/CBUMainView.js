@@ -62,7 +62,7 @@ define(["underscore",
 
         addOne: function(projectModel) {
             var view = new ProjectPartialsView({model: projectModel}); 
-            this.$el.find("#project-list").append(view.render().el);
+            this.$el.find("#project-list").append(view.el);
         },
 
         addAll: function() {   

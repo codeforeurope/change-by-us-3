@@ -1,4 +1,5 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView"], function(_, Backbone, $, temp, ProjectSubView) {
+define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView"], 
+    function(_, Backbone, $, temp, ProjectSubView) {
     
     var CreateProjectModalView = ProjectSubView.extend({
         render:function(){

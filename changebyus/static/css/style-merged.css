@@ -3489,6 +3489,18 @@ a.badge:focus {
   float: left;
 }
 
+.banner-search {
+  width: 780px;
+  border: 1px solid #000;
+}
+
+.discover-header {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #000;
+
+}
+
 .header-links {
   padding-right: 20px;
   padding-left: 20px;

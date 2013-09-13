@@ -54,6 +54,10 @@
 
 
     <div class = "placeholder-frame" id = "frame">
+          {% if project %}
+           <p>{{ project.id }}</p>
+          {% endif %}
+          
         {% block content %}
         {% endblock %}
     </div>

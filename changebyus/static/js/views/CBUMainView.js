@@ -1,5 +1,20 @@
 
-define(["underscore", "backbone", "jquery", "template","form","views/partials/ProjectPartialsView","views/partials/BannerImageView", "collection/ProjectListCollection" ], function(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) {
+define(["underscore", 
+        "backbone", 
+        "jquery", 
+        "template",
+        "form",
+        "views/partials/ProjectPartialsView",
+        "views/partials/BannerImageView", 
+        "collection/ProjectListCollection" ], 
+    function(_, 
+            Backbone, 
+            $, 
+            temp, 
+            form, 
+            ProjectPartialsView, 
+            BannerImageView, 
+            ProjectListCollection) {
     
     var CBUMainView = Backbone.View.extend({
 

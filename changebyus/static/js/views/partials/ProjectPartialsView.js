@@ -1,4 +1,5 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template"], 
+    function(_, Backbone, $, temp) {
     
     var ProjectPartialsView = Backbone.View.extend({
 
@@ -15,9 +16,9 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         },
 
         render:function(){ 
-            this.$el = $("<div class='project-preview'/>");
-            this.$el.template(this.templateDir + '/templates/partials-universal/project.html', {data:this.viewData}, function() {});
-            return this;
+            $el = $("<div class='project-preview'/>");
+            $el.template(this.templateDir + '/templates/partials-universal/project.html', {data:this.viewData}, function() {});
+            this.el = $el;
         }
  
     });

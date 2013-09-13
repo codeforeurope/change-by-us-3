@@ -49,13 +49,13 @@ define(["underscore",
         },
 
         addSubViews:function(){
-            var projectCalendarCollection = new ProjectCalendarCollection({url:"/api/project/"+window.projectID+"/list_updates"}); 
-            var projectMemberCollection   = new ProjectMemberCollection({url:"/api/project/"+window.projectID+"/user"}); 
-            var projectUpdatesCollection  = new ProjectUpdatesCollection({url:"/api/project/"+window.projectID+"/calendar"});
+            var projectCalendarCollection = new ProjectCalendarCollection(); 
+            var projectMemberCollection   = new ProjectMemberCollection(); 
+            var projectUpdatesCollection  = new ProjectUpdatesCollection();
 
-            this.projectCalenderView = new ProjectCalenderView({parent:"#project-calender",collection:projectCalendarCollection});
-            this.projectMembersView  = new ProjectMembersView({parent:"#project-members",collection:projectMemberCollection});
-            this.projectUpdatesView  = new projectUpdatesView({parent:"#project-update",collection:projectUpdatesCollection});
+            this.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
+            this.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
+            this.projectUpdatesView  = new projectUpdatesView({collection:projectUpdatesCollection});
         },
 
         toggleSubView:function(view){

@@ -42,7 +42,7 @@ define(["underscore",
         render:function(){
             var self = this;
 
-            this.$el = $("<div class='project'/>");
+            this.$el = $("<div class='project-container'/>");
             this.$el.template(this.templateDir + '/templates/project.html', {data:this.viewData}, function() {
                 self.addSubViews();
             });
@@ -62,10 +62,10 @@ define(["underscore",
 
                 self.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
                 self.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
-                self.projectUpdatesView  = new projectUpdatesView({collection:projectUpdatesCollection});
+                self.projectUpdatesView  = new ProjectUpdatesView({collection:projectUpdatesCollection});
             });
 
-            this.$el.append($header);
+            this.$el.prepend($header);
             
         },
 

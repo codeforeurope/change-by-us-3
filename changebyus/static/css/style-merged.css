@@ -3502,7 +3502,15 @@ a.badge:focus {
 
 .project{
 
-}
+}  
+
+  .project h1 {
+    font-size: 60px;
+    font-weight: normal;
+    text-align: left;
+    padding-top: 25px;
+    padding-bottom: 30px;
+  }
 
   .project .feature-image {
     width: 1000px;
@@ -3531,6 +3539,33 @@ a.badge:focus {
   }
   .project.feature-image .overlay-backdrop {
     background-color: #ffffff;
+  }
+
+  .project .tabs {
+
+  }
+
+  .project .updates {
+    padding-top: 50px;
+  }
+
+  .project .members {
+    padding-top: 50px;
+  }
+
+  .project .calendar {
+    padding-top: 50px;
+  }
+
+  .project .project-container {
+    padding: 30px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width:100%;
+    height: auto;
+    background-color: #ffffff;
+    border: 1px solid #dcdcdc;
+    border-radius: 4px;
   }
 
 .search-box {

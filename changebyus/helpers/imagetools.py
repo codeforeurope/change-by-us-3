@@ -1,5 +1,5 @@
 import os
-from PIL import Image, ImageOps, ImageDraw
+from PIL import Image, ImageOps, ImageDraw, ImageFilter
 from flask import current_app
 
 
@@ -18,7 +18,7 @@ class ImageManipulator():
         self.extension = extension
 
 
-def generate_ellipse_png( filepath, size ):
+def generate_ellipse_png( filepath, size, blurs = 0 ):
     """
 
     """
@@ -27,7 +27,6 @@ def generate_ellipse_png( filepath, size ):
 
         path, image = os.path.split(filepath)
         base, extension = os.path.splitext(image)
-        print "making " , extension, " to .png"
         extension = '.png'
 
         sizeStr = ".{0}.{1}.ellipse".format( size[0], size[1] )
@@ -37,10 +36,13 @@ def generate_ellipse_png( filepath, size ):
         draw = ImageDraw.Draw(mask)
         draw.ellipse([0,0] + size, fill=255)
         im = Image.open( filepath )
+
+        # filter
+        for i in range(blurs):
+            im = im.filter(ImageFilter.BLUR)
+
         output = ImageOps.fit(im, mask.size, centering=(0.5, 0.5))
         output.putalpha(mask)
-
-        print "name will be ", name
 
         resource = NamedImage( image=output, name=name, extension=extension )
         return resource
@@ -50,7 +52,7 @@ def generate_ellipse_png( filepath, size ):
         return None
 
 
-def generate_thumbnail( filepath, size ):
+def generate_thumbnail( filepath, size, blurs = 0 ):
     """
     ABOUT
         Routine that will take a full sized image path and generate
@@ -72,12 +74,17 @@ def generate_thumbnail( filepath, size ):
 
         img = Image.open(filepath)
 
+        # filter
+        for i in range(blurs):
+            img = img.filter(ImageFilter.BLUR)
+
         path, image = os.path.split(filepath)
         base, extension = os.path.splitext(image)
 
         sizeStr = ".{0}.{1}".format( size[0], size[1] )
         name = base + sizeStr + extension
         img = ImageOps.fit( image=img, size=size, method=Image.ANTIALIAS )
+
 
         resource = NamedImage( image=img, name=name, extension=extension )
 

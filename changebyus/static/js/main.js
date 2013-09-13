@@ -10,24 +10,31 @@ require.config({
         "main-view":     "views/CBUMainView",
         "discover-view": "views/CBUDiscoverView",
         "create-view":   "views/CBUCreateProjectView",
-        "project-view":  "views/CBUProjectView"
+        "project-view":  "views/CBUProjectView",
+        "login-view":    "views/CBULoginView",
+        "signup-view":   "views/CBUSignupView"
     }
 });
 
-require(["jquery","main-view", "discover-view","create-view","project-view"], 
-    function($, CBUMainView, CBUDiscoverView, CBUCreateProjectView, CBUProjectView) {
+require(["jquery","main-view", "discover-view","create-view","project-view","login-view","signup-view"], 
+    function($, CBUMainView, CBUDiscoverView, CBUCreateProjectView, CBUProjectView, CBULoginView, CBUSignupView) {
         $(document).ready(function() {
 
-            var path = window.location.pathname;
+            var path = window.location.pathname,
+                config = { parent:'#frame' };
 
             if (path.indexOf('/discover')>-1){
-                window.CBUAppView = new CBUDiscoverView({ parent:'#frame' });
+                window.CBUAppView = new CBUDiscoverView(config);
             } else if (path.indexOf('/create')>-1){
-                window.CBUAppView = new CBUCreateProjectView({ parent:'#frame' });
+                window.CBUAppView = new CBUCreateProjectView(config);
+            } else if (path.indexOf('/login')>-1){
+                window.CBUAppView = new CBULoginView(config);
+            } else if (path.indexOf('/signup')>-1){
+                window.CBUAppView = new CBUSignupView(config);
             } else if (path.indexOf('/project')>-1){
-                window.CBUAppView = new CBUProjectView({ parent:'#frame' });
+                window.CBUAppView = new CBUProjectView(config);
             } else {
-                window.CBUAppView = new CBUMainView({ parent:'#frame' });
+                window.CBUAppView = new CBUMainView(config);
             }
         });
 });

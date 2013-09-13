@@ -27,7 +27,7 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
             
         ajaxForm:function(){ 
             var $submit = $('input[type=submit]');
-            var $form = $('form[name=createproject]');
+            var $form   = $('form[name=createproject]');
 
             var options = { 
                 beforeSubmit: function() { 
@@ -41,11 +41,9 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
                     $submit.prop('disabled', false); 
                     if (res.success){ $form.resetForm(); }
                 }
-            }
-
+            } 
             $form.ajaxForm(options);
         }
- 
     });
 
     return CBUCreateProjectView;

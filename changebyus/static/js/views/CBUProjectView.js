@@ -101,17 +101,17 @@ define(["underscore",
             switch(view){
                 case "updates":
                     this.projectUpdatesView.show();
-                    this.updatesBTN.removeClass('active');
+                    this.updatesBTN.addClass('active');
                     break;
                 
                 case "members":
                     this.projectMembersView.show();
-                    this.membersBTN.removeClass('active');
+                    this.membersBTN.addClass('active');
                     break;
 
                 case "calendar":
                     this.projectCalenderView.show();
-                    this.calendarBTN.removeClass('active');
+                    this.calendarBTN.addClass('active');
                     break;
             }
         }

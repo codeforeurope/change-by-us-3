@@ -17,7 +17,6 @@ define(["underscore", "backbone", "jquery", "template"],
         },
 
         show:function(){
-            //console.log("PD",window,window.projectID);
             this.$el.show();
             if (!this.isDataLoaded){
                 this.collection.on('reset', this.addAll, this);

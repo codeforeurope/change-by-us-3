@@ -30,13 +30,25 @@ define(["underscore",
         projectCalenderView:null,
         projectMembersView:null,
         projectUpdatesView:null,
+        updatesBTN:null,
+        membersBTN:null,
+        calendarBTN:null,
 
         initialize: function(options) {
+            var self = this;
+
             this.templateDir = options.templateDir || this.templateDir;
             this.parent      = options.parent || this.parent; 
             this.viewData    = options.viewData || this.viewData; 
             this.collection  = options.collection || this.collection;
+           
             this.render();
+
+            $(window).bind('hashchange', function(e){
+                var hash = window.location.hash.substring(1);
+                self.toggleSubView(hash);
+                e.preventDefault();
+            });
         },
 
         render:function(){
@@ -56,13 +68,21 @@ define(["underscore",
             var $header = $("<div class='project-header'/>");
 
             $header.template(this.templateDir + '/templates/partials-project/project-header.html', {data:headerData}, function() {
-                var projectCalendarCollection = new ProjectCalendarCollection(); 
+                var projectUpdatesCollection  = new ProjectUpdatesCollection(); 
                 var projectMemberCollection   = new ProjectMemberCollection(); 
-                var projectUpdatesCollection  = new ProjectUpdatesCollection();
-
-                self.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
+                var projectCalendarCollection = new ProjectCalendarCollection(); 
+                
+                self.projectUpdatesView  = new ProjectUpdatesView({collection:projectUpdatesCollection}); 
                 self.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
-                self.projectUpdatesView  = new ProjectUpdatesView({collection:projectUpdatesCollection});
+                self.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
+
+                self.updatesBTN = $('a[href="#updates"]');
+                self.membersBTN = $('a[href="#members"]');
+                self.calendarBTN = $('a[href="#calendar"]');
+
+                self.projectMembersView.hide(); 
+                self.projectCalenderView.hide();
+                
             });
 
             this.$el.prepend($header);
@@ -70,19 +90,28 @@ define(["underscore",
         },
 
         toggleSubView:function(view){
+            this.projectUpdatesView.hide(); 
+            this.projectMembersView.hide(); 
             this.projectCalenderView.hide();
-            this.projectMembersView.hide();
-            this.projectUpdatesView.hide();
+
+            this.updatesBTN.removeClass('active');
+            this.membersBTN.removeClass('active');
+            this.calendarBTN.removeClass('active');
 
             switch(view){
+                case "updates":
+                    this.projectUpdatesView.show();
+                    this.updatesBTN.removeClass('active');
+                    break;
+                
+                case "members":
+                    this.projectMembersView.show();
+                    this.membersBTN.removeClass('active');
+                    break;
+
                 case "calendar":
                     this.projectCalenderView.show();
-                    break;
-                case "member":
-                    this.projectMembersView.show();
-                    break;
-                case "update":
-                    this.projectUpdatesView.show();
+                    this.calendarBTN.removeClass('active');
                     break;
             }
         }

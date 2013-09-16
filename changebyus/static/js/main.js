@@ -32,6 +32,7 @@ require(["jquery","main-view", "discover-view","create-view","project-view","log
             } else if (path.indexOf('/signup')>-1){
                 window.CBUAppView = new CBUSignupView(config);
             } else if (path.indexOf('/project')>-1){
+                config.model = {id:window.projectID};
                 window.CBUAppView = new CBUProjectView(config);
             } else {
                 window.CBUAppView = new CBUMainView(config);

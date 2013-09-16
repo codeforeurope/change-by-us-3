@@ -6,6 +6,7 @@ define(["underscore",
         "views/partials/ProjectCalenderView",
         "views/partials/ProjectMembersView",
         "views/partials/ProjectUpdatesView",
+        "model/ProjectModel",
         "collection/ProjectCalendarCollection",
         "collection/ProjectMemberCollection",
         "collection/ProjectUpdatesCollection"
@@ -18,6 +19,7 @@ define(["underscore",
           ProjectCalenderView, 
           ProjectMembersView, 
           ProjectUpdatesView, 
+          ProjectModel, 
           ProjectCalendarCollection, 
           ProjectMemberCollection, 
           ProjectUpdatesCollection) {
@@ -38,24 +40,20 @@ define(["underscore",
             var self = this;
 
             this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData; 
+            this.parent      = options.parent || this.parent;  
+            this.model       = new ProjectModel(options.model);
             this.collection  = options.collection || this.collection;
            
-            this.render();
-
-            $(window).bind('hashchange', function(e){
-                var hash = window.location.hash.substring(1);
-                self.toggleSubView(hash);
-                e.preventDefault();
-            }); 
+            this.model.fetch({
+                success:function(){ self.render(); }
+            });
         },
 
         render:function(){
             var self = this;
 
             this.$el = $("<div class='project-container'/>");
-            this.$el.template(this.templateDir + '/templates/project.html', {data:this.viewData}, function() {
+            this.$el.template(this.templateDir + '/templates/project.html', {}, function() {
                 self.addSubViews();
             });
 
@@ -64,27 +62,38 @@ define(["underscore",
 
         addSubViews:function(){
             var self = this,
-                headerData = {}, // todo: add header data;
                 $header = $("<div class='project-header'/>");
 
-            $header.template(this.templateDir + '/templates/partials-project/project-header.html', {data:headerData}, function() {
-                var projectUpdatesCollection  = new ProjectUpdatesCollection(),
-                    projectMemberCollection   = new ProjectMemberCollection(),
-                    projectCalendarCollection = new ProjectCalendarCollection();
-                
+            $header.template(this.templateDir + '/templates/partials-project/project-header.html', {data:this.model.attributes}, function() {
+                var id = {id:self.model.get('id')},
+                    projectUpdatesCollection  = new ProjectUpdatesCollection(id),
+                    projectMemberCollection   = new ProjectMemberCollection(id),
+                    projectCalendarCollection = new ProjectCalendarCollection(id);
+
                 self.projectUpdatesView  = new ProjectUpdatesView({collection:projectUpdatesCollection}); 
                 self.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
                 self.projectCalenderView = new ProjectCalenderView({collection:projectCalendarCollection});
 
-                self.updatesBTN = $('a[href="#updates"]');
-                self.membersBTN = $('a[href="#members"]');
+                self.updatesBTN  = $('a[href="#updates"]');
+                self.membersBTN  = $('a[href="#members"]');
                 self.calendarBTN = $('a[href="#calendar"]');
 
                 self.projectMembersView.hide(); 
                 self.projectCalenderView.hide();
 
                 var hash = window.location.hash.substring(1);
-                if (hash != "") self.toggleSubView(hash); 
+                if (hash == "") {
+                    self.toggleSubView("updates"); 
+                }else{
+                    self.toggleSubView(hash); 
+                }
+                    
+
+                $(window).bind('hashchange', function(e){
+                    var hash = window.location.hash.substring(1);
+                    self.toggleSubView(hash);
+                    e.preventDefault();
+                }); 
             });
 
             this.$el.prepend($header);

@@ -3572,3 +3572,21 @@ a.badge:focus {
 .modal-links{
 
 }
+
+.body-container{
+  position: relative;
+}
+
+.tabs-pane{
+  position: absolute;
+  bottom: 0;
+  height: 50px;
+  background-color: rgba(0,0,0,0.5);
+  width: 100%;
+}
+.tabs-pane li{
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+

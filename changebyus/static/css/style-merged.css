@@ -3584,9 +3584,10 @@ a.badge:focus {
   background-color: rgba(0,0,0,0.5);
   width: 100%;
 }
-.tabs-pane li{
-    display: inline;
-    list-style-type: none;
-    padding-right: 20px;
-}
+  .tabs-pane li{
+      display: inline;
+      list-style-type: none;
+      padding-right: 20px;
+  }
 
+  .tabs-pane li .active span{display:none}

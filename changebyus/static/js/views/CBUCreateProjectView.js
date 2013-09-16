@@ -26,10 +26,10 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
         },
             
         ajaxForm:function(){ 
-            var $submit = $('input[type=submit]');
-            var $form   = $('form[name=createproject]');
+            var $submit = $('input[type=submit]'),
+                $form   = $('form[name=createproject]')
 
-            var options = { 
+                options = { 
                 beforeSubmit: function() { 
                     $submit.prop('disabled', true);
                 },

@@ -36,8 +36,8 @@ define(["underscore",
             this.$el = $("<div class='projects-main'/>");
             this.$el.template(this.templateDir + '/templates/main.html', {}, function() {
                 $(self.parent).prepend(self.$el);
-                var bannerParent = self.$el.find(".body-container-wide");
-                var bannerImageView = new BannerImageView({parent:bannerParent}); 
+                var bannerParent = self.$el.find(".body-container-wide"),
+                    bannerImageView = new BannerImageView({parent:bannerParent}); 
 
                 self.collection.on('reset', self.addAll, self);
                 self.collection.fetch({reset: true});

@@ -48,7 +48,7 @@ define(["underscore",
                 var hash = window.location.hash.substring(1);
                 self.toggleSubView(hash);
                 e.preventDefault();
-            });
+            }); 
         },
 
         render:function(){
@@ -63,14 +63,14 @@ define(["underscore",
         },
 
         addSubViews:function(){
-            var self = this;
-            var headerData = {}; // todo: add header data;
-            var $header = $("<div class='project-header'/>");
+            var self = this,
+                headerData = {}, // todo: add header data;
+                $header = $("<div class='project-header'/>");
 
             $header.template(this.templateDir + '/templates/partials-project/project-header.html', {data:headerData}, function() {
-                var projectUpdatesCollection  = new ProjectUpdatesCollection(); 
-                var projectMemberCollection   = new ProjectMemberCollection(); 
-                var projectCalendarCollection = new ProjectCalendarCollection(); 
+                var projectUpdatesCollection  = new ProjectUpdatesCollection(),
+                    projectMemberCollection   = new ProjectMemberCollection(),
+                    projectCalendarCollection = new ProjectCalendarCollection();
                 
                 self.projectUpdatesView  = new ProjectUpdatesView({collection:projectUpdatesCollection}); 
                 self.projectMembersView  = new ProjectMembersView({collection:projectMemberCollection});
@@ -82,7 +82,9 @@ define(["underscore",
 
                 self.projectMembersView.hide(); 
                 self.projectCalenderView.hide();
-                
+
+                var hash = window.location.hash.substring(1);
+                if (hash != "") self.toggleSubView(hash); 
             });
 
             this.$el.prepend($header);

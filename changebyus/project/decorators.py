@@ -60,8 +60,9 @@ def project_exists(f):
             else:
                 project = Project.objects(slug = project_slug)
 
-            if project is None:
-                errStr = "Project {0} does not exist.".format(project_id)
+            if project is None or len(project) == 0:
+                errStr = "Project {0}, {1} does not exist.".format(project_id,
+                                                                   project_slug)
                 return jsonify_response( ReturnStructure( success = False,
                                                           msg = errStr ))
         

@@ -9,6 +9,7 @@ from flask.ext.login import login_required, current_user
 from .models import Project
 from .helpers import _user_involved_in_project
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
+from .decorators import project_exists
 
 project_view = Blueprint('project_view', __name__, url_prefix='/project')
 
@@ -21,7 +22,6 @@ Project Views
 Web facing views for interacting with projects.
 
 """
-
 
 @project_view.route('/<project_id>')
 def project_view_id(project_id):

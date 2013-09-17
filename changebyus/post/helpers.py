@@ -14,17 +14,16 @@ from flask.ext.cdn import url_for
 from .models import Project, ProjectPost, SocialMediaObject
 
 def _get_posts_for_project(project_id = None, 
-						   private_posts = False, 
-						   max_posts = 10):
+                           private_posts = False, 
+                           max_posts = 10):
 
-	if private_posts:
-		posts = Project.objects( parent = None, 
-			                     project = project_id )[0:max_posts]
-	else:
-		posts = Projects.objects( parent = None, 
-			                      project = project_id,
-			                      public = True )[0:max_posts]
+    if private_posts:
+        posts = ProjectPost.objects( project = project_id )[0:max_posts]
+    else:
+        posts = ProjectPost.objects( project = project_id,
+                                     public = True )[0:max_posts]
 
+    return posts
 
 
 def _get_project_post_stream(id=None, private_data=False):

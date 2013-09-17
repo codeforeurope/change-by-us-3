@@ -332,6 +332,7 @@ def api_get_projects(limit = None, municipality = None, alphabetical = None):
 
     return jsonify_response( ReturnStructure( data = projects_list ) )
 
+
     """
     # TODO add filtering / max / etc
 

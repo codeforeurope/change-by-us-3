@@ -28,10 +28,14 @@ from ..project.helpers import ( _get_user_involved_projects, _get_project_users_
 from ..project.decorators import ( project_exists, project_member, 
                                    _is_organizer as _is_project_organizer )
 
+from ..helpers.flasktools import jsonify_response, ReturnStructure
+
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
 from ..facebook.facebook import _get_fb_user_name_and_thumbnail
+
+from .helpers import _get_posts_for_project
 
 post_api = Blueprint('post_api', __name__, url_prefix='/api/post')
 
@@ -77,7 +81,9 @@ def api_get_project_posts_fixed(project_id):
                                     private_posts = private_posts,
                                     max_posts = 10 )
 
-    return jsonify_response( ReturnStructure( data = posts ) )
+    ret_posts = db_list_to_dict_list( posts )
+
+    return jsonify_response( ReturnStructure( data = ret_posts ) )
 
 
 

@@ -1,5 +1,5 @@
 # used for generating external urls
-SERVER_NAME = {{ SERVER_NAME }}
+SERVER_NAME: {{ SERVER_NAME }}
 
 # example: my_mongodb
 MONGODB_DB: {{ MONGODB_DB }}

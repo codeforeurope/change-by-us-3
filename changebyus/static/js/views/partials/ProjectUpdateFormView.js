@@ -2,15 +2,17 @@ define(["underscore",
         "backbone", 
         "jquery", 
         "template",
-        "form"],
+        "form",
+        "views/partials/ProjectSubView"],
 
     function(_, 
              Backbone, 
              $, 
              temp, 
-             form) {
+             form,
+             ProjectSubView) {
     
-    var ProjectUpdateFormView = Backbone.View.extend({
+    var ProjectUpdateFormView = ProjectSubView.extend({
 
         parent: 'body',
         templateDir: '/static',

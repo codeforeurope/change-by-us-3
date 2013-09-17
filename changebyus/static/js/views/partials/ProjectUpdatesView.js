@@ -1,5 +1,18 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView","views/partials/ProjectUpdateFormView"], 
-    function(_, Backbone, $, temp, ProjectSubView, ProjectUpdateFormView) {
+define(["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "views/partials/ProjectSubView",
+        "views/partials/ProjectUpdateFormView",
+        "views/partials/ProjectUpdateListItemView"], 
+
+    function(_, 
+             Backbone, 
+             $, 
+             temp, 
+             ProjectSubView, 
+             ProjectUpdateFormView, 
+             ProjectUpdateListItemView) {
     
     var ProjectUpdatesView = ProjectSubView.extend({
         parent:"#project-update",
@@ -15,9 +28,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectS
         },
         
         addOne: function(model) {
-            //to do 
-            //var view = new Partial();
-            //this.$el.append(view);
+            console.log('model',model);
+
+            var view = new ProjectUpdateListItemView({model:model});
+            this.$el.find('.project-container ul').append(view.el);
         }
  
     });

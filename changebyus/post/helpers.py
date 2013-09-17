@@ -13,6 +13,9 @@ from flask.ext.cdn import url_for
 
 from .models import Project, ProjectPost, SocialMediaObject
 
+from ..post.activity import update_project_activity
+
+
 def _get_posts_for_project(project_id = None, 
                            private_posts = False, 
                            max_posts = 10):
@@ -196,6 +199,8 @@ def _create_project_post(title = None,
     current_app.logger.info(infoStr)
 
     _notify_post( post_id = pp.id )
+
+    update_project_activity( project_id )
 
     return jsonify_response( ReturnStructure( data = pp.as_dict() ))
 

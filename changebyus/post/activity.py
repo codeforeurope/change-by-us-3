@@ -45,4 +45,5 @@ def _get_num_comments(project):
     
 def _get_num_users(project):
 #     return UserProjectLink.objects(project = project, user.active = True)
-    return UserProjectLink.objects(project = project).count()
+    numOwners = 1
+    return UserProjectLink.objects(project = project).count() + numOwners

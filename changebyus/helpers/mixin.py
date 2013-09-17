@@ -15,6 +15,8 @@ from mongoengine.dereference import DeReference
 from mongoengine.fields import ReferenceField
 from mongoengine.queryset import QuerySet
 
+from numbers import Number
+
 from types import ModuleType
 from itertools import groupby
 
@@ -148,7 +150,7 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
         out = obj
     elif isinstance(obj, (datetime.datetime)):
         out = str(obj)
-    elif isinstance(obj, (bool, int, float, long)):
+    elif isinstance(obj, Number):
         out = obj
     elif isinstance(obj, bson.DBRef):
         if recursive:

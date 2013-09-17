@@ -116,6 +116,7 @@ class Project(db.Document, EntityMixin):
 
     slug = db.StringField(unique=True)
 
+    activity = db.DecimalField()
 
     meta = {
         'indexes': [

@@ -145,6 +145,10 @@ def _create_project( resource = False ):
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)
     current_app.logger.info(infoStr)
 
+
+    from ..post.activity import update_project_activity
+    update_project_activity( p.id )
+
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
 

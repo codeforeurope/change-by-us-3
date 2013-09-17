@@ -6,11 +6,10 @@ define(["underscore", "backbone", "model/ProjectUpdateModel"], function(_, Backb
   		},
         model: ProjectUpdateModel, 
         url:function(){
-        	return "/api/project/"+this.id+"/list_updates";
+        	return "/api/post/project/"+this.id+"/list_updates";
     	},
         parse: function(response) {
-        	console.log('res',response);
-            return response.data;
+            return (response.msg == "OK") ? response.data : {};
         }
     });
 

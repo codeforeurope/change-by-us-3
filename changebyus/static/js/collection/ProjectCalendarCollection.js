@@ -9,7 +9,7 @@ define(["underscore", "backbone", "model/ProjectCalendarModel"], function(_, Bac
         	return "/api/project/"+this.id+"/calendar";
     	},
         parse: function(response) {
-            return response.data;
+            return (response.msg == "OK") ? response.data : {};
         }
     });
 

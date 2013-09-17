@@ -416,6 +416,9 @@ def api_join_project():
     _notify_project_join( project_id = project.id,
                           user_name = user.display_name)
 
+    from ..post.activity import update_project_activity
+    update_project_activity( project_id )
+
     return jsonify_response( ReturnStructure( success = True) )
 
 
@@ -467,6 +470,8 @@ def api_leave_project():
 
     for link in links:
         link.delete()
+
+    update_project_activity( project_id )
 
     return jsonify_response( ReturnStructure( ) )
 

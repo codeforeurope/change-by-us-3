@@ -9,7 +9,7 @@ define(["underscore", "backbone", "model/ProjectMemberModel"], function(_, Backb
        		return "/api/project/"+this.id+"/users"
        	},
         parse: function(response) {
-            return response.data;
+            return (response.msg == "OK") ? response.data : {};
         }
     });
 

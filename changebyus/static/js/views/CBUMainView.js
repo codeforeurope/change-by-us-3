@@ -47,7 +47,7 @@ define(["underscore",
         },
 
         ajaxForm:function(){ 
-            // AJAXIFY THE SINGUP FORM
+            // AJAXIFY THE SIGNUP FORM
             var $signup = $('form[name=signup]');
             $signup.ajaxForm(function(response) { 
                 console.log(response);

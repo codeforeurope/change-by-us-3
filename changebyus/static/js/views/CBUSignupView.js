@@ -16,7 +16,7 @@ define(["underscore",
         initialize: function(options) {
             this.templateDir = options.templateDir || this.templateDir;
             this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData;  
+            this.viewData    = options.viewData || this.viewData;
             this.render();
         },
 

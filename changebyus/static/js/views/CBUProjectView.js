@@ -86,8 +86,7 @@ define(["underscore",
                     self.toggleSubView("updates"); 
                 }else{
                     self.toggleSubView(hash); 
-                }
-                    
+                } 
 
                 $(window).bind('hashchange', function(e){
                     var hash = window.location.hash.substring(1);

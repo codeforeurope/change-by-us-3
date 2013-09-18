@@ -38,7 +38,7 @@ define(["underscore", "backbone", "jquery", "template"],
 
         addAll: function() {
             var self = this;
-            console.log('addAll',this,this.collection);
+            //console.log('addAll',this,this.collection);
             this.collection.each(function(model){
                 self.addOne(model);
             });

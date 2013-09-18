@@ -3548,7 +3548,6 @@ a.badge:focus {
 /*******************************************
  * Modal
  *******************************************/
-
 .modal-fullscreen{
   position: fixed;
   top: 0;
@@ -3593,3 +3592,4 @@ a.badge:focus {
   }
 
   .tabs-pane li .active span{display:none}
+

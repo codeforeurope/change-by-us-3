@@ -8,6 +8,7 @@
 
         <div id="editor"></div>
         
+
         <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
 	      <div class="btn-group">
 	        <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
@@ -43,12 +44,21 @@
 			    <input class="span2" placeholder="URL" type="text" data-edit="createLink">
 			    <button class="btn" type="button">Add</button>
         	</div>
-	        <a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink"><i class="icon-cut"></i></a>
+	        <a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink">
+	        	<i class="icon-cut"></i>
+	        </a>
 	      </div>
 	      
 	      <div class="btn-group">
 	        <a class="btn" title="" id="pictureBtn" data-original-title="Insert picture (or just drag &amp; drop)"><i class="icon-picture"></i></a>
 	        <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 36px; height: 30px;">
+	        <div class="dropdown-menu input-append">
+			    <input class="span2" placeholder="Embed Code" type="text" data-edit="InsertHTML">
+			    <button class="btn" type="button">Add</button>
+        	</div>
+            <a class="btn dropdown-toggle" data-toggle="dropdown" title="" id="videoBtn" data-original-title="Insert video embed code">
+	        	<i class="icon-film"></i>
+	        </a> 
 	      </div>
 	      <div class="btn-group">
 	        <a class="btn" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>

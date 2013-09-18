@@ -45,10 +45,22 @@ define(["underscore",
 
         jQueryForm:function(){ 
             // AJAXIFY THE FORM
-            var $updateForm = $('form[name="project-update"]');
-            $updateForm.ajaxForm(function(response) { 
-                console.log(response);
-            }); 
+            var $editor = $('#editor'),
+                $updateForm = $('form[name="project-update"]'),
+                options = {
+                  beforeSubmit: function(arr, $form, options) { 
+                    for (i in arr){
+                      console.log('obj.name', arr[i].name,  arr[i]);
+                      if ( arr[i].name =="description")  arr[i].value = escape( $editor.html() );
+                    }
+                   
+                  },
+                  success: function(response) {  
+                    console.log(response);
+                  }
+                };
+
+            $updateForm.ajaxForm(options); 
             
             $('a[title]').tooltip({container:'body'});
             
@@ -69,7 +81,7 @@ define(["underscore",
               $('#voiceBtn').hide();
             }
             
-            $('#editor').wysiwyg({ fileUploadError: showErrorAlert} );
+            $editor.wysiwyg({ fileUploadError: showErrorAlert} );
 
             function showErrorAlert (reason, detail) {
                 var msg='';

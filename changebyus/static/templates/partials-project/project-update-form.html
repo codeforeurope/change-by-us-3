@@ -7,7 +7,6 @@
         <input type="text" maxlength="30" name="title" id="title" placeholder="Title" class="input-xxlarge">
 
         <div id="editor"></div>
-        
 
         <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
 	      <div class="btn-group">
@@ -16,7 +15,7 @@
 	          <li><a data-edit="fontSize 5"><font size="5">Huge</font></a></li>
 	          <li><a data-edit="fontSize 3"><font size="3">Normal</font></a></li>
 	          <li><a data-edit="fontSize 1"><font size="1">Small</font></a></li>
-	          </ul>
+	          </ul> 
 	      </div>
 	      <div class="btn-group">
 	        <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
@@ -68,7 +67,13 @@
 	    </div> 
 
         <input type="hidden" name="project_id" value="<%= data.project_id %>" >
-        <!-- <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>" > -->
+
+        <input type="hidden" id="description" name="description" value="" >
+        <!-- 
+         <textarea rows="8" name="description" maxlength="600" id="description" placeholder="Description" class="input-xxlarge"></textarea>
+        
+        <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>" > 
+        -->
 
     </div>
 

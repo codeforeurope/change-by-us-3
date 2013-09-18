@@ -1,0 +1,19 @@
+<h2>PLACEHOLDER UPDATE FORM</h2>
+<form method="post" enctype=multipart/form-data class="form-project" name="project-update" action="/api/post/add_update">
+
+    <div>
+
+        <label> TITLE </label>
+        <input type="text" maxlength="30" name="title" id="title" placeholder="Title" class="input-xxlarge">
+
+        <label> DESCRIPTION </label>
+        <textarea rows="8" name="description" maxlength="600" id="description" placeholder="Description" class="input-xxlarge"></textarea>
+
+        <input type="hidden" name="project_id" value="<%= data.project_id %>" >
+        <!-- <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>" > -->
+
+    </div>
+
+    <input type="submit" class="btn" value="Save">
+
+</form>

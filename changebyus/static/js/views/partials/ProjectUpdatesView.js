@@ -1,5 +1,18 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView"], 
-    function(_, Backbone, $, temp, ProjectSubView) {
+define(["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "views/partials/ProjectSubView",
+        "views/partials/ProjectUpdateFormView",
+        "views/partials/ProjectUpdateListItemView"], 
+
+    function(_, 
+             Backbone, 
+             $, 
+             temp, 
+             ProjectSubView, 
+             ProjectUpdateFormView, 
+             ProjectUpdateListItemView) {
     
     var ProjectUpdatesView = ProjectSubView.extend({
         parent:"#project-update",
@@ -9,14 +22,16 @@ define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectS
             this.$el = $("<div class='project'/>");
             this.$el.template(this.templateDir + '/templates/partials-project/project-updates.html', {data:this.viewData}, function() {
                 self.$el.find('.preload').remove();
+                var form = new ProjectUpdateFormView({parent:self.$el});
             });
-            $(this.parent).append(this.$el); 
+            $(this.parent).append(this.$el);  
         },
         
         addOne: function(model) {
-            //to do 
-            //var view = new Partial();
-            //this.$el.append(view);
+            console.log('model',model);
+
+            var view = new ProjectUpdateListItemView({model:model});
+            this.$el.find('.project-container ul').append(view.el);
         }
  
     });

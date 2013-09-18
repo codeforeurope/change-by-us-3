@@ -22,7 +22,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectS
         addOne: function(model) {
             //to do 
             var view = new ProjectMemberListItemView({model:model});
-            // if team // if member
             this.$teamList.append(view.el);
         }
     });

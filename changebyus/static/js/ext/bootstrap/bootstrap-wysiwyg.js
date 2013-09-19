@@ -3,7 +3,14 @@
 /*jslint browser:true*/
 (function ($) {
 	'use strict';
-	var readFileIntoDataUrl = function (fileInfo) {
+	var tests = {
+		filereader: typeof FileReader != 'undefined',
+		dnd: 'draggable' in document.createElement('span'),
+		formdata: !!window.FormData,
+		progress: "upload" in new XMLHttpRequest
+    },
+    shouldPostImage = true,
+	readFileIntoDataUrl = function (fileInfo) {
 		var loader = $.Deferred(),
 			fReader = new FileReader();
 		fReader.onload = function (e) {
@@ -13,7 +20,53 @@
 		fReader.onprogress = loader.notify;
 		fReader.readAsDataURL(fileInfo);
 		return loader.promise();
+	},
+	postImages = function(files){
+	    //debugger;
+	    var formData = tests.formdata ? new FormData() : null;
+	    for (var i = 0; i < files.length; i++) {
+	      if (tests.formdata) formData.append('file', files[i]);
+	      if (!shouldPostImage) previewfile(files[i]);
+	    }
+
+	    // now post a new XHR request
+	    /*
+	    if (tests.formdata) {
+		    var xhr = new XMLHttpRequest();
+		    xhr.onreadystatechange = function() {
+	            if (xhr.readyState == 4 && xhr.status == 200) {                
+	                 //xhr.responseText;
+	            }
+		    };
+		    xhr.open('POST', '/image/post/url');
+		    xhr.onload = function() {
+		        //progress.value = progress.innerHTML = 100;
+		    };
+		    if (tests.progress) {
+		        xhr.upload.onprogress = function (event) {
+		          if (event.lengthComputable) {
+		            var complete = (event.loaded / event.total * 100 | 0);
+		            //progress.value = progress.innerHTML = complete;
+		          }
+		        }
+		    }
+		    xhr.send(formData);
+	    }*/
+	    $.ajax({
+	        url: '/image/post/url',
+	        data: formData,
+	        processData: false,
+	        type: 'POST',
+	        success: function ( data ) {
+	            //alert( data );
+	        },
+	        error: function ( data ) {
+	            //alert( data );
+	        }
+	    });
+
 	};
+
 	$.fn.cleanHtml = function () {
 		var html = $(this).html();
 		return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
@@ -82,17 +135,22 @@
 			},
 			insertFiles = function (files) {
 				editor.focus();
-				$.each(files, function (idx, fileInfo) {
-					if (/^image\//.test(fileInfo.type)) {
-						$.when(readFileIntoDataUrl(fileInfo)).done(function (dataUrl) {
-							execCommand('insertimage', dataUrl);
-						}).fail(function (e) {
-							options.fileUploadError("file-reader", e);
-						});
-					} else {
-						options.fileUploadError("unsupported-file-type", fileInfo.type);
-					}
-				});
+
+				if (shouldPostImage){
+					postImages(files);
+				}else{
+					$.each(files, function (idx, fileInfo) {
+						if (/^image\//.test(fileInfo.type)) { 
+							$.when(readFileIntoDataUrl(fileInfo)).done(function (dataUrl) {
+								execCommand('insertimage', dataUrl);
+							}).fail(function (e) {
+								options.fileUploadError("file-reader", e);
+							});
+						} else {
+							options.fileUploadError("unsupported-file-type", fileInfo.type);
+						}
+					});
+				} 
 			},
 			markSelection = function (input, color) {
 				restoreSelection();
@@ -158,6 +216,7 @@
 		if (options.dragAndDropImages) {
 			initFileDrops();
 		}
+		shouldPostImage = options.shouldPostImage;
 		bindToolbar($(options.toolbarSelector), options);
 		editor.attr('contenteditable', true)
 			.on('mouseup keyup mouseout', function () {
@@ -195,6 +254,7 @@
 		selectionMarker: 'edit-focus-marker',
 		selectionColor: 'darkgrey',
 		dragAndDropImages: true,
+		shouldPostImage: true,
 		fileUploadError: function (reason, detail) { console.log("File upload error", reason, detail); }
 	};
 }(window.jQuery));

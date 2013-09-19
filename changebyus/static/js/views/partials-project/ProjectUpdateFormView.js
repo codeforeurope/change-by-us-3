@@ -7,7 +7,7 @@ define(["underscore",
         "prettify",
         "wysiwyg",
         "hotkeys",
-        "views/partials/ProjectSubView"],
+        "abstract-view"],
 
     function(_, 
              Backbone, 
@@ -18,18 +18,12 @@ define(["underscore",
              prettify,
              wysiwyg,
              hotkeys,
-             ProjectSubView) {
+             AbstractView) {
     
-    var ProjectUpdateFormView = ProjectSubView.extend({
-
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
+    var ProjectUpdateFormView = AbstractView.extend({
 
         initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || {};
+            AbstractView.prototype.initialize.apply(this, options);
             this.render();
         },
 

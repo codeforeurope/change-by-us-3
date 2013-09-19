@@ -1,9 +1,14 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView"], 
-    function(_, Backbone, $, temp, ProjectSubView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    function(_, Backbone, $, temp, AbstractView) {
     
-    var ProjectAddUpdateView = ProjectSubView.extend({
+    var ProjectAddUpdateView = AbstractView.extend({
         
         parent:"#project",
+        
+        initialize: function(options) {
+            AbstractView.prototype.initialize.apply(this, options);
+            this.render();
+        },
         
         render:function(){
             var self = this;

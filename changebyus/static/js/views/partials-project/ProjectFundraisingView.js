@@ -1,8 +1,15 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView"], 
-    function(_, Backbone, $, temp, ProjectSubView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    function(_, Backbone, $, temp, AbstractView) {
     
-    var ProjectFundraisingView = ProjectSubView.extend({
+    var ProjectFundraisingView = AbstractView.extend({
         parent:"#project-calendar",
+
+
+        initialize: function(options) {
+            AbstractView.prototype.initialize.apply(this, options);
+            this.render();
+        },
+        
         render:function(){
             this.$el = $("<div class='project'/>");
             if(this.started){

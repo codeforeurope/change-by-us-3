@@ -1,16 +1,21 @@
-define(["underscore", "backbone", "jquery", "template","form","views/partials/CreateProjectModalView"], 
-    function(_, Backbone, $, temp, form, CreateProjectModalView) {
+define(["underscore", 
+        "backbone", 
+        "jquery", 
+        "template",
+        "form",
+        "abstract-view"],
+        
+    function(_, 
+             Backbone, 
+             $, 
+             temp, 
+             form,  
+             AbstractView) {
     
-    var CBUCreateProjectView = Backbone.View.extend({
-
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
+    var CreateProjectView = AbstractView.extend({
 
         initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData;  // not sure is this would be the correct one this.model.toJSON()
+            AbstractView.prototype.initialize.apply(this, options);
             this.render();
         },
 
@@ -34,7 +39,7 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
                 success: function(res) { 
                     console.log('res',res);
                     
-                    var createProjectModalView = new CreateProjectModalView({viewData:res})
+                    var createProjectModalView = new CreateProjectView({viewData:res})
 
                     $submit.prop('disabled', false); 
                     if (res.success){ $form.resetForm(); }
@@ -44,7 +49,7 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
         }
     });
 
-    return CBUCreateProjectView;
+    return CreateProjectView;
     
 });
 

@@ -22,6 +22,7 @@ define(["underscore",
             this.$el = $("<div class='project'/>");
             this.$el.template(this.templateDir + '/templates/partials-project/project-updates.html', {data:this.viewData}, function() {
                 self.$el.find('.preload').remove();
+                // temp here for now
                 var form = new ProjectUpdateFormView({parent:self.$el});
             });
             $(this.parent).append(this.$el);  

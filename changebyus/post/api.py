@@ -256,3 +256,36 @@ def api_delete_post():
 
     return jsonify_response( ReturnStructure( ) )
 
+
+@post_api.route('/imageupload', methods = ['POSTS'])
+@login_required
+def api_upload_image():
+
+    if 'photo' not in request.files:
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = "photo not provided" ) )
+
+    photo = request.files.get('photo')
+
+    if len(photo.filename) < 3:
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = "filename invalid" ) )
+
+    try:
+        result = upload_rackspace_image( photo )
+
+        if result.success:
+            return jsonify_response( ReturnStructure ( success = False,
+                                                       data = { "image_url" : result.url } ) )
+        else:
+            msg = "An error occured."
+            return jsonify_response( ReturnStructure( success = False, 
+                                                      msg = msg ) )  
+
+    except Exception as e:
+        current_app.logger.exception(e)
+        msg = "An error occured."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = msg ) )
+
+

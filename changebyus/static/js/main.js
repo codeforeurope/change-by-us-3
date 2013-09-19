@@ -2,9 +2,12 @@ require.config({
     baseUrl: "/static/js",
     paths: {
         "jquery":        "ext/jquery/jquery", 
+        "hotkeys":       "ext/jquery/jquery.hotkeys", 
         "underscore":    "ext/underscore/underscore-min",
         "backbone":      "ext/backbone/backbone-min", 
-        "bootstrap":     "ext/bootstrap/bootstrap",
+        "bootstrap":     "ext/bootstrap/bootstrap.min",
+        "wysiwyg":       "ext/bootstrap/bootstrap-wysiwyg",
+        "prettify":      "ext/google/prettify",
         "template":      "ext/jquery/template",
         "form":          "ext/jquery/jquery.form.min",
         "main-view":     "views/CBUMainView",

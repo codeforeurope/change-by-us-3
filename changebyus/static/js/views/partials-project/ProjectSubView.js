@@ -28,7 +28,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"],
 
         addAll: function() {
             var self = this;
-            //console.log('addAll',this,this.collection);
             this.collection.each(function(model){
                 self.addOne(model);
             });

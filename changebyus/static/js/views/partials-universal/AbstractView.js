@@ -7,11 +7,12 @@ define(["underscore", "backbone", "jquery", "template"],
         templateDir: '/static',
         viewData:{},
 
-        initialize: function(options_) {
+        initialize:function(options_) {
             var options      = options_ || {};
             this.templateDir = options.templateDir || this.templateDir;
             this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData;
+            this.viewData    = options.viewData || this.viewData; 
+            // console.log("initialize",options,this);
         },
 
         show:function(){

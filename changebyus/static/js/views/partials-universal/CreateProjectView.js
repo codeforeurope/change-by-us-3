@@ -3,25 +3,19 @@ define(["underscore",
         "jquery", 
         "template",
         "form",
-        "create-view"], 
+        "abstract-view"],
         
     function(_, 
              Backbone, 
              $, 
              temp, 
-             form, 
-             CreateProjectView) {
+             form,  
+             AbstractView) {
     
-    var CreateProjectView = Backbone.View.extend({
-
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
+    var CreateProjectView = AbstractView.extend({
 
         initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData;  // not sure is this would be the correct one this.model.toJSON()
+            AbstractView.prototype.initialize.apply(this, options);
             this.render();
         },
 

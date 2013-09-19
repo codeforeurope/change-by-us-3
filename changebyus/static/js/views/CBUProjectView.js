@@ -82,18 +82,19 @@ define(["underscore",
                 self.projectCalenderView.hide();
 
                 var hash = window.location.hash.substring(1);
-                if (hash == "") {
-                    self.toggleSubView("updates"); 
-                }else{
-                    self.toggleSubView(hash); 
-                } 
-                /*
+                self.toggleSubView( (hash == "") ? "updates" : hash );
+
                 $(window).bind('hashchange', function(e){
                     var hash = window.location.hash.substring(1);
                     self.toggleSubView(hash);
-                    //e.preventDefault();
-                });*/ 
+                });
 
+                // temp hack because somewhere this event default is prevented
+                $('a[href^="#"]').click(function(e){
+                   var hash = $(this).attr('href').substring(1);
+                   window.location.hash = hash;
+                });
+                
             });
 
             this.$el.prepend($header);

@@ -1,17 +1,12 @@
-define(["underscore", "backbone", "jquery", "template"], 
-    function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    function(_, Backbone, $, temp, AbstractView) {
     
-    var ProjectPartialsView = Backbone.View.extend({
+    var ProjectPartialsView = AbstractView.extend({
 
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
         tagName:  "li",
 
         initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.model.toJSON();
+            AbstractView.prototype.initialize.apply(this, options);
             this.render();
         },
 

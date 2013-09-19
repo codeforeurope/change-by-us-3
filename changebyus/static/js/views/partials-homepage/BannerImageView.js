@@ -1,26 +1,18 @@
-define(["underscore", "backbone", "jquery", "template"], 
-    function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    function(_, Backbone, $, temp, AbstractView) {
     
-    var BannerImageView = Backbone.View.extend({
+    var BannerImageView =  AbstractView.extend({
 
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
-
-        initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData; 
+        initialize: function(options) { 
+            AbstractView.prototype.initialize.call(this, options);
             this.render();
         },
 
         render:function(){
-            //var self = this;
             this.$el = $("<div class='banner-image'/>");
             this.$el.template(this.templateDir + '/templates/partials-homepage/banner-image.html', {data:this.viewData}, function() {});
-            $(this.parent).append(this.$el); 
+            $(this.parent).append(this.$el);  
         }
- 
     });
 
     return BannerImageView;

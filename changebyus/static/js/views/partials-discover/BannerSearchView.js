@@ -1,16 +1,10 @@
-define(["underscore", "backbone", "jquery", "template"], 
-    function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    function(_, Backbone, $, temp, AbstractView) {
     
-    var BannerSearchView = Backbone.View.extend({
-
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
+    var BannerSearchView = AbstractView.extend({
 
         initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData; 
+            AbstractView.prototype.initialize.apply(this, options);
             this.render();
         },
 

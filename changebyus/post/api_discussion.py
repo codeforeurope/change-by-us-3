@@ -160,7 +160,7 @@ def api_edit_project_discussion():
     return jsonify_response( ReturnStructure( data = post.as_dict() ) )
 
 
-@post_discussion_api.route('/delete_discussion', methods = ['POSTS'])
+@post_discussion_api.route('/delete_discussion', methods = ['POST'])
 @login_required
 @post_exists
 @post_delete_permission

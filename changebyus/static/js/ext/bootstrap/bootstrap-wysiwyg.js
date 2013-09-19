@@ -20,51 +20,6 @@
 		fReader.onprogress = loader.notify;
 		fReader.readAsDataURL(fileInfo);
 		return loader.promise();
-	},
-	postImages = function(files){
-	    //debugger;
-	    var formData = tests.formdata ? new FormData() : null;
-	    for (var i = 0; i < files.length; i++) {
-	      if (tests.formdata) formData.append('file', files[i]);
-	      if (!shouldPostImage) previewfile(files[i]);
-	    }
-
-	    // now post a new XHR request
-	    /*
-	    if (tests.formdata) {
-		    var xhr = new XMLHttpRequest();
-		    xhr.onreadystatechange = function() {
-	            if (xhr.readyState == 4 && xhr.status == 200) {                
-	                 //xhr.responseText;
-	            }
-		    };
-		    xhr.open('POST', '/image/post/url');
-		    xhr.onload = function() {
-		        //progress.value = progress.innerHTML = 100;
-		    };
-		    if (tests.progress) {
-		        xhr.upload.onprogress = function (event) {
-		          if (event.lengthComputable) {
-		            var complete = (event.loaded / event.total * 100 | 0);
-		            //progress.value = progress.innerHTML = complete;
-		          }
-		        }
-		    }
-		    xhr.send(formData);
-	    }*/
-	    $.ajax({
-	        url: '/image/post/url',
-	        data: formData,
-	        processData: false,
-	        type: 'POST',
-	        success: function ( data ) {
-	            //alert( data );
-	        },
-	        error: function ( data ) {
-	            //alert( data );
-	        }
-	    });
-
 	};
 
 	$.fn.cleanHtml = function () {
@@ -137,7 +92,7 @@
 				editor.focus();
 
 				if (shouldPostImage){
-					postImages(files);
+					postImages(files); 
 				}else{
 					$.each(files, function (idx, fileInfo) {
 						if (/^image\//.test(fileInfo.type)) { 
@@ -198,6 +153,26 @@
 					saveSelection();
 					this.value = '';
 				});
+			},
+			postImages = function(files){
+			    var data = new FormData(); 
+				data.append('photo',files[0]); 
+			   	//console.log('postImages',postImages);
+			    $.ajax({
+			        url: '/api/post/imageupload',
+			        data: data,
+			        type: 'POST',
+			        cache: false,
+					contentType: false,
+					processData: false,
+			        success: function ( data ) {
+			            //console.log("success", data );
+			            execCommand('insertimage', data.data.image_url);
+			        },
+			        error: function ( data ) {
+			            console.log("error", data );
+			        }
+			    })
 			},
 			initFileDrops = function () {
 				editor.on('dragenter dragover', false)

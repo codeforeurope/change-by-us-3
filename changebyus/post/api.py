@@ -6,6 +6,8 @@
 from flask import Blueprint, request, render_template, redirect
 from flask import url_for, g, current_app
 
+from flask.ext.cdn_rackspace import upload_rackspace_image
+
 from flask.ext.login import login_required, current_user
 
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
@@ -234,7 +236,7 @@ def api_edit_post():
 class DeleteProjectPostForm(Form):
     post_id = TextField("post_id", validators=[Required()])
 
-@post_api.route('/delete', methods = ['POSTS'])
+@post_api.route('/delete', methods = ['POST'])
 @login_required
 @post_exists
 @post_delete_permission
@@ -257,10 +259,10 @@ def api_delete_post():
     return jsonify_response( ReturnStructure( ) )
 
 
-@post_api.route('/imageupload', methods = ['POSTS'])
+@post_api.route('/imageupload', methods = ['POST'])
 @login_required
-def api_upload_image():
-
+def api_upload_image(): 
+    
     if 'photo' not in request.files:
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = "photo not provided" ) )

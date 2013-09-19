@@ -11,16 +11,17 @@ require.config({
         "template":      "ext/jquery/template",
         "form":          "ext/jquery/jquery.form.min",
         "main-view":     "views/CBUMainView",
-        "discover-view": "views/CBUDiscoverView",
-        "create-view":   "views/CBUCreateProjectView",
+        "discover-view": "views/CBUDiscoverView", 
         "project-view":  "views/CBUProjectView",
         "login-view":    "views/CBULoginView",
-        "signup-view":   "views/CBUSignupView"
+        "signup-view":   "views/CBUSignupView",
+        "create-view":   "views/partials-universal/CreateProjectView",
+        "abstract-view": "views/partials-universal/AbstractView"
     }
 });
 
 require(["jquery","main-view", "discover-view","create-view","project-view","login-view","signup-view"], 
-    function($, CBUMainView, CBUDiscoverView, CBUCreateProjectView, CBUProjectView, CBULoginView, CBUSignupView) {
+    function($, CBUMainView, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView) {
         $(document).ready(function() {
 
             var path = window.location.pathname,
@@ -29,7 +30,7 @@ require(["jquery","main-view", "discover-view","create-view","project-view","log
             if (path.indexOf('/discover')>-1){
                 window.CBUAppView = new CBUDiscoverView(config);
             } else if (path.indexOf('/create')>-1){
-                window.CBUAppView = new CBUCreateProjectView(config);
+                window.CBUAppView = new CreateProjectView(config);
             } else if (path.indexOf('/login')>-1){
                 window.CBUAppView = new CBULoginView(config);
             } else if (path.indexOf('/signup')>-1){

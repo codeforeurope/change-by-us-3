@@ -1,18 +1,12 @@
-define(["underscore", "backbone", "jquery", "template"], 
-    function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    function(_, Backbone, $, temp, AbstractView) {
     
-    var ProjectSubView = Backbone.View.extend({
+    var ProjectSubView = AbstractView.extend({
 
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
         isDataLoaded:false,
 
         initialize: function(options) {
-            this.templateDir = options.templateDir || this.templateDir;
-            this.parent      = options.parent || this.parent; 
-            this.viewData    = options.viewData || this.viewData;
-
+            AbstractView.prototype.initialize.apply(this, options);
             this.render();
         },
 
@@ -22,10 +16,6 @@ define(["underscore", "backbone", "jquery", "template"],
                 this.collection.on('reset', this.addAll, this);
                 this.collection.fetch({reset: true});
             }
-        },
-
-        hide:function(){
-            this.$el.hide();
         },
         
         loadData:function(){

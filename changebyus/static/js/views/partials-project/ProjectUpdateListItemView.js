@@ -1,4 +1,8 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials/ProjectSubView"], 
+define(["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"views/partials-project/ProjectSubView"], 
     function(_, Backbone, $, temp, ProjectSubView) {
     
     var ProjectUpdateListItemView = ProjectSubView.extend({

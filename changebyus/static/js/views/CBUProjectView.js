@@ -3,9 +3,9 @@ define(["underscore",
         "backbone", 
         "jquery", 
         "template",
-        "views/partials/ProjectCalenderView",
-        "views/partials/ProjectMembersView",
-        "views/partials/ProjectUpdatesView",
+        "views/partials-project/ProjectCalenderView",
+        "views/partials-project/ProjectMembersView",
+        "views/partials-project/ProjectUpdatesView",
         "model/ProjectModel",
         "collection/ProjectCalendarCollection",
         "collection/ProjectMemberCollection",
@@ -87,12 +87,13 @@ define(["underscore",
                 }else{
                     self.toggleSubView(hash); 
                 } 
-
+                /*
                 $(window).bind('hashchange', function(e){
                     var hash = window.location.hash.substring(1);
                     self.toggleSubView(hash);
-                    e.preventDefault();
-                }); 
+                    //e.preventDefault();
+                });*/ 
+
             });
 
             this.$el.prepend($header);

@@ -7,7 +7,7 @@ define(["underscore",
         "prettify",
         "wysiwyg",
         "hotkeys",
-        "views/partials/ProjectSubView"],
+        "views/partials-project/ProjectSubView"],
 
     function(_, 
              Backbone, 

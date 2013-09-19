@@ -1,7 +1,18 @@
-define(["underscore", "backbone", "jquery", "template","form","views/partials/CreateProjectModalView"], 
-    function(_, Backbone, $, temp, form, CreateProjectModalView) {
+define(["underscore", 
+        "backbone", 
+        "jquery", 
+        "template",
+        "form",
+        "create-view"], 
+        
+    function(_, 
+             Backbone, 
+             $, 
+             temp, 
+             form, 
+             CreateProjectView) {
     
-    var CBUCreateProjectView = Backbone.View.extend({
+    var CreateProjectView = Backbone.View.extend({
 
         parent: 'body',
         templateDir: '/static',
@@ -34,7 +45,7 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
                 success: function(res) { 
                     console.log('res',res);
                     
-                    var createProjectModalView = new CreateProjectModalView({viewData:res})
+                    var createProjectModalView = new CreateProjectView({viewData:res})
 
                     $submit.prop('disabled', false); 
                     if (res.success){ $form.resetForm(); }
@@ -44,7 +55,7 @@ define(["underscore", "backbone", "jquery", "template","form","views/partials/Cr
         }
     });
 
-    return CBUCreateProjectView;
+    return CreateProjectView;
     
 });
 

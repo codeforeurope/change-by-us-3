@@ -3,6 +3,7 @@ define(["underscore",
         "backbone", 
         "jquery", 
         "template",
+        "abstract-view",
         "views/partials-project/ProjectCalenderView",
         "views/partials-project/ProjectMembersView",
         "views/partials-project/ProjectUpdatesView",
@@ -16,6 +17,7 @@ define(["underscore",
           Backbone, 
           $, 
           temp, 
+          AbstractView,
           ProjectCalenderView, 
           ProjectMembersView, 
           ProjectUpdatesView, 
@@ -24,11 +26,8 @@ define(["underscore",
           ProjectMemberCollection, 
           ProjectUpdatesCollection) {
     
-    var CBUProjectView = Backbone.View.extend({
+    var CBUProjectView = AbstractView.extend({
 
-        parent: 'body',
-        templateDir: '/static',
-        viewData:{},
         projectCalenderView:null,
         projectMembersView:null,
         projectUpdatesView:null,

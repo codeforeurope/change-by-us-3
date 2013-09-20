@@ -59,10 +59,19 @@ def discover_view():
     else:
         return render_template('index.html', login = False)
 
-
 @frontend_view.route('/create')
 def create_project_view():
     if g.user.is_anonymous():
         return render_template('index.html', login = True)
     else:
         return render_template('index.html', login = False)
+
+@frontend_view.route('/user/<user_id>')
+def user_view(user_id): 
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)
+
+
+        

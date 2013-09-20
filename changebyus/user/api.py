@@ -113,7 +113,9 @@ def api_get_user(id):
     """
 
     u = User.objects.with_id(id)
-    
+     
+    # TEMP OFF FOR NOW
+    '''
     if u.count() is 0:
         ret = ReturnStructure( msg = "User not found.",
                                success = False,
@@ -122,16 +124,16 @@ def api_get_user(id):
         return jsonify_response( ret )
 
     else:
+    '''
+    ret = ReturnStructure( data = u.as_dict() )
 
-        ret = ReturnSctucture( data = u.as_dict() )
+    # Remove email from visibility
+    if not u.public_email:
+        if ret.data.has_key('email'):
 
-        # Remove email from visibility
-        if not u.public_email:
-            if ret.data.has_key('email'):
+            del ret.data['email']
 
-                del ret.data['email']
-
-        return jsonify_response( ret )
+    return jsonify_response( ret )
 
 
 class EditUserForm(Form):

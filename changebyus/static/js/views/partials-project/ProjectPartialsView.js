@@ -12,7 +12,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"],
 
         render:function(){ 
             $el = $("<div class='project-preview'/>");
-            $el.template(this.templateDir + '/templates/partials-universal/project.html', {data:this.viewData}, function() {});
+            $el.template(this.templateDir + '/templates/partials-universal/project.html', {data:this.model.attributes}, function() {});
             this.el = $el;
         }
  

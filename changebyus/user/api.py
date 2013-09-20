@@ -114,17 +114,13 @@ def api_get_user(id):
 
     u = User.objects.with_id(id)
      
-    # TEMP OFF FOR NOW
-    '''
-    if u.count() is 0:
+    if u is None:
         ret = ReturnStructure( msg = "User not found.",
                                success = False,
                                data = {} )
 
         return jsonify_response( ret )
 
-    else:
-    '''
     ret = ReturnStructure( data = u.as_dict() )
 
     # Remove email from visibility

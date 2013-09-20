@@ -21,26 +21,45 @@ require.config({
     }
 });
 
-require(["jquery","main-view", "discover-view","create-view","project-view","login-view","signup-view"], 
-    function($, CBUMainView, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView) {
+require(["jquery","main-view", "backbone", "discover-view","create-view","project-view","login-view","signup-view"], 
+    function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView) {
         $(document).ready(function() {
 
-            var path = window.location.pathname,
-                config = { parent:'#frame' };
+            var config = { parent:'#frame' };
+            
+            var CBURouter = Backbone.Router.extend({
+                routes: {
+                    "project/:id": "project",
+                    "discover":    "discover",
+                    "create":      "create",
+                    "login":       "login",
+                    "signup":      "signup",
+                    "project":     "project",
+                    "":            "default"
+                },
 
-            if (path.indexOf('/discover')>-1){
-                window.CBUAppView = new CBUDiscoverView(config);
-            } else if (path.indexOf('/create')>-1){
-                window.CBUAppView = new CreateProjectView(config);
-            } else if (path.indexOf('/login')>-1){
-                window.CBUAppView = new CBULoginView(config);
-            } else if (path.indexOf('/signup')>-1){
-                window.CBUAppView = new CBUSignupView(config);
-            } else if (path.indexOf('/project')>-1){
-                config.model = {id:window.projectID};
-                window.CBUAppView = new CBUProjectView(config);
-            } else {
-                window.CBUAppView = new CBUMainView(config);
-            }
+                project: function(id){
+                    config.model = {id:id};
+                    window.CBUAppView = new CBUProjectView(config);
+                },
+                discover: function(){
+                    window.CBUAppView = new CBUDiscoverView(config);
+                },
+                create: function(){
+                    window.CBUAppView = new CreateProjectView(config);
+                },
+                login: function(){
+                    window.CBUAppView = new CBULoginView(config);
+                },
+                signup: function(){
+                    window.CBUAppView = new CBUSignupView(config);
+                }, 
+                default: function(){
+                    window.CBUAppView = new CBUMainView(config);
+                }
+            });
+
+            var CBUAppRouter = new CBURouter();
+            Backbone.history.start({pushState: true});
         });
 });

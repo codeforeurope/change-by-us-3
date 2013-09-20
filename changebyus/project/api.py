@@ -304,68 +304,33 @@ def api_view_project_users_common_projects(project_id):
 
 
 @project_api.route('/list')
-def api_get_projects(limit = None, municipality = None, alphabetical = None):
+def api_get_projects():
     """
     ABOUT
-        Lists all projects, given certain search parameters
+        Simple list of projects, optionally sorted and limited
     METHOD
         Get
     INPUT
-        Options Python only (not web facing) limit, municiplaity, alphabetical
+        limit, sort, order
     OUTPUT
-        Json list of projects.  Filtered by limit (max number of returns),
-        mulicipality (location), and alphabetical (True/False)
+        Json list of projects.  
     PRECONDITIONS
         None
-    TODO
-        When we move away from simple zip code and into proper location search
-        we will need to upgrade this search routine accordingly.  Most likely
-        this part of the project will incorporate elastic search, or if mongodb
-        grows in geo and string searching capabilities it could remain native to 
-        mongodb
     """
+    limit = int(request.args.get('limit', 100))
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
 
-    projects = Project.objects()
-    if limit:
-        projects = projects[0:limit]
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        projects = Project.objects.order_by(sort_order)
+    else:
+        projects = Project.objects()
+
+    projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)
 
     return jsonify_response( ReturnStructure( data = projects_list ) )
-
-
-    """
-    # TODO add filtering / max / etc
-
-    if limit is None:
-        limit = int(request.args['limit']) if 'limit' in request.args else None
-    if municipality is None:
-        municipality = request.args['municipality'] if 'municipality' in request.args else None
-    if alphabetical is None:
-        alphabetical = True if 'alphabetical' in request.args else False
-
-    # convert logic to mongoengine logic
-    orderby = "name" if alphabetical else "-created_at"
-
-    if municipality:
-        if limit:
-            projects = Project.objects(municipality__icontains=municipality).order_by(orderby).limit(limit)
-        else:
-            projects = Project.objects(municipality__icontains=municipality).order_by(orderby)
-    else:
-        if limit:
-            projects = Project.objects().order_by(orderby).limit(limit)
-        else:
-            projects = Project.objects().order_by(orderby)
-    
-    
-    pList = []
-    for p in projects:
-        pList.append( p.as_dict())
-
-    return pList
-
-    #return gen_ok( jsonify(projects=pList))
-    """
 
 
 class JoinProjectForm(Form):

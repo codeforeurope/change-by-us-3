@@ -3,7 +3,7 @@ define(["underscore", "backbone"], function(_, Backbone) {
     	urlRoot : '/api/user/',
 		defaults: {
 			last_name: "",
-			updated_at: "2000-00-00 00:00:00.000000",
+			updated_at: "2000-01-01 00:00:00.000000",
 			notifications: {
 				responds_to_a_discussion: true,
 				posts_discussion: true,
@@ -22,7 +22,7 @@ define(["underscore", "backbone"], function(_, Backbone) {
 			first_name: "",
 			display_name: "",
 			roles: [ ],
-			created_at: "2000-00-00 00:00:00.000000",
+			created_at: "2000-01-01 00:00:00.000000",
 		},
     });
     return UserModel;

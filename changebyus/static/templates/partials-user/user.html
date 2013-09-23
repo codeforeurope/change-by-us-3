@@ -1,5 +1,7 @@
 <div class="user-header">
-	<div class="user_icon"></div>
+	<div class="user-avatar">
+		<img src="<%= data.data.avatar_url %>">
+	</div>
 	<div class="user_info">
 		<h2><%= data.data.first_name %> <%= data.data.last_name %></h2>
 		<span>aka </span><span><%= data.data.user_name %></span>
@@ -14,8 +16,10 @@
 <hr>
 <div class="user-projects">
 	<h2><%= data.data.first_name %> <%= data.data.last_name %>'s Projects</h2>
+	<ul id="project-list"></ul>
 </div>
 
 <div class="user-following">
 	<h2>Following</h2>
+	<ul id="following-list"></ul>
 </div>

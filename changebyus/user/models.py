@@ -3,16 +3,15 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
+from ..extensions import db
+from ..helpers.crypt import (handle_decryption, handle_initial_encryption, 
+    handle_update_encryption)
+from ..helpers.mixin import EntityMixin, encode_model
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security.utils import encrypt_password
 from mongoengine import signals
-from flask import current_app
 
-from ..extensions import db
 
-from ..helpers.mixin import ( handle_decryption, handle_initial_encryption,
-                              handle_update_encryption, EntityMixin, encode_model )
 
 """
 =================

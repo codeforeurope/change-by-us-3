@@ -3,17 +3,12 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
-from mongoengine import signals
-
 from ..extensions import db
-
-from ..helpers.mixin import handle_decryption, handle_initial_encryption
-from ..helpers.mixin import handle_update_encryption, EntityMixin
-
+from ..helpers.crypt import (handle_update_encryption, handle_decryption, 
+    handle_initial_encryption)
+from ..helpers.mixin import EntityMixin
 from ..user.models import User
-
-from flask import current_app
+from mongoengine import signals
 
 
 """

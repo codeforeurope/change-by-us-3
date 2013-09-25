@@ -3,26 +3,21 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
-from mongoengine import signals
-
 from ..extensions import db
-from ..user.models import User
-from ..stripe.models import StripeAccount
-from ..helpers.imagetools import ( ImageManipulator, generate_thumbnail, 
-                                   generate_ellipse_png )
-
+from ..helpers.crypt import handle_decryption
+from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+    generate_ellipse_png)
+from ..helpers.mixin import EntityMixin, encode_model
 from ..helpers.stringtools import slugify
-
-from ..helpers.mixin import ( handle_decryption, handle_initial_encryption,
-                              handle_update_encryption, EntityMixin, encode_model )
-
-
+from ..stripe.models import StripeAccount
+from ..user.models import User
 from flask import current_app
 from flask.ext.cdn import url_for
-
+from mongoengine import signals
 import os
-from collections import namedtuple
+# from ..helpers.mixin import (handle_decryption, handle_initial_encryption, 
+#     handle_update_encryption, EntityMixin, encode_model)
+
 
 
 """

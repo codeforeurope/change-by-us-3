@@ -4,28 +4,27 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
+from ..extensions import db
+from flask import current_app as app
+from itertools import groupby
+from mongoengine import Document, EmbeddedDocument
+from mongoengine.queryset import QuerySet
+from mongoengine.queryset.manager import queryset_manager
+from types import ModuleType
+import bson
+from numbers import Number
 import datetime
 
-from ..extensions import db
-from .encryption import *
-from flask import current_app
 
-from mongoengine import Document, EmbeddedDocument
-from mongoengine.dereference import DeReference
-from mongoengine.fields import ReferenceField
-from mongoengine.queryset import QuerySet
-
-from numbers import Number
-
-from types import ModuleType
-from itertools import groupby
-
-import bson
 
 """
 ====================
 Common Model Objects
 ====================
+
+Timestamps and other auto-content to be mixed in with a MongoDB object, 
+and the pre_save routine that will populate them
+
 """
 
 class EntityMixin(object):
@@ -61,6 +60,7 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
     
     kwargs:
         current_depth: for internal recursion
+        use_derefs: whether to use deref_only and deref_exclude properties to filter dereferenced values
     """
     if (  kwargs.get('current_depth') is not None and
           kwargs.get('current_depth') > 0 and
@@ -97,24 +97,8 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
                     if isinstance(v, (str, unicode, float, int)):
                         out[k] = v
                     else:
-                        # Check to see if this is an event. If it is, we want to put the dates
-                        # in a nice format for the front end (list of all dates -> [start, end] tuple)
-                        already_encoded = False
-                        if obj.__class__.__name__ == "Events" and k == "dates":
-                            earliest_date = None
-                            latest_date = None
-                            for date in v:
-                                if not earliest_date or date < earliest_date:
-                                    earliest_date = date
-                                if not latest_date or date > latest_date:
-                                    latest_date = date
-                            if earliest_date and latest_date:
-                                out[k] = encode_model([earliest_date,latest_date], recursive=recursive, 
-                                                      depth=depth, **kwargs)
-                                already_encoded = True
-                        if not already_encoded:
-                            out[k] = encode_model(v, recursive=recursive, 
-                                                  depth=depth, **kwargs)
+                        out[k] = encode_model(v, recursive=recursive, 
+                                              depth=depth, **kwargs)
                     
         # To avoid breaking loop flow, do at the end of looping
         for delkey in kwargs.get('delete_keys'):
@@ -170,12 +154,25 @@ def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwarg
                 out = str(obj)
             else:
                 try:
-                    doc = Context.objects(id=obj.id).first()
+                    # Only apply the deref_* filters if requested
+                    if kwargs.get('use_derefs'):
+                        if hasattr(Context, 'deref_only'):
+                            doc = Context.objects(id=obj.id).only(*Context.deref_only_fields).first()
+                        elif hasattr(Context, 'deref_exclude'):
+                            doc = Context.objects(id=obj.id).exclude(*Context.deref_exclude_fields).first()
+                        else:
+                            doc = Context.objects(id=obj.id).first()
+                    else:
+                        doc = Context.objects(id=obj.id).first()
+                        
+                    if not doc:
+                        app.logger.error("Orphaned document: %s.id=%s" % (obj.collection, obj.id))
+                        
                     if kwargs.get('current_depth') == depth:
                         if doc: doc = doc._data
                     
                     out = encode_model(obj=doc, recursive=recursive, depth=depth, **kwargs)
-                except Exception:
+                except Exception as exc:
                     app.logger.error('Vars: context=%s, id=%s, depth=%s' % 
                                      (str(obj.collection), str(obj.id), depth),
                                      exc_info=True)
@@ -200,56 +197,19 @@ def lazy_load_model_classes(collection):
     if classname in globals().keys():
         return classname
     
-    model_path = u"timescapes.%s.models" % (collection)
+    model_path = u"changebyus.%s.models" % (collection)
     # import all release models into (global) namespace
     try:
         exec("from %s import %s" % (model_path, classname)) in globals()
-    except Exception as exc:
+    except Exception:
         app.logger.error("Exception lazy loading %s" % collection, exc_info=True)
 
     if classname not in globals().keys():
         app.logger.error("Programming error! "
                          "Missing Context (or import) for %s => %s."
-                         "%s vs %s" % (obj.collection, model, globals().keys(), model),
+                         "%s vs %s" % (collection, classname, globals().keys(), classname),
                          exc_info=True)
 
     return classname
 
 
-def handle_initial_encryption(document, encrypted_fields):
-
-    if current_app.config['ENCRYPTION']['ENABLED']:
-
-        for key in encrypted_fields:
-            if hasattr(document, key):
-                field = getattr(document, key)
-                field = aes_encrypt(field, 
-                                    current_app.config['ENCRYPTION']['KEY'], 
-                                    current_app.config['ENCRYPTION']['IV'])
-                setattr(document, key, field)
-
-def handle_update_encryption(document, encrypted_fields):
-    if current_app.config['ENCRYPTION']['ENABLED']:
-
-        for key in encrypted_fields:
-            if hasattr(document, key):
-                if key in document.__dict__['_changed_fields']:
-                    field = getattr(document, key)
-                    field = aes_encrypt(field, 
-                                        current_app.config['ENCRYPTION']['KEY'], 
-                                        current_app.config['ENCRYPTION']['IV'])
-                    setattr(document, key, field)                        
-
-def handle_decryption(document, encrypted_fields):
-    if current_app.config['ENCRYPTION']['ENABLED']:
-
-        # only decrypted saved docs
-        if document.id is not None:
-
-            for key in encrypted_fields:
-                if hasattr(document, key):
-                    field = getattr(document, key)
-                    field = aes_decrypt(field, 
-                                        current_app.config['ENCRYPTION']['KEY'], 
-                                        current_app.config['ENCRYPTION']['IV'])
-                    setattr(document, key, field)

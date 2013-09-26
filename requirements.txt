@@ -1,5 +1,5 @@
 Flask==0.10.1
--e git+https://github.com/local-projects/flask-cdn.git@52bad5757fac4b944a1e420f714e606fa489c219#egg=Flask_CDN-dev
+-e git+https://github.com/local-projects/flask-cdn.git@10c7577e223a520e1e9d9d40db2711714ea48f76#egg=Flask_CDN-dev
 Flask-Login==0.2.6
 Flask-Mail==0.9.0
 Flask-OAuth==0.12

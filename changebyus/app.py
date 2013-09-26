@@ -8,7 +8,9 @@ import os
 import yaml
 import inspect
 import bson
+import socket
 
+from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
 import logging
 
@@ -156,7 +158,7 @@ def configure_logging(app):
         if app.settings['LOGGING']['ROTATIONS']:
             rotations = app.settings['LOGGING']['ROTATIONS']
 
-    handler = RotatingFileHandler(app.settings['LOGGING']['NAME'], 
+    handler = RotatingFileHandler(name, 
                                   maxBytes=(25 * megabyte), 
                                   backupCount=rotations)
 
@@ -175,12 +177,12 @@ def configure_logging(app):
         hostname = socket.gethostname()
         mail_handler = SMTPHandler( app.settings['MAIL_SERVER'],
                                     app.settings['MAIL_USERNAME'],
-                                    [ app.settings['REPORTING_EMAIL'] ], 
+                                    [ app.settings['LOGGING']['REPORTING_EMAIL'] ], 
                                     'CBU Issue on {0}'.format(hostname),
-                                    credentials = app.settings['MAIL_PASSWORD'],
-                                    secure = app.settings['MAIL_USE_SSL'] )
+                                    credentials = ( app.settings['MAIL_USERNAME'], 
+                                                    app.settings['MAIL_PASSWORD'] ) )
 
-        mail_handler.setLevel(logging.WARNING)
+        mail_handler.setLevel(level)
         app.logger.addHandler(mail_handler)
 
 
@@ -348,8 +350,6 @@ def configure_error_handlers(app=None):
 
         return render_template('error.html', error="Sorry, there was a server error.")
 
-
-    # TODO only enable this on production
     if app.config['DEBUG'] is False:
         @app.errorhandler(Exception)
         def internal_exception_handler(error=""):

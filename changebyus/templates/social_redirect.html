@@ -1,14 +1,12 @@
 <html>
   <head>
     <script>
-    //alert("{{ url }}");
     {% if url %}
     window.opener.location.href = "/{{ url }}";
     {% else %}
     window.opener.location.reload();
     {% endif %}
-
-	window.close();
+	  window.close();
     </script>
   </head>
 <body>

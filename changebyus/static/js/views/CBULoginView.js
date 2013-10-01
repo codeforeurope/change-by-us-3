@@ -28,8 +28,17 @@ define(["underscore",
             this.$el.template(this.templateDir + '/templates/login.html', {data:this.viewData}, function() {
                 self.$submit = $('input[type="submit"]');
                 self.ajaxForm();
+                self.addListeners();
              });
             $(this.parent).append(this.$el); 
+        },
+
+        addListeners:function(){
+            $('.btn-info').click(function(e){
+                e.preventDefault();
+                var url = $(this).attr('href');
+                popWindow(url);
+            })
         },
 
         ajaxForm:function(){
@@ -53,6 +62,16 @@ define(["underscore",
             $login.ajaxForm(options); 
         }
     });
+
+    function popWindow(url) {
+        var title   = "social",
+            w       = 650,
+            h       = 650,
+            left    = (screen.width/2)-(w/2),
+            top     = (screen.height/2)-(h/2);
+
+        window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+    }
 
     return CBUDLoginView;
     

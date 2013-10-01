@@ -1,8 +1,13 @@
 <html>
   <head>
     <script>
-    //window.opener.location.reload();
-    window.opener.location.href = "/";
+    
+    {% if url %}
+    window.opener.location.href = "{{ url }}";
+    {% else %}
+    window.opener.location.reload();
+    {% endif %}
+
 	window.close();
     </script>
   </head>

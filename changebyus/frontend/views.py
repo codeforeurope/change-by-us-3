@@ -74,5 +74,5 @@ def user_view(user_id):
         return render_template('index.html', login = False)
 
 @frontend_view.route('/social_redirect')
-def social_redirect_view(): 
-    return render_template('social_redirect.html')
+def social_redirect_view(url = None): 
+    return render_template('social_redirect.html', url = url)

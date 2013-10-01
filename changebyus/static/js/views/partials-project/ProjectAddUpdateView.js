@@ -27,9 +27,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"],
                 // if (success){}
                 // if (failure){}
             }); 
-        }
-         
- 
+        } 
     });
 
     return ProjectAddUpdateView;

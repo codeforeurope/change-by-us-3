@@ -22,9 +22,22 @@ define(["underscore",
         },
 
         render:function(){ 
+            self = this;
             this.$el = $("<div class='signup'/>");
-            this.$el.template(this.templateDir + '/templates/signup.html', {data:this.viewData}, function() { });
+            this.$el.template(this.templateDir + '/templates/signup.html', {data:this.viewData}, function() { 
+                 //self.ajaxForm();
+            });
             $(this.parent).append(this.$el); 
+        },
+
+        ajaxForm:function(){
+            var $signin = $('form[name=signin]');
+            $signin.ajaxForm(function(response) { 
+                console.log(response);
+                // to do
+                // if (success){}
+                // if (failure){}
+            }); 
         }
     });
 

@@ -22,8 +22,24 @@ require.config({
     }
 });
 
-require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view"],
-    function ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView) {
+require(["jquery", 
+         "main-view", 
+         "backbone", 
+         "discover-view", 
+         "create-view", 
+         "project-view", 
+         "login-view", 
+         "signup-view", 
+         "user-view"],
+    function ($, 
+              CBUMainView, 
+              Backbone, 
+              CBUDiscoverView, 
+              CreateProjectView, 
+              CBUProjectView, 
+              CBULoginView, 
+              CBUSignupView, 
+              CBUUserView) {
         $(document).ready(function () {
 
             var config = {
@@ -43,7 +59,7 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
                 },
 
                 project: function (id) {
-                    config.model = {  id: id };
+                    config.model = { id: id };
                     window.CBUAppView = new CBUProjectView(config);
                 },
                 user: function (id) {
@@ -63,6 +79,7 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
                     window.CBUAppView = new CBUSignupView(config);
                 },
                 default: function () {
+                    // added in dev tool
                     window.CBUAppView = new CBUMainView(config);
                 }
             });

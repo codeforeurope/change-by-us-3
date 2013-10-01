@@ -33,18 +33,20 @@ define(["underscore",
                 $form   = $('form[name=createproject]')
 
                 options = { 
-                beforeSubmit: function() { 
-                    $submit.prop('disabled', true);
-                },
-                success: function(res) { 
-                    console.log('res',res);
-                    
-                    var createProjectModalView = new CreateProjectView({viewData:res})
+                    beforeSubmit: function() { 
+                        $submit.prop('disabled', true);
+                    },
+                    success: function(res) { 
+                        console.log('res',res);
+                        
+                        var createProjectModalView = new CreateProjectView({viewData:res})
 
-                    $submit.prop('disabled', false); 
-                    if (res.success){ $form.resetForm(); }
+                        $submit.prop('disabled', false); 
+                        if (res.success){ $form.resetForm(); 
+                    }
                 }
-            } 
+            }
+            
             $form.ajaxForm(options);
         }
     });

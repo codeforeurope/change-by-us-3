@@ -3531,12 +3531,41 @@ a.badge:focus {
   }
 
   .login .btn {
+    /*
     background-color: #ecb827;
     padding: 20px 40px;
     font-size: 26px;
-    display: block;
+    */
+    background-color: #00cfd0;
+    padding: 13px 22px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    display: inline-block;
     }
 
+.line-behind{
+  margin: 20px 0;
+  position: relative;
+  width: 100%;
+  z-index: 1;
+}
+  .line-behind:before{
+    border-top: 1px solid #000;
+    content: "";
+    margin: 0 auto;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0; 
+    width: 100%;
+    z-index: -1; 
+  }
+  .line-behind span{
+    background-color: #fff;
+    padding: 0 15px;
+  }
 
 .topnav {
   padding-top: 10px;
@@ -3544,6 +3573,7 @@ a.badge:focus {
   padding-bottom: 80px;
   background-color:#77cbd0;
 }
+
 
 /*******************************************
  * Modal

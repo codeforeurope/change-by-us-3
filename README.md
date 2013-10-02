@@ -38,6 +38,10 @@ The following organizations (and individuals) contributed to ChangeByUs:
 `pip install -r requirements.txt`  
 `python wsgi.py`
 
+### Grunt setup and usage
+* npm install js2coffee
+* $ sh js2coffee.sh to batch convert any JS file to coffee
+
 
 ### Optional Encryption
 * If you choose to use the two part encryption, where one key is stored

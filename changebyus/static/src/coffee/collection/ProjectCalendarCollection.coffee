@@ -1,5 +1,5 @@
 define ["underscore", "backbone", "model/ProjectCalendarModel"], (_, Backbone, ProjectCalendarModel) ->
-  ProjectCalendarCollection = Backbone.Collection.extend(
+  ProjectCalendarCollection = Backbone.Collection.extend
     initialize: (options) ->
       @id = options.id
 
@@ -9,5 +9,5 @@ define ["underscore", "backbone", "model/ProjectCalendarModel"], (_, Backbone, P
 
     parse: (response) ->
       (if (response.msg is "OK") then response.data else {})
-  )
+  
   ProjectCalendarCollection 

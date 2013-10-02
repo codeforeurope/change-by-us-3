@@ -6,11 +6,13 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
     left = (screen.width / 2) - (w / 2)
     top = (screen.height / 2) - (h / 2)
     window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=" + left
+  
   CBUDLoginView = Backbone.View.extend(
     parent: "body"
     templateDir: "/static"
     viewData: {}
     $submit: null
+    
     initialize: (options) ->
       @templateDir = options.templateDir or @templateDir
       @parent = options.parent or @parent

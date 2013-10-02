@@ -1,3 +1,5 @@
+@import "variables";
+
 /*!
  * Bootstrap v2.3.1
  *
@@ -1351,7 +1353,7 @@ legend + .control-group {
     &:hover, &:focus {
       color: #ffffff;
       text-decoration: none;
-      background-color: #00cfd0;
+      background-color: $primaryColor;
     }
   }
 }
@@ -1360,7 +1362,7 @@ legend + .control-group {
   &:hover > a, &:focus > a {
     color: #ffffff;
     text-decoration: none;
-    background-color: #00cfd0;
+    background-color: $primaryColor;
   }
 }
 
@@ -1368,11 +1370,11 @@ legend + .control-group {
   .active > a {
     color: #ffffff;
     text-decoration: none;
-    background-color: #00cfd0;
+    background-color: $primaryColor;
     &:hover, &:focus {
       color: #ffffff;
       text-decoration: none;
-      background-color: #00cfd0;
+      background-color: $primaryColor;
     }
   }
   .disabled > a {
@@ -1545,7 +1547,7 @@ button.close {
   border: none;
   cursor: pointer;
   color: #ffffff;
-  background-color: #00cfd0;
+  background-color: $primaryColor;
   background-image: none;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
@@ -1562,7 +1564,7 @@ button.close {
     *margin-left: 0;
   }
   &:hover {
-    color: #333333;
+    // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
     -webkit-transition: background-position 0.1s linear;
@@ -1571,7 +1573,7 @@ button.close {
     transition: background-position 0.1s linear;
   }
   &:focus {
-    color: #333333;
+    // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
     -webkit-transition: background-position 0.1s linear;
@@ -1715,12 +1717,12 @@ input {
   background-color: #eaeaea;
   *background-color: #eaeaea;
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
-    color: #00cfd0;
+    color: $primaryColor;
     background-color: #eaeaea;
     *background-color: #eaeaea;
   }
   &:active, &.active {
-    background-color: #00cfd0 \9;
+    background-color: $primaryColor \9;
   }
 }
 
@@ -2615,7 +2617,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 a.thumbnail .caption:hover {
-  color: #00cfd0;
+  color: $primaryColor;
   font-weight: bold;
 }
 
@@ -2944,7 +2946,7 @@ a {
     float: right;
   }
   .btn {
-    background-color: #ecb827;
+    background-color: $secondaryColor;
     padding: 20px 40px;
     font-size: 26px;
   }
@@ -3041,7 +3043,7 @@ a {
   }
   .tabs! {}
   .updates, .members, .calendar {
-    padding-top: 50px;
+    padding-top: 50px; 
   }
   .project-container {
     padding: 30px;
@@ -3120,7 +3122,7 @@ a {
     margin: none;
     padding-top: 20px;
     font-size: 24px;
-    background-color: #ecb827;
+    background-color: $secondaryColor;
     color: #ffffff;
     border-radius: 4px;
   }
@@ -3152,7 +3154,7 @@ a {
   width: 100%;
   margin-top: 20px;
   margin-bottom: 60px;
-  background-color: #ecb827;
+  background-color: $secondaryColor;
   height: 762px;
   float: left;
   h2 {
@@ -3188,7 +3190,7 @@ a {
     color: #ffffff;
   }
   .btn {
-    background-color: #ecb827;
+    background-color: $secondaryColor;
     padding: 20px 40px;
     font-size: 26px;
   }
@@ -3241,11 +3243,11 @@ a {
   }
   .btn {
     /*
-    background-color: #ecb827;
+    background-color: $secondaryColor;
     padding: 20px 40px;
     font-size: 26px;
     */
-    background-color: #00cfd0;
+    background-color: $primaryColor;
     padding: 13px 22px;
     font-size: 18px;
     font-weight: bold;
@@ -3314,7 +3316,7 @@ a {
 .body-container {
   position: relative;
 }
-
+ 
 .tabs-pane {
   position: absolute;
   bottom: 0;

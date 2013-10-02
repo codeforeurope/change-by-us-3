@@ -1,5 +1,6 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel"], (_, Backbone, $, temp, AbstractView, UserModel) ->
   CBUUserView = AbstractView.extend(
+    
     initialize: (options) ->
       AbstractView::initialize.apply this, options
       self = this

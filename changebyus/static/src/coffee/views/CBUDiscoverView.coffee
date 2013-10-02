@@ -4,13 +4,13 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
     templateDir: "/static"
     viewData: {}
     bannerSearchView: null
+    
     initialize: (options) ->
-      
       # this is added later
       @templateDir = options.templateDir or @templateDir
-      @parent = options.parent or @parent
-      @viewData = options.viewData or @viewData
-      @collection = options.collection or new ProjectListCollection()
+      @parent      = options.parent or @parent
+      @viewData    = options.viewData or @viewData
+      @collection  = options.collection or new ProjectListCollection()
       @render()
 
     render: ->

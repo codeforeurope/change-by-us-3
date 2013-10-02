@@ -1,14 +1,17 @@
-define ["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], (_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) ->
+define ["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
+(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) ->
+  
   CBUMainView = Backbone.View.extend(
     parent: "body"
     templateDir: "/static"
     viewData: {}
     collection: {}
+    
     initialize: (options) ->
       @templateDir = options.templateDir or @templateDir
-      @parent = options.parent or @parent
-      @viewData = options.viewData or @viewData
-      @collection = options.collection or new ProjectListCollection()
+      @parent      = options.parent or @parent
+      @viewData    = options.viewData or @viewData
+      @collection  = options.collection or new ProjectListCollection()
       @render()
 
     render: ->
@@ -21,7 +24,6 @@ define ["underscore", "backbone", "jquery", "template", "form", "views/partials-
         self.collection.on "reset", self.addAll, self
         self.collection.fetch reset: true
         self.ajaxForm()
-
 
     ajaxForm: ->
       

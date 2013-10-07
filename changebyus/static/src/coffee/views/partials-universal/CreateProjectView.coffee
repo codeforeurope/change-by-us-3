@@ -23,7 +23,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
 
         success: (res) ->
           console.log "res", res
-          createProjectModalView = new CreateProjectView(viewData: res)
+          # createProjectModalView = new CreateProjectView(viewData: res)
           $submit.prop "disabled", false
           $form.resetForm()  if res.success
 

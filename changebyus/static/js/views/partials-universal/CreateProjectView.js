@@ -25,11 +25,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           return $submit.prop("disabled", true);
         },
         success: function(res) {
-          var createProjectModalView;
           console.log("res", res);
-          createProjectModalView = new CreateProjectView({
-            viewData: res
-          });
           $submit.prop("disabled", false);
           if (res.success) {
             return $form.resetForm();

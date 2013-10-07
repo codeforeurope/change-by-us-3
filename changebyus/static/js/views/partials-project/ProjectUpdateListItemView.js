@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var ProjectUpdateListItemView;
-  ProjectUpdateListItemView = AbstractView.extend({
+  return ProjectUpdateListItemView = AbstractView.extend({
     tagName: "li",
     render: function() {
       $(this.el).template(this.templateDir + "/templates/partials-project/project-update-list-item.html", {
@@ -9,5 +9,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this;
     }
   });
-  return ProjectUpdateListItemView;
 });

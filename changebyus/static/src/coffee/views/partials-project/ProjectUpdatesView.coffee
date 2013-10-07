@@ -1,23 +1,22 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectUpdateFormView", "views/partials-project/ProjectUpdateListItemView"], (_, Backbone, $, temp, ProjectSubView, ProjectUpdateFormView, ProjectUpdateListItemView) ->
-  ProjectUpdatesView = ProjectSubView.extend(
-    parent: "#project-update"
-    render: ->
-      self = this
-      @$el = $("<div class='project'/>")
-      @$el.template @templateDir + "/templates/partials-project/project-updates.html",
-        data: @viewData
-      , ->
-        self.$el.find(".preload").remove()
-        
-        # temp here for now
-        form = new ProjectUpdateFormView(parent: self.$el)
+define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectUpdateFormView", "views/partials-project/ProjectUpdateListItemView"], 
+	(_, Backbone, $, temp, ProjectSubView, ProjectUpdateFormView, ProjectUpdateListItemView) ->
+		ProjectUpdatesView = ProjectSubView.extend
+			parent: "#project-update"
 
-      $(@parent).append @$el
+			render: -> 
+				@$el = $("<div class='project'/>")
+				@$el.template @templateDir + "/templates/partials-project/project-updates.html",
+					data: @viewData
+				, =>
+					@$el.find(".preload").remove()
+					@$ul = @$el.find(".updates-container ul")
+					
+					# temp here for now
+					form = new ProjectUpdateFormView({parent: @$el})
 
-    addOne: (model) ->
-      console.log "model", model
-      view = new ProjectUpdateListItemView(model: model)
-      @$el.find(".project-container ul").append view.el
-  )
-  ProjectUpdatesView
+				$(@parent).append @$el
 
+			addOne: (model_) ->
+				#console.log "ProjectUpdatesView addOne model", model_
+				view = new ProjectUpdateListItemView({model: model_})
+				@$ul.append(view.render().el) 

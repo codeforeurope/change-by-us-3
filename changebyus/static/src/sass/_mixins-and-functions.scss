@@ -1,0 +1,20 @@
+/****************************************
+ * FUNCTIONS
+ ***************************************/
+@function em($target, $context: $fontBase) {
+	@if $target == 0 { @return 0 }
+	@return $target / $context + 0em;
+}
+
+@function perc($width, $containerWidth) {
+	@return percentage($width / $containerWidth);
+}
+
+@mixin placeholderColor($c){
+	color: $c;
+	&.placeholder{color: $c;}
+	&:-moz-placeholder{color: $c;}
+	&::-moz-placeholder{color: $c;}
+	&::-webkit-input-placeholder{color: $c;}
+	&:-ms-input-placeholder{color: $c;}
+}

@@ -52,9 +52,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         self.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
         });
-        self.updatesBTN = $("a[href=\"#updates\"]");
-        self.membersBTN = $("a[href=\"#members\"]");
-        self.calendarBTN = $("a[href=\"#calendar\"]");
+        self.updatesBTN = $("a[href='#updates']");
+        self.membersBTN = $("a[href='#members']");
+        self.calendarBTN = $("a[href='#calendar']");
         self.projectMembersView.hide();
         self.projectCalenderView.hide();
         hash = window.location.hash.substring(1);
@@ -63,9 +63,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           hash = window.location.hash.substring(1);
           return self.toggleSubView(hash);
         });
-        return $("a[href^=\"#\"]").click(function(e) {
-          hash = $(this).attr("href").substring(1);
-          return window.location.hash = hash;
+        return $("a[href^='#']").click(function(e) {
+          return window.location.hash = $(this).attr("href").substring(1);
         });
       });
       return this.$el.prepend($header);

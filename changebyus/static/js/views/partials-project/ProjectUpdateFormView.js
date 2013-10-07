@@ -30,10 +30,10 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         } else {
           console.log("error uploading file", reason, detail);
         }
-        return $("<div class=\"alert\"> <button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>" + "<strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
+        return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button>" + "<strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
       $editor = $("#editor");
-      $updateForm = $("form[name=\"project-update\"]");
+      $updateForm = $("form[name='project-update']");
       options = {
         beforeSubmit: function(arr, $form, options) {
           var i, _results;
@@ -41,7 +41,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
           for (i in arr) {
             console.log("obj.name", arr[i].name, arr[i]);
             if (arr[i].name === "description") {
-              _results.push(arr[i].value = escape($editor.html()));
+              arr[i].value = escape($editor.html());
+              _results.push(console.log('des', arr[i].value));
             } else {
               _results.push(void 0);
             }
@@ -53,6 +54,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         }
       };
       $updateForm.ajaxForm(options);
+      console.log('$updateForm', $updateForm);
       $("a[title]").tooltip({
         container: "body"
       });

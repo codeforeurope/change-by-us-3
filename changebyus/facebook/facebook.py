@@ -99,12 +99,16 @@ def facebook_login():
         None
     """
 
+    # use this to close window for facebook/twitter login
+    # redirect(url_for('frontend_view.social_redirect_view',url=' '))
+
     # clear out any old facebook data
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
     if g.user.is_authenticated():
-        return redirect(url_for('stream_view.dashboard_view'))
+        #return redirect(url_for('stream_view.dashboard_view')) 
+        return redirect(url_for('frontend_view.social_redirect_view',url=' '))
 
     return facebook.authorize(callback=url_for('facebook_view.facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
@@ -204,8 +208,8 @@ def facebook_disconnect():
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
-    return redirect(url_for('stream_view.dashboard_view'))
-
+    # return redirect(url_for('stream_view.dashboard_view')) 
+    return redirect(url_for('frontend_view.social_redirect_view',url=' '))
 
 @facebook_view.route('/authorized')
 @facebook.authorized_handler
@@ -241,7 +245,8 @@ def facebook_authorized(resp):
 
         if g.user.is_authenticated():
             # they were trying to link
-            return redirect(url_for('stream_view.dashboard_view'))
+            # return redirect(url_for('stream_view.dashboard_view'))
+            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
         else:
             # non-registered user
             return redirect(url_for('frontend_view.home'))
@@ -266,15 +271,15 @@ def facebook_authorized(resp):
             debugStr = "Linked user {0} with facebook id {1}".format(g.user.id, facebook_id)
             current_app.logger.debug(debugStr)
             # or return them to where they were
-            return redirect(url_for('stream_view.dashboard_view'))
-
+            # return redirect(url_for('stream_view.dashboard_view')) 
+            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
         else:
 
             errStr = "Unable to link user {0} with facebook id {1}".format(g.user.id, facebook_id)
             current_app.logger.error(errStr)
             # or return them to where they were            
-            return redirect(url_for('stream_view.dashboard_view'))
-
+            # return redirect(url_for('stream_view.dashboard_view')) 
+            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
 
     # otherwise let's make an account given their facebook credentials
     user = [] if facebook_id is None else User.objects(facebook_id = facebook_id)

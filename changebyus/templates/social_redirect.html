@@ -1,0 +1,14 @@
+<html>
+  <head>
+    <script>
+    {% if url %}
+    window.opener.location.href = "/{{ url }}";
+    {% else %}
+    window.opener.location.reload();
+    {% endif %}
+	  window.close();
+    </script>
+  </head>
+<body>
+</body>
+</html>

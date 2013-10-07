@@ -38,3 +38,5 @@ data.replica*/
 *.orig
 
 changebyus3/*
+changebyus/.sass-cache
+changebyus/node_modules

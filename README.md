@@ -38,6 +38,18 @@ The following organizations (and individuals) contributed to ChangeByUs:
 `pip install -r requirements.txt`  
 `python wsgi.py`
 
+### Grunt setup and usage
+* if you have JS files that are missing a coffee source and watch to batch convert JS files to Coffee
+* $ sudo npm install js2coffee -g
+* $ sh js2coffee.bash
+
+***
+* to start using grunt
+* $ cd directory/containing/grunt/file
+* $ npm install
+* $ grunt
+
+
 
 ### Optional Encryption
 * If you choose to use the two part encryption, where one key is stored

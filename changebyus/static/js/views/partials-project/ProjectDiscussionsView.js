@@ -1,12 +1,13 @@
 define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView"], function(_, Backbone, $, temp, ProjectSubView) {
   var ProjectDiscussionsView;
-  ProjectDiscussionsView = ProjectSubView.extend({
+  return ProjectDiscussionsView = ProjectSubView.extend({
     parent: "#project-update",
     render: function() {
       this.$el = $("<div class='project'/>");
       return $(this.parent).append(this.$el);
     },
     addAll: function() {
+      var _this = this;
       if (this.collection.length === 0) {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {});
       } else {
@@ -16,5 +17,4 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       }
     }
   });
-  return ProjectDiscussionsView;
 });

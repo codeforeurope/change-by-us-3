@@ -1,5 +1,6 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-  CreateProjectModalView = AbstractView.extend(
+  CreateProjectModalView = AbstractView.extend
+  
     initialize: (options) ->
       AbstractView::initialize.apply this, options
       @render()
@@ -10,7 +11,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
         data: @viewData
       , ->
 
-      $(@parent).append @$el
-  )
-  CreateProjectModalView
+      $(@parent).append @$el 
 

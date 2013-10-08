@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"], function(_, Backbone, $, temp, form, AbstractView) {
   var CreateProjectView;
-  CreateProjectView = AbstractView.extend({
+  return CreateProjectView = AbstractView.extend({
     initialize: function(options) {
       AbstractView.prototype.initialize.apply(this, options);
       return this.render();
@@ -35,5 +35,4 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return $form.ajaxForm(options);
     }
   });
-  return CreateProjectView;
 });

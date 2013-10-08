@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var ProjectSubView;
-  ProjectSubView = AbstractView.extend({
+  return ProjectSubView = AbstractView.extend({
     isDataLoaded: false,
     initialize: function(options) {
       AbstractView.prototype.initialize.apply(this, options);
@@ -26,5 +26,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.isDataLoaded = true;
     }
   });
-  return ProjectSubView;
 });

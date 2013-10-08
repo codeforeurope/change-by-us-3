@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
   var AbstractView;
-  AbstractView = Backbone.View.extend({
+  return AbstractView = Backbone.View.extend({
     parent: "body",
     templateDir: "/static",
     viewData: {},
@@ -18,5 +18,4 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return this.$el.hide();
     }
   });
-  return AbstractView;
 });

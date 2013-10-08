@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var ProjectMemberListItemView;
-  ProjectMemberListItemView = AbstractView.extend({
+  return ProjectMemberListItemView = AbstractView.extend({
     tagName: "li",
     initialize: function(options) {
       AbstractView.prototype.initialize.apply(this, options);
@@ -13,5 +13,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this;
     }
   });
-  return ProjectMemberListItemView;
 });

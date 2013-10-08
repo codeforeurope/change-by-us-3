@@ -1,5 +1,6 @@
 define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) ->
-  AbstractView = Backbone.View.extend(
+  AbstractView = Backbone.View.extend
+    
     parent: "body"
     templateDir: "/static"
     viewData: {}
@@ -15,6 +16,3 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 
     hide: ->
       @$el.hide()
-  )
-  AbstractView
-

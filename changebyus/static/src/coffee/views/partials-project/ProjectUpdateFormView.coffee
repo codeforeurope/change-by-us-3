@@ -1,6 +1,6 @@
 define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], 
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
-		ProjectUpdateFormView = AbstractView.extend(
+		ProjectUpdateFormView = AbstractView.extend
 			initialize: (options) ->
 				AbstractView::initialize.apply this, options
 				@render()
@@ -67,6 +67,5 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					$("#voiceBtn").hide()
 
 				$editor.wysiwyg fileUploadError: showErrorAlert
-				window.prettyPrint and prettyPrint()
-		)
+				window.prettyPrint and prettyPrint() 
 

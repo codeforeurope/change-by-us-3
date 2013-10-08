@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var CreateProjectModalView;
-  CreateProjectModalView = AbstractView.extend({
+  return CreateProjectModalView = AbstractView.extend({
     initialize: function(options) {
       AbstractView.prototype.initialize.apply(this, options);
       return this.render();
@@ -13,5 +13,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return $(this.parent).append(this.$el);
     }
   });
-  return CreateProjectModalView;
 });

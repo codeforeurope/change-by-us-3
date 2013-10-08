@@ -1,6 +1,8 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-  ProjectSubView = AbstractView.extend(
+  ProjectSubView = AbstractView.extend
+
     isDataLoaded: false
+   
     initialize: (options) ->
       AbstractView::initialize.apply this, options
       @render()
@@ -25,6 +27,4 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
         self.addOne model
 
       @isDataLoaded = true
-  )
-  ProjectSubView
 

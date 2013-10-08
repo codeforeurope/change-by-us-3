@@ -1,5 +1,5 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-  ProjectDiscussionPreviewView = AbstractView.extend(
+  ProjectDiscussionPreviewView = AbstractView.extend
     
     #parent:"#project-update",
     initialize: (options) ->
@@ -9,11 +9,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
     render: ->
       @$el = $("<div class='project'/>")
       @$el.template @templateDir + "/templates/partials-project/project-discussion-preview.html",
-        data: @viewData
-      , ->
-        self.ajaxForm()
+        {data: @viewData}, =>@ajaxForm()
 
-      $(@parent).append @$el
-  )
-  ProjectDiscussionPreviewView
+      $(@parent).append @$el 
 

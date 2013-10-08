@@ -3,7 +3,6 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 		ProjectUpdateListItemView = AbstractView.extend
 			
 			model:ProjectUpdateModel
-			tagName: "li"
 			$repliesHolder: null
 			$postRight: null
 			$replyForm: null
@@ -19,7 +18,7 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 
 			addReplies:-> 
 				self = @
-				@$repliesHolder = $('<div class="post-replies hide"/>')
+				@$repliesHolder = $('<ul class="post-replies hide"/>')
 				@$postRight     = @$el.find('.post-right')
 				$replyToggle    = @$el.find('.reply-toggle')
 				$replyToggle.click ->
@@ -28,10 +27,9 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 
 				for reply in @model.get('responses') 
 					projectPostReplyView = new ProjectPostReplyView(reply)
-					@$repliesHolder.append projectPostReplyView.$el
-					console.log 'projectPostReplyView',projectPostReplyView, reply
+					@$repliesHolder.append projectPostReplyView.$el 
 
-				@$replyForm = $('<div class="post-reply-form"/>')
+				@$replyForm = $('<li class="post-reply-form"/>')
 				@$replyForm.template( @templateDir+"/templates/partials-project/project-post-reply-form.html",
 					data: @model.attributes, => @onFormLoaded()
 				)

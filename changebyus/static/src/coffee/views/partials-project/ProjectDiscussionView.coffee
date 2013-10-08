@@ -1,5 +1,5 @@
 define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView"], (_, Backbone, $, temp, ProjectSubView) ->
-  ProjectDiscussionView = ProjectSubView.extend(
+  ProjectDiscussionView = ProjectSubView.extend
     
     #parent:"#project-update",
     render: ->
@@ -9,10 +9,6 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
     addOne: (model) ->
       view = $("<div/>")
       view.template @templateDir + "/templates/partials-project/project-discussion.html",
-        data: @viewData
-      , ->
+        {data: @viewData}, =>
 
-      @$el.append view
-  )
-  ProjectDiscussionView
-
+      @$el.append view 

@@ -1,5 +1,5 @@
 define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"], (_, Backbone, $, temp, form, AbstractView) ->
-  CreateProjectView = AbstractView.extend(
+  CreateProjectView = AbstractView.extend
     initialize: (options) ->
       AbstractView::initialize.apply this, options
       @render()
@@ -28,6 +28,4 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           $form.resetForm()  if res.success
 
       $form.ajaxForm options
-  )
-  CreateProjectView
 

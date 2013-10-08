@@ -2,7 +2,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
   var ProjectUpdateListItemView;
   return ProjectUpdateListItemView = AbstractView.extend({
     model: ProjectUpdateModel,
-    tagName: "li",
     $repliesHolder: null,
     $postRight: null,
     $replyForm: null,
@@ -22,7 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       var $replyToggle, projectPostReplyView, reply, self, _i, _len, _ref,
         _this = this;
       self = this;
-      this.$repliesHolder = $('<div class="post-replies hide"/>');
+      this.$repliesHolder = $('<ul class="post-replies hide"/>');
       this.$postRight = this.$el.find('.post-right');
       $replyToggle = this.$el.find('.reply-toggle');
       $replyToggle.click(function() {
@@ -34,9 +33,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         reply = _ref[_i];
         projectPostReplyView = new ProjectPostReplyView(reply);
         this.$repliesHolder.append(projectPostReplyView.$el);
-        console.log('projectPostReplyView', projectPostReplyView, reply);
       }
-      this.$replyForm = $('<div class="post-reply-form"/>');
+      this.$replyForm = $('<li class="post-reply-form"/>');
       return this.$replyForm.template(this.templateDir + "/templates/partials-project/project-post-reply-form.html", {
         data: this.model.attributes
       }, function() {

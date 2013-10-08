@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectMemberListItemView"], function(_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView) {
   var ProjectMembersView;
-  ProjectMembersView = ProjectSubView.extend({
+  return ProjectMembersView = ProjectSubView.extend({
     parent: "#project-members",
     $teamList: null,
     $memberList: null,
@@ -23,5 +23,4 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       return this.$teamList.append(view.el);
     }
   });
-  return ProjectMembersView;
 });

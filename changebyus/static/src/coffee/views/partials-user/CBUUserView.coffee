@@ -1,23 +1,19 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel"], (_, Backbone, $, temp, AbstractView, UserModel) ->
-  CBUUserView = AbstractView.extend(
+  CBUUserView = AbstractView.extend
     
     initialize: (options) ->
       AbstractView::initialize.apply this, options
-      self = this
-      console.log "options.model", options.model
-      @model = new UserModel(options.model)
-      @model.fetch success: ->
-        self.render()
 
+      @model = new UserModel(options.model)
+      @model.fetch success: =>
+        @render()
 
     render: ->
       console.log "this.model", @model
-      self = this
+ 
       @$el = $("<div class='user'/>")
       @$el.template @templateDir + "/templates/partials-user/user.html",
-        data: @model.attributes
-      , ->
-        self.ajaxForm()
+        data: @model.attributes, => @ajaxForm()
 
       $(@parent).append @$el
 
@@ -26,10 +22,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       $signin.ajaxForm (response) ->
         console.log response
 
-  )
-  
   # to do
   # if (success){}
   # if (failure){}
-  CBUUserView
+  # CBUUserView
 

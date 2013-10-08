@@ -1,27 +1,24 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel"], function(_, Backbone, $, temp, AbstractView, UserModel) {
   var CBUUserView;
-  CBUUserView = AbstractView.extend({
+  return CBUUserView = AbstractView.extend({
     initialize: function(options) {
-      var self;
+      var _this = this;
       AbstractView.prototype.initialize.apply(this, options);
-      self = this;
-      console.log("options.model", options.model);
       this.model = new UserModel(options.model);
       return this.model.fetch({
         success: function() {
-          return self.render();
+          return _this.render();
         }
       });
     },
     render: function() {
-      var self;
+      var _this = this;
       console.log("this.model", this.model);
-      self = this;
       this.$el = $("<div class='user'/>");
       this.$el.template(this.templateDir + "/templates/partials-user/user.html", {
         data: this.model.attributes
       }, function() {
-        return self.ajaxForm();
+        return _this.ajaxForm();
       });
       return $(this.parent).append(this.$el);
     },
@@ -33,5 +30,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
     }
   });
-  return CBUUserView;
 });

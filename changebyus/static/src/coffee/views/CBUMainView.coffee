@@ -41,7 +41,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "views/partials-
 
     addOne: (projectModel) ->
       view = new ProjectPartialsView(model: projectModel)
-      @$el.find("#project-list").append view.el
+      @$el.find("#project-list").append view.$el
 
     addAll: ->
       self = this

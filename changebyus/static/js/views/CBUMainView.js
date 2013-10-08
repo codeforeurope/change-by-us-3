@@ -46,7 +46,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
       view = new ProjectPartialsView({
         model: projectModel
       });
-      return this.$el.find("#project-list").append(view.el);
+      return this.$el.find("#project-list").append(view.$el);
     },
     addAll: function() {
       var self;

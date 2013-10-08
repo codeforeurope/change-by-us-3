@@ -3,6 +3,7 @@ require.config({
   paths: {
     "jquery": "ext/jquery/jquery",
     "hotkeys": "ext/jquery/jquery.hotkeys",
+    "moment": "ext/moment/moment.min",
     "underscore": "ext/underscore/underscore-min",
     "backbone": "ext/backbone/backbone-min",
     "bootstrap": "ext/bootstrap/bootstrap.min",
@@ -18,11 +19,12 @@ require.config({
     "create-view": "views/partials-universal/CreateProjectView",
     "abstract-view": "views/partials-universal/AbstractView",
     "project-sub-view": "views/partials-project/ProjectSubView",
-    "user-view": "views/partials-user/CBUUserView"
+    "user-view": "views/partials-user/CBUUserView",
+    "utils": "utils/Utils"
   }
 });
 
-require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView) {
+require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView, Utils) {
   return $(document).ready(function() {
     var CBUAppRouter, CBURouter, config;
     config = {

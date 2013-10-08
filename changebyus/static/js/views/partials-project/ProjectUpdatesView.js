@@ -8,21 +8,24 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
         data: this.viewData
       }, function() {
-        var form;
-        _this.$el.find(".preload").remove();
-        _this.$ul = _this.$el.find(".updates-container ul");
-        return form = new ProjectUpdateFormView({
-          parent: _this.$el
-        });
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      var form;
+      this.$el.find(".preload").remove();
+      this.$ul = this.$el.find(".updates-container ul");
+      return form = new ProjectUpdateFormView({
+        parent: this.$el
+      });
     },
     addOne: function(model_) {
       var view;
       view = new ProjectUpdateListItemView({
         model: model_
       });
-      return this.$ul.append(view.render().el);
+      return this.$ul.append(view.render().$el);
     }
   });
 });

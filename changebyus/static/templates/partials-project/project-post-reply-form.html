@@ -1,0 +1,7 @@
+<form method="post" enctype=multipart/form-data class="form-project" name="project-update" action="/api/post/add_discussion">
+	<input type="text" maxlength="30" name="description" placeholder="Reply" class="input-xxlarge">
+	<input type="submit" class="btn" value="Reply">
+	<input type="hidden" name="title" value="title" >
+	<input type="hidden" name="project_id" value="<%= data.project.id %>" >
+	<input type="hidden" name="response_to_id" value="<%= data.id %>" >
+</form>

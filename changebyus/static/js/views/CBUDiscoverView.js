@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "views/partials-project/ProjectPartialsView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, BannerSearchView, ProjectPartialsView, ProjectListCollection) {
   var CBUDiscoverView;
-  CBUDiscoverView = Backbone.View.extend({
+  return CBUDiscoverView = Backbone.View.extend({
     parent: "body",
     templateDir: "/static",
     viewData: {},
@@ -13,20 +13,19 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       return this.render();
     },
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='discover'/>");
       return this.$el.template(this.templateDir + "/templates/discover.html", {
         data: this.viewData
       }, function() {
         var bannerSearchView, searchParent;
-        $(self.parent).append(self.$el);
-        searchParent = self.$el.find(".content");
+        $(_this.parent).append(_this.$el);
+        searchParent = _this.$el.find(".content");
         bannerSearchView = new BannerSearchView({
           parent: searchParent
         });
-        self.collection.on("reset", self.addAll, self);
-        return self.collection.fetch({
+        _this.collection.on("reset", _this.addAll, _this);
+        return _this.collection.fetch({
           reset: true
         });
       });
@@ -39,12 +38,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       return this.$el.find("#project-list").append(view.el);
     },
     addAll: function() {
-      var self;
-      self = this;
+      var _this = this;
       return this.collection.each(function(projectModel) {
-        return self.addOne(projectModel);
+        return _this.addOne(projectModel);
       });
     }
   });
-  return CBUDiscoverView;
 });

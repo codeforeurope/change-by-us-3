@@ -8,60 +8,58 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     membersBTN: null,
     calendarBTN: null,
     initialize: function(options) {
-      var self;
-      self = this;
+      var _this = this;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.model = new ProjectModel(options.model);
       this.collection = options.collection || this.collection;
       return this.model.fetch({
         success: function() {
-          return self.render();
+          return _this.render();
         }
       });
     },
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='project-container'/>");
       this.$el.template(this.templateDir + "/templates/project.html", {}, function() {
-        return self.addSubViews();
+        return _this.addSubViews();
       });
       return $(this.parent).append(this.$el);
     },
     addSubViews: function() {
-      var $header, self;
-      self = this;
+      var $header,
+        _this = this;
       $header = $("<div class='project-header'/>");
       $header.template(this.templateDir + "/templates/partials-project/project-header.html", {
         data: this.model.attributes
       }, function() {
         var hash, id, projectCalendarCollection, projectMemberCollection, projectUpdatesCollection;
         id = {
-          id: self.model.get("id")
+          id: _this.model.get("id")
         };
         projectUpdatesCollection = new ProjectUpdatesCollection(id);
         projectMemberCollection = new ProjectMemberCollection(id);
         projectCalendarCollection = new ProjectCalendarCollection(id);
-        self.projectUpdatesView = new ProjectUpdatesView({
+        _this.projectUpdatesView = new ProjectUpdatesView({
           collection: projectUpdatesCollection
         });
-        self.projectMembersView = new ProjectMembersView({
+        _this.projectMembersView = new ProjectMembersView({
           collection: projectMemberCollection
         });
-        self.projectCalenderView = new ProjectCalenderView({
+        _this.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
         });
-        self.updatesBTN = $("a[href='#updates']");
-        self.membersBTN = $("a[href='#members']");
-        self.calendarBTN = $("a[href='#calendar']");
-        self.projectMembersView.hide();
-        self.projectCalenderView.hide();
+        _this.updatesBTN = $("a[href='#updates']");
+        _this.membersBTN = $("a[href='#members']");
+        _this.calendarBTN = $("a[href='#calendar']");
+        _this.projectMembersView.hide();
+        _this.projectCalenderView.hide();
         hash = window.location.hash.substring(1);
-        self.toggleSubView((hash === "" ? "updates" : hash));
+        _this.toggleSubView((hash === "" ? "updates" : hash));
         $(window).bind("hashchange", function(e) {
           hash = window.location.hash.substring(1);
-          return self.toggleSubView(hash);
+          return _this.toggleSubView(hash);
         });
         return $("a[href^='#']").click(function(e) {
           return window.location.hash = $(this).attr("href").substring(1);

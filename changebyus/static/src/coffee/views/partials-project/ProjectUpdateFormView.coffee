@@ -31,7 +31,6 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button>" + "<strong>File upload error</strong> " + msg + " </div>").prependTo "#alerts"
 				
 				$editor = $("#editor")
-				$updateForm = $("form[name='project-update']")
 				options =
 					beforeSubmit: (arr, $form, options) ->
 						for i of arr
@@ -41,10 +40,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 								console.log 'des',arr[i].value
 					success: (response) ->
 						console.log response
-
+				$updateForm = $("form[name='project-update']")
 				$updateForm.ajaxForm options
-
-				console.log '$updateForm',$updateForm
 
 				$("a[title]").tooltip container: "body"
 
@@ -66,12 +63,10 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					$("#voiceBtn").css("position", "absolute").offset
 						top: editorOffset.top - 20
 						left: editorOffset.left + $("#editor").innerWidth() - 75
-
 				else
 					$("#voiceBtn").hide()
 
 				$editor.wysiwyg fileUploadError: showErrorAlert
 				window.prettyPrint and prettyPrint()
 		)
-		ProjectUpdateFormView
 

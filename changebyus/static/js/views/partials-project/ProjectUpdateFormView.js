@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], function(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) {
   var ProjectUpdateFormView;
-  ProjectUpdateFormView = AbstractView.extend({
+  return ProjectUpdateFormView = AbstractView.extend({
     initialize: function(options) {
       AbstractView.prototype.initialize.apply(this, options);
       return this.render();
@@ -33,7 +33,6 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button>" + "<strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
       $editor = $("#editor");
-      $updateForm = $("form[name='project-update']");
       options = {
         beforeSubmit: function(arr, $form, options) {
           var i, _results;
@@ -53,8 +52,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
           return console.log(response);
         }
       };
+      $updateForm = $("form[name='project-update']");
       $updateForm.ajaxForm(options);
-      console.log('$updateForm', $updateForm);
       $("a[title]").tooltip({
         container: "body"
       });
@@ -87,5 +86,4 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       return window.prettyPrint && prettyPrint();
     }
   });
-  return ProjectUpdateFormView;
 });

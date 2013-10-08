@@ -1,4 +1,42 @@
-<div class="project-container">
-	<div><%= data.title %></div>
-	<div><%= unescape(data.description) %></div> 
+<div class="post-container">
+	<div class="post-left">
+		<div class="user-avatar">
+			<img src="<%= data.user_avatar %>">
+		</div>
+	</div>
+	<div class="post-right">
+		<div class="post-title"><%= data.title %></div>
+		<div class="post-content"><%= unescape(data.description) %></div> 
+		<div class="post-footer">
+			<div class="reply-toggle">
+				<% if(data.responses.length>0) { %>
+					<span class="reply"><%= data.responses.length %> Replies</span>
+				<% } else { %>
+					<span class="reply">Reply</span>
+				<% } %>
+				<span class="reply hide">Hide Reply</span>
+				* 
+				<span class="jq-date"><%= data.format_date %></span> 
+			</div>
+		</div>
+	</div>
+
+
 </div>
+
+<!--
+description: ""
+			title: ""
+			created_at: "2000-01-01 00:00:00.000000"
+			updated_at: "2000-01-01 00:00:00.000000"
+			id: "0"
+			project:
+				id: "0"
+				collection: ""
+			user: 
+				id: "0"
+				collection: ""
+			public: false,
+			responses: [ ]
+
+-->

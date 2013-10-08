@@ -2,7 +2,8 @@ require.config
   baseUrl: "/static/js"
   paths:
     "jquery": "ext/jquery/jquery"
-    "hotkeys": "ext/jquery/jquery.hotkeys"
+    "hotkeys": "ext/jquery/jquery.hotkeys" 
+    "moment": "ext/moment/moment.min"
     "underscore": "ext/underscore/underscore-min"
     "backbone": "ext/backbone/backbone-min"
     "bootstrap": "ext/bootstrap/bootstrap.min"
@@ -19,9 +20,10 @@ require.config
     "abstract-view": "views/partials-universal/AbstractView"
     "project-sub-view": "views/partials-project/ProjectSubView"
     "user-view": "views/partials-user/CBUUserView"
+    "utils": "utils/Utils"
  
-require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view"], 
-  ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView) ->
+require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view", "utils"], 
+  ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView, Utils) ->
     $(document).ready ->
       config = parent: "#frame"
       CBURouter = Backbone.Router.extend(

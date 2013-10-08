@@ -1,7 +1,9 @@
 @import "variables";
 @import "projects";
 @import "helpers";
+@import "mixins-and-functions";
 @import "compass/css3/border-radius";
+@import "compass/css3/opacity";
 
 /*!
  * Bootstrap v2.3.1
@@ -40,7 +42,7 @@ audio:not([controls]) {
 
 html {
   font-size: 100%;
-  font-family: "Asap", sans-serif;
+  @include asap;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
 }
@@ -206,7 +208,7 @@ textarea {
 
 body {
   margin: 0;
-  font-family: "Asap", Helvetica, Arial, sans-serif;
+  @include asap;
   /*font-size: 14px;*/
   line-height: 20px;
   color: #333333;
@@ -656,7 +658,7 @@ label-jumbo {
 }
 
 textarea {
-  font-family: "Merriweather", serif;
+  @include merriweather;
 }
 
 label {
@@ -669,7 +671,7 @@ select, textarea {
   height: 50px;
   padding: 4px 6px;
   margin-bottom: 10px;
-  font-family: "Merriweather", serif;
+  @include merriweather;
   font-weight: 100;
   color: $black;
   font-size: 16px;
@@ -683,7 +685,7 @@ input {
     height: 50px;
     padding: 4px 6px;
     margin-bottom: 10px;
-    font-family: "Merriweather", serif;
+    @include merriweather;
     font-weight: 100;
     color: $black;
     font-size: 16px;
@@ -697,7 +699,7 @@ input {
   height: 50px;
   padding: 4px 6px;
   margin-bottom: 10px;
-  font-family: "Merriweather", serif;
+  @include merriweather;
   font-weight: 100;
   color: $black;
   font-size: 16px;
@@ -2217,7 +2219,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   .search-query {
     padding: 4px 14px;
     margin-bottom: 0;
-    font-family: "Asap", Helvetica, Arial, sans-serif;
+    @include asap;
     font-size: 13px;
     font-weight: normal;
     line-height: 1;
@@ -3004,12 +3006,29 @@ a {
   .overlay {
     opacity: 1;
     position: absolute;
-    top: 300px;
+    top: 303px;
     left: 200px;
     width: 912px;
     height: 225px;
     text-align: center;
     background: url("/static/img/community-text.png") no-repeat;
+  }
+  .overlay-text{ 
+    position: absolute;
+    top: 300px;
+    left: 200px;
+    width: 912px;
+    height: 225px; 
+    span{ 
+      display: inline-block;
+      color: #fff; // text color
+      font-family: "Asap";
+      font-size: 85px;
+      line-height: 1.25;
+      padding: 0 15px 5px;
+      margin-bottom: 15px; 
+      background-color: rgba(0,0,0,.45); // layer fill content
+    }
   }
 }
 

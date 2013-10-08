@@ -8,7 +8,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     render: function() {
       var m,
         _this = this;
-      m = moment(this.model.attributes.created_at).format("MMMM D HH:mm a");
+      m = moment(this.model.attributes.created_at).format("MMMM D hh:mm a");
       this.model.attributes.format_date = m;
       $(this.el).template(this.templateDir + "/templates/partials-project/project-update-list-item.html", {
         data: this.model.attributes

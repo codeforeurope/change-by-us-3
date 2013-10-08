@@ -18,3 +18,15 @@
 	&::-webkit-input-placeholder{color: $c;}
 	&:-ms-input-placeholder{color: $c;}
 }
+
+/****************************************
+ * TYPOGRAPHY
+ ***************************************/
+
+@mixin asap(){
+	font-family: "Asap", Helvetica, Arial, sans-serif;
+}
+
+@mixin merriweather(){
+	font-family: "Merriweather", serif;
+}

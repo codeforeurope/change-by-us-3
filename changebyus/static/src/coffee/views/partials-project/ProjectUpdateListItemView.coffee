@@ -8,7 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 			$replyForm: null
 
 			render: ->
-				m = moment(@model.attributes.created_at).format("MMMM D HH:mm a")
+				m = moment(@model.attributes.created_at).format("MMMM D hh:mm a")
 				@model.attributes.format_date = m
 
 				$(@el).template(@templateDir+"/templates/partials-project/project-update-list-item.html",

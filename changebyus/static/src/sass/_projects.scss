@@ -1,3 +1,4 @@
+@import "mixins-and-functions";
 
 .projects {
   padding: none;
@@ -55,7 +56,7 @@
       color: $white;
       position: absolute;
       font-size: 18px;
-      font-family: "Merriweather", serif;
+      @include merriweather;
       top: 150px;
       left: 300px;
       width: 650px;
@@ -77,7 +78,7 @@
     width: 100%;
     height: auto;
     background-color: $white;
-    border: 1px solid #dcdcdc;
+    border: 1px solid $grayBorder;
     border-radius: 4px;
   }
   .post-left, .post-right, .reply-left, .reply-right{
@@ -86,15 +87,29 @@
 
   .post-left, .reply-left{ 
     width: 100px;
-  }
-
+  } 
+ 
   .post-right{ 
     width: 880px;
   }
-    .post-title{}
-    .post-content{}
-    .post-footer{}
+    .post-title{
+      color: $gray20;
+    }
+    .post-content{
+        color: $gray20; 
+        @include merriweather;
+        font-size: 14px;
+    }
+    .post-footer{
+      color: $gray53; // text color
+      @include asap;
+      text-decoration: underline;
+    }
     .post-replies{
+ 
+     
+     
+
       padding: 0;
       ul{}
       li{

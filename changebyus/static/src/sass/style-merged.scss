@@ -1,5 +1,6 @@
 @import "variables";
 @import "helpers";
+@import "compass/css3/border-radius";
 
 /*!
  * Bootstrap v2.3.1
@@ -3056,6 +3057,22 @@ a {
     border: 1px solid #dcdcdc;
     border-radius: 4px;
   }
+  .post-left, .post-right{
+    float: left;
+  }
+
+  .post-left{ 
+    width: 100px;
+  }
+
+  .post-right{ 
+    width: 880px;
+  }
+    .post-title{}
+    .post-content{}
+    .post-footer{}
+    .post-replies{}
+
   .reply-toggle{
     .reply{
       cursor: pointer;
@@ -3291,6 +3308,10 @@ a {
   font-size: 24px;
   padding-bottom: 80px;
   background-color: $primaryColor;
+}
+
+.circle{
+  @include border-radius(1000px, 1000px);
 }
 
 /*******************************************

@@ -45,6 +45,7 @@ The following organizations (and individuals) contributed to ChangeByUs:
 
 ***
 * to start using grunt
+* $ npm install -g grunt-cli
 * $ cd directory/containing/grunt/file
 * $ npm install
 * $ grunt

@@ -77,6 +77,10 @@ sub {
   bottom: -0.25em;
 }
 
+div{
+  position: relative;
+}
+
 img {
   width: auto\9;
   height: auto;
@@ -2843,7 +2847,7 @@ a {
 }
 
 .body-container-wide {
-  width: 1500px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -3003,6 +3007,7 @@ a {
 .header-image {
   width: 1500px;
   height: 690px;
+  margin: auto;
   .overlay {
     opacity: 1;
     position: absolute;
@@ -3015,20 +3020,27 @@ a {
   }
   .overlay-text{ 
     position: absolute;
-    top: 300px;
+    top: 175px;
     left: 200px;
-    width: 912px;
+    width: auto;
     height: 225px; 
-    span{ 
+    h1{ 
       display: inline-block;
       color: #fff; // text color
-      font-family: "Asap";
+      @include asap;
+      font-weight: normal;
       font-size: 85px;
       line-height: 1.25;
-      padding: 0 15px 5px;
-      margin-bottom: 15px; 
+      padding: 0 15px; 
+      margin-bottom: 0;
       background-color: rgba(0,0,0,.45); // layer fill content
     }
+  }
+  .btn-large{
+    margin-top: 46px;
+    padding: 30px 50px;
+    font-size: 32px;
+    font-weight: bold;
   }
 }
 

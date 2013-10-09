@@ -20,21 +20,23 @@ require.config
     "abstract-view": "views/partials-universal/AbstractView"
     "project-sub-view": "views/partials-project/ProjectSubView"
     "user-view": "views/partials-user/CBUUserView"
+    "profile-view": "views/CBUProfileView"
     "utils": "utils/Utils"
  
-require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view", "utils"], 
-  ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView, Utils) ->
+require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], 
+  ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
     $(document).ready ->
       config = parent: "#frame"
       CBURouter = Backbone.Router.extend(
         routes:
           "project/:id": "project"
           "user/:id": "user"
-          discover: "discover"
-          create: "create"
-          login: "login"
-          signup: "signup"
-          project: "project"
+          "discover": "discover"
+          "create": "create"
+          "login": "login"
+          "signup": "signup"
+          "project": "project"
+          "profile": "profile"
           "": "default"
 
         project: (id) ->
@@ -57,8 +59,10 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
         signup: ->
           window.CBUAppView = new CBUSignupView(config)
 
+        profile: ->
+          window.CBUAppView = new CBUProfileView(config)
+
         default: ->
-          
           # added in dev tool
           window.CBUAppView = new CBUMainView(config)
       )

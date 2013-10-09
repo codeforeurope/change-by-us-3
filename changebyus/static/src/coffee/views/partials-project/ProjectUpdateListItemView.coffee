@@ -30,8 +30,8 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 					@$repliesHolder.append projectPostReplyView.$el 
 
 				@$replyForm = $('<li class="post-reply-form"/>')
-				@$replyForm.template( @templateDir+"/templates/partials-project/project-post-reply-form.html",
-					data: @model.attributes, => @onFormLoaded()
+				@$replyForm.template(@templateDir+"/templates/partials-project/project-post-reply-form.html",
+					{data:@model.attributes}, => @onFormLoaded()
 				)
 
 			onFormLoaded:->
@@ -42,5 +42,4 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 					success: (response) ->
 						console.log response
 
-				@$replyFormTag = @$replyForm.find('form')
-				@$replyFormTag.ajaxForm options
+				@$replyForm.find('form').ajaxForm options

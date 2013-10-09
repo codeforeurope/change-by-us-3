@@ -1,5 +1,5 @@
 define ["underscore", "backbone"], (_, Backbone) ->
-  ProjectModel = Backbone.Model.extend(
+  ProjectModel = Backbone.Model.extend
     urlRoot: "/api/project/"
     defaults:
       name: ""
@@ -8,6 +8,3 @@ define ["underscore", "backbone"], (_, Backbone) ->
       zip: ""
       website: ""
       visibility: "private"
-  )
-  ProjectModel
-

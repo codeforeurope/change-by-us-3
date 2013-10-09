@@ -1,6 +1,6 @@
 define(["underscore", "backbone"], function(_, Backbone) {
   var UserModel;
-  UserModel = Backbone.Model.extend({
+  return UserModel = Backbone.Model.extend({
     urlRoot: "/api/user/",
     defaults: {
       last_name: "",
@@ -26,5 +26,4 @@ define(["underscore", "backbone"], function(_, Backbone) {
       created_at: "2000-01-01 00:00:00.000000"
     }
   });
-  return UserModel;
 });

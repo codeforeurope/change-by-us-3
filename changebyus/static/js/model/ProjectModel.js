@@ -1,6 +1,6 @@
 define(["underscore", "backbone"], function(_, Backbone) {
   var ProjectModel;
-  ProjectModel = Backbone.Model.extend({
+  return ProjectModel = Backbone.Model.extend({
     urlRoot: "/api/project/",
     defaults: {
       name: "",
@@ -11,5 +11,4 @@ define(["underscore", "backbone"], function(_, Backbone) {
       visibility: "private"
     }
   });
-  return ProjectModel;
 });

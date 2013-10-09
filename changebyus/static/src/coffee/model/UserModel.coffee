@@ -1,5 +1,5 @@
 define ["underscore", "backbone"], (_, Backbone) ->
-  UserModel = Backbone.Model.extend(
+  UserModel = Backbone.Model.extend
     urlRoot: "/api/user/"
     defaults:
       last_name: ""
@@ -23,6 +23,3 @@ define ["underscore", "backbone"], (_, Backbone) ->
       display_name: ""
       roles: []
       created_at: "2000-01-01 00:00:00.000000"
-  )
-  UserModel
-

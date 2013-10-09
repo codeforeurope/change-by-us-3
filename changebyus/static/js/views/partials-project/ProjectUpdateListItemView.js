@@ -50,8 +50,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
           return console.log(response);
         }
       };
-      this.$replyFormTag = this.$replyForm.find('form');
-      return this.$replyFormTag.ajaxForm(options);
+      return this.$replyForm.find('form').ajaxForm(options);
     }
   });
 });

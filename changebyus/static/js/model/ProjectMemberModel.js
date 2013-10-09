@@ -1,5 +1,4 @@
 define(["underscore", "backbone"], function(_, Backbone) {
   var ProjectMembersModel;
-  ProjectMembersModel = Backbone.Model.extend();
-  return ProjectMembersModel;
+  return ProjectMembersModel = Backbone.Model.extend();
 });

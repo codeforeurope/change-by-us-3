@@ -14,6 +14,7 @@ require.config
     "main-view": "views/CBUMainView"
     "discover-view": "views/CBUDiscoverView"
     "project-view": "views/CBUProjectView"
+    "project-owner-view": "views/CBUProjectOwnerView"
     "login-view": "views/CBULoginView"
     "signup-view": "views/CBUSignupView"
     "create-view": "views/partials-universal/CreateProjectView"
@@ -23,8 +24,8 @@ require.config
     "profile-view": "views/CBUProfileView"
     "utils": "utils/Utils"
  
-require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], 
-  ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
+require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], 
+  ($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
     $(document).ready ->
       config = parent: "#frame"
       CBURouter = Backbone.Router.extend(
@@ -39,12 +40,13 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
           "profile": "profile"
           "": "default"
 
-        project: (id) ->
-          config.model = id: id
-          window.CBUAppView = new CBUProjectView(config)
+        project: (id_) ->
+          config.model = {id:id_}
+          console.log 'CBURouter',config
+          window.CBUAppView = if (userID is projectOwnerID) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
 
-        user: (id) ->
-          config.model = id: id
+        user: (id_) ->
+          config.model = {id:id_}
           window.CBUAppView = new CBUUserView(config)
 
         discover: ->

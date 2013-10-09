@@ -4,27 +4,27 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
     isDataLoaded: false
    
     initialize: (options) ->
-      AbstractView::initialize.apply this, options
+      AbstractView::initialize.apply(@, options)
       @render()
 
     show: ->
       @$el.show()
       unless @isDataLoaded
-        @collection.on "reset", @addAll, this
-        @collection.fetch reset: true
+        @collection.on "reset", @addAll, @
+        @collection.fetch {reset: true}
 
     loadData: ->
 
     
     # override in subview
     addOne: (model) ->
-
+      
     
     # override in subview
-    addAll: ->
-      self = this
-      @collection.each (model) ->
-        self.addOne model
+    addAll: -> 
+      # console.log 'ProjectSubView addAll @collection.',@collection.models
+      @collection.each (model) => 
+        @addOne model
 
       @isDataLoaded = true
 

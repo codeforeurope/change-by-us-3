@@ -1,7 +1,7 @@
 define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"], (_, Backbone, $, temp, form, AbstractView) ->
   CreateProjectView = AbstractView.extend
     initialize: (options) ->
-      AbstractView::initialize.apply this, options
+      AbstractView::initialize.call @, options
       @render()
 
     render: ->

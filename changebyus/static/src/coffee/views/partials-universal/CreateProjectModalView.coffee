@@ -2,7 +2,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
   CreateProjectModalView = AbstractView.extend
   
     initialize: (options) ->
-      AbstractView::initialize.apply this, options
+      AbstractView::initialize.call @, options
       @render()
 
     render: ->

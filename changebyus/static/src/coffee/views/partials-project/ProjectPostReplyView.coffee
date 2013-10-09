@@ -6,7 +6,7 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 			tagName: "li"
 
 			initialize: (options) ->
-				AbstractView::initialize.apply this, options
+				AbstractView::initialize.call @, options
 				@model = new ProjectPostReplyModel({id:options.id})
 				#@model.fetch success:=>@render()
 				@render()

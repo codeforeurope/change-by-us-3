@@ -45,7 +45,6 @@
 
         {% endif %}
 
-
       <!-- </div> -->
     </div>
   </div>
@@ -59,7 +58,9 @@
     <!-- ========= -->
     {% if project %}
     <script type="text/javascript">
-      window.projectID = "{{ project.id }}"; 
+      window.userID         = "{{ current_user.id }}"; 
+      window.projectID      = "{{ project.id }}";  
+      window.projectOwnerID = "{{ project.owner.id }}"; 
     </script>
     {% endif %}
 

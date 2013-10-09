@@ -3,7 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   return ProjectDiscussionCommentView = AbstractView.extend({
     parent: "#project",
     initialize: function(options) {
-      AbstractView.prototype.initialize.apply(this, options);
+      AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {

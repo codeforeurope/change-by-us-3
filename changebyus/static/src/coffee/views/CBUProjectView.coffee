@@ -1,6 +1,6 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMemberCollection", "collection/ProjectUpdatesCollection"], 
-	(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMemberCollection, ProjectUpdatesCollection) ->
-		CBUProjectView = AbstractView.extend(
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], 
+	(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) ->
+		CBUProjectView = AbstractView.extend
 			projectCalenderView: null
 			projectMembersView: null
 			projectUpdatesView: null
@@ -9,6 +9,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			calendarBTN: null
 
 			initialize: (options) ->
+				console.log 'CBUProjectView options',options
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent
 				@model       = new ProjectModel(options.model)
@@ -29,11 +30,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				, =>
 					id = {id:@model.get("id")}
 					projectUpdatesCollection  = new ProjectUpdatesCollection(id)
-					projectMemberCollection   = new ProjectMemberCollection(id)
+					projectMembersCollection   = new ProjectMembersCollection(id)
 					projectCalendarCollection = new ProjectCalendarCollection(id)
 
 					@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
-					@projectMembersView   = new ProjectMembersView({collection: projectMemberCollection})
+					@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
 					@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
 					
 					@updatesBTN  = $("a[href='#updates']")
@@ -73,7 +74,4 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 						@membersBTN.addClass "active"
 					when "calendar"
 						@projectCalenderView.show()
-						@calendarBTN.addClass "active"
-		)
-		CBUProjectView
-
+						@calendarBTN.addClass "active" 

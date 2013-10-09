@@ -3,7 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
   return CBUUserView = AbstractView.extend({
     initialize: function(options) {
       var _this = this;
-      AbstractView.prototype.initialize.apply(this, options);
+      AbstractView.prototype.initialize.call(this, options);
       this.model = new UserModel(options.model);
       return this.model.fetch({
         success: function() {

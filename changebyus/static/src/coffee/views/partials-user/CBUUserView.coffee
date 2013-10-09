@@ -2,7 +2,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
   CBUUserView = AbstractView.extend
     
     initialize: (options) ->
-      AbstractView::initialize.apply this, options
+      AbstractView::initialize.call @, options
 
       @model = new UserModel(options.model)
       @model.fetch success: =>

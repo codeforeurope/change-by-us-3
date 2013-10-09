@@ -1,6 +1,6 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMemberCollection", "collection/ProjectUpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMemberCollection, ProjectUpdatesCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) {
   var CBUProjectView;
-  CBUProjectView = AbstractView.extend({
+  return CBUProjectView = AbstractView.extend({
     projectCalenderView: null,
     projectMembersView: null,
     projectUpdatesView: null,
@@ -9,6 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     calendarBTN: null,
     initialize: function(options) {
       var _this = this;
+      console.log('CBUProjectView options', options);
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.model = new ProjectModel(options.model);
@@ -34,18 +35,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       $header.template(this.templateDir + "/templates/partials-project/project-header.html", {
         data: this.model.attributes
       }, function() {
-        var hash, id, projectCalendarCollection, projectMemberCollection, projectUpdatesCollection;
+        var hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection;
         id = {
           id: _this.model.get("id")
         };
         projectUpdatesCollection = new ProjectUpdatesCollection(id);
-        projectMemberCollection = new ProjectMemberCollection(id);
+        projectMembersCollection = new ProjectMembersCollection(id);
         projectCalendarCollection = new ProjectCalendarCollection(id);
         _this.projectUpdatesView = new ProjectUpdatesView({
           collection: projectUpdatesCollection
         });
         _this.projectMembersView = new ProjectMembersView({
-          collection: projectMemberCollection
+          collection: projectMembersCollection
         });
         _this.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
@@ -87,5 +88,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
     }
   });
-  return CBUProjectView;
 });

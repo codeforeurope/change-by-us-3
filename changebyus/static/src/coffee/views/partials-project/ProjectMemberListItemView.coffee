@@ -4,7 +4,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
     tagName: "li"
 
     initialize: (options) ->
-      AbstractView::initialize.apply this, options
+      AbstractView::initialize.call @, options
       @render()
 
     render: ->

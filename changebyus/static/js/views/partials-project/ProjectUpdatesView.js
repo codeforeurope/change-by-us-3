@@ -13,12 +13,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var form;
       this.$el.find(".preload").remove();
-      this.$ul = this.$el.find(".updates-container ul");
-      return form = new ProjectUpdateFormView({
-        parent: this.$el
-      });
+      return this.$ul = this.$el.find(".updates-container ul");
     },
     addOne: function(model_) {
       var view;

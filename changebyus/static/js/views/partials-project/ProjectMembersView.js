@@ -5,20 +5,19 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     $teamList: null,
     $memberList: null,
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='project'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-members.html", {}, function() {
-        self.$el.find(".preload").remove();
-        self.$teamList = self.$el.find("#team-members ul");
-        return self.$memberList = self.$el.find("#project-members ul");
+        _this.$el.find(".preload").remove();
+        _this.$teamList = _this.$el.find("#team-members ul");
+        return _this.$memberList = _this.$el.find("#project-members ul");
       });
       return $(this.parent).append(this.$el);
     },
-    addOne: function(model) {
+    addOne: function(model_) {
       var view;
       view = new ProjectMemberListItemView({
-        model: model
+        model: model_
       });
       return this.$teamList.append(view.el);
     }

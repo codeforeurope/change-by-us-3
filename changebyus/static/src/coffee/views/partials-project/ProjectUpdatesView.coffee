@@ -15,7 +15,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$ul = @$el.find(".updates-container ul")
 					
 				# temp here for now
-				form = new ProjectUpdateFormView({parent: @$el})
+				# form = new ProjectUpdateFormView({parent: @$el})
 
 			addOne: (model_) ->
 				#console.log "ProjectUpdatesView addOne model", model_

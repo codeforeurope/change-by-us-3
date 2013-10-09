@@ -2,7 +2,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
 		ProjectUpdateFormView = AbstractView.extend
 			initialize: (options) ->
-				AbstractView::initialize.apply this, options
+				AbstractView::initialize.call @, options
 				@render()
 
 			render: ->

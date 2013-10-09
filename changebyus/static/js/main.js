@@ -14,6 +14,7 @@ require.config({
     "main-view": "views/CBUMainView",
     "discover-view": "views/CBUDiscoverView",
     "project-view": "views/CBUProjectView",
+    "project-owner-view": "views/CBUProjectOwnerView",
     "login-view": "views/CBULoginView",
     "signup-view": "views/CBUSignupView",
     "create-view": "views/partials-universal/CreateProjectView",
@@ -25,7 +26,7 @@ require.config({
   }
 });
 
-require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) {
+require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) {
   return $(document).ready(function() {
     var CBUAppRouter, CBURouter, config;
     config = {
@@ -43,15 +44,16 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
         "profile": "profile",
         "": "default"
       },
-      project: function(id) {
+      project: function(id_) {
         config.model = {
-          id: id
+          id: id_
         };
-        return window.CBUAppView = new CBUProjectView(config);
+        console.log('CBURouter', config);
+        return window.CBUAppView = userID === projectOwnerID ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
       },
-      user: function(id) {
+      user: function(id_) {
         config.model = {
-          id: id
+          id: id_
         };
         return window.CBUAppView = new CBUUserView(config);
       },

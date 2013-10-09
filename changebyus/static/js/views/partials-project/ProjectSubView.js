@@ -18,10 +18,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     loadData: function() {},
     addOne: function(model) {},
     addAll: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.collection.each(function(model) {
-        return self.addOne(model);
+        return _this.addOne(model);
       });
       return this.isDataLoaded = true;
     }

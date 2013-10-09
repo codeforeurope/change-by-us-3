@@ -2,7 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
   var CreateProjectView;
   return CreateProjectView = AbstractView.extend({
     initialize: function(options) {
-      AbstractView.prototype.initialize.apply(this, options);
+      AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {

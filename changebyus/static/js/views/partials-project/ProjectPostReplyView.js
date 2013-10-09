@@ -4,7 +4,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     model: null,
     tagName: "li",
     initialize: function(options) {
-      AbstractView.prototype.initialize.apply(this, options);
+      AbstractView.prototype.initialize.call(this, options);
       this.model = new ProjectPostReplyModel({
         id: options.id
       });

@@ -1097,9 +1097,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   margin-bottom: 0;
   *margin-left: 0;
   vertical-align: top;
-  -webkit-border-radius: 0 4px 4px 0;
-  -moz-border-radius: 0 4px 4px 0;
-  border-radius: 0 4px 4px 0;
+  @include border-radius(4px);
 }
 
 .input-append input:focus, .input-prepend input:focus, .input-append select:focus, .input-prepend select:focus, .input-append .uneditable-input:focus, .input-prepend .uneditable-input:focus {
@@ -1123,9 +1121,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
 
 .input-append .add-on, .input-prepend .add-on, .input-append .btn, .input-prepend .btn, .input-append .btn-group > .dropdown-toggle, .input-prepend .btn-group > .dropdown-toggle {
   vertical-align: top;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+  @include border-radius(0);
 }
 
 .input-append .active {
@@ -1142,55 +1138,39 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
     margin-right: -1px;
   }
   .add-on:first-child, .btn:first-child {
-    -webkit-border-radius: 4px 0 0 4px;
-    -moz-border-radius: 4px 0 0 4px;
-    border-radius: 4px 0 0 4px;
+    @include border-radius(4px 0 0 4px);
   }
 }
 
 .input-append {
   input, select, .uneditable-input {
-    -webkit-border-radius: 4px 0 0 4px;
-    -moz-border-radius: 4px 0 0 4px;
-    border-radius: 4px 0 0 4px;
+    @include border-radius(4px 0 0 4px);
   }
   input + .btn-group .btn:last-child, select + .btn-group .btn:last-child, .uneditable-input + .btn-group .btn:last-child {
-    -webkit-border-radius: 0 4px 4px 0;
-    -moz-border-radius: 0 4px 4px 0;
-    border-radius: 0 4px 4px 0;
+    @include border-radius(4px 0 0 4px);
   }
   .add-on, .btn, .btn-group {
     margin-left: -1px;
   }
   .add-on:last-child, .btn:last-child, .btn-group:last-child > .dropdown-toggle {
-    -webkit-border-radius: 0 4px 4px 0;
-    -moz-border-radius: 0 4px 4px 0;
-    border-radius: 0 4px 4px 0;
+    @include border-radius(4px 0 0 4px);
   }
 }
 
 .input-prepend.input-append {
   input, select, .uneditable-input {
-    -webkit-border-radius: 0;
-    -moz-border-radius: 0;
-    border-radius: 0;
+   @include border-radius(0);
   }
   input + .btn-group .btn, select + .btn-group .btn, .uneditable-input + .btn-group .btn {
-    -webkit-border-radius: 0 4px 4px 0;
-    -moz-border-radius: 0 4px 4px 0;
-    border-radius: 0 4px 4px 0;
+    @include border-radius(4px 0 0 4px);
   }
   .add-on:first-child, .btn:first-child {
     margin-right: -1px;
-    -webkit-border-radius: 4px 0 0 4px;
-    -moz-border-radius: 4px 0 0 4px;
-    border-radius: 4px 0 0 4px;
+    @include border-radius(4px 0 0 4px);
   }
   .add-on:last-child, .btn:last-child {
     margin-left: -1px;
-    -webkit-border-radius: 0 4px 4px 0;
-    -moz-border-radius: 0 4px 4px 0;
-    border-radius: 0 4px 4px 0;
+    @include border-radius(4px 0 0 4px);
   }
   .btn-group:first-child {
     margin-left: 0;
@@ -1204,9 +1184,7 @@ input.search-query {
   padding-left: 4px \9;
   /* IE7-8 doesn't have border-radius, so don't indent the padding */
   margin-bottom: 0;
-  -webkit-border-radius: 15px;
-  -moz-border-radius: 15px;
-  border-radius: 15px;
+  @include border-radius(15px);
 }
 
 .form-search input, .form-inline input, .form-horizontal input, .form-search textarea, .form-inline textarea, .form-horizontal textarea, .form-search select, .form-inline select, .form-horizontal select, .form-search .help-inline, .form-inline .help-inline, .form-horizontal .help-inline, .form-search .uneditable-input, .form-inline .uneditable-input, .form-horizontal .uneditable-input, .form-search .input-prepend, .form-inline .input-prepend, .form-horizontal .input-prepend, .form-search .input-append, .form-inline .input-append, .form-horizontal .input-append {
@@ -1417,9 +1395,7 @@ legend + .control-group {
     left: 100%;
     margin-top: -6px;
     margin-left: -1px;
-    -webkit-border-radius: 0 6px 6px 6px;
-    -moz-border-radius: 0 6px 6px 6px;
-    border-radius: 0 6px 6px 6px;
+    @include border-radius(0 6px 6px 6px);
   }
   &:hover > .dropdown-menu {
     display: block;
@@ -1432,9 +1408,7 @@ legend + .control-group {
   margin-top: 0;
   margin-bottom: -2px;
   margin-left: 10px;
-  -webkit-border-radius: 5px 5px 5px 0;
-  -moz-border-radius: 5px 5px 5px 0;
-  border-radius: 5px 5px 5px 0;
+  @include border-radius(5px 5px 5px 0);
 }
 
 .dropdown-submenu {
@@ -1459,9 +1433,7 @@ legend + .control-group {
     > .dropdown-menu {
       left: -100%;
       margin-left: 10px;
-      -webkit-border-radius: 6px 0 6px 6px;
-      -moz-border-radius: 6px 0 6px 6px;
-      border-radius: 6px 0 6px 6px;
+      @include border-radius(6px 0 6px 6px);
     }
   }
 }
@@ -1538,9 +1510,7 @@ button.close {
   color: $white;
   background-color: $primaryColor;
   background-image: none;
-  -webkit-border-radius: 2px;
-  -moz-border-radius: 2px;
-  border-radius: 2px;
+  @include border-radius(2px);
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
     color: #333333;
     background-color: #e6e6e6;
@@ -1591,12 +1561,16 @@ button.close {
   }
 }
 
+.btn-medium{
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 16px;
+}
+
 .btn-large {
   padding: 20px 40px;
   font-size: 26px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  @include border-radius(3px);
   [class^="icon-"], [class*=" icon-"] {
     margin-top: 4px;
   }
@@ -1605,9 +1579,7 @@ button.close {
 .btn-large-center {
   padding: 20px 40px;
   font-size: 26px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  @include border-radius(3px);
   vertical-align: center;
   [class^="icon-"], [class*=" icon-"] {
     margin-top: 0;
@@ -1633,9 +1605,7 @@ button.close {
   vertical-align: center !important;
   text-align: center !important;
   margin-bottom: 20px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  @include border-radius(3px);
 }
 
 .btn-block-funding {
@@ -1646,9 +1616,7 @@ button.close {
   border: none !important;
   vertical-align: center !important;
   text-align: center !important;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  @include border-radius(3px);
 }
 
 .btn-block-inverse {
@@ -1659,9 +1627,7 @@ button.close {
   vertical-align: center !important;
   text-align: center !important;
   margin-bottom: 20px;
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
+  @include border-radius(3px);
   color: $black;
   background-color: #eaeaea;
   *background-color: #eaeaea;
@@ -1781,9 +1747,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   color: #0088cc;
   cursor: pointer;
   border-color: transparent;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+  @include border-radius(0);
   &:hover, &:focus {
     color: #005580;
     text-decoration: underline;
@@ -1829,9 +1793,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   > {
     .btn {
       position: relative;
-      -webkit-border-radius: 0;
-      -moz-border-radius: 0;
-      border-radius: 0;
+      @include border-radius(0);
       + .btn {
         margin-left: -1px;
       }
@@ -2141,9 +2103,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   background-color: #fafafa;
   background-repeat: repeat-x;
   border: 1px solid #d4d4d4;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
+  @include border-radius(4px);
   *zoom: 1;
   &:before {
     display: table;
@@ -2227,9 +2187,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     font-size: 13px;
     font-weight: normal;
     line-height: 1;
-    -webkit-border-radius: 15px;
-    -moz-border-radius: 15px;
-    border-radius: 15px;
+    @include border-radius(15px);
   }
 }
 
@@ -2252,9 +2210,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 .navbar-fixed-top .navbar-inner, .navbar-fixed-bottom .navbar-inner {
   padding-right: 0;
   padding-left: 0;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+  @include border-radius(0);
 }
 
 .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
@@ -2355,9 +2311,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
       width: 18px;
       height: 2px;
       background-color: #f5f5f5;
-      -webkit-border-radius: 1px;
-      -moz-border-radius: 1px;
-      border-radius: 1px;
+      @include border-radius(1px);
       -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
       -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
       box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
@@ -2440,9 +2394,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     left: auto;
     margin-right: -1px;
     margin-left: 0;
-    -webkit-border-radius: 6px 0 6px 6px;
-    -moz-border-radius: 6px 0 6px 6px;
-    border-radius: 6px 0 6px 6px;
+    @include border-radius(6px 0 6px 6px);
   }
 }
 

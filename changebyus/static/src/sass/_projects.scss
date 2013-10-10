@@ -6,11 +6,9 @@
 }
 
 .project-square {
+  @include box-skin;
   height: 525px;
   width: 320px;
-  background: $white;
-  border: 1px solid #dcdcdc;
-  border-radius: 4px;
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
@@ -18,7 +16,7 @@
 
 .project-icon {
   margin: 10px;
-  border: 1px solid #dcdcdc;
+  @include box-skin;
 }
 
 .project-name {
@@ -71,25 +69,23 @@
     padding-top: 50px; 
   }
   
-  .post-container, .project-container, .post-replies {
+  .post-container, .project-container, .post-replies, .update-wrapper {
     padding: 30px;
     margin-top: 30px;
     margin-bottom: 30px;
     width: 100%;
     height: auto;
-    background-color: $white;
-    border: 1px solid $grayBorder;
-    border-radius: 4px;
+    @include box-skin;
   }
-  .post-left, .post-right, .reply-left, .reply-right{
+  .post-left, .post-right, .reply-left, .reply-right, .project-left, .project-right{
     float: left;
   }
 
-  .post-left, .reply-left{ 
+  .post-left, .reply-left, .project-left{ 
     width: 100px;
   } 
  
-  .post-right{ 
+  .post-right, .project-right{ 
     width: 880px;
   }
     .post-title{
@@ -106,10 +102,6 @@
       text-decoration: underline;
     }
     .post-replies{
- 
-     
-     
-
       padding: 0;
       ul{}
       li{
@@ -126,4 +118,37 @@
       text-decoration: underline;
     }
   }
+
+  /******************************
+   * OWNER VIEW
+   ******************************/
+  .update-wrapper{
+     
+  }
+
+  .share-select{
+    span{float: left;}
+  }
+  .share-toggle-wrapper{
+    float: left;
+    width: 205px;
+  }
+  .share-toggle{
+    @include box-skin;
+  }
+  .share-options{
+    @include box-skin;
+  }
+  .project-update-form{
+    padding: 30px;
+    @include box-skin;
+    .btn-medium{
+      float: right;
+      background-color:$secondaryColor;
+      &:hover{ 
+        background-color:$secondaryHoverColor;
+      }
+    }
+  }
+
 }

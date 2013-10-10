@@ -9,11 +9,11 @@ define ["underscore",
 		"collection/ProjectMembersCollection", 
 		"views/partials-project/ProjectDiscussionsView", 
 		"views/partials-project/ProjectFundraisingView", 
-		"views/partials-project/ProjectUpdatesView", 
+		"views/partials-project/ProjectAddUpdateView", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
 		"views/partials-project/ProjectInfoAppearanceView"], 
-	(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionsView, ProjectFundraisingView, ProjectUpdatesView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) ->
+	(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionsView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) ->
 		CBUProjectOwnerView = CBUProjectView.extend
 
 			initialize: (options) ->
@@ -34,13 +34,12 @@ define ["underscore",
 						# TO DO
 						# create all the subpage classes and HTML templates
 
-						projectDiscussionsCollection = new ProjectDiscussionsCollection(id)
-						projectUpdatesCollection     = new ProjectUpdatesCollection(id)
+						projectDiscussionsCollection = new ProjectDiscussionsCollection(id) 
 						projectCalendarCollection    = new ProjectCalendarCollection(id)
 						projectMembersCollection     = new ProjectMembersCollection(id)
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection, parent:"#project-discussion"}) 
-						@projectUpdatesView        = new ProjectUpdatesView({collection: projectUpdatesCollection}) 
+						@projectAddUpdateView      = new ProjectAddUpdateView()
 						@projectFundraisingView    = new ProjectFundraisingView() 
 						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
@@ -66,7 +65,7 @@ define ["underscore",
 				@$el.prepend $header
 
 			toggleSubView: (view_) -> 
-				for view in [@projectDiscussionsView, @projectUpdatesView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
+				for view in [@projectDiscussionsView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
 					view.hide()
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
@@ -77,7 +76,7 @@ define ["underscore",
 						@projectDiscussionsView.show()
 						@discussionBTN.addClass "active"
 					when "updates"
-						@projectUpdatesView.show()
+						@projectAddUpdateView.show()
 						@updatesBTN.addClass "active"
 					when "fundraising"
 						@projectFundraisingView.show()

@@ -1,3 +1,5 @@
+@import "compass/css3/border-radius";
+
 /****************************************
  * FUNCTIONS
  ***************************************/
@@ -29,4 +31,14 @@
 
 @mixin merriweather(){
 	font-family: "Merriweather", serif;
+}
+
+@mixin box-border{
+	border: 1px solid $grayBorder;
+}
+
+@mixin box-skin{
+	@include box-border;
+	background-color: $white;
+	@include border-radius(4px);
 }

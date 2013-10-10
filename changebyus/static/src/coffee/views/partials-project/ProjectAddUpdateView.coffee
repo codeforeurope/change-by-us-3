@@ -1,19 +1,16 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-  ProjectAddUpdateView = AbstractView.extend
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectUpdateFormView"],
+	(_, Backbone, $, temp, AbstractView, ProjectUpdateFormView) ->
+		ProjectAddUpdateView = AbstractView.extend
 
-    parent: "#project"
-   
-    initialize: (options) ->
-      AbstractView::initialize.call @, options
-      @render()
+			parent: "#project-update"
+		
+			initialize: (options) ->
+				AbstractView::initialize.call @, options
+				@render()
 
-    render: -> 
-      @$el = $("<div class='project'/>")
-      @$el.template @templateDir + "/templates/partials-project/project-add-update.html",
-        {data: @viewData}, =>@ajaxForm()
-
-      $(@parent).append @$el
-
-    ajaxForm: ->
-      $signin = $("form[name=add-update]")
-      $signin.ajaxForm (response) ->
+			render: -> 
+				@$el = $(@parent)
+				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
+					{data: @viewData}, =>
+						updateDiv = @$el.find("#update-form")
+						form = new ProjectUpdateFormView({parent:updateDiv})

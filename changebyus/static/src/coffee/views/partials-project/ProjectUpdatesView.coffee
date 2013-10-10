@@ -5,10 +5,9 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			parent: "#project-update"
 
 			render: ->  
-				@$el = $("<div class='project'/>")
+				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-updates.html",
-					{data: @viewData}, =>@onTemplateLoad()
-				$(@parent).append @$el
+					{data: @viewData}, =>@onTemplateLoad() 
 
 			onTemplateLoad:->
 				@$el.find(".preload").remove()

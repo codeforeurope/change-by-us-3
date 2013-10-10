@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "project-view"], function(_, Backbone, $, temp, CBUProjectView) {
+define(["underscore", "backbone", "jquery", "template", "project-view", "collection/ProjectDiscussionsCollection", "collection/ProjectUpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectUpdatesView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionsView, ProjectFundraisingView, ProjectUpdatesView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
   var CBUProjectOwnerView;
   return CBUProjectOwnerView = CBUProjectView.extend({
     initialize: function(options) {
@@ -19,20 +19,37 @@ define(["underscore", "backbone", "jquery", "template", "project-view"], functio
       $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
-        var hash, id;
+        var hash, id, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
         id = {
           id: _this.model.get("id")
         };
+        projectDiscussionsCollection = new ProjectDiscussionsCollection(id);
+        projectUpdatesCollection = new ProjectUpdatesCollection(id);
+        projectCalendarCollection = new ProjectCalendarCollection(id);
+        projectMembersCollection = new ProjectMembersCollection(id);
+        _this.projectDiscussionsView = new ProjectDiscussionsView({
+          collection: projectDiscussionsCollection,
+          parent: "#project-discussion"
+        });
+        _this.projectUpdatesView = new ProjectUpdatesView({
+          collection: projectUpdatesCollection
+        });
+        _this.projectFundraisingView = new ProjectFundraisingView();
+        _this.projectCalenderView = new ProjectCalenderView({
+          collection: projectCalendarCollection
+        });
+        _this.projectMembersView = new ProjectMembersView({
+          collection: projectMembersCollection
+        });
+        _this.projectInfoAppearanceView = new ProjectInfoAppearanceView();
         _this.discussionBTN = $("a[href='#discussion']");
         _this.updatesBTN = $("a[href='#updates']");
         _this.fundraisingBTN = $("a[href='#fundraising']");
         _this.calendarBTN = $("a[href='#calendar']");
         _this.membersBTN = $("a[href='#members']");
         _this.infoBTN = $("a[href='#info']");
-        _this.projectMembersView.hide();
-        _this.projectCalenderView.hide();
         hash = window.location.hash.substring(1);
-        _this.toggleSubView((hash === "" ? "updates" : hash));
+        _this.toggleSubView((hash === "" ? "discussion" : hash));
         $(window).bind("hashchange", function(e) {
           hash = window.location.hash.substring(1);
           return _this.toggleSubView(hash);
@@ -43,24 +60,28 @@ define(["underscore", "backbone", "jquery", "template", "project-view"], functio
       });
       return this.$el.prepend($header);
     },
-    toggleSubView: function(view) {
-      this.projectUpdatesView.hide();
-      this.projectMembersView.hide();
-      this.projectCalenderView.hide();
-      this.discussionBTN.removeClass("active");
-      this.updatesBTN.removeClass("active");
-      this.fundraisingBTN.removeClass("active");
-      this.calendarBTN.removeClass("active");
-      this.membersBTN.removeClass("active");
-      this.infoBTN.removeClass("active");
-      switch (view) {
+    toggleSubView: function(view_) {
+      var btn, view, _i, _j, _len, _len1, _ref, _ref1;
+      _ref = [this.projectDiscussionsView, this.projectUpdatesView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        view = _ref[_i];
+        view.hide();
+      }
+      _ref1 = [this.discussionBTN, this.updatesBTN, this.fundraisingBTN, this.calendarBTN, this.membersBTN, this.infoBTN];
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        btn = _ref1[_j];
+        btn.removeClass("active");
+      }
+      switch (view_) {
         case "discussion":
-          return console.log('');
+          this.projectDiscussionsView.show();
+          return this.discussionBTN.addClass("active");
         case "updates":
           this.projectUpdatesView.show();
           return this.updatesBTN.addClass("active");
         case "fundraising":
-          return console.log('');
+          this.projectFundraisingView.show();
+          return this.fundraisingBTN.addClass("active");
         case "calendar":
           this.projectCalenderView.show();
           return this.calendarBTN.addClass("active");
@@ -68,7 +89,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view"], functio
           this.projectMembersView.show();
           return this.membersBTN.addClass("active");
         case "info":
-          return console.log('');
+          this.projectInfoAppearanceView.show();
+          return this.infoBTN.addClass("active");
       }
     }
   });

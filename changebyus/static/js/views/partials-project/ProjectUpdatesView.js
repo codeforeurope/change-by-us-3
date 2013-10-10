@@ -4,13 +4,12 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     parent: "#project-update",
     render: function() {
       var _this = this;
-      this.$el = $("<div class='project'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
+      this.$el = $(this.parent);
+      return this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
       this.$el.find(".preload").remove();

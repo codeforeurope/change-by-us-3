@@ -1,6 +1,21 @@
-define ["underscore", "backbone", "jquery", "template", "project-view"], 
-	(_, Backbone, $, temp, CBUProjectView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"project-view", 
+		"collection/ProjectDiscussionsCollection", 
+		"collection/ProjectUpdatesCollection", 
+		"collection/ProjectCalendarCollection", 
+		"collection/ProjectMembersCollection", 
+		"views/partials-project/ProjectDiscussionsView", 
+		"views/partials-project/ProjectFundraisingView", 
+		"views/partials-project/ProjectUpdatesView", 
+		"views/partials-project/ProjectCalenderView", 
+		"views/partials-project/ProjectMembersView", 
+		"views/partials-project/ProjectInfoAppearanceView"], 
+	(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionsView, ProjectFundraisingView, ProjectUpdatesView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) ->
 		CBUProjectOwnerView = CBUProjectView.extend
+
 			initialize: (options) ->
 				# console.log 'CBUProjectOwnerView',options
 				CBUProjectView::initialize.call @, options
@@ -16,13 +31,20 @@ define ["underscore", "backbone", "jquery", "template", "project-view"],
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
 						id = {id:@model.get("id")}
-						#projectUpdatesCollection  = new ProjectUpdatesCollection(id)
-						#projectMembersCollection   = new ProjectMembersCollection(id)
-						#projectCalendarCollection = new ProjectCalendarCollection(id)
+						# TO DO
+						# create all the subpage classes and HTML templates
 
-						#@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection}) 
-						#@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
-						#@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
+						projectDiscussionsCollection = new ProjectDiscussionsCollection(id)
+						projectUpdatesCollection     = new ProjectUpdatesCollection(id)
+						projectCalendarCollection    = new ProjectCalendarCollection(id)
+						projectMembersCollection     = new ProjectMembersCollection(id)
+						
+						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection, parent:"#project-discussion"}) 
+						@projectUpdatesView        = new ProjectUpdatesView({collection: projectUpdatesCollection}) 
+						@projectFundraisingView    = new ProjectFundraisingView() 
+						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
+						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
+						@projectInfoAppearanceView = new ProjectInfoAppearanceView()
 						
 						@discussionBTN  = $("a[href='#discussion']")
 						@updatesBTN     = $("a[href='#updates']")
@@ -31,11 +53,8 @@ define ["underscore", "backbone", "jquery", "template", "project-view"],
 						@membersBTN     = $("a[href='#members']")
 						@infoBTN        = $("a[href='#info']")
 						
-						@projectMembersView.hide()
-						@projectCalenderView.hide()
-						
 						hash = window.location.hash.substring(1)
-						@toggleSubView (if (hash is "") then "updates" else hash)
+						@toggleSubView (if (hash is "") then "discussion" else hash)
 						$(window).bind "hashchange", (e) =>
 							hash = window.location.hash.substring(1)
 							@toggleSubView hash
@@ -46,26 +65,23 @@ define ["underscore", "backbone", "jquery", "template", "project-view"],
 
 				@$el.prepend $header
 
-			toggleSubView: (view) ->
-				@projectUpdatesView.hide()
-				@projectMembersView.hide()
-				@projectCalenderView.hide()
+			toggleSubView: (view_) -> 
+				for view in [@projectDiscussionsView, @projectUpdatesView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
+					view.hide()
 
-				@discussionBTN.removeClass "active"
-				@updatesBTN.removeClass "active"
-				@fundraisingBTN.removeClass "active" 
-				@calendarBTN.removeClass "active"
-				@membersBTN.removeClass "active"
-				@infoBTN.removeClass "active"
-
-				switch view
-					when "discussion"
-						console.log ''
+				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
+					btn.removeClass "active"
+ 
+				switch view_
+					when "discussion" 
+						@projectDiscussionsView.show()
+						@discussionBTN.addClass "active"
 					when "updates"
 						@projectUpdatesView.show()
 						@updatesBTN.addClass "active"
 					when "fundraising"
-						console.log ''
+						@projectFundraisingView.show()
+						@fundraisingBTN.addClass "active" 
 					when "calendar"
 						@projectCalenderView.show()
 						@calendarBTN.addClass "active" 
@@ -73,4 +89,5 @@ define ["underscore", "backbone", "jquery", "template", "project-view"],
 						@projectMembersView.show()
 						@membersBTN.addClass "active"
 					when "info"
-						console.log '' 
+						@projectInfoAppearanceView.show()
+						@infoBTN.addClass "active"

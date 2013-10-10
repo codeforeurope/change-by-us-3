@@ -9,7 +9,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       options = options_ || {};
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
-      return this.viewData = options.viewData || this.viewData;
+      this.viewData = options.viewData || this.viewData;
+      return console.log('options_', options.parent, this.parent);
     },
     show: function() {
       return this.$el.show();

@@ -26,33 +26,29 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			addSubViews: ->  
 				$header = $("<div class='project-header'/>")
 				$header.template @templateDir + "/templates/partials-project/project-header.html",
-					data: @model.attributes
-				, =>
-					id = {id:@model.get("id")}
-					projectUpdatesCollection  = new ProjectUpdatesCollection(id)
-					projectMembersCollection   = new ProjectMembersCollection(id)
-					projectCalendarCollection = new ProjectCalendarCollection(id)
+					{data:@model.attributes}, =>
+						id = {id:@model.get("id")}
+						projectUpdatesCollection  = new ProjectUpdatesCollection(id)
+						projectMembersCollection   = new ProjectMembersCollection(id)
+						projectCalendarCollection = new ProjectCalendarCollection(id)
 
-					@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
-					@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
-					@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
-					
-					@updatesBTN  = $("a[href='#updates']")
-					@membersBTN  = $("a[href='#members']")
-					@calendarBTN = $("a[href='#calendar']")
-					
-					@projectMembersView.hide()
-					@projectCalenderView.hide()
-					
-					hash = window.location.hash.substring(1)
-					@toggleSubView (if (hash is "") then "updates" else hash)
-					$(window).bind "hashchange", (e) =>
+						@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
+						@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
+						@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
+						
+						@updatesBTN  = $("a[href='#updates']")
+						@membersBTN  = $("a[href='#members']")
+						@calendarBTN = $("a[href='#calendar']")
+						
 						hash = window.location.hash.substring(1)
-						@toggleSubView hash
-					
-					# temp hack because somewhere this event default is prevented
-					$("a[href^='#']").click (e) -> 
-						window.location.hash = $(this).attr("href").substring(1)
+						@toggleSubView (if (hash is "") then "updates" else hash)
+						$(window).bind "hashchange", (e) =>
+							hash = window.location.hash.substring(1)
+							@toggleSubView hash
+						
+						# temp hack because somewhere this event default is prevented
+						$("a[href^='#']").click (e) -> 
+							window.location.hash = $(this).attr("href").substring(1)
 
 				@$el.prepend $header
 

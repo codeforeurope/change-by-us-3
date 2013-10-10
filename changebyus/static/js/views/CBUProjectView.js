@@ -54,8 +54,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this.updatesBTN = $("a[href='#updates']");
         _this.membersBTN = $("a[href='#members']");
         _this.calendarBTN = $("a[href='#calendar']");
-        _this.projectMembersView.hide();
-        _this.projectCalenderView.hide();
         hash = window.location.hash.substring(1);
         _this.toggleSubView((hash === "" ? "updates" : hash));
         $(window).bind("hashchange", function(e) {

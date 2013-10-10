@@ -10,6 +10,7 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
       @templateDir = options.templateDir or @templateDir
       @parent      = options.parent or @parent
       @viewData    = options.viewData or @viewData
+      console.log 'options_',options.parent,@parent
     
     show: ->
       @$el.show()

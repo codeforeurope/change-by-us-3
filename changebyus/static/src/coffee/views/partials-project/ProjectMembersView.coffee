@@ -6,16 +6,15 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			$teamList: null
 			$memberList: null
 
-			render: -> 
-				@$el = $("<div class='project'/>")
+			render: ->  
+				@$el = $(@parent)
 				
 				# data:this.viewData
-				@$el.template @templateDir + "/templates/partials-project/project-members.html", {}, =>
-					@$el.find(".preload").remove()
-					@$teamList = @$el.find("#team-members ul")
-					@$memberList = @$el.find("#project-members ul")
-
-				$(@parent).append @$el
+				@$el.template @templateDir + "/templates/partials-project/project-members.html", 
+					{}, =>
+						@$el.find(".preload").remove()
+						@$teamList = @$el.find("#team-members ul")
+						@$memberList = @$el.find("#project-members ul")
 
 			addOne: (model_) -> 
 				#to do 

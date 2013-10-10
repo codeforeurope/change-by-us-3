@@ -8,15 +8,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     },
     render: function() {
       var _this = this;
-      this.$el = $("<div class='project'/>");
+      this.$el = $(this.parent);
       if (this.started) {
-        this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-goals.html", {
+        return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-goals.html", {
           data: this.viewData
         }, function() {});
       } else {
-        this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {});
+        return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {});
       }
-      return $(this.parent).append(this.$el);
     }
   });
 });

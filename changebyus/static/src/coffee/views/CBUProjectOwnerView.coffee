@@ -30,7 +30,7 @@ define ["underscore",
 				$header = $("<div class='project-header'/>")
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
-						id = {id:@model.get("id")}
+						id = {id:@model.get("id"), name:@model.get("name")}
 						# TO DO
 						# create all the subpage classes and HTML templates
 
@@ -40,7 +40,7 @@ define ["underscore",
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection, parent:"#project-discussion"}) 
 						@projectAddUpdateView      = new ProjectAddUpdateView()
-						@projectFundraisingView    = new ProjectFundraisingView() 
+						@projectFundraisingView    = new ProjectFundraisingView(id) 
 						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
 						@projectInfoAppearanceView = new ProjectInfoAppearanceView()

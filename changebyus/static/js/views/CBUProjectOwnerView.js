@@ -21,7 +21,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       }, function() {
         var hash, id, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection;
         id = {
-          id: _this.model.get("id")
+          id: _this.model.get("id"),
+          name: _this.model.get("name")
         };
         projectDiscussionsCollection = new ProjectDiscussionsCollection(id);
         projectCalendarCollection = new ProjectCalendarCollection(id);
@@ -31,7 +32,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           parent: "#project-discussion"
         });
         _this.projectAddUpdateView = new ProjectAddUpdateView();
-        _this.projectFundraisingView = new ProjectFundraisingView();
+        _this.projectFundraisingView = new ProjectFundraisingView(id);
         _this.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
         });

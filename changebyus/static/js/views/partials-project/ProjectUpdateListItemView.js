@@ -21,9 +21,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       var $replyToggle, projectPostReplyView, reply, self, _i, _len, _ref,
         _this = this;
       self = this;
-      this.$repliesHolder = $('<ul class="post-replies hide"/>');
+      this.$repliesHolder = $('<ul class="content-wrapper hide"/>');
       this.$postRight = this.$el.find('.post-right');
-      $replyToggle = this.$el.find('.reply-toggle');
+      $replyToggle = this.$el.find('.reply-toggle').first();
       $replyToggle.click(function() {
         $(this).find('.reply').toggleClass('hide');
         return self.$repliesHolder.toggleClass('hide');

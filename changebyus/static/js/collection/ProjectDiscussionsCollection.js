@@ -1,11 +1,10 @@
 define(["underscore", "backbone", "model/ProjectDiscussionModel"], function(_, Backbone, ProjectDiscussionModel) {
   var ProjectDiscussionsCollection;
-  ProjectDiscussionsCollection = Backbone.Collection.extend({
+  return ProjectDiscussionsCollection = Backbone.Collection.extend({
     model: ProjectDiscussionModel,
-    url: "/api/project/" + window.projectID + "/discussions_list",
+    url: "/api/post/project/" + window.projectID + "/list_discussions",
     parse: function(response) {
       return response.data;
     }
   });
-  return ProjectDiscussionsCollection;
 });

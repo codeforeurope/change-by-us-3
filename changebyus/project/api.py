@@ -394,7 +394,7 @@ class RemoveMemberForm(Form):
     project_id = TextField("project_id", validators=[Required()])
     user_id = TextField("user_id", validators=[Required()])    
 
-@project_api.route('/remove', methods = ['POST'])
+@project_api.route('/remove_member', methods = ['POST'])
 @login_required
 @project_exists
 @project_organizer

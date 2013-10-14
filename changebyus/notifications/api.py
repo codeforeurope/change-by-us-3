@@ -3,9 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, current_app
-
-from flask.ext.cdn import url_for
+from flask import Blueprint, current_app, url_for
 
 from flask.ext.mail import Message
 
@@ -22,7 +20,8 @@ from sets import Set
 from ..user.models import User, UserNotifications
 from ..project.models import Project, UserProjectLink
 from ..project.helpers import ( _get_project_organizers, _get_project_members,
-                                _get_slug_url )
+                                _get_project_slug_url )
+from ..user.helpers import _get_user_slug_url
 
 notifications_api = Blueprint('notificiations_api', __name__, url_prefix='/api/notifications')
 
@@ -68,14 +67,15 @@ def _notify_project_join( project_id=None, user_name=None ):
     if project is None:
         return False
 
+    """
     owner = project.owner
     if owner.notifications.joins_my_project:
-        emails.add( owner.email )
+        emails.add( (owner.email, owner. )
 
     links = UserProjectLink.objects(project = project)
     for link in links:
         if link.user.notifications.joins_common_project:
-            emails.add( user.email )
+            emails.add( user.email, user.first_name )
 
     # clean out the None email
     emails.add( None )
@@ -84,22 +84,26 @@ def _notify_project_join( project_id=None, user_name=None ):
     # TODO send the actual email
 
     resource = project.resource
-    url = _get_slug_url( project.id )
+    project_url = _get_project_slug_url( project.id )
+    user_url = _get_user_slug_url( user_name = user_name )
 
     action = "joined" if resource is False else "followed"
-    description = "Project" if resource is False else "Resource"
+    description = "project" if resource is False else "resource"
 
     emails_list = list(emails)
 
-    if len(emails_list) > 0:
-        msg = Message("User has {0} the CBU {1} \"{2}\".".format( action, description, project.name ),
+    for (email, first_name) in > emails_list:
+        msg = Message("{0} {1} your {2} {3}.".format( user_name, action, description, project.name ),
                       recipients = emails_list)
 
-        msg.body = "Hello,\n"
-        msg.body += "The user {0} has {1} CBU {2} {3}.\n".format(user_name, action, description, project.name)
-        msg.body += "Please visit the {0} at {1}".format( description, url )
+        msg.body = "Hello {0},\n".format(first_name)
+        msg.body += "{0} has {1} your {2} {3}.\n".format( user_name, action, description, project.name )
+        msg.body += "View profile : {0}".format(user_url)
 
-        msg.html = "Hello,<br>"
+        msg.html = "Hello {0},<br>".format(first_name)
+
+
+        
         msg.html += "The user {0} has {1} <a href = \"{2}\">CBU {3} {4}.</a><br>".format( user_name, 
                                                                                           action,
                                                                                           url,
@@ -108,6 +112,7 @@ def _notify_project_join( project_id=None, user_name=None ):
         msg.html += "Please visit the project by clicking the link above.<br>"
 
         current_app.mail.send(msg)
+    """
 
 
 def _notify_post( post_id=None):
@@ -139,7 +144,7 @@ def _notify_post( post_id=None):
 
 
     resource = original_post.project.resource
-    url = _get_slug_url( original_post.project.id )
+    url = _get_project_slug_url( original_post.project.id )
 
     # all commentors on update.  Update is public
     update_commentors = []

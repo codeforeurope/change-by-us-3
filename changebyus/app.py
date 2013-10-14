@@ -332,6 +332,7 @@ def configure_error_handlers(app=None):
     @app.errorhandler(404)
     def not_found(error=""):
         current_app.logger.error(str(error))
+        current_app.logger.error(str(request))
         return render_template('error.html', error="Sorry, this page doesn't exist.")
     
     @app.errorhandler(405)

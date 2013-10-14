@@ -11,6 +11,8 @@ from flask.ext.login import login_required, current_user, login_user
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
                            SubmitField, Required, ValidationError)
 
+from ..geonames import get_geopoint
+
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list
 
@@ -45,6 +47,17 @@ Projects are the heart of the CBU website.  Projects incorporate funding, member
 images, etc.
 
 """
+
+@project_api.route('/geopoint')
+def api_get_geopoint():
+    """
+    returns a list of names and lat/lon
+    """
+    s = request.args.get('s')
+    
+    data = get_geopoint(s)
+    
+    return jsonify_response(ReturnStructure(data = data))
 
 @project_api.route('/search')
 def api_search_projects():

@@ -15,8 +15,6 @@
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
 
-
-
 .input-block-level {
   display: block;
   width: 100%;
@@ -214,7 +212,7 @@ body {
   margin: 0;
   @include asap;
   /*font-size: 14px;*/
-  line-height: 20px;
+  line-height: 1.25;
   color: #333333;
   background-color: #f8f8f8;
   padding-bottom: 50px;
@@ -3167,18 +3165,28 @@ a {
   position: relative;
 }
  
-.tabs-pane {
+.tabs-pane, .owner-tabs-pane{
   position: absolute;
   bottom: 0;
   height: 50px;
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
+  ul{margin-left: 10px;}
   li {
     display: inline;
     list-style-type: none;
     padding-right: 20px;
-    .active span {
-      display: none;
-    }
+    margin: 0 18px;
+  } 
+  a {
+    line-height: 50px;
+    @include font-styling("asap", 22px, $white, "normal", "bold");
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75)); // drop shadow
   }
 }
+
+.tabs-pane{
+  li .active span {
+    display: none;
+  }
+}/**/

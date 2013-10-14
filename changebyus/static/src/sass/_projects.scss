@@ -1,4 +1,5 @@
 @import "mixins-and-functions";
+@import "compass/css3/text-shadow";
 
 .projects {
   padding: none;
@@ -38,18 +39,21 @@
     padding-bottom: 30px;
   }
   .feature-image {
-    width: 1000px;
+    width: 100%;
     height: 430px;
     position: relative;
+
     .overlay-h1 {
-      color: $white;
-      position: absolute;
-      font-size: 48px;
-      font-weight: bold;
-      top: 100px;
       left: 300px;
       width: 100%;
+      top: 100px;
+      padding: 0;
+      margin: 0;
+
+      @include font-styling("asap", 48px, $white, "normal", "bold");
+      @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
     }
+
     .overlay-h2 {
       color: $white;
       position: absolute;
@@ -60,6 +64,15 @@
       width: 650px;
       line-height: 24px;
     }
+    &.slim{ 
+      .overlay-h1 {
+        left: 30px;
+        top: 40px;
+        line-height: 1;
+        position: absolute;
+      }
+      height: 167px;
+    }
   }
   &.feature-image .overlay-backdrop {
     background-color: $white;
@@ -69,24 +82,59 @@
     padding-top: 50px; 
   }
   
-  .post-container, .project-container, .post-replies, .update-wrapper {
+  .content-header{
+    margin-top: 24px;
+
+  }
+
+  //.post-container, .project-container, .post-replies, .update-wrapper {
+  .content-wrapper {
     padding: 30px;
     margin-top: 30px;
     margin-bottom: 30px;
     width: 100%;
     height: auto;
     @include box-skin;
+
+    p{
+      @include font-styling("asap", 20px, $gray20, "normal", "regular");
+      margin-bottom: 28px;
+    }
+
+    span.highlight{
+      @include highlight;
+    }
+
+    .btn-large{ 
+      font-weight: bold;
+      background-color:$secondaryColor; 
+      padding: 20px 22px;
+    }
+ 
+    ul.bordered-item{
+      li{
+        padding: 30px;
+        border-bottom: 1px solid #dcdcdc;
+        &:last-child{border: none;}
+      }
+    }
   }
-  .post-left, .post-right, .reply-left, .reply-right, .project-left, .project-right{
+
+  .content-title{ 
+    @include font-styling("asap", 32px, $gray20, "normal", "regular");
+    margin: 0 0 22px;
+  }
+
+  .content-left, .post-right, .reply-left, .reply-right, .project-left, .project-right{
     float: left;
   }
 
-  .post-left, .reply-left, .project-left{ 
-    width: 100px;
+  .content-left, .reply-left, .project-left{ 
+    width: 60%;
   } 
  
-  .post-right, .project-right{ 
-    width: 880px;
+  .content-right, .project-right{ 
+    width: 40%;
   }
     .post-title{
       color: $gray20;
@@ -102,14 +150,7 @@
       text-decoration: underline;
     }
     .post-replies{
-      padding: 0;
-      ul{}
-      li{
-        padding: 30px;
-        border-bottom: 1px solid #dcdcdc;
-        &:last-child{border: none;}
-      }
-
+      padding: 0; 
     }
 
   .reply-toggle{
@@ -139,6 +180,58 @@
   .share-options{
     @include box-skin;
   }
+
+  .discussion{ 
+
+  }
+    .avatar{
+      float: left;
+      margin-right: 20px; 
+    }
+
+    .description{
+      float: left;
+      h5{
+        @include font-styling("asap", 32px, $gray20, "bold" );
+      }
+    }
+    
+    .date{
+      float: right;
+      @include font-styling("asap", 10px, $gray65);
+    }
+    .close-x{
+      float: right;
+      padding: 20px;
+    }
+
+  .fundraising-wrapper{
+    padding: 30px;
+    @include box-skin;
+  }
+
+  .fundraising-left{
+    float: left;
+    width: 66%;
+    
+    span{
+      font-weight: bold;
+      color:$primaryColor;
+    }
+    
+    p{ margin-bottom: 24px; }
+
+    .btn-large{ 
+      font-weight: bold;
+      background-color:$secondaryColor; 
+    }
+  }
+
+  .fundraising-right{
+    float: left;
+    width: 33%;
+  }
+
   .project-update-form{
     padding: 30px;
     @include box-skin;

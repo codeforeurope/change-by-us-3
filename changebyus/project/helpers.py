@@ -18,7 +18,7 @@ import simplejson as json
 import os
 
 
-def _get_slug_url(project_id = None):
+def _get_project_slug_url(project_id = None):
     """
     Given a project_id get the slug url for the project or resource
     """
@@ -600,3 +600,35 @@ def _check_stripe_account_link(stripe_user_id=None):
         return False, ""
 
     return True, project.first().name
+
+
+def _leave_project(project_id=None, user_id=None):
+
+
+    project = Project.objects.with_id(project_id)
+
+    if project.owner.id == g.user.id:
+        return jsonify_response( ReturnStructure( success = False,
+                                                  msg = 'Project owner can not leave the project.' ) )
+    
+    links = UserProjectLink.objects( user = g.user.id,
+                                    project = project_id)
+
+
+    if links.count() == 0:
+        return jsonify_response( ReturnStructure( success = True,
+                                                  msg = 'User was not involved in project.' ) )
+    if links.count() > 1:
+        warnStr = "Warning, user {0} has multiple user_project_links on project {1}".format(g.user.id,
+                                                                                            project_id)
+        current_app.logger.warn(warnStr)
+
+    for link in links:
+        link.delete()
+
+    update_project_activity( project_id )
+
+    return jsonify_response( ReturnStructure( ) )
+
+
+

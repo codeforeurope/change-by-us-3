@@ -6,6 +6,11 @@ from flask import current_app
 from flask.ext.security.utils import ( encrypt_password, verify_password,
                                        verify_and_update_password )
 
+def _get_user_slug_url( user_name=None, user_id = None ):
+    # TODO TODO
+
+    return "***** You need to populate this once the user page is made"
+
 def _is_email_in_use(email=None):
     """
     ABOUT

@@ -16,11 +16,14 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 from ..mongo_search import search
 
-from .models import Project, Roles, ACTIVE_ROLES
-from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
-                       _create_project, _edit_project, _get_lat_lon_from_location )
+from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink
 
-from .decorators import *
+from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
+                       _create_project, _edit_project, _get_lat_lon_from_location,
+                       _leave_project )
+
+from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
+                          project_member, project_ownership, project_organizer )
 
 from ..stripe.models import StripeAccount
 from ..stripe.api import _get_account_balance_percentage
@@ -387,6 +390,43 @@ def api_join_project():
     return jsonify_response( ReturnStructure( success = True) )
 
 
+class RemoveMemberForm(Form):
+    project_id = TextField("project_id", validators=[Required()])
+    user_id = TextField("user_id", validators=[Required()])    
+
+@project_api.route('/remove', methods = ['POST'])
+@login_required
+@project_exists
+@project_organizer
+def remove_project_user():
+    """
+    ABOUT
+        Allows an organizer to remove a member from a project
+    METHOD
+        Post
+    INPUT
+        project id, user id
+    PRECONDITIONS
+        User is logged in, user is an organizer of the project
+    """    
+
+    form = RemoveMemberForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    project_id = request.form.get('project_id')
+    user_id = request.form.get('user_id')
+
+    infoStr = "User {0} is attempting removal of user {1} on project {2}.".format(g.user.id,
+                                                                                  user_id,
+                                                                                  project_id)
+    current_app.logger.info(infoStr)
+
+    return leave_project(project_id=project_id, user_id=user_id)
+
+
 class LeaveProjectForm(Form):
     project_id = TextField("project_id", validators=[Required()])
 
@@ -400,9 +440,7 @@ def api_leave_project():
     METHOD
         Post
     INPUT
-        project id (via url)
-    OUTPUT
-        Currently a rendered tempalte for the project.  Should in the future return a Jsonified OK statement.
+        project id 
     PRECONDITIONS
         User is logged in, user is a member of the project.
     """
@@ -414,31 +452,50 @@ def api_leave_project():
                                                   msg = errStr ) )
 
     project_id = request.form.get('project_id')
-    project = Project.objects.with_id(project_id)
+
+    return leave_project(project_id=project_id, user_id=g.user.id)
 
 
-    if project.owner.id == g.user.id:
-        return jsonify_response( ReturnStructure( success = False,
-                                                  msg = 'Project owner can not leave the project.' ) )
-    
-    links = UserProjectLink.objects( user = g.user.id,
-                                    project = project_id)
+class IsRoleForm(Form):
+    project_id = TextField("project_id", validators=[Required()])
+
+@project_api.route('/am_i_a_member', methods = ['POST'])
+@project_exists
+@login_required
+def api_is_user_member():
+
+    form = IsRoleForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    project_id = request.form.get('project_id')
+
+    if _is_member(project_id, g.user.id):
+        return jsonify_response( ReturnStructure( data = {'member' : True } ))
+    else:
+        return jsonify_response( ReturnStructure( data = {'member' : False } ))
 
 
-    if links.count() == 0:
-        return jsonify_response( ReturnStructure( success = True,
-                                                  msg = 'User was not involved in project.' ) )
-    if links.count() > 1:
-        warnStr = "Warning, user {0} has multiple user_project_links on project {1}".format(g.user.id,
-                                                                                            project_id)
-        current_app.logger.warn(warnStr)
+@project_api.route('/am_i_an_organizer', methods = ['POST'])
+@project_exists
+@login_required
+def api_is_user_organizer():
 
-    for link in links:
-        link.delete()
+    form = IsRoleForm()
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-    update_project_activity( project_id )
+    project_id = request.form.get('project_id')
 
-    return jsonify_response( ReturnStructure( ) )
+    if _is_organizer(project_id, g.user.id):
+        return jsonify_response( ReturnStructure( data = {'organizer' : True } ))
+    else:
+        return jsonify_response( ReturnStructure( data = {'organizer' : False } ))
+
 
 
 

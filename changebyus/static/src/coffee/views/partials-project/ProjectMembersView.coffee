@@ -8,7 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 			render: ->  
 				@$el = $(@parent)
-				
+				console.log 'ProjectMembersView render'
 				# data:this.viewData
 				@$el.template @templateDir + "/templates/partials-project/project-members.html", 
 					{}, =>
@@ -18,5 +18,6 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 			addOne: (model_) -> 
 				#to do 
+				console.log 'ProjectMembersView model_',model_
 				view = new ProjectMemberListItemView({model:model_})
 				@$teamList.append view.el

@@ -211,15 +211,17 @@
     .reply{
       cursor: pointer;
       text-decoration: underline;
-    }
+    } 
     .jq-date{
       text-decoration: none;
     }
   }
 
-  .input-xxlarge{
-    height: 32px;
-    width: 568px;
+  .post-reply-form{
+    .input-xxlarge{
+      height: 32px;
+      width: 568px;
+    }
   }
 
   .reply-right{

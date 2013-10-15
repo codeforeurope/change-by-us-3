@@ -18,11 +18,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       }
     },
     loadData: function() {},
+    noResults: function() {},
     addOne: function(model) {},
     addAll: function() {
       var _this = this;
+      if (this.collection.models.length === 0) {
+        this.noResults();
+      } else {
+        this.$el.find(".preload").remove();
+      }
       console.log('ProjectSubView addAll @collection.', this.collection.models);
       this.collection.each(function(model) {
+        console.log('ProjectSubView >>>>', _this);
         return _this.addOne(model);
       });
       return this.isDataLoaded = true;

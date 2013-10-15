@@ -12,9 +12,9 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     onTemplateLoad: function() {
-      this.$el.find(".preload").remove();
       return this.$ul = this.$el.find(".updates-container ul");
     },
+    noResults: function() {},
     addOne: function(model_) {
       var view;
       view = new ProjectUpdateListItemView({

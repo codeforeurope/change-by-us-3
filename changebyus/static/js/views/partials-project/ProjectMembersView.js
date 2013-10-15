@@ -7,6 +7,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
+      console.log('ProjectMembersView render');
       return this.$el.template(this.templateDir + "/templates/partials-project/project-members.html", {}, function() {
         _this.$el.find(".preload").remove();
         _this.$teamList = _this.$el.find("#team-members ul");
@@ -15,6 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     addOne: function(model_) {
       var view;
+      console.log('ProjectMembersView model_', model_);
       view = new ProjectMemberListItemView({
         model: model_
       });

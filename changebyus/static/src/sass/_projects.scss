@@ -227,6 +227,30 @@
     width: 670px;
   }
 
+  .project-member{
+    .mail-icon{ 
+      float: left; 
+      width: 60px;
+      img{ margin-top: 20px; }
+    }
+    .member-title{  
+      float: left;  
+      margin-top: 15px; 
+      width: 175px;
+      padding-right: 15px;
+    }
+    .member-description{ 
+      float: left; 
+      margin-top: 15px;
+      width: 505px;
+    }
+    .member-roles{ 
+      float: left;
+      margin-top: 25px;
+      width: 120px; 
+    }
+  }
+
   /******************************
    * OWNER VIEW
    ******************************/
@@ -249,11 +273,6 @@
   }
 
   .discussion{ 
-
-    .avatar{
-      float: left;
-      margin-right: 20px; 
-    }
 
     .description{
       float: left;

@@ -193,13 +193,13 @@
       float: right;
       width: 858px;
     }
-    .post-title{
+    .post-title, .reply-title{
       color: $gray20;
     }
-    .post-content{
+    .post-content, .reply-content{
       @include font-styling("merriweather", 14px, $gray20);
     }
-    .post-footer{ 
+    .post-footer, .reply-date{ 
       margin-top: 10px;
       @include font-styling("asap", 14px, $gray53);
     }
@@ -215,6 +215,16 @@
     .jq-date{
       text-decoration: none;
     }
+  }
+
+  .input-xxlarge{
+    height: 32px;
+    width: 568px;
+  }
+
+  .reply-right{
+    margin-top: 12px;
+    width: 670px;
   }
 
   /******************************

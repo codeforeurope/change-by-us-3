@@ -17,8 +17,8 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 				@
 
 			addReplies:-> 
-				self = @
-				@$repliesHolder = $('<ul class="content-wrapper hide"/>')
+				self = @ 
+				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 				@$postRight     = @$el.find('.update-content')
 				$replyToggle    = @$el.find('.reply-toggle').first()
 				$replyToggle.click ->

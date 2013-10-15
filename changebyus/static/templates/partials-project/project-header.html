@@ -1,10 +1,23 @@
 <div class="project">
     <div class="body-container">
-        <div class="feature-image">
-            <img src="<%= data.data.image_url_large_rect %>" />
-            <div class="overlay-h1"><%= data.name %></div>
-            <div class="overlay-h2"><%= data.description %></div>
+        <div class="feature-image" style="background-image:url(http://lorempixel.com/1018/430/);">
+            <img src="http://lorempixel.com/255/255/" class="circle"/>
+         
+            <h1 class="overlay-h1"><%= data.data.name %></h1>
+            <p class="overlay-description"><%= data.data.description %></p>
+        
+
+            <div class="project-footer">
+                <div class="project-location">
+                    Brooklyn, NY
+                    <br>
+                    <a href="http://www.ucf.com">http://www.ucf.com</a>
+                </div>
+                <a href="#" class="btn btn-large">Join Project</a>
+            </div>
+            
         </div>
+
         <div class="tabs-pane">
             <ul class="tabs">
                 <li><a href="#updates" data-toggle="tab"><span>Updates</span></a></li>

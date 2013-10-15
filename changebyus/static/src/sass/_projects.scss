@@ -38,10 +38,38 @@
     padding-top: 25px;
     padding-bottom: 30px;
   }
+  h4{
+    text-transform: uppercase;
+    @include font-styling("asap", 10px, $gray65 );
+  }
   .feature-image {
     width: 100%;
     height: 430px;
     position: relative;
+
+    >img{
+      position: absolute;
+      top:80px;
+      left: 30px;
+    }
+
+    .project-info{
+
+    }
+
+    .project-location{
+      color: $white;
+    }
+
+    .project-footer{
+      position: absolute;
+      left: 300px;
+      top: 230px;
+      width: 620px;
+      .btn{
+        float: right;
+      }
+    }
 
     .overlay-h1 {
       left: 300px;
@@ -49,12 +77,13 @@
       top: 100px;
       padding: 0;
       margin: 0;
+      position: absolute;
 
       @include font-styling("asap", 48px, $white, "normal", "bold");
       @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
     }
 
-    .overlay-h2 {
+    .overlay-description {
       color: $white;
       position: absolute;
       font-size: 18px;
@@ -64,12 +93,13 @@
       width: 650px;
       line-height: 24px;
     }
+
     &.slim{ 
       .overlay-h1 {
         left: 30px;
         top: 40px;
         line-height: 1;
-        position: absolute;
+        
       }
       height: 167px;
     }
@@ -113,7 +143,7 @@
  
     ul.bordered-item{
       li{
-        padding: 30px;
+        padding: 20px;
         border-bottom: 1px solid #dcdcdc;
         &:last-child{border: none;}
       }
@@ -129,11 +159,17 @@
     float: left;
   }
 
-  .content-left, .reply-left, .project-left{ 
+  .project-left{ 
+    width: 80px;
+  }
+
+  //.content-left, .reply-left, .project-left{ 
+  .content-left{
     width: 60%;
   } 
  
-  .content-right, .project-right{ 
+  //.content-right, .project-right{ 
+  .content-right{
     width: 40%;
   }
     .post-title{
@@ -183,7 +219,6 @@
 
   .discussion{ 
 
-  }
     .avatar{
       float: left;
       margin-right: 20px; 
@@ -192,18 +227,26 @@
     .description{
       float: left;
       h5{
-        @include font-styling("asap", 32px, $gray20, "bold" );
+        margin-bottom: 0;
+        @include font-styling("asap", 18px, $gray20, "normal", "bold" );
+      }
+      span{
+        @include font-styling("merriweather", 14px, $gray20);
       }
     }
     
     .date{
       float: right;
-      @include font-styling("asap", 10px, $gray65);
+      margin-top: 10px;
+      margin-right: 55px;
+      @include font-styling("asap", 15px, $gray65);
     }
-    .close-x{
+    .close{
       float: right;
-      padding: 20px;
+      margin-top: 10px;
+      margin-right: 20px; 
     }
+  }
 
   .fundraising-wrapper{
     padding: 30px;

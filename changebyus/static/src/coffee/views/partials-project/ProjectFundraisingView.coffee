@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
+define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"], (_, Backbone, $, temp, form, AbstractView) ->
 	ProjectFundraisingView = AbstractView.extend
 		
 		parent: "#project-calendar"
@@ -14,5 +14,25 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 					{data: @viewData}, =>
 			else
 				@$el.template @templateDir + "/templates/partials-project/project-fundraising-get-started.html", 
-					{}, ->
+					{}, => @getStarted()
+						
+
+		getStarted:->
+			$('.btn-large').click (e)=>
+				e.preventDefault()
+				console.log 'here'
+				$.ajax(
+					url: "/stripe/link"
+					context: document.body
+					data: { project_id:@id, project_name:@name }
+				).done (response)=>
+					console.log 'more',response
+
+				###
+					options =
+					success: (response) ->
+						console.log response
+
+				@$el.find('form').ajaxForm options
+				###
 

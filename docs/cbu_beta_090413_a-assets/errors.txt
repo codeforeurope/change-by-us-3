@@ -1,0 +1,60 @@
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.website.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.website.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://website.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:21:20 GMT-0400 (EDT)]
+http://mypersonalsite.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:53 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:53 GMT-0400 (EDT)]
+http://www.website.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://www.website.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://website.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://www.ucf.com: File name contains invalid character ":"
+
+[Tue Oct 15 2013 12:22:54 GMT-0400 (EDT)]
+http://mypersonalsite.com: File name contains invalid character ":"
+

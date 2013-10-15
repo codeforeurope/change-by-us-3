@@ -1,5 +1,6 @@
 @import "mixins-and-functions";
 @import "compass/css3/text-shadow";
+@import "compass/css3/background-clip";
 
 .projects {
   padding: none;
@@ -30,27 +31,46 @@
   margin: 15px;
 }
 
-.project {
-  h1 {
-    font-size: 60px;
+.project-container {
+  h2 {
+    font-size: 44px;
     font-weight: normal;
     text-align: left;
-    padding-top: 25px;
-    padding-bottom: 30px;
   }
+   
   h4{
     text-transform: uppercase;
     @include font-styling("asap", 10px, $gray65 );
   }
+  
+  &.feature-image .overlay-backdrop {
+    background-color: $white;
+  }
+}
+
+  .project-header{
+    margin-top: 12px;
+  }
+
   .feature-image {
     width: 100%;
     height: 430px;
     position: relative;
 
-    >img{
+    h1{
+      @include font-styling("asap", 48px, $white, "normal", "bold");
+      @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
+    }
+
+    .preview{
       position: absolute;
-      top:80px;
+      top:70px;
       left: 30px;
+      width: 249px;
+      height: 249px;
+      border: 4px solid #fff;  
+      @include border-radius(128px);  
+      @include background-clip(padding-box);  
     }
 
     .project-info{
@@ -58,44 +78,38 @@
     }
 
     .project-location{
-      color: $white;
+      @include font-styling("asap", 21px, $white );
+      @include text-shadow(0 1px 5px rgba(0,0,0,.75));
     }
 
     .project-footer{
       position: absolute;
-      left: 300px;
-      top: 230px;
+      left: 310px;
+      top: 257px;
       width: 620px;
-      .btn{
-        float: right;
-      }
     }
 
-    .overlay-h1 {
-      left: 300px;
+    .overlay-title {
+      left: 310px;
       width: 100%;
       top: 100px;
       padding: 0;
       margin: 0;
       position: absolute;
-
-      @include font-styling("asap", 48px, $white, "normal", "bold");
-      @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
     }
 
     .overlay-description {
-      color: $white;
-      position: absolute;
-      font-size: 18px;
-      @include merriweather;
-      top: 150px;
-      left: 300px;
+      position: absolute; 
+      top: 160px;
+      left: 310px;
       width: 650px;
+
+      @include font-styling("merriweather", 18px, $white );
       line-height: 24px;
     }
 
     &.slim{ 
-      .overlay-h1 {
+      .overlay-title {
         left: 30px;
         top: 40px;
         line-height: 1;
@@ -104,25 +118,31 @@
       height: 167px;
     }
   }
-  &.feature-image .overlay-backdrop {
-    background-color: $white;
+  
+  .tabs{
+    /*
+    li{
+      height: 45px;
+      background-repeat: no-repeat;
+      background-position: left center;
+    }*/
   }
-  .tabs! {}
-  .updates, .members, .calendar {
-    padding-top: 50px; 
+  .updates, .members, .calendar { 
+    h2{
+        margin: 50px 0 22px;
+    } 
   }
   
   .content-header{
     margin-top: 24px;
 
   }
-
-  //.post-container, .project-container, .post-replies, .update-wrapper {
+ 
   .content-wrapper {
     padding: 30px;
     margin-top: 30px;
     margin-bottom: 30px;
-    width: 100%;
+    //width: 100%;
     height: auto;
     @include box-skin;
 
@@ -133,12 +153,6 @@
 
     span.highlight{
       @include highlight;
-    }
-
-    .btn-large{ 
-      font-weight: bold;
-      background-color:$secondaryColor; 
-      padding: 20px 22px;
     }
  
     ul.bordered-item{
@@ -162,28 +176,32 @@
   .project-left{ 
     width: 80px;
   }
-
-  //.content-left, .reply-left, .project-left{ 
+ 
   .content-left{
     width: 60%;
   } 
- 
-  //.content-right, .project-right{ 
+  
   .content-right{
     width: 40%;
   }
+    .user-avatar{
+      float: left;
+      width: 70px;
+      margin-right: 20px;
+    }
+    .update-content{
+      float: right;
+      width: 858px;
+    }
     .post-title{
       color: $gray20;
     }
     .post-content{
-        color: $gray20; 
-        @include merriweather;
-        font-size: 14px;
+      @include font-styling("merriweather", 14px, $gray20);
     }
-    .post-footer{
-      color: $gray53; // text color
-      @include asap;
-      text-decoration: underline;
+    .post-footer{ 
+      margin-top: 10px;
+      @include font-styling("asap", 14px, $gray53);
     }
     .post-replies{
       padding: 0; 
@@ -193,6 +211,9 @@
     .reply{
       cursor: pointer;
       text-decoration: underline;
+    }
+    .jq-date{
+      text-decoration: none;
     }
   }
 
@@ -241,11 +262,13 @@
       margin-right: 55px;
       @include font-styling("asap", 15px, $gray65);
     }
+
     .close{
       float: right;
       margin-top: 10px;
       margin-right: 20px; 
     }
+
   }
 
   .fundraising-wrapper{
@@ -263,11 +286,6 @@
     }
     
     p{ margin-bottom: 24px; }
-
-    .btn-large{ 
-      font-weight: bold;
-      background-color:$secondaryColor; 
-    }
   }
 
   .fundraising-right{
@@ -287,4 +305,44 @@
     }
   }
 
+
+.body-container {
+  position: relative;
+}
+
+.btn-large{
+  font-weight: bold;
+  padding: 20px 22px;
+  &.invs{ 
+    background-color:$secondaryColor; 
+  }
+}
+
+.tabs-pane, .owner-tabs-pane{
+  position: absolute;
+  bottom: 0;
+  height: 58px;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+
+  ul{margin-left: 30px;}
+  li{
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+    margin: 0 18px;
+  }  
+  a{
+    line-height: 58px;
+    @include font-styling("asap", 22px, $white, "normal", "bold");
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75)); // drop shadow
+  }
+}
+
+.tabs-pane{
+  img{vertical-align:initial;}
+  li a{ vertical-align: text-bottom; }
+  li .active span {
+    display: none;
+  }
 }

@@ -22,7 +22,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         _this = this;
       self = this;
       this.$repliesHolder = $('<ul class="content-wrapper hide"/>');
-      this.$postRight = this.$el.find('.post-right');
+      this.$postRight = this.$el.find('.update-content');
       $replyToggle = this.$el.find('.reply-toggle').first();
       $replyToggle.click(function() {
         $(this).find('.reply').toggleClass('hide');

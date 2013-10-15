@@ -88,6 +88,7 @@ CDN_ALLOWED_EXTENSIONS: {{ CDN_ALLOWED_EXTENSIONS }}
 # example: 
 #    name: Honeycomb.jpg, expect: 1020.320.Honeycomb.jpg 160.50.Honeycomb.jpg   300.94.Honeycomb.jpg
 DEFAULT_PROJECT_IMAGE: {{ DEFAULT_PROJECT_IMAGE }}
+DEFAULT_USER_IMAGE: {{ DEFAULT_USER_IMAGE }}
 
 # flask logging settings
 LOGGING:

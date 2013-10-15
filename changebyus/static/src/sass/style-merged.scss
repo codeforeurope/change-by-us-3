@@ -1,5 +1,6 @@
 @import "variables";
 @import "projects";
+@import "modal";
 @import "helpers";
 @import "mixins-and-functions";
 @import "compass/css3/border-radius";
@@ -3124,69 +3125,8 @@ a {
 }
 
 .topnav {
-  padding-top: 10px;
+  height: 87px; 
   font-size: 24px;
-  padding-bottom: 80px;
   background-color: $primaryColor;
 }
 
-.circle{
-  @include border-radius(1000px, 1000px);
-}
-
-/*******************************************
- * Modal
- *******************************************/
-
-.modal-fullscreen {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-}
-
-.create-modal {
-  position: absolute;
-  width: 730px;
-  height: 390px;
-  top: 50%;
-  left: 50%;
-  margin-top: -185px;
-  margin-left: -365px;
-  text-align: center;
-  background: $white;
-  z-index: 9999;
-}
-
-.modal-links{}
-
-.body-container {
-  position: relative;
-}
- 
-.tabs-pane, .owner-tabs-pane{
-  position: absolute;
-  bottom: 0;
-  height: 50px;
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  ul{margin-left: 10px;}
-  li {
-    display: inline;
-    list-style-type: none;
-    padding-right: 20px;
-    margin: 0 18px;
-  } 
-  a {
-    line-height: 50px;
-    @include font-styling("asap", 22px, $white, "normal", "bold");
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75)); // drop shadow
-  }
-}
-
-.tabs-pane{
-  li .active span {
-    display: none;
-  }
-}/**/

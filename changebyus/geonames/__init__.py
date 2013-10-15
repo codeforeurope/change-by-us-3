@@ -21,18 +21,15 @@ def get_geopoint(s, exact=False):
     if (is_postal):
         varname = 'postalcode' if exact else 'postalcode_startsWith'
         dataname = 'postalCodes'
-        style = 'SHORT'
         url = settings['POSTALCODE_SEARCH_URL']
     else:
         varname = 'name_equals' if exact else 'name_startsWith'
         dataname = 'geonames'
-        style = 'MEDIUM'
         url = settings['SEARCH_URL']
         
     params = {'country': settings['COUNTRY'],
               'maxRows': settings['MAXROWS'],
               'username': settings['USERNAME'],
-              'style': style,
               varname: s}
               
     r = requests.get(url, params = params)
@@ -43,11 +40,13 @@ def get_geopoint(s, exact=False):
     else:
         json_data = r.json()
         
+        print(r.url)
+        
         if dataname not in json_data:
             current_app.logger.error("Error on %s: %s" % (r.url, json_data['status']))
         else:
             for x in json.loads(r.text)[dataname]:
-                data.append({'name': x['postalCode'] if is_postal \
+                data.append({'name': "%s, %s, %s" % (x['placeName'], x['adminCode1'], x['postalCode']) if is_postal \
                                                      else "%s, %s" % (x['name'], x['adminCode1']),
                              'lat': x['lat'],
                              'lon': x['lng']})

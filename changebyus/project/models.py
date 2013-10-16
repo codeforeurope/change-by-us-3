@@ -101,6 +101,8 @@ class Project(db.Document, EntityMixin):
     stripe_account = db.ReferenceField(StripeAccount)
     retired_stripe_accounts = db.ListField()
 
+    location = db.StringField()
+
     # Geo JSON Field
     geo_location = db.PointField()
 

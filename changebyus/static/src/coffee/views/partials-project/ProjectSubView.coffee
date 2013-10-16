@@ -9,7 +9,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 			@render()
 
 		show: ->
-			console.log @,'show',@isDataLoaded
+			console.log @,'ProjectSubView show',@isDataLoaded
 			@$el.show()
 			unless @isDataLoaded
 				@collection.on "reset", @addAll, @

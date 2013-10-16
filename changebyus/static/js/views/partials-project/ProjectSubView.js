@@ -8,7 +8,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.render();
     },
     show: function() {
-      console.log(this, 'show', this.isDataLoaded);
+      console.log(this, 'ProjectSubView show', this.isDataLoaded);
       this.$el.show();
       if (!this.isDataLoaded) {
         this.collection.on("reset", this.addAll, this);

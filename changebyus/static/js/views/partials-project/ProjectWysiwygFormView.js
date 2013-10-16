@@ -6,14 +6,19 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       return this.render();
     },
     render: function() {
-      var self;
+      var self, url;
       self = this;
       this.viewData = {
         project_id: window.projectID,
         response_id: "PLACEHOLDER"
       };
+      if (this.parent === "#discussion-form") {
+        url = "/templates/partials-project/project-new-discussion-form.html";
+      } else if (this.parent === "#update-form") {
+        url = "/templates/partials-project/project-update-form.html";
+      }
       this.$el = $("<div class='project-update-form'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-update-form.html", {
+      this.$el.template(this.templateDir + url, {
         data: this.viewData
       }, function() {
         return self.jQueryForm();

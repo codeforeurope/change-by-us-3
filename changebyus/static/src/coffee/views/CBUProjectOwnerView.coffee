@@ -8,12 +8,28 @@ define ["underscore",
 		"collection/ProjectCalendarCollection", 
 		"collection/ProjectMembersCollection", 
 		"views/partials-project/ProjectDiscussionsView", 
+		"views/partials-project/ProjectNewDiscussionView", 
 		"views/partials-project/ProjectFundraisingView", 
 		"views/partials-project/ProjectAddUpdateView", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
-		"views/partials-project/ProjectInfoAppearanceView"], 
-	(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionsView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) ->
+		"views/partials-project/ProjectInfoAppearanceView"], (_, 
+																Backbone, 
+																$, 
+																temp, 
+																CBUProjectView, 
+																ProjectDiscussionsCollection, 
+																ProjectUpdatesCollection, 
+																ProjectCalendarCollection, 
+																ProjectMembersCollection, 
+																ProjectDiscussionsView, 
+																ProjectNewDiscussionView, 
+																ProjectFundraisingView, 
+																ProjectAddUpdateView, 
+																ProjectCalenderView, 
+																ProjectMembersView, 
+																ProjectInfoAppearanceView) ->
+
 		CBUProjectOwnerView = CBUProjectView.extend
 
 			initialize: (options) ->
@@ -39,6 +55,7 @@ define ["underscore",
 						projectMembersCollection     = new ProjectMembersCollection(id)
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection, parent:"#project-discussion"}) 
+						@projectNewDiscussionView  = new ProjectNewDiscussionView() 
 						@projectAddUpdateView      = new ProjectAddUpdateView()
 						@projectFundraisingView    = new ProjectFundraisingView(id) 
 						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
@@ -65,7 +82,7 @@ define ["underscore",
 				@$el.prepend $header
 
 			toggleSubView: (view_) -> 
-				for view in [@projectDiscussionsView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
+				for view in [@projectDiscussionsView, @projectNewDiscussionView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
 					view.hide()
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
@@ -74,6 +91,9 @@ define ["underscore",
 				switch view_
 					when "discussion" 
 						@projectDiscussionsView.show()
+						@discussionBTN.addClass "active"
+					when "new-discussion" 
+						@projectNewDiscussionView.show()
 						@discussionBTN.addClass "active"
 					when "updates"
 						@projectAddUpdateView.show()

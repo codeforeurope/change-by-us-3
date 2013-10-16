@@ -10,8 +10,10 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					{data: @viewData}, =>@onTemplateLoad() 
 
 			onTemplateLoad:->
-				@$el.find(".preload").remove()
 				@$ul = @$el.find(".updates-container ul")
+
+			noResults:->
+
 					
 			addOne: (model_) ->
 				#console.log "ProjectUpdatesView addOne model", model_

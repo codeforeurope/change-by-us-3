@@ -1,6 +1,6 @@
 define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], 
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
-		ProjectUpdateFormView = AbstractView.extend
+		ProjectWysiwygFormView = AbstractView.extend
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@render()
@@ -19,8 +19,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 				$(@parent).append @$el
 
-			jQueryForm: ->
-				
+			jQueryForm: -> 
 				# AJAXIFY THE FORM
 				showErrorAlert = (reason, detail) ->
 					msg = ""

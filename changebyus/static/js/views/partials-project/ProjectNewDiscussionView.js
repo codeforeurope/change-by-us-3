@@ -1,7 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectWysiwygFormView"], function(_, Backbone, $, temp, AbstractView, ProjectWysiwygFormView) {
-  var ProjectAddUpdateView;
-  return ProjectAddUpdateView = AbstractView.extend({
-    parent: "#project-update",
+  var ProjectNewDiscussionView;
+  return ProjectNewDiscussionView = AbstractView.extend({
+    parent: "#project-new-discussion",
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
@@ -9,13 +9,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
+      return this.$el.template(this.templateDir + "/templates/partials-project/project-new-discussion.html", {
         data: this.viewData
       }, function() {
-        var form, updateDiv;
-        updateDiv = _this.$el.find("#update-form");
+        var form, formDiv;
+        formDiv = _this.$el.find("#discussion-form");
         return form = new ProjectWysiwygFormView({
-          parent: updateDiv
+          parent: formDiv
         });
       });
     }

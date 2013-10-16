@@ -1,6 +1,9 @@
 define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], 
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
 		ProjectWysiwygFormView = AbstractView.extend
+
+
+
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@render()
@@ -11,8 +14,13 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					project_id: window.projectID
 					response_id: "PLACEHOLDER"
 
+				if @parent is "#discussion-form"
+					url = "/templates/partials-project/project-new-discussion-form.html"
+				else if @parent is "#update-form"
+					url = "/templates/partials-project/project-update-form.html"
+
 				@$el = $("<div class='project-update-form'/>")
-				@$el.template @templateDir + "/templates/partials-project/project-update-form.html",
+				@$el.template @templateDir+url,
 					data: @viewData
 				, ->
 					self.jQueryForm()

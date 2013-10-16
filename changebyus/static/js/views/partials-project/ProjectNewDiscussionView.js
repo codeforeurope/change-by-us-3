@@ -12,10 +12,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$el.template(this.templateDir + "/templates/partials-project/project-new-discussion.html", {
         data: this.viewData
       }, function() {
-        var form, formDiv;
-        formDiv = _this.$el.find("#discussion-form");
+        var form;
         return form = new ProjectWysiwygFormView({
-          parent: formDiv
+          parent: "#discussion-form"
         });
       });
     }

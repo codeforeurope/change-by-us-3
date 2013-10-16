@@ -11,6 +11,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			render: -> 
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
-					{data: @viewData}, =>
-						updateDiv = @$el.find("#update-form")
-						form = new ProjectWysiwygFormView({parent:updateDiv})
+					{data: @viewData}, => 
+						form = new ProjectWysiwygFormView({parent:"#update-form"})

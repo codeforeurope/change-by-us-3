@@ -112,6 +112,8 @@ class Project(db.Document, EntityMixin):
     resource = db.BooleanField(default=False)
 
     slug = db.StringField(unique=True)
+    
+    flags = db.IntField(default=0)
 
     activity = db.DecimalField()
 

@@ -145,6 +145,7 @@ class User(db.Document, UserMixin, EntityMixin):
     display_name = db.StringField(max_length=50)
     first_name = db.StringField(max_length=20)
     last_name = db.StringField(max_length=20)
+    flags = db.IntField(default=0)
 
     #visible profile information
     user_description = db.StringField(max_length=600)

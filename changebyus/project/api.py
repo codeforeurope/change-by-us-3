@@ -120,7 +120,7 @@ def api_search_projects():
 
 @project_api.route('/<project_id>/flag', methods = ['POST'])
 @project_exists
-#@login_required
+@login_required
 def api_flag_project(project_id):
     p = Project.objects.with_id(project_id)
     

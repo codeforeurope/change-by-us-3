@@ -11,10 +11,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       console.log(this, 'ProjectSubView show', this.isDataLoaded);
       this.$el.show();
       if (!this.isDataLoaded) {
-        this.collection.on("reset", this.addAll, this);
-        return this.collection.fetch({
-          reset: true
-        });
+        if (this.collection) {
+          this.collection.on("reset", this.addAll, this);
+          return this.collection.fetch({
+            reset: true
+          });
+        }
       }
     },
     loadData: function() {},

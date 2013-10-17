@@ -1,6 +1,7 @@
 define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], function(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) {
   var ProjectWysiwygFormView;
   return ProjectWysiwygFormView = AbstractView.extend({
+    formID: "#editor",
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
@@ -10,12 +11,19 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       self = this;
       this.viewData = {
         project_id: window.projectID,
-        response_id: "PLACEHOLDER"
+        response_to_id: this.id,
+        formID: this.formID
       };
-      if (this.parent === "#discussion-form") {
-        url = "/templates/partials-project/project-new-discussion-form.html";
-      } else if (this.parent === "#update-form") {
+      console.log("ProjectWysiwygFormView", this);
+      if (this.parent === "#update-form") {
         url = "/templates/partials-project/project-update-form.html";
+        this.formID = "#editor";
+      } else if (this.parent === "#add-thread-form") {
+        url = "/templates/partials-project/project-new-thread-form.html";
+        this.formID = "#new-thread-editor";
+      } else {
+        url = "/templates/partials-project/project-new-discussion-form.html";
+        this.formID = "#discussion-editor";
       }
       this.$el = $("<div class='project-update-form'/>");
       this.$el.template(this.templateDir + url, {
@@ -35,9 +43,9 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         } else {
           console.log("error uploading file", reason, detail);
         }
-        return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button>" + "<strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
+        return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
-      $editor = $("#editor");
+      $editor = $(this.formID);
       options = {
         beforeSubmit: function(arr, $form, options) {
           var i, _results;
@@ -77,10 +85,10 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return overlay.css("opacity", 0).css("position", "absolute").offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
       });
       if ("onwebkitspeechchange" in document.createElement("input")) {
-        editorOffset = $("#editor").offset();
+        editorOffset = $editor.offset();
         $("#voiceBtn").css("position", "absolute").offset({
           top: editorOffset.top - 20,
-          left: editorOffset.left + $("#editor").innerWidth() - 75
+          left: editorOffset.left + $editor.innerWidth() - 75
         });
       } else {
         $("#voiceBtn").hide();

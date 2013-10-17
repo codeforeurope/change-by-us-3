@@ -18,19 +18,22 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					success: =>@render()
 
 			render: -> 
+				console.log 'CBUProjectView',@model
 				@$el = $("<div class='project-container'/>")
 				@$el.template(@templateDir+"/templates/project.html", {}
 					, => @addSubViews())
 				$(@parent).append @$el
 
-			addSubViews: ->  
+			addSubViews: -> 
+				
 				$header = $("<div class='project-header'/>")
 				$header.template @templateDir + "/templates/partials-project/project-header.html",
 					{data:@model.attributes}, =>
-						id = {id:@model.get("id")}
-						projectUpdatesCollection  = new ProjectUpdatesCollection(id)
-						projectMembersCollection   = new ProjectMembersCollection(id)
-						projectCalendarCollection = new ProjectCalendarCollection(id)
+						id = @model.get("id")
+						config = {id:id}
+						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
+						projectMembersCollection   = new ProjectMembersCollection(config)
+						projectCalendarCollection = new ProjectCalendarCollection(config)
 
 						@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
 						@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
@@ -50,6 +53,31 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 						$("a[href^='#']").click (e) -> 
 							window.location.hash = $(this).attr("href").substring(1)
 
+						@joingBTN()
+
+			joingBTN:->
+
+				# am_i_a_member
+
+				joined = false
+				$join = $(".project-footer .btn")
+				$join.click (e) =>
+					e.preventDefault()
+					if joined then return
+					$.ajax(
+						type: "POST"
+						url: "/api/project/join"
+						data: { project_id:id }
+					).done (response)=>
+						if response.msg.toLowerCase() is "ok"
+							joined = true
+							$join.html('Joined')
+							$join.css('background-color','#e6e6e6')
+
+
+							
+						
+
 				@$el.prepend $header
 
 			toggleSubView: (view) ->
@@ -61,13 +89,14 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				@membersBTN.removeClass "active"
 				@calendarBTN.removeClass "active"
 
-				switch view
-					when "updates"
-						@projectUpdatesView.show()
-						@updatesBTN.addClass "active"
+				switch view 
 					when "members"
 						@projectMembersView.show()
 						@membersBTN.addClass "active"
 					when "calendar"
 						@projectCalenderView.show()
-						@calendarBTN.addClass "active" 
+						@calendarBTN.addClass "active"
+					else
+						# "updates"
+						@projectUpdatesView.show()
+						@updatesBTN.addClass "active"

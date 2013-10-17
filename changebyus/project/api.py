@@ -51,6 +51,8 @@ images, etc.
 
 """
 
+## TODO WTForms for geopoint?
+
 @project_api.route('/geopoint')
 def api_get_geopoint():
     """
@@ -61,6 +63,9 @@ def api_get_geopoint():
     data = get_geopoint(s)
     
     return jsonify_response(ReturnStructure(data = data))
+
+
+## TODO WTForms for search?
 
 @project_api.route('/search')
 def api_search_projects():
@@ -81,13 +86,13 @@ def api_search_projects():
         None
     """    
     text = request.args.get('s')
-    loc = request.args.get('loc')
     geo_dist = request.args.get('d')
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
     cat = request.args.get('cat')
     search_type = request.args.get('type')
     
-    latlon = _get_lat_lon_from_location(loc)
-    geo_center = [latlon[0], latlon[1]]
+    geo_center = [lat, lon]
     
     addl_filters = {}
     
@@ -111,12 +116,27 @@ def api_search_projects():
 
     return jsonify_response(ReturnStructure(data = search_data))
 
+# TODO WTForms for flagging?
+
+@project_api.route('/<project_id>/flag', methods = ['POST'])
+@project_exists
+#@login_required
+def api_flag_project(project_id):
+    p = Project.objects.with_id(project_id)
+    
+    p.flags += 1
+    p.save()
+
+    return jsonify_response(ReturnStructure())
+
 
 class CreateProjectForm(Form):
 
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
     location = TextField("location", validators=[Required()])
+    lat = TextField("lat", validators=[Required()])
+    lon = TextField("lon", validators=[Required()])
     photo = FileField("photo")
 
 

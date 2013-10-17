@@ -85,9 +85,7 @@ def stripe_link():
 
     site = SITE + AUTHORIZE_URI
 
-    project_url = url_for('project_view.project_view_id', 
-                          id = project_id,
-                          _external = True)
+    project_url = "/project/" + project_id
 
     # pre-populate a few of the fields
     email = g.user.email

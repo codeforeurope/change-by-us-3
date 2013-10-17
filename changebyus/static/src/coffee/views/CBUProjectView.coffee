@@ -7,6 +7,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			updatesBTN: null
 			membersBTN: null
 			calendarBTN: null
+			$header:null
 
 			initialize: (options) ->
 				console.log 'CBUProjectView options',options
@@ -24,10 +25,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					, => @addSubViews())
 				$(@parent).append @$el
 
-			addSubViews: -> 
-				
-				$header = $("<div class='project-header'/>")
-				$header.template @templateDir + "/templates/partials-project/project-header.html",
+			addSubViews: ->  
+				@$header = $("<div class='project-header'/>")
+				@$header.template @templateDir+"/templates/partials-project/project-header.html",
 					{data:@model.attributes}, =>
 						id = @model.get("id")
 						config = {id:id}
@@ -53,11 +53,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 						$("a[href^='#']").click (e) -> 
 							window.location.hash = $(this).attr("href").substring(1)
 
+						@$el.prepend @$header
+
 						@joingBTN()
 
 			joingBTN:->
-
-				# am_i_a_member
+				id = @model.get("id")
 
 				joined = false
 				$join = $(".project-footer .btn")
@@ -73,12 +74,19 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 							joined = true
 							$join.html('Joined')
 							$join.css('background-color','#e6e6e6')
+				$join.addClass('invisible')
 
+				# determine if user is a member of the project
+				# if not, display the join button
+				$.ajax(
+					type: "POST"
+					url: "/api/project/am_i_a_member"
+					data: { project_id:id }
+				).done (response)=> 
+					console.log 'response.data.member',response.data.member,$join
+					if response.data.member is false then $join.removeClass('invisible')
 
-							
-						
-
-				@$el.prepend $header
+				
 
 			toggleSubView: (view) ->
 				@projectUpdatesView.hide()

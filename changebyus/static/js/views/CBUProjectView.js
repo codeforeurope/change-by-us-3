@@ -7,6 +7,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     updatesBTN: null,
     membersBTN: null,
     calendarBTN: null,
+    $header: null,
     initialize: function(options) {
       var _this = this;
       console.log('CBUProjectView options', options);
@@ -30,10 +31,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $(this.parent).append(this.$el);
     },
     addSubViews: function() {
-      var $header,
-        _this = this;
-      $header = $("<div class='project-header'/>");
-      return $header.template(this.templateDir + "/templates/partials-project/project-header.html", {
+      var _this = this;
+      this.$header = $("<div class='project-header'/>");
+      return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
         data: this.model.attributes
       }, function() {
         var config, hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection;
@@ -65,12 +65,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         $("a[href^='#']").click(function(e) {
           return window.location.hash = $(this).attr("href").substring(1);
         });
+        _this.$el.prepend(_this.$header);
         return _this.joingBTN();
       });
     },
     joingBTN: function() {
-      var $join, joined,
+      var $join, id, joined,
         _this = this;
+      id = this.model.get("id");
       joined = false;
       $join = $(".project-footer .btn");
       $join.click(function(e) {
@@ -92,7 +94,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           }
         });
       });
-      return this.$el.prepend($header);
+      $join.addClass('invisible');
+      return $.ajax({
+        type: "POST",
+        url: "/api/project/am_i_a_member",
+        data: {
+          project_id: id
+        }
+      }).done(function(response) {
+        console.log('response.data.member', response.data.member, $join);
+        if (response.data.member === false) {
+          return $join.removeClass('invisible');
+        }
+      });
     },
     toggleSubView: function(view) {
       this.projectUpdatesView.hide();

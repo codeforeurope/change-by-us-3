@@ -20,21 +20,20 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 						
 
 		getStarted:->
+			$how = $('.fundraising-left .content-wrapper')
+			$how.slideToggle(1)
+
+			$('#does-it-work').click (e)=>
+				$how.slideToggle()
+
 			$('.btn-large').click (e)=>
-				e.preventDefault()
-				console.log 'ProjectFundraisingView here',@
+				e.preventDefault() 
+				console.log 'ProjectFundraisingView '
+				
+				# post to API, get URL and pass to popupWindow function
 				$.ajax(
 					type: "POST"
 					url: "/stripe/link"
 					data: { project_id:@id, project_name:@name }
-				).done (response)=>
-					console.log 'more',response
-
-				###
-					options =
-					success: (response) ->
-						console.log response
-
-				@$el.find('form').ajaxForm options
-				###
-
+				).done (response_)=>
+					popWindow response_

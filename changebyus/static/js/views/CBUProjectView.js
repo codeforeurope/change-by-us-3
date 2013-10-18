@@ -102,7 +102,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           project_id: id
         }
       }).done(function(response) {
-        console.log('response.data.member', response.data.member, $join);
+        console.log('response.data.member', response, $join);
         if (response.data.member === false) {
           return $join.removeClass('invisible');
         }

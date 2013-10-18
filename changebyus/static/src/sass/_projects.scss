@@ -84,6 +84,7 @@
     }
 
     .project-location{
+      display: inline-block;
       @include font-styling("asap", 21px, $white );
       @include text-shadow(0 1px 5px rgba(0,0,0,.75));
     }
@@ -301,14 +302,14 @@
     
     .date{
       float: right;
-      margin-top: 10px;
+      margin-top: 20px;
       margin-right: 55px;
       @include font-styling("asap", 15px, $gray65);
     }
 
     .close{
       float: right;
-      margin-top: 10px;
+      margin-top: 20px;
       margin-right: 20px; 
     }
 

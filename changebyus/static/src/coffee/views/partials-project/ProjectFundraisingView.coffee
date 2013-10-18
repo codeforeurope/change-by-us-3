@@ -2,9 +2,11 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 	ProjectFundraisingView = AbstractView.extend
 		
 		parent: "#project-calendar"
+		name:"My Project"
 		
 		initialize: (options) ->
 			AbstractView::initialize.call @, options
+			@name = options.name || @name;
 			@render()
 
 		render: ->  
@@ -20,10 +22,10 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 		getStarted:->
 			$('.btn-large').click (e)=>
 				e.preventDefault()
-				console.log 'here'
+				console.log 'ProjectFundraisingView here',@
 				$.ajax(
+					type: "POST"
 					url: "/stripe/link"
-					context: document.body
 					data: { project_id:@id, project_name:@name }
 				).done (response)=>
 					console.log 'more',response

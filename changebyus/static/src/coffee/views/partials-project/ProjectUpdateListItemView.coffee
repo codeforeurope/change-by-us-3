@@ -1,5 +1,19 @@
-define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/ProjectUpdateModel", "views/partials-project/ProjectPostReplyView"], 
-	(_, Backbone, $, temp, moment, AbstractView, ProjectUpdateModel, ProjectPostReplyView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"moment", 
+		"abstract-view", 
+		"model/ProjectUpdateModel", 
+		"views/partials-project/ProjectPostReplyView"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 moment, 
+	 AbstractView, 
+	 ProjectUpdateModel, 
+	 ProjectPostReplyView) ->
 		ProjectUpdateListItemView = AbstractView.extend
 			
 			model:ProjectUpdateModel

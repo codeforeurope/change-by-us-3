@@ -83,7 +83,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					url: "/api/project/am_i_a_member"
 					data: { project_id:id }
 				).done (response)=> 
-					console.log 'response.data.member',response.data.member,$join
+					console.log 'response.data.member',response,$join
 					if response.data.member is false then $join.removeClass('invisible')
 
 				

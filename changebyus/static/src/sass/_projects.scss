@@ -1,5 +1,6 @@
 @import "mixins-and-functions";
 @import "variables";
+@import "compass/css3";
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
 
@@ -323,6 +324,23 @@
   .fundraising-left{
     float: left;
     width: 66%;
+
+
+
+    .content-wrapper{
+      overflow: hidden;
+      /*
+      @include transition-property(height);
+      @include transition-duration(.5s);
+      
+      height: 461px;
+      &.invisible{
+       display: block;
+       height: 0;
+      }
+      */
+    }
+    
     
     span{
       font-weight: bold;

@@ -110,7 +110,8 @@ def stripe_link():
 
     # Redirect to Stripe /oauth/authorize endpoint
     url = site + '?' + urllib.urlencode(params)
-    return redirect(url)
+    return url
+    #return redirect(url)
 
 
 @stripe_view.route(settings['HOOK_URL'], methods=['GET', 'POST'])

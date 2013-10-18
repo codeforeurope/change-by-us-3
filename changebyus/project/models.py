@@ -14,6 +14,8 @@ from ..user.models import User
 from flask import current_app
 from flask.ext.cdn import url_for
 from mongoengine import signals
+from ..wordlist import filter_model
+
 import os
 # from ..helpers.mixin import (handle_decryption, handle_initial_encryption, 
 #     handle_update_encryption, EntityMixin, encode_model)
@@ -142,6 +144,8 @@ class Project(db.Document, EntityMixin):
             slug = slugify( document.name )
         elif document.__dict__.has_key('_changed_fields'):
             slug = slugify( document.name )
+            
+        filter_model(document, ['name', 'description'])
 
 
 

@@ -141,16 +141,23 @@ class ProjectClass():
     def __init__(self):
         self.name = name_generator()
         self.description = text_generator(100)
+        # zipcode gets turned into proper location later
         self.location = zipcode_generator()
 
     def createResource(self, client):
         self.createProject(client, resource = True)
 
     def createProject(self, client, resource = False):
+        loc_data = client.GET('/api/project/geopoint?s=%s' % self.location)['data'][0]
+        self.location = loc_data['name']
+        self.lat = loc_data['lat']
+        self.lon = loc_data['lon']
 
         create = { 'name' : self.name,
                    'description' : self.description,
-                   'location' : self.location }
+                   'location' : self.location,
+                   'lat': self.lat,
+                   'lon': self.lon }
 
         resp = client.POST('/api/project/create', data = create)
   
@@ -168,7 +175,9 @@ class ProjectClass():
         edit = { 'project_id' : self.project_id,
                  'name' : self.name,
                  'description' : self.description,
-                 'location' : self.location }
+                 'location' : self.location,
+                 'lat': self.lat,
+                 'lon': self.lon }
 
         resp = client.POST('/api/project/edit', data = edit)
 
@@ -457,7 +466,9 @@ class SearchTest(BaseTestCase):
     i.e. they have 'lorem' in the text and a location in NYC
     """
     search_string = "lorem"
-    search_loc = "11217"
+    # Brooklyn, NY, 11217
+    search_lat = "40.68165"
+    search_lon = "-73.979797"
     search_dist = "10"
     url = "/api/project/search"
 
@@ -475,18 +486,20 @@ class SearchTest(BaseTestCase):
 #         self.assertTrue(len(results) > 0)
         
     def test_geo_search(self):
-        search_url = "{0}?loc={2}&d={3}".format(self.url, 
+        search_url = "{0}?lat={2}&lon={3}&d={4}".format(self.url, 
                                               self.search_string,
-                                              self.search_loc,
+                                              self.search_lat,
+                                              self.search_lon,
                                               self.search_dist)
         results = self.GET(search_url)
                 
         self.assertTrue(len(results) > 0)
         
     def test_text_geo_search(self):
-        search_url = "{0}?s={1}&loc={2}&d={3}".format(self.url, 
+        search_url = "{0}?s={1}&lat={2}&lon={3}&d={4}".format(self.url, 
                                                       self.search_string,
-                                                      self.search_loc,
+                                                      self.search_lat,
+                                                      self.search_lon,
                                                       self.search_dist)
         results = self.GET(search_url)
                 

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectUpdateFormView"], function(_, Backbone, $, temp, AbstractView, ProjectUpdateFormView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectWysiwygFormView"], function(_, Backbone, $, temp, AbstractView, ProjectWysiwygFormView) {
   var ProjectAddUpdateView;
   return ProjectAddUpdateView = AbstractView.extend({
     parent: "#project-update",
@@ -12,10 +12,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
-        var form, updateDiv;
-        updateDiv = _this.$el.find("#update-form");
-        return form = new ProjectUpdateFormView({
-          parent: updateDiv
+        var form;
+        return form = new ProjectWysiwygFormView({
+          parent: "#update-form"
         });
       });
     }

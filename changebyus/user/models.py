@@ -4,14 +4,20 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from ..extensions import db
+
 from ..helpers.crypt import (handle_decryption, handle_initial_encryption, 
     handle_update_encryption)
+
+from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+    generate_ellipse_png)
+
 from ..helpers.mixin import EntityMixin, encode_model
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security.utils import encrypt_password
+from flask import current_app
 from mongoengine import signals
-
-
+from flask.ext.cdn import url_for
+import os
 
 """
 =================
@@ -24,6 +30,35 @@ have some social keys in these models, which the social tools are
 dependent on
 
 """
+
+
+user_images = [
+    ImageManipulator(dict_name = "image_url_round",
+                     converter = lambda x: generate_ellipse_png(x, [70, 70]),
+                     prefix = "70.70",
+                     extension = ".png"),
+]
+
+
+def gen_image_urls(image_url):
+
+    """
+    Helper that will take a root image name, and given our image manipulators
+    assign names
+    """
+
+    images = {}
+
+    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_USER_IMAGE']
+
+    for manipulator in user_images:
+        base, extension = os.path.splitext(root_image)
+        name = manipulator.prefix + "." + base + manipulator.extension
+        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
+
+    return images
+
+
 
 # Python 3 allows ENUM's, eventually move to that
 class Roles:
@@ -116,6 +151,8 @@ class User(db.Document, UserMixin, EntityMixin):
 
     notifications = db.EmbeddedDocumentField( UserNotifications )
 
+    image_name = db.StringField()
+
     meta = {
         'indexes': [
             {'fields': ['display_name'], 'unique': True },
@@ -150,7 +187,13 @@ class User(db.Document, UserMixin, EntityMixin):
         if not self['public_email']:
             resp['email'] = None
 
+        image_urls = gen_image_urls(self.image_name)
+
+        for image, url in image_urls.iteritems():
+            resp[image] = url
+
         return resp
+
 
     @classmethod    
     def pre_save(cls, sender, document, **kwargs):

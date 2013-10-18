@@ -25,6 +25,7 @@ def _get_project_slug_url(project_id = None):
 
     return "**** ONCE FRONTEND IN PLACE YOU REALLY SHOULD FIX THIS BUDDY TODO LV TODO"
 
+## DEPRECATED
 def _get_lat_lon_from_location(loc):
     """
     Returns lat/lon pair as a list from google maps api.
@@ -50,11 +51,7 @@ def _create_project( resource = False ):
     name = request.form.get('name')
     description = request.form.get('description')
     location = request.form.get('location')
-
-    if (location):
-        geo_location = _get_lat_lon_from_location(location)
-    else:
-        geo_location = []
+    geo_location = [float(request.form.get('lat')), float(request.form.get('lon'))]
 
     owner = User.objects.with_id(g.user.id)
     slug = slugify(name)
@@ -76,6 +73,8 @@ def _create_project( resource = False ):
     # TODO work on geo stuff
     p = Project( name = name, 
                  description = description, 
+                 location = location,
+                 geo_location = geo_location,
                  owner = owner,
                  resource = resource,
                  slug = slug )

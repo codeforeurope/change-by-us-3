@@ -1,29 +1,33 @@
-<div class="project">
-    <div class="body-container">
-        <div class="feature-image" style="background-image:url(http://lorempixel.com/1018/430/);">
-            <img src="http://lorempixel.com/255/255/" class="circle"/>
-         
-            <h1 class="overlay-h1"><%= data.data.name %></h1>
-            <p class="overlay-description"><%= data.data.description %></p>
+<div class="body-container">
+    <div class="feature-image" style="background-image:url(http://lorempixel.com/1018/430/);">
         
+        <div style="background-image:url(http://lorempixel.com/255/255/)" class="preview circle"></div>
 
-            <div class="project-footer">
-                <div class="project-location">
-                    Brooklyn, NY
-                    <br>
-                    <a href="http://www.ucf.com">http://www.ucf.com</a>
-                </div>
-                <a href="#" class="btn btn-large">Join Project</a>
+        <h1 class="overlay-title"><%= data.data.name %></h1>
+        <p class="overlay-description"><%= data.data.description %></p>
+        <div class="project-footer">
+            <a href="#" class="btn btn-large invs pull-right">Join Project</a>
+            <div class="project-location">
+                Brooklyn, NY
+                <br>
+                <a href="http://www.ucf.com">http://www.ucf.com</a>
             </div>
-            
         </div>
-
-        <div class="tabs-pane">
-            <ul class="tabs">
-                <li><a href="#updates" data-toggle="tab"><span>Updates</span></a></li>
-                <li><a href="#members" data-toggle="tab"><span>Members</span></a></li>
-                <li><a href="#calendar" data-toggle="tab"><span>Calendar</span></a></li>
-            </ul>
-        </div>
+    </div>
+    <div class="tabs-pane">
+        <ul class="tabs">
+            <li> 
+                <img src="/static/img/updates_icon.png">
+                <a href="#updates" data-toggle="tab"><span>Updates</span></a>
+            </li>
+            <li>
+                <img src="/static/img/members_icon.png">
+                <a href="#members" data-toggle="tab"><span>Members</span></a>
+            </li>
+            <li>
+                <img src="/static/img/cal_icon.png">
+                <a href="#calendar" data-toggle="tab"><span>Calendar</span></a>
+            </li>
+        </ul>
     </div>
 </div>

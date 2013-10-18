@@ -62,3 +62,8 @@
   text-align: center;
   display: block;
 }
+
+
+.circle{
+  @include border-radius(1000px, 1000px);
+}

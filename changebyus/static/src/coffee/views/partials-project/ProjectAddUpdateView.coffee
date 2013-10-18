@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectUpdateFormView"],
-	(_, Backbone, $, temp, AbstractView, ProjectUpdateFormView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectWysiwygFormView"],
+	(_, Backbone, $, temp, AbstractView, ProjectWysiwygFormView) ->
 		ProjectAddUpdateView = AbstractView.extend
 
 			parent: "#project-update"
@@ -11,6 +11,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			render: -> 
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
-					{data: @viewData}, =>
-						updateDiv = @$el.find("#update-form")
-						form = new ProjectUpdateFormView({parent:updateDiv})
+					{data: @viewData}, => 
+						form = new ProjectWysiwygFormView({parent:"#update-form"})

@@ -33,10 +33,16 @@ dependent on
 
 
 user_images = [
-    ImageManipulator(dict_name = "image_url_round",
+    ImageManipulator(dict_name = "image_url_round_small",
                      converter = lambda x: generate_ellipse_png(x, [70, 70]),
                      prefix = "70.70",
                      extension = ".png"),
+
+    ImageManipulator(dict_name = "image_url_round_medium",
+                     converter = lambda x: generate_ellipse_png(x, [250, 250]),
+                     prefix = "250.250",
+                     extension = ".png"),
+
 ]
 
 

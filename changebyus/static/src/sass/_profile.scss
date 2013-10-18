@@ -6,13 +6,32 @@
 
 }
 
-.user-info {
-    width: 600px;
-    border: 1px solid #000;
-    text-align: center;
+.user-header {
+    margin-top: 50px;
+    width: 1000px;
+    height: 300px;
+}
 
-    h1 {
-        font-size: 24px;
+.user-avatar {
+    width: 250px;
+    height: 250px;
+    float: left;
+}
+
+.user-info {
+float: left;
+    width: 700px;
+    border: none;
+    height: 300px;
+    margin-bottom: 10px;
+
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+    }
+
+    span {
+        font-size: 18px;
     }
 }
 
@@ -20,4 +39,31 @@
 .user-image {
     height: 400px;
     width: 400px;
+}
+
+.user-projects {
+    width: 1000px;
+
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+    }
+
+    span {
+        font-size: 18px;
+    }
+}
+
+.user-following {
+    width: 1000px;
+
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+    }
+
+    span {
+        font-size: 18px;
+    }
+
 }

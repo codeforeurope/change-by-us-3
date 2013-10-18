@@ -4,9 +4,11 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     parent: "body",
     templateDir: "/static",
     viewData: {},
+    id: 0,
     initialize: function(options_) {
       var options;
       options = options_ || {};
+      this.id = options.id || this.id;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.viewData = options.viewData || this.viewData;

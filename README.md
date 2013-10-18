@@ -44,7 +44,9 @@ The following organizations (and individuals) contributed to ChangeByUs:
 * $ sh js2coffee.bash
 
 ***
+
 * to start using grunt
+* $ sudo gem install compass-rgbapng
 * $ npm install -g grunt-cli
 * $ cd directory/containing/grunt/file
 * $ npm install

@@ -1,0 +1,23 @@
+@import "mixins-and-functions";
+@import "compass/css3/text-shadow";
+
+.user {
+    
+
+}
+
+.user-info {
+    width: 600px;
+    border: 1px solid #000;
+    text-align: center;
+
+    h1 {
+        font-size: 24px;
+    }
+}
+
+
+.user-image {
+    height: 400px;
+    width: 400px;
+}

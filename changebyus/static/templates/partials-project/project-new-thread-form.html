@@ -1,13 +1,13 @@
-<form method="post" enctype=multipart/form-data class="form-project clearfix" name="project-update" action="/api/post/add_update">
+<form method="post" enctype=multipart/form-data class="form-project clearfix" name="project-update" action="/api/post/add_discussion">
 
     <div>
 
         <label> TITLE </label>
         <input type="text" maxlength="30" name="title" id="title" placeholder="Title" class="input-xxlarge">
 
-        <div id="editor" class="wsyiwyg-editor"></div>
+        <div id="new-thread-editor" class="wsyiwyg-editor"></div>
 
-        <div class="btn-toolbar" data-role="editor-toolbar" data-target="#editor">
+        <div class="btn-toolbar" data-role="editor-toolbar" data-target="new-thread-editor">
 	      <div class="btn-group">
 	        <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
 	          <ul class="dropdown-menu">
@@ -70,9 +70,9 @@
         <input type="hidden" id="description" name="description" value="" >
         <!-- 
          <textarea rows="8" name="description" maxlength="600" id="description" placeholder="Description" class="input-xxlarge"></textarea>
-        
+         -->
         <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>" > 
-        -->
+       
 
     </div>
 

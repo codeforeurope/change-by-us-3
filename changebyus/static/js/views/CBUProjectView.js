@@ -7,6 +7,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     updatesBTN: null,
     membersBTN: null,
     calendarBTN: null,
+    $header: null,
     initialize: function(options) {
       var _this = this;
       console.log('CBUProjectView options', options);
@@ -22,6 +23,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     render: function() {
       var _this = this;
+      console.log('CBUProjectView', this.model);
       this.$el = $("<div class='project-container'/>");
       this.$el.template(this.templateDir + "/templates/project.html", {}, function() {
         return _this.addSubViews();
@@ -29,19 +31,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $(this.parent).append(this.$el);
     },
     addSubViews: function() {
-      var $header,
-        _this = this;
-      $header = $("<div class='project-header'/>");
-      $header.template(this.templateDir + "/templates/partials-project/project-header.html", {
+      var _this = this;
+      this.$header = $("<div class='project-header'/>");
+      return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
         data: this.model.attributes
       }, function() {
-        var hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection;
-        id = {
-          id: _this.model.get("id")
+        var config, hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection;
+        id = _this.model.get("id");
+        config = {
+          id: id
         };
-        projectUpdatesCollection = new ProjectUpdatesCollection(id);
-        projectMembersCollection = new ProjectMembersCollection(id);
-        projectCalendarCollection = new ProjectCalendarCollection(id);
+        projectUpdatesCollection = new ProjectUpdatesCollection(config);
+        projectMembersCollection = new ProjectMembersCollection(config);
+        projectCalendarCollection = new ProjectCalendarCollection(config);
         _this.projectUpdatesView = new ProjectUpdatesView({
           collection: projectUpdatesCollection
         });
@@ -60,11 +62,51 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           hash = window.location.hash.substring(1);
           return _this.toggleSubView(hash);
         });
-        return $("a[href^='#']").click(function(e) {
+        $("a[href^='#']").click(function(e) {
           return window.location.hash = $(this).attr("href").substring(1);
         });
+        _this.$el.prepend(_this.$header);
+        return _this.joingBTN();
       });
-      return this.$el.prepend($header);
+    },
+    joingBTN: function() {
+      var $join, id, joined,
+        _this = this;
+      id = this.model.get("id");
+      joined = false;
+      $join = $(".project-footer .btn");
+      $join.click(function(e) {
+        e.preventDefault();
+        if (joined) {
+          return;
+        }
+        return $.ajax({
+          type: "POST",
+          url: "/api/project/join",
+          data: {
+            project_id: id
+          }
+        }).done(function(response) {
+          if (response.msg.toLowerCase() === "ok") {
+            joined = true;
+            $join.html('Joined');
+            return $join.css('background-color', '#e6e6e6');
+          }
+        });
+      });
+      $join.addClass('invisible');
+      return $.ajax({
+        type: "POST",
+        url: "/api/project/am_i_a_member",
+        data: {
+          project_id: id
+        }
+      }).done(function(response) {
+        console.log('response.data.member', response.data.member, $join);
+        if (response.data.member === false) {
+          return $join.removeClass('invisible');
+        }
+      });
     },
     toggleSubView: function(view) {
       this.projectUpdatesView.hide();
@@ -74,15 +116,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.membersBTN.removeClass("active");
       this.calendarBTN.removeClass("active");
       switch (view) {
-        case "updates":
-          this.projectUpdatesView.show();
-          return this.updatesBTN.addClass("active");
         case "members":
           this.projectMembersView.show();
           return this.membersBTN.addClass("active");
         case "calendar":
           this.projectCalenderView.show();
           return this.calendarBTN.addClass("active");
+        default:
+          this.projectUpdatesView.show();
+          return this.updatesBTN.addClass("active");
       }
     }
   });

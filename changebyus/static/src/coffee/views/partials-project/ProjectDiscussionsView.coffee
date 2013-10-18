@@ -1,23 +1,36 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView"],
-	(_, Backbone, $, temp, ProjectSubView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"views/partials-project/ProjectSubView",
+		"views/partials-project/ProjectDiscussionListItemView"],
+	(_, Backbone, $, temp, ProjectSubView, ProjectDiscussionListItemView) ->
 		ProjectDiscussionsView = ProjectSubView.extend
 
-			parent: "#project-update"
+			parent: "#project-discussions"
+			$ul:null
 
 			render: ->  
 				@$el = $(@parent)
 
 			addAll: ->
 				console.log 'ProjectDiscussionsView addAll',@collection
-				###
+				
 				if @collection.models.length is 0
-					@$el.template @templateDir + "/templates/partials-project/project-zero-discussions.html", 
+					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
 						{}, =>
 				else
-					@$el.template @templateDir + "/templates/partials-project/project-all-discussions.html",
-						{data:@collection.models}, =>
-				###
-				@$el.template @templateDir + "/templates/partials-project/project-all-discussions.html",
-					{data:@collection.models}, =>
+					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
+						{}, => 
+							@$ul = @$el.find('.bordered-item')
+							for model in @collection.models
+								@addOne model
 
+				@isDataLoaded = true
 
+			addOne:(model_)->  
+				config = {model:model_}
+				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
+				projectDiscussionListItemView.on 'click', =>
+					@trigger 'discussionClick', config
+				@$ul.append projectDiscussionListItemView.$el

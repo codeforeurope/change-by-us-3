@@ -12,8 +12,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 			console.log @,'ProjectSubView show',@isDataLoaded
 			@$el.show()
 			unless @isDataLoaded
-				@collection.on "reset", @addAll, @
-				@collection.fetch {reset: true}
+				if @collection
+					@collection.on "reset", @addAll, @
+					@collection.fetch {reset: true}
 
 		loadData: ->
 

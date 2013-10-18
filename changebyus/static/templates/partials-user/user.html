@@ -2,15 +2,16 @@
 	<div class="user-avatar">
 		<img src="<%= data.data.avatar_url %>">
 	</div>
-	<div class="user_info">
-		<h2><%= data.data.first_name %> <%= data.data.last_name %></h2>
-		<span>aka </span><span><%= data.data.user_name %></span>
+	<div class="user-info">
+		<h2><%= data.data.display_name %></h2>
+		<span>aka </span><span><%= data.data.first_name %> <%= data.data.last_name %></span>
 		<span><%= data.data.user_description %></span>
 		<br>
 		<span><%= data.data.user_location %></span>
 		<strong>
 			<span><%= data.data.user_website %></span>
 		</strong>
+		<p>blah debug </p>
 	</div>
 </div>
 <hr>

@@ -17,6 +17,11 @@
   margin-bottom: 15px;
 }
 
+.user-info {
+    width: 600px;
+    border: 1px solid #000;
+}
+
 .project-icon {
   margin: 10px;
   @include box-skin;

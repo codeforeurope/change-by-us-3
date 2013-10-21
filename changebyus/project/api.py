@@ -120,7 +120,7 @@ def api_search_projects():
 
 @project_api.route('/<project_id>/flag', methods = ['POST'])
 @project_exists
-#@login_required
+@login_required
 def api_flag_project(project_id):
     p = Project.objects.with_id(project_id)
     
@@ -134,9 +134,9 @@ class CreateProjectForm(Form):
 
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
-    location = TextField("location", validators=[Required()])
-    lat = TextField("lat", validators=[Required()])
-    lon = TextField("lon", validators=[Required()])
+    location = TextField("location")
+    lat = TextField("lat")
+    lon = TextField("lon")
     photo = FileField("photo")
 
 

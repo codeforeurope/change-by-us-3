@@ -134,9 +134,9 @@ class CreateProjectForm(Form):
 
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
-    location = TextField("location", validators=[Required()])
-    lat = TextField("lat", validators=[Required()])
-    lon = TextField("lon", validators=[Required()])
+    location = TextField("location")
+    lat = TextField("lat")
+    lon = TextField("lon")
     photo = FileField("photo")
 
 

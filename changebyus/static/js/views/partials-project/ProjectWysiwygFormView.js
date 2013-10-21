@@ -34,7 +34,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       return $(this.parent).append(this.$el);
     },
     jQueryForm: function() {
-      var $editor, $updateForm, editorOffset, options, showErrorAlert;
+      var $editor, $updateForm, editorOffset, options, self, showErrorAlert;
       showErrorAlert = function(reason, detail) {
         var msg;
         msg = "";
@@ -45,16 +45,18 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         }
         return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
+      self = this;
       $editor = $(this.formID);
       options = {
-        beforeSubmit: function(arr, $form, options) {
+        beforeSubmit: function(arr_, form_, options_) {
           var i, _results;
+          self.beforeSubmit(arr_, form_, options_);
           _results = [];
-          for (i in arr) {
-            console.log("obj.name", arr[i].name, arr[i]);
-            if (arr[i].name === "description") {
-              arr[i].value = escape($editor.html());
-              _results.push(console.log('des', arr[i].value));
+          for (i in arr_) {
+            console.log("obj.name", arr_[i].name, arr_[i]);
+            if (arr_[i].name === "description") {
+              arr_[i].value = escape($editor.html());
+              _results.push(console.log('des', arr_[i].value));
             } else {
               _results.push(void 0);
             }
@@ -97,6 +99,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         fileUploadError: showErrorAlert
       });
       return window.prettyPrint && prettyPrint();
-    }
+    },
+    beforeSubmit: function(arr_, form_, options_) {}
   });
 });

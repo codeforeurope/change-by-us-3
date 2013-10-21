@@ -1,5 +1,6 @@
 @import "mixins-and-functions";
 @import "variables";
+@import "compass/css3";
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
 
@@ -274,17 +275,48 @@
   }
 
   .share-select{
-    span{float: left;}
+    
+    margin-bottom: 20px;
   }
   .share-toggle-wrapper{
     float: left;
+    height: 25px;
     width: 205px;
+    z-index: 1;
+    top:-7px;
+    left: 5px;
   }
   .share-toggle{
+    cursor: pointer; 
+    padding: 5px;
     @include box-skin;
+
+    
+
+    .caret{
+      float: right;
+      margin-top: 8px;
+      margin-right: 5px;
+    }
   }
   .share-options{
+    padding: 5px;
     @include box-skin;
+
+    label{ 
+      height: 15px;
+      line-height: 15px;
+      padding-left: 20px;
+      background-repeat: no-repeat;
+      background-image: url('/static/img/black-check.png');
+    }
+
+    input[type=checkbox]{
+      display: none;
+    }
+    input[type=checkbox]:checked+label {
+      background-position: 0 -15px;
+    }
   }
 
   .discussion{ 
@@ -323,6 +355,23 @@
   .fundraising-left{
     float: left;
     width: 66%;
+
+
+
+    .content-wrapper{
+      overflow: hidden;
+      /*
+      @include transition-property(height);
+      @include transition-duration(.5s);
+      
+      height: 461px;
+      &.invisible{
+       display: block;
+       height: 0;
+      }
+      */
+    }
+    
     
     span{
       font-weight: bold;

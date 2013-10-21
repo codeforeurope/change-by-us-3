@@ -12,9 +12,30 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
-        var form;
-        return form = new ProjectWysiwygFormView({
+        var $shareOptions, $shareToggle, form;
+        form = new ProjectWysiwygFormView({
           parent: "#update-form"
+        });
+        form.beforeSubmit = function(arr_, form_, options_) {
+          var share;
+          share = [];
+          if ($("#twitter").val() === "on") {
+            share.push('twitter');
+          }
+          if ($("#facebook").val() === "on") {
+            share.push('facebook');
+          }
+          return arr_.push({
+            name: "social_sharing",
+            value: share,
+            type: "hidden",
+            required: false
+          });
+        };
+        $shareOptions = $(".share-options");
+        $shareToggle = $(".share-toggle");
+        return $shareToggle.click(function() {
+          return $shareOptions.toggleClass("hide");
         });
       });
     }

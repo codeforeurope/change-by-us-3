@@ -1,25 +1,31 @@
-<div class="user-header">
-	<div class="user-avatar">
-		<img src="<%= data.data.avatar_url %>">
+<div class="body-container">
+	<div class="user-header">
+		<div class="user-avatar">
+			<img src="/static/img/user_profile_temp.png">
+			<!-- <img src="<%= data.data.avatar_url %>"> -->
+		</div>
+		<div class="user-info">
+			<span style="font-size: 42px; font-weight: normal"><%= data.data.display_name %></span><span><img src="/static/img/profile_email.png"></span>
+			<br>
+			<span style="color:#323232"><i>aka </i></span><span><%= data.data.first_name %> <%= data.data.last_name %></span>
+			<span><%= data.data.user_description %></span>
+			<br>
+			<span><%= data.data.user_location %></span>
+			<strong>
+				<span><%= data.data.user_website %></span>
+			</strong>
+		</div>
 	</div>
-	<div class="user_info">
-		<h2><%= data.data.first_name %> <%= data.data.last_name %></h2>
-		<span>aka </span><span><%= data.data.user_name %></span>
-		<span><%= data.data.user_description %></span>
-		<br>
-		<span><%= data.data.user_location %></span>
-		<strong>
-			<span><%= data.data.user_website %></span>
-		</strong>
+	<hr>
+	<div class="user-projects">
+		<h2><%= data.data.first_name %> <%= data.data.last_name %>'s Projects</h2>
+		<ul id="project-list"></ul>
 	</div>
-</div>
-<hr>
-<div class="user-projects">
-	<h2><%= data.data.first_name %> <%= data.data.last_name %>'s Projects</h2>
-	<ul id="project-list"></ul>
-</div>
 
-<div class="user-following">
-	<h2>Following</h2>
-	<ul id="following-list"></ul>
+	<hr>
+
+	<div class="user-following">
+		<h2>Following</h2>
+		<ul id="following-list"></ul>
+	</div>
 </div>

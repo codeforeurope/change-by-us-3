@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "project-view", "collection/ProjectDiscussionsCollection", "collection/ProjectUpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectAddUpdateView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionsView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
+define(["underscore", "backbone", "jquery", "template", "project-view", "collection/ProjectDiscussionsCollection", "collection/ProjectUpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionView", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectNewDiscussionView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectAddUpdateView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionView, ProjectDiscussionsView, ProjectNewDiscussionView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
   var CBUProjectOwnerView;
   return CBUProjectOwnerView = CBUProjectView.extend({
     initialize: function(options) {
@@ -19,19 +19,22 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
-        var hash, id, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection;
-        id = {
-          id: _this.model.get("id")
+        var config, hash, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection;
+        config = {
+          id: _this.model.get("id"),
+          name: _this.model.get("data").name
         };
-        projectDiscussionsCollection = new ProjectDiscussionsCollection(id);
-        projectCalendarCollection = new ProjectCalendarCollection(id);
-        projectMembersCollection = new ProjectMembersCollection(id);
+        console.log('CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!', config);
+        projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
+        projectCalendarCollection = new ProjectCalendarCollection(config);
+        projectMembersCollection = new ProjectMembersCollection(config);
         _this.projectDiscussionsView = new ProjectDiscussionsView({
-          collection: projectDiscussionsCollection,
-          parent: "#project-discussion"
+          collection: projectDiscussionsCollection
         });
+        _this.projectDiscussionView = new ProjectDiscussionView();
+        _this.projectNewDiscussionView = new ProjectNewDiscussionView();
         _this.projectAddUpdateView = new ProjectAddUpdateView();
-        _this.projectFundraisingView = new ProjectFundraisingView();
+        _this.projectFundraisingView = new ProjectFundraisingView(config);
         _this.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
         });
@@ -39,14 +42,19 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           collection: projectMembersCollection
         });
         _this.projectInfoAppearanceView = new ProjectInfoAppearanceView();
-        _this.discussionBTN = $("a[href='#discussion']");
+        _this.projectDiscussionsView.on('discussionClick', function(arg_) {
+          console.log('projectDiscussionsView arg_', arg_);
+          _this.projectDiscussionView.updateDiscussion(arg_.model);
+          return window.location.hash = "discussion/" + arg_.model.id;
+        });
+        _this.discussionBTN = $("a[href='#discussions']");
         _this.updatesBTN = $("a[href='#updates']");
         _this.fundraisingBTN = $("a[href='#fundraising']");
         _this.calendarBTN = $("a[href='#calendar']");
         _this.membersBTN = $("a[href='#members']");
         _this.infoBTN = $("a[href='#info']");
         hash = window.location.hash.substring(1);
-        _this.toggleSubView((hash === "" ? "discussion" : hash));
+        _this.toggleSubView((hash === "" ? "discussions" : hash));
         $(window).bind("hashchange", function(e) {
           hash = window.location.hash.substring(1);
           return _this.toggleSubView(hash);
@@ -59,7 +67,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
     },
     toggleSubView: function(view_) {
       var btn, view, _i, _j, _len, _len1, _ref, _ref1;
-      _ref = [this.projectDiscussionsView, this.projectAddUpdateView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
+      _ref = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         view = _ref[_i];
         view.hide();
@@ -69,9 +77,15 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         btn = _ref1[_j];
         btn.removeClass("active");
       }
+      console.log('view_', view_.indexOf("discussion/") > -1);
+      if (view_.indexOf("discussion/") > -1) {
+        this.projectDiscussionView.show();
+        this.discussionBTN.addClass("active");
+        return;
+      }
       switch (view_) {
-        case "discussion":
-          this.projectDiscussionsView.show();
+        case "new-discussion":
+          this.projectNewDiscussionView.show();
           return this.discussionBTN.addClass("active");
         case "updates":
           this.projectAddUpdateView.show();
@@ -88,6 +102,9 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         case "info":
           this.projectInfoAppearanceView.show();
           return this.infoBTN.addClass("active");
+        default:
+          this.projectDiscussionsView.show();
+          return this.discussionBTN.addClass("active");
       }
     }
   });

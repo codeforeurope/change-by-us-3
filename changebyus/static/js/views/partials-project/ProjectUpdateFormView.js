@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], function(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) {
-  var ProjectUpdateFormView;
-  return ProjectUpdateFormView = AbstractView.extend({
+  var ProjectWysiwygFormView;
+  return ProjectWysiwygFormView = AbstractView.extend({
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       return this.render();

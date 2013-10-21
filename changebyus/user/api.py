@@ -20,6 +20,7 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 user_api = Blueprint('user_api', __name__, url_prefix='/api/user')
 
+
 """
 =========
 User API
@@ -150,7 +151,7 @@ def api_edit_user():
     METHOD
         POST
     INPUT
-        OPTIONAL: email, public_email, password, display_name, first_name, last_name
+        OPTIONAL: photo, email, public_email, password, display_name, first_name, last_name
     OUTPUT
         User record upon success
     PRECONDITIONS
@@ -181,11 +182,96 @@ def api_edit_user():
     if first_name: u.first_name = first_name
     if last_name: u.last_name = last_name
 
+
+    file_name = None
+
+    # photo is optional
+    if 'photo' in request.files:
+        photo = request.files.get('photo')
+
+        if len(photo.filename) > 3:
+
+            try:
+                result = upload_rackspace_image( photo )
+
+                if result.success:
+                    file_name = result.name
+                    file_path = result.path
+                    image_url = result.url
+
+                    from .models import user_images
+
+                    for manipulator in user_images:
+
+                        manip_image = manipulator.converter(file_path)
+                        base, extension = os.path.splitext(file_name)
+                        manip_image_name = manipulator.prefix + '.' + base + manipulator.extension
+
+                        if not upload_rackspace_image( manip_image.image, 
+                                                       manip_image_name).success:
+
+                            return jsonify_response( ReturnStructure ( success = False ) )
+                else:
+                    return jsonify_response( ReturnStructure ( success = False ) )
+
+            except Exception as e:
+                current_app.logger.exception(e)
+                msg = "An error occured."
+                return jsonify_response( ReturnStructure( success = False, 
+                                                          msg = msg ) )
+
+            file_name = result.name
+
+        else:
+            # again, photo optional
+            file_name = None
+
+    # we don't store the URL because the URL can change depending on what
+    # rackspace container we wish to use
+    if file_name:
+        u.image_name = file_name
+
+
     u.save()
 
 
     # defaults to success and 'OK'
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )
+
+
+@user_api.route('/socialstatus', methods = ['GET'])
+@login_required
+def api_get_user_social_status():
+    """
+    ABOUT
+        Gets the currently logged in users social connection status
+    METHOD
+        GET
+    INPUT
+        None
+    OUTPUT
+        Dict of { 'facebook' : true/false,
+                  'twitter': true/false }
+    """
+
+    user = User.objects.with_id(g.user.id)
+    data = { 'facebook' : True if user.facebook_id else False,
+             'twitter' : True if user.twitter_id else False }
+
+    return jsonify_response( ReturnStructure( data = data ) )    
+
+
+# TODO WTForms for flagging?
+
+@user_api.route('/<user_id>/flag', methods = ['POST'])
+@login_required
+def api_flag_user(user_id):
+    u = User.objects.with_id(user_id)
+    
+    u.flags += 1
+    u.save()
+
+    return jsonify_response(ReturnStructure())
 
 
 # TODO what is this doing here?

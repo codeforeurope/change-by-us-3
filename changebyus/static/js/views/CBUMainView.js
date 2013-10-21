@@ -49,8 +49,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
       return this.$el.find("#project-list").append(view.$el);
     },
     addAll: function() {
-      var self;
+      var i, self;
       self = this;
+      i = 0;
       return this.collection.each(function(projectModel) {
         return self.addOne(projectModel);
       });

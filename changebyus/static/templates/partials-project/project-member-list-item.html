@@ -1,7 +1,15 @@
-<div class='project-member'>
-	<div>mail icon</div>
-	<div><%= data.avatar %></div>
-	<div><%= data.first_name %> <%= data.last_name %></div>
-	<div><%= data.description %></div>
-	<div><%= data.roles %></div>
+<div class="project-member clearfix">
+	<div class="mail-icon">
+		<img src="/static/img/mail_icon.png">
+	</div>
+	<div class="user-avatar">
+		<img src="http://lorempixel.com/70/70/" class="circle">
+	</div> 
+	<div class="member-title">
+		<%= data.first_name %> <%= data.last_name %> <span class="aka">aka</span>
+		<br>
+		<%= data.display_name %>
+	</div>
+	<div class="member-description"> description <%= data.description %></div>
+	<div class="member-roles grey">roles <%= data.roles %></div>
 </div>

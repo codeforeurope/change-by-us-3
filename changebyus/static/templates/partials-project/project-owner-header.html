@@ -1,14 +1,13 @@
 <%= console.log("POH",data) %>
 <div class="project">
     <div class="body-container">
-        <div class="feature-image slim">
-            <img src="/static/img/group-slim-header.jpg" />
-            <h1 class="overlay-h1"><%= data.data.name %></h1> 
+        <div class="feature-image slim" style="background-image:url(/static/img/group-slim-header.jpg);">
+            <h1 class="overlay-title"><%= data.data.name %></h1> 
         </div>
 
         <div class="owner-tabs-pane">
             <ul class="tabs">
-                <li><a href="#discussion" data-toggle="tab"><span>Discuss</span></a></li>
+                <li><a href="#discussions" data-toggle="tab"><span>Discuss</span></a></li>
                 <li><a href="#updates" data-toggle="tab"><span>Updates</span></a></li>
                 <li><a href="#fundraising" data-toggle="tab"><span>Fundraising</span></a></li>
                 <li><a href="#calendar" data-toggle="tab"><span>Calendar</span></a></li>

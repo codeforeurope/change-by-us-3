@@ -51,19 +51,16 @@ def _create_project( resource = False ):
     name = request.form.get('name')
     description = request.form.get('description')
     location = request.form.get('location')
-    geo_location = [float(request.form.get('lat')), float(request.form.get('lon'))]
+    geo_location = None
+    
+    if ('lat' in request.form and 'lon' in request.form):
+        geo_location = [float(request.form.get('lat')), float(request.form.get('lon'))]
 
     owner = User.objects.with_id(g.user.id)
     slug = slugify(name)
 
     project = Project.objects(name = name,
                               slug = slug )
-
-    """
-    from pprint import pprint
-    pprint( project )
-    print project.count()
-    """
 
     if project.count() > 0:
         errStr = "Sorry, the name '{0}' is already in use.".format(name)

@@ -30,7 +30,8 @@ def get_word_conditions(s, full_words_only=True, strip_punctuation=True):
 
     if (strip_punctuation):
         from string import punctuation
-        s = s.translate(None, punctuation)
+        
+        s = str(s).translate(None, punctuation)
         
     if (full_words_only):
         s = s.split()

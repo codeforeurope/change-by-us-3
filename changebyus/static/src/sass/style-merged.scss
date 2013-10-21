@@ -1062,7 +1062,24 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
       height: auto;
       margin-bottom: 15px;
       padding: 7px 9px;
+      &.top{ 
+        @include border-bottom-left-radius(0);
+        @include border-bottom-right-radius(0);
+        margin-bottom: 0; 
+      }
+      &.middle{ 
+        border-top: none;
+        @include border-radius(0);
+      }
+      &.bottom{ 
+        border-top: none;
+        @include border-top-left-radius(0);
+        @include border-top-right-radius(0);
+      }
     }
+  }
+  label{
+    text-align: left;
   }
 }
 
@@ -3055,14 +3072,14 @@ a {
   }
   p{
     @include font-styling("asap", 22px, $white);
-    width:75%;
+    width:85%;
   }
 }
 
 .homepage-tool-icon{
   width: 215px;
   height: 165px;
-  margin-bottom: 32px;
+  margin:0 auto 32px;
 
   background-repeat: no-repeat;
   background-position: center center;

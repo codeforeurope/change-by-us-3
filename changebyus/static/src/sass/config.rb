@@ -7,6 +7,7 @@ css_dir = "static/css"
 sass_dir = "static/src/sass"
 images_dir = "static/img"
 javascripts_dir = "static/js"
+sass_options = {:sourcemap => true}
 
 # You can select your preferred output style here (can be overridden via the command line):
 # output_style = :expanded or :nested or :compact or :compressed

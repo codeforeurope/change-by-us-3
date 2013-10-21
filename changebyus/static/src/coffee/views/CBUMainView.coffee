@@ -45,7 +45,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "views/partials-
 
     addAll: ->
       self = this
+      i = 0
       @collection.each (projectModel) ->
+        #while i++ < 3 then self.addOne projectModel
         self.addOne projectModel
 
   )

@@ -18,9 +18,14 @@
 
     <div class="topnav clearfix">
       <div class="body-container">
-          <!-- <div class="masthead"> -->
+          <!-- masthead -->
 
           {% if login == false %}
+
+           <ul class="nav nav-pills pull-left">
+              <li><a href="/" id="header-text">{{ current_user.first_name }}</a></li>
+              <li><a href="/" id="header-text">{{ current_user.id }}</a></li>
+          </ul>
 
             <ul class="nav nav-pills pull-right">    
               <li><a href="/" class="header-links">Stream</a></li>
@@ -28,33 +33,47 @@
               <li><a href="/discover" class="header-links">Discover</a></li>
             </ul>
 
-        <ul class="nav nav-pills pull-left">
-          <li><a href="/" id="header-text">{{ current_user.first_name }}</a></li>
-          <li><a href="/" id="header-text">{{ current_user.id }}</a></li>
-
-        </ul>
-
-
             {% else %}
+
+             <ul class="nav nav-pills pull-left">
+                <li>
+                  <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
+                </li>
+                 <li>
+                  <a href="/create">Create a Project</a>
+                </li>
+                <li>
+                  <a href="/discover">Discover Projects</a>
+                </li>
+             </ul>
 
              <ul class="nav nav-pills pull-right">    
               <li><a href="/signup" class="header-links">Sign Up</a></li>
               <li><a href="/login" class="header-links">Log In</a></li>
             </ul>
 
-            <ul class="nav nav-pills pull-left">
-              <li><a href="/" id="header-text">Change By Us</a></li>
-            </ul>
-
             {% endif %}
 
-          <!-- </div> -->
+          <!-- end masthead-->
         </div>
   </div>
 
-    <div class = "placeholder-frame" id = "frame"> 
+  <div class="placeholder-frame" id="frame"> </div>
 
+  <div class="footer-nav clearfix">
+    <div class="body-container">
+      <div class="pull-left">
+        <a href="/create">Create a Project</a>
+      </div>
+      <div class="pull-right">
+        <ul>
+          <li><a href="/policies">Policies</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
     </div>
+  </div>
 
     <!-- ========= -->
     <!-- Libraries -->

@@ -3110,8 +3110,11 @@ a {
     padding: 40px;
     color: $white;
   }
-  .btn {
-    background-color: $secondaryColor;
+  .btn { background-color: $secondaryColor; }
+}
+
+.btn {
+    @include font-styling("asap", 22px, $white, "normal", "bold" );
     &.btn-xlarge{
       display: inline-block;
       width: 328px;
@@ -3124,13 +3127,10 @@ a {
       }
     }
   }
-}
 
 .icons-wrapper{
-
   width: 690px;
   margin-top: 60px; 
-  
   div{float: left;}
 }
 

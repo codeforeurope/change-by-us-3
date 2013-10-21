@@ -3126,8 +3126,13 @@ a {
 }
 
 .topnav {
-  height: 87px; 
+  height: 72px; 
+  width: 100%;
   font-size: 24px;
   background-color: $primaryColor;
+
+  .nav{
+    margin-top: 16px;
+  }
 }
 

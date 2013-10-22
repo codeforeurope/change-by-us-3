@@ -71,6 +71,10 @@
   display: block;
 }
 
+span.highlight{
+  @include highlight;
+}
+
 .circle{
   @include border-radius(1000px, 1000px);
 }

@@ -159,10 +159,6 @@
       @include font-styling("asap", 20px, $gray20, "normal", "regular");
       margin-bottom: 28px;
     }
-
-    span.highlight{
-      @include highlight;
-    }
  
     ul.bordered-item{
       li{

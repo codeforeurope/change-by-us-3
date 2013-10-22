@@ -71,6 +71,14 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 			CBUAppRouter = new CBURouter()
 			Backbone.history.start pushState: true
 
+			# NAV
+			$navTop = $('.nav.pull-left')
+			$navTop.mouseover ->
+				$(this).toggleClass('active')
+			$navTop.mouseout ->
+				$(this).removeClass('active')
+
+
 		### GLOBAL UTILS ###
 		window.popWindow = (url) ->
 			title = "social"

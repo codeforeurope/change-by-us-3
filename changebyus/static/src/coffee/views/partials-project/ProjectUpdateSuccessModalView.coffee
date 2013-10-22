@@ -11,7 +11,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			render: -> 
 				@$el = $("<div class='modal-fullscreen dark'/>") 
 				@$el.template @templateDir + "/templates/partials-project/project-share-success-overlay.html",
-					{data: @viewData}, => 
+					{data: @model}, => 
 
 				$(@parent).append @$el
 						 

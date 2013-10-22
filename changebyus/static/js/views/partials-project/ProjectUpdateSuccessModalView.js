@@ -10,7 +10,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       var _this = this;
       this.$el = $("<div class='modal-fullscreen dark'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-share-success-overlay.html", {
-        data: this.viewData
+        data: this.model
       }, function() {});
       return $(this.parent).append(this.$el);
     }

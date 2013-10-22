@@ -109,6 +109,13 @@
 }
 
 .create-modal { @extend .modal; } 
-.success-modal { @extend .modal; } 
+.success-modal { 
+  @extend .modal;
+  padding: 0;
+  width: 730px;
+  h1{font-size: 54px;}
+  span{font-size: 24px;}
+  .btn-xlarge{width: 100% !important;}
+} 
 .modal-links{}
 

@@ -28,7 +28,7 @@ require.config({
 
 require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) {
   $(document).ready(function() {
-    var CBUAppRouter, CBURouter, config;
+    var $navTop, CBUAppRouter, CBURouter, config;
     config = {
       parent: "#frame"
     };
@@ -77,8 +77,15 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       }
     });
     CBUAppRouter = new CBURouter();
-    return Backbone.history.start({
+    Backbone.history.start({
       pushState: true
+    });
+    $navTop = $('.nav.pull-left');
+    $navTop.mouseover(function() {
+      return $(this).toggleClass('active');
+    });
+    return $navTop.mouseout(function() {
+      return $(this).removeClass('active');
     });
   });
   /* GLOBAL UTILS*/

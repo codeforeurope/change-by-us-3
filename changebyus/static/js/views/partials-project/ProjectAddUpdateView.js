@@ -57,7 +57,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$ul.append(view.render().$el);
     },
     addModal: function(data_) {
-      return this.modal = new ProjectUpdateSuccessModalView(data_);
+      console.log("ProjectAddUpdateView addModal model", data_);
+      return this.modal = new ProjectUpdateSuccessModalView({
+        model: data_
+      });
     }
   });
 });

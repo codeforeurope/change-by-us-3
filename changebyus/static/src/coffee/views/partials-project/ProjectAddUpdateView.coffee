@@ -49,4 +49,5 @@ define ["underscore",
 				@$ul.append view.render().$el 
 
 			addModal:(data_)->
-				@modal = new ProjectUpdateSuccessModalView(data_)
+				console.log "ProjectAddUpdateView addModal model", data_
+				@modal = new ProjectUpdateSuccessModalView({model:data_})

@@ -80,6 +80,7 @@ sub {
 
 div{
   position: relative;
+  box-sizing: border-box;
 }
 
 img {
@@ -1975,9 +1976,6 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   }
 }
 
-.nav-pills {
-  *zoom: 1;
-}
 
 .nav-tabs:before, .nav-pills:before, .nav-tabs:after, .nav-pills:after {
   display: table;
@@ -1989,17 +1987,6 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   clear: both;
 }
 
-.nav-pills {
-  &:after {
-    clear: both;
-  }
-  .dropdown {
-    width: 320px;
-    border: 1px solid #dedede;
-    padding-left: 10px;
-  }
-}
-
 /*PILL BUTTONS*/
 
 .custom {
@@ -2008,6 +1995,19 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 .nav-pills {
+  *zoom: 1;
+
+  img{margin-top: -29px;}
+
+  &:after {
+    clear: both;
+  }
+  
+  .dropdown {
+    width: 320px;
+    border: 1px solid #dedede;
+    padding-left: 10px;
+  }
   > {
     .active > a {
       color: #555555;
@@ -2051,12 +2051,53 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 .nav {
   margin-top: 22px;
-  img{margin-top: -29px;}
+  z-index: 1;
 
   &.pull-left{
+    width: 260px;
     li{padding-right:0;}
   }
-  .user-avatar { margin-top:7px }
+
+  &.user{margin: 0;}
+
+  .profile-nav-header{
+    height: 87px; 
+    >span{ 
+      color: $white; 
+      line-height: 87px; 
+    }
+  }
+
+  .profile-nav-menu{
+    width: 100%;
+    background-color: $white;
+    display: none;
+    border: 1px solid $grayBorder;
+    border-top: none;
+    @include border-bottom-left-radius(4px);
+    @include border-bottom-right-radius(4px);
+    a{
+      font-size: 22px;
+      color: $black;
+    }
+    ul{
+      width: 100%;
+      li{padding: 15px;}
+      li:last-child{
+        border-top: 1px solid $grayBorder;
+      }
+    }
+  }
+
+  &.active{
+    .profile-nav-header{background-color: $primaryAltHoverColor;}
+    .profile-nav-menu{display: block;}
+  }
+
+  .user-avatar { 
+    margin-left:14px;
+    margin-top:7px;
+  }
   .dropdown-toggle .caret {
     margin-top: 6px;
     border-top-color: $black;
@@ -2284,6 +2325,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     display: block;
     float: left;
     margin: 0 10px 0 0;
+
     &.pull-right {
       float: right;
       margin-right: 0;
@@ -2901,7 +2943,7 @@ a {
 }
 
 .header-image {
-  width: 1500px;
+  width: 100%;
   height: 690px;
   margin: auto;
 
@@ -2922,7 +2964,7 @@ a {
     position: absolute;
     top: 175px;
     left: 200px;
-    width: auto;
+    width: 1015px;
     height: 225px; 
     h1{ 
       display: inline-block;

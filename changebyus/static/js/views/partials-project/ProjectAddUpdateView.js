@@ -23,21 +23,24 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           var share;
           $submit.attr("disabled", "disabled");
           share = [];
-          if ($("#twitter").val() === "on") {
+          if ($("#twitter").prop('checked')) {
             share.push('twitter');
           }
-          if ($("#facebook").val() === "on") {
+          if ($("#facebook").prop('checked')) {
             share.push('facebook');
           }
-          return arr_.push({
+          arr_.push({
             name: "social_sharing",
             value: share,
             type: "hidden",
             required: false
           });
+          return console.log('form.beforeSubmit', $("#twitter").prop('checked'), $("#facebook").prop('checked'));
         };
         form.success = function(response_) {
-          _this.addModal(response_.data);
+          if (response_.success) {
+            _this.addModal(response_.data);
+          }
           return console.log('response_', response_);
         };
         $shareOptions = $(".share-options");

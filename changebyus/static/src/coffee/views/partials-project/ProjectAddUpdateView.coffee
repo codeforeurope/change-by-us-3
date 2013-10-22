@@ -27,13 +27,14 @@ define ["underscore",
 						form.beforeSubmit = (arr_, form_, options_)->
 							$submit.attr("disabled", "disabled");
 							share = []
-							if $("#twitter").val() is "on" then share.push 'twitter'
-							if $("#facebook").val() is "on" then share.push 'facebook'
+							if $("#twitter").prop('checked') then share.push 'twitter'
+							if $("#facebook").prop('checked') then share.push 'facebook'
 							arr_.push {name: "social_sharing", value:share, type: "hidden", required: false}
-							# console.log('form.beforeSubmit', arr_, form_, options_)
+							console.log 'form.beforeSubmit',$("#twitter").prop('checked'),$("#facebook").prop('checked')
 
 						form.success = (response_)=>
-							@addModal response_.data
+							if response_.success
+								@addModal response_.data
 							console.log 'response_',response_
 
 						$shareOptions = $(".share-options")

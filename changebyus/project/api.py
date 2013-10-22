@@ -489,21 +489,10 @@ def api_leave_project():
     return leave_project(project_id=project_id, user_id=g.user.id)
 
 
-class IsRoleForm(Form):
-    project_id = TextField("project_id", validators=[Required()])
-
-@project_api.route('/am_i_a_member', methods = ['POST'])
+@project_api.route('/am_i_a_member/<project_id>')
 @project_exists
 @login_required
-def api_is_user_member():
-
-    form = IsRoleForm()
-    if not form.validate():
-        errStr = "Request contained errors."
-        return jsonify_response( ReturnStructure( success = False, 
-                                                  msg = errStr ) )
-
-    project_id = request.form.get('project_id')
+def api_is_user_member(project_id):
 
     if _is_member(project_id, g.user.id):
         return jsonify_response( ReturnStructure( data = {'member' : True } ))
@@ -511,18 +500,10 @@ def api_is_user_member():
         return jsonify_response( ReturnStructure( data = {'member' : False } ))
 
 
-@project_api.route('/am_i_an_organizer', methods = ['POST'])
+@project_api.route('/am_i_an_organizer/<project_id>')
 @project_exists
 @login_required
-def api_is_user_organizer():
-
-    form = IsRoleForm()
-    if not form.validate():
-        errStr = "Request contained errors."
-        return jsonify_response( ReturnStructure( success = False, 
-                                                  msg = errStr ) )
-
-    project_id = request.form.get('project_id')
+def api_is_user_organizer(project_id):
 
     if _is_organizer(project_id, g.user.id):
         return jsonify_response( ReturnStructure( data = {'organizer' : True } ))

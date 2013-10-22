@@ -261,6 +261,19 @@ def api_get_user_social_status():
     return jsonify_response( ReturnStructure( data = data ) )    
 
 
+# TODO WTForms for flagging?
+
+@user_api.route('/<user_id>/flag', methods = ['POST'])
+@login_required
+def api_flag_user(user_id):
+    u = User.objects.with_id(user_id)
+    
+    u.flags += 1
+    u.save()
+
+    return jsonify_response(ReturnStructure())
+
+
 # TODO what is this doing here?
 # make sure things work with it commented out
 '''

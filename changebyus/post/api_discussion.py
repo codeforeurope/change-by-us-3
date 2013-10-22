@@ -21,6 +21,16 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 post_discussion_api = Blueprint('post_discussion_api', __name__, url_prefix='/api/post')
 
+#######
+# @post_discussion_api.route('/project/<project_id>/post/<post_type>')
+# @post_discussion_api.route('/project/<project_id>/post/<post_type>/<number_posts>')
+# @login_required
+# @project_exists
+# @project_member
+# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
+#     public = (post_type == 'update')
+######
+    
 @post_discussion_api.route('/project/<project_id>/list_discussions')
 @login_required
 @project_exists

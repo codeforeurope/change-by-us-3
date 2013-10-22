@@ -2,7 +2,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
 		ProjectWysiwygFormView = AbstractView.extend
 
-
+			formID:"#editor" #default ID, but doublecheck that form ID is correct
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
@@ -12,12 +12,19 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				self = this
 				@viewData =
 					project_id: window.projectID
-					response_id: "PLACEHOLDER"
+					response_to_id: @id 
+					formID: @formID
 
-				if @parent is "#discussion-form"
-					url = "/templates/partials-project/project-new-discussion-form.html"
-				else if @parent is "#update-form"
-					url = "/templates/partials-project/project-update-form.html"
+				console.log "ProjectWysiwygFormView",@
+				if @parent is "#update-form"
+					url = "/templates/partials-project/project-update-form.html" 
+					@formID =  "#editor"
+				else if @parent is "#add-thread-form"
+					url = "/templates/partials-project/project-new-thread-form.html" 
+					@formID =  "#new-thread-editor"
+				else
+					url = "/templates/partials-project/project-new-discussion-form.html" 
+					@formID = "#discussion-editor"
 
 				@$el = $("<div class='project-update-form'/>")
 				@$el.template @templateDir+url,
@@ -35,20 +42,23 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 						msg = "Unsupported format " + detail 
 					else
 						console.log "error uploading file", reason, detail
-					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button>" + "<strong>File upload error</strong> " + msg + " </div>").prependTo "#alerts"
+					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo "#alerts"
 				
-				$editor = $("#editor")
+				self = @
+				$editor = $(@formID)
 				options =
-					beforeSubmit: (arr, $form, options) ->
-						for i of arr
-							console.log "obj.name", arr[i].name, arr[i]
-							if arr[i].name is "description"
-								arr[i].value = escape($editor.html())
-								console.log 'des',arr[i].value
-					success: (response) ->
-						console.log response
+					beforeSubmit: (arr_, form_, options_) ->
+						self.beforeSubmit(arr_, form_, options_)
+						for i of arr_
+							console.log "obj.name", arr_[i].name, arr_[i]
+							if arr_[i].name is "description"
+								arr_[i].value = escape($editor.html())
+								console.log 'des',arr_[i].value
+					success: (response_) ->
+						self.success(response_)
+						console.log response_
 				$updateForm = $("form[name='project-update']")
-				$updateForm.ajaxForm options
+				$updateForm.ajaxForm options 
 
 				$("a[title]").tooltip container: "body"
 
@@ -66,13 +76,19 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					overlay.css("opacity", 0).css("position", "absolute").offset(target.offset()).width(target.outerWidth()).height target.outerHeight()
 
 				if "onwebkitspeechchange" of document.createElement("input")
-					editorOffset = $("#editor").offset()
+					editorOffset = $editor.offset()
 					$("#voiceBtn").css("position", "absolute").offset
 						top: editorOffset.top - 20
-						left: editorOffset.left + $("#editor").innerWidth() - 75
+						left: editorOffset.left + $editor.innerWidth() - 75
 				else
 					$("#voiceBtn").hide()
 
 				$editor.wysiwyg fileUploadError: showErrorAlert
-				window.prettyPrint and prettyPrint() 
+				window.prettyPrint and prettyPrint()
+
+			beforeSubmit:(arr_, form_, options_)->
+				# hook for beforeSubmit
+
+			success: (response_) ->
+				# hook for beforeSubmit
 

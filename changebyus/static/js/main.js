@@ -27,7 +27,7 @@ require.config({
 });
 
 require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) {
-  return $(document).ready(function() {
+  $(document).ready(function() {
     var CBUAppRouter, CBURouter, config;
     config = {
       parent: "#frame"
@@ -81,4 +81,15 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       pushState: true
     });
   });
+  /* GLOBAL UTILS*/
+
+  return window.popWindow = function(url) {
+    var h, left, title, top, w;
+    title = "social";
+    w = 650;
+    h = 650;
+    left = (screen.width / 2) - (w / 2);
+    top = (screen.height / 2) - (h / 2);
+    return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
+  };
 });

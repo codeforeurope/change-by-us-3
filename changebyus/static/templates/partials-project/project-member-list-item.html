@@ -1,6 +1,10 @@
 <div class="project-member clearfix">
 	<div class="mail-icon">
-		<img src="/static/img/mail_icon.png">
+		<% if (data.email){ %>
+			<a href="mailto:<%= data.email %>"><img src="/static/img/mail_icon.png"></a>
+		<% }else{ %>
+			<img src="/static/img/mail_icon_deactive.png">
+		<% } %>
 	</div>
 	<div class="user-avatar">
 		<img src="http://lorempixel.com/70/70/" class="circle">
@@ -11,5 +15,5 @@
 		<%= data.display_name %>
 	</div>
 	<div class="member-description"> description <%= data.description %></div>
-	<div class="member-roles grey">roles <%= data.roles %></div>
+	<div class="member-roles grey"><%= data.roles %></div>
 </div>

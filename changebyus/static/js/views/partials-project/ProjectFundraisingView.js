@@ -2,8 +2,10 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
   var ProjectFundraisingView;
   return ProjectFundraisingView = AbstractView.extend({
     parent: "#project-calendar",
+    name: "My Project",
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
+      this.name = options.name || this.name;
       return this.render();
     },
     render: function() {
@@ -20,28 +22,26 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       }
     },
     getStarted: function() {
-      var _this = this;
+      var $how,
+        _this = this;
+      $how = $('.fundraising-left .content-wrapper');
+      $how.slideToggle(1);
+      $('#does-it-work').click(function(e) {
+        return $how.slideToggle();
+      });
       return $('.btn-large').click(function(e) {
         e.preventDefault();
-        console.log('here');
+        console.log('ProjectFundraisingView ');
         return $.ajax({
+          type: "POST",
           url: "/stripe/link",
-          context: document.body,
           data: {
             project_id: _this.id,
             project_name: _this.name
           }
-        }).done(function(response) {
-          return console.log('more', response);
+        }).done(function(response_) {
+          return popWindow(response_);
         });
-        /*
-        					options =
-        					success: (response) ->
-        						console.log response
-        
-        				@$el.find('form').ajaxForm options
-        */
-
       });
     }
   });

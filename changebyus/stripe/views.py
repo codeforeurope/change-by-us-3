@@ -67,7 +67,8 @@ def stripe_link():
         User is logged in, logged in user owns the project in question
     """
 
-    from ..project.api import _check_user_owns_project
+    # from ..project.api import _check_user_owns_project
+    from ..project.helpers import _check_user_owns_project
 
     project_id = request.form['project_id']
     project_name = request.form['project_name']
@@ -109,7 +110,8 @@ def stripe_link():
 
     # Redirect to Stripe /oauth/authorize endpoint
     url = site + '?' + urllib.urlencode(params)
-    return redirect(url)
+    return url
+    #return redirect(url)
 
 
 @stripe_view.route(settings['HOOK_URL'], methods=['GET', 'POST'])

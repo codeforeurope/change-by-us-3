@@ -1,5 +1,6 @@
 @import "mixins-and-functions";
 @import "variables";
+@import "compass/css3";
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
 
@@ -15,6 +16,11 @@
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
+}
+
+.user-info {
+    width: 600px;
+    border: 1px solid #000;
 }
 
 .project-icon {
@@ -79,6 +85,7 @@
     }
 
     .project-location{
+      display: inline-block;
       @include font-styling("asap", 21px, $white );
       @include text-shadow(0 1px 5px rgba(0,0,0,.75));
     }
@@ -171,8 +178,8 @@
     margin: 0 0 22px;
   }
 
-  .content-left, .post-right, .reply-left, .reply-right, .project-left, .project-right{
-    float: left;
+  .content-left, .content-right, .post-right, .reply-left, .reply-right, .project-left, .project-right{
+    float: left; 
   }
 
   .project-left{ 
@@ -268,17 +275,45 @@
   }
 
   .share-select{
-    span{float: left;}
+    
+    margin-bottom: 20px;
   }
   .share-toggle-wrapper{
     float: left;
+    height: 25px;
     width: 205px;
+    z-index: 1;
+    top:-7px;
+    left: 5px;
   }
   .share-toggle{
+    cursor: pointer; 
+    padding: 5px;
     @include box-skin;
+    .caret{
+      float: right;
+      margin-top: 8px;
+      margin-right: 5px;
+    }
   }
   .share-options{
+    padding: 5px;
     @include box-skin;
+
+    label{ 
+      height: 15px;
+      line-height: 15px;
+      padding-left: 20px;
+      background-repeat: no-repeat;
+      background-image: url('/static/img/black-check.png');
+    }
+
+    input[type=checkbox]{
+      display: none;
+    }
+    input[type=checkbox]:checked+label {
+      background-position: 0 -15px;
+    }
   }
 
   .discussion{ 
@@ -296,14 +331,14 @@
     
     .date{
       float: right;
-      margin-top: 10px;
+      margin-top: 20px;
       margin-right: 55px;
       @include font-styling("asap", 15px, $gray65);
     }
 
     .close{
       float: right;
-      margin-top: 10px;
+      margin-top: 20px;
       margin-right: 20px; 
     }
 
@@ -312,11 +347,29 @@
   .fundraising-wrapper{
     padding: 30px;
     @include box-skin;
+    
   }
 
   .fundraising-left{
     float: left;
     width: 66%;
+
+
+
+    .content-wrapper{
+      overflow: hidden;
+      /*
+      @include transition-property(height);
+      @include transition-duration(.5s);
+      
+      height: 461px;
+      &.invisible{
+       display: block;
+       height: 0;
+      }
+      */
+    }
+    
     
     span{
       font-weight: bold;
@@ -380,7 +433,9 @@
 .tabs-pane{
   img{vertical-align:initial;}
   li a{ vertical-align: text-bottom; }
-  li .active span {
-    display: none;
-  }
+  li{
+    &.active {
+      a{ display: none; }
+    }
+  } 
 }

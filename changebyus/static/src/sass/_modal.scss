@@ -106,6 +106,13 @@
       top: 50%;
     }
   }
+  .modal-innerwrapper{
+    width: 505px;
+    margin: auto;
+    span{text-align: left;}
+  }
+  .btn{ background-color: $gray59; }
+  .btn-xlarge{ background-color: $secondaryColor; }
 }
 
 .create-modal { @extend .modal; } 

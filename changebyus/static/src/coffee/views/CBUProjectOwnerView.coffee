@@ -57,11 +57,12 @@ define ["underscore",
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config) 
 						projectCalendarCollection    = new ProjectCalendarCollection(config)
 						projectMembersCollection     = new ProjectMembersCollection(config)
+						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
 						@projectDiscussionView     = new ProjectDiscussionView()
-						@projectNewDiscussionView  = new ProjectNewDiscussionView() 
-						@projectAddUpdateView      = new ProjectAddUpdateView()
+						@projectNewDiscussionView  = new ProjectNewDiscussionView({model:@model}) 
+						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
 						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
@@ -71,6 +72,11 @@ define ["underscore",
 							console.log 'projectDiscussionsView arg_',arg_
 							@projectDiscussionView.updateDiscussion(arg_.model)
 							window.location.hash = "discussion/"+arg_.model.id
+
+						###
+						@projectDiscussionsView.on 'deleteDiscussion', (arg_)=>
+							console.log 'deleteDiscussion arg_',arg_ 
+						###
 						
 						@discussionBTN  = $("a[href='#discussions']")
 						@updatesBTN     = $("a[href='#updates']")

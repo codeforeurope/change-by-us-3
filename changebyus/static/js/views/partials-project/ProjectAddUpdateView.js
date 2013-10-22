@@ -1,9 +1,9 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectWysiwygFormView"], function(_, Backbone, $, temp, AbstractView, ProjectWysiwygFormView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-project/ProjectWysiwygFormView", "views/partials-project/ProjectUpdateListItemView", "views/partials-project/ProjectUpdateSuccessModalView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectWysiwygFormView, ProjectUpdateListItemView, ProjectUpdateSuccessModalView) {
   var ProjectAddUpdateView;
-  return ProjectAddUpdateView = AbstractView.extend({
+  return ProjectAddUpdateView = ProjectSubView.extend({
     parent: "#project-update",
     initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+      ProjectSubView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {
@@ -13,6 +13,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         data: this.viewData
       }, function() {
         var $shareOptions, $shareToggle, $submit, form;
+        _this.$ul = _this.$el.find('.updates-container ul');
         form = new ProjectWysiwygFormView({
           parent: "#update-form"
         });
@@ -36,6 +37,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           });
         };
         form.success = function(response_) {
+          _this.addModal(response_.data);
           return console.log('response_', response_);
         };
         $shareOptions = $(".share-options");
@@ -44,6 +46,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           return $shareOptions.toggleClass("hide");
         });
       });
+    },
+    noResults: function() {},
+    addOne: function(model_) {
+      var view;
+      console.log("ProjectAddUpdateView addOne model", model_);
+      view = new ProjectUpdateListItemView({
+        model: model_
+      });
+      return this.$ul.append(view.render().$el);
+    },
+    addModal: function(data_) {
+      return this.modal = new ProjectUpdateSuccessModalView(data_);
     }
   });
 });

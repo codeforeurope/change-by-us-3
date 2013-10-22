@@ -55,7 +55,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 						$("a[href^='#']").click (e) -> 
 							window.location.hash = $(this).attr("href").substring(1)
 
-						# @joingBTN()
+						@joingBTN() 
 
 			joingBTN:->
 				id = @model.get("id")
@@ -80,9 +80,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				# if not, display the join button
 
 				$.ajax(
-					type: "POST"
-					url: "/api/project/am_i_a_member"
-					data: { project_id:id }
+					type: "GET"
+					url: "/api/project/am_i_a_member/"+id
 				).done (response)=> 
 					console.log 'response.data.member',response,$join
 

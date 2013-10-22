@@ -25,10 +25,12 @@
            <ul class="nav nav-pills pull-left"> 
               <li>
                 <div class="user-avatar">
-                  <img src="http://lorempixel.com/70/70/" class="circle">
+                  <a href="/">
+                    <img src="http://lorempixel.com/70/70/" class="circle">
+                  </a>
                 </div>
               </li>
-              <li><a href="/" id="header-text">{{ current_user.display_name }}</a></li>
+              <li><a href="/user/{{ current_user.id }}" id="header-text">{{ current_user.display_name }}</a></li>
           </ul>
 
             <ul class="nav nav-pills pull-right">    

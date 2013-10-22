@@ -36,7 +36,23 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       projectDiscussionListItemView.on('click', function() {
         return _this.trigger('discussionClick', config);
       });
+      projectDiscussionListItemView.on('delete', function() {
+        console.log('config', config.model.attributes.id);
+        return _this.deleteDiscussion(config.model.attributes.id);
+      });
       return this.$ul.append(projectDiscussionListItemView.$el);
+    },
+    deleteDiscussion: function(id_) {
+      var _this = this;
+      return $.ajax({
+        type: "POST",
+        url: "/api/post/delete",
+        data: {
+          post_id: id_
+        }
+      }).done(function(response) {
+        return console.log('deleteDiscussion', response);
+      });
     }
   });
 });

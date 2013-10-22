@@ -148,7 +148,7 @@
   }
  
   .content-wrapper {
-    padding: 30px;
+    padding: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
     //width: 100%;
@@ -178,7 +178,7 @@
     margin: 0 0 22px;
   }
 
-  .content-left, .content-right, .post-right, .reply-left, .reply-right, .project-left, .project-right{
+  .content-left, .content-right, .post-right, .reply-left, .reply-right{
     float: left; 
   }
 
@@ -290,6 +290,7 @@
     cursor: pointer; 
     padding: 5px;
     @include box-skin;
+
     .caret{
       float: right;
       margin-top: 8px;
@@ -302,11 +303,17 @@
 
     label{ 
       height: 15px;
+      font-size: 16px;
       line-height: 15px;
       padding-left: 20px;
+      margin-top: 10px;
       background-repeat: no-repeat;
       background-image: url('/static/img/black-check.png');
+      &:first-child{
+        margin-top: 0;
+      }
     }
+
 
     input[type=checkbox]{
       display: none;
@@ -336,12 +343,10 @@
       @include font-styling("asap", 15px, $gray65);
     }
 
-    .close{
-      float: right;
+    .delete,.close{
       margin-top: 20px;
       margin-right: 20px; 
     }
-
   }
 
   .fundraising-wrapper{

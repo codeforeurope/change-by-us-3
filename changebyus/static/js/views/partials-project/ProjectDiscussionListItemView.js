@@ -14,9 +14,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.$el = $(this.el);
       this.$el.template(this.templateDir + "/templates/partials-project/project-discussion-list-item.html", {
         data: this.model.attributes
-      }, function() {});
-      this.$el.click(function() {
-        return _this.trigger("click", _this.model);
+      }, function() {
+        _this.$el.find('.user-avatar, .description').click(function() {
+          return _this.trigger("click", _this.model);
+        });
+        _this.$el.find('.delete').click(function() {
+          return _this.trigger("delete", _this.model);
+        });
+        return console.log(_this.$el.find('.delete'));
       });
       return this;
     }

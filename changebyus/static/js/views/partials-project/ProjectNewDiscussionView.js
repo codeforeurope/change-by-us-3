@@ -13,9 +13,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         data: this.viewData
       }, function() {
         var form;
-        return form = new ProjectWysiwygFormView({
+        form = new ProjectWysiwygFormView({
           parent: "#discussion-form"
         });
+        return form.success = function(response_) {
+          form.resetForm();
+          return window.location = "/project/" + _this.model.id + "#discussion/" + response_.data.id;
+        };
       });
     }
   });

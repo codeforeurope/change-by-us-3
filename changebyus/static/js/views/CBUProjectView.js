@@ -63,9 +63,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           hash = window.location.hash.substring(1);
           return _this.toggleSubView(hash);
         });
-        return $("a[href^='#']").click(function(e) {
+        $("a[href^='#']").click(function(e) {
           return window.location.hash = $(this).attr("href").substring(1);
         });
+        return _this.joingBTN();
       });
     },
     joingBTN: function() {
@@ -95,11 +96,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       $join.addClass('invisible');
       return $.ajax({
-        type: "POST",
-        url: "/api/project/am_i_a_member",
-        data: {
-          project_id: id
-        }
+        type: "GET",
+        url: "/api/project/am_i_a_member/" + id
       }).done(function(response) {
         var e;
         console.log('response.data.member', response, $join);

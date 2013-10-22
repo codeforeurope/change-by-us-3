@@ -25,7 +25,12 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           console.log "res", res
           # createProjectModalView = new CreateProjectView(viewData: res)
           $submit.prop "disabled", false
-          $form.resetForm()  if res.success
+          
+          if res.success
+            window.location = "/project/"+res.data.id
+          else
+            $form.resetForm()  
+           
 
       $form.ajaxForm options
 

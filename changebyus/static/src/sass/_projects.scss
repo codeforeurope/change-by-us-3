@@ -178,8 +178,8 @@
     margin: 0 0 22px;
   }
 
-  .content-left, .post-right, .reply-left, .reply-right, .project-left, .project-right{
-    float: left;
+  .content-left, .content-right, .post-right, .reply-left, .reply-right, .project-left, .project-right{
+    float: left; 
   }
 
   .project-left{ 
@@ -347,6 +347,7 @@
   .fundraising-wrapper{
     padding: 30px;
     @include box-skin;
+    
   }
 
   .fundraising-left{
@@ -432,7 +433,9 @@
 .tabs-pane{
   img{vertical-align:initial;}
   li a{ vertical-align: text-bottom; }
-  li .active span {
-    display: none;
-  }
+  li{
+    &.active {
+      a{ display: none; }
+    }
+  } 
 }

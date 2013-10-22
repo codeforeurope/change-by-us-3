@@ -37,6 +37,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         data: this.model.attributes
       }, function() {
         var config, hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection;
+        _this.$el.prepend(_this.$header);
         id = _this.model.get("id");
         config = {
           id: id
@@ -53,20 +54,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
         });
-        _this.updatesBTN = $("a[href='#updates']");
-        _this.membersBTN = $("a[href='#members']");
-        _this.calendarBTN = $("a[href='#calendar']");
+        _this.updatesBTN = $("a[href='#updates']").parent();
+        _this.membersBTN = $("a[href='#members']").parent();
+        _this.calendarBTN = $("a[href='#calendar']").parent();
         hash = window.location.hash.substring(1);
         _this.toggleSubView((hash === "" ? "updates" : hash));
         $(window).bind("hashchange", function(e) {
           hash = window.location.hash.substring(1);
           return _this.toggleSubView(hash);
         });
-        $("a[href^='#']").click(function(e) {
+        return $("a[href^='#']").click(function(e) {
           return window.location.hash = $(this).attr("href").substring(1);
         });
-        _this.$el.prepend(_this.$header);
-        return _this.joingBTN();
       });
     },
     joingBTN: function() {
@@ -102,9 +101,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           project_id: id
         }
       }).done(function(response) {
+        var e;
         console.log('response.data.member', response, $join);
-        if (response.data.member === false) {
-          return $join.removeClass('invisible');
+        try {
+          if (response.data.member === false) {
+            return $join.removeClass('invisible');
+          }
+        } catch (_error) {
+          e = _error;
+          return console.log(e);
         }
       });
     },
@@ -115,6 +120,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.updatesBTN.removeClass("active");
       this.membersBTN.removeClass("active");
       this.calendarBTN.removeClass("active");
+      console.log('toggleSubView', this.projectUpdatesView, this.updatesBTN);
       switch (view) {
         case "members":
           this.projectMembersView.show();

@@ -54,8 +54,9 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 							if arr_[i].name is "description"
 								arr_[i].value = escape($editor.html())
 								console.log 'des',arr_[i].value
-					success: (response) ->
-						console.log response
+					success: (response_) ->
+						self.success(response_)
+						console.log response_
 				$updateForm = $("form[name='project-update']")
 				$updateForm.ajaxForm options 
 
@@ -86,5 +87,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				window.prettyPrint and prettyPrint()
 
 			beforeSubmit:(arr_, form_, options_)->
+				# hook for beforeSubmit
+
+			success: (response_) ->
 				# hook for beforeSubmit
 

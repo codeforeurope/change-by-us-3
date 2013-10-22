@@ -12,12 +12,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
-        var $shareOptions, $shareToggle, form;
+        var $shareOptions, $shareToggle, $submit, form;
         form = new ProjectWysiwygFormView({
           parent: "#update-form"
         });
+        $submit = form.$el.find('input[type="submit"]');
+        console.log('$submit', $submit, form.$el);
         form.beforeSubmit = function(arr_, form_, options_) {
           var share;
+          $submit.attr("disabled", "disabled");
           share = [];
           if ($("#twitter").val() === "on") {
             share.push('twitter');
@@ -31,6 +34,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             type: "hidden",
             required: false
           });
+        };
+        form.success = function(response_) {
+          return console.log('response_', response_);
         };
         $shareOptions = $(".share-options");
         $shareToggle = $(".share-toggle");

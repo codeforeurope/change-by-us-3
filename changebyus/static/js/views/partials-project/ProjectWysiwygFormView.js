@@ -63,8 +63,9 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
           }
           return _results;
         },
-        success: function(response) {
-          return console.log(response);
+        success: function(response_) {
+          self.success(response_);
+          return console.log(response_);
         }
       };
       $updateForm = $("form[name='project-update']");
@@ -100,6 +101,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       });
       return window.prettyPrint && prettyPrint();
     },
-    beforeSubmit: function(arr_, form_, options_) {}
+    beforeSubmit: function(arr_, form_, options_) {},
+    success: function(response_) {}
   });
 });

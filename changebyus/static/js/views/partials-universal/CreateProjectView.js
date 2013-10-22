@@ -28,6 +28,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           console.log("res", res);
           $submit.prop("disabled", false);
           if (res.success) {
+            return window.location = "/project/" + res.data.id;
+          } else {
             return $form.resetForm();
           }
         }

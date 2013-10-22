@@ -2042,19 +2042,21 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 
 .topnav {
-  height: 72px; 
+  height: 87px; 
   width: 100%;
   font-size: 20px;
   background-color: $primaryColor;
-
-  .nav{
-    margin-top: 22px;
-    img{margin-top: -29px;}
-  }
 }
 
 
 .nav {
+  margin-top: 22px;
+  img{margin-top: -29px;}
+
+  &.pull-left{
+    li{padding-right:0;}
+  }
+  .user-avatar { margin-top:7px }
   .dropdown-toggle .caret {
     margin-top: 6px;
     border-top-color: $black;
@@ -3072,7 +3074,7 @@ a {
   }
   p{
     @include font-styling("asap", 22px, $white);
-    width:85%;
+    width:95%;
   }
 }
 

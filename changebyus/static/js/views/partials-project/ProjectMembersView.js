@@ -11,7 +11,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      console.log('ProjectMembersView render');
       return this.$el.template(this.templateDir + "/templates/partials-project/project-members.html", {}, function() {
         _this.$el.find(".preload").remove();
         _this.$teamList = _this.$el.find("#team-members ul");
@@ -27,6 +26,13 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       } else {
         this.$el.find(".preload").remove();
       }
+      this.collection.models[0].attributes.roles = ["Project Owner"];
+      this.collection.models[0].attributes.description = "Lorem ipsum";
+      this.collection.models[1].attributes.roles = ["Organizer"];
+      this.collection.models[1].attributes.description = "Tempor cray proident, stumptown hella";
+      this.collection.models[1].attributes.email = "mattlohmann@localprojects.net";
+      this.collection.models[2].attributes.roles = ["Member"];
+      this.collection.models[2].attributes.description = "Master cleanse plaid assumenda";
       this.collection.each(function(model) {
         if (__indexOf.call(model.attributes.roles, "Project Owner") >= 0 || __indexOf.call(model.attributes.roles, "Organizer") >= 0) {
           _this.team.push(model);

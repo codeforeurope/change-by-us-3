@@ -2054,14 +2054,17 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 .nav {
   margin-top: 22px;
-  z-index: 1;
+  z-index: 1; 
 
-  &.pull-left{
+  &.user{
+    height: 87px;
     width: 260px;
-    li{padding-right:0;}
-  }
+    margin: 0;
 
-  &.user{margin: 0;}
+    &.pull-left{
+      li{padding-right:0;}
+    }
+  }
 
   .profile-nav-header{
     height: 87px; 
@@ -3080,9 +3083,11 @@ a {
 .icon-rackspace{}
 
 .footer-nav{
+
+  margin-top: 48px; 
   height: 60px;
-  
   background-color: $primaryColor;
+
   li{
     float: left;
     list-style: none;

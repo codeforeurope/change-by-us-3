@@ -1,10 +1,9 @@
 define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
   var CBUDLoginView;
-  CBUDLoginView = Backbone.View.extend({
+  return CBUDLoginView = Backbone.View.extend({
     parent: "body",
     templateDir: "/static",
     viewData: {},
-    $submit: null,
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
@@ -12,15 +11,13 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return this.render();
     },
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='login'/>");
       this.$el.template(this.templateDir + "/templates/login.html", {
         data: this.viewData
       }, function() {
-        self.$submit = $("input[type=\"submit\"]");
-        self.ajaxForm();
-        return self.addListeners();
+        _this.ajaxForm();
+        return _this.addListeners();
       });
       return $(this.parent).append(this.$el);
     },
@@ -33,17 +30,18 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       });
     },
     ajaxForm: function() {
-      var $feedback, $login, options, self;
-      self = this;
-      $login = $("form[name=signin]");
+      var $feedback, $login, $submit, options,
+        _this = this;
+      $submit = $("input[type='submit']");
+      $login = $("form[name='signin']");
       $feedback = $("#login-feedback");
       options = {
         beforeSubmit: function() {
-          self.$submit.prop("disabled", true);
+          $submit.prop("disabled", true);
           return $feedback.removeClass("alert").html("");
         },
         success: function(response) {
-          self.$submit.prop("disabled", false);
+          $submit.prop("disabled", false);
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {
@@ -54,5 +52,4 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return $login.ajaxForm(options);
     }
   });
-  return CBUDLoginView;
 });

@@ -53,6 +53,81 @@ a twitter_post_id and a facebook_post_id, however the actual social posting
 is handled by other modules
 """
 
+@post_api.route('/<post_id>')
+@post_exists
+def api_get_post(post_id):
+    """
+    Get data for root post and all child response posts.
+    """
+    limit = int(request.args.get('limit', 500))
+    
+    root_post = ProjectPost.objects.with_id(post_id)
+    responses = ProjectPost.objects(parent_id = post_id)[0:limit]
+
+    data = root_post.as_dict()
+
+    data['responses'] = db_list_to_dict_list(responses)
+    
+    return jsonify_response(ReturnStructure(data = data))
+    
+
+# @post_discussion_api.route('/project/<project_id>/<post_type>')
+# @post_discussion_api.route('/project/<project_id>/<post_type>/<number_posts>')
+# #@login_required
+# @project_exists
+# #@project_member
+# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
+#     public = (post_type == 'update')
+#     
+#     posts = ProjectPost.objects( parent_id = None, 
+#                                  project = project_id,
+#                                  public = public )[0:number_posts]
+# 
+#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
+# 
+# 
+# @post_discussion_api.route('/<post_type>/<post_id>')
+# #@login_required
+# @project_exists
+# #@project_member
+# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
+#     public = (post_type == 'update')
+#     
+#     posts = ProjectPost.objects( parent_id = None, 
+#                                  project = project_id,
+#                                  public = public )[0:number_posts]
+# 
+#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
+#         
+# 
+# @post_discussion_api.route('/project/<project_id>/post/<post_type>/create')
+# @login_required
+# @project_exists
+# @project_member
+# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
+#     public = (post_type == 'update')
+#     
+#     posts = ProjectPost.objects( parent_id = None, 
+#                                  project = project_id,
+#                                  public = public )[0:number_posts]
+# 
+#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
+#     
+# 
+# @post_discussion_api.route('/project/<project_id>/post/<post_type>')
+# @post_discussion_api.route('/project/<project_id>/post/<post_type>/<number_posts>')
+# #@login_required
+# @project_exists
+# #@project_member
+# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
+#     public = (post_type == 'update')
+#     
+#     posts = ProjectPost.objects( parent_id = None, 
+#                                  project = project_id,
+#                                  public = public )[0:number_posts]
+# 
+#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
+    
 
 @post_api.route('/project/<project_id>/listposts')
 @project_exists

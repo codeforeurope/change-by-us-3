@@ -11,8 +11,6 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 			render: ->  
 				@$el = $(@parent)
-				console.log 'ProjectMembersView render'
-				
 				@$el.template @templateDir + "/templates/partials-project/project-members.html", 
 					{}, =>
 						@$el.find(".preload").remove()
@@ -23,6 +21,17 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			addAll: -> 
 				console.log 'ProjectMembersView ',@
 				if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
+
+				# temp
+				@collection.models[0].attributes.roles = ["Project Owner"]
+				@collection.models[0].attributes.description = "Lorem ipsum"
+
+				@collection.models[1].attributes.roles = ["Organizer"]
+				@collection.models[1].attributes.description = "Tempor cray proident, stumptown hella"
+				@collection.models[1].attributes.email = "mattlohmann@localprojects.net"
+				
+				@collection.models[2].attributes.roles = ["Member"]
+				@collection.models[2].attributes.description = "Master cleanse plaid assumenda"
 
 				@collection.each (model) => 
 					if "Project Owner" in model.attributes.roles or "Organizer" in model.attributes.roles

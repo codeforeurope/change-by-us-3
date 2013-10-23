@@ -1,12 +1,15 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/opacity";
+
 @import "variables";
 @import "projects";
 @import "modal";
 @import "helpers";
+@import "form";
 @import "profile";
 @import "login-signup";
 @import "mixins-and-functions";
-@import "compass/css3/border-radius";
-@import "compass/css3/opacity";
+
 
 /*!
  * Bootstrap v2.3.1
@@ -80,6 +83,7 @@ sub {
 
 div{
   position: relative;
+  box-sizing: border-box;
 }
 
 img {
@@ -1485,7 +1489,7 @@ legend + .control-group {
   }
 }
 
-.close {
+.delete, .close{
   float: right;
   font-size: 20px;
   font-weight: bold;
@@ -1975,9 +1979,6 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   }
 }
 
-.nav-pills {
-  *zoom: 1;
-}
 
 .nav-tabs:before, .nav-pills:before, .nav-tabs:after, .nav-pills:after {
   display: table;
@@ -1989,17 +1990,6 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   clear: both;
 }
 
-.nav-pills {
-  &:after {
-    clear: both;
-  }
-  .dropdown {
-    width: 320px;
-    border: 1px solid #dedede;
-    padding-left: 10px;
-  }
-}
-
 /*PILL BUTTONS*/
 
 .custom {
@@ -2008,6 +1998,19 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 .nav-pills {
+  *zoom: 1;
+
+  img{margin-top: -29px;}
+
+  &:after {
+    clear: both;
+  }
+  
+  .dropdown {
+    width: 320px;
+    border: 1px solid #dedede;
+    padding-left: 10px;
+  }
   > {
     .active > a {
       color: #555555;
@@ -2042,19 +2045,62 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 
 .topnav {
-  height: 72px; 
+  height: 87px; 
   width: 100%;
   font-size: 20px;
   background-color: $primaryColor;
-
-  .nav{
-    margin-top: 22px;
-    img{margin-top: -29px;}
-  }
 }
 
 
 .nav {
+  margin-top: 22px;
+  z-index: 1;
+
+  &.pull-left{
+    width: 260px;
+    li{padding-right:0;}
+  }
+
+  &.user{margin: 0;}
+
+  .profile-nav-header{
+    height: 87px; 
+    >span{ 
+      color: $white; 
+      line-height: 87px; 
+    }
+  }
+
+  .profile-nav-menu{
+    width: 100%;
+    background-color: $white;
+    display: none;
+    border: 1px solid $grayBorder;
+    border-top: none;
+    @include border-bottom-left-radius(4px);
+    @include border-bottom-right-radius(4px);
+    a{
+      font-size: 22px;
+      color: $black;
+    }
+    ul{
+      width: 100%;
+      li{padding: 15px;}
+      li:last-child{
+        border-top: 1px solid $grayBorder;
+      }
+    }
+  }
+
+  &.active{
+    .profile-nav-header{background-color: $primaryAltHoverColor;}
+    .profile-nav-menu{display: block;}
+  }
+
+  .user-avatar { 
+    margin-left:14px;
+    margin-top:7px;
+  }
   .dropdown-toggle .caret {
     margin-top: 6px;
     border-top-color: $black;
@@ -2282,6 +2328,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     display: block;
     float: left;
     margin: 0 10px 0 0;
+
     &.pull-right {
       float: right;
       margin-right: 0;
@@ -2434,98 +2481,6 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 .pagination-centered {
   text-align: center;
-}
-
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1040;
-  background-color: $black;
-  &.fade {
-    opacity: 0;
-    &.in {
-      opacity: 0.8;
-      filter: alpha(opacity = 80);
-    }
-  }
-  opacity: 0.8;
-  filter: alpha(opacity = 80);
-}
-
-.modal {
-  position: fixed;
-  top: 10%;
-  left: 50%;
-  z-index: 1050;
-  width: 560px;
-  margin-left: -280px;
-  background-color: $white;
-  border: 1px solid #999;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  *border: 1px solid #999;
-  outline: none;
-  &.fade {
-    top: -25%;
-    -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
-    -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
-    -o-transition: opacity 0.3s linear, top 0.3s ease-out;
-    transition: opacity 0.3s linear, top 0.3s ease-out;
-    &.in {
-      top: 10%;
-    }
-  }
-}
-
-.modal-header {
-  padding: 9px 15px;
-  border-bottom: 1px solid #eee;
-  .close {
-    margin-top: 2px;
-  }
-  h3 {
-    margin: 0;
-    line-height: 30px;
-  }
-}
-
-.modal-body {
-  position: relative;
-  max-height: 400px;
-  padding: 15px;
-  overflow-y: auto;
-}
-
-.modal-form {
-  margin-bottom: 0;
-}
-
-.modal-footer {
-  padding: 14px 15px 15px;
-  margin-bottom: 0;
-  text-align: right;
-  background-color: #f5f5f5;
-  border-top: 1px solid #ddd;
-  -webkit-border-radius: 0 0 6px 6px;
-  -moz-border-radius: 0 0 6px 6px;
-  border-radius: 0 0 6px 6px;
-  *zoom: 1;
-  -webkit-box-shadow: inset 0 1px 0 $white;
-  -moz-box-shadow: inset 0 1px 0 $white;
-  box-shadow: inset 0 1px 0 $white;
-  &:before {
-    display: table;
-    line-height: 0;
-    content: "";
-  }
-  &:after {
-    display: table;
-    line-height: 0;
-    content: "";
-    clear: both;
-  }
 }
 
 .thumbnails {
@@ -2845,7 +2800,6 @@ a {
 }
 
 .create {
-  padding-top: 20px;
   h1 {
     font-size: 60px;
     font-weight: normal;
@@ -2862,26 +2816,7 @@ a {
     color: #9c9c9c;
     font-size: 16px;
   }
-  .form-container {
-    padding: 30px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    width: 100%;
-    height: 480px;
-    background-color: $white;
-    border: 1px solid #dcdcdc;
-    border-radius: 4px;
-  }
-  .label {
-    font-family: "BebasNeue", serif;
-    margin-top: 20px;
-  }
-  .form-left {
-    float: left;
-  }
-  .form-right {
-    float: right;
-  }
+  
   .btn {
     background-color: $secondaryColor;
     padding: 20px 40px;
@@ -2991,7 +2926,7 @@ a {
 }
 
 .header-image {
-  width: 1500px;
+  width: 100%;
   height: 690px;
   margin: auto;
 
@@ -3012,7 +2947,7 @@ a {
     position: absolute;
     top: 175px;
     left: 200px;
-    width: auto;
+    width: 1015px;
     height: 225px; 
     h1{ 
       display: inline-block;
@@ -3072,7 +3007,7 @@ a {
   }
   p{
     @include font-styling("asap", 22px, $white);
-    width:85%;
+    width:95%;
   }
 }
 
@@ -3086,7 +3021,7 @@ a {
 }
 
 .resources{
-  text-align: right;
+   
   a{
     color: $black;
     font-size: 22px;

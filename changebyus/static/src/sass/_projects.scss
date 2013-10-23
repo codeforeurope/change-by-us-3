@@ -148,7 +148,7 @@
   }
  
   .content-wrapper {
-    padding: 30px;
+    padding: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
     //width: 100%;
@@ -158,10 +158,6 @@
     p{
       @include font-styling("asap", 20px, $gray20, "normal", "regular");
       margin-bottom: 28px;
-    }
-
-    span.highlight{
-      @include highlight;
     }
  
     ul.bordered-item{
@@ -178,8 +174,8 @@
     margin: 0 0 22px;
   }
 
-  .content-left, .post-right, .reply-left, .reply-right, .project-left, .project-right{
-    float: left;
+  .content-left, .content-right, .post-right, .reply-left, .reply-right{
+    float: left; 
   }
 
   .project-left{ 
@@ -290,6 +286,7 @@
     cursor: pointer; 
     padding: 5px;
     @include box-skin;
+
     .caret{
       float: right;
       margin-top: 8px;
@@ -302,11 +299,17 @@
 
     label{ 
       height: 15px;
+      font-size: 16px;
       line-height: 15px;
       padding-left: 20px;
+      margin-top: 10px;
       background-repeat: no-repeat;
       background-image: url('/static/img/black-check.png');
+      &:first-child{
+        margin-top: 0;
+      }
     }
+
 
     input[type=checkbox]{
       display: none;
@@ -336,17 +339,16 @@
       @include font-styling("asap", 15px, $gray65);
     }
 
-    .close{
-      float: right;
+    .delete,.close{
       margin-top: 20px;
       margin-right: 20px; 
     }
-
   }
 
   .fundraising-wrapper{
     padding: 30px;
     @include box-skin;
+    
   }
 
   .fundraising-left{
@@ -432,7 +434,9 @@
 .tabs-pane{
   img{vertical-align:initial;}
   li a{ vertical-align: text-bottom; }
-  li .active span {
-    display: none;
-  }
+  li{
+    &.active {
+      a{ display: none; }
+    }
+  } 
 }

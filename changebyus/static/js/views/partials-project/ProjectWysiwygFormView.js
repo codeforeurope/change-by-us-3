@@ -1,40 +1,46 @@
 define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], function(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) {
   var ProjectWysiwygFormView;
   return ProjectWysiwygFormView = AbstractView.extend({
-    formID: "#editor",
+    formName: "project-update",
+    editorID: "#editor",
+    $updateForm: null,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {
-      var self, url;
-      self = this;
+      var url,
+        _this = this;
       this.viewData = {
         project_id: window.projectID,
         response_to_id: this.id,
-        formID: this.formID
+        editorID: this.editorID
       };
       console.log("ProjectWysiwygFormView", this);
       if (this.parent === "#update-form") {
         url = "/templates/partials-project/project-update-form.html";
-        this.formID = "#editor";
+        this.editorID = "#editor";
+        this.formName = "project-update";
       } else if (this.parent === "#add-thread-form") {
         url = "/templates/partials-project/project-new-thread-form.html";
-        this.formID = "#new-thread-editor";
+        this.editorID = "#new-thread-editor";
+        this.formName = "new-discussion";
       } else {
         url = "/templates/partials-project/project-new-discussion-form.html";
-        this.formID = "#discussion-editor";
+        this.editorID = "#discussion-editor";
+        this.formName = "new-thread";
       }
-      this.$el = $("<div class='project-update-form'/>");
+      this.$el = $("<div class='content-wrapper'/>");
       this.$el.template(this.templateDir + url, {
         data: this.viewData
       }, function() {
-        return self.jQueryForm();
+        return _this.jQueryForm();
       });
       return $(this.parent).append(this.$el);
     },
     jQueryForm: function() {
-      var $editor, $updateForm, editorOffset, options, self, showErrorAlert;
+      var $editor, editorOffset, options, showErrorAlert,
+        _this = this;
       showErrorAlert = function(reason, detail) {
         var msg;
         msg = "";
@@ -45,15 +51,15 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         }
         return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
-      self = this;
-      $editor = $(this.formID);
+      $editor = $(this.editorID);
+      console.log('$editor', $editor, this.editorID);
       options = {
         beforeSubmit: function(arr_, form_, options_) {
           var i, _results;
-          self.beforeSubmit(arr_, form_, options_);
+          _this.beforeSubmit(arr_, form_, options_);
           _results = [];
           for (i in arr_) {
-            console.log("obj.name", arr_[i].name, arr_[i]);
+            console.log("obj.name", arr_[i].name, arr_[i], $editor);
             if (arr_[i].name === "description") {
               arr_[i].value = escape($editor.html());
               _results.push(console.log('des', arr_[i].value));
@@ -63,12 +69,14 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
           }
           return _results;
         },
-        success: function(response) {
-          return console.log(response);
+        success: function(response_) {
+          _this.success(response_);
+          return console.log(response_);
         }
       };
-      $updateForm = $("form[name='project-update']");
-      $updateForm.ajaxForm(options);
+      this.$updateForm = this.$el.find("form");
+      this.$updateForm.ajaxForm(options);
+      console.log("$updateForm", this.$updateForm);
       $("a[title]").tooltip({
         container: "body"
       });
@@ -88,10 +96,12 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       });
       if ("onwebkitspeechchange" in document.createElement("input")) {
         editorOffset = $editor.offset();
-        $("#voiceBtn").css("position", "absolute").offset({
-          top: editorOffset.top - 20,
-          left: editorOffset.left + $editor.innerWidth() - 75
-        });
+        if (editorOffset) {
+          $("#voiceBtn").css("position", "absolute").offset({
+            top: editorOffset.top - 20,
+            left: editorOffset.left + $editor.innerWidth() - 75
+          });
+        }
       } else {
         $("#voiceBtn").hide();
       }
@@ -100,6 +110,10 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       });
       return window.prettyPrint && prettyPrint();
     },
-    beforeSubmit: function(arr_, form_, options_) {}
+    beforeSubmit: function(arr_, form_, options_) {},
+    success: function(response_) {},
+    resetForm: function() {
+      return this.$updateForm.resetForm();
+    }
   });
 });

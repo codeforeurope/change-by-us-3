@@ -1,16 +1,54 @@
-<div>
-	<div>
-		<form>
-			<!-- project form -->
-		</form>
+<form>
+	<div class="content-wrapper clearfix">
+		<div class="form-left">
+			<label for="name">Project Name </label>
+			<input type="text" maxlength="30" name="name" id="name" placeholder="Project Name" class="input-xxlarge">
+			
+			<label for="description">Description</label>
+			<input type="text" maxlength="30" name="description" id="description" placeholder="Description" class="input-xxlarge">
+			
+			<label for="name">Category </label>
+			<select name="Category">
+				<option value="">Try Me!</option>
+				<option value="">Try Me!</option>
+				<option value="">Try Me!</option>
+			</select>
+			
+			<label for="description">Project Location</label>
+			<input type="text" maxlength="30" name="location" id="location" placeholder="Project Location" class="input-xxlarge">
+							
+			<label for="description">Website</label>
+			<input type="text" maxlength="30" name="website" id="website" placeholder="Website" class="input-xxlarge">
+					
+			<label for="name">Project Visibility</label>
+			<input type="radio" name="public" value="public">Public<br>
+			<input type="radio" name="private" value="private">Private
+		</div>
+		<div class="form-right">
+			<div class="edit-thumbnail">
+				<label>Project Thumbnail</label>
+				<a href="#edit-thumbnail" class="btn">Edit Thumbnail</a>
+				<img src="">
+				<span>upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ## MB</span>
+			</div>
+			<div class="social-btns">
+				<label>Social</label>
+				<div class="twitter">
+					<div class="icon-twitter"></div>
+					<a href="#" class="btn">Disconnect</a>
+				</div>
+				<div class="facebook">
+					<div class="icon-facebook"></div>
+					<a href="#" class="btn">Disconnect</a>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div>
-		<!-- image & social -->
+	<div class="form-footer">
+		<div class="pull-left">
+			<input type="submit" class="btn btn-medium" value="Save">
+			<input type="submit" class="btn btn-medium" value="Cancel">
+		</div>
+		<div class="pull-right"></div>
 	</div>
-</div>
-<div>
-	<div>
-		<a href="" class="btn">Save</a>
-		<a href="" class="btn">Cancel</a>
-	</div>
-</div>
+</form>

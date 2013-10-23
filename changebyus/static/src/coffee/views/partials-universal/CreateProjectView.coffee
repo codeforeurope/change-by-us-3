@@ -16,7 +16,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
 
     ajaxForm: ->
       $submit = $("input[type=submit]")
-      $form = $("form[name=createproject]")
+      $form = @$el.find("form")
       options =
         beforeSubmit: ->
           $submit.prop "disabled", true
@@ -25,7 +25,12 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           console.log "res", res
           # createProjectModalView = new CreateProjectView(viewData: res)
           $submit.prop "disabled", false
-          $form.resetForm()  if res.success
-
+          
+          if res.success
+            $form.resetForm()
+            window.location = "/project/"+res.data.id
+          else
+            # $form.resetForm()  
+           
       $form.ajaxForm options
 

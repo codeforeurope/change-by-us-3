@@ -22,10 +22,21 @@
 
           {% if login == false %}
 
-           <ul class="nav nav-pills pull-left">
-              <li><a href="/" id="header-text">{{ current_user.first_name }}</a></li>
-              <li><a href="/" id="header-text">{{ current_user.id }}</a></li>
-          </ul>
+           <div class="nav user pull-left">
+              <div class="profile-nav-header">
+                <div class="user-avatar">
+                  <img src="http://lorempixel.com/70/70/" class="circle">
+                </div>
+                <span>{{ current_user.display_name }}</span>
+              </div>
+              <div class="profile-nav-menu">
+                <ul>
+                  <li><a href="/dashboard">Dashboard</a></li>
+                  <li><a href="/user/{{ current_user.id }}">Profile</a></li>
+                  <li><a href="/logout">Sign Out</a></li> 
+                </ul>
+              </div> 
+          </div>
 
             <ul class="nav nav-pills pull-right">    
               <li><a href="/" class="header-links">Stream</a></li>

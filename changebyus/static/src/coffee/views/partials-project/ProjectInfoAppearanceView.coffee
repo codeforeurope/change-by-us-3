@@ -2,17 +2,16 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
   (_, Backbone, $, temp, AbstractView) ->
     ProjectInfoAppearanceView = AbstractView.extend
       
-      parent: "#project-calendar"
+      parent: "#project-info"
 
       initialize: (options) ->
         AbstractView::initialize.call @, options
         @render()
 
       render: ->
-        @$el = $("<div class='project'/>")
+        @$el = $("<div />")
         @$el.template @templateDir + "/templates/partials-project/project-info-appearance.html",
-          data: @viewData
-        , =>
+          data: @viewData, =>
 
         $(@parent).append @$el 
 

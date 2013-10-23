@@ -19,7 +19,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
-        var config, hash, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection;
+        var config, hash, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
         config = {
           id: _this.model.get("id"),
           name: _this.model.get("data").name
@@ -28,12 +28,17 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
         projectCalendarCollection = new ProjectCalendarCollection(config);
         projectMembersCollection = new ProjectMembersCollection(config);
+        projectUpdatesCollection = new ProjectUpdatesCollection(config);
         _this.projectDiscussionsView = new ProjectDiscussionsView({
           collection: projectDiscussionsCollection
         });
         _this.projectDiscussionView = new ProjectDiscussionView();
-        _this.projectNewDiscussionView = new ProjectNewDiscussionView();
-        _this.projectAddUpdateView = new ProjectAddUpdateView();
+        _this.projectNewDiscussionView = new ProjectNewDiscussionView({
+          model: _this.model
+        });
+        _this.projectAddUpdateView = new ProjectAddUpdateView({
+          collection: projectUpdatesCollection
+        });
         _this.projectFundraisingView = new ProjectFundraisingView(config);
         _this.projectCalenderView = new ProjectCalenderView({
           collection: projectCalendarCollection
@@ -47,6 +52,11 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           _this.projectDiscussionView.updateDiscussion(arg_.model);
           return window.location.hash = "discussion/" + arg_.model.id;
         });
+        /*
+        						@projectDiscussionsView.on 'deleteDiscussion', (arg_)=>
+        							console.log 'deleteDiscussion arg_',arg_
+        */
+
         _this.discussionBTN = $("a[href='#discussions']");
         _this.updatesBTN = $("a[href='#updates']");
         _this.fundraisingBTN = $("a[href='#fundraising']");

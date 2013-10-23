@@ -2,35 +2,37 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
 		ProjectWysiwygFormView = AbstractView.extend
 
-			formID:"#editor" #default ID, but doublecheck that form ID is correct
+			formName:"project-update" #default ID, but doublecheck that form ID is correct
+			editorID:"#editor" #default ID, but doublecheck that form ID is correct
+			$updateForm:null
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@render()
 
-			render: ->
-				self = this
+			render: -> 
 				@viewData =
 					project_id: window.projectID
 					response_to_id: @id 
-					formID: @formID
+					editorID: @editorID
 
 				console.log "ProjectWysiwygFormView",@
 				if @parent is "#update-form"
 					url = "/templates/partials-project/project-update-form.html" 
-					@formID =  "#editor"
+					@editorID =  "#editor"
+					@formName = "project-update"
 				else if @parent is "#add-thread-form"
 					url = "/templates/partials-project/project-new-thread-form.html" 
-					@formID =  "#new-thread-editor"
+					@editorID =  "#new-thread-editor"
+					@formName = "new-discussion"
 				else
 					url = "/templates/partials-project/project-new-discussion-form.html" 
-					@formID = "#discussion-editor"
+					@editorID = "#discussion-editor"
+					@formName = "new-thread"
 
-				@$el = $("<div class='project-update-form'/>")
+				@$el = $("<div class='content-wrapper'/>")
 				@$el.template @templateDir+url,
-					data: @viewData
-				, ->
-					self.jQueryForm()
+					{data: @viewData}, => @jQueryForm()
 
 				$(@parent).append @$el
 
@@ -43,21 +45,24 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					else
 						console.log "error uploading file", reason, detail
 					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo "#alerts"
-				
-				self = @
-				$editor = $(@formID)
+				 
+				$editor = $(@editorID)
+				console.log '$editor',$editor,@editorID
 				options =
-					beforeSubmit: (arr_, form_, options_) ->
-						self.beforeSubmit(arr_, form_, options_)
+					beforeSubmit: (arr_, form_, options_) =>
+						@beforeSubmit(arr_, form_, options_)
 						for i of arr_
-							console.log "obj.name", arr_[i].name, arr_[i]
+							console.log "obj.name", arr_[i].name, arr_[i],$editor
 							if arr_[i].name is "description"
 								arr_[i].value = escape($editor.html())
 								console.log 'des',arr_[i].value
-					success: (response) ->
-						console.log response
-				$updateForm = $("form[name='project-update']")
-				$updateForm.ajaxForm options 
+					success: (response_) =>
+						@success(response_)
+						console.log response_
+				@$updateForm = @$el.find("form")
+				@$updateForm.ajaxForm options 
+
+				console.log "$updateForm",@$updateForm
 
 				$("a[title]").tooltip container: "body"
 
@@ -76,9 +81,10 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 				if "onwebkitspeechchange" of document.createElement("input")
 					editorOffset = $editor.offset()
-					$("#voiceBtn").css("position", "absolute").offset
-						top: editorOffset.top - 20
-						left: editorOffset.left + $editor.innerWidth() - 75
+					if editorOffset
+						$("#voiceBtn").css("position", "absolute").offset
+							top: editorOffset.top - 20
+							left: editorOffset.left + $editor.innerWidth() - 75
 				else
 					$("#voiceBtn").hide()
 
@@ -87,4 +93,11 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 			beforeSubmit:(arr_, form_, options_)->
 				# hook for beforeSubmit
+
+			success: (response_) ->
+				# hook for beforeSubmit
+
+			resetForm:->
+				@$updateForm.resetForm()
+
 

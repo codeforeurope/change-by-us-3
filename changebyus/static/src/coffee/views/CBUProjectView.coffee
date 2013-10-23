@@ -29,6 +29,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
 					{data:@model.attributes}, =>
+						@$el.prepend @$header
+
 						id = @model.get("id")
 						config = {id:id}
 						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
@@ -39,23 +41,21 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 						@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
 						@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
 						
-						@updatesBTN  = $("a[href='#updates']")
-						@membersBTN  = $("a[href='#members']")
-						@calendarBTN = $("a[href='#calendar']")
+						@updatesBTN  = $("a[href='#updates']").parent()
+						@membersBTN  = $("a[href='#members']").parent()
+						@calendarBTN = $("a[href='#calendar']").parent()
 						
 						hash = window.location.hash.substring(1)
 						@toggleSubView (if (hash is "") then "updates" else hash)
 						$(window).bind "hashchange", (e) =>
 							hash = window.location.hash.substring(1)
 							@toggleSubView hash
-						
+
 						# temp hack because somewhere this event default is prevented
 						$("a[href^='#']").click (e) -> 
 							window.location.hash = $(this).attr("href").substring(1)
 
-						@$el.prepend @$header
-
-						@joingBTN()
+						@joingBTN() 
 
 			joingBTN:->
 				id = @model.get("id")
@@ -78,15 +78,16 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 
 				# determine if user is a member of the project
 				# if not, display the join button
+
 				$.ajax(
-					type: "POST"
-					url: "/api/project/am_i_a_member"
-					data: { project_id:id }
+					type: "GET"
+					url: "/api/project/am_i_a_member/"+id
 				).done (response)=> 
 					console.log 'response.data.member',response,$join
-					if response.data.member is false then $join.removeClass('invisible')
 
-				
+					try if response.data.member is false then $join.removeClass('invisible')
+					catch e then console.log e
+
 
 			toggleSubView: (view) ->
 				@projectUpdatesView.hide()
@@ -96,6 +97,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				@updatesBTN.removeClass "active"
 				@membersBTN.removeClass "active"
 				@calendarBTN.removeClass "active"
+				console.log 'toggleSubView',@projectUpdatesView,@updatesBTN
 
 				switch view 
 					when "members"
@@ -104,7 +106,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					when "calendar"
 						@projectCalenderView.show()
 						@calendarBTN.addClass "active"
-					else
-						# "updates"
+					else 
 						@projectUpdatesView.show()
 						@updatesBTN.addClass "active"

@@ -33,6 +33,14 @@
   float: left;
 }
 
+.tl{
+  text-align: left;
+}
+
+.tr{
+  text-align: right;
+}
+
 .hide {
   display: none;
 }
@@ -63,7 +71,13 @@
   display: block;
 }
 
+span.highlight{
+  @include highlight;
+}
 
 .circle{
   @include border-radius(1000px, 1000px);
 }
+
+/********** position helper ***********/
+.mt-16{margin-top: 16px;}

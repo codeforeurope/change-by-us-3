@@ -19,7 +19,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
     ajaxForm: function() {
       var $form, $submit, options;
       $submit = $("input[type=submit]");
-      $form = $("form[name=createproject]");
+      $form = this.$el.find("form");
       options = {
         beforeSubmit: function() {
           return $submit.prop("disabled", true);
@@ -28,7 +28,10 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           console.log("res", res);
           $submit.prop("disabled", false);
           if (res.success) {
-            return $form.resetForm();
+            $form.resetForm();
+            return window.location = "/project/" + res.data.id;
+          } else {
+
           }
         }
       };

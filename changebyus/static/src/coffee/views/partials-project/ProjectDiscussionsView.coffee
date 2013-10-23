@@ -33,4 +33,17 @@ define ["underscore",
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
+				projectDiscussionListItemView.on 'delete', =>
+					# @trigger 'deleteDiscussion', config
+					console.log 'config',config.model.attributes.id
+					@deleteDiscussion config.model.attributes.id
 				@$ul.append projectDiscussionListItemView.$el
+
+
+			deleteDiscussion:(id_)->
+				$.ajax(
+					type: "POST"
+					url: "/api/post/delete"
+					data: { post_id:id_ }
+				).done (response)=> 
+					console.log 'deleteDiscussion',response

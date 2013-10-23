@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 
 from functools import wraps
+from .models import ProjectPost
 from ..project.decorators import _is_owner, _is_organizer, _is_member
 
+from ..helpers.flasktools import *
+from flask import g, request, current_app
 
 def post_delete_permission(f):
     @wraps(f)
@@ -100,7 +103,7 @@ def post_edit_permission(f):
 def post_exists(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
-        project_id = request.form.get('post_id') or request.view_args.get('post_id')
+        post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:
@@ -110,15 +113,16 @@ def post_exists(f):
    
         try:
             post = ProjectPost.objects.with_id(post_id)
-            if project is None:
-                errStr = "post {0} does not exist.".format(project_id)
+            if post is None:
+                errStr = "post {0} does not exist.".format(post_id)
                 return jsonify_response( ReturnStructure( success = False,
                                                           msg = errStr ))
         
         except Exception as e:
-            infoStr = "Exception looking up post of id {0}".format(project_id)
+            infoStr = "Exception looking up post of id {0}".format(post_id)
             current_app.logger.info(infoStr)
-            errStr = "post {0} does not exist.".format(project_id)
+            current_app.logger.error(e)
+            errStr = "post {0} does not exist.".format(post_id)
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
 

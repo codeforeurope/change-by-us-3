@@ -7,7 +7,7 @@ from ..extensions import db
 from ..helpers.crypt import handle_decryption
 from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
-from ..helpers.mixin import EntityMixin, encode_model
+from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, encode_model
 from ..helpers.stringtools import slugify
 from ..stripe.models import StripeAccount
 from ..user.models import User
@@ -87,7 +87,7 @@ class Roles:
 ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
 
 
-class Project(db.Document, EntityMixin):
+class Project(db.Document, HasActiveEntityMixin):
     """
     Project model.  Pretty straight forward.  For image_url we
     store the url (/images/image.jpg) so that we can move data between

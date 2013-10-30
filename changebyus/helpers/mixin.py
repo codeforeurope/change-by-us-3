@@ -47,7 +47,14 @@ class EntityMixin(object):
                             depth=depth, 
                             **kwargs)
         return resp
+
+
+class HasActiveEntityMixin(EntityMixin):
+    active = db.BooleanField(default=True)
     
+    def is_active(self):
+        return active
+
 
 def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwargs):
     """Take a Mongo (or other) object and return a JSON

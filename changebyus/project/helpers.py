@@ -11,6 +11,8 @@ from ..helpers.stringtools import slugify
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
 
+from ..wordlist import filter_model
+\
 from flask.ext.cdn_rackspace import upload_rackspace_image
 
 import requests
@@ -67,7 +69,6 @@ def _create_project( resource = False ):
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    # TODO work on geo stuff
     p = Project( name = name, 
                  description = description, 
                  location = location,
@@ -76,6 +77,7 @@ def _create_project( resource = False ):
                  resource = resource,
                  slug = slug )
 
+    filter_model(p, ['name', 'description'])
 
     try:
         p.save()
@@ -166,6 +168,9 @@ def _edit_project():
 
     if name: p.name = name
     if description: p.description = description
+
+    # TODO flag objects if new content needs to be flagged,
+    # BUT don't double-flag existing, unchanged content
 
     # handle image manipulation stuff
 

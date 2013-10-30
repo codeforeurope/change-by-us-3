@@ -7,14 +7,13 @@ from ..extensions import db
 from ..helpers.crypt import handle_decryption
 from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
-from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, encode_model
+from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, FlaggableMixin, encode_model
 from ..helpers.stringtools import slugify
 from ..stripe.models import StripeAccount
 from ..user.models import User
 from flask import current_app
 from flask.ext.cdn import url_for
 from mongoengine import signals
-from ..wordlist import filter_model
 
 import os
 # from ..helpers.mixin import (handle_decryption, handle_initial_encryption, 
@@ -87,7 +86,7 @@ class Roles:
 ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
 
 
-class Project(db.Document, HasActiveEntityMixin):
+class Project(db.Document, HasActiveEntityMixin, FlaggableMixin):
     """
     Project model.  Pretty straight forward.  For image_url we
     store the url (/images/image.jpg) so that we can move data between
@@ -115,8 +114,6 @@ class Project(db.Document, HasActiveEntityMixin):
 
     slug = db.StringField(unique=True)
     
-    flags = db.IntField(default=0)
-
     activity = db.DecimalField()
 
     meta = {
@@ -145,10 +142,7 @@ class Project(db.Document, HasActiveEntityMixin):
         elif document.__dict__.has_key('_changed_fields'):
             slug = slugify( document.name )
             
-        filter_model(document, ['name', 'description'])
-
-
-
+        
     @classmethod    
     def post_init(cls, sender, document, **kwargs):
         handle_decryption(document, document.ENCRYPTED_FIELDS)

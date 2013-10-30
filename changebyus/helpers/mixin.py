@@ -56,6 +56,13 @@ class HasActiveEntityMixin(EntityMixin):
         return active
 
 
+class FlaggableMixin(object):
+    flags = db.IntField(default=0)
+
+    def is_flagged(self):
+        return flags > 0
+
+
 def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwargs):
     """Take a Mongo (or other) object and return a JSON
      

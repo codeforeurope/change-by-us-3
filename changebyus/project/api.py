@@ -8,7 +8,7 @@ from flask import (Blueprint, render_template, redirect,
 
 from flask.ext.login import login_required, current_user, login_user
 
-from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
+from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError)
 
 from ..geonames import get_geopoint
@@ -134,9 +134,9 @@ class CreateProjectForm(Form):
 
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
-    location = TextField("location")
-    lat = TextField("lat")
-    lon = TextField("lon")
+    location = HiddenField("location")
+    lat = HiddenField("lat")
+    lon = HiddenField("lon")
     photo = FileField("photo")
 
 

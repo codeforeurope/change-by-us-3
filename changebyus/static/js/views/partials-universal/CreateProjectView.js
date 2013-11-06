@@ -21,7 +21,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $ajax, $form, $projectLocation, $submit, options;
+      var $ajax, $form, $projectLocation, $submit, options,
+        _this = this;
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
       options = {
@@ -64,16 +65,13 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
               }
             }
             return zips;
-          },
-          select: function() {
-            return console.log('select', this);
-          },
-          onselect: function() {
-            return console.log('onselect', this);
           }
         }
       }).bind('typeahead:selected', function(obj, datum) {
-        this.location = datum;
+        _this.location = datum;
+        $('input[name="location"]').val(_this.location.name);
+        $('input[name="lat"]').val(_this.location.lat);
+        $('input[name="lon"]').val(_this.location.lon);
         return console.log(datum);
       });
     }

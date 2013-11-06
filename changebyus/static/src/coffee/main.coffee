@@ -7,7 +7,9 @@ require.config
 		"underscore": "ext/underscore/underscore-min"
 		"backbone": "ext/backbone/backbone-min"
 		"bootstrap": "ext/bootstrap/bootstrap.min"
+		"hogan": "ext/hogan/hogan-2.0.0.amd"
 		"wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
+		"autocomp": "ext/bootstrap/typeahead.min"
 		"prettify": "ext/google/prettify"
 		"template": "ext/jquery/template"
 		"form": "ext/jquery/jquery.form.min"
@@ -23,7 +25,7 @@ require.config
 		"user-view": "views/partials-user/CBUUserView"
 		"profile-view": "views/CBUProfileView"
 		"utils": "utils/Utils"
- 
+
 require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], 
 	($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
 		$(document).ready ->
@@ -88,3 +90,5 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 			top = (screen.height / 2) - (h / 2)
 			window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
 
+		window.delay = (time, fn) ->
+			setTimeout fn, time

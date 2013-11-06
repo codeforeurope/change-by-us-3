@@ -7,7 +7,9 @@ require.config({
     "underscore": "ext/underscore/underscore-min",
     "backbone": "ext/backbone/backbone-min",
     "bootstrap": "ext/bootstrap/bootstrap.min",
+    "hogan": "ext/hogan/hogan-2.0.0.amd",
     "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg",
+    "autocomp": "ext/bootstrap/typeahead.min",
     "prettify": "ext/google/prettify",
     "template": "ext/jquery/template",
     "form": "ext/jquery/jquery.form.min",
@@ -90,7 +92,7 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
   });
   /* GLOBAL UTILS*/
 
-  return window.popWindow = function(url) {
+  window.popWindow = function(url) {
     var h, left, title, top, w;
     title = "social";
     w = 650;
@@ -98,5 +100,8 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
     left = (screen.width / 2) - (w / 2);
     top = (screen.height / 2) - (h / 2);
     return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
+  };
+  return window.delay = function(time, fn) {
+    return setTimeout(fn, time);
   };
 });

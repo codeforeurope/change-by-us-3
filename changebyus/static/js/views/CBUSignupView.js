@@ -1,15 +1,6 @@
 define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
-  var CBUSignupView, popWindow;
-  popWindow = function(url) {
-    var h, left, title, top, w;
-    title = "social";
-    w = 650;
-    h = 650;
-    left = (screen.width / 2) - (w / 2);
-    top = (screen.height / 2) - (h / 2);
-    return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=" + left);
-  };
-  CBUSignupView = Backbone.View.extend({
+  var CBUSignupView;
+  return CBUSignupView = Backbone.View.extend({
     parent: "body",
     templateDir: "/static",
     viewData: {},
@@ -20,14 +11,13 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return this.render();
     },
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='signup'/>");
       this.$el.template(this.templateDir + "/templates/signup.html", {
         data: this.viewData
       }, function() {
-        self.ajaxForm();
-        return self.addListeners();
+        _this.ajaxForm();
+        return _this.addListeners();
       });
       return $(this.parent).append(this.$el);
     },
@@ -40,12 +30,28 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       });
     },
     ajaxForm: function() {
-      var $signin;
-      $signin = $("form[name=signin]");
-      return $signin.ajaxForm(function(response) {
-        return console.log(response);
-      });
+      var $feedback, $signin, $submit, options,
+        _this = this;
+      $signin = $("form[name='signin']");
+      $submit = $("input[type='submit']");
+      $feedback = $("#login-feedback");
+      console.log('ajaxForm', $signin);
+      options = {
+        beforeSubmit: function() {
+          console.log('beforeSubmit');
+          $submit.prop("disabled", true);
+          return $feedback.removeClass("alert").html("");
+        },
+        success: function(response) {
+          $submit.prop("disabled", false);
+          if (response.msg.toLowerCase() === "ok") {
+            return window.location.href = "/";
+          } else {
+            return $feedback.addClass("alert").html(response.msg);
+          }
+        }
+      };
+      return $signin.ajaxForm(options);
     }
   });
-  return CBUSignupView;
 });

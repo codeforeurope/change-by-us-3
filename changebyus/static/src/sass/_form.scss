@@ -1,3 +1,6 @@
+@import "compass/css3/border-radius";
+@import "compass/css3/box-shadow";
+
 .form-left {
 	float: left;
 	width: 75%
@@ -9,4 +12,27 @@
 
 .form-footer{
 	margin-bottom: 48px;
+}
+
+.tt-dropdown-menu {
+	width: 480px;
+	padding: 8px 0;
+	margin-bottom: 12px;
+	background-color: #fff;
+	border: 1px solid rgba(0, 0, 0, 0.2);
+	@include border-radius(8px);
+	@include box-shadow(rgba(0,0,0,.2) 0 5px 10px);
+	text-align: left;
+}
+
+.zip {
+	white-space: nowrap;
+	cursor: pointer;
+	padding: 8px 20px;
+	font-size: 18px;
+	line-height: 24px;
+}
+
+.tt-suggestion + .tt-suggestion{
+	border-top: 1px solid rgba(0, 0, 0, 0.2);
 }

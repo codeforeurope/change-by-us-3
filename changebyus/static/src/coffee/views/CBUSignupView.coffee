@@ -28,7 +28,6 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 				url = $(this).attr("href")
 				popWindow url
 
-
 		ajaxForm: ->
 			$signin = $("form[name='signin']")
 			$submit = $("input[type='submit']")

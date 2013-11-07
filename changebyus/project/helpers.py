@@ -56,7 +56,7 @@ def _create_project( resource = False ):
     geo_location = None
     
     if ('lat' in request.form and 'lon' in request.form):
-        geo_location = [float(request.form.get('lat')), float(request.form.get('lon'))]
+        geo_location = [float(request.form.get('lon')), float(request.form.get('lat'))]
 
     owner = User.objects.with_id(g.user.id)
     slug = slugify(name)

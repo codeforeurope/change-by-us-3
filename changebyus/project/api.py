@@ -92,7 +92,7 @@ def api_search_projects():
     cat = request.args.get('cat')
     search_type = request.args.get('type')
     
-    geo_center = [lat, lon]
+    geo_center = [lon, lat]
     
     addl_filters = {}
     

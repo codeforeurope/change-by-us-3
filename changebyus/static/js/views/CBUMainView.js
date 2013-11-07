@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) {
   var CBUMainView;
-  CBUMainView = Backbone.View.extend({
+  return CBUMainView = Backbone.View.extend({
     parent: "body",
     templateDir: "/static",
     viewData: {},
@@ -41,21 +41,20 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
         return console.log(response);
       });
     },
+    addAll: function() {
+      var i,
+        _this = this;
+      i = 0;
+      return this.collection.each(function(projectModel) {
+        return _this.addOne(projectModel);
+      });
+    },
     addOne: function(projectModel) {
       var view;
       view = new ProjectPartialsView({
         model: projectModel
       });
       return this.$el.find("#project-list").append(view.$el);
-    },
-    addAll: function() {
-      var i, self;
-      self = this;
-      i = 0;
-      return this.collection.each(function(projectModel) {
-        return self.addOne(projectModel);
-      });
     }
   });
-  return CBUMainView;
 });

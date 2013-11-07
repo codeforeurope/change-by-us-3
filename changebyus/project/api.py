@@ -67,7 +67,7 @@ def api_get_geopoint():
 
 ## TODO WTForms for search?
 
-@project_api.route('/search')
+@project_api.route('/search', methods = ['POST'])
 def api_search_projects():
     """
     ABOUT

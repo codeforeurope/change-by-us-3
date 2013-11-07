@@ -21,8 +21,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			render: -> 
 				console.log 'CBUProjectView',@model
 				@$el = $("<div class='project-container'/>")
-				@$el.template(@templateDir+"/templates/project.html", {}
-					, => @addSubViews())
+				@$el.template(@templateDir+"/templates/project.html", 
+					{}, => @addSubViews())
 				$(@parent).append @$el
 
 			addSubViews: ->  

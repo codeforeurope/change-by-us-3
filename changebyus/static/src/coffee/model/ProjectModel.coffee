@@ -12,5 +12,5 @@ define ["underscore", "backbone"], (_, Backbone) ->
 			visibility: "private"
 
 		parse:(resp_)->
-			resp_.data
+			if resp_.data then resp_.data else resp_
 

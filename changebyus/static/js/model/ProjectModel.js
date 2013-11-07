@@ -11,7 +11,11 @@ define(["underscore", "backbone"], function(_, Backbone) {
       visibility: "private"
     },
     parse: function(resp_) {
-      return resp_.data;
+      if (resp_.data) {
+        return resp_.data;
+      } else {
+        return resp_;
+      }
     }
   });
 });

@@ -11,4 +11,4 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 				{data: @model.attributes}, => console.log 'done'
 
 		onFetch:(r)-> 
-			$(@parent).append @render()
+			$(@parent).append @render() 

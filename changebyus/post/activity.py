@@ -20,11 +20,6 @@ def calculate_project_activity(project):
     num_pub_posts = _get_num_public_posts(project)
     num_comments = _get_num_comments(project)
     num_users = _get_num_users(project)
-
-    print("##### num_priv_posts = " + str(num_priv_posts))
-    print("##### num_pub_posts = " + str(num_pub_posts))
-    print("##### num_comments = " + str(num_comments))
-    print("##### num_users = " + str(num_users))
     
     activity = (10.0*num_pub_posts + num_priv_posts + num_comments) / num_users
     

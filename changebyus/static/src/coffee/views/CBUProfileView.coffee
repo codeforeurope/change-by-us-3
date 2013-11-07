@@ -1,18 +1,13 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
-	(_, Backbone, $, temp, AbstractView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/ProjectListCollection"], 
+	(_, Backbone, $, temp, AbstractView, ProjectListCollection) ->
 
 		CBUProfileView = AbstractView.extend
 
-			initialize: (options) -> 
-				###
-				@model.fetch 
-					success: =>@render()
-				###
-
 			render: -> 
-
-				@$el.template(@templateDir+"/templates/profile.html", {}
-					, => @onTemplateLoad())
+				console.log '@',@model
+				@$el.template(@templateDir+"/templates/profile.html", 
+					{}, => @onTemplateLoad())
 
 			onTemplateLoad:->
-				# finalize stuff
+				console.log 'onTemplateLoad'
+				

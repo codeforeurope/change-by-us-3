@@ -14,16 +14,15 @@ define ["underscore", "backbone", "jquery", "template", "form", "views/partials-
 			@collection  = options.collection or new ProjectListCollection()
 			@render()
 
-		render: ->
-			self = this
+		render: -> 
 			@$el = $("<div class='projects-main'/>")
-			@$el.template @templateDir + "/templates/main.html", {}, ->
-				$(self.parent).prepend self.$el
-				bannerParent = self.$el.find(".body-container-wide")
+			@$el.template @templateDir + "/templates/main.html", {}, =>
+				$(@parent).prepend @$el
+				bannerParent = @$el.find(".body-container-wide")
 				bannerImageView = new BannerImageView(parent: bannerParent)
-				self.collection.on "reset", self.addAll, self
-				self.collection.fetch reset: true
-				self.ajaxForm()
+				@collection.on "reset", @addAll, @
+				@collection.fetch reset: true
+				@ajaxForm()
 
 		ajaxForm: ->
 			# AJAXIFY THE SIGNUP FORM
@@ -37,9 +36,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "views/partials-
 				console.log response
 
 		addAll: -> 
-			i = 0
+			#i = 0
 			@collection.each (projectModel) =>
-				#while i++ < 3 then self.addOne projectModel
+				#while i++ < 3 then @addOne projectModel
 				@addOne projectModel
 
 		addOne: (projectModel) ->

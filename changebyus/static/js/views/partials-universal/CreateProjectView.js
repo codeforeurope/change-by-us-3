@@ -1,10 +1,10 @@
-define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp", "hogan"], function(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan) {
+define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp", "hogan", "validate"], function(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan, valid) {
   var CreateProjectView;
   return CreateProjectView = AbstractView.extend({
     location: {
       name: "",
-      lat: 0.0,
-      lon: 0.0
+      lat: 0,
+      lon: 0
     },
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
@@ -27,7 +27,25 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       $form = this.$el.find("form");
       options = {
         beforeSubmit: function() {
-          return $submit.prop("disabled", true);
+          var $zip;
+          if ($form.valid()) {
+            $zip = $('input[name="zip"]');
+            console.log('>>>>>>', _this.location.name, $zip.val());
+            if (_this.location.name !== "" && _this.location.name === $zip.val()) {
+              $submit.prop("disabled", true);
+              return true;
+            } else {
+              if ($zip.val() === "") {
+                console.log('# zip warning');
+              } else {
+                console.log('# zip show');
+                $('.tt-dropdown-menu').show();
+              }
+              return false;
+            }
+          } else {
+            return false;
+          }
         },
         success: function(res) {
           console.log("res", res);

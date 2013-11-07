@@ -1,8 +1,8 @@
-define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp","hogan"], 
-	(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan) ->
+define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp","hogan","validate"], 
+	(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan, valid) ->
 		CreateProjectView = AbstractView.extend
 
-			location:{name: "", lat: 0.0, lon: 0.0} 
+			location:{name: "", lat: 0, lon: 0} 
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
@@ -20,7 +20,21 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				$form = @$el.find("form")
 				options =
 					beforeSubmit: => 
-						$submit.prop "disabled", true
+						if $form.valid()
+							$zip = $('input[name="zip"]')
+							console.log '>>>>>>', @location.name, $zip.val()
+							if @location.name isnt "" and @location.name is $zip.val()
+								$submit.prop "disabled", true
+								return true
+							else
+								if $zip.val() is ""
+									console.log('# zip warning')
+								else
+									console.log('# zip show')
+									$('.tt-dropdown-menu').show()
+								return false
+						else
+							return false
 
 					success: (res) ->
 						console.log "res", res
@@ -31,7 +45,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							$form.resetForm()
 							window.location = "/project/"+res.data.id
 						else
-							# $form.resetForm()  
+							# $form.resetForm()
 				$form.ajaxForm options
 
 				$ajax = null

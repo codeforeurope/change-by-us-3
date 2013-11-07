@@ -13,6 +13,7 @@ require.config
 		"prettify": "ext/google/prettify"
 		"template": "ext/jquery/template"
 		"form": "ext/jquery/jquery.form.min"
+		"validate": "ext/jquery/jquery.validate.min"
 		"main-view": "views/CBUMainView"
 		"discover-view": "views/CBUDiscoverView"
 		"project-view": "views/CBUProjectView"

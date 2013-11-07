@@ -36,8 +36,6 @@ def get_word_conditions(s, full_words_only=True, strip_punctuation=True):
     if (full_words_only):
         s = s.split()
     
-    print(s)
-    
     for k,v in wordlists.iteritems():
         if any(word in s for word in v):
             conditions.append(k)

@@ -8,10 +8,9 @@ from flask.ext.login import login_required, current_user, logout_user, login_use
 
 from ..user.models import User
 from ..project.api import api_get_projects
-from ..helpers import gen_blank_ok
+from ..helpers.flasktools import gen_blank_ok
 
 frontend_view = Blueprint('frontend_view', __name__)
-
 
 """
 ==============
@@ -46,17 +45,34 @@ def signup_view():
         process, but due to our integration of social network account creation
         (sign up through twitter, sign up through facebook) we did this our own way
     """
-    return render_template('signup.html')
+    return render_template('index.html')
+
+@frontend_view.route('/login')
+def login_view():
+    return render_template('index.html');
 
 
-@frontend_view.route('/logout')
-def user_logout():
-    """
-    ABOUT
-        In retrospect there is probably a native flask-security url that does this...
-    TODO
-        Check if this can be retired easily
-    """
-    logout_user();
+@frontend_view.route('/discover')
+def discover_view():
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)
 
-    return redirect(url_for('frontend_view.home'))
+@frontend_view.route('/create')
+def create_project_view():
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)
+
+@frontend_view.route('/user/<user_id>')
+def user_view(user_id): 
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)
+
+@frontend_view.route('/social_redirect/<url>')
+def social_redirect_view(url=None): 
+    return render_template('social_redirect.html', url = url)

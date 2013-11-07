@@ -1,224 +1,118 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "utf-8">
+    <title>Change By Us</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{% block head %}
-{{ super() }}
-{% block validatePost %}
-{% endblock %}
-{% endblock %}
+    <link href='http://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700,300' rel='stylesheet' type='text/css'>
 
-{% block topnav %}
+    <link href="/static/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"> 
+    <link href="/static/css/style-merged.css" rel="stylesheet">
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/static/css/wysiwyg.css" rel="stylesheet"> 
+</head>
 
+<body>
 
-  {% if login == false %}
+    <div class="topnav clearfix">
+      <div class="body-container">
+          <!-- masthead -->
 
-<div id="streamtop">
-    <div class="container-narrow">
-    <div class="container-narrow">
-      <div class="masthead">
-        <div class="hidden-phone">
-          <ul class="nav nav-pills pull-left">    
-            <form method="post" action="/stream/sort">
-              <input type="hidden" name="project_id" value="">
-              <li ><input class="btn btn-success" type="submit" id="header-text" value="View Dashboard"></li>
-            </form>
-          </ul>
-        </div>
+          {% if login == false %}
 
-        <div class="hidden-desktop hidden-tablet visible-phone">
-          <div id="mobile-header">
-            <ul class="nav nav-pills pull-left">
-              <form method="post" action="/stream/sort">
-              <input type="hidden" name="project_id" value="">
-              <li ><input type="image" src="/static/img/dashboard.png" style="width: 30px; height: 30"></li>
-            </form>
-            </ul>
-
-            <ul class="nav nav-pills pull-right">
-              <li style="padding-top: 0px">
-                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
-              </li>
-              <li class="dropdown custom">
-                <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
-                <ul id="divNewNotifications" class="dropdown-menu wide-drops">
-                  <li><a role="menuitem" href="/project/create">Create a project</a></li>
-                  <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
-                  <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
-                  <li><a role="menuitem" href="/logout">Log Out</a></li>
+           <div class="nav user pull-left">
+              <div class="profile-nav-header">
+                <div class="user-avatar">
+                  <img src="http://lorempixel.com/70/70/" class="circle">
+                </div>
+                <span>{{ current_user.display_name }}</span>
+              </div>
+              <div class="profile-nav-menu">
+                <ul>
+                  <li><a href="/dashboard">Dashboard</a></li>
+                  <li><a href="/user/{{ current_user.id }}">Profile</a></li>
+                  <li><a href="/logout">Sign Out</a></li> 
                 </ul>
-              </li>
-            </ul>
+              </div> 
           </div>
+
+            <ul class="nav nav-pills pull-right">    
+              <li><a href="/" class="header-links">Stream</a></li>
+              <li><a href="/" class="header-links">City</a></li>
+              <li><a href="/discover" class="header-links">Discover</a></li>
+            </ul>
+
+            {% else %}
+
+             <ul class="nav nav-pills pull-left">
+                <li>
+                  <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
+                </li>
+                 <li>
+                  <a href="/create">Create a Project</a>
+                </li>
+                <li>
+                  <a href="/discover">Discover Projects</a>
+                </li>
+             </ul>
+
+             <ul class="nav nav-pills pull-right">    
+              <li><a href="/signup" class="header-links">Sign Up</a></li>
+              <li><a href="/login" class="header-links">Log In</a></li>
+            </ul>
+
+            {% endif %}
+
+          <!-- end masthead-->
         </div>
-
-        <div class="hidden-phone visible-desktop visible-tablet">
-          <ul class="nav nav-pills pull-right">
-            <li><a href="/" id="header-text">View ChangeBy.us</a></li>
-            <li class="dropdown custom">
-              <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
-              <ul id="divNewNotifications" class="dropdown-menu wide-drops">
-                <li><a role="menuitem" href="/project/create">Create a project</a></li>
-                <li><a role="menuitem" href="/#projects-anchor">Join a project</a></li>
-                <li><a role="menuitem" href="/stream/dashboard">My accounts</a></li>
-                <li><a role="menuitem" href="/logout">Log Out</a></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-
-      </div>
-
-    </div>
-</div>
-</div>
-
-  {% else %}
-
-<div id = "topnav">
-  <div class="container-narrow">
-  <div class="masthead">
-    <ul class="nav nav-pills pull-right">
-
-      <li><a data-toggle="modal" href="#signupModal" id="header-text"><strong>Sign Up</strong></a></li>
-      <li><a data-toggle="modal" href="#loginModal" id="header-text"><strong>Log In</strong></a></li>
-
-    </ul>
-    <ul class="nav nav-pills pull-left">
-      <li><a href="/" id="header-text"><strong>Change By Us</strong></a></li>
-    </ul>
   </div>
- </div>
-</div>
 
-  {% endif %}
+  <div class="placeholder-frame" id="frame"> </div>
 
- 
-{% endblock %}
+  <div class="footer-nav clearfix">
+    <div class="body-container">
+      <div class="pull-left">
+        <a href="/create">Create a Project</a>
+      </div>
+      <div class="pull-right">
+        <ul>
+          <li><a href="/policies">Policies</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-{% block topnav_stream %}{% endblock %}
-
-{% block content %}
-
-<div class="container-narrow">
-
-  <div class="span4 pull-left" style="padding-top: 50px">
-
-    <p class="lead"><strong>Change By Us</strong></p>
-    <p id="frontpage-header"> Change in your community begins with you.</p>
-
-      {% if login == true %}
-    <br/>
-    <a class="btn btn-large" data-toggle="modal" href="#signupModal">Sign Up</a>
-
-    {% else %}
-    <br/>
-    <form method="post" action="/stream/sort">
-      <input type="hidden" name="project_id" value="">
-      <input type="submit" class="btn btn-large" value="View Dashboard">
-    </form>
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
+    {% if project %}
+    <script type="text/javascript">
+      window.userID         = "{{ current_user.id }}"; 
+      window.projectID      = "{{ project.id }}";  
+      window.projectOwnerID = "{{ project.owner.id }}"; 
+    </script>
     {% endif %}
 
-  </div>
-  <div class="span6" style="padding-top: 50px">
-      <li class="span4 pull-right">
-          <img src="/static/img/icon_connect.png" id="icons" alt=""><span id="header-text"><strong>Connect</strong></span>
-          <p>Find people and projects that share your interest -- and join forces.  Communicate updates with project members.</p>
-      </li>
-      <li class="span4 pull-right">
-          <img src="/static/img/icon_promote.png" id="icons" alt=""><span id="header-text"><strong>Promote</strong></span>
-          <p>Share news on Facebook, Twitter, and your project blog.  Find participants to grow your team.</p>
-      </li>
-      <li class="span4 pull-right">
-          <img src="/static/img/icon_fundraise.png" id="icons" alt=""><span id="header-text"><strong>Fundraise</strong></span>
-          <p>Make your projects a reality by raising the money you need.</p>
-      </li>
-  </div>
+    <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js" type="text/javascript"></script>
+    <script src="https://js.stripe.com/v1/" type="text/javascript" ></script>
 
-  <div class="span10">
-      <hr>
-    </div>
+    <script src="/static/js/ext/jquery/jquery.js"></script>
+    <script src="/static/js/ext/jquery/jquery-form.js"></script>
+    <script src="/static/js/ext/jquery/jquery.tinysort.js"></script>
+    <script src="/static/js/ext/jquery/select-post.js"></script> 
+    
+    <!-- 
+    <script src="/static/js/ext/bootstrap/bootstrap.min.js"></script>
+    <script src="/static/js/ext/bootstrap/bootstrap-fileupload.js"></script>
+    <script src="/static/js/ext/bootstrap/bootstrap-dropdown.js"></script>
+   -->
 
-<div class="span10">
-  <!-- Existing Projects -->
-  <a name="projects-anchor"></a> 
-<div class="span5">
-   <p class="lead">Active Projects</p>
-</div>
-<div class="span4 pull-right">
+    <script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script>  
 
- <a class="btn btn-info-sort" id="sortAlpha"
- onclick="$('ul#projects-display>li').tsort('input.name', { attr: 'value' });
-$('.active').removeClass('active'); $(this).addClass('active');">Alphabetical</a>
-
- <a class="btn btn-info-sort" id="sortLatest"
- onclick="$('ul#projects-display>li').tsort('input.id', { order: 'desc', attr: 'value' });
-$('.active').removeClass('active'); $(this).addClass('active');">Latest Projects</a>
-
-<div class="hidden-phone">
-<span style="float: right; margin: 5px; padding-top: 3px"><strong><i>View By: </i></strong></span>
-</div>
-</div>
-
-<br/> <!-- firefox breaks if there's not some extra spacing... -->
-<br/>
-
-<div class="visible-phone hidden-desktop">
-<ul id="projects-display" class="thumbnails">
-  {% for project in projects %}
-    <li class="span3" id="index-icons">
-    <div class="thumbnail">
-      <input type="hidden" class="id" value="{{ project.id }}" />
-      <input type="hidden" class="name" value="{{ project.name }}" />
-      <input type="hidden" class="municipality" value="{{ project.municipality }}" />
-      <a href='/project/{{ project.id|e }}'><img src="{{project.image_uri_medium}}" style="width: 250px; height: 94px;"></a>
-      <p class="emphasis"><a href='/project/{{ project.id|e }}'><strong> {{ project.name|e }} </strong></a></p>
-      <br/>
-    </div>
-  </li>
-  </li>
-  {% else %}
-  <p> No projects are currently available to see.</p>
-
-  {% endfor %}
-</ul>
-</div>
-
-<div class="hidden-phone visible-desktop">
- <ul id="projects-display" class="thumbnails">
-  {% for project in projects %}
-  <li class="span3" id="index-icons">
-    <div class="thumbnail">
-      <input type="hidden" class="id" value="{{ project.id }}" />
-      <input type="hidden" class="name" value="{{ project.name }}" />
-      <input type="hidden" class="municipality" value="{{ project.municipality }}" />
-      <a href='/project/{{ project.id|e }}'><img src="{{project.image_uri_medium}}" style="width: 300px; height: 94px;"></a>
-      <p class="emphasis"><a href='/project/{{ project.id|e }}'><strong> {{ project.name|e }} </strong></a></p>
-      <br/>
-    </div>
-
-  </li>
-  {% else %}
-  <p> No projects are currently available to see.</p>
-
-  {% endfor %}
-</ul>
-</div>
-<div id="view-more" class="unhidden"><a onclick="$('#projects-display').animate({height:'100%'}, 500); unhide('view-less'); unhide('view-more')"><strong>View More </strong></a></div>
-<div id="view-less" class="hidden"><a onclick="$('#projects-display').animate({height: '560px'}, 500); unhide('view-more'); unhide('view-less')"><strong>View Less </strong></a></div>
-<hr>
-
-</div>
-
-<div class="span5">
-  <p><b><i>Created by:</i></b></p>
-  <img src="/static/img/creators.png"></img>
-</div>
-
-<div class="span5">
-  <p><b><i>Supported by:</i></b></p>
-  <img src="/static/img/supporters-1.png"></img>
-</div>
-
-</div> <!--container-narrow -->
-
-
-{% endblock %}
+</body>
+</html>

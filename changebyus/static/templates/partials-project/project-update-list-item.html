@@ -1,0 +1,22 @@
+<div class="content-wrapper clearfix">
+	<div class="user-avatar">
+		<img src="http://lorempixel.com/70/70/" class="circle">
+		<img src="<%= data.user_avatar %>"  class="circle">
+	</div>
+	<div class="update-content">
+		<div class="post-title"><%= data.title %></div>
+		<div class="post-content"><%= unescape(data.description) %></div> 
+		<div class="post-footer">
+			<div class="reply-toggle">
+				<% if(data.responses.length>0) { %>
+					<span class="reply"><%= data.responses.length %> Replies</span>
+				<% } else { %>
+					<span class="reply">Reply</span>
+				<% } %>
+				<span class="reply hide">Hide Reply</span>
+				* 
+				<span class="jq-date"><%= data.format_date %></span> 
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,4 +1,4 @@
- {% extends "layout.html" %}
+ 
 
 {% block head %}
   {{ super() }}
@@ -34,7 +34,7 @@
    <div class="jumbotron">
    <p class="lead">Sign up</p>
  </div>
- <form method="post" name="signin" class="form-signin" action="/api/user/create">
+ <form method="post" name="signup" class="form-signin" action="/api/user/create">
   <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username">
   <input type="text" class="input-block-level" name="first_name" id="signup-first-name" placeholder="First name">
   <input type="text" class="input-block-level" name="last_name" id="signup-last-name" placeholder="Last name">
@@ -52,7 +52,7 @@
   <div class="jumbotron">
    <p class="lead">Log In</p>
  </div>
-      <form method="post" class="form-signin" action="/login">
+      <form method="post" name="signin" class="form-signin" action="/login">
         <input type="email" class="input-block-level" id="login-email" name="email" placeholder="Email address">
         <input type="password" class="input-block-level" id="login-password" name="password" placeholder="Password">
 

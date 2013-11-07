@@ -3,17 +3,21 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
+from ..extensions import db
+
+from ..helpers.crypt import (handle_decryption, handle_initial_encryption, 
+    handle_update_encryption)
+
+from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+    generate_ellipse_png)
+
+from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, FlaggableMixin, encode_model
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security.utils import encrypt_password
-from mongoengine import signals
 from flask import current_app
-
-from ..extensions import db
-from ..helpers import swap_null_id
-from ..models_common import EntityMixin
-
-from ..encryption import aes_encrypt, aes_decrypt
+from mongoengine import signals
+from flask.ext.cdn import url_for
+import os
 
 """
 =================
@@ -28,22 +32,91 @@ dependent on
 """
 
 
-class Role(db.Document, RoleMixin):
+user_images = [
+    ImageManipulator(dict_name = "image_url_round_small",
+                     converter = lambda x: generate_ellipse_png(x, [70, 70]),
+                     prefix = "70.70",
+                     extension = ".png"),
+
+    ImageManipulator(dict_name = "image_url_round_medium",
+                     converter = lambda x: generate_ellipse_png(x, [250, 250]),
+                     prefix = "250.250",
+                     extension = ".png"),
+
+]
+
+
+def gen_image_urls(image_url):
+
     """
-    In the future we will have website administrators, multiple project owners,
-    etc.  These roles will let us identify who has what permission, and this
-    should eventually allow us to do permission checks using @decorators
-    rather than the in function checks we do now.
+    Helper that will take a root image name, and given our image manipulators
+    assign names
+    """
+
+    images = {}
+
+    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_USER_IMAGE']
+
+    for manipulator in user_images:
+        base, extension = os.path.splitext(root_image)
+        name = manipulator.prefix + "." + base + manipulator.extension
+        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
+
+    return images
+
+
+
+# Python 3 allows ENUM's, eventually move to that
+class Roles:
+    ADMIN = "ADMIN"
+
+
+class Role(db.EmbeddedDocument):
+    """
+    This allows us to define user roles, such as "Admin"
     """
     name = db.StringField(max_length=80, unique=True)
     description = db.StringField(max_length=255)
 
 
-class User(db.Document, UserMixin, EntityMixin):
+class UserNotifications(db.EmbeddedDocument):
+    """
+    Lets us keep track of a users notification preferences.
+    """
+
+    # joins a project I own or organize
+    joins_my_project = db.BooleanField(default = True)
+    # update to a project I own or organize
+    posts_update_to_my_project = db.BooleanField(default = True)
+    # response to an update I created
+    responds_to_my_update = db.BooleanField(default = True)
+    # response to a update I commented on
+    responds_to_my_comment = db.BooleanField(default = True)
+    # someone flags my account or project as inappropriate
+    flags_me = db.BooleanField(default = True)
+
+
+    # someone posts a discussion on a project I own or organize
+    posts_discussion = db.BooleanField(default = True)
+    # someone responds to a discussion on a project I own or organize
+    responds_to_a_discussion = db.BooleanField(default = True)
+
+    # someone joins a project I'm involved in (owner, member, organizer)
+    joins_common_project = db.BooleanField(default = False)
+    # someone posts an update to a project I'm involved in (owner, member, organizer)
+    posts_update_common_project = db.BooleanField(default = False)
+
+
+class User(db.Document, UserMixin, HasActiveEntityMixin):
     """
     This contains all there is to know about one of our users.
     Passwords are encrypted on save, and additionally we encrypt
     social tokens just to be secure.
+
+    We do not enforce uniqueness in code.  In our case this is 
+    because twitter accounts do not provide email, and we also
+    allow users to sign up via email w/ no social identity,
+    so there is no guarantee for any type of uniqueness in model.
     """
 
     # global account information, but alas twitter doesn't provide
@@ -56,7 +129,7 @@ class User(db.Document, UserMixin, EntityMixin):
     password = db.StringField(max_length=255)
     active = db.BooleanField(default=True)
     confirmed_at = db.DateTimeField()
-    roles = db.ListField(db.ReferenceField(Role), default=[])
+    roles = db.ListField(db.EmbeddedDocumentField(Role), default=[])
     
     # facebook login information
     facebook_id = db.IntField()
@@ -78,81 +151,70 @@ class User(db.Document, UserMixin, EntityMixin):
     display_name = db.StringField(max_length=50)
     first_name = db.StringField(max_length=20)
     last_name = db.StringField(max_length=20)
-
+    
     #visible profile information
     user_description = db.StringField(max_length=600)
 
-    def as_dict(self):
-        return {'id': str(self.id),
-                'email': self.email,
-                'public_email': self.public_email,
-                'display_name': self.display_name,
-                'first_name': self.first_name,
-                'last_name': self.last_name,
-                'user_description': self.user_description}
-                
+    notifications = db.EmbeddedDocumentField( UserNotifications )
+
+    image_name = db.StringField()
+
+    meta = {
+        'indexes': [
+            {'fields': ['display_name'], 'unique': True },
+            {'fields': ['email'], 'unique': True, 'sparse' : True }
+        ],
+    }
+
+
+    # fields that will not be returned by the as_dict routine 
+    PRIVATE_FIELDS = [
+    'password',
+    'facebook_token',
+    'facebook_id',
+    'twitter_id',
+    'twitter_token',
+    'twitter_token_secret',
+    'last_login_ip',
+    'current_login_ip',
+    ]
+
+    # list of fields we want encrypted by our encryption tool.
+    # this should not be the standard method of password encryption.
+    ENCRYPTED_FIELDS = [
+    'twitter_token',
+    'twitter_token_secret',
+    'facebook_token'
+    ]
+      
+    # we override the as_dict to handle the email logic
+    def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
+        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
+        if not self['public_email']:
+            resp['email'] = None
+
+        image_urls = gen_image_urls(self.image_name)
+
+        for image, url in image_urls.iteritems():
+            resp[image] = url
+
+        return resp
+
+
     @classmethod    
     def pre_save(cls, sender, document, **kwargs):
         EntityMixin.pre_save(sender, document)
         
         if document.is_new():
             document.password = encrypt_password(document.password)
-
-            if current_app.config['ENCRYPTION']['ENABLED']:
-
-                document.twitter_token = aes_encrypt(document.twitter_token, 
-                                                     current_app.config['ENCRYPTION']['KEY'], 
-                                                     current_app.config['ENCRYPTION']['IV'])
-
-                document.twitter_token_secret = aes_encrypt(document.twitter_token_secret, 
-                                                            current_app.config['ENCRYPTION']['KEY'], 
-                                                            current_app.config['ENCRYPTION']['IV'])
-
-                document.facebook_token = aes_encrypt(document.facebook_token, 
-                                                      current_app.config['ENCRYPTION']['KEY'], 
-                                                      current_app.config['ENCRYPTION']['IV'])
-            
+            handle_initial_encryption(document, document.ENCRYPTED_FIELDS)
 
         elif document.__dict__.has_key('_changed_fields'):
-
-            if current_app.config['ENCRYPTION']['ENABLED']:
-
-                if 'twitter_token' in document.__dict__['_changed_fields']:
-                    document.twitter_token = aes_encrypt(document.twitter_token, 
-                                                         current_app.config['ENCRYPTION']['KEY'], 
-                                                         current_app.config['ENCRYPTION']['IV'])
-
-                if 'twitter_token_secret' in document.__dict__['_changed_fields']:
-                    document.twitter_token_secret = aes_encrypt(document.twitter_token_secret, 
-                                                                current_app.config['ENCRYPTION']['KEY'], 
-                                                                current_app.config['ENCRYPTION']['IV'])
-
-                if 'facebook_token' in document.__dict__['_changed_fields']:
-                    document.facebook_token = aes_encrypt(document.facebook_token, 
-                                                          current_app.config['ENCRYPTION']['KEY'], 
-                                                          current_app.config['ENCRYPTION']['IV'])
-                
+            handle_update_encryption(document, document.ENCRYPTED_FIELDS)
 
     @classmethod    
     def post_init(cls, sender, document, **kwargs):
-        
-        if current_app.config['ENCRYPTION']['ENABLED']:
-
-            # only decrypt saved documents
-            if document.id is not None:
-                    
-                document.twitter_token = aes_decrypt(document.twitter_token, 
-                                                     current_app.config['ENCRYPTION']['KEY'], 
-                                                     current_app.config['ENCRYPTION']['IV'])
-
-                document.twitter_token_secret = aes_decrypt(document.twitter_token_secret, 
-                                                            current_app.config['ENCRYPTION']['KEY'], 
-                                                            current_app.config['ENCRYPTION']['IV'])
-
-                document.facebook_token = aes_decrypt(document.facebook_token, 
-                                                      current_app.config['ENCRYPTION']['KEY'], 
-                                                      current_app.config['ENCRYPTION']['IV'])
-
+        handle_decryption(document, document.ENCRYPTED_FIELDS)
 
 
 signals.post_init.connect(User.post_init, sender=User)

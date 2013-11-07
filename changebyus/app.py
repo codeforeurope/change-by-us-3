@@ -4,12 +4,13 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-
 import os
 import yaml
 import inspect
 import bson
+import socket
 
+from logging.handlers import SMTPHandler
 from logging.handlers import RotatingFileHandler
 import logging
 
@@ -20,24 +21,29 @@ from flask import Flask, request, render_template, current_app, g, jsonify
 from flask.ext.security import Security, MongoEngineUserDatastore, login_required
 from flask.ext.principal import identity_loaded, Identity, Permission, RoleNeed, UserNeed
 from flask.ext.login import LoginManager, current_user
-from flaskext.uploads import UploadSet, configure_uploads, IMAGES
+from flaskext.csrf import csrf
+from flask.ext.cdn import CDN
+#from flaskext.uploads import UploadSet, configure_uploads, IMAGES
 
 from flask_oauth import OAuth
 
-from .post import post_view, post_api
-from .project import project_view, project_api
+from .post import post_api, post_discussion_api, post_update_api
+from .project import project_view, project_api, resource_api
 from .facebook import facebook_view
 from .twitter import twitter_view
 from .stream import stream_view, stream_api
 from .user import user_view, user_api
-from .frontend import frontend_view
+from .frontend import frontend_view, frontend_api
 
-from .encryption import assemble_key
+from .helpers.encryption import assemble_key
 from .extensions import db, login_manager
 
-from helpers import Flask, get_shared_config
+from .helpers.configtools import get_shared_config, Flask
 
 from .stripe import stripe_view
+
+import changebyus
+# needed for our own context
 
 """
 ========
@@ -58,10 +64,13 @@ __all__ = ['create_app']
 
 DEFAULT_BLUEPRINTS = (
     frontend_view,
-    post_view,
+    frontend_api,
     post_api,
+    post_discussion_api,
+    post_update_api,
     project_view, 
     project_api,
+    resource_api,
     facebook_view,
     twitter_view,
     stripe_view,
@@ -91,8 +100,10 @@ def create_app(app_name=None, blueprints=None):
     configure_blueprints(app, blueprints)
     configure_mail(app)
     configure_security(app)
+    configure_csrf(app)
     configure_error_handlers(app)
-    configure_media_uploads(app)
+    #configure_media_uploads(app)
+    configure_rackspace_assets(app)
     configure_encryption(app)
 
     if app.config['DEBUG'] == True:
@@ -147,7 +158,7 @@ def configure_logging(app):
         if app.settings['LOGGING']['ROTATIONS']:
             rotations = app.settings['LOGGING']['ROTATIONS']
 
-    handler = RotatingFileHandler(app.settings['LOGGING']['NAME'], 
+    handler = RotatingFileHandler(name, 
                                   maxBytes=(25 * megabyte), 
                                   backupCount=rotations)
 
@@ -161,13 +172,27 @@ def configure_logging(app):
     app.logger.addHandler(handler)
 
 
+    if not app.debug:
+        
+        hostname = socket.gethostname()
+        mail_handler = SMTPHandler( app.settings['MAIL_SERVER'],
+                                    app.settings['MAIL_USERNAME'],
+                                    [ app.settings['LOGGING']['REPORTING_EMAIL'] ], 
+                                    'CBU Issue on {0}'.format(hostname),
+                                    credentials = ( app.settings['MAIL_USERNAME'], 
+                                                    app.settings['MAIL_PASSWORD'] ) )
+
+        mail_handler.setLevel(level)
+        app.logger.addHandler(mail_handler)
+
+
 def configure_app(app):
     """
     ABOUT
         This routine loads configuration files
     """
-    app.config.from_yaml(get_shared_config('config/config.yml'))
-    app.settings = yaml.load(file(get_shared_config('config/config.yml')))
+    app.config.from_yaml( get_shared_config(changebyus, 'config/config.yml') )
+    app.settings = yaml.load( file(get_shared_config(changebyus, 'config/config.yml')) )
 
 
 def configure_hook(app):
@@ -196,6 +221,11 @@ def configure_mail(app):
     """
     app.mail = Mail(app)
 
+def configure_csrf(app):
+    # enable CSRF
+    if app.config.get('CSRF_ENABLED'):
+        csrf(app)
+
 
 # Setup Flask-Security
 def configure_security(app):
@@ -210,44 +240,8 @@ def configure_security(app):
 
     @identity_loaded.connect_via(app)
     def on_identity_loaded(sender, identity):
-        # Set the default state
-        g.user = None
-
-        if identity.name is None:
-            return
-
-        # Ok we're ok to proceed now ...
-        if isinstance(identity.name, (bson.ObjectId)):
-            user = User.objects(id=identity.name)
-        elif isinstance(identity.name, (str, unicode)):
-            user = User.objects(email=identity.name)
-
-        if user.count() > 1:
-            app.logger.error("Got more than one match for user login %s" % identity.name)
-            raise Exception("[on_identity_loaded] Error getting login information. Please contact an administrator")
-            g.user = None
-        elif user.count() == 0:
-            g.user = None
-        else:
-            user = user.first()
-
-            if hasattr(user, 'id'):
-                identity.provides.add(UserNeed(user.id))
-
-            # Assuming the User model has a list of roles, update the
-            # identity with the roles that the user provides
-            if hasattr(user, 'roles'):
-                for role in user.roles:
-                    identity.provides.add(RoleNeed(role.name))
-
-            # Assuming the User model has a list of posts the user
-            # has authored, add the needs to the identity
-            if hasattr(user, 'posts'):
-                for post in user.posts:
-                    identity.provides.add(EditBlogPostNeed(unicode(post.id)))
-
-            identity.user = user
-            g.user = user
+        user = User.objects.with_id(identity.user.id)
+        g.user = user
 
     # set the user load clalback
     @login_manager.user_loader
@@ -272,9 +266,21 @@ def configure_media_uploads(app=None):
         files.  UploadSet is pretty flexible, but we don't do
         a whole lot to customize this.
     """
+
+    # this is for flask-uploads which is no longer used
+
     uploaded_photos = UploadSet('photos', IMAGES)
     configure_uploads(app, uploaded_photos)
     app.uploaded_photos = uploaded_photos
+    
+
+def configure_rackspace_assets(app=None):
+    """
+    Enables our rackspaceimages package and links it with the flask-cdn
+    for cloud based hosting made easy
+    """
+
+    CDN(app)
     
 
 def configure_encryption(app=None):
@@ -326,6 +332,7 @@ def configure_error_handlers(app=None):
     @app.errorhandler(404)
     def not_found(error=""):
         current_app.logger.error(str(error))
+        current_app.logger.error(str(request))
         return render_template('error.html', error="Sorry, this page doesn't exist.")
     
     @app.errorhandler(405)
@@ -344,8 +351,6 @@ def configure_error_handlers(app=None):
 
         return render_template('error.html', error="Sorry, there was a server error.")
 
-
-    # TODO only enable this on production
     if app.config['DEBUG'] is False:
         @app.errorhandler(Exception)
         def internal_exception_handler(error=""):

@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, redirect, url_for, g
 from flask import current_app, request, session, abort
 from flask.ext.login import login_required, current_user, login_user
 
-from ..helpers import gen_blank_ok
+from ..helpers.flasktools import gen_blank_ok
 
 from .api import _capture_event_details, _get_account_balance_percentage
 from .models import StripeAccount, StripeDonation, StripeLink
@@ -67,7 +67,8 @@ def stripe_link():
         User is logged in, logged in user owns the project in question
     """
 
-    from ..project.api import _check_user_owns_project
+    # from ..project.api import _check_user_owns_project
+    from ..project.helpers import _check_user_owns_project
 
     project_id = request.form['project_id']
     project_name = request.form['project_name']
@@ -84,9 +85,7 @@ def stripe_link():
 
     site = SITE + AUTHORIZE_URI
 
-    project_url = url_for('project_view.project_view_id', 
-                          id = project_id,
-                          _external = True)
+    project_url = "/project/" + project_id
 
     # pre-populate a few of the fields
     email = g.user.email
@@ -111,7 +110,8 @@ def stripe_link():
 
     # Redirect to Stripe /oauth/authorize endpoint
     url = site + '?' + urllib.urlencode(params)
-    return redirect(url)
+    return url
+    #return redirect(url)
 
 
 @stripe_view.route(settings['HOOK_URL'], methods=['GET', 'POST'])

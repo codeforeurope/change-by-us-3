@@ -6,10 +6,11 @@
 from flask import Blueprint, render_template, redirect, url_for
 from flask.ext.login import login_required, current_user, login_user
 
-from ..project.api import _get_user_involved_projects
+from ..project.helpers import _get_user_involved_projects
 from ..post.models import ProjectPost
 
-from ..helpers import gen_ok, gen_blank_ok, db_list_to_dict_list
+from ..helpers.flasktools import ReturnStructure, jsonify_response
+from ..helpers.mongotools import db_list_to_dict_list
 
 stream_api = Blueprint('stream_api', __name__, url_prefix='/api/stream')
 
@@ -83,5 +84,7 @@ def api_stream():
     PRECONDITIONS
         API key exists in the config file
     """
+    # TODO fix
     streamList = _get_user_stream(g.user.id)
-    return gen_ok( jsonify(stream=streamList))
+    #return gen_ok( jsonify(stream=streamList))
+    return ""

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+
 
 {% block topnav %}
 {{ super() }}
@@ -27,7 +27,7 @@
 
             <ul class="nav nav-pills pull-right">
               <li style="padding-top: 0px">
-                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px"></img></a>
+                <a href="/"><img src="/static/img/cbu_home.png" style="width: 30px; height: 30px; margin-bottom: 30px">@include monteRegular;</a>
               </li>
               <li class="dropdown custom">
                 <a class="dropdown-toggle" data-toggle="dropdown"><span id="header-text">Welcome {{current_user.first_name}}</span> <span class="caret"></span></a>
@@ -76,7 +76,7 @@
 	{% if current_user.facebook_id == None %}
 	<div class="span9" style="margin-top:60px">
 		<div class="span4 pull-left" style="text-align: left">
-		<img src='/static/img/icon_facebook.png'></img>
+		<img src='/static/img/icon_facebook.png'>@include monteRegular;
 		<span id="header-text">Connect to Facebook</span>
 		</div>
 		<div class="span4 pull-right">
@@ -86,7 +86,7 @@
 	{% else %}
 	<div class="span9" style="margin-top:60px">
 		<div class="span4 pull-left" style="text-align: left">
-		<img src="{{fb_image}}"></img>
+		<img src="{{fb_image}}">@include monteRegular;
 		<span id="header-text">Facebook: {{fb_name}}</span>
 		</div>
 		<div class="span4 pull-right">
@@ -98,7 +98,7 @@
 	{% if current_user.twitter_id == None %}
 	<div class="span9" style="margin-bottom: 60px">
 		<div class="span4 pull-left" style="text-align: left">
-		<img src='/static/img/icon_twitter.png'></img>
+		<img src='/static/img/icon_twitter.png'>@include monteRegular;
 		<span id="header-text">Connect to Twitter</span>
 		</div>
 		<div class="span4 pull-right">
@@ -107,7 +107,7 @@
 	</div>	{% else %}
 	<div class="span9" style="margin-bottom: 60px">
 		<div class="span4 pull-left" style="text-align: left">
-		<img src="{{t_image}}"></img>
+		<img src="{{t_image}}">@include monteRegular;
 		<span id="header-text"> @{{t_name}}</span>
 		</div>
 		<div class="span4 pull-right">

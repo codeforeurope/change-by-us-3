@@ -1,0 +1,63 @@
+@import "mixins-and-functions";
+@import "compass/css3/text-shadow";
+
+.user {
+    
+
+}
+
+.user-header {
+    margin-top: 50px;
+    width: 1000px;
+    height: 300px;
+}
+
+.user-info {
+    float: left;
+    width: 700px;
+    border: none;
+    height: 300px;
+    margin-bottom: 10px;
+
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+    }
+
+    span {
+        font-size: 18px;
+    }
+}
+
+
+.user-image {
+    height: 400px;
+    width: 400px;
+}
+
+.user-projects {
+    width: 1000px;
+
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+    }
+
+    span {
+        font-size: 18px;
+    }
+}
+
+.user-following {
+    width: 1000px;
+
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+    }
+
+    span {
+        font-size: 18px;
+    }
+
+}

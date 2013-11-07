@@ -3,19 +3,22 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
+from ..extensions import db
+from ..helpers.crypt import handle_decryption
+from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+    generate_ellipse_png)
+from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, FlaggableMixin, encode_model
+from ..helpers.stringtools import slugify
+from ..stripe.models import StripeAccount
+from ..user.models import User
+from flask import current_app
+from flask.ext.cdn import url_for
 from mongoengine import signals
 
-from ..extensions import db
-from ..helpers import swap_null_id
-from ..models_common import EntityMixin
-from ..user.models import User
-from ..stripe.models import StripeAccount
-
-from flask import current_app
-
 import os
-from collections import namedtuple
+# from ..helpers.mixin import (handle_decryption, handle_initial_encryption, 
+#     handle_update_encryption, EntityMixin, encode_model)
+
 
 
 """
@@ -28,77 +31,131 @@ For the most part it is pretty straight forward.
 
 """
 
-class Municipality(db.Document):
+
+project_images = [ 
+    
+    ImageManipulator(dict_name = "image_url_large_rect",
+                     converter = lambda x: generate_thumbnail(x, [1020, 430], blurs = 5),
+                     prefix = "1020.430",
+                     extension = ".jpg"),
+
+    ImageManipulator(dict_name = "image_url_medium_rect",
+                     converter = lambda x: generate_thumbnail(x, [1020, 170], blurs = 5),
+                     prefix = "1020.170",
+                     extension = ".jpg"),
+
+    ImageManipulator(dict_name = "image_url_small_square",
+                     converter = lambda x: generate_thumbnail(x, [300, 300]),
+                     prefix = "300.300",
+                     extension = ".jpg"),
+
+    ImageManipulator(dict_name = "image_url_round",
+                     converter = lambda x: generate_ellipse_png(x, [250, 250]),
+                     prefix = "250.250",
+                     extension = ".png"),
+
+]
+
+
+# TODO this should not be here, we need a cleaner solution to this
+def gen_image_urls(image_url):
+
     """
-    Municipality will eventually be turned into an object that represents 
-    a location in a geo-database.  This will help us normalize location
-    information and eventually search given a region, or coordinate and distance, etc
-    """
-    city = db.StringField(max_length=20)
-    state = db.StringField(max_length=20)
-    zipcode = db.StringField(max_length=20)
-    # service unique identifier
-    geo_identifier = db.StringField(max_length=100)
-
-    def as_dict(self):
-        return swap_null_id( self._data)
-
-
-def gen_image_uris(image_uri):
-    """
-    Helper that will take a root image uri and create a named touple
-    of image uri's based on various sizes.  Note that these various
-    sizes will need to be synced with the sizes in templates and in
-    helpers.py: generate_thumbnails
+    Helper that will take a root image name, and given our image manipulators
+    assign names
     """
 
-    Thumbnails = namedtuple('Thumbnails', 'uri large_uri medium_uri small_uri')
+    images = {}
 
-    root_image = image_uri if image_uri is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
+    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
 
-    path, image = os.path.split(root_image)
-    large_uri = os.path.join(path, '1020.320.' + image)
-    medium_uri = os.path.join(path, '300.94.' + image)
-    small_uri = os.path.join(path, '160.50.' + image)
-
-    images = Thumbnails(root_image, large_uri, medium_uri, small_uri)
+    for manipulator in project_images:
+        base, extension = os.path.splitext(root_image)
+        name = manipulator.prefix + "." + base + manipulator.extension
+        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
 
     return images
 
-    
-class Project(db.Document, EntityMixin):
+
+
+# Python 3 allows ENUM's, eventually move to that
+class Roles:
+    ORGANIZER = "ORGANIZER"
+    MEMBER = "MEMBER"
+
+ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
+
+
+class Project(db.Document, HasActiveEntityMixin, FlaggableMixin):
     """
-    Project model.  Pretty straight forward.  For image_uri we
-    store the uri (/images/image.jpg) so that we can move data between
+    Project model.  Pretty straight forward.  For image_url we
+    store the url (/images/image.jpg) so that we can move data between
     servers and domains pretty easily
     """
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(max_length=600)
-    municipality = db.StringField(max_length=5)
-    image_uri = db.StringField()
+
+    image_name = db.StringField()
     #municipality = db.ReferenceField(Municipality)
     owner = db.ReferenceField(User)
 
     stripe_account = db.ReferenceField(StripeAccount)
     retired_stripe_accounts = db.ListField()
 
-    def as_dict(self):
+    location = db.StringField()
 
-        image_uris = gen_image_uris(self.image_uri)
+    # Geo JSON Field
+    geo_location = db.PointField()
 
-        return {'id': str(self.id),
-                'name': self.name,
-                'description': self.description,
-                'municipality': self.municipality,
-                'created_at': self.created_at.isoformat(),
-                # this is a little hacky
-                'image_uri': image_uris.uri,
-                'image_uri_large': image_uris.large_uri,
-                'image_uri_medium': image_uris.medium_uri,
-                'image_uri_small': image_uris.small_uri,
-                'owner': self.owner.as_dict(),
-                'owner_id': self.owner.id,
-                'stripe_account': self.stripe_account.as_dict() if self.stripe_account else None }
+    # NOTE: This is very CBU specific
+    # a project is either a project or a resource
+    # resource is different on the UI side and does slightly less
+    resource = db.BooleanField(default=False)
+
+    slug = db.StringField(unique=True)
+    
+    activity = db.DecimalField()
+
+    meta = {
+        'indexes': [
+            {'fields': ['name'], 'unique': True },
+            {'fields': ['slug'], 'unique': True },
+            {'fields': ['name', 'slug'], 'unique': True },
+        ],
+    }
+
+
+    PRIVATE_FIELDS = [
+    'retired_stripe_accounts',
+    ]
+
+    ENCRYPTED_FIELDS = []
+
+
+    @classmethod    
+    def pre_save(cls, sender, document, **kwargs):
+        EntityMixin.pre_save(sender, document)
+        
+        if document.is_new():
+            # ensure it's properly slugged
+            slug = slugify( document.name )
+        elif document.__dict__.has_key('_changed_fields'):
+            slug = slugify( document.name )
+            
+        
+    @classmethod    
+    def post_init(cls, sender, document, **kwargs):
+        handle_decryption(document, document.ENCRYPTED_FIELDS)
+
+    def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
+        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
+
+        image_urls = gen_image_urls(self.image_name)
+
+        for image, url in image_urls.iteritems():
+            resp[image] = url
+
+        return resp
 
 
 class UserProjectLink(db.Document, EntityMixin):
@@ -110,15 +167,20 @@ class UserProjectLink(db.Document, EntityMixin):
     """
     user = db.ReferenceField(User)
     project = db.ReferenceField(Project)
-    user_left = db.BooleanField(default = False)
+    role = db.StringField()
 
-    def as_dict(self):
-        return swap_null_id(self._data)
+    meta = {
+        'indexes': [
+            {'fields': ['user'], 'unique': False },
+            {'fields': ['project'], 'unique': False },
+            {'fields': ['user', 'project'], 'unique': True },
+        ],
+    }
 
 
-
-
+signals.post_init.connect(Project.post_init, sender=Project)
 signals.pre_save.connect(Project.pre_save, sender=Project)
+
 signals.pre_save.connect(UserProjectLink.pre_save, sender=UserProjectLink)
 """
 The presave routine filles in timestamps for us

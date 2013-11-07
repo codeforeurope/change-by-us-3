@@ -1,0 +1,442 @@
+@import "mixins-and-functions";
+@import "variables";
+@import "compass/css3";
+@import "compass/css3/text-shadow";
+@import "compass/css3/background-clip";
+
+.projects {
+  padding: none;
+  margin: none;
+}
+
+.project-square {
+  @include box-skin;
+  height: 525px;
+  width: 320px;
+  float: left;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}
+
+.user-info {
+    width: 600px;
+    border: 1px solid #000;
+}
+
+.project-icon {
+  margin: 10px;
+  @include box-skin;
+}
+
+.project-name {
+  margin: 15px;
+  font-size: 25 !important;
+  font-weight: bold;
+}
+
+.project-description {
+  margin: 15px;
+}
+
+.project-container {
+  h2 {
+    font-size: 44px;
+    font-weight: normal;
+    text-align: left;
+  }
+   
+  h4{
+    text-transform: uppercase;
+    @include font-styling("asap", 10px, $gray65 );
+  }
+  
+  &.feature-image .overlay-backdrop {
+    background-color: $white;
+  }
+}
+
+  .project-header{
+    margin-top: 12px;
+  }
+
+  .feature-image {
+    width: 100%;
+    height: 430px;
+    position: relative;
+
+    h1{
+      @include font-styling("asap", 48px, $white, "normal", "bold");
+      @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
+    }
+
+    .preview{
+      position: absolute;
+      top:70px;
+      left: 30px;
+      width: 249px;
+      height: 249px;
+      border: 4px solid #fff;  
+      @include border-radius(128px);  
+      @include background-clip(padding-box);  
+    }
+
+    .project-info{
+
+    }
+
+    .project-location{
+      display: inline-block;
+      @include font-styling("asap", 21px, $white );
+      @include text-shadow(0 1px 5px rgba(0,0,0,.75));
+    }
+
+    .project-footer{
+      position: absolute;
+      left: 310px;
+      top: 257px;
+      width: 620px;
+    }
+
+    .overlay-title {
+      left: 310px;
+      width: 100%;
+      top: 100px;
+      padding: 0;
+      margin: 0;
+      position: absolute;
+    }
+
+    .overlay-description {
+      position: absolute; 
+      top: 160px; 
+      left: 310px;
+      width: 650px;
+
+      @include text-shadow(0 1px 5px rgba(0,0,0,.75));
+      @include font-styling("merriweather", 18px, $white );
+      line-height: 24px;
+    }
+
+    &.slim{ 
+      .overlay-title {
+        left: 30px;
+        top: 40px;
+        line-height: 1;
+        
+      }
+      height: 167px;
+    }
+  }
+  
+  .tabs{
+    /*
+    li{
+      height: 45px;
+      background-repeat: no-repeat;
+      background-position: left center;
+    }*/
+  }
+  .updates, .members, .calendar { 
+    h2{
+        margin: 50px 0 22px;
+    } 
+  }
+  
+  .content-header{
+    margin-top: 24px;
+
+  }
+ 
+  .content-wrapper {
+    padding: 20px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    //width: 100%;
+    height: auto;
+    @include box-skin;
+
+    p{
+      @include font-styling("asap", 20px, $gray20, "normal", "regular");
+      margin-bottom: 28px;
+    }
+ 
+    ul.bordered-item{
+      li{
+        padding: 20px;
+        border-bottom: 1px solid #dcdcdc;
+        &:last-child{border: none;}
+      }
+    }
+  }
+
+  .content-title{ 
+    @include font-styling("asap", 32px, $gray20, "normal", "regular");
+    margin: 0 0 22px;
+  }
+
+  .content-left, .content-right, .post-right, .reply-left, .reply-right{
+    float: left; 
+  }
+
+  .project-left{ 
+    width: 80px;
+  }
+ 
+  .content-left{
+    width: 60%;
+  } 
+  
+  .content-right{
+    width: 40%;
+  }
+    .user-avatar{
+      float: left;
+      width: 70px;
+      margin-right: 20px;
+    }
+    .update-content{
+      float: right;
+      width: 858px;
+    }
+    .post-title, .reply-title{
+      color: $gray20;
+    }
+    .post-content, .reply-content{
+      @include font-styling("merriweather", 14px, $gray20);
+    }
+    .post-footer, .reply-date{ 
+      margin-top: 10px;
+      @include font-styling("asap", 14px, $gray53);
+    }
+    .post-replies{
+      padding: 0; 
+    }
+
+  .reply-toggle{
+    .reply{
+      cursor: pointer;
+      text-decoration: underline;
+    } 
+    .jq-date{
+      text-decoration: none;
+    }
+  }
+
+  .post-reply-form{
+    .input-xxlarge{
+      height: 32px;
+      width: 568px;
+    }
+  }
+
+  .reply-right{
+    margin-top: 12px;
+    width: 670px;
+  }
+
+  .project-member{
+    .mail-icon{ 
+      float: left; 
+      width: 60px;
+      img{ margin-top: 20px; }
+    }
+    .member-title{  
+      float: left;  
+      margin-top: 15px; 
+      width: 175px;
+      padding-right: 15px;
+    }
+    .member-description{ 
+      float: left; 
+      margin-top: 15px;
+      width: 505px;
+    }
+    .member-roles{ 
+      float: left;
+      margin-top: 25px;
+      width: 120px; 
+    }
+    .aka{ @include font-styling("asap", 15px, $gray80, "italic"); }
+    .grey{ 
+        //@include opacity(.5); // layer alpha
+        @include font-styling("asap", 15px, $gray80);
+    }
+  }
+
+  /******************************
+   * OWNER VIEW
+   ******************************/
+  .update-wrapper{
+     
+  }
+
+  .share-select{
+    
+    margin-bottom: 20px;
+  }
+  .share-toggle-wrapper{
+    float: left;
+    height: 25px;
+    width: 205px;
+    z-index: 1;
+    top:-7px;
+    left: 5px;
+  }
+  .share-toggle{
+    cursor: pointer; 
+    padding: 5px;
+    @include box-skin;
+
+    .caret{
+      float: right;
+      margin-top: 8px;
+      margin-right: 5px;
+    }
+  }
+  .share-options{
+    padding: 5px;
+    @include box-skin;
+
+    label{ 
+      height: 15px;
+      font-size: 16px;
+      line-height: 15px;
+      padding-left: 20px;
+      margin-top: 10px;
+      background-repeat: no-repeat;
+      background-image: url('/static/img/black-check.png');
+      &:first-child{
+        margin-top: 0;
+      }
+    }
+
+
+    input[type=checkbox]{
+      display: none;
+    }
+    input[type=checkbox]:checked+label {
+      background-position: 0 -15px;
+    }
+  }
+
+  .discussion{ 
+
+    .description{
+      float: left;
+      h5{
+        margin-bottom: 0;
+        @include font-styling("asap", 18px, $gray20, "normal", "bold" );
+      }
+      span{
+        @include font-styling("merriweather", 14px, $gray20);
+      }
+    }
+    
+    .date{
+      float: right;
+      margin-top: 20px;
+      margin-right: 55px;
+      @include font-styling("asap", 15px, $gray65);
+    }
+
+    .delete,.close{
+      margin-top: 20px;
+      margin-right: 20px; 
+    }
+  }
+
+  .fundraising-wrapper{
+    padding: 30px;
+    @include box-skin;
+    
+  }
+
+  .fundraising-left{
+    float: left;
+    width: 66%;
+
+
+
+    .content-wrapper{
+      overflow: hidden;
+      /*
+      @include transition-property(height);
+      @include transition-duration(.5s);
+      
+      height: 461px;
+      &.invisible{
+       display: block;
+       height: 0;
+      }
+      */
+    }
+    
+    
+    span{
+      font-weight: bold;
+      color:$primaryColor;
+    }
+    
+    p{ margin-bottom: 24px; }
+  }
+
+  .fundraising-right{
+    float: left;
+    width: 33%;
+  }
+
+  .project-update-form{
+    padding: 30px;
+    @include box-skin;
+    .btn-medium{
+      float: right;
+      background-color:$secondaryColor;
+      &:hover{ 
+        background-color:$secondaryHoverColor;
+      }
+    }
+  }
+
+
+.body-container {
+  position: relative;
+}
+
+.btn-large{
+  font-weight: bold;
+  padding: 20px 22px;
+  &.invs{ 
+    background-color:$secondaryColor; 
+  }
+}
+
+.tabs-pane, .owner-tabs-pane{
+  position: absolute;
+  bottom: 0;
+  height: 58px;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+
+  ul{margin-left: 30px;}
+  li{
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+    margin: 0 18px;
+  }  
+  a{
+    line-height: 58px;
+    @include font-styling("asap", 22px, $white, "normal", "bold");
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75)); // drop shadow
+  }
+}
+
+.tabs-pane{
+  img{vertical-align:initial;}
+  li a{ vertical-align: text-bottom; }
+  li{
+    &.active {
+      a{ display: none; }
+    }
+  } 
+}

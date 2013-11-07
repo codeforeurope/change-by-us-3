@@ -7,8 +7,9 @@ from flask import Blueprint, request, render_template, redirect, url_for, g, cur
 from flask.ext.login import login_required, current_user
 
 from .models import Project
-from .api import _user_involved_in_project
+from .helpers import _user_involved_in_project
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
+from .decorators import project_exists
 
 project_view = Blueprint('project_view', __name__, url_prefix='/project')
 
@@ -22,8 +23,8 @@ Web facing views for interacting with projects.
 
 """
 
-@project_view.route('/<id>')
-def project_view_id(id):
+@project_view.route('/<project_id>')
+def project_view_id(project_id):
     """
     ABOUT:
         View a project for a given id
@@ -45,9 +46,9 @@ def project_view_id(id):
     circular include.  We do our best to contain it only to the function itself
     """
 
-    from ..post.api import _get_project_post_stream
+    from ..post.helpers import _get_project_post_stream
     
-    project = Project.objects.with_id(id)
+    project = Project.objects.with_id(project_id)
     if project is None:
         abort(404)
 
@@ -76,7 +77,7 @@ def project_view_id(id):
         account_id, balance, percentage, account_key, description, access_token = None, None, None, None, None, None
 
     if g.user.is_anonymous():
-        return render_template('project_view.html', 
+        return render_template('index.html', 
             project = project.as_dict(), 
             posts = posts, 
             involved = involved, 
@@ -88,7 +89,7 @@ def project_view_id(id):
             access_token=access_token,
             account_id=account_id)
     else:
-        return render_template('project_view.html', 
+        return render_template('index.html', 
             project = project.as_dict(), 
             posts = posts, 
             involved = involved, 
@@ -210,7 +211,7 @@ def stripe_review_info():
 
     # we want to pass the fundraiser view the small 160x50 image
     project_dict = project.as_dict()
-    project_image = project_dict['image_uri_small']
+    project_image = project_dict['image_url_small']
     
     return render_template('fundraise_review.html', funding = funding_goal, project_id=project_id, description = description, name=project.name, 
                            image_url=project_image, balance = balance, percentage = percentage)

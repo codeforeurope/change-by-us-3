@@ -1,0 +1,11 @@
+For CBU, there is a superficial distinction between a a project and a resource.
+
+Conceptually a project is something that a user joins and partakes, while a resource is something provided by a city and people only follow.  The only real differences are
+
+project you join
+resource you follow
+
+resources do not allow discussions (only updates)
+
+because these two are so similar, for CBU we are adding a 
+resource boolean, and opeing a seporate api for resources.

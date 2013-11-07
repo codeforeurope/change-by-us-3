@@ -1,3 +1,6 @@
+# used for generating external urls
+CBU_SERVER_NAME: {{ SERVER_NAME }}
+
 # example: my_mongodb
 MONGODB_DB: {{ MONGODB_DB }}
 # example: mongohq.com
@@ -43,6 +46,8 @@ MAIL_PORT: {{ MAIL_PORT }}
 MAIL_USE_SSL: {{ MAIL_USE_SSL }}
 # example: my.gmail.login
 MAIL_USERNAME: {{ MAIL_USERNAME }}
+# who is sending the email, should probably be same as mail_username
+MAIL_DEFAULT_SENDER: {{ MAIL_DEFAULT_SENDER }}
 # example: my.gmail.password
 MAIL_PASSWORD: {{ MAIL_PASSWORD }}
 
@@ -53,15 +58,37 @@ CSRF_ENABLED: {{ CSRF_ENABLED }}
 # 3145728 = 3 mb
 # example: 3145728
 MAX_CONTENT_LENGTH: {{ MAX_CONTENT_LENGTH }}
-# folder to store uploaded images
-# example: /home/user/site/content
-UPLOADED_PHOTOS_DEST: {{ UPLOADED_PHOTOS_DEST }}
+
+
+### flask CDN rackspace
+# force CDN to operate remotely
+CDN_DEBUG: {{ CDN_DEBUG }}
+# USE HTTPS?  For rackspace not recommended
+CDN_HTTPS: {{ CDN_HTTPS }}
+# Our flask-cdn fork can handle basic url forwarding or some
+# more advanced logic regarding rackspace
+CDN_USE_RACKSPACE:  {{ CDN_USE_RACKSPACE }}
+# the rackspace settings
+CDN_RACKSPACE_USERNAME: {{ CDN_RACKSPACE_USERNAME }}
+# the rackspace key
+CDN_RACKSPACE_KEY: {{ CDN_RACKSPACE_KEY }}
+# the container name for this project
+CDN_RACKSPACE_CONTAINER: {{ CDN_RACKSPACE_CONTAINER }}
+# the region the container should reside
+CDN_RACKSPACE_REGION: {{ CDN_RACKSPACE_REGION }}
+# the local dir we store our images
+CDN_HOSTED_IMAGES_LOCAL_DIR: {{ CDN_HOSTED_IMAGES_LOCAL_DIR }}
+# list of allowed image extensions such as
+# ['.jpg', '.gif', '.png', '.jpeg', '.jpe', '.svg', '.bmp']
+CDN_ALLOWED_EXTENSIONS: {{ CDN_ALLOWED_EXTENSIONS }}
+
 
 # note that this image is expected in different sizes.  
 # Check helpers.py for info.
 # example: 
 #    name: Honeycomb.jpg, expect: 1020.320.Honeycomb.jpg 160.50.Honeycomb.jpg   300.94.Honeycomb.jpg
 DEFAULT_PROJECT_IMAGE: {{ DEFAULT_PROJECT_IMAGE }}
+DEFAULT_USER_IMAGE: {{ DEFAULT_USER_IMAGE }}
 
 # flask logging settings
 LOGGING:

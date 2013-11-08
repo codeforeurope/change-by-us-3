@@ -136,6 +136,6 @@ def dashboard_view():
     fb_name = facebook_info[1]
     fb_image = facebook_info[2]
 
-    return render_template('dashboard.html', t_name=twitter_name, t_image=twitter_image, fb_name=fb_name, fb_image=fb_image)
-
+    # return render_template('dashboard.html', t_name=twitter_name, t_image=twitter_image, fb_name=fb_name, fb_image=fb_image)
+    return render_template('index.html')
 

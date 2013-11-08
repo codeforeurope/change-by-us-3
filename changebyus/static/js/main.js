@@ -24,12 +24,12 @@ require.config({
     "abstract-view": "views/partials-universal/AbstractView",
     "project-sub-view": "views/partials-project/ProjectSubView",
     "user-view": "views/partials-user/CBUUserView",
-    "profile-view": "views/CBUProfileView",
+    "dashboard-view": "views/CBUDashboardView",
     "utils": "utils/Utils"
   }
 });
 
-require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) {
+require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, Utils) {
   $(document).ready(function() {
     var $navTop, CBUAppRouter, CBURouter, config;
     config = {
@@ -41,11 +41,11 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
         "project/:id/admin": "projectAdmin",
         "user/:id": "user",
         "discover": "discover",
+        "stream/dashboard": "dashboard",
         "create": "create",
         "login": "login",
         "signup": "signup",
         "project": "project",
-        "profile": "profile",
         "": "default"
       },
       project: function(id_) {
@@ -71,6 +71,9 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       discover: function() {
         return window.CBUAppView = new CBUDiscoverView(config);
       },
+      dashboard: function() {
+        return window.CBUAppView = new CBUDashboardView(config);
+      },
       create: function() {
         return window.CBUAppView = new CreateProjectView(config);
       },
@@ -79,9 +82,6 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       },
       signup: function() {
         return window.CBUAppView = new CBUSignupView(config);
-      },
-      profile: function() {
-        return window.CBUAppView = new CBUProfileView(config);
       },
       "default": function() {
         return window.CBUAppView = new CBUMainView(config);

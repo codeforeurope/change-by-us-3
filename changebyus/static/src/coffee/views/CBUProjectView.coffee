@@ -36,7 +36,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 						id = @model.get("id")
 						config = {id:id}
 						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
-						projectMembersCollection   = new ProjectMembersCollection(config)
+						projectMembersCollection  = new ProjectMembersCollection(config)
 						projectCalendarCollection = new ProjectCalendarCollection(config)
 
 						@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})

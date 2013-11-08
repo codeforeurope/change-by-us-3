@@ -7,6 +7,7 @@
 @import "helpers";
 @import "form";
 @import "profile";
+@import "dashboard";
 @import "login-signup";
 @import "mixins-and-functions";
 
@@ -635,8 +636,8 @@ dd {
 hr {
   margin: 40px 0;
   border: 0;
-  border-top: 10px solid #eeeeee;
-  border-bottom: 10px solid $white;
+  border-top: 1px solid #eeeeee;
+  border-bottom: 1px solid $white;
 }
 
 .thin {

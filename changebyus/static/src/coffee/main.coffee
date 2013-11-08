@@ -24,11 +24,11 @@ require.config
 		"abstract-view": "views/partials-universal/AbstractView"
 		"project-sub-view": "views/partials-project/ProjectSubView"
 		"user-view": "views/partials-user/CBUUserView"
-		"profile-view": "views/CBUProfileView"
+		"dashboard-view": "views/CBUDashboardView"
 		"utils": "utils/Utils"
 
-require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], 
-	($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
+require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "utils"], 
+	($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, Utils) ->
 		$(document).ready ->
 			config = parent: "#frame"
 			CBURouter = Backbone.Router.extend
@@ -37,11 +37,11 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 					"project/:id/admin": "projectAdmin"
 					"user/:id": "user"
 					"discover": "discover"
+					"stream/dashboard": "dashboard"
 					"create": "create"
 					"login": "login"
 					"signup": "signup"
-					"project": "project"
-					"profile": "profile"
+					"project": "project" 
 					"": "default"
 
 				project: (id_) ->
@@ -60,6 +60,9 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 				discover: ->
 					window.CBUAppView = new CBUDiscoverView(config)
 
+				dashboard: ->  
+					window.CBUAppView = new CBUDashboardView(config) 
+
 				create: ->
 					window.CBUAppView = new CreateProjectView(config)
 
@@ -68,9 +71,6 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 
 				signup: ->
 					window.CBUAppView = new CBUSignupView(config)
-
-				profile: ->
-					window.CBUAppView = new CBUProfileView(config)
 
 				default: ->
 					# added in dev tool

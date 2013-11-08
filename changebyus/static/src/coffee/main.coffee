@@ -31,9 +31,10 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 	($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
 		$(document).ready ->
 			config = parent: "#frame"
-			CBURouter = Backbone.Router.extend(
+			CBURouter = Backbone.Router.extend
 				routes:
 					"project/:id": "project"
+					"project/:id/admin": "projectAdmin"
 					"user/:id": "user"
 					"discover": "discover"
 					"create": "create"
@@ -44,9 +45,13 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 					"": "default"
 
 				project: (id_) ->
+					config.model = {id:id_, isOwner:(userID is projectOwnerID)} 
+					window.CBUAppView =  new CBUProjectView(config)
+
+				projectAdmin: (id_) ->
 					config.model = {id:id_}
-					console.log 'CBURouter',config
 					window.CBUAppView = if (userID is projectOwnerID) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
+					console.log 'admin',window.CBUAppView,(userID is projectOwnerID)
 
 				user: (id_) ->
 					config.model = {id:id_}
@@ -70,15 +75,15 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 				default: ->
 					# added in dev tool
 					window.CBUAppView = new CBUMainView(config)
-			)
+
 			CBUAppRouter = new CBURouter()
 			Backbone.history.start pushState: true
 
 			# NAV
 			$navTop = $('.nav.pull-left')
-			$navTop.mouseover ->
+			$navTop.hover ->
 				$(this).toggleClass('active')
-			$navTop.mouseout ->
+			, ->
 				$(this).removeClass('active')
 
 

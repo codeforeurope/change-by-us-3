@@ -13,6 +13,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       }, function() {
         return console.log('done');
       });
+    },
+    onFetch: function(r) {
+      return $(this.parent).append(this.render());
     }
   });
 });

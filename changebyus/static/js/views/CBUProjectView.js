@@ -1,6 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) {
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
+    isOwner: false,
     projectCalenderView: null,
     projectMembersView: null,
     projectUpdatesView: null,
@@ -15,6 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.parent = options.parent || this.parent;
       this.model = new ProjectModel(options.model);
       this.collection = options.collection || this.collection;
+      this.isOwner = options.isOwner || this.isOwner;
       return this.model.fetch({
         success: function() {
           return _this.render();

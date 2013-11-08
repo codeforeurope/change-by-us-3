@@ -40,16 +40,17 @@ define ["underscore",
 
 			render: -> 
 				@$el = $("<div class='project-container'/>")
-				@$el.template(@templateDir+"/templates/project-owner.html", {}
-					, => @addSubViews())
+				@$el.template @templateDir+"/templates/project-owner.html", 
+					{}, => @addSubViews()
 				$(@parent).append @$el
 
-			addSubViews: ->  
+			addSubViews: ->
+				console.log 'addSubViews',@model.attributes
 				$header = $("<div class='project-header'/>")
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
 						
-						config = {id:@model.get("id"), name:@model.get("data").name}
+						config = {id:@model.get("id"), name:@model.get("name")}
 						console.log 'CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!',config
 						# TO DO
 						# create all the subpage classes and HTML templates

@@ -15,6 +15,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
     addSubViews: function() {
       var $header,
         _this = this;
+      console.log('addSubViews', this.model.attributes);
       $header = $("<div class='project-header'/>");
       $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
@@ -22,7 +23,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         var config, hash, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
         config = {
           id: _this.model.get("id"),
-          name: _this.model.get("data").name
+          name: _this.model.get("name")
         };
         console.log('CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!', config);
         projectDiscussionsCollection = new ProjectDiscussionsCollection(config);

@@ -19,6 +19,15 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     },
     hide: function() {
       return this.$el.hide();
-    }
+    },
+    fetch: function() {
+      var _this = this;
+      return this.model.fetch({
+        success: function(r) {
+          return _this.onFetch(r);
+        }
+      });
+    },
+    onFetch: function(r) {}
   });
 });

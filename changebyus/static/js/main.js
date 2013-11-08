@@ -38,6 +38,7 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
     CBURouter = Backbone.Router.extend({
       routes: {
         "project/:id": "project",
+        "project/:id/admin": "projectAdmin",
         "user/:id": "user",
         "discover": "discover",
         "create": "create",
@@ -49,10 +50,17 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       },
       project: function(id_) {
         config.model = {
+          id: id_,
+          isOwner: userID === projectOwnerID
+        };
+        return window.CBUAppView = new CBUProjectView(config);
+      },
+      projectAdmin: function(id_) {
+        config.model = {
           id: id_
         };
-        console.log('CBURouter', config);
-        return window.CBUAppView = userID === projectOwnerID ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
+        window.CBUAppView = userID === projectOwnerID ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
+        return console.log('admin', window.CBUAppView, userID === projectOwnerID);
       },
       user: function(id_) {
         config.model = {
@@ -84,10 +92,9 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       pushState: true
     });
     $navTop = $('.nav.pull-left');
-    $navTop.mouseover(function() {
+    return $navTop.hover(function() {
       return $(this).toggleClass('active');
-    });
-    return $navTop.mouseout(function() {
+    }, function() {
       return $(this).removeClass('active');
     });
   });

@@ -22,7 +22,7 @@ from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink
 
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
                        _create_project, _edit_project, _get_lat_lon_from_location,
-                       _leave_project )
+                       _get_user_owned_projects, _leave_project )
 
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
                           project_member, project_ownership, project_organizer )
@@ -67,7 +67,7 @@ def api_get_geopoint():
 
 ## TODO WTForms for search?
 
-@project_api.route('/search')
+@project_api.route('/search', methods = ['POST'])
 def api_search_projects():
     """
     ABOUT

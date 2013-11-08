@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) {
   var CBUMainView;
-  CBUMainView = Backbone.View.extend({
+  return CBUMainView = Backbone.View.extend({
     parent: "body",
     templateDir: "/static",
     viewData: {},
@@ -13,21 +13,20 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
       return this.render();
     },
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='projects-main'/>");
       return this.$el.template(this.templateDir + "/templates/main.html", {}, function() {
         var bannerImageView, bannerParent;
-        $(self.parent).prepend(self.$el);
-        bannerParent = self.$el.find(".body-container-wide");
+        $(_this.parent).prepend(_this.$el);
+        bannerParent = _this.$el.find(".body-container-wide");
         bannerImageView = new BannerImageView({
           parent: bannerParent
         });
-        self.collection.on("reset", self.addAll, self);
-        self.collection.fetch({
+        _this.collection.on("reset", _this.addAll, _this);
+        _this.collection.fetch({
           reset: true
         });
-        return self.ajaxForm();
+        return _this.ajaxForm();
       });
     },
     ajaxForm: function() {
@@ -41,21 +40,18 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
         return console.log(response);
       });
     },
+    addAll: function() {
+      var _this = this;
+      return this.collection.each(function(projectModel) {
+        return _this.addOne(projectModel);
+      });
+    },
     addOne: function(projectModel) {
       var view;
       view = new ProjectPartialsView({
         model: projectModel
       });
       return this.$el.find("#project-list").append(view.$el);
-    },
-    addAll: function() {
-      var i, self;
-      self = this;
-      i = 0;
-      return this.collection.each(function(projectModel) {
-        return self.addOne(projectModel);
-      });
     }
   });
-  return CBUMainView;
 });

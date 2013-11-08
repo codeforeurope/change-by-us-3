@@ -1,6 +1,7 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], 
 	(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) ->
 		CBUProjectView = AbstractView.extend
+			isOwner:false
 			projectCalenderView: null
 			projectMembersView: null
 			projectUpdatesView: null
@@ -15,14 +16,15 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				@parent      = options.parent or @parent
 				@model       = new ProjectModel(options.model)
 				@collection  = options.collection or @collection
+				@isOwner     = options.isOwner || @isOwner
 				@model.fetch 
 					success: =>@render()
 
 			render: -> 
 				console.log 'CBUProjectView',@model
 				@$el = $("<div class='project-container'/>")
-				@$el.template(@templateDir+"/templates/project.html", {}
-					, => @addSubViews())
+				@$el.template(@templateDir+"/templates/project.html", 
+					{}, => @addSubViews())
 				$(@parent).append @$el
 
 			addSubViews: ->  

@@ -14,3 +14,5 @@ define ["underscore", "backbone"], (_, Backbone) ->
 				collection: ""
 			public: false,
 			responses: [ ]
+		parse:(resp_)->
+			if resp_.data then resp_.data else resp_

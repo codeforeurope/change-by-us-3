@@ -1,17 +1,23 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/ProjectListCollection"], 
-	(_, Backbone, $, temp, AbstractView, ProjectListCollection) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/ProjectListCollection", "model/UserModel" , "views/partials-project/ProjectPartialsView"], 
+	(_, Backbone, $, temp, AbstractView, ProjectListCollection, UserModel, ProjectPartialsView) ->
 
 		CBUDashboardView = AbstractView.extend
 
-			initialize: (options) -> 
+			initialize: (options) ->  
 				@templateDir = options.templateDir or @templateDir
 				@parent = options.parent or @parent
-				@viewData = options.viewData or @viewData
-				@render()
+				@viewData = options.viewData or @viewData 
+				@userModel = new UserModel(id:@model.id)
+				@userModel.fetch 
+					success: =>@render() 
 
 			render: -> 
+				console.log '@userModel',@userModel
 				@$el.template(@templateDir+"/templates/dashboard.html", 
-					{}, => @onTemplateLoad())
+					{data:@userModel.attributes}, => 
+						@onTemplateLoad()
+						@loadProjects()
+				)
 				$(@parent).append @$el
 
 			onTemplateLoad: ->  
@@ -26,8 +32,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				
 				###
 				@manageView   = $('#manage-projects')
-				@profileView  = $('#edit-profile')
 				@followView   = $('#follow-projects')
+				@profileView  = $('#edit-profile')
 				
 				@manageBTN  = $("a[href='#manage']").parent()
 				@followBTN  = $("a[href='#follow']").parent()
@@ -44,8 +50,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 					window.location.hash = $(this).attr("href").substring(1)
 
 
-			toggleSubView: (view) ->
-				 
+			toggleSubView: (view) -> 
 				for v in [@manageView,@profileView,@followView]
 					v.hide()
 
@@ -62,3 +67,24 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 					else 
 						@manageView.show()
 						@manageBTN.addClass "active"
+
+			loadProjects:->
+				console.log 'onTemplateLoad'
+				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joinedprojects"})
+				@joinedProjects.on "reset", @addJoined, @
+				@joinedProjects.fetch reset: true
+
+				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/ownedprojects"})
+				@ownedProjects.on "reset", @addOwned, @
+				@ownedProjects.fetch reset: true
+				
+
+			addJoined:->
+				@joinedProjects.each (projectModel) => @addOne projectModel, @followView.find("ul" )
+
+			addOwned:->
+				@ownedProjects.each (projectModel) => @addOne projectModel, @manageView.find("ul")
+
+			addOne: (projectModel_, parent_) ->
+				view = new ProjectPartialsView(model: projectModel_)
+				@$el.find(parent_).append view.$el

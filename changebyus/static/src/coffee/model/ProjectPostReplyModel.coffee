@@ -1,3 +1,5 @@
 define ["underscore", "backbone"], (_, Backbone) ->
-  ProjectPostReplyModel = Backbone.Model.extend()
+	ProjectPostReplyModel = Backbone.Model.extend
+		parse:(resp_)->
+			if resp_.data then resp_.data else resp_
 

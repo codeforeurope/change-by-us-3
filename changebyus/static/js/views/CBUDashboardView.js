@@ -1,16 +1,28 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "collection/ProjectListCollection"], function(_, Backbone, $, temp, AbstractView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "collection/ProjectListCollection", "model/UserModel", "views/partials-project/ProjectPartialsView"], function(_, Backbone, $, temp, AbstractView, ProjectListCollection, UserModel, ProjectPartialsView) {
   var CBUDashboardView;
   return CBUDashboardView = AbstractView.extend({
     initialize: function(options) {
+      var _this = this;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.viewData = options.viewData || this.viewData;
-      return this.render();
+      this.userModel = new UserModel({
+        id: this.model.id
+      });
+      return this.userModel.fetch({
+        success: function() {
+          return _this.render();
+        }
+      });
     },
     render: function() {
       var _this = this;
-      this.$el.template(this.templateDir + "/templates/dashboard.html", {}, function() {
-        return _this.onTemplateLoad();
+      console.log('@userModel', this.userModel);
+      this.$el.template(this.templateDir + "/templates/dashboard.html", {
+        data: this.userModel.attributes
+      }, function() {
+        _this.onTemplateLoad();
+        return _this.loadProjects();
       });
       return $(this.parent).append(this.$el);
     },
@@ -26,8 +38,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       var hash,
         _this = this;
       this.manageView = $('#manage-projects');
-      this.profileView = $('#edit-profile');
       this.followView = $('#follow-projects');
+      this.profileView = $('#edit-profile');
       this.manageBTN = $("a[href='#manage']").parent();
       this.followBTN = $("a[href='#follow']").parent();
       this.profileBTN = $("a[href='#profile']").parent();
@@ -64,6 +76,42 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
           this.manageView.show();
           return this.manageBTN.addClass("active");
       }
+    },
+    loadProjects: function() {
+      console.log('onTemplateLoad');
+      this.joinedProjects = new ProjectListCollection({
+        url: "/api/project/user/" + this.model.id + "/joinedprojects"
+      });
+      this.joinedProjects.on("reset", this.addJoined, this);
+      this.joinedProjects.fetch({
+        reset: true
+      });
+      this.ownedProjects = new ProjectListCollection({
+        url: "/api/project/user/" + this.model.id + "/ownedprojects"
+      });
+      this.ownedProjects.on("reset", this.addOwned, this);
+      return this.ownedProjects.fetch({
+        reset: true
+      });
+    },
+    addJoined: function() {
+      var _this = this;
+      return this.joinedProjects.each(function(projectModel) {
+        return _this.addOne(projectModel, _this.followView.find("ul"));
+      });
+    },
+    addOwned: function() {
+      var _this = this;
+      return this.ownedProjects.each(function(projectModel) {
+        return _this.addOne(projectModel, _this.manageView.find("ul"));
+      });
+    },
+    addOne: function(projectModel_, parent_) {
+      var view;
+      view = new ProjectPartialsView({
+        model: projectModel_
+      });
+      return this.$el.find(parent_).append(view.$el);
     }
   });
 });

@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view","autocomp", "model/ProjectModel", "views/partials-project/ProjectPartialsView"], 
-	(_, Backbone, $, temp, AbstractView, autocomp, ProjectModel, ProjectPartialsView) ->
+define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view","autocomp", "model/ProjectModel", "views/partials-project/ProjectPartialsView"], 
+	(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ProjectPartialsView) ->
 		BannerSearchView = AbstractView.extend
 
 			sortByProjectResouces:'Projects'
@@ -43,7 +43,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view","autocom
 						console.log(datum)
 				)
 
-				$('li').click ->
+				$dropkick = $('#search-range').dropkick()
+
+				$('.search-catagories li').click ->
 					$searchInput.val $(this).html()
 					$searchCatagories.hide()
 

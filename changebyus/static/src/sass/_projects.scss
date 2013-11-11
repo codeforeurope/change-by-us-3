@@ -4,6 +4,8 @@
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
 
+/* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
+
 .projects {
   padding: none;
   margin: none;
@@ -12,14 +14,14 @@
 .project-square {
   @include box-skin;
   height: 525px;
-  width: 320px;
+  width: 320px;  
   float: left;
   margin-right: 15px;
   margin-bottom: 15px;
 }
 
 .user-info {
-    width: 600px;
+    width: 600px; 
     border: 1px solid #000;
 }
 
@@ -31,7 +33,7 @@
 .project-name {
   margin: 15px;
   font-size: 25 !important;
-  font-weight: bold;
+  font-weight: bold; 
 }
 
 .project-description {
@@ -41,11 +43,11 @@
 .project-container {
   h2 {
     font-size: 44px;
-    font-weight: normal;
+    font-weight: normal;  
     text-align: left;
   }
    
-  h4{
+  h4{  
     text-transform: uppercase;
     @include font-styling("asap", 10px, $gray65 );
   }
@@ -76,7 +78,6 @@
       width: 249px;
       height: 249px;
       border: 4px solid #fff;  
-      @include border-radius(128px);  
       @include background-clip(padding-box);  
     }
 
@@ -175,7 +176,7 @@
   }
 
   .content-left, .content-right, .post-right, .reply-left, .reply-right{
-    float: left; 
+    float: left;  
   }
 
   .project-left{ 

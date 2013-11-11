@@ -7,6 +7,7 @@ require.config
 		"underscore": "ext/underscore/underscore-min"
 		"backbone": "ext/backbone/backbone-min"
 		"bootstrap": "ext/bootstrap/bootstrap.min"
+		"dropkick": "ext/jquery/jquery.dropkick-min"
 		"hogan": "ext/hogan/hogan-2.0.0.amd"
 		"wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
 		"autocomp": "ext/bootstrap/typeahead.min"
@@ -27,8 +28,30 @@ require.config
 		"dashboard-view": "views/CBUDashboardView"
 		"utils": "utils/Utils"
 
-require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "utils"], 
-	($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, Utils) ->
+require ["jquery", 
+		 "main-view", 
+		 "backbone", 
+		 "discover-view", 
+		 "create-view", 
+		 "project-view", 
+		 "project-owner-view", 
+		 "login-view", 
+		 "signup-view", 
+		 "user-view", 
+		 "dashboard-view", 
+		 "utils"], 
+	($, 
+	 CBUMainView, 
+	 Backbone, 
+	 CBUDiscoverView, 
+	 CreateProjectView, 
+	 CBUProjectView, 
+	 CBUProjectOwnerView, 
+	 CBULoginView, 
+	 CBUSignupView, 
+	 CBUUserView, 
+	 CBUDashboardView, 
+	 Utils) ->
 		$(document).ready ->
 			config = parent: "#frame"
 			CBURouter = Backbone.Router.extend
@@ -60,7 +83,8 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 				discover: ->
 					window.CBUAppView = new CBUDiscoverView(config)
 
-				dashboard: ->  
+				dashboard: ->
+					config.model = {id:window.userID}
 					window.CBUAppView = new CBUDashboardView(config) 
 
 				create: ->

@@ -2,6 +2,7 @@
 @import "compass/css3/opacity";
 
 @import "variables";
+@import "mixins-and-functions";
 @import "projects";
 @import "modal";
 @import "helpers";
@@ -9,8 +10,7 @@
 @import "profile";
 @import "dashboard";
 @import "login-signup";
-@import "mixins-and-functions";
-
+@import "dropkick";
 
 /*!
  * Bootstrap v2.3.1
@@ -2895,7 +2895,7 @@ a {
   height: 94px;
   z-index: 1;
   .btn {
-    margin-top: 30px;
+    margin-top: 37px;
     padding-top: 20px;
     width: 40px;
     height: 35px;
@@ -2920,7 +2920,7 @@ a {
 }
 
 .search-filters{
-  margin-right: 40px;
+  //margin-right: 40px;
   span{
     float: left;
   }
@@ -2933,6 +2933,7 @@ a {
 
 .filter-within{
   float: left;
+  select{width: 100px !important;}
 }
 
 
@@ -2984,7 +2985,11 @@ a {
   }
   .cities{
     @include box-skin;
-    li{padding: 10px;}
+    margin-top: 10px;
+    li{
+      padding: 10px;
+      &:last-child{border-top: 1px solid $grayBorder;  }
+    }
   }
 }
 

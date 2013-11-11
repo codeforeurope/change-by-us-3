@@ -7,6 +7,7 @@ require.config({
     "underscore": "ext/underscore/underscore-min",
     "backbone": "ext/backbone/backbone-min",
     "bootstrap": "ext/bootstrap/bootstrap.min",
+    "dropkick": "ext/jquery/jquery.dropkick-min",
     "hogan": "ext/hogan/hogan-2.0.0.amd",
     "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg",
     "autocomp": "ext/bootstrap/typeahead.min",
@@ -72,6 +73,9 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
         return window.CBUAppView = new CBUDiscoverView(config);
       },
       dashboard: function() {
+        config.model = {
+          id: window.userID
+        };
         return window.CBUAppView = new CBUDashboardView(config);
       },
       create: function() {

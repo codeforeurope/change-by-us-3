@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "autocomp", "model/ProjectModel", "views/partials-project/ProjectPartialsView"], function(_, Backbone, $, temp, AbstractView, autocomp, ProjectModel, ProjectPartialsView) {
+define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "views/partials-project/ProjectPartialsView"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ProjectPartialsView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
     sortByProjectResouces: 'Projects',
@@ -20,7 +20,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "autoco
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var $searchCatagories, $searchInput, $searchNear,
+      var $dropkick, $searchCatagories, $searchInput, $searchNear,
         _this = this;
       $searchCatagories = $('.search-catagories');
       $searchInput = $('#search-input');
@@ -56,7 +56,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "autoco
         _this.locationObj = datum;
         return console.log(datum);
       });
-      $('li').click(function() {
+      $dropkick = $('#search-range').dropkick();
+      $('.search-catagories li').click(function() {
         $searchInput.val($(this).html());
         return $searchCatagories.hide();
       });

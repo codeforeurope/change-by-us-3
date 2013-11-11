@@ -2,52 +2,55 @@
     <h1>Dashboard</h1>
 
     <div class="dashboard-tabs">
-        <ul class="tabs">
-            <li class="active">  
+        <ul class="tabs clearfix">
+            <li class="active pull-left">  
                 <a href="#manage" data-toggle="tab"><span>Your Project</span></a>
             </li>
-            <li> 
+            <li class="pull-left"> 
                 <a href="#follow" data-toggle="tab"><span>Projects You Follow</span></a>
             </li>
-            <li> 
+            <li class="pull-right"> 
                 <a href="#profile" data-toggle="tab"><span>Edit Profile</span></a>
             </li>
         </ul>
     </div>
 
-	<div id="manage-projects">
+	<div id="manage-projects" class="clearfix">
 		<ul></ul>
 	</div>
 
-	<div id="follow-projects" class="hide">
+	<div id="follow-projects" class="clearfix">
 		<ul></ul>
 	</div>
 
-	<div id="edit-profile" class="hide">
+	<div id="edit-profile">
 		<form>
 			<div class="content-wrapper clearfix"> 
                 <div class="form-left">
 
-                    <label>FULL NAME</label>
-                    <input type="text" maxlength="30" name="full_name" id="full_name" placeholder="" class="input-xxlarge" required>
+                    <label>FIRST NAME</label>
+                    <input type="text" maxlength="30" name="first_name" id="full_name" placeholder="" class="input-xxlarge" value="<%= data.first_name %>" required>
+
+                    <label>LAST NAME</label>
+                    <input type="text" maxlength="30" name="last_name" id="full_name" placeholder="" class="input-xxlarge" value="<%= data.last_name %>" required>
 
                     <label>USER NAME</label>
-                    <input type="text" maxlength="30" name="display_name" id="display_name" placeholder="" class="input-xxlarge" required>
+                    <input type="text" maxlength="30" name="display_name" id="display_name" placeholder="" class="input-xxlarge" value="<%= data.display_name %>" required>
 
                     <label>YOUR LOCATION</label>
-                    <input type="text" maxlength="30" name="location" id="location" placeholder="" class="input-xxlarge" required>
+                    <input type="text" maxlength="30" name="location" id="location" placeholder="" class="input-xxlarge" value="<%= data.location %>" required>
 
                     <label>SHORT BIO</label>
-                    <textarea rows="8" maxlength="600" name="bio" id="bio" placeholder="" class="input-xxlarge" required></textarea>
+                    <textarea rows="8" maxlength="600" name="bio" id="bio" placeholder="" class="input-xxlarge" value="<%= data.bio %>" required></textarea>
 
                     <label>EMAIL</label>
-                    <input type="text" name="email" id="email" placeholder="" class="input-xxlarge">
+                    <input type="email" name="email" id="email" placeholder="" class="input-xxlarge" value="<%= data.public_email %>" >
 
                     <label>PASSWORD</label>
-                    <input type="text" name="password" id="password" placeholder="" class="input-xxlarge">
+                    <input type="password" name="password" id="password" placeholder="" class="input-xxlarge" value="<%= data.password %>" >
 
                     <label>WEBSITE</label>
-                    <input type="text" name="website" id="website" placeholder="" class="input-xxlarge">
+                    <input type="text" name="website" id="website" placeholder="" class="input-xxlarge" value="<%= data.website %>" >
 
                     <div class="notify-wrapper">
                         <div class="notify-row">
@@ -74,8 +77,12 @@
 
                 <div class="form-right">
                     <label>PROFILE PICTURE</label>
-                    <div class="fileupload fileupload-new" data-provides="fileupload">
-                        <span class="btn btn-file"><span class="fileupload-new">Upload</span><span class="fileupload-exists">Change</span><input type="file" id="project_image" name="photo"/></span>
+                    <div class="fileupload" data-provides="fileupload">
+                        <span class="btn btn-file">
+                            <span class="fileupload-new">Upload</span>
+                            <span class="fileupload-exists">Change</span>
+                            <input type="file" id="project_image" name="photo"/>
+                        </span>
                         <!-- <div class="fileupload-new thumbnail" style="width: 50px; height: 50px;"><img src="/static/img/50.50.placeholder.gif" /></div> -->
                         <div class="fileupload-preview fileupload-exists thumbnail" style="width: 50px; height: 50px;"></div>
                     </div>

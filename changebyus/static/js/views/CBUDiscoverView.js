@@ -39,9 +39,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
     },
     addAll: function() {
       var _this = this;
-      return this.collection.each(function(projectModel) {
+      this.collection.each(function(projectModel) {
         return _this.addOne(projectModel);
       });
+      if (this.collection.length === 0) {
+        return this.$el.template(this.templateDir + "/templates/partials-discover/no-results.html", {
+          data: this.viewData
+        }, function() {});
+      }
     }
   });
 });

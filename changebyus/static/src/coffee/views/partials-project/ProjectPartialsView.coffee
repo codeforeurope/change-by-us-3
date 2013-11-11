@@ -8,7 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 		render: ->
 			@$el = $("<li class='project-preview'/>")
 			@$el.template @templateDir+"/templates/partials-universal/project.html", 
-				{data: @model.attributes}, => console.log 'done'
+				{data: @model.attributes}, => console.log ''
 
 		onFetch:(r)-> 
 			$(@parent).append @render() 

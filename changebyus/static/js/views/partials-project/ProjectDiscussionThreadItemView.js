@@ -15,7 +15,12 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       }
     },
     loadModel: function() {
-      return console.log('loadModel', this.model);
+      var _this = this;
+      return this.model.fetch({
+        success: function() {
+          return _this.render();
+        }
+      });
     },
     render: function() {
       var m,

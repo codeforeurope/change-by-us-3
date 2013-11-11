@@ -17,13 +17,12 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
       render: -> 
         @$el = $("<div class='discover'/>")
         @$el.template @templateDir + "/templates/discover.html",
-          data: @viewData
-        , =>
-          $(@parent).append @$el
-          searchParent = @$el.find(".content")
-          bannerSearchView = new BannerSearchView({parent:searchParent})
-          @collection.on "reset", @addAll, @
-          @collection.fetch reset: true
+          data: @viewData, =>
+            $(@parent).append @$el
+            searchParent = @$el.find(".content")
+            bannerSearchView = new BannerSearchView({parent:searchParent})
+            @collection.on "reset", @addAll, @
+            @collection.fetch reset: true
 
 
       addOne: (projectModel) ->
@@ -33,3 +32,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
       addAll: -> 
         @collection.each (projectModel) =>
           @addOne projectModel
+
+        if (@collection.length is 0)
+          @$el.template @templateDir + "/templates/partials-discover/no-results.html",
+            data: @viewData, =>

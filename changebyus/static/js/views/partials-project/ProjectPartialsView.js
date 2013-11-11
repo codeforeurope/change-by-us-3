@@ -11,7 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "/templates/partials-universal/project.html", {
         data: this.model.attributes
       }, function() {
-        return console.log('done');
+        return console.log('');
       });
     },
     onFetch: function(r) {

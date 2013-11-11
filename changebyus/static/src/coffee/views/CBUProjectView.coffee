@@ -1,5 +1,28 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], 
-	(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"abstract-view", 
+		"views/partials-project/ProjectCalenderView", 
+		"views/partials-project/ProjectMembersView", 
+		"views/partials-project/ProjectUpdatesView", 
+		"model/ProjectModel", 
+		"collection/ProjectCalendarCollection", 
+		"collection/ProjectMembersCollection", 
+		"collection/ProjectUpdatesCollection"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 AbstractView, 
+	 ProjectCalenderView,
+	 ProjectMembersView, 
+	 ProjectUpdatesView, 
+	 ProjectModel, 
+	 ProjectCalendarCollection, 
+	 ProjectMembersCollection, 
+	 ProjectUpdatesCollection) ->
+	 	
 		CBUProjectView = AbstractView.extend
 			isOwner:false
 			projectCalenderView: null

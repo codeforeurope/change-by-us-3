@@ -23,7 +23,7 @@ Stream views
 List of views that allow a user to see project posts for a given group of scenarios
 """
 
-@stream_view.route('')
+@stream_view.route('/')
 @login_required
 def projects_view():
     """
@@ -38,6 +38,8 @@ def projects_view():
         Rendered stream.html view
     PRECONDITIONS
         User is logged in
+    """
+
     """
     projects = _get_user_involved_projects(g.user.id)
     posts = _get_user_stream(g.user.id)
@@ -55,7 +57,10 @@ def projects_view():
             project['stripe_description'] = project['stripe_account']['description']
 
     return render_template('stream.html', data = projects, posts = posts, members = members, newPost=False)
-
+    """
+ 
+    return render_template('index.html')
+     
 
 @stream_view.route('/sort', methods = ['GET'])
 @login_required

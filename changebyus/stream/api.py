@@ -85,6 +85,6 @@ def api_stream():
         API key exists in the config file
     """
     # TODO fix
-    streamList = _get_user_stream(g.user.id)
+    #streamList = _get_user_stream(g.user.id)
     #return gen_ok( jsonify(stream=streamList))
     return ""

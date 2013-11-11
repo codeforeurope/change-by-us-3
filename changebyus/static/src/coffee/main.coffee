@@ -26,6 +26,7 @@ require.config
 		"project-sub-view": "views/partials-project/ProjectSubView"
 		"user-view": "views/partials-user/CBUUserView"
 		"dashboard-view": "views/CBUDashboardView"
+		"stream-view": "views/CBUStreamView"
 		"utils": "utils/Utils"
 
 require ["jquery", 
@@ -39,6 +40,7 @@ require ["jquery",
 		 "signup-view", 
 		 "user-view", 
 		 "dashboard-view", 
+		 "stream-view",
 		 "utils"], 
 	($, 
 	 CBUMainView, 
@@ -51,6 +53,7 @@ require ["jquery",
 	 CBUSignupView, 
 	 CBUUserView, 
 	 CBUDashboardView, 
+	 CBUStreamView,
 	 Utils) ->
 		$(document).ready ->
 			config = parent: "#frame"
@@ -65,6 +68,8 @@ require ["jquery",
 					"login": "login"
 					"signup": "signup"
 					"project": "project" 
+					"stream": "stream" 
+					"stream/": "stream" 
 					"": "default"
 
 				project: (id_) ->
@@ -95,6 +100,9 @@ require ["jquery",
 
 				signup: ->
 					window.CBUAppView = new CBUSignupView(config)
+
+				stream:->
+					window.CBUAppView = new CBUStreamView(config)
 
 				default: ->
 					# added in dev tool

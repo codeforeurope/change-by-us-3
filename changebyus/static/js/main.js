@@ -26,11 +26,12 @@ require.config({
     "project-sub-view": "views/partials-project/ProjectSubView",
     "user-view": "views/partials-user/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
+    "stream-view": "views/CBUStreamView",
     "utils": "utils/Utils"
   }
 });
 
-require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, Utils) {
+require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, Utils) {
   $(document).ready(function() {
     var $navTop, CBUAppRouter, CBURouter, config;
     config = {
@@ -47,6 +48,8 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
         "login": "login",
         "signup": "signup",
         "project": "project",
+        "stream": "stream",
+        "stream/": "stream",
         "": "default"
       },
       project: function(id_) {
@@ -86,6 +89,9 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       },
       signup: function() {
         return window.CBUAppView = new CBUSignupView(config);
+      },
+      stream: function() {
+        return window.CBUAppView = new CBUStreamView(config);
       },
       "default": function() {
         return window.CBUAppView = new CBUMainView(config);

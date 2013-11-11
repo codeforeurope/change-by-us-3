@@ -11,13 +11,17 @@
   margin: none;
 }
 
+.project-preview:nth-child(3n+3){
+  .project-square {margin-right: 0;}
+}
+
 .project-square {
   @include box-skin;
   height: 525px;
-  width: 320px;  
+  width: 328px;
   float: left;
-  margin-right: 15px;
-  margin-bottom: 15px;
+  margin-right: 16px;
+  margin-bottom: 16px;
 }
 
 .user-info {
@@ -27,7 +31,7 @@
 
 .project-icon {
   margin: 10px;
-  @include box-skin;
+  //@include box-skin;
 }
 
 .project-name {

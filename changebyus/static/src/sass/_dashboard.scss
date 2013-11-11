@@ -1,7 +1,13 @@
-.dashboard-tabs{
-	background: #5E5E5E;
-}
 
+.dashboard-tabs{
+	background: $gray37;
+	li{
+		padding: 20px;
+		font-size: 20px;
+	}
+	.active{background: $gray29;}
+	
+}
 
 .notify-wrapper{ width: 480px; }
 .notify-row{
@@ -10,4 +16,8 @@
     width: 10%; 
     &:first-child{width: 80%;}
   }
+}
+
+#manage-projects, #follow-projects{
+	margin-top: 20px;
 }

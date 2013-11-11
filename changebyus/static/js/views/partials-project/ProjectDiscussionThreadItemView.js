@@ -25,8 +25,10 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     render: function() {
       var m,
         _this = this;
-      m = moment(this.model.attributes.created_at).format("MMMM D hh:mm a");
-      this.model.attributes.format_date = m;
+      m = moment(this.model.get('created_at')).format("MMMM D hh:mm a");
+      this.model.set({
+        'created_at': m
+      });
       $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
         data: this.model.attributes
       }, function() {

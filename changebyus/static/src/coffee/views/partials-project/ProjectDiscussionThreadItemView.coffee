@@ -30,10 +30,11 @@ define ["underscore",
 				#console.log 'loadModel',@model
 				@model.fetch
 					success: =>@render()
-	 
+
 			render: ->
 				m = moment(@model.get('created_at')).format("MMMM D hh:mm a")
-				@model.set('created_at') = m
+				@model.set
+					'created_at':m
 
 				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
 					{data: @model.attributes}, => @onTemplateLoad()

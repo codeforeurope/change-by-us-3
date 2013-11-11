@@ -21,7 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $ajax, $form, $projectLocation, $submit, options,
+      var $form, $projectLocation, $submit, options,
         _this = this;
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
@@ -59,7 +59,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
         }
       };
       $form.ajaxForm(options);
-      $ajax = null;
       $projectLocation = $("#project_location");
       return $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',

@@ -22,9 +22,9 @@
 	<div id="follow-projects" class="clearfix">
 		<ul></ul>
 	</div>
-
+    <div id="feedback" class="form-feedback hide"></div>
 	<div id="edit-profile">
-		<form>
+		<form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/user/edit">
 			<div class="content-wrapper clearfix"> 
                 <div class="form-left">
 
@@ -38,10 +38,10 @@
                     <input type="text" maxlength="30" name="display_name" id="display_name" placeholder="" class="input-xxlarge" value="<%= data.display_name %>" required>
 
                     <label>YOUR LOCATION</label>
-                    <input type="text" maxlength="30" name="location" id="location" placeholder="" class="input-xxlarge" value="<%= data.location %>" required>
+                    <input type="text" maxlength="30" name="location" id="location" placeholder="" class="input-xxlarge" value="<%= data.location %>" >
 
                     <label>SHORT BIO</label>
-                    <textarea rows="8" maxlength="600" name="bio" id="bio" placeholder="" class="input-xxlarge" value="<%= data.bio %>" required></textarea>
+                    <textarea rows="8" maxlength="600" name="bio" id="bio" placeholder="" class="input-xxlarge" value="<%= data.bio %>" ></textarea>
 
                     <label>EMAIL</label>
                     <input type="email" name="email" id="email" placeholder="" class="input-xxlarge" value="<%= data.public_email %>" >
@@ -60,15 +60,18 @@
                         </div>
                         <div class="notify-row">
                            <div>Someone joins my project</div>
-                           <div></div> 
+                           <div><input type="radio" name="joins_my_project" value="false"> </div> 
+                           <div><input type="radio" name="joins_my_project" value="true" checked> </div> 
                         </div>
                         <div class="notify-row">
                            <div>Someone responds to a discussion thread</div>
-                           <div></div> 
+                           <div><input type="radio" name="responds_to_a_discussion" value="false"> </div> 
+                           <div><input type="radio" name="responds_to_a_discussion" value="true" checked> </div> 
                         </div>
                         <div class="notify-row">
                            <div>Someone comments on my post</div>
-                           <div></div> 
+                           <div><input type="radio" name="responds_to_my_comment" value="false"> </div> 
+                           <div><input type="radio" name="responds_to_my_comment" value="true" checked> </div> 
                         </div>
                     </div>
 
@@ -90,9 +93,10 @@
                 </div>
             </div>
 
-            <a class="btn" href="#" id="save">Save</a>
-            <a class="btn" href="#" id="cancel">Cancel</a>
-            
+            <input type="submit" class="btn btn-large" id="save" value="Save">
+            <input type="button" class="btn btn-large" id="cancel" value="Cancel">
+
+            <input type="hidden" name="id" value="<%= data.id %>">
 		</form>
 	</div>
 

@@ -717,6 +717,15 @@ span.highlight {
 .dashboard-tabs {
   background: #5E5E5E; }
 
+.notify-wrapper {
+  width: 480px; }
+
+.notify-row div {
+  float: left;
+  width: 10%; }
+  .notify-row div:first-child {
+    width: 80%; }
+
 .login {
   text-align: center; }
   .login h1 {

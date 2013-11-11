@@ -17,20 +17,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 					{data:@userModel.attributes}, => 
 						@onTemplateLoad()
 						@loadProjects()
+						@ajaxForm()
 				)
 				$(@parent).append @$el
 
 			onTemplateLoad: ->  
 				# @$el.prepend @$header
-
-				###
-				id = @model.get("id")
-				config = {id:id}
-				projectUpdatesCollection  = new ProjectUpdatesCollection(config)
-				projectMembersCollection  = new ProjectMembersCollection(config)
-				projectCalendarCollection = new ProjectCalendarCollection(config)
-				
-				###
 				@manageView   = $('#manage-projects')
 				@followView   = $('#follow-projects')
 				@profileView  = $('#edit-profile')
@@ -88,3 +80,24 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 			addOne: (projectModel_, parent_) ->
 				view = new ProjectPartialsView(model: projectModel_)
 				@$el.find(parent_).append view.$el
+
+			ajaxForm: ->
+				$submit = @profileView.find("input[type=submit]")
+				$form = @profileView.find("form")
+				$feedback = $("#feedback")
+				options =
+					beforeSubmit: => 
+						if $form.valid()
+							return true
+						else
+							return false
+
+					success: (res) ->
+						console.log "res", res
+						$feedback.html res.msg
+						if res.success
+							$form.resetForm()
+							 
+						else
+							# $form.resetForm()
+				$form.ajaxForm options

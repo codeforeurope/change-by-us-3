@@ -48,7 +48,6 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							# $form.resetForm()
 				$form.ajaxForm options
 
-				$ajax = null
 				$projectLocation = $("#project_location")
 				$projectLocation.typeahead(
 					template: '<div class="zip">{{ name }}</div>'

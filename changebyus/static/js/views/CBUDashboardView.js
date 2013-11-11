@@ -22,19 +22,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
         data: this.userModel.attributes
       }, function() {
         _this.onTemplateLoad();
-        return _this.loadProjects();
+        _this.loadProjects();
+        return _this.ajaxForm();
       });
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      /*
-      				id = @model.get("id")
-      				config = {id:id}
-      				projectUpdatesCollection  = new ProjectUpdatesCollection(config)
-      				projectMembersCollection  = new ProjectMembersCollection(config)
-      				projectCalendarCollection = new ProjectCalendarCollection(config)
-      */
-
       var hash,
         _this = this;
       this.manageView = $('#manage-projects');
@@ -112,6 +105,32 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
         model: projectModel_
       });
       return this.$el.find(parent_).append(view.$el);
+    },
+    ajaxForm: function() {
+      var $feedback, $form, $submit, options,
+        _this = this;
+      $submit = this.profileView.find("input[type=submit]");
+      $form = this.profileView.find("form");
+      $feedback = $("#feedback");
+      options = {
+        beforeSubmit: function() {
+          if ($form.valid()) {
+            return true;
+          } else {
+            return false;
+          }
+        },
+        success: function(res) {
+          console.log("res", res);
+          $feedback.html(res.msg);
+          if (res.success) {
+            return $form.resetForm();
+          } else {
+
+          }
+        }
+      };
+      return $form.ajaxForm(options);
     }
   });
 });

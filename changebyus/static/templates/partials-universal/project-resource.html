@@ -1,0 +1,32 @@
+<% console.log('data',data); %>
+<div class="project-square" id="<%= data.id %>">
+    <div class="side-tab">Resource</div>
+    <% if(data.isResource){ %>
+        <% if(data.isOwned || data.isFollowed){ %>
+             <div class="side-tab">Resource</div>
+        <% } %>
+    <% } %>
+    <% if(data.isProject){ %>
+        <% if(data.isOwned){ %>
+                <div class="hover-overlay">
+                   <a href="" class="btn">Manage</a>
+                </div>
+        <% } %>
+        <% if(data.isFollowed){ %>
+                <div class="hover-overlay">
+                   <a href="" class="btn">View</a>
+                   <button type="button" class="close" data-dismiss="alert">×</button>
+                </div>
+        <% } %>
+    <% } %>
+
+    <div class="project-icon">
+        <a href="/project/<%= data.id %>">
+    	<img src="/static/img/icon-medium.jpg">
+    	<!-- <img src="<%= data.image_url_small_square %>">-->
+    </a>
+    </div>
+        <!-- <div id="project-icon"><img src="<%= data.image_uri_medium %>" /></div> -->
+    <div class="project-name"><%= data.name %></div>
+    <div class="project-description"><%= data.description %></div>
+</div>

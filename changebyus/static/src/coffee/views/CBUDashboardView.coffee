@@ -1,5 +1,14 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/ProjectListCollection", "model/UserModel" , "views/partials-project/ProjectPartialsView"], 
-	(_, Backbone, $, temp, AbstractView, ProjectListCollection, UserModel, ProjectPartialsView) ->
+define ["underscore", 
+		"backbone", 
+		"bootstrap-fileupload", 
+		"button"
+		"jquery", 
+		"template", 
+		"abstract-view", 
+		"collection/ProjectListCollection", 
+		"model/UserModel",
+		"resource-project-view"], 
+	(_, Backbone, fileupload, button, $, temp, AbstractView, ProjectListCollection, UserModel, ResourceProjectPreviewView) ->
 
 		CBUDashboardView = AbstractView.extend
 
@@ -13,15 +22,19 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 
 			render: -> 
 				console.log '@userModel',@userModel
-				@$el.template(@templateDir+"/templates/dashboard.html", 
+				@$el.template @templateDir+"/templates/dashboard.html", 
 					{data:@userModel.attributes}, => 
 						@onTemplateLoad()
 						@loadProjects()
-						@ajaxForm()
-				)
 				$(@parent).append @$el
 
-			onTemplateLoad: ->  
+			onTemplateLoad: ->
+				$('#edit-profile').template @templateDir+"/templates/partials-user/profile-edit-form.html", 
+					{data:@userModel.attributes}, =>
+						@onProfileEditLoad()
+						@ajaxForm()
+
+			onProfileEditLoad:->
 				# @$el.prepend @$header
 				@manageView   = $('#manage-projects')
 				@followView   = $('#follow-projects')
@@ -30,7 +43,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				@manageBTN  = $("a[href='#manage']").parent()
 				@followBTN  = $("a[href='#follow']").parent()
 				@profileBTN = $("a[href='#profile']").parent()
-				
+
 				hash = window.location.hash.substring(1)
 				@toggleSubView (if (hash is "") then "updates" else hash)
 				$(window).bind "hashchange", (e) =>
@@ -60,8 +73,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 						@manageView.show()
 						@manageBTN.addClass "active"
 
-			loadProjects:->
-				console.log 'onTemplateLoad'
+			loadProjects:-> 
 				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joinedprojects"})
 				@joinedProjects.on "reset", @addJoined, @
 				@joinedProjects.fetch reset: true
@@ -72,32 +84,71 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				
 
 			addJoined:->
-				@joinedProjects.each (projectModel) => @addOne projectModel, @followView.find("ul" )
+				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
 
 			addOwned:->
-				@ownedProjects.each (projectModel) => @addOne projectModel, @manageView.find("ul")
+				@ownedProjects.each (projectModel) => @addOne(projectModel, @manageView.find("ul"), true, false)
 
-			addOne: (projectModel_, parent_) ->
-				view = new ProjectPartialsView(model: projectModel_)
+			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->
+				view = new ResourceProjectPreviewView
+					model: projectModel_
+					isOwned: isOwned_
+					isFollowed: isFollowed_
+					isProject: true
+					isResource: false
+
 				@$el.find(parent_).append view.$el
 
 			ajaxForm: ->
+				$('.fileupload').fileupload({uploadtype: 'image'})
+
 				$submit = @profileView.find("input[type=submit]")
 				$form = @profileView.find("form")
 				$feedback = $("#feedback")
 				options =
 					beforeSubmit: => 
 						if $form.valid()
+							$form.find("input, textarea").attr("disabled", "disabled")
 							return true
 						else
 							return false
 
-					success: (res) ->
-						console.log "res", res
-						$feedback.html res.msg
+					success: (res) -> 
+						msg = if res.msg.toLowerCase() is "ok" then "Updated Successfully" else res.msg
+						$feedback.show().html(msg)
+
+						$form.find("input, textarea").removeAttr("disabled")
+
 						if res.success
-							$form.resetForm()
-							 
+							$("html, body").animate({ scrollTop: 0 }, "slow")
+							$feedback.addClass('.alert-success').removeClass('.alert-error')
 						else
-							# $form.resetForm()
+							$feedback.removeClass('.alert-success').addClass('.alert-error')
 				$form.ajaxForm options
+
+				$projectLocation = $("#location")
+				$projectLocation.typeahead(
+					template: '<div class="zip">{{ name }}</div>'
+					engine: Hogan 
+					valueKey: 'name'
+					name: 'zip'
+					remote:
+						url: "/api/project/geopoint?s=%QUERY"
+						filter: (resp) ->
+							zips = []
+							if resp.msg.toLowerCase() is "ok" and resp.data.length > 0
+								for loc in resp.data
+									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon}
+							zips
+				).bind('typeahead:selected', (obj, datum) =>
+						@location = datum
+						$('input[name="location"]').val @location.name
+						$('input[name="lat"]').val @location.lat
+						$('input[name="lon"]').val @location.lon
+						console.log(datum)
+				)
+
+				$('input:radio').screwDefaultButtons
+					image: 'url("/static/img/black-check.png")'
+					width: 18
+					height: 18

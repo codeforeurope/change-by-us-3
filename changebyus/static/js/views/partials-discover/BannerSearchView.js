@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "views/partials-project/ProjectPartialsView"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ProjectPartialsView) {
+define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
     sortByProjectResouces: 'Projects',
@@ -116,7 +116,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       projectModel = new ProjectModel({
         id: id_
       });
-      view = new ProjectPartialsView({
+      view = new ResourceProjectPreviewView({
         model: projectModel,
         parent: "#projects-list"
       });

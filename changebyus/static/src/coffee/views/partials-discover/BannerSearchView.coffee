@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view","autocomp", "model/ProjectModel", "views/partials-project/ProjectPartialsView"], 
-	(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ProjectPartialsView) ->
+define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view","autocomp", "model/ProjectModel", "resource-project-view"], 
+	(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) ->
 		BannerSearchView = AbstractView.extend
 
 			sortByProjectResouces:'Projects'
@@ -87,7 +87,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 			addProject:(id_)->
 				projectModel = new ProjectModel({id:id_})
-				view = new ProjectPartialsView({model: projectModel, parent: "#projects-list"})
+				view = new ResourceProjectPreviewView({model: projectModel, parent: "#projects-list"})
 				view.fetch()
 
 				#console.log 'projectModel',projectModel,'view',view,'id_',id_

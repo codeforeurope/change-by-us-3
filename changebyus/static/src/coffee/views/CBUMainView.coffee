@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
-	(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) ->
+define ["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
+	(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection) ->
 		
 		CBUMainView = Backbone.View.extend
 			parent: "body"
@@ -42,5 +42,5 @@ define ["underscore", "backbone", "jquery", "template", "form", "views/partials-
 					@addOne projectModel
 
 			addOne: (projectModel) ->
-				view = new ProjectPartialsView(model: projectModel)
+				view = new ResourceProjectPreviewView(model: projectModel)
 				@$el.find("#project-list").append view.$el

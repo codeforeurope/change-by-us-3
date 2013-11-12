@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "views/partials-project/ProjectPartialsView"], 
-	(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ProjectPartialsView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "resource-project-view"], 
+	(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ResourceProjectPreviewView) ->
 		CBUUserView = AbstractView.extend
 			
 			joinedProjects:null
@@ -46,7 +46,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@ownedProjects.each (projectModel) => @addOne projectModel, "#project-list"
 
 			addOne: (projectModel_, parent_) ->
-				view = new ProjectPartialsView(model: projectModel_)
+				view = new ResourceProjectPreviewView(model: projectModel_)
 				@$el.find(parent_).append view.$el
 
 		# to do

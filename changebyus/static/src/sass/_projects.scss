@@ -22,6 +22,33 @@
   float: left;
   margin-right: 16px;
   margin-bottom: 16px;
+
+  &:hover{
+    .hover-overlay{display: block;}
+  }
+  .side-tab{
+    position: absolute;
+    top:20px;
+    left:10px;
+    background-color: rgba(0,0,0,0.5);
+    padding:10px;
+    color: $white; 
+    z-index: 1;
+
+    @include border-top-right-radius(4px);
+    @include border-bottom-right-radius(4px);
+  }
+  .hover-overlay{
+    background-color: rgba(255,255,255,0.5);
+    width:100%;
+    height: 100%;
+    position: absolute; 
+    z-index: 2;
+    text-align: center;
+    display: none;
+    
+  }
+  .btn{ margin-top:150px; }
 }
 
 .user-info {
@@ -31,6 +58,7 @@
 
 .project-icon {
   margin: 10px;
+  img{width: 100%; }
   //@include box-skin;
 }
 
@@ -308,19 +336,22 @@
       line-height: 15px;
       padding-left: 20px;
       margin-top: 10px;
-      background-repeat: no-repeat;
-      background-image: url('/static/img/black-check.png');
+      //background-repeat: no-repeat;
+      //background-image: url('/static/img/black-check.png');
       &:first-child{
         margin-top: 0;
       }
     }
 
+    /*
     input[type=checkbox]{
       display: none;
     }
     input[type=checkbox]:checked+label {
       background-position: 0 -15px;
     }
+    */
+
   }
 
   .discussion{ 

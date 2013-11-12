@@ -82,13 +82,13 @@ sub {
   bottom: -0.25em;
 }
 
-div{
+div{ 
   position: relative;
   box-sizing: border-box;
 }
 
 img {
-  width: auto\9;
+  //width: auto\9;
   height: auto;
   max-width: 100%;
   vertical-align: middle;
@@ -2522,6 +2522,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 .thumbnail {
+  /*
   display: block;
   padding: 4px;
   line-height: 20px;
@@ -2535,6 +2536,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   -moz-transition: all 0.2s ease-in-out;
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
+  */
   &:hover {
     font-weight: normal !important;
   }
@@ -2744,12 +2746,19 @@ a {
 
 .fileupload {
   margin-bottom: 9px;
+  .circle{
+    width:200px;
+    height:200px;
+    margin:10px auto;
+    border: 1px solid $grayBorder;
+  }
   .uneditable-input {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle;
     cursor: text;
-  }
+  } 
+  /*
   .thumbnail {
     display: inline-block;
     margin-bottom: 5px;
@@ -2761,7 +2770,8 @@ a {
       max-height: 100%;
       vertical-align: middle !important;
     }
-  }
+   
+  } */
   .btn {
     vertical-align: middle;
   }

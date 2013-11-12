@@ -30,7 +30,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');
-            console.log('>>>>>>', _this.location.name, $zip.val());
             if (_this.location.name !== "" && _this.location.name === $zip.val()) {
               $submit.prop("disabled", true);
               return true;
@@ -48,7 +47,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           }
         },
         success: function(res) {
-          console.log("res", res);
           $submit.prop("disabled", false);
           if (res.success) {
             $form.resetForm();

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection) {
   var CBUMainView;
   return CBUMainView = Backbone.View.extend({
     parent: "body",
@@ -48,7 +48,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
     },
     addOne: function(projectModel) {
       var view;
-      view = new ProjectPartialsView({
+      view = new ResourceProjectPreviewView({
         model: projectModel
       });
       return this.$el.find("#project-list").append(view.$el);

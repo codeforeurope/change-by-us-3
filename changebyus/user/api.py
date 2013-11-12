@@ -3,9 +3,13 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, request, render_template, redirect, url_for, request, g
+from flask import Blueprint, request, render_template, redirect, current_app, url_for, request, g
+import os
+
 from flask.ext.login import login_required, current_user, login_user
 from flask.ext.security.utils import encrypt_password
+from flask.ext.cdn_rackspace import upload_rackspace_image
+
 
 from .models import User
 from .helpers import _create_user
@@ -55,7 +59,7 @@ def api_create_user():
     """
 
     if not g.user.is_anonymous():
-        errStr = "You can not create an account when logged in."
+        errStr = "You can not create an account when logged in." 
         return jsonify_response( ReturnStruct(msg = errStr, success = False) )
 
     form = CreateUserForm()

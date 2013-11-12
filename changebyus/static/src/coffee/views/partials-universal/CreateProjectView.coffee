@@ -22,7 +22,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 					beforeSubmit: => 
 						if $form.valid()
 							$zip = $('input[name="zip"]')
-							console.log '>>>>>>', @location.name, $zip.val()
+
 							if @location.name isnt "" and @location.name is $zip.val()
 								$submit.prop "disabled", true
 								return true
@@ -37,8 +37,6 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							return false
 
 					success: (res) ->
-						console.log "res", res
-						# createProjectModalView = new CreateProjectView(viewData: res)
 						$submit.prop "disabled", false
 						
 						if res.success

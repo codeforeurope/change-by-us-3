@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "views/partials-project/ProjectPartialsView"], function(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ProjectPartialsView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "resource-project-view"], function(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ResourceProjectPreviewView) {
   var CBUUserView;
   return CBUUserView = AbstractView.extend({
     joinedProjects: null,
@@ -63,7 +63,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     addOne: function(projectModel_, parent_) {
       var view;
-      view = new ProjectPartialsView({
+      view = new ResourceProjectPreviewView({
         model: projectModel_
       });
       return this.$el.find(parent_).append(view.$el);

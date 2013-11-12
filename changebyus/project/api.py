@@ -18,7 +18,7 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 from ..mongo_search import search
 
-from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink
+from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
 
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
                        _create_project, _edit_project, _get_lat_lon_from_location,
@@ -67,7 +67,7 @@ def api_get_geopoint():
 
 ## TODO WTForms for search?
 
-@project_api.route('/search', methods = ['POST'])
+@project_api.route('/search', methods = ['POST', 'GET'])
 def api_search_projects():
     """
     ABOUT
@@ -115,6 +115,16 @@ def api_search_projects():
                          units = 'mi')
 
     return jsonify_response(ReturnStructure(data = search_data))
+    
+
+@project_api.route('/categories')
+def api_categories():
+    cats = ProjectCategory.objects(active=True)
+    
+    data = {"categories": [c.name for c in cats]}
+    
+    return jsonify_response(ReturnStructure(data = data))
+
 
 # TODO WTForms for flagging?
 
@@ -134,6 +144,7 @@ class CreateProjectForm(Form):
 
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
+    category = TextField("category")
     location = HiddenField("location")
     lat = HiddenField("lat")
     lon = HiddenField("lon")
@@ -215,7 +226,9 @@ class EditProjectForm(Form):
     project_id = TextField("project_id")
     name = TextField("title",)
     description = TextAreaField("description")
-    location = TextField("location")
+    location = HiddenField("location")
+    lat = HiddenField("lat")
+    lon = HiddenField("lon")
     photo = FileField("photo")    
 
 

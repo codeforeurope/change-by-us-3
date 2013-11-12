@@ -9,7 +9,7 @@ from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.imagetools import generate_thumbnail
 from ..helpers.stringtools import slugify
 
-from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
+from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
 
 from ..wordlist import filter_model
 \
@@ -52,6 +52,7 @@ def _create_project( resource = False ):
 
     name = request.form.get('name')
     description = request.form.get('description')
+    category = request.form.get('category')
     location = request.form.get('location')
     geo_location = None
     
@@ -71,6 +72,7 @@ def _create_project( resource = False ):
 
     p = Project( name = name, 
                  description = description, 
+                 category = category,
                  location = location,
                  geo_location = geo_location,
                  owner = owner,
@@ -155,7 +157,9 @@ def _edit_project():
     project_id = request.form.get('project_id')
     name = request.form.get('name')
     description = request.form.get('description')
-    location = request.form.get('location')
+    location = request.form.get("location")
+    lat = request.form.get("lat")
+    lon = request.form.get("lon")
 
     p = Project.objects.with_id(project_id)
 
@@ -168,6 +172,11 @@ def _edit_project():
 
     if name: p.name = name
     if description: p.description = description
+    
+    if (location and lat and lon):
+        p.location = location
+        p.geo_location = [float(lon), float(lat)]
+    
 
     # TODO flag objects if new content needs to be flagged,
     # BUT don't double-flag existing, unchanged content
@@ -632,4 +641,10 @@ def _leave_project(project_id=None, user_id=None):
     return jsonify_response( ReturnStructure( ) )
 
 
-
+def _create_category(cat):
+    c = ProjectCategory(name=cat)
+    c.save()
+    
+    
+def _remove_category(cat):
+    pass

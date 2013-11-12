@@ -49,18 +49,18 @@ class EntityMixin(object):
         return resp
 
 
-class HasActiveEntityMixin(EntityMixin):
+class HasActiveEntityMixin(object):
     active = db.BooleanField(default=True)
     
     def is_active(self):
-        return active
+        return self.active
 
 
-class FlaggableMixin(object):
+class FlaggableEntityMixin(object):
     flags = db.IntField(default=0)
 
     def is_flagged(self):
-        return flags > 0
+        return self.flags > 0
 
 
 def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwargs):

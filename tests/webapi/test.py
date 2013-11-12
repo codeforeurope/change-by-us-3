@@ -141,6 +141,7 @@ class ProjectClass():
     def __init__(self):
         self.name = name_generator()
         self.description = text_generator(100)
+        self.category = 'animals'
         # zipcode gets turned into proper location later
         self.location = zipcode_generator()
 
@@ -155,6 +156,7 @@ class ProjectClass():
 
         create = { 'name' : self.name,
                    'description' : self.description,
+                   'category': self.category,
                    'location' : self.location,
                    'lat': self.lat,
                    'lon': self.lon }
@@ -175,6 +177,7 @@ class ProjectClass():
         edit = { 'project_id' : self.project_id,
                  'name' : self.name,
                  'description' : self.description,
+                 'category': self.category,
                  'location' : self.location,
                  'lat': self.lat,
                  'lon': self.lon }
@@ -464,6 +467,8 @@ class SearchTest(BaseTestCase):
     """
     All tests currently assume projects created with project tests, 
     i.e. they have 'lorem' in the text and a location in NYC
+    
+    TODO: get some verbosity in here
     """
     search_string = "lorem"
     # Brooklyn, NY, 11217
@@ -504,4 +509,17 @@ class SearchTest(BaseTestCase):
         results = self.GET(search_url)
                 
         self.assertTrue(len(results) > 0)
-    
+        
+    def test_category_search(self):
+        search_url = "{0}?s={1}&cat=animals".format(self.url, 
+                                                      self.search_string)
+        results = self.GET(search_url)
+                
+        self.assertTrue(len(results) > 0)
+ 
+            
+class BlacklistTest(BaseTestCase):
+    """
+    TODO
+    """
+    pass

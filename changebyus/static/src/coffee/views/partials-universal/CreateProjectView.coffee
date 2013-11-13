@@ -16,6 +16,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				$(@parent).append @$el
 
 			ajaxForm: ->
+				$('.fileupload').fileupload({uploadtype: 'image'})
+
+				# ajax the form
 				$submit = $("input[type=submit]")
 				$form = @$el.find("form")
 				options =
@@ -46,6 +49,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							# $form.resetForm()
 				$form.ajaxForm options
 
+				# location autocomplete
 				$projectLocation = $("#project_location")
 				$projectLocation.typeahead(
 					template: '<div class="zip">{{ name }}</div>'

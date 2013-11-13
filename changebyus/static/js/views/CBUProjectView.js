@@ -38,38 +38,42 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
         data: this.model.attributes
       }, function() {
-        var config, hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection;
-        _this.$el.prepend(_this.$header);
-        id = _this.model.get("id");
-        config = {
-          id: id
-        };
-        projectUpdatesCollection = new ProjectUpdatesCollection(config);
-        projectMembersCollection = new ProjectMembersCollection(config);
-        projectCalendarCollection = new ProjectCalendarCollection(config);
-        _this.projectUpdatesView = new ProjectUpdatesView({
-          collection: projectUpdatesCollection
-        });
-        _this.projectMembersView = new ProjectMembersView({
-          collection: projectMembersCollection
-        });
-        _this.projectCalenderView = new ProjectCalenderView({
-          collection: projectCalendarCollection
-        });
-        _this.updatesBTN = $("a[href='#updates']").parent();
-        _this.membersBTN = $("a[href='#members']").parent();
-        _this.calendarBTN = $("a[href='#calendar']").parent();
-        hash = window.location.hash.substring(1);
-        _this.toggleSubView((hash === "" ? "updates" : hash));
-        $(window).bind("hashchange", function(e) {
-          hash = window.location.hash.substring(1);
-          return _this.toggleSubView(hash);
-        });
-        $("a[href^='#']").click(function(e) {
-          return window.location.hash = $(this).attr("href").substring(1);
-        });
-        return _this.joingBTN();
+        return _this.onHeaderLoaded();
       });
+    },
+    onHeaderLoaded: function() {
+      var config, hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection,
+        _this = this;
+      this.$el.prepend(this.$header);
+      id = this.model.get("id");
+      config = {
+        id: id
+      };
+      projectUpdatesCollection = new ProjectUpdatesCollection(config);
+      projectMembersCollection = new ProjectMembersCollection(config);
+      projectCalendarCollection = new ProjectCalendarCollection(config);
+      this.projectUpdatesView = new ProjectUpdatesView({
+        collection: projectUpdatesCollection
+      });
+      this.projectMembersView = new ProjectMembersView({
+        collection: projectMembersCollection
+      });
+      this.projectCalenderView = new ProjectCalenderView({
+        collection: projectCalendarCollection
+      });
+      this.updatesBTN = $("a[href='#updates']").parent();
+      this.membersBTN = $("a[href='#members']").parent();
+      this.calendarBTN = $("a[href='#calendar']").parent();
+      hash = window.location.hash.substring(1);
+      this.toggleSubView((hash === "" ? "updates" : hash));
+      $(window).bind("hashchange", function(e) {
+        hash = window.location.hash.substring(1);
+        return _this.toggleSubView(hash);
+      });
+      $("a[href^='#']").click(function(e) {
+        return window.location.hash = $(this).attr("href").substring(1);
+      });
+      return this.joingBTN();
     },
     joingBTN: function() {
       var $join, id, joined,

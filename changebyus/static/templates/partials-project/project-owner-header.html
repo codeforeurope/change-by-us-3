@@ -1,7 +1,7 @@
 <%= console.log("POH",data) %>
 <div class="project">
     <div class="body-container">
-        <div class="feature-image slim" style="background-image:url(/static/img/group-slim-header.jpg);">
+        <div class="feature-image slim" style="background-image:url(<%= data.image_url_medium_rect %>);">
             <h1 class="overlay-title"><%= data.name %></h1> 
         </div>
 

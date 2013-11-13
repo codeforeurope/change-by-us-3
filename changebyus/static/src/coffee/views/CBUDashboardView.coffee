@@ -102,6 +102,7 @@ define ["underscore",
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
 
+				# ajax the form
 				$submit = @profileView.find("input[type=submit]")
 				$form = @profileView.find("form")
 				$feedback = $("#feedback")
@@ -126,6 +127,7 @@ define ["underscore",
 							$feedback.removeClass('.alert-success').addClass('.alert-error')
 				$form.ajaxForm options
 
+				# location autocomplete
 				$projectLocation = $("#location")
 				$projectLocation.typeahead(
 					template: '<div class="zip">{{ name }}</div>'

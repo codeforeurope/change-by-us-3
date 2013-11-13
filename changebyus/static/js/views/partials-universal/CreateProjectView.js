@@ -23,6 +23,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
     ajaxForm: function() {
       var $form, $projectLocation, $submit, options,
         _this = this;
+      $('.fileupload').fileupload({
+        uploadtype: 'image'
+      });
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
       options = {

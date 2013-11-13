@@ -53,34 +53,36 @@ define ["underscore",
 			addSubViews: ->  
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
-					{data:@model.attributes}, =>
-						@$el.prepend @$header
+					{data:@model.attributes}, =>@onHeaderLoaded()
 
-						id = @model.get("id")
-						config = {id:id}
-						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
-						projectMembersCollection  = new ProjectMembersCollection(config)
-						projectCalendarCollection = new ProjectCalendarCollection(config)
+			onHeaderLoaded:->
+				@$el.prepend @$header
 
-						@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
-						@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
-						@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
-						
-						@updatesBTN  = $("a[href='#updates']").parent()
-						@membersBTN  = $("a[href='#members']").parent()
-						@calendarBTN = $("a[href='#calendar']").parent()
-						
-						hash = window.location.hash.substring(1)
-						@toggleSubView (if (hash is "") then "updates" else hash)
-						$(window).bind "hashchange", (e) =>
-							hash = window.location.hash.substring(1)
-							@toggleSubView hash
+				id = @model.get("id")
+				config = {id:id}
+				projectUpdatesCollection  = new ProjectUpdatesCollection(config)
+				projectMembersCollection  = new ProjectMembersCollection(config)
+				projectCalendarCollection = new ProjectCalendarCollection(config)
 
-						# temp hack because somewhere this event default is prevented
-						$("a[href^='#']").click (e) -> 
-							window.location.hash = $(this).attr("href").substring(1)
+				@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
+				@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
+				@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
+				
+				@updatesBTN  = $("a[href='#updates']").parent()
+				@membersBTN  = $("a[href='#members']").parent()
+				@calendarBTN = $("a[href='#calendar']").parent()
+				
+				hash = window.location.hash.substring(1)
+				@toggleSubView (if (hash is "") then "updates" else hash)
+				$(window).bind "hashchange", (e) =>
+					hash = window.location.hash.substring(1)
+					@toggleSubView hash
 
-						@joingBTN() 
+				# temp hack because somewhere this event default is prevented
+				$("a[href^='#']").click (e) -> 
+					window.location.hash = $(this).attr("href").substring(1)
+
+				@joingBTN() 
 
 			joingBTN:->
 				id = @model.get("id")

@@ -30,18 +30,19 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       });
     },
     ajaxForm: function() {
-      var $feedback, $login, $submit, options,
+      var $feedback, $form, $login, $submit, options,
         _this = this;
       $submit = $("input[type='submit']");
+      $form = $("form");
       $login = $("form[name='signin']");
       $feedback = $("#login-feedback");
       options = {
         beforeSubmit: function() {
-          $submit.prop("disabled", true);
+          $form.find("input, textarea").attr("disabled", "disabled");
           return $feedback.removeClass("alert").html("");
         },
         success: function(response) {
-          $submit.prop("disabled", false);
+          $form.find("input, textarea").removeAttr("disabled");
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {

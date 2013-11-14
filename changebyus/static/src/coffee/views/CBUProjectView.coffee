@@ -72,11 +72,8 @@ define ["underscore",
 				@membersBTN  = $("a[href='#members']").parent()
 				@calendarBTN = $("a[href='#calendar']").parent()
 				
-				hash = window.location.hash.substring(1)
-				@toggleSubView (if (hash is "") then "updates" else hash)
-				$(window).bind "hashchange", (e) =>
-					hash = window.location.hash.substring(1)
-					@toggleSubView hash
+				$(window).bind "hashchange", (e) => @toggleSubView()
+				@toggleSubView()
 
 				# temp hack because somewhere this event default is prevented
 				$("a[href^='#']").click (e) -> 
@@ -116,7 +113,9 @@ define ["underscore",
 					catch e then console.log e
 
 
-			toggleSubView: (view) ->
+			toggleSubView: -> 
+				view = window.location.hash.substring(1)
+				
 				@projectUpdatesView.hide()
 				@projectMembersView.hide()
 				@projectCalenderView.hide()

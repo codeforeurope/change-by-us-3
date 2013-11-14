@@ -22,12 +22,17 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return $(this.parent).append(this.$el);
     },
     addListeners: function() {
-      return $(".btn-info").click(function(e) {
+      var _this = this;
+      $(".btn-info").click(function(e) {
         var url;
         e.preventDefault();
         url = $(this).attr("href");
         return popWindow(url);
       });
+      $(window).bind("hashchange", function(e) {
+        return _this.toggleSubView();
+      });
+      return this.toggleSubView();
     },
     ajaxForm: function() {
       var $feedback, $signin, $submit, options,
@@ -35,15 +40,14 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       $signin = $("form[name='signin']");
       $submit = $("input[type='submit']");
       $feedback = $("#login-feedback");
-      console.log('ajaxForm', $signin);
       options = {
         beforeSubmit: function() {
           console.log('beforeSubmit');
-          $submit.prop("disabled", true);
+          $form.find("input, textarea").attr("disabled", "disabled");
           return $feedback.removeClass("alert").html("");
         },
         success: function(response) {
-          $submit.prop("disabled", false);
+          $form.find("input, textarea").removeAttr("disabled");
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {
@@ -52,6 +56,17 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         }
       };
       return $signin.ajaxForm(options);
+    },
+    toggleSubView: function() {
+      var view;
+      view = window.location.hash.substring(1);
+      if (view === "facebook") {
+        $('.facebook-signup').show();
+        return $('.init-signup').hide();
+      } else {
+        $('.facebook-signup').hide();
+        return $('.init-signup').show();
+      }
     }
   });
 });

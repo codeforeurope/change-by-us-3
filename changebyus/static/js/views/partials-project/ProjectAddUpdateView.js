@@ -18,10 +18,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           parent: "#update-form"
         });
         $submit = form.$el.find('input[type="submit"]');
-        console.log('$submit', $submit, form.$el);
         form.beforeSubmit = function(arr_, form_, options_) {
           var share;
-          $submit.attr("disabled", "disabled");
+          $submit.find("input, textarea").attr("disabled", "disabled");
           share = [];
           if ($("#twitter").prop('checked')) {
             share.push('twitter');
@@ -29,13 +28,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           if ($("#facebook").prop('checked')) {
             share.push('facebook');
           }
-          arr_.push({
+          return arr_.push({
             name: "social_sharing",
             value: share,
             type: "hidden",
             required: false
           });
-          return console.log('form.beforeSubmit', $("#twitter").prop('checked'), $("#facebook").prop('checked'));
         };
         form.success = function(response_) {
           if (response_.success) {

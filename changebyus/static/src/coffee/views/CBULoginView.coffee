@@ -28,16 +28,18 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 
 
 		ajaxForm: -> 
-			$submit = $("input[type='submit']")
-			$login = $("form[name='signin']")
+			$submit   = $("input[type='submit']")
+			$form     = $("form")
+			$login    = $("form[name='signin']")
 			$feedback = $("#login-feedback")
-			options =
+			options   =
 				beforeSubmit: =>
-					$submit.prop "disabled", true
+					$form.find("input, textarea").attr("disabled", "disabled")
 					$feedback.removeClass("alert").html ""
 
 				success: (response) =>
-					$submit.prop "disabled", false
+					$form.find("input, textarea").removeAttr("disabled")
+
 					if response.msg.toLowerCase() is "ok"
 						window.location.href = "/"
 					else

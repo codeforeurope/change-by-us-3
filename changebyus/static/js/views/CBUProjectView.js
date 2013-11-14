@@ -42,7 +42,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onHeaderLoaded: function() {
-      var config, hash, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection,
+      var config, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection,
         _this = this;
       this.$el.prepend(this.$header);
       id = this.model.get("id");
@@ -64,12 +64,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.updatesBTN = $("a[href='#updates']").parent();
       this.membersBTN = $("a[href='#members']").parent();
       this.calendarBTN = $("a[href='#calendar']").parent();
-      hash = window.location.hash.substring(1);
-      this.toggleSubView((hash === "" ? "updates" : hash));
       $(window).bind("hashchange", function(e) {
-        hash = window.location.hash.substring(1);
-        return _this.toggleSubView(hash);
+        return _this.toggleSubView();
       });
+      this.toggleSubView();
       $("a[href^='#']").click(function(e) {
         return window.location.hash = $(this).attr("href").substring(1);
       });
@@ -117,7 +115,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }
       });
     },
-    toggleSubView: function(view) {
+    toggleSubView: function() {
+      var view;
+      view = window.location.hash.substring(1);
       this.projectUpdatesView.hide();
       this.projectMembersView.hide();
       this.projectCalenderView.hide();

@@ -16,8 +16,14 @@
                     <input type="text" maxlength="30" name="name" id="project_name" placeholder="My awesome project" class="input-xxlarge" required>
 
                     <label>DESCRIPTION* </label>
-
                     <textarea rows="8" name="description" maxlength="600" id="project_description" placeholder="Project Description" class="input-xxlarge" required></textarea>
+
+                    <label for="category">Category </label>
+                    <select name="category" id="project-category">
+                        <option value="">Try Me!</option>
+                        <option value="">Try Me!</option>
+                        <option value="">Try Me!</option>
+                    </select>
 
                     <label>PROJECT LOCATION </label>
                     <input type="text" name="zip" id="project_location" placeholder="Enter Zip Code of Location" class="input-xxlarge">
@@ -25,14 +31,17 @@
                 </div>
 
                 <div class="form-right">
-                    <label>PROJECT THUMBNAIL </label>
-                    <div class="fileupload fileupload-new" data-provides="fileupload">
-                        <span class="btn btn-file"><span class="fileupload-new">Upload</span><span class="fileupload-exists">Change</span><input type="file" id="project_image" name="photo"/></span>
-                        <!-- <div class="fileupload-new thumbnail" style="width: 50px; height: 50px;"><img src="/static/img/50.50.placeholder.gif" /></div> -->
-                        <div class="fileupload-preview fileupload-exists thumbnail" style="width: 50px; height: 50px;"></div>
-                        <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                        <p>Upload a .jpg that is no larger than ##MB.</p>
-                    </div>
+                      <label>Project Thumbnail</label>
+                      <div class="fileupload fileupload-new" data-provides="fileupload">
+                          <div>
+                              <span class="btn btn-file"><% if (data.image_url_round_medium){ %> <% }else{ %> <% } %> <span class="fileupload-exists">Edit Thumbnail</span> <span class="fileupload-new">Upload Thumbnail</span> <input id="project_image" name="photo" type="file"></span> <a class="btn fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                          </div>
+
+                          <div class="fileupload-preview thumbnail circle">
+                              <% if (data.image_url_round_medium){ %><img src="<%=  data.image_url_round_medium %>"> <% } %>
+                          </div>
+                      </div>
+                      <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
                     <br/>
                 </div>
             </div>

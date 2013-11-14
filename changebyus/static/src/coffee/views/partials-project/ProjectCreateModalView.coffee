@@ -1,5 +1,5 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-  CreateProjectModalView = AbstractView.extend
+  ProjectCreateModalView = AbstractView.extend
   
     initialize: (options) ->
       AbstractView::initialize.call @, options
@@ -7,7 +7,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 
     render: ->
       @$el = $("<div class='project-preview'/>")
-      @$el.template @templateDir + "/templates/partials-universal/create-project-modal.html",
+      @$el.template @templateDir + "/templates/partials-project/project-create-modal.html",
         data: @viewData
       , ->
 

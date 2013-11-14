@@ -28,23 +28,35 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 				url = $(this).attr("href")
 				popWindow url
 
+			$(window).bind "hashchange", (e) => @toggleSubView()
+			@toggleSubView()
+
 		ajaxForm: ->
 			$signin = $("form[name='signin']")
 			$submit = $("input[type='submit']")
 			$feedback = $("#login-feedback")
 
-			console.log 'ajaxForm',$signin
 			options =
 				beforeSubmit: =>
 					console.log 'beforeSubmit'
-					$submit.prop "disabled", true
+					$form.find("input, textarea").attr("disabled", "disabled")
 					$feedback.removeClass("alert").html ""
 
 				success: (response) =>
-					$submit.prop "disabled", false
+					$form.find("input, textarea").removeAttr("disabled")
 					if response.msg.toLowerCase() is "ok"
 						window.location.href = "/"
 					else
 						$feedback.addClass("alert").html response.msg
 
 			$signin.ajaxForm options
+
+		toggleSubView:->
+			view = window.location.hash.substring(1)
+
+			if view is "facebook"
+				$('.facebook-signup').show()
+				$('.init-signup').hide()
+			else
+				$('.facebook-signup').hide()
+				$('.init-signup').show()

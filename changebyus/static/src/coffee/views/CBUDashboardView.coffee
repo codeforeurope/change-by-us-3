@@ -12,6 +12,8 @@ define ["underscore",
 
 		CBUDashboardView = AbstractView.extend
 
+			location:{name: "", lat: 0, lon: 0} 
+
 			initialize: (options) ->  
 				@templateDir = options.templateDir or @templateDir
 				@parent = options.parent or @parent
@@ -44,18 +46,17 @@ define ["underscore",
 				@followBTN  = $("a[href='#follow']").parent()
 				@profileBTN = $("a[href='#profile']").parent()
 
-				hash = window.location.hash.substring(1)
-				@toggleSubView (if (hash is "") then "updates" else hash)
-				$(window).bind "hashchange", (e) =>
-					hash = window.location.hash.substring(1)
-					@toggleSubView hash
+				$(window).bind "hashchange", (e) => @toggleSubView()
+				@toggleSubView()
 
 				# temp hack because somewhere this event default is prevented
 				$("a[href^='#']").click (e) -> 
 					window.location.hash = $(this).attr("href").substring(1)
 
 
-			toggleSubView: (view) -> 
+			toggleSubView: -> 
+				view = window.location.hash.substring(1)
+
 				for v in [@manageView,@profileView,@followView]
 					v.hide()
 

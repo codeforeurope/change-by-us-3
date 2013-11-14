@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp", "hogan", "validate"], function(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan, valid) {
-  var CreateProjectView;
-  return CreateProjectView = AbstractView.extend({
+  var ProjectCreateView;
+  return ProjectCreateView = AbstractView.extend({
     location: {
       name: "",
       lat: 0,

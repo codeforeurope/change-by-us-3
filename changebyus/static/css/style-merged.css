@@ -773,23 +773,23 @@ span.highlight {
 #manage-projects, #follow-projects {
   margin-top: 20px; }
 
-.login {
+.login, .sign-in {
   text-align: center; }
-  .login h1 {
+  .login h1, .sign-in h1 {
     font-size: 60px;
     font-weight: bold;
     text-align: center;
     padding-top: 25px;
     padding-bottom: 30px; }
-  .login h2 {
+  .login h2, .sign-in h2 {
     font-size: 20px;
     line-height: 16px;
     text-align: center;
     font-weight: lighter; }
-  .login p {
+  .login p, .sign-in p {
     color: #9c9c9c;
     font-size: 16px; }
-  .login .content-wrapper {
+  .login .content-wrapper, .sign-in .content-wrapper {
     /*
     padding: 30px;
     margin-top: 30px;
@@ -800,28 +800,54 @@ span.highlight {
     border-radius: 4px;
     text-align: center;
     */ }
-    .login .content-wrapper .centered {
+    .login .content-wrapper .centered, .sign-in .content-wrapper .centered {
       width: 500px;
       margin-top: 20px;
       margin-bottom: 20px;
       margin-left: 250px; }
-      .login .content-wrapper .centered span {
+      .login .content-wrapper .centered span, .sign-in .content-wrapper .centered span {
+        font-size: 14px;
         color: #cccccc; }
-        .login .content-wrapper .centered span a {
+        .login .content-wrapper .centered span a, .sign-in .content-wrapper .centered span a {
           color: #cccccc; }
-  .login .label {
-    font-family: "BebasNeue", serif;
+  .login .label, .sign-in .label {
+    font-family: "bebas_neueregular", Arial, Helvetica, sans-serif;
     margin-top: 20px; }
-  .login .btn {
+  .login .btn, .sign-in .btn {
     background-color: darkturquoise;
     padding: 13px 22px;
     font-size: 18px;
     font-weight: bold;
     color: white;
     display: inline-block; }
-    .login .btn.btn-xlarge {
-      background-color: #ffb400;
-      width: 200px; }
+    .login .btn.btn-xlarge, .sign-in .btn.btn-xlarge {
+      background-color: #ffb400; }
+  .login .btn-info, .sign-in .btn-info {
+    width: 47%; }
+    .login .btn-info:first-child, .sign-in .btn-info:first-child {
+      margin-right: 5%; }
+  .login input[type="submit"], .sign-in input[type="submit"] {
+    width: 65% !important;
+    margin-right: 4%; }
+  .login input[type="button"], .sign-in input[type="button"] {
+    width: 30% !important;
+    margin-right: 0; }
+
+.facebook-avatar {
+  width: 100%;
+  text-align: center;
+  margin: 20px auto; }
+  .facebook-avatar img {
+    margin-bottom: 4px; }
+
+.back-btn {
+  position: absolute;
+  left: 0;
+  top: 50px; }
+  .back-btn a {
+    font-size: 15px;
+    font-weight: bold;
+    color: black !important; }
 
 .line-behind {
   margin: 20px 0;
@@ -973,8 +999,7 @@ span.highlight {
 /******  End Theme ******/
 /***** Critical to the continued enjoyment of working dropdowns ******/
 .dk_container {
-  display: none;
-  float: left; }
+  display: none; }
   .dk_container a {
     outline: 0; }
 
@@ -1138,10 +1163,19 @@ textarea {
   overflow: auto;
   vertical-align: top; }
 
+/*
 @font-face {
   font-family: 'AsapRegular';
-  src: url("fonts/Asap-Regular-webfont.eot");
-  src: url("fonts/Asap-Regular-webfont.eot?#iefix") format("embedded-opentype"), url("fonts/Asap-Regular-webfont.woff") format("woff"), url("fonts/Asap-Regular-webfont.ttf") format("truetype"), url("fonts/Asap-Regular-webfont.svg#AsapItalic") format("svg");
+  src: url('../fonts/Asap-Regular-webfont.eot');
+  src: url('../fonts/Asap-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/Asap-Regular-webfont.woff') format("woff"), url('../fonts/Asap-Regular-webfont.ttf') format("truetype"), url('../fonts/Asap-Regular-webfont.svg#AsapItalic') format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+*/
+@font-face {
+  font-family: 'bebas_neueregular';
+  src: url("../fonts/BebasNeue-webfont.eot");
+  src: url("../fonts/BebasNeue-webfont.eot?#iefix") format("embedded-opentype"), url("../fonts/BebasNeue-webfont.woff") format("woff"), url("../fonts/BebasNeue-webfont.ttf") format("truetype"), url("../fonts/BebasNeue-webfont.svg#bebas_neueregular") format("svg");
   font-weight: normal;
   font-style: normal; }
 @media print {
@@ -1195,7 +1229,7 @@ body {
   /*font-size: 14px;*/
   line-height: 1.25;
   color: #333333;
-  background-color: #f8f8f8; }
+  background-color: #F2F2F2; }
 
 /* Main marketing message and sign up button */
 .jumbotron {
@@ -1535,6 +1569,7 @@ textarea {
   font-family: "Merriweather", Georgia, serif; }
 
 label {
+  font-family: "bebas_neueregular", Arial, Helvetica, sans-serif;
   display: block;
   margin-bottom: 5px; }
 
@@ -1823,7 +1858,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
 
 .form-signin {
   max-width: 600px;
-  padding: 1px 2px 29px;
+  padding-bottom: 29px;
   background-color: white;
   border: 0px solid #e5e5e5; }
   .form-signin .form-signin-heading, .form-signin .checkbox {
@@ -2239,6 +2274,7 @@ button.close {
   border: none;
   cursor: pointer;
   color: white;
+  box-sizing: border-box;
   background-color: darkturquoise;
   background-image: none;
   -moz-border-radius: 2px;
@@ -3359,6 +3395,8 @@ a.badge:hover, a.badge:focus {
   float: left; }
   .filter-within select {
     width: 100px !important; }
+  .filter-within .dk_container {
+    float: left; }
 
 .pill-toggle {
   border: 1px solid #dbdbdb;
@@ -3396,10 +3434,10 @@ a.badge:hover, a.badge:focus {
   float: right; }
   .discover-header-right .btn {
     width: 210px;
-    height: 40px;
+    height: auto;
     line-height: 20px;
     margin: none;
-    padding-top: 20px;
+    padding: 20px;
     font-size: 24px;
     background-color: #ffb400;
     color: white;
@@ -3503,10 +3541,12 @@ a.badge:hover, a.badge:focus {
   background-repeat: no-repeat;
   background-position: center center; }
 
-.resources a {
-  color: black;
-  font-size: 22px;
-  font-weight: bold; }
+.sub-link {
+  text-align: right; }
+  .sub-link a {
+    color: black;
+    font-size: 22px;
+    font-weight: bold; }
 
 .homepage-footer {
   width: 100%;

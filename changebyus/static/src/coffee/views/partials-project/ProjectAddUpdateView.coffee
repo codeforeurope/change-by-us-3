@@ -23,14 +23,14 @@ define ["underscore",
 						@$ul = @$el.find('.updates-container ul')
 						form = new ProjectWysiwygFormView({parent:"#update-form"})
 						$submit = form.$el.find('input[type="submit"]')
-						console.log '$submit',$submit,form.$el
-						form.beforeSubmit = (arr_, form_, options_)->
-							$submit.attr("disabled", "disabled");
+						
+						form.beforeSubmit = (arr_, form_, options_)-> 
+							$submit.find("input, textarea").attr("disabled", "disabled")
 							share = []
 							if $("#twitter").prop('checked') then share.push 'twitter'
 							if $("#facebook").prop('checked') then share.push 'facebook'
 							arr_.push {name: "social_sharing", value:share, type: "hidden", required: false}
-							console.log 'form.beforeSubmit',$("#twitter").prop('checked'),$("#facebook").prop('checked')
+							#console.log 'form.beforeSubmit',$("#twitter").prop('checked'),$("#facebook").prop('checked')
 
 						form.success = (response_)=>
 							if response_.success

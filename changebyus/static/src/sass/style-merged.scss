@@ -153,13 +153,28 @@ textarea {
   vertical-align: top;
 }
 
+/*
 @font-face {
   font-family: 'AsapRegular';
-  src: url('fonts/Asap-Regular-webfont.eot');
-  src: url('fonts/Asap-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('fonts/Asap-Regular-webfont.woff') format("woff"), url('fonts/Asap-Regular-webfont.ttf') format("truetype"), url('fonts/Asap-Regular-webfont.svg#AsapItalic') format("svg");
+  src: url('../fonts/Asap-Regular-webfont.eot');
+  src: url('../fonts/Asap-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/Asap-Regular-webfont.woff') format("woff"), url('../fonts/Asap-Regular-webfont.ttf') format("truetype"), url('../fonts/Asap-Regular-webfont.svg#AsapItalic') format("svg");
   font-weight: normal;
   font-style: normal;
 }
+*/
+
+@font-face {
+    font-family: 'bebas_neueregular';
+    src: url('../fonts/BebasNeue-webfont.eot');
+    src: url('../fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/BebasNeue-webfont.woff') format('woff'),
+         url('../fonts/BebasNeue-webfont.ttf') format('truetype'),
+         url('../fonts/BebasNeue-webfont.svg#bebas_neueregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
 
 
 @media print {
@@ -222,7 +237,7 @@ body {
   /*font-size: 14px;*/
   line-height: 1.25;
   color: #333333;
-  background-color: #f8f8f8;
+  background-color: #F2F2F2;
   //padding-bottom: 50px;
   //margin-bottom: 50px;
 }
@@ -672,6 +687,7 @@ textarea {
 }
 
 label {
+  @include bebas;
   display: block;
   margin-bottom: 5px;
 }
@@ -1053,14 +1069,16 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
 
 .form-signin {
   max-width: 600px;
-  padding: 1px 2px 29px;
+  padding-bottom:29px;
   background-color: $white;
   border: 0px solid #e5e5e5;
+
   .form-signin-heading, .checkbox {
     margin-bottom: 50px;
     font-size: 16px;
     color: #333333;
   }
+
   input {
     &[type="text"], &[type="firstname"], &[type="lastname"], &[type="email"], &[type="password"] {
       max-width: 500px;
@@ -1084,9 +1102,12 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
       }
     }
   }
+
   label{
     text-align: left;
   }
+
+  
 }
 
 .help-block, .help-inline {
@@ -1532,6 +1553,7 @@ button.close {
   border: none;
   cursor: pointer;
   color: $white;
+  box-sizing: border-box;
   background-color: $primaryColor;
   background-image: none;
   @include border-radius(2px);
@@ -2944,6 +2966,7 @@ a {
 .filter-within{
   float: left;
   select{width: 100px !important;}
+  .dk_container {float: left;}
 }
 
 
@@ -2984,10 +3007,10 @@ a {
 
   .btn {
     width: 210px;
-    height: 40px;
+    height: auto;
     line-height: 20px;
     margin: none;
-    padding-top: 20px;
+    padding: 20px; 
     font-size: 24px;
     background-color: $secondaryColor;
     color: $white;
@@ -3109,8 +3132,8 @@ a {
   background-position: center center;
 }
 
-.resources{
-   
+.sub-link{
+  text-align: right;
   a{
     color: $black;
     font-size: 22px;

@@ -1,6 +1,11 @@
 define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "template", "abstract-view", "collection/ProjectListCollection", "model/UserModel", "resource-project-view"], function(_, Backbone, fileupload, button, $, temp, AbstractView, ProjectListCollection, UserModel, ResourceProjectPreviewView) {
   var CBUDashboardView;
   return CBUDashboardView = AbstractView.extend({
+    location: {
+      name: "",
+      lat: 0,
+      lon: 0
+    },
     initialize: function(options) {
       var _this = this;
       this.templateDir = options.templateDir || this.templateDir;
@@ -36,26 +41,24 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       });
     },
     onProfileEditLoad: function() {
-      var hash,
-        _this = this;
+      var _this = this;
       this.manageView = $('#manage-projects');
       this.followView = $('#follow-projects');
       this.profileView = $('#edit-profile');
       this.manageBTN = $("a[href='#manage']").parent();
       this.followBTN = $("a[href='#follow']").parent();
       this.profileBTN = $("a[href='#profile']").parent();
-      hash = window.location.hash.substring(1);
-      this.toggleSubView((hash === "" ? "updates" : hash));
       $(window).bind("hashchange", function(e) {
-        hash = window.location.hash.substring(1);
-        return _this.toggleSubView(hash);
+        return _this.toggleSubView();
       });
+      this.toggleSubView();
       return $("a[href^='#']").click(function(e) {
         return window.location.hash = $(this).attr("href").substring(1);
       });
     },
-    toggleSubView: function(view) {
-      var btn, v, _i, _j, _len, _len1, _ref, _ref1;
+    toggleSubView: function() {
+      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
+      view = window.location.hash.substring(1);
       _ref = [this.manageView, this.profileView, this.followView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];

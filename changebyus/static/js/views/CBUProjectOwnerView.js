@@ -20,7 +20,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
-        var config, hash, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
+        var config, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
         config = {
           id: _this.model.get("id"),
           name: _this.model.get("name")
@@ -47,7 +47,9 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         _this.projectMembersView = new ProjectMembersView({
           collection: projectMembersCollection
         });
-        _this.projectInfoAppearanceView = new ProjectInfoAppearanceView();
+        _this.projectInfoAppearanceView = new ProjectInfoAppearanceView({
+          model: _this.model
+        });
         _this.projectDiscussionsView.on('discussionClick', function(arg_) {
           console.log('projectDiscussionsView arg_', arg_);
           _this.projectDiscussionView.updateDiscussion(arg_.model);
@@ -64,37 +66,36 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         _this.calendarBTN = $("a[href='#calendar']");
         _this.membersBTN = $("a[href='#members']");
         _this.infoBTN = $("a[href='#info']");
-        hash = window.location.hash.substring(1);
-        _this.toggleSubView((hash === "" ? "discussions" : hash));
         $(window).bind("hashchange", function(e) {
-          hash = window.location.hash.substring(1);
-          return _this.toggleSubView(hash);
+          return _this.toggleSubView();
         });
+        _this.toggleSubView();
         return $("a[href^='#']").click(function(e) {
           return window.location.hash = $(this).attr("href").substring(1);
         });
       });
       return this.$el.prepend($header);
     },
-    toggleSubView: function(view_) {
-      var btn, view, _i, _j, _len, _len1, _ref, _ref1;
+    toggleSubView: function() {
+      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
+      view = window.location.hash.substring(1);
       _ref = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        view = _ref[_i];
-        view.hide();
+        v = _ref[_i];
+        v.hide();
       }
       _ref1 = [this.discussionBTN, this.updatesBTN, this.fundraisingBTN, this.calendarBTN, this.membersBTN, this.infoBTN];
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         btn = _ref1[_j];
         btn.removeClass("active");
       }
-      console.log('view_', view_.indexOf("discussion/") > -1);
-      if (view_.indexOf("discussion/") > -1) {
+      console.log('view', view.indexOf("discussion/") > -1);
+      if (view.indexOf("discussion/") > -1) {
         this.projectDiscussionView.show();
         this.discussionBTN.addClass("active");
         return;
       }
-      switch (view_) {
+      switch (view) {
         case "new-discussion":
           this.projectNewDiscussionView.show();
           return this.discussionBTN.addClass("active");

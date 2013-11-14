@@ -67,7 +67,7 @@ define ["underscore",
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
 						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
-						@projectInfoAppearanceView = new ProjectInfoAppearanceView()
+						@projectInfoAppearanceView = new ProjectInfoAppearanceView({model:@model})
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>
 							console.log 'projectDiscussionsView arg_',arg_
@@ -86,11 +86,8 @@ define ["underscore",
 						@membersBTN     = $("a[href='#members']")
 						@infoBTN        = $("a[href='#info']")
 						
-						hash = window.location.hash.substring(1)
-						@toggleSubView (if (hash is "") then "discussions" else hash)
-						$(window).bind "hashchange", (e) =>
-							hash = window.location.hash.substring(1)
-							@toggleSubView hash
+						$(window).bind "hashchange", (e) => @toggleSubView()
+						@toggleSubView()
 						
 						# temp hack because somewhere this event default is prevented
 						$("a[href^='#']").click (e) -> 
@@ -98,20 +95,22 @@ define ["underscore",
 
 				@$el.prepend $header
 
-			toggleSubView: (view_) -> 
-				for view in [@projectDiscussionsView, @projectDiscussionView, @projectNewDiscussionView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
-					view.hide()
+			toggleSubView: -> 
+				view = window.location.hash.substring(1)
+
+				for v in [@projectDiscussionsView, @projectDiscussionView, @projectNewDiscussionView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
+					v.hide()
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
 					btn.removeClass "active"
-				console.log 'view_', (view_.indexOf("discussion/")>-1)
+				console.log 'view', (view.indexOf("discussion/")>-1)
 
-				if view_.indexOf("discussion/") > -1
+				if view.indexOf("discussion/") > -1
 					@projectDiscussionView.show()
 					@discussionBTN.addClass "active"
 					return
 
-				switch view_ 
+				switch view 
 					when "new-discussion" 
 						@projectNewDiscussionView.show()
 						@discussionBTN.addClass "active"

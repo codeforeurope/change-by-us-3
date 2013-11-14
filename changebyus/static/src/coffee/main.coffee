@@ -23,7 +23,7 @@ require.config
 		"project-owner-view": "views/CBUProjectOwnerView"
 		"login-view": "views/CBULoginView"
 		"signup-view": "views/CBUSignupView"
-		"create-view": "views/partials-universal/CreateProjectView"
+		"create-view": "views/partials-project/ProjectCreateView"
 		"abstract-view": "views/partials-universal/AbstractView"
 		"project-sub-view": "views/partials-project/ProjectSubView"
 		"resource-project-view": "views/partials-universal/ResourceProjectPreviewView"
@@ -33,10 +33,9 @@ require.config
 		"utils": "utils/Utils"
 
 require ["jquery", 
+		"backbone", 
 		 "main-view", 
-		 "backbone", 
-		 "discover-view", 
-		 "create-view", 
+		 "discover-view",  
 		 "project-view", 
 		 "project-owner-view", 
 		 "login-view", 
@@ -44,12 +43,12 @@ require ["jquery",
 		 "user-view", 
 		 "dashboard-view", 
 		 "stream-view",
+		 "create-view", 
 		 "utils"], 
 	($, 
-	 CBUMainView, 
 	 Backbone, 
-	 CBUDiscoverView, 
-	 CreateProjectView, 
+	 CBUMainView, 
+	 CBUDiscoverView,  
 	 CBUProjectView, 
 	 CBUProjectOwnerView, 
 	 CBULoginView, 
@@ -57,6 +56,7 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
+	 ProjectCreateView, 
 	 Utils) ->
 		$(document).ready ->
 			config = parent: "#frame"
@@ -96,7 +96,7 @@ require ["jquery",
 					window.CBUAppView = new CBUDashboardView(config) 
 
 				create: ->
-					window.CBUAppView = new CreateProjectView(config)
+					window.CBUAppView = new ProjectCreateView(config)
 
 				login: ->
 					window.CBUAppView = new CBULoginView(config)

@@ -1,34 +1,50 @@
 <div class="body-container">
-    <div class="login">
+    <div class="sign-in">
         <div class="content-wrapper">
 
             <h1>Sign Up</h1>
-            <h2>Start making awesome projects in your community.</h2>
-            <h2>It only takes 30 seconds to sign up.</h2>
+
+            <div class="init-signup">
+              <h2>Start making awesome projects in your community.</h2>
+              <h2>It only takes 30 seconds to sign up.</h2>
+            </div>
 
             <div class="centered">
-               <span id="login-feedback"></span>
-               <form method="post" name="signin" class="form-signin" action="/api/user/create">
-                  
-                  <a class="btn btn-info" href="/social/twitter/login" style="margin-left:15px">Connect with Twitter </a>
-                  <a class="btn btn-info" href="/social/facebook/login">Connect with Facebook </a>
+              <div class="facebook-signup hide">
+                <h2>Almost finished! Fill in the remaing fields below.</h2>
+                 
+                <div class="facebook-avatar">
+                  <img src="http://lorempixel.com/75/75/" class="circle"> 
+                  <br>
+                  <span>name</span>
+                </div>
 
-                  <div class="line-behind">
-                    <span>or register below</span>
+                <span class="back-btn">
+                  <a href="#">‹ Back</a>
+                </span> 
+
+              </div>
+              <div class="init-signup">
+                   <span id="login-feedback"></span>
+                   <a class="btn btn-info" href="/social/twitter/login">Connect with Twitter </a>
+                   <a class="btn btn-info" href="/social/facebook/login">Connect with Facebook </a>
+
+                   <div class="line-behind">
+                        <span>or register below</span>
                   </div>
+              </div>
 
-                  <label> FULL NAME </label>
-
-                  <input type="text" class="input-block-level top" name="first_name" id="signup-first-name" placeholder="First name">
-                  <input type="text" class="input-block-level bottom" name="last_name" id="signup-last-name" placeholder="Last name">
+               <form method="post" name="signin" class="form-signin" action="/api/user/create">
+                  <div class="init-signup">
+                    <label> FULL NAME </label>
+                    <input type="text" class="input-block-level top" name="first_name" id="signup-first-name" placeholder="First name">
+                    <input type="text" class="input-block-level bottom" name="last_name" id="signup-last-name" placeholder="Last name">
+                  </div>
                   
                   <label> CREATE A USERNAME </label>
-
                   <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username">
 
                   <label> LOGIN INFORMATION </label>
-
-
                   <input type="email" class="input-block-level top" name="email" id="signup-email"  placeholder="Email address">
                   <input type="password" class="input-block-level bottom" name="password" id="signup-password" placeholder="Password">
 

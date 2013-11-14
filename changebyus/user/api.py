@@ -22,6 +22,9 @@ from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField,
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list 
 
+from ..twitter.twitter import _get_user_name_and_thumbnail
+from ..facebook.facebook import _get_fb_user_name_and_thumbnail
+
 user_api = Blueprint('user_api', __name__, url_prefix='/api/user')
 
 
@@ -263,6 +266,38 @@ def api_get_user_social_status():
              'twitter' : True if user.twitter_id else False }
 
     return jsonify_response( ReturnStructure( data = data ) )    
+
+
+@user_api.route('/socialinfo', methods = ['GET'])
+def api_get_user_social_info():
+    """
+    ABOUT
+        Gets the currently logged in users social info
+    METHOD
+        GET
+    INPUT
+        None
+    OUTPUT
+         
+    """
+
+    twitter_info = _get_user_name_and_thumbnail()
+    facebook_info = _get_fb_user_name_and_thumbnail()
+    twitter_name = twitter_info[1]
+    twitter_image = twitter_info[2]
+    fb_name = facebook_info[1]
+    fb_image = facebook_info[2]
+
+    data = { 'twitter_name' : twitter_name,
+             'twitter_image' : twitter_image,
+             'fb_name' : fb_name,
+             'fb_image' : fb_image,
+             'id': str(g.user.id),
+             'display_name': str(g.user.display_name),
+             'email': str(g.user.email)
+           }
+
+    return jsonify_response( ReturnStructure( data = data ) )
 
 
 # TODO WTForms for flagging?

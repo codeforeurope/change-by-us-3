@@ -29,9 +29,9 @@ def home():
     """
     projects = api_get_projects()
     if g.user.is_anonymous():
-        return render_template('index.html', projects = projects, login = True)
+        return render_template('index.html', projects = projects, index = True, login = True)
     else:
-        return render_template('index.html', projects = projects, login = False)   
+        return render_template('index.html', projects = projects, index = True, login = False)   
         
 
 @frontend_view.route('/signup')

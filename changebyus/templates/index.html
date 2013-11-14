@@ -25,7 +25,7 @@
            <div class="nav user pull-left">
               <div class="profile-nav-header">
                 <div class="user-avatar">
-                  <img src="" class="circle">
+                    <img src="http://lorempixel.com/70/70/" class="circle">
                 </div>
                 <span>{{ current_user.display_name }}</span>
               </div>
@@ -69,9 +69,13 @@
         </div>
   </div>
 
-  <div class="placeholder-frame" id="frame"> </div>
+  <div class="main-content" id="frame"> </div>
 
+  {% if index == true %}
+  <div class="footer-nav index clearfix">
+   {% else %}
   <div class="footer-nav clearfix">
+  {% endif %}
     <div class="body-container">
       <div class="pull-left">
         <a href="/create">Create a Project</a>

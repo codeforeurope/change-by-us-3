@@ -58,6 +58,7 @@
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
+  padding: 10px;
   height: 525px;
   width: 328px;
   float: left;
@@ -94,18 +95,34 @@
   width: 600px;
   border: 1px solid #000; }
 
-.project-icon {
-  margin: 10px; }
-  .project-icon img {
-    width: 100%; }
+.project-icon img {
+  width: 100%; }
 
 .project-name {
-  margin: 15px;
-  font-size: 25 !important;
-  font-weight: bold; }
+  font-family: "Asap", Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 23px;
+  color: #323232;
+  margin-top: 15px; }
 
 .project-description {
-  margin: 15px; }
+  font-family: "Merriweather", Georgia, serif;
+  font-weight: normal;
+  font-size: 16px;
+  color: #323232;
+  line-height: 1.6;
+  margin-top: 15px; }
+
+.project-category {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  font-family: "bebas_neueregular", Arial, Helvetica, sans-serif;
+  font-weight: normal;
+  font-size: 18px;
+  color: #a5a5a5; }
+  .project-category a {
+    color: #868686; }
 
 .project-container h2 {
   font-size: 44px;
@@ -773,23 +790,23 @@ span.highlight {
 #manage-projects, #follow-projects {
   margin-top: 20px; }
 
-.login, .sign-in {
+.login, .signup {
   text-align: center; }
-  .login h1, .sign-in h1 {
+  .login h1, .signup h1 {
     font-size: 60px;
     font-weight: bold;
     text-align: center;
     padding-top: 25px;
     padding-bottom: 30px; }
-  .login h2, .sign-in h2 {
+  .login h2, .signup h2 {
     font-size: 20px;
     line-height: 16px;
     text-align: center;
     font-weight: lighter; }
-  .login p, .sign-in p {
+  .login p, .signup p {
     color: #9c9c9c;
     font-size: 16px; }
-  .login .content-wrapper, .sign-in .content-wrapper {
+  .login .content-wrapper, .signup .content-wrapper {
     /*
     padding: 30px;
     margin-top: 30px;
@@ -800,36 +817,36 @@ span.highlight {
     border-radius: 4px;
     text-align: center;
     */ }
-    .login .content-wrapper .centered, .sign-in .content-wrapper .centered {
+    .login .content-wrapper .centered, .signup .content-wrapper .centered {
       width: 500px;
       margin-top: 20px;
       margin-bottom: 20px;
       margin-left: 250px; }
-      .login .content-wrapper .centered span, .sign-in .content-wrapper .centered span {
+      .login .content-wrapper .centered span, .signup .content-wrapper .centered span {
         font-size: 14px;
         color: #cccccc; }
-        .login .content-wrapper .centered span a, .sign-in .content-wrapper .centered span a {
+        .login .content-wrapper .centered span a, .signup .content-wrapper .centered span a {
           color: #cccccc; }
-  .login .label, .sign-in .label {
+  .login .label, .signup .label {
     font-family: "bebas_neueregular", Arial, Helvetica, sans-serif;
     margin-top: 20px; }
-  .login .btn, .sign-in .btn {
+  .login .btn, .signup .btn {
     background-color: darkturquoise;
     padding: 13px 22px;
     font-size: 18px;
     font-weight: bold;
     color: white;
     display: inline-block; }
-    .login .btn.btn-xlarge, .sign-in .btn.btn-xlarge {
+    .login .btn.btn-xlarge, .signup .btn.btn-xlarge {
       background-color: #ffb400; }
-  .login .btn-info, .sign-in .btn-info {
+  .login .btn-info, .signup .btn-info {
     width: 47%; }
-    .login .btn-info:first-child, .sign-in .btn-info:first-child {
+    .login .btn-info:first-child, .signup .btn-info:first-child {
       margin-right: 5%; }
-  .login input[type="submit"], .sign-in input[type="submit"] {
+  .login input[type="submit"], .signup input[type="submit"] {
     width: 65% !important;
     margin-right: 4%; }
-  .login input[type="button"], .sign-in input[type="button"] {
+  .login input[type="button"], .signup input[type="button"] {
     width: 30% !important;
     margin-right: 0; }
 
@@ -1856,22 +1873,22 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
     content: "";
     clear: both; }
 
-.form-signin {
+.form-signin, .form-signup {
   max-width: 600px;
   padding-bottom: 29px;
   background-color: white;
   border: 0px solid #e5e5e5; }
-  .form-signin .form-signin-heading, .form-signin .checkbox {
+  .form-signin .form-signin-heading, .form-signin .checkbox, .form-signup .form-signin-heading, .form-signup .checkbox {
     margin-bottom: 50px;
     font-size: 16px;
     color: #333333; }
-  .form-signin input[type="text"], .form-signin input[type="firstname"], .form-signin input[type="lastname"], .form-signin input[type="email"], .form-signin input[type="password"] {
+  .form-signin input[type="text"], .form-signin input[type="firstname"], .form-signin input[type="lastname"], .form-signin input[type="email"], .form-signin input[type="password"], .form-signup input[type="text"], .form-signup input[type="firstname"], .form-signup input[type="lastname"], .form-signup input[type="email"], .form-signup input[type="password"] {
     max-width: 500px;
     font-size: 16px;
     height: auto;
     margin-bottom: 15px;
     padding: 7px 9px; }
-    .form-signin input[type="text"].top, .form-signin input[type="firstname"].top, .form-signin input[type="lastname"].top, .form-signin input[type="email"].top, .form-signin input[type="password"].top {
+    .form-signin input[type="text"].top, .form-signin input[type="firstname"].top, .form-signin input[type="lastname"].top, .form-signin input[type="email"].top, .form-signin input[type="password"].top, .form-signup input[type="text"].top, .form-signup input[type="firstname"].top, .form-signup input[type="lastname"].top, .form-signup input[type="email"].top, .form-signup input[type="password"].top {
       -moz-border-radius-bottomleft: 0;
       -webkit-border-bottom-left-radius: 0;
       border-bottom-left-radius: 0;
@@ -1879,12 +1896,12 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
       -webkit-border-bottom-right-radius: 0;
       border-bottom-right-radius: 0;
       margin-bottom: 0; }
-    .form-signin input[type="text"].middle, .form-signin input[type="firstname"].middle, .form-signin input[type="lastname"].middle, .form-signin input[type="email"].middle, .form-signin input[type="password"].middle {
+    .form-signin input[type="text"].middle, .form-signin input[type="firstname"].middle, .form-signin input[type="lastname"].middle, .form-signin input[type="email"].middle, .form-signin input[type="password"].middle, .form-signup input[type="text"].middle, .form-signup input[type="firstname"].middle, .form-signup input[type="lastname"].middle, .form-signup input[type="email"].middle, .form-signup input[type="password"].middle {
       border-top: none;
       -moz-border-radius: 0;
       -webkit-border-radius: 0;
       border-radius: 0; }
-    .form-signin input[type="text"].bottom, .form-signin input[type="firstname"].bottom, .form-signin input[type="lastname"].bottom, .form-signin input[type="email"].bottom, .form-signin input[type="password"].bottom {
+    .form-signin input[type="text"].bottom, .form-signin input[type="firstname"].bottom, .form-signin input[type="lastname"].bottom, .form-signin input[type="email"].bottom, .form-signin input[type="password"].bottom, .form-signup input[type="text"].bottom, .form-signup input[type="firstname"].bottom, .form-signup input[type="lastname"].bottom, .form-signup input[type="email"].bottom, .form-signup input[type="password"].bottom {
       border-top: none;
       -moz-border-radius-topleft: 0;
       -webkit-border-top-left-radius: 0;
@@ -1892,7 +1909,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
       -moz-border-radius-topright: 0;
       -webkit-border-top-right-radius: 0;
       border-top-right-radius: 0; }
-  .form-signin label {
+  .form-signin label, .form-signup label {
     text-align: left; }
 
 .help-block, .help-inline {
@@ -3599,5 +3616,7 @@ a.badge:hover, a.badge:focus {
     margin-left: 24px; }
   .footer-nav a {
     line-height: 60px; }
+  .footer-nav.index {
+    margin-top: 0; }
 
 /*# sourceMappingURL=style-merged.css.map */

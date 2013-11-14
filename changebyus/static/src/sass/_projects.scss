@@ -17,6 +17,7 @@
 
 .project-square {
   @include box-skin;
+  padding: 10px;
   height: 525px;
   width: 328px;
   float: left;
@@ -57,19 +58,26 @@
 }
 
 .project-icon {
-  margin: 10px;
-  img{width: 100%; }
-  //@include box-skin;
+  img{width: 100%; } 
 }
 
 .project-name {
-  margin: 15px;
-  font-size: 25 !important;
-  font-weight: bold; 
+  @include font-styling("asap", 23px, $gray20, "normal", "bold");
+  margin-top: 15px;
 }
 
 .project-description {
-  margin: 15px;
+  @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.project-category{
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  @include font-styling("bebas", 18px, $gray65 );
+  a{color: #868686;}
 }
 
 .project-container {

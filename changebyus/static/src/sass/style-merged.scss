@@ -1067,7 +1067,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   }
 }
 
-.form-signin {
+.form-signin,.form-signup {
   max-width: 600px;
   padding-bottom:29px;
   background-color: $white;
@@ -1078,7 +1078,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
     font-size: 16px;
     color: #333333;
   }
-
+ 
   input {
     &[type="text"], &[type="firstname"], &[type="lastname"], &[type="email"], &[type="password"] {
       max-width: 500px;
@@ -3192,7 +3192,6 @@ a {
 .icon-rackspace{}
 
 .footer-nav{
-
   margin-top: 48px; 
   height: 60px;
   background-color: $primaryColor;
@@ -3205,4 +3204,6 @@ a {
   a{
     line-height: 60px;
   }
+
+  &.index{margin-top: 0; }
 }

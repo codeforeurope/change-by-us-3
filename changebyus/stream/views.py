@@ -59,7 +59,10 @@ def projects_view():
     return render_template('stream.html', data = projects, posts = posts, members = members, newPost=False)
     """
  
-    return render_template('index.html')
+    if g.user.is_anonymous():
+        return render_template('index.html', projects = projects, login = True)
+    else:
+        return render_template('index.html', projects = projects, login = False)   
      
 
 @stream_view.route('/sort', methods = ['GET'])
@@ -142,5 +145,8 @@ def dashboard_view():
     fb_image = facebook_info[2]
 
     # return render_template('dashboard.html', t_name=twitter_name, t_image=twitter_image, fb_name=fb_name, fb_image=fb_image)
-    return render_template('index.html')
+    if g.user.is_anonymous():
+        return render_template('index.html', projects = projects, login = True)
+    else:
+        return render_template('index.html', projects = projects, login = False)   
 

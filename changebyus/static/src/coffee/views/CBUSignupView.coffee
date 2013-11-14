@@ -21,6 +21,7 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 				data: @viewData, =>
 					@ajaxForm()
 					@addListeners()
+					onPageElementsLoad()
 
 			$(@parent).append @$el
 
@@ -38,13 +39,13 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 			$signup   = $(".init-signup")
 			$form     = $signup.find("form") 
 			$submit   = $signup.find("input[type='submit']")
-			$feedback = $signup.find("#login-feedback")
+			$feedback = $signup.find(".login-feedback")
 
 			options =
 				beforeSubmit: =>
 					console.log 'beforeSubmit'
 					$form.find("input, textarea").attr("disabled", "disabled")
-					$feedback.removeClass("alert").html ""
+					$feedback.removeClass("alert").removeClass("alert-danger").html ""
 
 				success: (response) =>
 					console.log 'signup',response
@@ -52,14 +53,15 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 					if response.msg.toLowerCase() is "ok"
 						window.location.href = "/"
 					else
-						$feedback.addClass("alert").html response.msg
+						$feedback.addClass("alert").addClass("alert-danger").html response.msg
+
 			$form.ajaxForm options
 
 			# social signup --------------------------------------------------
 			$socialSignup   = $(".social-signup")
 			$socialForm     = $socialSignup.find("form") 
 			$socialSubmit   = $socialSignup.find("input[type='submit']")
-			$socialFeedback = $socialSignup.find("#login-feedback")
+			$socialFeedback = $socialSignup.find(".login-feedback")
 
 			options =
 				beforeSubmit: =>

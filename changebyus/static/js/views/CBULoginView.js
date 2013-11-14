@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "validate"], function(_, Backbone, $, temp, valid) {
   var CBUDLoginView;
   return CBUDLoginView = Backbone.View.extend({
     parent: "body",
@@ -17,7 +17,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         data: this.viewData
       }, function() {
         _this.ajaxForm();
-        return _this.addListeners();
+        _this.addListeners();
+        return onPageElementsLoad();
       });
       return $(this.parent).append(this.$el);
     },
@@ -35,18 +36,23 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       $submit = $("input[type='submit']");
       $form = $("form");
       $login = $("form[name='signin']");
-      $feedback = $("#login-feedback");
+      $feedback = $(".login-feedback");
       options = {
         beforeSubmit: function() {
-          $form.find("input, textarea").attr("disabled", "disabled");
-          return $feedback.removeClass("alert").html("");
+          if ($form.valid()) {
+            $form.find("input, textarea").attr("disabled", "disabled");
+            $feedback.removeClass("alert").removeClass("alert-danger").html("");
+            return true;
+          } else {
+            return false;
+          }
         },
         success: function(response) {
           $form.find("input, textarea").removeAttr("disabled");
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {
-            return $feedback.addClass("alert").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
           }
         }
       };

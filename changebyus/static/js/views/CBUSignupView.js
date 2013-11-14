@@ -18,7 +18,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         data: this.viewData
       }, function() {
         _this.ajaxForm();
-        return _this.addListeners();
+        _this.addListeners();
+        return onPageElementsLoad();
       });
       return $(this.parent).append(this.$el);
     },
@@ -41,12 +42,12 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       $signup = $(".init-signup");
       $form = $signup.find("form");
       $submit = $signup.find("input[type='submit']");
-      $feedback = $signup.find("#login-feedback");
+      $feedback = $signup.find(".login-feedback");
       options = {
         beforeSubmit: function() {
           console.log('beforeSubmit');
           $form.find("input, textarea").attr("disabled", "disabled");
-          return $feedback.removeClass("alert").html("");
+          return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
         success: function(response) {
           console.log('signup', response);
@@ -54,7 +55,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {
-            return $feedback.addClass("alert").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
           }
         }
       };
@@ -62,7 +63,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       $socialSignup = $(".social-signup");
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
-      $socialFeedback = $socialSignup.find("#login-feedback");
+      $socialFeedback = $socialSignup.find(".login-feedback");
       options = {
         beforeSubmit: function() {
           console.log('beforeSubmit');

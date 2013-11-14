@@ -36,7 +36,7 @@ require.config({
 
 require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "utils"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Utils) {
   $(document).ready(function() {
-    var $navTop, CBUAppRouter, CBURouter, config;
+    var $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
       parent: "#frame"
     };
@@ -105,11 +105,32 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
       pushState: true
     });
     $navTop = $('.nav.pull-left');
-    return $navTop.hover(function() {
+    $navTop.hover(function() {
       return $(this).toggleClass('active');
     }, function() {
       return $(this).removeClass('active');
     });
+    /* STICKY FOOTER*/
+
+    $window = $(window);
+    footerHeight = 0;
+    $footer = $(".footer-nav");
+    window.positionFooter = function() {
+      footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
+      console.log($footer.css('margin-top'), footerHeight);
+      if (($(document.body).height() + footerHeight) < $window.height()) {
+        return $footer.css({
+          position: "fixed",
+          bottom: 0
+        });
+      } else {
+        return $footer.css({
+          position: "relative"
+        });
+      }
+    };
+    positionFooter();
+    return $window.scroll(positionFooter).resize(positionFooter);
   });
   /* GLOBAL UTILS*/
 
@@ -122,7 +143,10 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     top = (screen.height / 2) - (h / 2);
     return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
   };
-  return window.delay = function(time, fn) {
+  window.delay = function(time, fn) {
     return setTimeout(fn, time);
+  };
+  return window.onPageElementsLoad = function() {
+    return positionFooter();
   };
 });

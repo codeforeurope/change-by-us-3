@@ -121,6 +121,25 @@ require ["jquery",
 			, ->
 				$(this).removeClass('active')
 
+			### STICKY FOOTER ###
+			$window      = $(window)
+			footerHeight = 0 
+			$footer      = $(".footer-nav")
+
+			window.positionFooter = ->
+				footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
+				console.log $footer.css('margin-top'), footerHeight
+
+				if ($(document.body).height() + footerHeight) < $window.height()
+					$footer.css
+						position: "fixed" 
+						bottom: 0
+				else
+					$footer.css position: "relative"
+			
+			positionFooter()
+			$window.scroll(positionFooter).resize(positionFooter)
+
 
 		### GLOBAL UTILS ###
 		window.popWindow = (url) ->
@@ -133,3 +152,7 @@ require ["jquery",
 
 		window.delay = (time, fn) ->
 			setTimeout fn, time
+
+		window.onPageElementsLoad = ->
+			positionFooter()
+

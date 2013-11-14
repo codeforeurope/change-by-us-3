@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) ->
+define ["underscore", "backbone", "jquery", "template", "validate"], (_, Backbone, $, temp, valid) ->
 	
 	CBUDLoginView = Backbone.View.extend
 		parent: "body"
@@ -17,6 +17,7 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 				data: @viewData, =>
 					@ajaxForm()
 					@addListeners()
+					onPageElementsLoad()
 
 			$(@parent).append @$el
 
@@ -31,11 +32,15 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 			$submit   = $("input[type='submit']")
 			$form     = $("form")
 			$login    = $("form[name='signin']")
-			$feedback = $("#login-feedback")
+			$feedback = $(".login-feedback")
 			options   =
 				beforeSubmit: =>
-					$form.find("input, textarea").attr("disabled", "disabled")
-					$feedback.removeClass("alert").html ""
+					if $form.valid()
+						$form.find("input, textarea").attr("disabled", "disabled")
+						$feedback.removeClass("alert").removeClass("alert-danger").html ""
+						return true
+					else
+						return false
 
 				success: (response) =>
 					$form.find("input, textarea").removeAttr("disabled")
@@ -43,6 +48,6 @@ define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) 
 					if response.msg.toLowerCase() is "ok"
 						window.location.href = "/"
 					else
-						$feedback.addClass("alert").html response.msg
+						$feedback.addClass("alert").addClass("alert-danger").html response.msg
 
 			$login.ajaxForm options

@@ -3379,9 +3379,7 @@ a.badge:hover, a.badge:focus {
   z-index: 1; }
   .search-forms .btn {
     margin-top: 37px;
-    padding-top: 20px;
-    width: 40px;
-    height: 35px;
+    padding: 20px;
     color: white;
     font-size: 24px;
     background-color: darkturquoise;
@@ -3450,10 +3448,10 @@ a.badge:hover, a.badge:focus {
   height: 200px;
   float: right; }
   .discover-header-right .btn {
-    width: 210px;
+    width: 100%;
     height: auto;
     line-height: 20px;
-    margin: none;
+    margin: auto;
     padding: 20px;
     font-size: 24px;
     background-color: #ffb400;
@@ -3585,7 +3583,8 @@ a.badge:hover, a.badge:focus {
   font-family: "Asap", Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 22px;
-  color: white; }
+  color: white;
+  white-space: nowrap; }
   .btn.btn-xlarge {
     display: inline-block;
     width: 328px;
@@ -3608,6 +3607,7 @@ a.badge:hover, a.badge:focus {
 
 .footer-nav {
   margin-top: 48px;
+  width: 100%;
   height: 60px;
   background-color: darkturquoise; }
   .footer-nav li {

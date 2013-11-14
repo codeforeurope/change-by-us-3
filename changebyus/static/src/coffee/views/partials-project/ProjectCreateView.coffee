@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp","hogan","validate", "dropkick"], 
+define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp","hogan", "validate", "dropkick"], 
 	(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan, valid, dropkick) ->
 		ProjectCreateView = AbstractView.extend
 

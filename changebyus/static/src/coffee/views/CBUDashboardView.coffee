@@ -7,8 +7,9 @@ define ["underscore",
 		"abstract-view", 
 		"collection/ProjectListCollection", 
 		"model/UserModel",
-		"resource-project-view"], 
-	(_, Backbone, fileupload, button, $, temp, AbstractView, ProjectListCollection, UserModel, ResourceProjectPreviewView) ->
+		"resource-project-view",
+		"views/partials-user/ProfileEditView"], 
+	(_, Backbone, fileupload, button, $, temp, AbstractView, ProjectListCollection, UserModel, ResourceProjectPreviewView, ProfileEditView) ->
 
 		CBUDashboardView = AbstractView.extend
 
@@ -31,13 +32,6 @@ define ["underscore",
 				$(@parent).append @$el
 
 			onTemplateLoad: ->
-				$('#edit-profile').template @templateDir+"/templates/partials-user/profile-edit-form.html", 
-					{data:@userModel.attributes}, =>
-						@onProfileEditLoad()
-						@ajaxForm()
-
-			onProfileEditLoad:->
-				# @$el.prepend @$header
 				@manageView   = $('#manage-projects')
 				@followView   = $('#follow-projects')
 				@profileView  = $('#edit-profile')
@@ -53,6 +47,9 @@ define ["underscore",
 				$("a[href^='#']").click (e) -> 
 					window.location.hash = $(this).attr("href").substring(1)
 
+				profileEditView = new ProfileEditView({model:@userModel, parent:@profileView})
+
+				console.log '@model',@model
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)
@@ -82,7 +79,6 @@ define ["underscore",
 				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/ownedprojects"})
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
-				
 
 			addJoined:->
 				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
@@ -99,59 +95,3 @@ define ["underscore",
 					isResource: false
 
 				@$el.find(parent_).append view.$el
-
-			ajaxForm: ->
-				$('.fileupload').fileupload({uploadtype: 'image'})
-
-				# ajax the form
-				$submit = @profileView.find("input[type=submit]")
-				$form = @profileView.find("form")
-				$feedback = $("#feedback")
-				options =
-					beforeSubmit: => 
-						if $form.valid()
-							$form.find("input, textarea").attr("disabled", "disabled")
-							return true
-						else
-							return false
-
-					success: (res) -> 
-						msg = if res.msg.toLowerCase() is "ok" then "Updated Successfully" else res.msg
-						$feedback.show().html(msg)
-
-						$form.find("input, textarea").removeAttr("disabled")
-
-						if res.success
-							$("html, body").animate({ scrollTop: 0 }, "slow")
-							$feedback.addClass('.alert-success').removeClass('.alert-error')
-						else
-							$feedback.removeClass('.alert-success').addClass('.alert-error')
-				$form.ajaxForm options
-
-				# location autocomplete
-				$projectLocation = $("#location")
-				$projectLocation.typeahead(
-					template: '<div class="zip">{{ name }}</div>'
-					engine: Hogan 
-					valueKey: 'name'
-					name: 'zip'
-					remote:
-						url: "/api/project/geopoint?s=%QUERY"
-						filter: (resp) ->
-							zips = []
-							if resp.msg.toLowerCase() is "ok" and resp.data.length > 0
-								for loc in resp.data
-									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon}
-							zips
-				).bind('typeahead:selected', (obj, datum) =>
-						@location = datum
-						$('input[name="location"]').val @location.name
-						$('input[name="lat"]').val @location.lat
-						$('input[name="lon"]').val @location.lon
-						console.log(datum)
-				)
-
-				$('input:radio').screwDefaultButtons
-					image: 'url("/static/img/black-check.png")'
-					width: 18
-					height: 18

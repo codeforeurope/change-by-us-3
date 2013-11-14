@@ -27,7 +27,7 @@ require.config({
     "abstract-view": "views/partials-universal/AbstractView",
     "project-sub-view": "views/partials-project/ProjectSubView",
     "resource-project-view": "views/partials-universal/ResourceProjectPreviewView",
-    "user-view": "views/partials-user/CBUUserView",
+    "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
     "stream-view": "views/CBUStreamView",
     "utils": "utils/Utils"

@@ -146,7 +146,7 @@ def dashboard_view():
 
     # return render_template('dashboard.html', t_name=twitter_name, t_image=twitter_image, fb_name=fb_name, fb_image=fb_image)
     if g.user.is_anonymous():
-        return render_template('index.html', projects = projects, login = True)
+        return render_template('index.html', login = True)
     else:
-        return render_template('index.html', projects = projects, login = False)   
+        return render_template('index.html', login = False)
 

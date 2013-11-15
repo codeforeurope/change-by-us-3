@@ -23,7 +23,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$el.find(".preload").remove();
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
-      return this.addAll();
+      this.addAll();
+      return onPageElementsLoad();
     },
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,

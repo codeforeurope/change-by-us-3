@@ -141,6 +141,7 @@ require ["jquery",
 			$window.scroll(positionFooter).resize(positionFooter)
 
 			window.onPageElementsLoad = ->
+				console.log 'onPageElementsLoad'
 				positionFooter()
 			### END STICKY FOOTER ###
 

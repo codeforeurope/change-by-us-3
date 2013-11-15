@@ -43,11 +43,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onHeaderLoaded: function() {
       var config, id;
-      this.$el.prepend(this.$header);
       id = this.model.get("id");
       config = {
         id: id
       };
+      this.$el.prepend(this.$header);
       this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
       this.projectCalendarCollection = new ProjectCalendarCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);
@@ -79,11 +79,25 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       $("a[href^='#']").click(function(e) {
         return window.location.hash = $(this).attr("href").substring(1);
       });
-      return this.joingBTN();
+      return this.btnListeners();
     },
-    joingBTN: function() {
+    btnListeners: function() {
       var $join, id, joined,
         _this = this;
+      $('.flag-project a').click(function(e) {
+        var $this, url,
+          _this = this;
+        e.preventDefault();
+        $this = $(this);
+        $this.parent().css('opacity', 0.25);
+        url = $this.attr('href');
+        return $.ajax({
+          type: "POST",
+          url: url
+        }).done(function(response_) {
+          return console.log(response_);
+        });
+      });
       id = this.model.get("id");
       joined = false;
       $join = $(".project-footer .btn");

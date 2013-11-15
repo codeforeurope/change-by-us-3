@@ -56,11 +56,10 @@ define ["underscore",
 					{data:@model.attributes}, => @onHeaderLoaded()
 
 			onHeaderLoaded:->
-				@$el.prepend @$header
-
 				id = @model.get("id")
 				config = {id:id}
 
+				@$el.prepend @$header
 				@projectUpdatesCollection  = new ProjectUpdatesCollection(config) 
 				@projectCalendarCollection = new ProjectCalendarCollection(config)
 				@projectMembersCollection  = new ProjectMembersCollection(config)
@@ -83,13 +82,23 @@ define ["underscore",
 				$("a[href^='#']").click (e) -> 
 					window.location.hash = $(this).attr("href").substring(1)
 
-				@joingBTN() 
+				@btnListeners() 
 
-			joingBTN:->
-				id = @model.get("id")
+			btnListeners:->
+				$('.flag-project a').click (e)->
+					e.preventDefault()
+					$this = $(this)
+					$this.parent().css('opacity', 0.25)
+					url = $this.attr('href')
+					$.ajax(
+						type: "POST"
+						url: url 
+					).done (response_)=>
+						console.log response_
 
+				id     = @model.get("id")
 				joined = false
-				$join = $(".project-footer .btn")
+				$join  = $(".project-footer .btn")
 				$join.click (e) =>
 					e.preventDefault()
 					if joined then return

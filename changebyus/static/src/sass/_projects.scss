@@ -211,10 +211,11 @@
     padding: 20px;
     margin-top: 30px;
     margin-bottom: 30px;
-    //width: 100%;
     height: auto;
     @include box-skin;
 
+    a{color: $black;}
+    
     p{
       @include font-styling("asap", 20px, $gray20, "normal", "regular");
       margin-bottom: 28px;
@@ -362,23 +363,11 @@
       font-size: 16px;
       line-height: 15px;
       padding-left: 20px;
-      margin-top: 10px;
-      //background-repeat: no-repeat;
-      //background-image: url('/static/img/black-check.png');
+      margin-top: 10px; 
       &:first-child{
         margin-top: 0;
       }
-    }
-
-    /*
-    input[type=checkbox]{
-      display: none;
-    }
-    input[type=checkbox]:checked+label {
-      background-position: 0 -15px;
-    }
-    */
-
+    } 
   }
 
   .discussion{ 
@@ -421,16 +410,6 @@
 
     .content-wrapper{
       overflow: hidden;
-      /*
-      @include transition-property(height);
-      @include transition-duration(.5s);
-      
-      height: 461px;
-      &.invisible{
-       display: block;
-       height: 0;
-      }
-      */
     }
     
     
@@ -513,15 +492,21 @@
   width: auto;
 
   a{ color: $black; }
-  li{ float: left; }
+
+  ul{ 
+    display: inline-block;
+    margin-top: 20px;
+  }
+  li{ 
+    float: left; 
+    margin-left: 15px;
+    &:first-child{ margin-left: 0;}
+  }
 
   .member-avatar{
-    width: 90px;
-    height: 90px;
-    margin-left: 15px;
+    width: 70px;
+    height: 70px; 
     cursor: pointer;
-    
-    &:first-child{ margin-left: 0;}
 
     .mail-icon{
       float: right;
@@ -556,4 +541,8 @@
     top: -7px;
     left: 69%;
   }
+}
+
+iframe{
+  width: 100%;
 }

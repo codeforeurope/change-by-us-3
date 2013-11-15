@@ -132,6 +132,7 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     positionFooter();
     $window.scroll(positionFooter).resize(positionFooter);
     return window.onPageElementsLoad = function() {
+      console.log('onPageElementsLoad');
       return positionFooter();
     };
     /* END STICKY FOOTER*/

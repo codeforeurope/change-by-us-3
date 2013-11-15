@@ -23,6 +23,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$memberList = @$el.find("#project-members ul")
 				@addAll()
 
+				onPageElementsLoad()
+
 			# override in subview
 			addAll: -> 
 				console.log 'ProjectMembersView ',@

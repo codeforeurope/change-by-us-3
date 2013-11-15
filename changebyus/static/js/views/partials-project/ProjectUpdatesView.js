@@ -21,9 +21,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$ul = this.$el.find(".updates-container ul");
       this.$members = this.$el.find(".team-members ul");
       console.log('onTemplateLoad', this.members);
-      return this.members.each(function(model) {
+      this.members.each(function(model) {
         return _this.addMemeber(model);
       });
+      return onPageElementsLoad();
     },
     noResults: function() {},
     addMemeber: function(model_) {

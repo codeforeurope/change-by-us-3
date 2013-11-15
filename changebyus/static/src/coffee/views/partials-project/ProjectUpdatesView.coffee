@@ -21,6 +21,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@members.each (model) => 
 					@addMemeber model
 
+				onPageElementsLoad()
+
 			noResults:->
 
 			addMemeber: (model_) ->

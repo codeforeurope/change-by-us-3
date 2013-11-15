@@ -58,10 +58,13 @@
     }
    }
 
-  .btn-info{
-    width: 47%;
-    &:first-child{ margin-right: 5%;}
+  .btn-info{ 
+    width: 47%; 
   }
+
+  a:first-child{ 
+      display: none;
+      margin-right: 5%;}
      
   input[type="submit"]{
     width: 65% !important;

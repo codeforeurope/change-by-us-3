@@ -42,12 +42,10 @@ module.exports = (grunt) ->
 				ext: ".js"
 
 		compass:
-			dev: 
-				files: 
-					"static/src/sass/**/*.scss":"static/src/sass/**/*.css"
+			dev:  
 				options:
-					#config:'static/src/sass/config.rb' # paths in config.rg should be relative to the Gruntfile
-					sourcemap:true 
+					config:'static/src/sass/config.rb' # paths in config.rg should be relative to the Gruntfile
+					#sourcemap:true 
 
 		requirejs:
 			production:
@@ -67,6 +65,6 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks "grunt-exec"
 
 	# By default, run watch.
-	grunt.registerTask "default", ["watch:coffeesrc"]
+	grunt.registerTask "default", ["watch"]
 	grunt.registerTask "mongo", ["exec:start_mongo"]
 	grunt.registerTask "server", ["exec:move_up","exec:start_virt_env","exec:start_server"]

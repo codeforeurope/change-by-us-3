@@ -2999,10 +2999,9 @@ a {
   h3{text-align: left;}
 }
 
-.discover-header-right {
+.discover-header-right, .dashboard-header-right{
   margin-left: 15px;
   width: 230px;
-  height: 200px;
   float: right;
 
   .btn {
@@ -3016,6 +3015,10 @@ a {
     color: $white;
     border-radius: 4px;
   }
+}
+
+.discover-header-right{
+  height: 200px;
   .cities{
     @include box-skin;
     margin-top: 10px;
@@ -3209,3 +3212,24 @@ a {
 
   &.index{margin-top: 0; }
 }
+
+/*** HEADER *****/
+
+.header-icon{ 
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  height: 20px;
+  width: auto;
+  font-size: 14px;
+  font-weight: bold;
+  background-position: left center;
+  background-repeat: no-repeat;
+  a{ 
+    padding-left: 30px;
+    @include text-shadow(rgba(0,0,0,.5) 0 5px 10px);
+  }
+}
+
+.public-view{background-image: url(../img/icon-view-project.png);}
+.flag-project{background-image: url(../img/icon-view-project.png);}

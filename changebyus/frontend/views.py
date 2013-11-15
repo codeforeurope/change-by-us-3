@@ -6,6 +6,8 @@
 from flask import Blueprint, render_template, redirect, url_for, g, abort, current_app
 from flask.ext.login import login_required, current_user, logout_user, login_user
 
+from ..user.api import api_get_user
+
 from ..user.models import User
 from ..project.api import api_get_projects
 from ..helpers.flasktools import gen_blank_ok

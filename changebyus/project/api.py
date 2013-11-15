@@ -20,7 +20,7 @@ from ..mongo_search import search
 
 from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
 
-from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
+from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
                        _create_project, _edit_project, _get_lat_lon_from_location,
                        _get_user_owned_projects, _leave_project )
 

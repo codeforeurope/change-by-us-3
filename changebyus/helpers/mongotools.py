@@ -12,6 +12,9 @@ def db_list_to_dict_list(l):
 
     dict_list = []
     for db_item in l:
-        dict_list.append( db_item.as_dict() )
+        try:
+            dict_list.append( db_item.as_dict() )
+        except AttributeError:
+            print "Oops!  not valid"
 
     return dict_list

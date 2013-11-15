@@ -367,13 +367,17 @@ def _get_project_users_and_common_projects(project_id = None, user_id = None):
     return_list = []
     for user, projects in common_users.iteritems():
         # skip ourselves
+        
         if user == g.user.id:
             continue
 
-        user_dict = user.as_dict()
-        user_dict['common_projects'] = projects
+        try:
+            user_dict = user.as_dict()
+            user_dict['common_projects'] = projects
+            return_list.append(user_dict)
+        except AttributeError:
+            print "Oops!  not valid"
 
-        return_list.append(user_dict)
 
     return return_list
 

@@ -121,6 +121,15 @@ require ["jquery",
 			, ->
 				$(this).removeClass('active')
 
+			# LOG OUT
+			$("a[href='/logout']").click (e)->
+				e.preventDefault()
+				$.ajax(
+					type: "GET"
+					url: "/logout" 
+				).done (response)=> 
+					window.location.reload()
+
 			### STICKY FOOTER ###
 			$window      = $(window)
 			footerHeight = 0 
@@ -157,6 +166,3 @@ require ["jquery",
 
 		window.delay = (time, fn) ->
 			setTimeout fn, time
-
-		
-

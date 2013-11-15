@@ -153,16 +153,6 @@ textarea {
   vertical-align: top;
 }
 
-/*
-@font-face {
-  font-family: 'AsapRegular';
-  src: url('../fonts/Asap-Regular-webfont.eot');
-  src: url('../fonts/Asap-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('../fonts/Asap-Regular-webfont.woff') format("woff"), url('../fonts/Asap-Regular-webfont.ttf') format("truetype"), url('../fonts/Asap-Regular-webfont.svg#AsapItalic') format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-*/
-
 @font-face {
     font-family: 'bebas_neueregular';
     src: url('../fonts/BebasNeue-webfont.eot');
@@ -173,9 +163,6 @@ textarea {
     font-weight: normal;
     font-style: normal;
 }
-
-
-
 
 @media print {
   * {
@@ -2537,28 +2524,10 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   display: inline-block;
   *display: inline;
   float: none;
-  /*
-  margin-bottom: 20px;
-  margin-left: 20px;
-  */
 }
 
 .thumbnail {
-  /*
-  display: block;
-  padding: 4px;
-  line-height: 20px;
-  border: none;
-  min-height: 100px;
-  max-height: 100px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
-  */
+
   &:hover {
     font-weight: normal !important;
   }
@@ -2780,20 +2749,7 @@ a {
     vertical-align: middle;
     cursor: text;
   } 
-  /*
-  .thumbnail {
-    display: inline-block;
-    margin-bottom: 5px;
-    overflow: hidden;
-    text-align: center;
-    vertical-align: middle;
-    > img {
-      display: inline-block;
-      max-height: 100%;
-      vertical-align: middle !important;
-    }
-   
-  } */
+ 
   .btn {
     vertical-align: middle;
   }
@@ -2929,8 +2885,6 @@ a {
   .btn {
     margin-top: 37px;
     padding: 20px;
-    //width: 40px;
-    //height: 35px;
     color: $white;
     font-size: 24px;
     background-color: $primaryColor;
@@ -2952,7 +2906,6 @@ a {
 }
 
 .search-filters{
-  //margin-right: 40px;
   span{
     float: left;
   }
@@ -3085,9 +3038,7 @@ a {
 }
 
 .homepage-block-info {
-  //width: 100%;
-  margin-top: 20px;
-  //margin-bottom: 60px;
+  margin-top: 20px; 
   padding-top: 40px;
   background-color: $secondaryColor;
   height: 765px;
@@ -3103,7 +3054,6 @@ a {
     color: #f4e291;
     font-weight: 100;
     text-align: center;
-    /*padding: 10px;*/ 
   }
 }
 
@@ -3145,12 +3095,9 @@ a {
 }
 
 .homepage-footer {
-  width: 100%;
-  //padding: 50px;
+  width: 100%; 
   background-color: #737373;
-  height: 340px;
-  /*float: left;*/
-  //margin-bottom: 50px;
+  height: 340px; 
   margin-top: 50px;
   text-align: center;
   h2 {
@@ -3211,6 +3158,10 @@ a {
   }
 
   &.index{margin-top: 0; }
+}
+
+a.highlight{
+  @include highlight; 
 }
 
 /*** HEADER *****/

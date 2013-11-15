@@ -18,7 +18,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					{}, => @onTemplateLoad()
 
 			onTemplateLoad:->
-				@$el.find(".preload").remove()
+				#@$el.find(".preload").remove()
 				@$teamList = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
 				@addAll()
@@ -28,7 +28,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			# override in subview
 			addAll: -> 
 				console.log 'ProjectMembersView ',@
-				if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
+				# if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
 
 				###
 				@collection.models[0].attributes.roles = ["Project Owner"]

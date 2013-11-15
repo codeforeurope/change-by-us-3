@@ -1,6 +1,5 @@
 define ["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
 	(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection) ->
-		
 		CBUMainView = Backbone.View.extend
 			parent: "body"
 			templateDir: "/static"

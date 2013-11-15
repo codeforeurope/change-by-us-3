@@ -20,7 +20,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     onTemplateLoad: function() {
-      this.$el.find(".preload").remove();
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
       this.addAll();
@@ -30,11 +29,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
       console.log('ProjectMembersView ', this);
-      if (this.collection.models.length === 0) {
-        this.noResults();
-      } else {
-        this.$el.find(".preload").remove();
-      }
       /*
       				@collection.models[0].attributes.roles = ["Project Owner"]
       				@collection.models[0].attributes.description = "Lorem ipsum"

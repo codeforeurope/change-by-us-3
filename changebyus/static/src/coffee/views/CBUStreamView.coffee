@@ -1,6 +1,5 @@
 define ["underscore", "backbone", "jquery", "template"], 
 	(_, Backbone, $, temp) ->
-	
 		CBUStreamView = Backbone.View.extend
 			parent: "body"
 			templateDir: "/static"

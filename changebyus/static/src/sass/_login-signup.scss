@@ -1,4 +1,3 @@
-
 .login, .signup {
   text-align: center;
   h1 {
@@ -19,16 +18,6 @@
     font-size: 16px;
   }
   .content-wrapper {
-    /*
-    padding: 30px;
-    margin-top: 30px;
-    margin-bottom: 30px;
-    width: 100%;
-    background-color: $white;
-    border: 1px solid #dcdcdc;
-    border-radius: 4px;
-    text-align: center;
-    */  
     .centered {
       width: 500px;
       margin-top: 20px;
@@ -93,12 +82,12 @@
   }
 }
 
-
 .line-behind {
   margin: 20px 0;
   position: relative;
   width: 100%;
   z-index: 1;
+
   &:before {
     border-top: 1px solid $black;
     content: "";
@@ -111,6 +100,7 @@
     width: 100%;
     z-index: -1;
   }
+  
   span {
     color: $black;
     background-color: $white;

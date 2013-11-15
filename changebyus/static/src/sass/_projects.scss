@@ -502,7 +502,7 @@
     margin-left: 15px;
     &:first-child{ margin-left: 0;}
   }
-
+}
   .member-avatar{
     width: 70px;
     height: 70px; 
@@ -541,7 +541,21 @@
     top: -7px;
     left: 69%;
   }
-}
+
+  .icon_share_angle{
+    float: left;
+    background: url(../img/icon_share_angle.png);
+    padding-left: 25px;
+    margin-right: 15px;
+    line-height: 40px;
+    background-repeat: no-repeat;
+    background-position: left center;
+  }
+
+  input[type="text"].input-slim{
+    width: 50%;
+    height: auto;
+  }
 
 iframe{
   width: 100%;

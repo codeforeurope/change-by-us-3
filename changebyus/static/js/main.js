@@ -110,6 +110,16 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     }, function() {
       return $(this).removeClass('active');
     });
+    $("a[href='/logout']").click(function(e) {
+      var _this = this;
+      e.preventDefault();
+      return $.ajax({
+        type: "GET",
+        url: "/logout"
+      }).done(function(response) {
+        return window.location.reload();
+      });
+    });
     /* STICKY FOOTER*/
 
     $window = $(window);

@@ -1,6 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var BannerImageView;
-  BannerImageView = AbstractView.extend({
+  return BannerImageView = AbstractView.extend({
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
@@ -13,5 +13,4 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return $(this.parent).append(this.$el);
     }
   });
-  return BannerImageView;
 });

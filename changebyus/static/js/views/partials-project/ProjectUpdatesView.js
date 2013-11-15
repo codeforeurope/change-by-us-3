@@ -2,6 +2,11 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
   var ProjectUpdatesView;
   return ProjectUpdatesView = ProjectSubView.extend({
     parent: "#project-update",
+    members: null,
+    initialize: function(options) {
+      this.members = options.members || this.members;
+      return ProjectSubView.prototype.initialize.call(this, options);
+    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -12,9 +17,25 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     onTemplateLoad: function() {
-      return this.$ul = this.$el.find(".updates-container ul");
+      var _this = this;
+      this.$ul = this.$el.find(".updates-container ul");
+      this.$members = this.$el.find(".team-members ul");
+      console.log('onTemplateLoad', this.members);
+      return this.members.each(function(model) {
+        return _this.addMemeber(model);
+      });
     },
     noResults: function() {},
+    addMemeber: function(model_) {
+      var $member,
+        _this = this;
+      console.log('addMemeber', model_);
+      $member = $('<li/>');
+      $member.template(this.templateDir + "/templates/partials-project/project-member-avatar.html", {
+        data: model_.attributes
+      }, function() {});
+      return this.$members.append($member);
+    },
     addOne: function(model_) {
       var view;
       view = new ProjectUpdateListItemView({

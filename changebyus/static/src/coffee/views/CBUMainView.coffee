@@ -16,13 +16,19 @@ define ["underscore", "backbone", "jquery", "template", "form", "resource-projec
 
 			render: -> 
 				@$el = $("<div class='projects-main'/>")
-				@$el.template @templateDir + "/templates/main.html", {}, =>
-					$(@parent).prepend @$el
-					bannerParent = @$el.find(".body-container-wide")
-					bannerImageView = new BannerImageView(parent: bannerParent)
-					@collection.on "reset", @addAll, @
-					@collection.fetch reset: true
-					@ajaxForm()
+				@$el.template @templateDir + "/templates/main.html", {}, => @onTemplateLoad()
+
+			onTemplateLoad:->
+				$(@parent).prepend @$el
+				
+				bannerParent = @$el.find(".body-container-wide")
+				bannerImageView = new BannerImageView(parent: bannerParent)
+				
+				@collection.on "reset", @addAll, @
+				@collection.fetch reset: true
+				
+				onPageElementsLoad() 
+				@ajaxForm()
 
 			ajaxForm: ->
 				# AJAXIFY THE SIGNUP FORM

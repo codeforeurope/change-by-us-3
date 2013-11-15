@@ -9,7 +9,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     },
     render: function() {
       var _this = this;
-      return $(this.parent).template(this.templateDir + "/templates/partials-user/profile-edit-form.html", {
+      this.$el = $(this.parent);
+      return this.$el.template(this.templateDir + "/templates/partials-user/profile-edit-form.html", {
         data: this.viewData
       }, function() {
         _this.ajaxForm();
@@ -50,6 +51,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         }
       };
       $form.ajaxForm(options);
+      console.log('$form', $form);
       $projectLocation = $("#location");
       $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',

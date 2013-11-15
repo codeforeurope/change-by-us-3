@@ -53,20 +53,24 @@ define ["underscore",
 			addSubViews: ->  
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
-					{data:@model.attributes}, =>@onHeaderLoaded()
+					{data:@model.attributes}, => @onHeaderLoaded()
 
 			onHeaderLoaded:->
 				@$el.prepend @$header
 
 				id = @model.get("id")
 				config = {id:id}
-				projectUpdatesCollection  = new ProjectUpdatesCollection(config)
-				projectMembersCollection  = new ProjectMembersCollection(config)
-				projectCalendarCollection = new ProjectCalendarCollection(config)
 
-				@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
-				@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
-				@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
+				@projectUpdatesCollection  = new ProjectUpdatesCollection(config) 
+				@projectCalendarCollection = new ProjectCalendarCollection(config)
+				@projectMembersCollection  = new ProjectMembersCollection(config)
+				@projectMembersCollection.on "reset", @onCollectionLoad, @
+				@projectMembersCollection.fetch {reset: true}
+
+			onCollectionLoad:->
+				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection})
+				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true})
+				@projectCalenderView  = new ProjectCalenderView({collection: @projectCalendarCollection})
 				
 				@updatesBTN  = $("a[href='#updates']").parent()
 				@membersBTN  = $("a[href='#members']").parent()
@@ -102,7 +106,6 @@ define ["underscore",
 
 				# determine if user is a member of the project
 				# if not, display the join button
-
 				$.ajax(
 					type: "GET"
 					url: "/api/project/am_i_a_member/"+id

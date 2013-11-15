@@ -3,6 +3,11 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 		ProjectUpdatesView = ProjectSubView.extend
 
 			parent: "#project-update"
+			members: null
+
+			initialize: (options) -> 
+				@members = options.members || @members
+				ProjectSubView::initialize.call(@, options)
 
 			render: ->  
 				@$el = $(@parent)
@@ -11,9 +16,19 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 			onTemplateLoad:->
 				@$ul = @$el.find(".updates-container ul")
+				@$members = @$el.find(".team-members ul")
+				console.log 'onTemplateLoad',@members
+				@members.each (model) => 
+					@addMemeber model
 
 			noResults:->
 
+			addMemeber: (model_) ->
+				console.log 'addMemeber',model_
+				$member = $('<li/>')
+				$member.template @templateDir + "/templates/partials-project/project-member-avatar.html",
+					{data: model_.attributes}, =>  
+				@$members.append $member
 					
 			addOne: (model_) ->
 				#console.log "ProjectUpdatesView addOne model", model_

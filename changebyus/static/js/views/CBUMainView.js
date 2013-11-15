@@ -16,18 +16,22 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
       var _this = this;
       this.$el = $("<div class='projects-main'/>");
       return this.$el.template(this.templateDir + "/templates/main.html", {}, function() {
-        var bannerImageView, bannerParent;
-        $(_this.parent).prepend(_this.$el);
-        bannerParent = _this.$el.find(".body-container-wide");
-        bannerImageView = new BannerImageView({
-          parent: bannerParent
-        });
-        _this.collection.on("reset", _this.addAll, _this);
-        _this.collection.fetch({
-          reset: true
-        });
-        return _this.ajaxForm();
+        return _this.onTemplateLoad();
       });
+    },
+    onTemplateLoad: function() {
+      var bannerImageView, bannerParent;
+      $(this.parent).prepend(this.$el);
+      bannerParent = this.$el.find(".body-container-wide");
+      bannerImageView = new BannerImageView({
+        parent: bannerParent
+      });
+      this.collection.on("reset", this.addAll, this);
+      this.collection.fetch({
+        reset: true
+      });
+      onPageElementsLoad();
+      return this.ajaxForm();
     },
     ajaxForm: function() {
       var $signin, $signup;

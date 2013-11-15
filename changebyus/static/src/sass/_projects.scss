@@ -3,6 +3,7 @@
 @import "compass/css3";
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
+@import "compass/css3/transform";
 
 /* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
 
@@ -194,7 +195,8 @@
       background-position: left center;
     }*/
   }
-  .updates, .members, .calendar { 
+  //.updates, .members, .calendar { 
+  .members, .calendar { 
     h2{
         margin: 50px 0 22px;
     } 
@@ -499,4 +501,59 @@
       a{ display: none; }
     }
   } 
+}
+
+.updates{
+  margin: 50px 0 22px;
+  z-index: 1;
+}
+
+.team-members{
+  float: right;
+  width: auto;
+
+  a{ color: $black; }
+  li{ float: left; }
+
+  .member-avatar{
+    width: 90px;
+    height: 90px;
+    margin-left: 15px;
+    cursor: pointer;
+    
+    &:first-child{ margin-left: 0;}
+
+    .mail-icon{
+      float: right;
+      margin-top: 10px;
+    }
+
+    &:hover{
+      .member-popup{display: block;}
+    }
+  }
+
+  .member-popup{
+    position: absolute;
+    display: none;
+    @include box-skin;
+    padding: 10px;
+    height: 75px;
+    width: 200px;
+    left: -110px;
+    top:78px;
+  }
+
+  .popup-arrow{
+    position: absolute;
+    @include box-border;
+    @include rotate(45deg);
+    background-color: $white;
+    border-bottom: none;
+    border-right: none;
+    width: 15px;
+    height: 15px;
+    top: -7px;
+    left: 69%;
+  }
 }

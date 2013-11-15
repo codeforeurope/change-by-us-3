@@ -140,6 +140,10 @@ require ["jquery",
 			positionFooter()
 			$window.scroll(positionFooter).resize(positionFooter)
 
+			window.onPageElementsLoad = ->
+				positionFooter()
+			### END STICKY FOOTER ###
+
 
 		### GLOBAL UTILS ###
 		window.popWindow = (url) ->
@@ -153,6 +157,5 @@ require ["jquery",
 		window.delay = (time, fn) ->
 			setTimeout fn, time
 
-		window.onPageElementsLoad = ->
-			positionFooter()
+		
 

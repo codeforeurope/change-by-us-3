@@ -130,7 +130,12 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
       }
     };
     positionFooter();
-    return $window.scroll(positionFooter).resize(positionFooter);
+    $window.scroll(positionFooter).resize(positionFooter);
+    return window.onPageElementsLoad = function() {
+      return positionFooter();
+    };
+    /* END STICKY FOOTER*/
+
   });
   /* GLOBAL UTILS*/
 
@@ -143,10 +148,7 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     top = (screen.height / 2) - (h / 2);
     return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
   };
-  window.delay = function(time, fn) {
+  return window.delay = function(time, fn) {
     return setTimeout(fn, time);
-  };
-  return window.onPageElementsLoad = function() {
-    return positionFooter();
   };
 });

@@ -42,24 +42,32 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onHeaderLoaded: function() {
-      var config, id, projectCalendarCollection, projectMembersCollection, projectUpdatesCollection,
-        _this = this;
+      var config, id;
       this.$el.prepend(this.$header);
       id = this.model.get("id");
       config = {
         id: id
       };
-      projectUpdatesCollection = new ProjectUpdatesCollection(config);
-      projectMembersCollection = new ProjectMembersCollection(config);
-      projectCalendarCollection = new ProjectCalendarCollection(config);
+      this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
+      this.projectCalendarCollection = new ProjectCalendarCollection(config);
+      this.projectMembersCollection = new ProjectMembersCollection(config);
+      this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
+      return this.projectMembersCollection.fetch({
+        reset: true
+      });
+    },
+    onCollectionLoad: function() {
+      var _this = this;
       this.projectUpdatesView = new ProjectUpdatesView({
-        collection: projectUpdatesCollection
+        collection: this.projectUpdatesCollection,
+        members: this.projectMembersCollection
       });
       this.projectMembersView = new ProjectMembersView({
-        collection: projectMembersCollection
+        collection: this.projectMembersCollection,
+        isDataLoaded: true
       });
       this.projectCalenderView = new ProjectCalenderView({
-        collection: projectCalendarCollection
+        collection: this.projectCalendarCollection
       });
       this.updatesBTN = $("a[href='#updates']").parent();
       this.membersBTN = $("a[href='#members']").parent();

@@ -8,14 +8,22 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     members: [],
     $teamList: null,
     $memberList: null,
+    initialize: function(options) {
+      this.isDataLoaded = options.isDataLoaded || this.isDataLoaded;
+      return ProjectSubView.prototype.initialize.call(this, options);
+    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-project/project-members.html", {}, function() {
-        _this.$el.find(".preload").remove();
-        _this.$teamList = _this.$el.find("#team-members ul");
-        return _this.$memberList = _this.$el.find("#project-members ul");
+        return _this.onTemplateLoad();
       });
+    },
+    onTemplateLoad: function() {
+      this.$el.find(".preload").remove();
+      this.$teamList = this.$el.find("#team-members ul");
+      this.$memberList = this.$el.find("#project-members ul");
+      return this.addAll();
     },
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,
@@ -26,13 +34,18 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       } else {
         this.$el.find(".preload").remove();
       }
-      this.collection.models[0].attributes.roles = ["Project Owner"];
-      this.collection.models[0].attributes.description = "Lorem ipsum";
-      this.collection.models[1].attributes.roles = ["Organizer"];
-      this.collection.models[1].attributes.description = "Tempor cray proident, stumptown hella";
-      this.collection.models[1].attributes.email = "mattlohmann@localprojects.net";
-      this.collection.models[2].attributes.roles = ["Member"];
-      this.collection.models[2].attributes.description = "Master cleanse plaid assumenda";
+      /*
+      				@collection.models[0].attributes.roles = ["Project Owner"]
+      				@collection.models[0].attributes.description = "Lorem ipsum"
+      
+      				@collection.models[1].attributes.roles = ["Organizer"]
+      				@collection.models[1].attributes.description = "Tempor cray proident, stumptown hella"
+      				@collection.models[1].attributes.email = "mattlohmann@localprojects.net"
+      				
+      				@collection.models[2].attributes.roles = ["Member"]
+      				@collection.models[2].attributes.description = "Master cleanse plaid assumenda"
+      */
+
       this.collection.each(function(model) {
         if (__indexOf.call(model.attributes.roles, "Project Owner") >= 0 || __indexOf.call(model.attributes.roles, "Organizer") >= 0) {
           _this.team.push(model);

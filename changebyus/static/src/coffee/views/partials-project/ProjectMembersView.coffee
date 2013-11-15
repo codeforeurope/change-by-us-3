@@ -8,21 +8,27 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			$teamList: null
 			$memberList: null
 
+			initialize: (options) -> 
+				@isDataLoaded = options.isDataLoaded || @isDataLoaded
+				ProjectSubView::initialize.call(@, options)
 
 			render: ->  
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-members.html", 
-					{}, =>
-						@$el.find(".preload").remove()
-						@$teamList = @$el.find("#team-members ul")
-						@$memberList = @$el.find("#project-members ul")
+					{}, => @onTemplateLoad()
+
+			onTemplateLoad:->
+				@$el.find(".preload").remove()
+				@$teamList = @$el.find("#team-members ul")
+				@$memberList = @$el.find("#project-members ul")
+				@addAll()
 
 			# override in subview
 			addAll: -> 
 				console.log 'ProjectMembersView ',@
 				if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
 
-				# temp
+				###
 				@collection.models[0].attributes.roles = ["Project Owner"]
 				@collection.models[0].attributes.description = "Lorem ipsum"
 
@@ -32,6 +38,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				
 				@collection.models[2].attributes.roles = ["Member"]
 				@collection.models[2].attributes.description = "Master cleanse plaid assumenda"
+				###
 
 				@collection.each (model) => 
 					if "Project Owner" in model.attributes.roles or "Organizer" in model.attributes.roles

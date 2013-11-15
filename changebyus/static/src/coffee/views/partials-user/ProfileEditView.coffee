@@ -9,7 +9,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@render()
 
 			render: ->
-				$(@parent).template @templateDir+"/templates/partials-user/profile-edit-form.html", 
+				@$el = $(@parent)
+				@$el.template @templateDir+"/templates/partials-user/profile-edit-form.html", 
 					{data:@viewData}, => 
 						@ajaxForm()
 						onPageElementsLoad()
@@ -41,6 +42,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						else
 							$feedback.removeClass('.alert-success').addClass('.alert-error')
 				$form.ajaxForm options
+
+				console.log '$form',$form
 
 				# location autocomplete
 				$projectLocation = $("#location")

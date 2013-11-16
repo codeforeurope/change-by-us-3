@@ -1,3 +1,4 @@
+@import "compass/css3";
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity";
 
@@ -571,11 +572,9 @@ li {
   list-style: none;
 }
 
-/* TEMPORARY
-.custom{
-  margin-left:50 px;
-}  */
-
+a{
+ 
+}
 .custom {
   margin-left: none;
 }
@@ -1544,6 +1543,8 @@ button.close {
   background-color: $primaryColor;
   background-image: none;
   @include border-radius(2px);
+  @include transition-property(background-color,color);
+  @include transition-duration(.5s);
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
     color: #333333;
     background-color: #e6e6e6;
@@ -1559,19 +1560,23 @@ button.close {
     // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
+    /*
     -webkit-transition: background-position 0.1s linear;
     -moz-transition: background-position 0.1s linear;
     -o-transition: background-position 0.1s linear;
     transition: background-position 0.1s linear;
+    */
   }
   &:focus {
     // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
+    /*
     -webkit-transition: background-position 0.1s linear;
     -moz-transition: background-position 0.1s linear;
     -o-transition: background-position 0.1s linear;
     transition: background-position 0.1s linear;
+    */
     outline: thin dotted #333;
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;

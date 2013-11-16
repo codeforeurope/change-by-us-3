@@ -16,6 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       this.$el.template(this.templateDir + "/templates/partials-project/project-create-form.html", {
         data: this.viewData
       }, function() {
+        onPageElementsLoad();
         return _this.ajaxForm();
       });
       return $(this.parent).append(this.$el);

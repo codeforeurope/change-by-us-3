@@ -11,7 +11,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 			render: ->
 				@$el = $("<div class='create-project'/>")
 				@$el.template @templateDir + "/templates/partials-project/project-create-form.html",
-					data: @viewData, => @ajaxForm()
+					data: @viewData, => 
+						onPageElementsLoad()
+						@ajaxForm()
 
 				$(@parent).append @$el
 

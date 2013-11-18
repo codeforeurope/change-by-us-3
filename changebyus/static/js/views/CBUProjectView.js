@@ -2,6 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
+    isMember: false,
     projectCalenderView: null,
     projectMembersView: null,
     projectUpdatesView: null,
@@ -28,9 +29,31 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       console.log('CBUProjectView', this.model);
       this.$el = $("<div class='project-container'/>");
       this.$el.template(this.templateDir + "/templates/project.html", {}, function() {
-        return _this.addSubViews();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      var id,
+        _this = this;
+      id = this.model.get("id");
+      return $.ajax({
+        type: "GET",
+        url: "/api/project/am_i_a_member/" + id
+      }).done(function(response) {
+        var e;
+        try {
+          if (response.data.member) {
+            _this.isMember = true;
+          } else {
+            $join.removeClass('invisible');
+          }
+        } catch (_error) {
+          e = _error;
+          console.log(e);
+        }
+        return _this.addSubViews();
+      });
     },
     addSubViews: function() {
       var _this = this;
@@ -47,6 +70,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       config = {
         id: id
       };
+      console.log('CBUProjectView >> config', config);
       this.$el.prepend(this.$header);
       this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
       this.projectCalendarCollection = new ProjectCalendarCollection(config);
@@ -58,16 +82,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onCollectionLoad: function() {
       var _this = this;
+      console.log('onCollectionLoad');
       this.projectUpdatesView = new ProjectUpdatesView({
         collection: this.projectUpdatesCollection,
-        members: this.projectMembersCollection
+        members: this.projectMembersCollection,
+        isMember: this.isMember
       });
       this.projectMembersView = new ProjectMembersView({
         collection: this.projectMembersCollection,
-        isDataLoaded: true
+        isDataLoaded: true,
+        isMember: this.isMember
       });
       this.projectCalenderView = new ProjectCalenderView({
-        collection: this.projectCalendarCollection
+        collection: this.projectCalendarCollection,
+        isMember: this.isMember
       });
       this.updatesBTN = $("a[href='#updates']").parent();
       this.membersBTN = $("a[href='#members']").parent();
@@ -82,7 +110,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.btnListeners();
     },
     btnListeners: function() {
-      var $join, id, joined,
+      var $join, id,
         _this = this;
       $('.flag-project a').click(function(e) {
         var $this, url,
@@ -99,11 +127,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         });
       });
       id = this.model.get("id");
-      joined = false;
       $join = $(".project-footer .btn");
-      $join.click(function(e) {
+      return $join.click(function(e) {
         e.preventDefault();
-        if (joined) {
+        if (_this.isMember) {
           return;
         }
         return $.ajax({
@@ -114,25 +141,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           }
         }).done(function(response) {
           if (response.msg.toLowerCase() === "ok") {
-            joined = true;
-            return $join.html('Joined').css('background-color', '#e6e6e6');
+            _this.isMember = true;
+            return $join.html('isMember').css('background-color', '#e6e6e6');
           }
         });
-      });
-      return $.ajax({
-        type: "GET",
-        url: "/api/project/am_i_a_member/" + id
-      }).done(function(response) {
-        var e;
-        console.log('response.data.member', response, $join);
-        try {
-          if (response.data.member === false) {
-            return $join.removeClass('invisible');
-          }
-        } catch (_error) {
-          e = _error;
-          return console.log(e);
-        }
       });
     },
     toggleSubView: function() {

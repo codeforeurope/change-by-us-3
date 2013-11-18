@@ -4,17 +4,20 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     parent: "#project-update",
     members: null,
     initialize: function(options) {
+      ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
-      return ProjectSubView.prototype.initialize.call(this, options);
+      this.viewData.isMember = options.isMember;
+      return console.log('@viewData>>>>', this.viewData);
     },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
+      this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
+      return console.log('@viewData   >>>>', this.viewData);
     },
     onTemplateLoad: function() {
       var _this = this;

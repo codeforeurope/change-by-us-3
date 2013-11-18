@@ -25,6 +25,7 @@ define ["underscore",
 	 	
 		CBUProjectView = AbstractView.extend
 			isOwner:false
+			isMember:false
 			projectCalenderView: null
 			projectMembersView: null
 			projectUpdatesView: null
@@ -46,9 +47,26 @@ define ["underscore",
 			render: -> 
 				console.log 'CBUProjectView',@model
 				@$el = $("<div class='project-container'/>")
-				@$el.template(@templateDir+"/templates/project.html", 
-					{}, => @addSubViews())
+				@$el.template @templateDir+"/templates/project.html", 
+					{}, => @onTemplateLoad()
 				$(@parent).append @$el
+
+			onTemplateLoad:->
+				# determine if user is a member of the project
+				# if not, display the join button
+				id = @model.get("id")
+				$.ajax(
+					type: "GET"
+					url: "/api/project/am_i_a_member/"+id
+				).done (response)=> 
+					try 
+						if response.data.member
+							@isMember=true 
+						else 
+							$join.removeClass('invisible')
+					catch e then console.log e
+
+					@addSubViews()
 
 			addSubViews: ->  
 				@$header = $("<div class='project-header'/>")
@@ -59,6 +77,7 @@ define ["underscore",
 				id = @model.get("id")
 				config = {id:id}
 
+				console.log 'CBUProjectView >> config',config
 				@$el.prepend @$header
 				@projectUpdatesCollection  = new ProjectUpdatesCollection(config) 
 				@projectCalendarCollection = new ProjectCalendarCollection(config)
@@ -67,9 +86,10 @@ define ["underscore",
 				@projectMembersCollection.fetch {reset: true}
 
 			onCollectionLoad:->
-				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection})
-				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true})
-				@projectCalenderView  = new ProjectCalenderView({collection: @projectCalendarCollection})
+				console.log 'onCollectionLoad'
+				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
+				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
+				@projectCalenderView  = new ProjectCalenderView({collection: @projectCalendarCollection, isMember:@isMember})
 				
 				@updatesBTN  = $("a[href='#updates']").parent()
 				@membersBTN  = $("a[href='#members']").parent()
@@ -97,31 +117,19 @@ define ["underscore",
 						console.log response_
 
 				id     = @model.get("id")
-				joined = false
+
 				$join  = $(".project-footer .btn")
 				$join.click (e) =>
 					e.preventDefault()
-					if joined then return
+					if @isMember then return
 					$.ajax(
 						type: "POST"
 						url: "/api/project/join"
 						data: { project_id:id }
 					).done (response)=>
 						if response.msg.toLowerCase() is "ok"
-							joined = true
-							$join.html('Joined').css('background-color','#e6e6e6')
-
-				# determine if user is a member of the project
-				# if not, display the join button
-				$.ajax(
-					type: "GET"
-					url: "/api/project/am_i_a_member/"+id
-				).done (response)=> 
-					console.log 'response.data.member',response,$join
-
-					try if response.data.member is false then $join.removeClass('invisible')
-					catch e then console.log e
-
+							@isMember = true
+							$join.html('isMember').css('background-color','#e6e6e6')
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

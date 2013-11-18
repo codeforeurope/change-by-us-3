@@ -262,7 +262,7 @@ def api_edit_project():
 
 @project_api.route('/<project_id>/users')
 # return a list of users given a project
-@login_required
+# @login_required
 @project_exists
 def api_view_project_users(project_id):
     """

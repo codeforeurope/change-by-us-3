@@ -546,20 +546,29 @@
     } 
 
     &:hover{
-      .member-popup{display: block;}
+      .member-popup{
+        visibility: visible;
+        @include opacity(1);
+        top:78px;
+      }
     } 
+
+    >a{z-index: 1;}
     
   }
 
   .member-popup{
     position: absolute;
-    display: none;
-    @include box-skin;
+    visibility: hidden;
     padding: 10px;
     height: 75px;
     width: 200px;
     left: -110px;
-    top:78px;
+    top:58px;
+    @include opacity(0);
+    @include box-skin;
+    @include transition-property(opacity, top);
+    @include transition-duration(.1s);
   }
 
   .hover-padding{

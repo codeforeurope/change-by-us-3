@@ -21,7 +21,8 @@ from tests import BaseTestCase
 
 from tests import (string_generator, email_generator, password_generator,
                    timestamp_generator, name_generator, text_generator,
-                   unicode_generator, unicode_email_generator, zipcode_generator)
+                   unicode_generator, unicode_email_generator, zipcode_generator,
+                   url_generator)
 
 
 class AssertClass(BaseTestCase):
@@ -61,6 +62,9 @@ class UserClass():
         self.fname = self.name
         self.lname = self.name
         self.dname = self.name
+        self.bio = text_generator(50)
+        self.website = url_generator()
+        self.location = zipcode_generator()
 
     def s(self, field, val):
         self.vars[field] = val
@@ -69,17 +73,28 @@ class UserClass():
         return self.vars[field]
 
     def createUser(self, client):
+        loc_data = client.GET('/api/project/geopoint?s=%s' % self.location)['data'][0]
+        self.location = loc_data['name']
+        self.lat = loc_data['lat']
+        self.lon = loc_data['lon']    
+    
         create = {'email' : self.email,
                   'password' : self.pw,
                   'display_name' : self.dname,
                   'first_name' : self.fname,
-                  'last_name' : self.lname}
+                  'last_name' : self.lname,
+                  'bio': self.bio,
+                  'website': self.website,
+                  'location': self.location,
+                  'lat': self.lat,
+                  'lon': self.lon}
 
         resp = client.POST('/api/user/create', data = create)
         client.assertTrueMsg( resp['success'], resp['msg'] )
         self.user_id = resp['data']['id']
         self.data = resp['data']
 
+    ## TODO: No edit user test?
 
     def login(self, client):
         login = {'email' : self.email, 

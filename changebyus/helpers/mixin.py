@@ -61,6 +61,12 @@ class FlaggableEntityMixin(object):
 
     def is_flagged(self):
         return self.flags > 0
+        
+class LocationEnabledEntityMixin(object):
+    location = db.StringField()
+
+    # Geo JSON Field
+    geo_location = db.PointField()    
 
 
 def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwargs):

@@ -39,6 +39,11 @@ def unicode_generator():
 def unicode_email_generator():
     email = unicode_generator() + '@' + unicode_generator() + '.com'
     return email
+    
+def url_generator():
+    s = string_generator(10) + ".com"
+    return s
+
 
 def zipcode_generator():
     """

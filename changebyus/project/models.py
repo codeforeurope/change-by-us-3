@@ -7,7 +7,8 @@ from ..extensions import db
 from ..helpers.crypt import handle_decryption
 from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
-from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, encode_model
+from ..helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
+    LocationEnabledEntityMixin, encode_model)
 from ..helpers.stringtools import slugify
 from ..stripe.models import StripeAccount
 from ..user.models import User
@@ -86,7 +87,8 @@ class Roles:
 ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
 
 
-class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin):
+class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
+              LocationEnabledEntityMixin):
     """
     Project model.  Pretty straight forward.  For image_url we
     store the url (/images/image.jpg) so that we can move data between
@@ -102,11 +104,6 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
 
     stripe_account = db.ReferenceField(StripeAccount)
     retired_stripe_accounts = db.ListField()
-
-    location = db.StringField()
-
-    # Geo JSON Field
-    geo_location = db.PointField()
 
     # NOTE: This is very CBU specific
     # a project is either a project or a resource

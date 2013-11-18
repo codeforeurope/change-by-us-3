@@ -36,7 +36,11 @@ def _create_user(email=None,
                  password=None, 
                  display_name=None, 
                  first_name=None, 
-                 last_name=None):
+                 last_name=None,
+                 bio=None,
+                 website=None,
+                 location=None,
+                 geo_location=None):
     """
     ABOUT
         Routine to create a user record. This is purpusly flexible, you can
@@ -62,16 +66,15 @@ def _create_user(email=None,
     if password is None:
         return False
 
-    u = User(password = password)
-
-    if email:
-        u.email = email
-    if display_name:
-        u.display_name = display_name
-    if first_name:
-        u.first_name = first_name
-    if last_name:
-        u.last_name = last_name
+    u = User(email=email,
+             display_name=display_name,
+             first_name=first_name,
+             last_name=last_name,
+             password=password,
+             bio=bio,
+             website=website,
+             location=location,
+             geo_location=geo_location)
 
     u.notifications = UserNotifications()
 

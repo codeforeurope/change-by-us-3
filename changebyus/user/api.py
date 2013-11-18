@@ -88,7 +88,9 @@ def api_create_user():
     lon = request.form.get("lon")
     
     if (lat and lon):
-        p.geo_location = [float(lon), float(lat)]
+        geo_location = [float(lon), float(lat)]
+    else:
+        geo_location = None
 
     errStr = ''
     display_name_user = User.objects(display_name=display_name)
@@ -108,7 +110,11 @@ def api_create_user():
                      password=password,
                      display_name=display_name,
                      first_name=first_name,
-                     last_name=last_name)
+                     last_name=last_name,
+                     bio=bio,
+                     website=website,
+                     location=location,
+                     geo_location=geo_location)
 
     login_user(u)
 
@@ -207,15 +213,17 @@ def api_edit_user():
     lat = request.form.get("lat")
     lon = request.form.get("lon")
     
-    if (lat and lon):
-        p.geo_location = [float(lon), float(lat)]
-
     if email: u.email = email
     if password: u.password = password
     if display_name: u.display_name = display_name
     if first_name: u.first_name = first_name
     if last_name: u.last_name = last_name
-
+    if bio: u.bio = bio
+    if website: u.website = website
+    if location: u.location = location
+    
+    if (lat and lon):
+        u.geo_location = [float(lon), float(lat)]
 
     file_name = None
 

@@ -24,12 +24,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
+      if (this.collection.length > 0) {
+        this.onCollectionLoad();
+      }
       return onPageElementsLoad();
     },
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
-      console.log("@collection >> ", this.collection, this.collection.models.length);
+      console.log("addAll @collection >> ", this.collection, this.collection.models.length);
       this.collection.each(function(model) {
         if (__indexOf.call(model.attributes.roles, "Project Owner") >= 0 || __indexOf.call(model.attributes.roles, "Organizer") >= 0) {
           _this.team.push(model);

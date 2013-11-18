@@ -6,13 +6,16 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			members: null
 
 			initialize: (options) -> 
-				@members = options.members || @members
 				ProjectSubView::initialize.call(@, options)
+				@members           = options.members || @members
+				@viewData.isMember = options.isMember 
+				console.log '@viewData>>>>',@viewData
 
 			render: ->  
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-updates.html",
 					{data: @viewData}, =>@onTemplateLoad() 
+				console.log '@viewData   >>>>',@viewData
 
 			onTemplateLoad:->
 				ProjectSubView::onTemplateLoad.call @

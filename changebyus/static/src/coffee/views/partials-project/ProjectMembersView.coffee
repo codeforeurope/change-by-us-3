@@ -13,22 +13,24 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				ProjectSubView::initialize.call(@, options)
 				console.log "initialize @collection >> ",@collection
 
-			render: ->  
+			render: ->   
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-project/project-members.html", 
 					{}, => @onTemplateLoad()
 
-			onTemplateLoad:->
+			onTemplateLoad:-> 
 				ProjectSubView::onTemplateLoad.call @
 				
 				@$teamList = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
 
+				if @collection.length > 0 then @onCollectionLoad()
+
 				onPageElementsLoad()
 
 			# override in subview
 			addAll: -> 
-				console.log "@collection >> ",@collection, @collection.models.length
+				console.log "addAll @collection >> ",@collection, @collection.models.length
 
 				@collection.each (model) => 
 					if "Project Owner" in model.attributes.roles or "Organizer" in model.attributes.roles

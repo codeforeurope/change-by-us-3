@@ -14,8 +14,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 
 			render: -> 
 				@$el = $("<div class='discover'/>")
-				@$el.template @templateDir + "/templates/discover.html",
-					data: @viewData, => onTemplateLoad()
+				@$el.template @templateDir+"/templates/discover.html",
+					{data: @viewData}, => @onTemplateLoad()
 
 			onTemplateLoad:->
 				$(@parent).append @$el

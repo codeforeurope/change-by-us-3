@@ -18,39 +18,45 @@
             <div class="form-container">
                 <div class="form-left">
 
-                    <label>PROJECT NAME*</label>
+                    <label for="name">PROJECT NAME*</label>
                     <input type="text" maxlength="30" name="name" id="project_name" placeholder="My awesome project" class="input-xxlarge" required>
 
-                    <label>DESCRIPTION*</label>
+                    <label for="description">DESCRIPTION*</label>
                     <textarea rows="8" name="description" maxlength="600" id="project_description" placeholder="Project Description" class="input-xxlarge" required></textarea>
 
                     <label for="category">Category</label>
                     <select name="category" id="project-category">
-                        <option value="">Try Me!</option>
-                        <option value="">Try Me!</option>
-                        <option value="">Try Me!</option>
+                        <option value="Animals">Animals</option>
+                        <option value="Community">Community</option>
+                        <option value="Education">Education</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Food">Food</option>
+                        <option value="Health">Health</option>
+                        <option value="Politics">Politics</option>
+                        <option value="Religion">Religion</option>
                     </select>
 
-                    <label>PROJECT LOCATION</label>
+                    <label for="zip">PROJECT LOCATION</label>
                     <input type="text" name="zip" id="project_location" placeholder="Enter Zip Code of Location" class="input-xxlarge">
                     <br>
                 </div>
 
                 <div class="form-right">
-                    <label>Project Thumbnail</label>
-                    <div class="fileupload fileupload-new" data-provides="fileupload">
-                        <div>
-                            <span class="btn btn-file"> 
-                                <span class="fileupload-exists">Edit Thumbnail</span>
-                                <span class="fileupload-new">Upload</span>
-                                <input id="project_image" name="photo" type="file">
-                            </span>  
-                        </div> 
-                        <div class="fileupload-preview thumbnail circle"></div> 
-                        <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                    <div class="project-image"> 
+                        <label>Project Thumbnail</label>
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div>
+                                <span class="btn btn-file"> 
+                                    <span class="fileupload-exists">Edit Thumbnail</span>
+                                    <span class="fileupload-new">Upload</span>
+                                    <input id="project_image" name="photo" type="file">
+                                </span>  
+                            </div> 
+                            <div class="fileupload-preview thumbnail circle"></div> 
+                            <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                        </div>
+                        <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
                     </div>
-                    <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
-                    <br/>
                 </div>
             </div>
         </div>

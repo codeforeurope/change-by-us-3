@@ -15,7 +15,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       return this.$el.template(this.templateDir + "/templates/discover.html", {
         data: this.viewData
       }, function() {
-        return onTemplateLoad();
+        return _this.onTemplateLoad();
       });
     },
     onTemplateLoad: function() {

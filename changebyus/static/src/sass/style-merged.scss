@@ -639,8 +639,9 @@ dd {
 hr {
   margin: 40px 0;
   border: 0;
-  border-top: 1px solid #eeeeee;
+  border-top: 2px solid $grayBorder;
   border-bottom: 1px solid $white;
+  width: 100%;
 }
 
 .thin {
@@ -2869,8 +2870,8 @@ a.fileupload-exists{color: $white;}
   }
 
   .title {
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     font-size: 40px;
   }
 }
@@ -2913,9 +2914,11 @@ a.fileupload-exists{color: $white;}
   @include box-skin;
 
   li{
-    padding:10px;
+    padding:10px 20px;
     cursor: pointer;
   }
+
+  h3{margin-left: 10px;} 
 
 }
 

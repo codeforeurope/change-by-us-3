@@ -20,10 +20,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       this.$el.template(this.templateDir + "/templates/partials-user/user.html", {
         data: this.model.attributes
       }, function() {
-        _this.ajaxForm();
-        return _this.loadProjects();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      if (this.model.id === window.userID) {
+        $('.edit').removeClass('invisible');
+      }
+      this.ajaxForm();
+      return this.loadProjects();
     },
     ajaxForm: function() {
       var $signin;
@@ -33,7 +39,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
     },
     loadProjects: function() {
-      console.log('onTemplateLoad');
       this.joinedProjects = new ProjectListCollection({
         url: "/api/project/user/" + this.model.id + "/joinedprojects"
       });

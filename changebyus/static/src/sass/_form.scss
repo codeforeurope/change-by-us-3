@@ -3,7 +3,7 @@
 
 .form-left {
 	float: left;
-	width: 75%;
+	width: 60%;
 	label{
 		margin-top: 30px;
 		&:first-child{margin-top: 0;}
@@ -11,7 +11,7 @@
 }
 .form-right {
 	float: right;
-	width: 25%;
+	width: 40%;
 }	
 
 .form-footer{
@@ -31,7 +31,7 @@
 
 .zip {
 	white-space: nowrap;
-	cursor: pointer;
+	cursor: pointer; 
 	padding: 8px 20px;
 	font-size: 18px;
 	line-height: 24px;
@@ -41,8 +41,34 @@
 	border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 
-.feedback{
-	margin-top: 20px;
-}
+.feedback{ margin-top: 20px; }
 
 .sub-text{color: $graySubtext;} 
+
+.profile-image{
+	margin-bottom: 30px;
+	width: 240px;
+}
+
+.public-profile{ 
+	float: right;
+ }
+
+.public-email{
+	*{float: left;}
+	span{ 
+		margin-left: 10px; 
+	} 
+}
+
+.password-title{
+	width: 490px;
+	margin-top: 30px; 
+	text-align: right;
+	label{float: left;}
+}
+
+label[for=website]{
+	display: inline-block;
+	margin-right: 5px;
+}

@@ -2,7 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
   var CBUProjectOwnerView;
   return CBUProjectOwnerView = CBUProjectView.extend({
     initialize: function(options) {
-      return CBUProjectView.prototype.initialize.call(this, options);
+      CBUProjectView.prototype.initialize.call(this, options);
+      return console.log('CBUProjectOwnerView', this);
     },
     render: function() {
       var _this = this;
@@ -23,7 +24,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         var config, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
         config = {
           id: _this.model.get("id"),
-          name: _this.model.get("name")
+          name: _this.model.get("name"),
+          model: _this.model
         };
         console.log('CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!', config);
         projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
@@ -34,9 +36,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           collection: projectDiscussionsCollection
         });
         _this.projectDiscussionView = new ProjectDiscussionView();
-        _this.projectNewDiscussionView = new ProjectNewDiscussionView({
-          model: _this.model
-        });
+        _this.projectNewDiscussionView = new ProjectNewDiscussionView(config);
         _this.projectAddUpdateView = new ProjectAddUpdateView({
           collection: projectUpdatesCollection
         });
@@ -47,9 +47,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         _this.projectMembersView = new ProjectMembersView({
           collection: projectMembersCollection
         });
-        _this.projectInfoAppearanceView = new ProjectInfoAppearanceView({
-          model: _this.model
-        });
+        _this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
         _this.projectDiscussionsView.on('discussionClick', function(arg_) {
           console.log('projectDiscussionsView arg_', arg_);
           _this.projectDiscussionView.updateDiscussion(arg_.model);

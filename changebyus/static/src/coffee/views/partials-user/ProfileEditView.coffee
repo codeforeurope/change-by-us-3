@@ -68,7 +68,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						console.log(datum)
 				)
 
-				$('input:radio').screwDefaultButtons
+				$('input:radio, input:checkbox').screwDefaultButtons
 					image: 'url("/static/img/black-check.png")'
 					width: 18
 					height: 18

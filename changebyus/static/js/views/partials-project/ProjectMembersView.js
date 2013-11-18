@@ -10,7 +10,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     $memberList: null,
     initialize: function(options) {
       this.isDataLoaded = options.isDataLoaded || this.isDataLoaded;
-      return ProjectSubView.prototype.initialize.call(this, options);
+      ProjectSubView.prototype.initialize.call(this, options);
+      return console.log("initialize @collection >> ", this.collection);
     },
     render: function() {
       var _this = this;
@@ -20,28 +21,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     onTemplateLoad: function() {
+      ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
-      this.addAll();
       return onPageElementsLoad();
     },
-    noResults: function() {},
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
-      console.log('ProjectMembersView ', this);
-      /*
-      				@collection.models[0].attributes.roles = ["Project Owner"]
-      				@collection.models[0].attributes.description = "Lorem ipsum"
-      
-      				@collection.models[1].attributes.roles = ["Organizer"]
-      				@collection.models[1].attributes.description = "Tempor cray proident, stumptown hella"
-      				@collection.models[1].attributes.email = "mattlohmann@localprojects.net"
-      				
-      				@collection.models[2].attributes.roles = ["Member"]
-      				@collection.models[2].attributes.description = "Master cleanse plaid assumenda"
-      */
-
+      console.log("@collection >> ", this.collection, this.collection.models.length);
       this.collection.each(function(model) {
         if (__indexOf.call(model.attributes.roles, "Project Owner") >= 0 || __indexOf.call(model.attributes.roles, "Organizer") >= 0) {
           _this.team.push(model);

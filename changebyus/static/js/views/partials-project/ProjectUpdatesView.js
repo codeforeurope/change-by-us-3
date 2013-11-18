@@ -18,15 +18,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     onTemplateLoad: function() {
       var _this = this;
+      ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$ul = this.$el.find(".updates-container ul");
       this.$members = this.$el.find(".team-members ul");
-      console.log('onTemplateLoad', this.members);
       this.members.each(function(model) {
         return _this.addMemeber(model);
       });
       return onPageElementsLoad();
     },
-    noResults: function() {},
     addMemeber: function(model_) {
       var $member,
         _this = this;

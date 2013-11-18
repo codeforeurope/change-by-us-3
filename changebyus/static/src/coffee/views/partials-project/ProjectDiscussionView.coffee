@@ -23,12 +23,11 @@ define ["underscore",
 			onTemplateLoad:->
 				@$ul = @$el.find('.bordered-item')
 				@$form = @$el.find(@$threadFormID)
+				onPageElementsLoad()
 
 			updateDiscussion:(discussion_)->
 				@$ul.html('')
 				@$form.html('')
-
-				console.log 'updateDiscussion',discussion_, @$ul,@$form,discussion_.attributes.id
 
 				@addOne discussion_
 				for response in discussion_.attributes.responses

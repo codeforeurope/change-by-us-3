@@ -8,41 +8,27 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			$teamList: null
 			$memberList: null
 
-			initialize: (options) -> 
+			initialize: (options) ->
 				@isDataLoaded = options.isDataLoaded || @isDataLoaded
 				ProjectSubView::initialize.call(@, options)
+				console.log "initialize @collection >> ",@collection
 
 			render: ->  
 				@$el = $(@parent)
-				@$el.template @templateDir + "/templates/partials-project/project-members.html", 
+				@$el.template @templateDir+"/templates/partials-project/project-members.html", 
 					{}, => @onTemplateLoad()
 
 			onTemplateLoad:->
-				#@$el.find(".preload").remove()
+				ProjectSubView::onTemplateLoad.call @
+				
 				@$teamList = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
-				@addAll()
 
 				onPageElementsLoad()
 
-			noResults:->
-
 			# override in subview
 			addAll: -> 
-				console.log 'ProjectMembersView ',@
-				# if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
-
-				###
-				@collection.models[0].attributes.roles = ["Project Owner"]
-				@collection.models[0].attributes.description = "Lorem ipsum"
-
-				@collection.models[1].attributes.roles = ["Organizer"]
-				@collection.models[1].attributes.description = "Tempor cray proident, stumptown hella"
-				@collection.models[1].attributes.email = "mattlohmann@localprojects.net"
-				
-				@collection.models[2].attributes.roles = ["Member"]
-				@collection.models[2].attributes.description = "Master cleanse plaid assumenda"
-				###
+				console.log "@collection >> ",@collection, @collection.models.length
 
 				@collection.each (model) => 
 					if "Project Owner" in model.attributes.roles or "Organizer" in model.attributes.roles
@@ -50,6 +36,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					else
 						@members.push model
 					console.log 'ProjectMembersView model.roles',model
+
 
 				@addTeam(model) for model in @team
 				@addMember(model) for model in @members

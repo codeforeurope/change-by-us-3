@@ -136,15 +136,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     toggleSubView: function() {
-      var view;
+      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
       view = window.location.hash.substring(1);
-      this.projectUpdatesView.hide();
-      this.projectMembersView.hide();
-      this.projectCalenderView.hide();
-      this.updatesBTN.removeClass("active");
-      this.membersBTN.removeClass("active");
-      this.calendarBTN.removeClass("active");
-      console.log('toggleSubView', this.projectUpdatesView, this.updatesBTN);
+      _ref = [this.projectUpdatesView, this.projectMembersView, this.projectCalenderView];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        v = _ref[_i];
+        v.hide();
+      }
+      _ref1 = [this.updatesBTN, this.membersBTN, this.calendarBTN];
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        btn = _ref1[_j];
+        btn.removeClass("active");
+      }
       switch (view) {
         case "members":
           this.projectMembersView.show();

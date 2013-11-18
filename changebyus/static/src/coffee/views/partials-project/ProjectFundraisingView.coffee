@@ -1,7 +1,7 @@
 define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"], (_, Backbone, $, temp, form, AbstractView) ->
 	ProjectFundraisingView = AbstractView.extend
 		
-		parent: "#project-calendar"
+		parent: "#project-fundraising"
 		name:"My Project"
 		
 		initialize: (options) ->

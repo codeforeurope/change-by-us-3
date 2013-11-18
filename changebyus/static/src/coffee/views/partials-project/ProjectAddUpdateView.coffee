@@ -7,7 +7,16 @@ define ["underscore",
 		"views/partials-project/ProjectWysiwygFormView",
 		"views/partials-project/ProjectUpdateListItemView",
 		"views/partials-project/ProjectUpdateSuccessModalView"],
-	(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectWysiwygFormView, ProjectUpdateListItemView, ProjectUpdateSuccessModalView) ->
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 AbstractView, 
+	 ProjectSubView, 
+	 ProjectWysiwygFormView, 
+	 ProjectUpdateListItemView, 
+	 ProjectUpdateSuccessModalView) ->
+
 		ProjectAddUpdateView = ProjectSubView.extend
 
 			parent: "#project-update"
@@ -21,7 +30,9 @@ define ["underscore",
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
 					{data: @viewData}, => @onTemplateLoad()
 
-			onTemplateLoad:->
+			onTemplateLoad:-> 
+				ProjectSubView::onTemplateLoad.call @
+				
 				@$ul = @$el.find('.updates-container ul')
 				form = new ProjectWysiwygFormView({parent:"#update-form"})
 				$submit = form.$el.find('input[type="submit"]')
@@ -31,8 +42,7 @@ define ["underscore",
 					share = []
 					if $("#twitter").prop('checked') then share.push 'twitter'
 					if $("#facebook").prop('checked') then share.push 'facebook'
-					arr_.push {name: "social_sharing", value:share, type: "hidden", required: false}
-					#console.log 'form.beforeSubmit',$("#twitter").prop('checked'),$("#facebook").prop('checked')
+					arr_.push {name: "social_sharing", value:share, type: "hidden", required: false} 
 
 				form.success = (response_)=>
 					if response_.success
@@ -42,9 +52,6 @@ define ["underscore",
 				$shareOptions = $(".share-options")
 				$shareToggle = $(".share-toggle")
 				$shareToggle.click -> $shareOptions.toggleClass("hide")
-
-			noResults:->
-
 					
 			addOne: (model_) ->
 				console.log "ProjectAddUpdateView addOne model", model_

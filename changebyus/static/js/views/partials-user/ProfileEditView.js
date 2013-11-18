@@ -84,7 +84,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         $('input[name="lon"]').val(_this.location.lon);
         return console.log(datum);
       });
-      return $('input:radio').screwDefaultButtons({
+      return $('input:radio, input:checkbox').screwDefaultButtons({
         image: 'url("/static/img/black-check.png")',
         width: 18,
         height: 18

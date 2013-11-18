@@ -126,14 +126,11 @@ define ["underscore",
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)
 				
-				@projectUpdatesView.hide()
-				@projectMembersView.hide()
-				@projectCalenderView.hide()
+				for v in [@projectUpdatesView, @projectMembersView, @projectCalenderView]
+					v.hide()
 
-				@updatesBTN.removeClass "active"
-				@membersBTN.removeClass "active"
-				@calendarBTN.removeClass "active"
-				console.log 'toggleSubView',@projectUpdatesView,@updatesBTN
+				for btn in [@updatesBTN, @membersBTN, @calendarBTN]
+					btn.removeClass "active"
 
 				switch view 
 					when "members"

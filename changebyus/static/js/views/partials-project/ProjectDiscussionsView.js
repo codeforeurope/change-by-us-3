@@ -4,25 +4,21 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     parent: "#project-discussions",
     $ul: null,
     render: function() {
-      return this.$el = $(this.parent);
+      this.$el = $(this.parent);
+      return this.templateLoaded = true;
     },
-    noResults: function() {},
     addAll: function() {
       var _this = this;
       console.log('ProjectDiscussionsView addAll', this.collection);
       if (this.collection.models.length === 0) {
-        this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {});
+        this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {
+          return onPageElementsLoad();
+        });
       } else {
         this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
-          var model, _i, _len, _ref, _results;
           _this.$ul = _this.$el.find('.bordered-item');
-          _ref = _this.collection.models;
-          _results = [];
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            model = _ref[_i];
-            _results.push(_this.addOne(model));
-          }
-          return _results;
+          ProjectSubView.prototype.addAll.call(_this, options);
+          return onPageElementsLoad();
         });
       }
       return this.isDataLoaded = true;

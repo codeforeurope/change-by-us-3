@@ -15,15 +15,15 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					{data: @viewData}, =>@onTemplateLoad() 
 
 			onTemplateLoad:->
+				ProjectSubView::onTemplateLoad.call @
+				
 				@$ul = @$el.find(".updates-container ul")
 				@$members = @$el.find(".team-members ul")
-				console.log 'onTemplateLoad',@members
+ 
 				@members.each (model) => 
 					@addMemeber model
 
 				onPageElementsLoad()
-
-			noResults:->
 
 			addMemeber: (model_) ->
 				console.log 'addMemeber',model_

@@ -3,35 +3,39 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   return ProjectSubView = AbstractView.extend({
     isDataLoaded: false,
     initialize: function(options) {
-      console.log('ProjectSubView options', options);
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     show: function() {
-      console.log(this, 'ProjectSubView show', this.isDataLoaded);
       this.$el.show();
-      if (!this.isDataLoaded) {
-        if (this.collection) {
-          this.collection.on("reset", this.addAll, this);
-          return this.collection.fetch({
-            reset: true
-          });
+      if (this.collection && this.isDataLoaded === false) {
+        if (this.templateLoaded) {
+          return this.loadData();
+        } else {
+          return this.delayedCollectionLoad = true;
         }
       }
     },
-    loadData: function() {},
-    noResults: function() {},
+    loadData: function() {
+      this.collection.on("reset", this.onCollectionLoad, this);
+      return this.collection.fetch({
+        reset: true
+      });
+    },
+    noResults: function() {
+      return this.$el.find('.no-results').show();
+    },
+    onCollectionLoad: function() {
+      this.$el.find(".preload").remove();
+      return this.addAll();
+    },
     addOne: function(model) {},
     addAll: function() {
       var _this = this;
       if (this.collection.models.length === 0) {
         this.noResults();
-      } else {
-        this.$el.find(".preload").remove();
       }
-      console.log('ProjectSubView addAll @collection.', this.collection.models);
       this.collection.each(function(model) {
-        console.log('ProjectSubView >>>>', _this);
         return _this.addOne(model);
       });
       return this.isDataLoaded = true;

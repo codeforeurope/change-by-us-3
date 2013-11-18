@@ -5,7 +5,9 @@ define ["underscore", "backbone", "jquery", "template"],
 			parent: "body"
 			templateDir: "/static"
 			viewData: {}
-			id:0
+			templateLoaded: false
+			delayedCollectionLoad: false
+			id: 0
 
 			initialize: (options_) ->
 				options      = options_ or {}
@@ -13,9 +15,11 @@ define ["underscore", "backbone", "jquery", "template"],
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent
 				@viewData    = options.viewData or @viewData
-				console.log 'options_',options.parent,@parent
+				# console.log 'options_',options.parent,@parent
 
 			onTemplateLoad:->
+				@templateLoaded = true
+				if @delayedCollectionLoad then @loadData()
 				#override in subview
 			
 			show: ->

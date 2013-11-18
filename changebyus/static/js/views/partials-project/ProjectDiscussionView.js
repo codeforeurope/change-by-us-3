@@ -17,13 +17,13 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     },
     onTemplateLoad: function() {
       this.$ul = this.$el.find('.bordered-item');
-      return this.$form = this.$el.find(this.$threadFormID);
+      this.$form = this.$el.find(this.$threadFormID);
+      return onPageElementsLoad();
     },
     updateDiscussion: function(discussion_) {
       var model, response, _i, _len, _ref;
       this.$ul.html('');
       this.$form.html('');
-      console.log('updateDiscussion', discussion_, this.$ul, this.$form, discussion_.attributes.id);
       this.addOne(discussion_);
       _ref = discussion_.attributes.responses;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

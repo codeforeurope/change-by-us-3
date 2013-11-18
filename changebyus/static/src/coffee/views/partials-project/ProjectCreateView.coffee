@@ -48,7 +48,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 						
 						if res.success
 							$form.resetForm()
-							window.location = "/project/"+res.data.id
+							window.location = "/project/"+res.data.id+"/admin"
 						else
 							# $form.resetForm()
 							

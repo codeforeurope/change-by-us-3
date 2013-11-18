@@ -55,7 +55,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           $form.find("input, textarea").remove("disabled");
           if (res.success) {
             $form.resetForm();
-            return window.location = "/project/" + res.data.id;
+            return window.location = "/project/" + res.data.id + "/admin";
           } else {
 
           }

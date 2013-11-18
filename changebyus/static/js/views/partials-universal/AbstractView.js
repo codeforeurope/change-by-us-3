@@ -4,6 +4,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     parent: "body",
     templateDir: "/static",
     viewData: {},
+    templateLoaded: false,
+    delayedCollectionLoad: false,
     id: 0,
     initialize: function(options_) {
       var options;
@@ -11,10 +13,14 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       this.id = options.id || this.id;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
-      return console.log('options_', options.parent, this.parent);
+      return this.viewData = options.viewData || this.viewData;
     },
-    onTemplateLoad: function() {},
+    onTemplateLoad: function() {
+      this.templateLoaded = true;
+      if (this.delayedCollectionLoad) {
+        return this.loadData();
+      }
+    },
     show: function() {
       return this.$el.show();
     },

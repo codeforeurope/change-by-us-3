@@ -1,9 +1,7 @@
 <div id="feedback" class="feedback alert hide"></div>
 <form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/user/edit">
     <div class="content-wrapper clearfix">
-        <div class="public-profile">
-            <a href="/user/<%= data.id %>">View public Profile</a>
-        </div>
+        
         <div class="form-left">
 
             <label for="first_name">FIRST NAME</label>
@@ -25,26 +23,36 @@
             <input type="text" maxlength="30" name="location" id="location" placeholder="e.g. New York NY or 10018" class="input-xxlarge" value="<%= data.location %>">
             <br>
             <span class="sub-text">Specify city or zip code so that other users can find you</span>
-
+            <br>
             <label for="bio">SHORT BIO</label>
             <textarea rows="8" maxlength="160" name="bio" id="bio" placeholder="Making changes sine [date user joined CBU]" class="input-xxlarge" value="<%= data.bio %>"></textarea>
 
-
+             <br>
             <label for="email">EMAIL</label>
             <input type="email" name="email" id="email" placeholder="" class="input-xxlarge" value="<%= data.email %>">
-            <input type="checkbox" name="public_email">
-            <label for="public_email">Display this email address so other members can contact me</label>
+             <br>
+            <div class="public-email clearfix">
+                <input type="checkbox" name="public_email">
+                <span  class="sub-text">Display this email address so other members can contact me</span>
+            </div>
+            
             <!---->
-
-            <label for="password">PASSWORD</label>
+            <br>
+            <div class="password-title clearfix">
+                <label for="password">PASSWORD</label>
+                <a href="#" class="ul">Change Password</a>
+            </div>
+             
             <input type="password" name="password" id="password" placeholder="" class="input-xxlarge" value="<%= data.password %>">
-
-            <label for="website">WEBSITE</label>
+             <br>
+            <label for="website">WEBSITE</label> <span class="sub-text">(Optional)</span>
             <input type="text" name="website" id="website" placeholder="http://mypersonalsite.com" class="input-xxlarge" value="<%= data.website %>">
-
+             <br>
             <div class="notify-wrapper">
                 <div class="notify-row">
-                    <div>NOTIFY WHEN...</div>
+                    <div>
+                        <label>NOTIFY WHEN...</label>
+                    </div>
                     <div>CBU</div>
                     <div>Email</div>
                 </div>
@@ -79,26 +87,27 @@
         </div>
 
         <div class="form-right">
+            <div class="pull-right">
+                <a href="/user/<%= data.id %>" class="ul">View public Profile</a>
+            </div>
             <div class="profile-image">
                 <label>PROFILE PICTURE</label>
 
                 <div class="fileupload fileupload-new" data-provides="fileupload">
                     <div>
                         <span class="btn btn-file">
-                            <% if (data.image_url_round_medium){ %>
-                                <% }else{ %>
-                                    <% } %>
-                                        <span class="fileupload-exists">Edit Thumbnail</span>
-                                        <span class="fileupload-new">Upload Thumbnail</span>
-                                        <input id="project_image" name="photo" type="file">
-                        </span> <a class="btn fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                            <span class="fileupload-exists">Edit Thumbnail</span>
+                            <span class="fileupload-new">Upload</span>
+                            <input id="project_image" name="photo" type="file">
+                        </span>  
                     </div>
 
                     <div class="fileupload-preview thumbnail circle">
                         <% if (data.image_url_round_medium){ %>
                             <img src="<%=  data.image_url_round_medium %>">
-                            <% } %>
+                        <% } %>
                     </div>
+                    <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
                 </div>
                 <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div>
@@ -115,7 +124,7 @@
             <input type="hidden" name="id" value="<%= data.id %>">
         </div>
         <div class="pull-right">
-            <span class="sub-text">Member since</span>* <a href="/delete">Delete Account</a>
+            <span class="sub-text">Member since</span> * <a href="/delete">Delete Account</a>
         </div>
     </div>
 

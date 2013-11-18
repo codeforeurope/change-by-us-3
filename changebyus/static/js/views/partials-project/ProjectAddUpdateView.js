@@ -18,6 +18,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     onTemplateLoad: function() {
       var $shareOptions, $shareToggle, $submit, form,
         _this = this;
+      ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$ul = this.$el.find('.updates-container ul');
       form = new ProjectWysiwygFormView({
         parent: "#update-form"
@@ -52,7 +53,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return $shareOptions.toggleClass("hide");
       });
     },
-    noResults: function() {},
     addOne: function(model_) {
       var view;
       console.log("ProjectAddUpdateView addOne model", model_);

@@ -4,7 +4,13 @@ define ["underscore",
 		"template", 
 		"views/partials-project/ProjectSubView",
 		"views/partials-project/ProjectDiscussionListItemView"],
-	(_, Backbone, $, temp, ProjectSubView, ProjectDiscussionListItemView) ->
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 ProjectSubView, 
+	 ProjectDiscussionListItemView) ->
+
 		ProjectDiscussionsView = ProjectSubView.extend
 
 			parent: "#project-discussions"
@@ -12,21 +18,20 @@ define ["underscore",
 
 			render: ->  
 				@$el = $(@parent)
-
-			noResults:->
+				@templateLoaded = true
 
 			addAll: ->
 				console.log 'ProjectDiscussionsView addAll',@collection
 				
 				if @collection.models.length is 0
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
-						{}, =>
+						{}, => onPageElementsLoad()
 				else
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => 
 							@$ul = @$el.find('.bordered-item')
-							for model in @collection.models
-								@addOne model
+							ProjectSubView::addAll.call(@, options)
+							onPageElementsLoad()
 
 				@isDataLoaded = true
 

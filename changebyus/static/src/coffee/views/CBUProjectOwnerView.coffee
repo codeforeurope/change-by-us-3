@@ -35,9 +35,9 @@ define ["underscore",
 
 		CBUProjectOwnerView = CBUProjectView.extend
 
-			initialize: (options) ->
-				# console.log 'CBUProjectOwnerView',options
+			initialize: (options) -> 
 				CBUProjectView::initialize.call @, options
+				console.log 'CBUProjectOwnerView',@
 
 			render: -> 
 				@$el = $("<div class='project-container'/>")
@@ -51,7 +51,7 @@ define ["underscore",
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
 						
-						config = {id:@model.get("id"), name:@model.get("name")}
+						config = {id:@model.get("id"), name:@model.get("name"), model:@model}
 						console.log 'CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!',config
 
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config) 
@@ -61,12 +61,12 @@ define ["underscore",
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
 						@projectDiscussionView     = new ProjectDiscussionView()
-						@projectNewDiscussionView  = new ProjectNewDiscussionView({model:@model}) 
+						@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
 						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
 						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
-						@projectInfoAppearanceView = new ProjectInfoAppearanceView({model:@model})
+						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>
 							console.log 'projectDiscussionsView arg_',arg_

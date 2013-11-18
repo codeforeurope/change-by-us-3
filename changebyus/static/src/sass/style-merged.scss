@@ -13,6 +13,7 @@
 @import "dashboard";
 @import "login-signup";
 @import "dropkick";
+@import "social";
 
 /*!
  * Bootstrap v2.3.1
@@ -1525,6 +1526,8 @@ button.close {
   -webkit-appearance: none;
 }
 
+a.btn{ color: $white; }
+
 .btn {
   display: inline-block;
   *display: inline;
@@ -2727,6 +2730,7 @@ a {
   overflow: hidden;
   position: relative;
   vertical-align: middle;
+  padding: 10px 20px;
   > input {
     position: absolute;
     top: 0;
@@ -2764,6 +2768,8 @@ a {
 .fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
   display: none;
 }
+
+a.fileupload-exists{color: $white;}
 
 .fileupload-inline .fileupload-controls {
   display: inline;
@@ -2816,11 +2822,13 @@ a {
     font-size: 16px;
   }
   
+  /*
   .btn {
     background-color: $secondaryColor;
     padding: 20px 40px;
     font-size: 26px;
   }
+  */ 
 }
 
 .content {
@@ -3113,7 +3121,7 @@ a {
 }
 
 .btn {
-    @include font-styling("asap", 22px, $white, "normal", "bold" );
+    @include font-styling("asap", 22px, $white, "normal", "regular" );
     white-space: nowrap; 
     &.btn-xlarge{
       display: inline-block;
@@ -3166,3 +3174,7 @@ a.highlight{
   @include highlight; 
 }
 
+a.ul{ 
+  color: $graySubtext;
+  text-decoration: underline ;
+}

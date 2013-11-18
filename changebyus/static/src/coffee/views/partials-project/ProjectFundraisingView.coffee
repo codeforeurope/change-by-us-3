@@ -13,7 +13,7 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 			@$el = $(@parent)
 			if @started
 				@$el.template @templateDir + "/templates/partials-project/project-fundraising-goals.html",
-					{data: @viewData}, =>
+					{data: @viewData}, => @onTemplateLoad()
 			else
 				@$el.template @templateDir + "/templates/partials-project/project-fundraising-get-started.html", 
 					{}, => @getStarted()

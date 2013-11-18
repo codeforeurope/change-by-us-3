@@ -12,9 +12,12 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion.html", {
         data: this.viewData
       }, function() {
-        _this.$ul = _this.$el.find('.bordered-item');
-        return _this.$form = _this.$el.find(_this.$threadFormID);
+        return _this.onTemplateLoad();
       });
+    },
+    onTemplateLoad: function() {
+      this.$ul = this.$el.find('.bordered-item');
+      return this.$form = this.$el.find(this.$threadFormID);
     },
     updateDiscussion: function(discussion_) {
       var model, response, _i, _len, _ref;

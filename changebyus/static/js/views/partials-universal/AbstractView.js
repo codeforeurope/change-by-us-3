@@ -14,6 +14,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       this.viewData = options.viewData || this.viewData;
       return console.log('options_', options.parent, this.parent);
     },
+    onTemplateLoad: function() {},
     show: function() {
       return this.$el.show();
     },

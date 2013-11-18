@@ -1,9 +1,7 @@
-define ["underscore", "backbone", "jquery", "template"], 
-	(_, Backbone, $, temp) ->
-		CBUStreamView = Backbone.View.extend
-			parent: "body"
-			templateDir: "/static"
-			viewData: {}
+define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
+	(_, Backbone, $, temp, AbstractView) ->
+		CBUStreamView = AbstractView.extend
+
 			initialize: (options) ->
 				@templateDir = options.templateDir or @templateDir
 				@parent = options.parent or @parent

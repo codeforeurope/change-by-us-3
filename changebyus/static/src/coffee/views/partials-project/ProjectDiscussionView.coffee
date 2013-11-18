@@ -18,9 +18,11 @@ define ["underscore",
 			render: ->
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-discussion.html",
-					{data: @viewData}, =>
-						@$ul = @$el.find('.bordered-item')
-						@$form = @$el.find(@$threadFormID)
+					{data: @viewData}, => @onTemplateLoad()
+
+			onTemplateLoad:->
+				@$ul = @$el.find('.bordered-item')
+				@$form = @$el.find(@$threadFormID)
 
 			updateDiscussion:(discussion_)->
 				@$ul.html('')

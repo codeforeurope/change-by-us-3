@@ -1,10 +1,6 @@
-define(["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection", "abstract-view"], function(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection, AbstractView) {
   var CBUMainView;
-  return CBUMainView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
-    collection: {},
+  return CBUMainView = AbstractView.extend({
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;

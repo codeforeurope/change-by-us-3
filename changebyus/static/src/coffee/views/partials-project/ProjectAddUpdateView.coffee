@@ -19,27 +19,29 @@ define ["underscore",
 			render: -> 
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
-					{data: @viewData}, => 
-						@$ul = @$el.find('.updates-container ul')
-						form = new ProjectWysiwygFormView({parent:"#update-form"})
-						$submit = form.$el.find('input[type="submit"]')
-						
-						form.beforeSubmit = (arr_, form_, options_)-> 
-							$submit.find("input, textarea").attr("disabled", "disabled")
-							share = []
-							if $("#twitter").prop('checked') then share.push 'twitter'
-							if $("#facebook").prop('checked') then share.push 'facebook'
-							arr_.push {name: "social_sharing", value:share, type: "hidden", required: false}
-							#console.log 'form.beforeSubmit',$("#twitter").prop('checked'),$("#facebook").prop('checked')
+					{data: @viewData}, => @onTemplateLoad()
 
-						form.success = (response_)=>
-							if response_.success
-								@addModal response_.data
-							console.log 'response_',response_
+			onTemplateLoad:->
+				@$ul = @$el.find('.updates-container ul')
+				form = new ProjectWysiwygFormView({parent:"#update-form"})
+				$submit = form.$el.find('input[type="submit"]')
+				
+				form.beforeSubmit = (arr_, form_, options_)-> 
+					$submit.find("input, textarea").attr("disabled", "disabled")
+					share = []
+					if $("#twitter").prop('checked') then share.push 'twitter'
+					if $("#facebook").prop('checked') then share.push 'facebook'
+					arr_.push {name: "social_sharing", value:share, type: "hidden", required: false}
+					#console.log 'form.beforeSubmit',$("#twitter").prop('checked'),$("#facebook").prop('checked')
 
-						$shareOptions = $(".share-options")
-						$shareToggle = $(".share-toggle")
-						$shareToggle.click -> $shareOptions.toggleClass("hide")
+				form.success = (response_)=>
+					if response_.success
+						@addModal response_.data
+					console.log 'response_',response_
+
+				$shareOptions = $(".share-options")
+				$shareToggle = $(".share-toggle")
+				$shareToggle.click -> $shareOptions.toggleClass("hide")
 
 			noResults:->
 

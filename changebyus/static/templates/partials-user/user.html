@@ -1,31 +1,49 @@
 <div class="body-container">
-	<div class="user-header">
-		<div class="user-avatar">
-			<img src="http://lorempixel.com/250/250" class="circle">
-			<!-- <img src="<%= data.avatar_url %>"> -->
-		</div>
-		<div class="user-info">
-			<span style="font-size: 42px; font-weight: normal"><%= data.display_name %></span><span><img src="/static/img/profile_email.png"></span>
-			<br>
-			<span style="color:#323232"><i>aka </i></span><span><%= data.first_name %> <%= data.last_name %></span>
-			<span>Tempor cray proident, stumptown hella nulla fingerstache irony tonx. Mcsweeney's accusamus gentrify aliquip. Thundercats eiusmod single-origin coffee gastropub<%= data.user_description %></span>
-			<br>
-			<span>Brooklyn, NY<%= data.user_location %></span>
-			<strong>
-				<span><a href="http://website.com">http://website.com</a>  <%= data.user_website %></span>
-			</strong>
-		</div>
-	</div>
-	<hr>
-	<div class="user-projects clearfix">
-		<h2><%= data.first_name %> <%= data.last_name %>'s Projects</h2>
-		<ul id="project-list"></ul>
-	</div>
+    <div class="user-header">
+        <div class="user-avatar">
+            <img src="http://lorempixel.com/250/250" class="circle">
+            <!-- <img src="<%= data.avatar_url %>"> -->
+        </div>
+        <div class="user-info">
+            <span style="font-size: 42px; font-weight: normal">
+                <%= data.display_name %>
+            </span>
+            <span>
+                <img src="/static/img/profile_email.png">
+            </span>
+            <br>
+            <span style="color:#323232"><i>aka </i>
+            </span>
+            <span>
+                <%= data.first_name %>
+                    <%= data.last_name %>
+            </span>
+            <span>Tempor cray proident, stumptown hella nulla fingerstache irony tonx. Mcsweeney's accusamus gentrify aliquip. Thundercats eiusmod single-origin coffee gastropub
+                <%= data.user_description %>
+            </span>
+            <br>
+            <span>Brooklyn, NY
+                <%= data.user_location %>
+            </span>
+            <strong>
+                <span><a href="http://website.com">http://website.com</a> 
+                    <%= data.user_website %>
+                </span>
+            </strong>
+        </div>
+    </div>
+    <hr>
+    <div class="user-projects clearfix">
+        <h2>
+            <%= data.first_name %>
+                <%= data.last_name %>'s Projects</h2>
+        <ul id="project-list"></ul>
+    </div>
 
-	<hr>
+    <hr>
 
-	<div class="user-following clearfix">
-		<h2>Following</h2>
-		<ul id="following-list"></ul>
-	</div>
+    <div class="user-following clearfix">
+        <h2>Following</h2>
+        <ul id="following-list"></ul>
+    </div>
 </div>

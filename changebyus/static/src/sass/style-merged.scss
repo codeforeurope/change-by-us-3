@@ -2,6 +2,7 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity";
 
+@import "bootstrap-combined-no-icons";
 @import "variables";
 @import "mixins-and-functions";
 @import "projects";
@@ -2987,10 +2988,6 @@ a {
   }
 }
 
-.projects{
-
-}
-
 .header-links {
   padding-right: 20px;
   padding-left: 20px;
@@ -3169,23 +3166,3 @@ a.highlight{
   @include highlight; 
 }
 
-/*** HEADER *****/
-
-.header-icon{ 
-  position: absolute;
-  top: 15px;
-  right: 30px;
-  height: 20px;
-  width: auto;
-  font-size: 14px;
-  font-weight: bold;
-  background-position: left center;
-  background-repeat: no-repeat;
-  a{ 
-    padding-left: 30px;
-    @include text-shadow(rgba(0,0,0,.5) 0 0 5px);
-  }
-}
-
-.public-view{background-image: url(../img/icon_view_project.png);}
-.flag-project{background-image: url(../img/icon_flag.png);}

@@ -1,9 +1,6 @@
-define ["underscore", "backbone", "jquery", "template", "validate"], 
-	(_, Backbone, $, temp, valid) ->
-		CBUDLoginView = Backbone.View.extend
-			parent: "body"
-			templateDir: "/static"
-			viewData: {} 
+define ["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], 
+	(_, Backbone, $, temp, valid, AbstractView) ->
+		CBUDLoginView = AbstractView.extend
 			
 			initialize: (options) ->
 				@templateDir = options.templateDir or @templateDir

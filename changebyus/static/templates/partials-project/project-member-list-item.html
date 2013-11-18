@@ -1,19 +1,27 @@
 <div class="project-member clearfix">
-	<div class="mail-icon">
-		<% if (data.email){ %>
-			<a href="mailto:<%= data.email %>"><img src="/static/img/mail_icon.png"></a>
-		<% }else{ %>
-			<img src="/static/img/mail_icon_deactive.png">
-		<% } %>
-	</div>
-	<div class="user-avatar">
-		<img src="http://lorempixel.com/70/70/" class="circle">
-	</div> 
-	<div class="member-title">
-		<%= data.first_name %> <%= data.last_name %> <span class="aka">aka</span>
-		<br>
-		<%= data.display_name %>
-	</div>
-	<div class="member-description"> description <%= data.description %></div>
-	<div class="member-roles grey"><%= data.roles %></div>
+    <div class="mail-icon">
+        <% if (data.email){ %>
+            <a href="mailto:<%= data.email %>">
+                <img src="/static/img/mail_icon.png">
+            </a>
+            <% }else{ %>
+                <img src="/static/img/mail_icon_deactive.png">
+                <% } %>
+    </div>
+    <div class="user-avatar">
+        <img src="http://lorempixel.com/70/70/" class="circle">
+    </div>
+    <div class="member-title">
+        <%= data.first_name %>
+            <%= data.last_name %>
+                <span class="aka">aka</span>
+                <br>
+                <%= data.display_name %>
+    </div>
+    <div class="member-description">description
+        <%= data.description %>
+    </div>
+    <div class="member-roles grey">
+        <%= data.roles %>
+    </div>
 </div>

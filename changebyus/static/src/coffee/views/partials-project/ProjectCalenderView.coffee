@@ -2,6 +2,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 	(_, Backbone, $, temp, ProjectSubView) ->
 		ProjectCalenderView = ProjectSubView.extend
 			parent: "#project-calendar"
+			
 			render: -> 
 				@$el = $("<div class='project'/>")
 				@$el.template @templateDir + "/templates/partials-project/project-calendar.html",
@@ -9,4 +10,4 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 						@$el.find(".preload").remove()
 				$(@parent).append @$el
 
-			addOne: (model) ->
+			

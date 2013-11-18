@@ -6,6 +6,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       return this.$el = $(this.parent);
     },
+    noResults: function() {},
     addAll: function() {
       var _this = this;
       console.log('ProjectDiscussionsView addAll', this.collection);

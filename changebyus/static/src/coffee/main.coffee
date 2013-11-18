@@ -114,14 +114,14 @@ require ["jquery",
 			CBUAppRouter = new CBURouter()
 			Backbone.history.start pushState: true
 
-			# NAV
+			### NAV ###
 			$navTop = $('.nav.pull-left')
 			$navTop.hover ->
 				$(this).toggleClass('active')
 			, ->
 				$(this).removeClass('active')
 
-			# LOG OUT
+			### LOG OUT ###
 			$("a[href='/logout']").click (e)->
 				e.preventDefault()
 				$.ajax(

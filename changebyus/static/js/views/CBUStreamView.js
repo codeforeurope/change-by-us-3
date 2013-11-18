@@ -1,9 +1,6 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var CBUStreamView;
-  return CBUStreamView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
+  return CBUStreamView = AbstractView.extend({
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;

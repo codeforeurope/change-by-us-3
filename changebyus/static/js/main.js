@@ -104,12 +104,16 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     Backbone.history.start({
       pushState: true
     });
+    /* NAV*/
+
     $navTop = $('.nav.pull-left');
     $navTop.hover(function() {
       return $(this).toggleClass('active');
     }, function() {
       return $(this).removeClass('active');
     });
+    /* LOG OUT*/
+
     $("a[href='/logout']").click(function(e) {
       var _this = this;
       e.preventDefault();

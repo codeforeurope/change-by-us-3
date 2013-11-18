@@ -1,7 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/ProjectPostReplyModel"], function(_, Backbone, $, temp, moment, AbstractView, ProjectPostReplyModel) {
   var ProjectPostReplyView;
   return ProjectPostReplyView = AbstractView.extend({
-    model: null,
     tagName: "li",
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
@@ -16,7 +15,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       $reply = $("<div class='post-reply clearfix'/>");
       $reply.template(this.templateDir + "/templates/partials-project/project-post-reply-view.html", {
         data: {}
-      }, function() {});
+      }, function() {
+        return _this.onTemplateLoad();
+      });
       return $(this.el).append($reply);
     }
   });

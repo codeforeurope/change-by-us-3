@@ -1,11 +1,7 @@
-define ["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
-	(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection) ->
-		CBUMainView = Backbone.View.extend
-			parent: "body"
-			templateDir: "/static"
-			viewData: {}
-			collection: {}
-			
+define ["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection", "abstract-view"], 
+	(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection, AbstractView) ->
+		CBUMainView = AbstractView.extend
+
 			initialize: (options) ->
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent

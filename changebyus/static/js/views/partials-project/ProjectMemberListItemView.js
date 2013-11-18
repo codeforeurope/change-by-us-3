@@ -7,9 +7,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.render();
     },
     render: function() {
+      var _this = this;
       $(this.el).template(this.templateDir + "/templates/partials-project/project-member-list-item.html", {
         data: this.model.attributes
-      }, function() {});
+      }, function() {
+        return _this.onTemplateLoad();
+      });
       return this;
     }
   });

@@ -1,9 +1,7 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection"], 
-	(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection) ->
-		CBUDiscoverView = Backbone.View.extend
-			parent: "body"
-			templateDir: "/static"
-			viewData: {}
+define ["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection", "abstract-view"], 
+	(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection, AbstractView) ->
+		CBUDiscoverView = AbstractView.extend
+ 
 			bannerSearchView: null 
 				
 			initialize: (options) ->
@@ -17,12 +15,14 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 			render: -> 
 				@$el = $("<div class='discover'/>")
 				@$el.template @templateDir + "/templates/discover.html",
-					data: @viewData, =>
-						$(@parent).append @$el
-						searchParent = @$el.find(".content")
-						bannerSearchView = new BannerSearchView({parent:searchParent})
-						@collection.on "reset", @addAll, @
-						@collection.fetch reset: true
+					data: @viewData, => onTemplateLoad()
+
+			onTemplateLoad:->
+				$(@parent).append @$el
+				searchParent = @$el.find(".content")
+				bannerSearchView = new BannerSearchView({parent:searchParent})
+				@collection.on "reset", @addAll, @
+				@collection.fetch reset: true
 
 
 			addOne: (projectModel) ->

@@ -14,6 +14,9 @@ define ["underscore", "backbone", "jquery", "template"],
 				@parent      = options.parent or @parent
 				@viewData    = options.viewData or @viewData
 				console.log 'options_',options.parent,@parent
+
+			onTemplateLoad:->
+				#override in subview
 			
 			show: ->
 				@$el.show()

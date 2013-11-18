@@ -1,9 +1,7 @@
-define ["underscore", "backbone", "jquery", "template"], 
-	(_, Backbone, $, temp) ->
-		CBUSignupView = Backbone.View.extend
-			parent: "body"
-			templateDir: "/static"
-			viewData: {}
+define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
+	(_, Backbone, $, temp, AbstractView) ->
+		CBUSignupView = AbstractView.extend
+
 			socialInfo:null
 
 			initialize: (options) ->

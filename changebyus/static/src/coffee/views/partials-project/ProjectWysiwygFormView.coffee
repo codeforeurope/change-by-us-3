@@ -16,7 +16,6 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					response_to_id: @id 
 					editorID: @editorID
 
-				console.log "ProjectWysiwygFormView",@
 				if @parent is "#update-form"
 					url = "/templates/partials-project/project-update-form.html" 
 					@editorID =  "#editor"
@@ -32,11 +31,11 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 				@$el = $("<div class='content-wrapper'/>")
 				@$el.template @templateDir+url,
-					{data: @viewData}, => @jQueryForm()
+					{data: @viewData}, => @ajaxForm()
 
 				$(@parent).append @$el
 
-			jQueryForm: -> 
+			ajaxForm: -> 
 				# AJAXIFY THE FORM
 				showErrorAlert = (reason, detail) ->
 					msg = ""

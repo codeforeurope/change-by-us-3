@@ -1,20 +1,46 @@
 <div class="project">
     <div class="body-container">
         <div class="feature-image slim" style="background-image:url(<%= data.image_url_medium_rect %>);">
-            <h1 class="overlay-title"><%= data.name %></h1> 
+            <h1 class="overlay-title">
+                <%= data.name %>
+            </h1>
             <div class="header-icon public-view">
-                 <a href="/project/<%= data.id %>"> Public View</a>
+                <a href="/project/<%= data.id %>"> Public View</a>
             </div>
         </div>
-        
+
         <div class="owner-tabs-pane">
             <ul class="tabs">
-                <li><a href="#discussions" data-toggle="tab"><span>Discuss</span></a></li>
-                <li><a href="#updates" data-toggle="tab"><span>Updates</span></a></li>
-                <li><a href="#fundraising" data-toggle="tab"><span>Fundraising</span></a></li>
-                <li><a href="#calendar" data-toggle="tab"><span>Calendar</span></a></li>
-                <li><a href="#members" data-toggle="tab"><span>Members</span></a></li>
-                <li><a href="#info" data-toggle="tab"><span>Info &amp; Appearance</span></a></li>
+                <li>
+                    <a href="#discussions" data-toggle="tab">
+                        <span>Discuss</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#updates" data-toggle="tab">
+                        <span>Updates</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#fundraising" data-toggle="tab">
+                        <span>Fundraising</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#calendar" data-toggle="tab">
+                        <span>Calendar</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#members" data-toggle="tab">
+                        <span>Members</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#info" data-toggle="tab">
+                        <span>Info &amp; Appearance</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

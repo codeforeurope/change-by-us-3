@@ -14,8 +14,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			render: -> 
 				@$el = $("<div class='banner-search'/>")
 				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
-					data: @viewData, => 
-						@onTemplateLoad()
+					data: @viewData, => @onTemplateLoad()
 				$(@parent).append @$el
 
 			onTemplateLoad:->

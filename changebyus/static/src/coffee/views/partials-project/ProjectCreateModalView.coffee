@@ -8,8 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 		render: ->
 			@$el = $("<div class='project-preview'/>")
 			@$el.template @templateDir + "/templates/partials-project/project-create-modal.html",
-				data: @viewData
-			, ->
+				data: @viewData, ->
 
 			$(@parent).append @$el 
 

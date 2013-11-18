@@ -15,15 +15,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.$el.template(this.templateDir + "/templates/partials-project/project-discussion-list-item.html", {
         data: this.model.attributes
       }, function() {
-        _this.$el.find('.user-avatar, .description').click(function() {
-          return _this.trigger("click", _this.model);
-        });
-        _this.$el.find('.delete').click(function() {
-          return _this.trigger("delete", _this.model);
-        });
-        return console.log(_this.$el.find('.delete'));
+        return _this.onTemplateLoad();
       });
       return this;
+    },
+    onTemplateLoad: function() {
+      var _this = this;
+      this.$el.find('.user-avatar, .description').click(function() {
+        return _this.trigger("click", _this.model);
+      });
+      this.$el.find('.delete').click(function() {
+        return _this.trigger("delete", _this.model);
+      });
+      return console.log(this.$el.find('.delete'));
     }
   });
 });

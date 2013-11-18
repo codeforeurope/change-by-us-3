@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "utf-8">
+    <meta charset="utf-8">
     <title>Change By Us</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href='http://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700,300' rel='stylesheet' type='text/css'>
 
-    <link href="/static/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"> 
     <link href="/static/css/style-merged.css" rel="stylesheet">
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
     <link href="/static/css/wysiwyg.css" rel="stylesheet"> 
@@ -90,9 +89,7 @@
     </div>
   </div>
 
-    <!-- ========= -->
-    <!-- Libraries -->
-    <!-- ========= -->
+
     
     <script type="text/javascript">
       window.userID         = "{{ current_user.id }}"; 
@@ -101,7 +98,10 @@
       window.projectOwnerID = "{{ project.owner.id }}"; 
       {% endif %}
     </script>
-   
+       
+    <!-- ========= -->
+    <!-- Libraries -->
+    <!-- ========= -->
 
     <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js" type="text/javascript"></script>
@@ -111,14 +111,12 @@
     <script src="/static/js/ext/jquery/jquery-form.js"></script>
     <script src="/static/js/ext/jquery/jquery.tinysort.js"></script>
     <script src="/static/js/ext/jquery/select-post.js"></script> 
-    
+    <script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script>  
     <!-- 
     <script src="/static/js/ext/bootstrap/bootstrap.min.js"></script>
     <script src="/static/js/ext/bootstrap/bootstrap-fileupload.js"></script>
     <script src="/static/js/ext/bootstrap/bootstrap-dropdown.js"></script>
-   -->
-
-    <script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script>  
+    -->
 
 </body>
 </html>

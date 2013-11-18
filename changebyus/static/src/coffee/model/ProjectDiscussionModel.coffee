@@ -1,6 +1,7 @@
 define ["underscore", "backbone"], (_, Backbone) ->
 	ProjectDiscussionModel = Backbone.Model.extend
 		urlRoot: "/api/post"
+		
 		default: 
 			description: ""
 			title: ""

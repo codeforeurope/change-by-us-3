@@ -1,9 +1,6 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var CBUSignupView;
-  return CBUSignupView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
+  return CBUSignupView = AbstractView.extend({
     socialInfo: null,
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;

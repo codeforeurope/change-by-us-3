@@ -16,7 +16,6 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         response_to_id: this.id,
         editorID: this.editorID
       };
-      console.log("ProjectWysiwygFormView", this);
       if (this.parent === "#update-form") {
         url = "/templates/partials-project/project-update-form.html";
         this.editorID = "#editor";
@@ -34,11 +33,11 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       this.$el.template(this.templateDir + url, {
         data: this.viewData
       }, function() {
-        return _this.jQueryForm();
+        return _this.ajaxForm();
       });
       return $(this.parent).append(this.$el);
     },
-    jQueryForm: function() {
+    ajaxForm: function() {
       var $editor, editorOffset, options, showErrorAlert,
         _this = this;
       showErrorAlert = function(reason, detail) {

@@ -115,12 +115,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }).done(function(response) {
           if (response.msg.toLowerCase() === "ok") {
             joined = true;
-            $join.html('Joined');
-            return $join.css('background-color', '#e6e6e6');
+            return $join.html('Joined').css('background-color', '#e6e6e6');
           }
         });
       });
-      $join.addClass('invisible');
       return $.ajax({
         type: "GET",
         url: "/api/project/am_i_a_member/" + id

@@ -13,6 +13,8 @@ define ["underscore",
 			render: ->  
 				@$el = $(@parent)
 
+			noResults:->
+
 			addAll: ->
 				console.log 'ProjectDiscussionsView addAll',@collection
 				

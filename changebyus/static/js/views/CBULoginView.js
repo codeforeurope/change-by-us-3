@@ -1,9 +1,6 @@
-define(["underscore", "backbone", "jquery", "template", "validate"], function(_, Backbone, $, temp, valid) {
+define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], function(_, Backbone, $, temp, valid, AbstractView) {
   var CBUDLoginView;
-  return CBUDLoginView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
+  return CBUDLoginView = AbstractView.extend({
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;

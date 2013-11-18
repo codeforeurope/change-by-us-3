@@ -3,45 +3,60 @@
 
         <h1>Create a Project</h1>
         <span>
-            It's quick and easy, and you'll be up and running in no time.<br>
-            <a href=""><span class="highlight">Learn more</span></a>   about creating a project, or <a href=""><span class="highlight">join up with other projects</span></a> that might be similar to yours.
+            It's quick and easy, and you'll be up and running in no time.
+            <br>
+            <a href="">
+                <span class="highlight">Learn more</span>
+            </a>about creating a project, or
+            <a href="">
+                <span class="highlight">join up with other projects</span>
+            </a>that might be similar to yours.
         </span>
 
         <div class="content-wrapper create clearfix">
 
-            <div class="form-container"> 
+            <div class="form-container">
                 <div class="form-left">
 
-                    <label>PROJECT NAME* </label>
+                    <label>PROJECT NAME*</label>
                     <input type="text" maxlength="30" name="name" id="project_name" placeholder="My awesome project" class="input-xxlarge" required>
 
-                    <label>DESCRIPTION* </label>
+                    <label>DESCRIPTION*</label>
                     <textarea rows="8" name="description" maxlength="600" id="project_description" placeholder="Project Description" class="input-xxlarge" required></textarea>
 
-                    <label for="category">Category </label>
+                    <label for="category">Category</label>
                     <select name="category" id="project-category">
                         <option value="">Try Me!</option>
                         <option value="">Try Me!</option>
                         <option value="">Try Me!</option>
                     </select>
 
-                    <label>PROJECT LOCATION </label>
+                    <label>PROJECT LOCATION</label>
                     <input type="text" name="zip" id="project_location" placeholder="Enter Zip Code of Location" class="input-xxlarge">
                     <br>
                 </div>
 
                 <div class="form-right">
-                      <label>Project Thumbnail</label>
-                      <div class="fileupload fileupload-new" data-provides="fileupload">
-                          <div>
-                              <span class="btn btn-file"><% if (data.image_url_round_medium){ %> <% }else{ %> <% } %> <span class="fileupload-exists">Edit Thumbnail</span> <span class="fileupload-new">Upload Thumbnail</span> <input id="project_image" name="photo" type="file"></span> <a class="btn fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
-                          </div>
+                    <label>Project Thumbnail</label>
+                    <div class="fileupload fileupload-new" data-provides="fileupload">
+                        <div>
+                            <span class="btn btn-file">
+                                <% if (data.image_url_round_medium){ %>
+                                    <% }else{ %>
+                                        <% } %>
+                                            <span class="fileupload-exists">Edit Thumbnail</span>
+                                            <span class="fileupload-new">Upload Thumbnail</span>
+                                            <input id="project_image" name="photo" type="file">
+                            </span> <a class="btn fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                        </div>
 
-                          <div class="fileupload-preview thumbnail circle">
-                              <% if (data.image_url_round_medium){ %><img src="<%=  data.image_url_round_medium %>"> <% } %>
-                          </div>
-                      </div>
-                      <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+                        <div class="fileupload-preview thumbnail circle">
+                            <% if (data.image_url_round_medium){ %>
+                                <img src="<%=  data.image_url_round_medium %>">
+                                <% } %>
+                        </div>
+                    </div>
+                    <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
                     <br/>
                 </div>
             </div>
@@ -54,6 +69,6 @@
             <input type="submit" class="btn btn-large" value="Cancel">
         </div>
 
-        
+
     </form>
 </div>

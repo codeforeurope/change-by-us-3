@@ -109,9 +109,7 @@ define ["underscore",
 					).done (response)=>
 						if response.msg.toLowerCase() is "ok"
 							joined = true
-							$join.html('Joined')
-							$join.css('background-color','#e6e6e6')
-				$join.addClass('invisible')
+							$join.html('Joined').css('background-color','#e6e6e6')
 
 				# determine if user is a member of the project
 				# if not, display the join button

@@ -9,7 +9,17 @@ define ["underscore",
 		"model/UserModel",
 		"resource-project-view",
 		"views/partials-user/ProfileEditView"], 
-	(_, Backbone, fileupload, button, $, temp, AbstractView, ProjectListCollection, UserModel, ResourceProjectPreviewView, ProfileEditView) ->
+	(_, 
+	 Backbone, 
+	 fileupload, 
+	 button, 
+	 $, 
+	 temp, 
+	 AbstractView, 
+	 ProjectListCollection, 
+	 UserModel, 
+	 ResourceProjectPreviewView, 
+	 ProfileEditView) ->
 
 		CBUDashboardView = AbstractView.extend
 

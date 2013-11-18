@@ -11,7 +11,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.$el.find(".preload").remove();
       });
       return $(this.parent).append(this.$el);
-    },
-    addOne: function(model) {}
+    }
   });
 });

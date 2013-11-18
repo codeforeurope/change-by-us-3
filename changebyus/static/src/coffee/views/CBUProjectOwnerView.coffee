@@ -14,23 +14,24 @@ define ["underscore",
 		"views/partials-project/ProjectAddUpdateView", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
-		"views/partials-project/ProjectInfoAppearanceView"], (_, 
-																Backbone, 
-																$, 
-																temp, 
-																CBUProjectView, 
-																ProjectDiscussionsCollection, 
-																ProjectUpdatesCollection, 
-																ProjectCalendarCollection, 
-																ProjectMembersCollection, 
-																ProjectDiscussionView, 
-																ProjectDiscussionsView, 
-																ProjectNewDiscussionView, 
-																ProjectFundraisingView, 
-																ProjectAddUpdateView, 
-																ProjectCalenderView, 
-																ProjectMembersView, 
-																ProjectInfoAppearanceView) ->
+		"views/partials-project/ProjectInfoAppearanceView"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 CBUProjectView, 
+	 ProjectDiscussionsCollection, 
+	 ProjectUpdatesCollection, 
+	 ProjectCalendarCollection, 
+	 ProjectMembersCollection, 
+	 ProjectDiscussionView, 
+	 ProjectDiscussionsView, 
+	 ProjectNewDiscussionView, 
+	 ProjectFundraisingView, 
+	 ProjectAddUpdateView, 
+	 ProjectCalenderView, 
+	 ProjectMembersView, 
+	 ProjectInfoAppearanceView) ->
 
 		CBUProjectOwnerView = CBUProjectView.extend
 
@@ -52,13 +53,11 @@ define ["underscore",
 						
 						config = {id:@model.get("id"), name:@model.get("name")}
 						console.log 'CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!',config
-						# TO DO
-						# create all the subpage classes and HTML templates
 
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config) 
 						projectCalendarCollection    = new ProjectCalendarCollection(config)
 						projectMembersCollection     = new ProjectMembersCollection(config)
-						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
+						projectUpdatesCollection     = new ProjectUpdatesCollection(config)
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
 						@projectDiscussionView     = new ProjectDiscussionView()

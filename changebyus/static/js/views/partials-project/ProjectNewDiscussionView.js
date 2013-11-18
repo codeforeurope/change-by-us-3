@@ -12,15 +12,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$el.template(this.templateDir + "/templates/partials-project/project-new-discussion.html", {
         data: this.viewData
       }, function() {
-        var form;
-        form = new ProjectWysiwygFormView({
-          parent: "#discussion-form"
-        });
-        return form.success = function(response_) {
-          form.resetForm();
-          return window.location = "/project/" + _this.model.id + "#discussion/" + response_.data.id;
-        };
+        return _this.onTemplateLoad();
       });
+    },
+    onTemplateLoad: function() {
+      var form,
+        _this = this;
+      form = new ProjectWysiwygFormView({
+        parent: "#discussion-form"
+      });
+      return form.success = function(response_) {
+        form.resetForm();
+        return window.location = "/project/" + _this.model.id + "#discussion/" + response_.data.id;
+      };
     }
   });
 });

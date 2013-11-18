@@ -11,8 +11,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 			render: -> 
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-new-discussion.html",
-					{data: @viewData}, => 
-						form = new ProjectWysiwygFormView({parent:"#discussion-form"})
-						form.success = (response_) =>
-							form.resetForm()
-							window.location = "/project/"+@model.id+"#discussion/"+response_.data.id
+					{data: @viewData}, => @onTemplateLoad()
+
+			onTemplateLoad:->
+				form = new ProjectWysiwygFormView({parent:"#discussion-form"})
+				form.success = (response_) =>
+					form.resetForm()
+					window.location = "/project/"+@model.id+"#discussion/"+response_.data.id

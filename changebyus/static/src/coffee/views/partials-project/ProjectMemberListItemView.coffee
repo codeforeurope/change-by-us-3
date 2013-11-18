@@ -9,6 +9,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 
 		render: ->
 			$(@el).template @templateDir + "/templates/partials-project/project-member-list-item.html",
-				{data: @model.attributes}, ->
+				{data: @model.attributes}, => @onTemplateLoad()
 			@
 

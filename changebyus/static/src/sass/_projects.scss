@@ -7,6 +7,28 @@
 
 /* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
 
+/*** HEADER *****/
+
+.header-icon{ 
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  height: 20px;
+  width: auto;
+  font-size: 14px;
+  font-weight: bold;
+  background-position: left center;
+  background-repeat: no-repeat;
+  a{ 
+    padding-left: 30px;
+    @include text-shadow(rgba(0,0,0,.5) 0 0 5px);
+  }
+}
+
+.public-view{background-image: url(../img/icon_view_project.png);}
+.flag-project{background-image: url(../img/icon_flag.png);}
+
+
 .projects {
   padding: none;
   margin: none;
@@ -417,8 +439,7 @@
     .content-wrapper{
       overflow: hidden;
     }
-    
-    
+     
     span{
       font-weight: bold;
       color:$primaryColor;

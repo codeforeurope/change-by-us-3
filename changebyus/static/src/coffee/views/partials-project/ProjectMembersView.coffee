@@ -25,6 +25,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 				onPageElementsLoad()
 
+			noResults:->
+
 			# override in subview
 			addAll: -> 
 				console.log 'ProjectMembersView ',@

@@ -1,9 +1,6 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection"], function(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection", "abstract-view"], function(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection, AbstractView) {
   var CBUDiscoverView;
-  return CBUDiscoverView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
+  return CBUDiscoverView = AbstractView.extend({
     bannerSearchView: null,
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
@@ -18,16 +15,19 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       return this.$el.template(this.templateDir + "/templates/discover.html", {
         data: this.viewData
       }, function() {
-        var bannerSearchView, searchParent;
-        $(_this.parent).append(_this.$el);
-        searchParent = _this.$el.find(".content");
-        bannerSearchView = new BannerSearchView({
-          parent: searchParent
-        });
-        _this.collection.on("reset", _this.addAll, _this);
-        return _this.collection.fetch({
-          reset: true
-        });
+        return onTemplateLoad();
+      });
+    },
+    onTemplateLoad: function() {
+      var bannerSearchView, searchParent;
+      $(this.parent).append(this.$el);
+      searchParent = this.$el.find(".content");
+      bannerSearchView = new BannerSearchView({
+        parent: searchParent
+      });
+      this.collection.on("reset", this.addAll, this);
+      return this.collection.fetch({
+        reset: true
       });
     },
     addOne: function(projectModel) {

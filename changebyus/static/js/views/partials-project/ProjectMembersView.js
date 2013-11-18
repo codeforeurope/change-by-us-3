@@ -25,6 +25,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.addAll();
       return onPageElementsLoad();
     },
+    noResults: function() {},
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;

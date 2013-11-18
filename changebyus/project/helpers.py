@@ -54,10 +54,11 @@ def _create_project( resource = False ):
     description = request.form.get('description')
     category = request.form.get('category')
     location = request.form.get('location')
-    geo_location = None
+    lat = request.form.get("lat")
+    lon = request.form.get("lon")
     
-    if ('lat' in request.form and 'lon' in request.form):
-        geo_location = [float(request.form.get('lon')), float(request.form.get('lat'))]
+    if (lat and lon):
+        geo_location = [float(lon), float(lat)]
 
     owner = User.objects.with_id(g.user.id)
     slug = slugify(name)
@@ -173,8 +174,7 @@ def _edit_project():
     if name: p.name = name
     if description: p.description = description
     
-    if (location and lat and lon):
-        p.location = location
+    if (lat and lon):
         p.geo_location = [float(lon), float(lat)]
     
 

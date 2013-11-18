@@ -11,7 +11,8 @@ from ..helpers.crypt import (handle_decryption, handle_initial_encryption,
 from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
 
-from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, encode_model
+from ..helpers.mixin import (EntityMixin, HasActiveEntityMixin, 
+    LocationEnabledEntityMixin, encode_model)
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security.utils import encrypt_password
 from flask import current_app
@@ -107,7 +108,8 @@ class UserNotifications(db.EmbeddedDocument):
     posts_update_common_project = db.BooleanField(default = False)
 
 
-class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin):
+class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin, 
+           LocationEnabledEntityMixin):
     """
     This contains all there is to know about one of our users.
     Passwords are encrypted on save, and additionally we encrypt
@@ -153,7 +155,8 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin):
     last_name = db.StringField(max_length=20)
     
     #visible profile information
-    user_description = db.StringField(max_length=600)
+    bio = db.StringField(max_length=1000)
+    website = db.StringField(max_length=200)
 
     notifications = db.EmbeddedDocumentField( UserNotifications )
 

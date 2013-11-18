@@ -17,7 +17,7 @@ from ..helpers.stringtools import bool_strings
 
 from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, 
                             SubmitField, Required, ValidationError, 
-                            PasswordField,  )
+                            PasswordField, HiddenField)
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.mongotools import db_list_to_dict_list 
@@ -44,6 +44,11 @@ class CreateUserForm(Form):
     display_name = TextField("display_name", validators=[Required()])
     first_name = TextField("first_name", validators=[Required()])
     last_name = TextField("last_name", validators=[Required()])
+    bio = TextField()
+    website = TextField()
+    location = HiddenField("location")
+    lat = HiddenField("lat")
+    lon = HiddenField("lon")
 
 
 @user_api.route('/create', methods = ['POST'])
@@ -63,7 +68,7 @@ def api_create_user():
 
     if not g.user.is_anonymous():
         errStr = "You can not create an account when logged in." 
-        return jsonify_response( ReturnStruct(msg = errStr, success = False) )
+        return jsonify_response( ReturnStructure(msg = errStr, success = False) )
 
     form = CreateUserForm()
     if not form.validate():
@@ -76,6 +81,14 @@ def api_create_user():
     display_name = request.form.get('display_name')
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
+    bio = request.form.get('bio')
+    website = request.form.get('website')
+    location = request.form.get('location')
+    lat = request.form.get("lat")
+    lon = request.form.get("lon")
+    
+    if (lat and lon):
+        p.geo_location = [float(lon), float(lat)]
 
     errStr = ''
     display_name_user = User.objects(display_name=display_name)
@@ -148,6 +161,12 @@ class EditUserForm(Form):
     display_name = TextField("display_name")
     first_name = TextField("first_name")
     last_name = TextField("last_name")
+    bio = TextField()
+    website = TextField()
+    location = HiddenField("location")
+    lat = HiddenField("lat")
+    lon = HiddenField("lon")
+    
 
 @user_api.route('/edit', methods = ['POST'])
 @login_required
@@ -182,6 +201,14 @@ def api_edit_user():
     display_name = request.form.get('display_name')
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
+    bio = request.form.get('bio')
+    website = request.form.get('website')
+    location = request.form.get('location')
+    lat = request.form.get("lat")
+    lon = request.form.get("lon")
+    
+    if (lat and lon):
+        p.geo_location = [float(lon), float(lat)]
 
     if email: u.email = email
     if password: u.password = password

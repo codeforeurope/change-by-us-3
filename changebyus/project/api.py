@@ -145,6 +145,7 @@ class CreateProjectForm(Form):
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
     category = TextField("category")
+    gcal_code = TextField("gcal_code")
     location = HiddenField("location")
     lat = HiddenField("lat")
     lon = HiddenField("lon")
@@ -226,6 +227,8 @@ class EditProjectForm(Form):
     project_id = TextField("project_id")
     name = TextField("title",)
     description = TextAreaField("description")
+    category = TextField("category")
+    gcal_code = TextField("gcal_code")
     location = HiddenField("location")
     lat = HiddenField("lat")
     lon = HiddenField("lon")
@@ -262,7 +265,7 @@ def api_edit_project():
 
 @project_api.route('/<project_id>/users')
 # return a list of users given a project
-@login_required
+# @login_required
 @project_exists
 def api_view_project_users(project_id):
     """

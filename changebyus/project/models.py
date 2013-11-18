@@ -97,6 +97,7 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(max_length=600)
     category = db.StringField()
+    gcal_code = db.StringField(max_length=500)
 
     image_name = db.StringField()
     #municipality = db.ReferenceField(Municipality)

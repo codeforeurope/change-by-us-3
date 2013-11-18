@@ -53,6 +53,7 @@ def _create_project( resource = False ):
     name = request.form.get('name')
     description = request.form.get('description')
     category = request.form.get('category')
+    gcal_code = request.form.get('gcal_code')
     location = request.form.get('location')
     lat = request.form.get("lat")
     lon = request.form.get("lon")
@@ -76,6 +77,7 @@ def _create_project( resource = False ):
     p = Project( name = name, 
                  description = description, 
                  category = category,
+                 gcal_code = gcal_code,
                  location = location,
                  geo_location = geo_location,
                  owner = owner,
@@ -160,9 +162,11 @@ def _edit_project():
     project_id = request.form.get('project_id')
     name = request.form.get('name')
     description = request.form.get('description')
-    location = request.form.get("location")
-    lat = request.form.get("lat")
-    lon = request.form.get("lon")
+    category = request.form.get('category')
+    gcal_code = request.form.get('gcal_code')
+    location = request.form.get('location')
+    lat = request.form.get('lat')
+    lon = request.form.get('lon')
 
     p = Project.objects.with_id(project_id)
 
@@ -175,6 +179,8 @@ def _edit_project():
 
     if name: p.name = name
     if description: p.description = description
+    if category: p.category = category
+    if gcal_code: p.gcal_code = gcal_code
     
     if (lat and lon):
         p.geo_location = [float(lon), float(lat)]

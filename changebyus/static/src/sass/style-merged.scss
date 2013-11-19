@@ -2936,7 +2936,10 @@ a.fileupload-exists{color: $white;}
 .filter-within{
   float: left;
   select{width: 100px !important;}
-  .dk_container {float: left;}
+  .dk_container {
+    float: left;
+    width: 120px;
+  }
 }
 
 
@@ -3011,7 +3014,7 @@ a.fileupload-exists{color: $white;}
   height: 690px;
   margin: auto;
 
-  background-image:url(/static/img/cover.png);
+  background-image:url(/static/img/cover.jpg);
   background-size: cover;
 
   .overlay {

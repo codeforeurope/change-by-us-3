@@ -29,7 +29,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     onTemplateLoad: function() {
       var _this = this;
       this.$el.find(".preload").remove();
-      return $('.highlight').click(function(e) {
+      return $('#embed-calendar').click(function(e) {
         e.preventDefault();
         return _this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
           model: _this.model

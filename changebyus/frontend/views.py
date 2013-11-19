@@ -29,9 +29,8 @@ def home():
     ABOUT
         The homepage
     """
-    projects = api_get_projects()
     if g.user.is_anonymous():
-        return render_template('index.html', projects = projects, index = True, login = True)
+        return render_template('index.html', index = True, login = True)
     else:
         user = User.objects.with_id(g.user.id)
         udict = user.as_dict()
@@ -39,8 +38,7 @@ def home():
         keys_to_include = ['display_name', 'image_url_round_medium', 'image_url_round_small']
         udata = {x:udict[x] for x in keys_to_include}
         
-        return render_template('index.html', projects = projects, 
-                                             current_user = udata,
+        return render_template('index.html', current_user = udata,
                                              index = True, 
                                              login = False)   
         

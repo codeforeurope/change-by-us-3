@@ -18,5 +18,6 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				options =
 					success: (response) ->
 						console.log response
+						if response.msg.toLowerCase() is "ok" then window.location.reload()
 				@$el.find('form').ajaxForm options
 

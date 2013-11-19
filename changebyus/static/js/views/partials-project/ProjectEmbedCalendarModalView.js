@@ -21,7 +21,10 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       var options;
       options = {
         success: function(response) {
-          return console.log(response);
+          console.log(response);
+          if (response.msg.toLowerCase() === "ok") {
+            return window.location.reload();
+          }
         }
       };
       return this.$el.find('form').ajaxForm(options);

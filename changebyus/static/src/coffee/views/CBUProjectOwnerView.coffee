@@ -4,8 +4,7 @@ define ["underscore",
 		"template", 
 		"project-view", 
 		"collection/ProjectDiscussionsCollection", 
-		"collection/ProjectUpdatesCollection", 
-		"collection/ProjectCalendarCollection", 
+		"collection/ProjectUpdatesCollection",   
 		"collection/ProjectMembersCollection", 
 		"views/partials-project/ProjectDiscussionView", 
 		"views/partials-project/ProjectDiscussionsView", 
@@ -21,8 +20,7 @@ define ["underscore",
 	 temp, 
 	 CBUProjectView, 
 	 ProjectDiscussionsCollection, 
-	 ProjectUpdatesCollection, 
-	 ProjectCalendarCollection, 
+	 ProjectUpdatesCollection,  
 	 ProjectMembersCollection, 
 	 ProjectDiscussionView, 
 	 ProjectDiscussionsView, 
@@ -58,14 +56,14 @@ define ["underscore",
 						projectMembersCollection     = new ProjectMembersCollection(config)
 						projectUpdatesCollection     = new ProjectUpdatesCollection(config)
 						
-						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
-						@projectDiscussionView     = new ProjectDiscussionView()
-						@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
-						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
-						@projectFundraisingView    = new ProjectFundraisingView(config) 
-						@projectCalenderView       = new ProjectCalenderView({model:@model})
-						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
-						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
+						@projectDiscussionsView      = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
+						@projectDiscussionView       = new ProjectDiscussionView()
+						@projectNewDiscussionView    = new ProjectNewDiscussionView(config) 
+						@projectAddUpdateView        = new ProjectAddUpdateView({collection: projectUpdatesCollection})
+						@projectFundraisingView      = new ProjectFundraisingView(config) 
+						@projectCalenderView         = new ProjectCalenderView({model:@model, isOwner:true})
+						@projectMembersView          = new ProjectMembersView({collection: projectMembersCollection})
+						@projectInfoAppearanceView   = new ProjectInfoAppearanceView(config)
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>
 							console.log 'projectDiscussionsView arg_',arg_

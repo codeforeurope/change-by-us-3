@@ -6,8 +6,7 @@ define ["underscore",
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
 		"views/partials-project/ProjectUpdatesView", 
-		"model/ProjectModel", 
-		"collection/ProjectCalendarCollection", 
+		"model/ProjectModel",  
 		"collection/ProjectMembersCollection", 
 		"collection/ProjectUpdatesCollection"], 
 	(_, 
@@ -18,8 +17,7 @@ define ["underscore",
 	 ProjectCalenderView,
 	 ProjectMembersView, 
 	 ProjectUpdatesView, 
-	 ProjectModel, 
-	 ProjectCalendarCollection, 
+	 ProjectModel,  
 	 ProjectMembersCollection, 
 	 ProjectUpdatesCollection) ->
 	 	
@@ -79,8 +77,7 @@ define ["underscore",
 
 				console.log 'CBUProjectView >> config',config
 				@$el.prepend @$header
-				@projectUpdatesCollection  = new ProjectUpdatesCollection(config) 
-				@projectCalendarCollection = new ProjectCalendarCollection(config)
+				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
@@ -89,7 +86,7 @@ define ["underscore",
 				console.log 'onCollectionLoad'
 				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
 				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-				@projectCalenderView  = new ProjectCalenderView({collection: @projectCalendarCollection, isMember:@isMember})
+				@projectCalenderView  = new ProjectCalenderView({model:@model, isOwner:true})
 				
 				@updatesBTN  = $("a[href='#updates']").parent()
 				@membersBTN  = $("a[href='#members']").parent()

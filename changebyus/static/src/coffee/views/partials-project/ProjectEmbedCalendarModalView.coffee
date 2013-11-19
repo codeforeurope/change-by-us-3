@@ -15,6 +15,8 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				$(@parent).append @$el 
 
 			onTemplateLoad: ->
+				@$el.find(".close-x").click => @$el.remove()
+
 				options =
 					success: (response) ->
 						console.log response

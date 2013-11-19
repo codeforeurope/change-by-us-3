@@ -3,13 +3,18 @@
 </div>
 
 <div class="content-wrapper">
+    <% console.log('data',data) %> 
     <% if (data.gcal_code){ %> 
         <%= data.gcal_code %> 
+        <% if (data.isOwner){ %> 
+            <br>
+            <span><a href="#" class="highlight">Embed new calendar</a></span>
+        <% } %> 
     <% }else{ %> 
         <h2>
             <em>Nothing here yet.</em>
         </h2>
-        <% if (data.isMember){ %> 
+        <% if (data.isOwner){ %> 
             <span>Why don't you <a href="#" class="highlight">link your project's google calendar</a>?</span>
         <% } %> 
     <% } %> 

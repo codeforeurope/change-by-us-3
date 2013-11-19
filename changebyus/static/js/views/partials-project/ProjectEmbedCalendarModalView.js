@@ -18,7 +18,11 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var options;
+      var options,
+        _this = this;
+      this.$el.find(".close-x").click(function() {
+        return _this.$el.remove();
+      });
       options = {
         success: function(response) {
           console.log(response);

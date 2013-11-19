@@ -40,7 +40,7 @@ def home():
         udata = {x:udict[x] for x in keys_to_include}
         
         return render_template('index.html', projects = projects, 
-                                             user = udata,
+                                             current_user = udata,
                                              index = True, 
                                              login = False)   
         

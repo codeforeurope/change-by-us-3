@@ -6,10 +6,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.render();
     },
     render: function() {
+      var _this = this;
       this.$el = $("<div class='project-preview'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-create-modal.html", {
         data: this.viewData
-      }, function() {});
+      }, function() {
+        return onTemplateLoad();
+      });
       return $(this.parent).append(this.$el);
     }
   });

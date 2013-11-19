@@ -1,16 +1,14 @@
-
 <div class="calendar">
     <h2>Calendar</h2>
 </div>
 
 <div class="content-wrapper">
-    <div class="preload">
+    <% if (data.gcal_code){ %> 
+        <%= data.gcal_code %> 
+    <% }else{ %> 
         <h2>
-            <em>Loading...</em>
+            <em>Nothing here yet.</em>
         </h2>
-    </div>
-    <div class="no-results">
-	    <!-- <%= data.calendar %> -->
-	    <iframe src="http://www.google.com/calendar/embed?src=MattLohmann%40localprojects.net&ctz=America/New_York" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
-	</div>
+        <span>Why don't you <a href="#" class="highlight">link your project's google calendar</a>?</span>
+    <% } %> 
 </div>

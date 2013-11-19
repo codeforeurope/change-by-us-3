@@ -55,7 +55,6 @@ define ["underscore",
 						console.log 'CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!',config
 
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config) 
-						projectCalendarCollection    = new ProjectCalendarCollection(config)
 						projectMembersCollection     = new ProjectMembersCollection(config)
 						projectUpdatesCollection     = new ProjectUpdatesCollection(config)
 						
@@ -64,7 +63,7 @@ define ["underscore",
 						@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
 						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
-						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
+						@projectCalenderView       = new ProjectCalenderView({model:@model})
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
 						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 

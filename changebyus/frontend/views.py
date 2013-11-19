@@ -76,8 +76,6 @@ def _return_index():
         keys_to_include = ['image_url_round_medium', 'image_url_round_small']
         udata = {x:udict[x] for x in keys_to_include}
 
-        print udata
-
         return render_template('index.html', projects = projects, 
                                              udata = udata,
                                              index = True, 

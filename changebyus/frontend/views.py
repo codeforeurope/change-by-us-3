@@ -33,7 +33,16 @@ def home():
     if g.user.is_anonymous():
         return render_template('index.html', projects = projects, index = True, login = True)
     else:
-        return render_template('index.html', projects = projects, index = True, login = False)   
+        user = User.objects.with_id(g.user.id)
+        udict = user.as_dict()
+        
+        keys_to_include = ['display_name', 'image_url_round_medium', 'image_url_round_small']
+        udata = {x:udict[x] for x in keys_to_include}
+        
+        return render_template('index.html', projects = projects, 
+                                             current_user = udata,
+                                             index = True, 
+                                             login = False)   
         
 
 @frontend_view.route('/signup')

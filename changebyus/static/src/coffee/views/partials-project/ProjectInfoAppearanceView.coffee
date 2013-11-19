@@ -14,7 +14,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 			render: ->
 				@$el = $("<div />")
 				@$el.template @templateDir + "/templates/partials-project/project-info-appearance.html",
-					data: @viewData, => @ajaxForm()
+					data: @viewData, => 
+						onPageElementsLoad()
+						@ajaxForm()
 
 				$(@parent).append @$el 
 
@@ -83,6 +85,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				)
 
 				$('input:radio').screwDefaultButtons
-					image: 'url("/static/img/black-check.png")'
-					width: 18
-					height: 18
+					image: 'url("/static/img/icon-lock.png")'
+					width: 60
+					height: 25

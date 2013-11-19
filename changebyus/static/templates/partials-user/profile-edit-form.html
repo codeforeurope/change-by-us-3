@@ -25,7 +25,7 @@
             <span class="sub-text">Specify city or zip code so that other users can find you</span>
             <br>
             <label for="bio">SHORT BIO</label>
-            <textarea rows="8" maxlength="160" name="bio" id="bio" placeholder="Making changes sine [date user joined CBU]" class="input-xxlarge" value="<%= data.bio %>"></textarea>
+            <textarea rows="8" maxlength="160" name="bio" id="bio" placeholder="Making changes sine [date user joined CBU]" class="input-xxlarge"><%= data.bio %></textarea>
 
              <br>
             <label for="email">EMAIL</label>
@@ -122,6 +122,8 @@
             <input type="submit" class="btn btn-large" id="save" value="Save">
             <input type="button" class="btn btn-large" id="cancel" value="Cancel">
             <input type="hidden" name="id" value="<%= data.id %>">
+            <input type="hidden" name="lat" value="<%= data.lat %>">
+            <input type="hidden" name="lon" value="<%= data.lon %>">
         </div>
         <div class="pull-right">
             <span class="sub-text">Member since</span> * <a href="/delete">Delete Account</a>

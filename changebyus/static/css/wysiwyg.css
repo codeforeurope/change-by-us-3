@@ -18,7 +18,7 @@
 	overflow-x: hidden;
 	outline: none;
 }
-  #editor, .wsyiwyg-editor a{
+  #editor a, .wsyiwyg-editor a{
     color: #111;
     text-decoration: underline;
   }

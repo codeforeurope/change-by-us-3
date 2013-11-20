@@ -5,8 +5,7 @@ define ["underscore",
 		"moment", 
 		"abstract-view", 
 		"model/UserModel",
-		"model/ProjectUpdateModel", 
-		"views/partials-project/ProjectPostReplyView"], 
+		"model/ProjectUpdateModel"], 
 	(_, 
 	 Backbone, 
 	 $, 
@@ -14,8 +13,7 @@ define ["underscore",
 	 moment, 
 	 AbstractView, 
 	 UserModel,
-	 ProjectUpdateModel, 
-	 ProjectPostReplyView) ->
+	 ProjectUpdateModel ) ->
 		ProjectDiscussionThreadItemView = AbstractView.extend
 			
 			model:ProjectUpdateModel

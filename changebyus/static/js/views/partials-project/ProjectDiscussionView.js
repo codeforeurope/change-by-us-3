@@ -54,12 +54,15 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         this.addDiscussion(model);
       }
       userAvatar = $('.profile-nav-header img').attr('src');
-      return this.projectWysiwygFormView = new ProjectWysiwygFormView({
+      this.projectWysiwygFormView = new ProjectWysiwygFormView({
         parent: this.$threadFormID,
         id: this.model.attributes.id,
         slim: true,
         userAvatar: userAvatar
       });
+      return this.projectWysiwygFormView.success = function() {
+        return window.location.reload();
+      };
     },
     addDiscussion: function(model_) {
       var config, projectDiscussionThreadItemView;

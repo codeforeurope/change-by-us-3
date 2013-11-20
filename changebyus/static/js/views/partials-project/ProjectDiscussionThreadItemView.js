@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/UserModel", "model/ProjectUpdateModel", "views/partials-project/ProjectPostReplyView"], function(_, Backbone, $, temp, moment, AbstractView, UserModel, ProjectUpdateModel, ProjectPostReplyView) {
+define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/UserModel", "model/ProjectUpdateModel"], function(_, Backbone, $, temp, moment, AbstractView, UserModel, ProjectUpdateModel) {
   var ProjectDiscussionThreadItemView;
   return ProjectDiscussionThreadItemView = AbstractView.extend({
     model: ProjectUpdateModel,

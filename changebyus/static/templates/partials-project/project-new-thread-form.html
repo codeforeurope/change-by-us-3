@@ -7,7 +7,7 @@
     <form method="post" enctype=multipart/form-data class="form-project clearfix" name="new-thread" action="/api/post/add_discussion">
         <div id="new-thread-editor" class="wsyiwyg-editor slim"></div>
 
-        <div class="btn-toolbar" data-role="editor-toolbar" data-target="new-thread-editor">
+        <div class="btn-toolbar pull-left" data-role="editor-toolbar" data-target="new-thread-editor">
             <div class="btn-group">
                 <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -33,18 +33,6 @@
                 <a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
                 <a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="icon-strikethrough"></i></a>
                 <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
-            </div>
-            <div class="btn-group">
-                <a class="btn" data-edit="insertunorderedlist" title="" data-original-title="Bullet list"><i class="icon-list-ul"></i></a>
-                <a class="btn" data-edit="insertorderedlist" title="" data-original-title="Number list"><i class="icon-list-ol"></i></a>
-                <a class="btn" data-edit="outdent" title="" data-original-title="Reduce indent (Shift+Tab)"><i class="icon-indent-left"></i></a>
-                <a class="btn" data-edit="indent" title="" data-original-title="Indent (Tab)"><i class="icon-indent-right"></i></a>
-            </div>
-            <div class="btn-group">
-                <a class="btn" data-edit="justifyleft" title="" data-original-title="Align Left (Ctrl/Cmd+L)"><i class="icon-align-left"></i></a>
-                <a class="btn" data-edit="justifycenter" title="" data-original-title="Center (Ctrl/Cmd+E)"><i class="icon-align-center"></i></a>
-                <a class="btn" data-edit="justifyright" title="" data-original-title="Align Right (Ctrl/Cmd+R)"><i class="icon-align-right"></i></a>
-                <a class="btn" data-edit="justifyfull" title="" data-original-title="Justify (Ctrl/Cmd+J)"><i class="icon-align-justify"></i></a>
             </div>
             <div class="btn-group">
                 <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink">
@@ -78,7 +66,8 @@
         </div>
 
         <input type="hidden" name="project_id" value="<%= data.project_id %>">
-        <input type="hidden" id="description" name="description" value="">
+        <input type="hidden" id="title" name="title" value="Reply to <%= data.response_to_id %>">
+        <input type="hidden" id="description" name="description" value="Description to <%= data.response_to_id %>">
         <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>">
         <div class="tr">
             <input type="submit" class="btn btn-medium" value="Post">

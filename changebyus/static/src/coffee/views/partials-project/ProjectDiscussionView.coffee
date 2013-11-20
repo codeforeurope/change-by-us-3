@@ -47,7 +47,9 @@ define ["underscore",
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@projectWysiwygFormView  = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.attributes.id, slim:true, userAvatar:userAvatar})
+				@projectWysiwygFormView = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.attributes.id, slim:true, userAvatar:userAvatar})
+				@projectWysiwygFormView.success = ->
+					window.location.reload()
 
 
 			addDiscussion:(model_)->   

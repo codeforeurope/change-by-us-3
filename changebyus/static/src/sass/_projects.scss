@@ -276,6 +276,7 @@
     .update-content{
       float: right;
       width: 880px;
+      .tr{margin-top: 10px;}
       input[type=submit]{background-color: $secondaryColor}
       input[type=button]{background-color: $graySupport}
     }

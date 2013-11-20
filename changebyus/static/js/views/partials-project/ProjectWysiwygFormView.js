@@ -3,9 +3,13 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
   return ProjectWysiwygFormView = AbstractView.extend({
     formName: "project-update",
     editorID: "#editor",
+    slim: false,
+    userAvatar: "",
     $updateForm: null,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
+      this.slim = options.slim || this.slim;
+      this.userAvatar = options.userAvatar || this.userAvatar;
       return this.render();
     },
     render: function() {
@@ -14,7 +18,9 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       this.viewData = {
         project_id: window.projectID,
         response_to_id: this.id,
-        editorID: this.editorID
+        editorID: this.editorID,
+        slim: this.slim,
+        userAvatar: this.userAvatar
       };
       if (this.parent === "#update-form") {
         url = "/templates/partials-project/project-update-form.html";
@@ -29,7 +35,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         this.editorID = "#discussion-editor";
         this.formName = "new-thread";
       }
-      this.$el = $("<div class='content-wrapper'/>");
+      this.$el = $("<div class='content-wrapper clearfix'/>");
       this.$el.template(this.templateDir + url, {
         data: this.viewData
       }, function() {
@@ -38,7 +44,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $editor, editorOffset, options, showErrorAlert,
+      var $editor, options, showErrorAlert,
         _this = this;
       showErrorAlert = function(reason, detail) {
         var msg;
@@ -93,17 +99,18 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         target = $(overlay.data("target"));
         return overlay.css("opacity", 0).css("position", "absolute").offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
       });
-      if ("onwebkitspeechchange" in document.createElement("input")) {
-        editorOffset = $editor.offset();
-        if (editorOffset) {
-          $("#voiceBtn").css("position", "absolute").offset({
-            top: editorOffset.top - 20,
-            left: editorOffset.left + $editor.innerWidth() - 75
-          });
-        }
-      } else {
-        $("#voiceBtn").hide();
-      }
+      /*
+      				if "onwebkitspeechchange" of document.createElement("input")
+      					editorOffset = $editor.offset()
+      					if editorOffset
+      						$("#voiceBtn").css("position", "absolute").offset
+      							top: editorOffset.top - 20
+      							left: editorOffset.left + $editor.innerWidth() - 75
+      				else
+      					$("#voiceBtn").hide()
+      */
+
+      $("#voiceBtn").hide();
       $editor.wysiwyg({
         fileUploadError: showErrorAlert
       });

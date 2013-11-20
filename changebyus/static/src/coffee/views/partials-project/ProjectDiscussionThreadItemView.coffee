@@ -4,6 +4,7 @@ define ["underscore",
 		"template", 
 		"moment", 
 		"abstract-view", 
+		"model/UserModel",
 		"model/ProjectUpdateModel", 
 		"views/partials-project/ProjectPostReplyView"], 
 	(_, 
@@ -12,6 +13,7 @@ define ["underscore",
 	 temp, 
 	 moment, 
 	 AbstractView, 
+	 UserModel,
 	 ProjectUpdateModel, 
 	 ProjectPostReplyView) ->
 		ProjectDiscussionThreadItemView = AbstractView.extend
@@ -22,13 +24,15 @@ define ["underscore",
 			$replyForm: null
 			tagName: "li"
 
-			initialize: (options_, forceLoad_) ->
+			initialize: (options_) ->
 				AbstractView::initialize.call(@, options_)
-				if forceLoad_ then @loadModel() else @render()
-
-			loadModel:->
-				#console.log 'loadModel',@model
+				console.log 'loadModel',@model
 				@model.fetch
+					success: =>@loadUser()
+
+			loadUser:->
+				@user = new UserModel(id:@model.attributes.user.id)
+				@user.fetch
 					success: =>@render()
 
 			render: ->
@@ -36,8 +40,12 @@ define ["underscore",
 				@model.set
 					'created_at':m
 
+				@viewData                       = @model.attributes
+				@viewData.image_url_round_small = @user.attributes.image_url_round_small
+				@viewData.display_name          = @user.attributes.display_name
+				
 				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
-					{data: @model.attributes}, => @onTemplateLoad()
+					{data: @viewData}, => @onTemplateLoad()
 
 			onTemplateLoad:-> 
 				self = @ 
@@ -47,3 +55,5 @@ define ["underscore",
 				$replyToggle.click ->
 					top = $("#add-thread-form").offset().top
 					$("html, body").animate({ scrollTop: top }, "slow")
+
+				onPageElementsLoad()

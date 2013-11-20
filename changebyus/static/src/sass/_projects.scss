@@ -272,9 +272,12 @@
       width: 70px;
       margin-right: 20px;
     }
+    
     .update-content{
       float: right;
-      width: 858px;
+      width: 880px;
+      input[type=submit]{background-color: $secondaryColor}
+      input[type=button]{background-color: $graySupport}
     }
     .post-title, .reply-title{
       color: $gray20;
@@ -598,3 +601,5 @@
 iframe{
   width: 100%;
 }
+
+ 

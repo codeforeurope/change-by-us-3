@@ -40,16 +40,17 @@ define ["underscore",
 			onSuccess:-> 
 				@$ul.html('')
 				@$form.html('')
+
 				@addDiscussion @model
-				console.log 'updateDiscussion onSuccess',@model
 				for response in @model.attributes.responses
 					model = new ProjectDiscussionModel({id:response.id})
-					@addDiscussion model, true
+					@addDiscussion model 
 
-				@projectWysiwygFormView  = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.attributes.id})
+				userAvatar = $('.profile-nav-header img').attr('src')
+				@projectWysiwygFormView  = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.attributes.id, slim:true, userAvatar:userAvatar})
 
 
-			addDiscussion:(model_, forceLoad_=false)->   
+			addDiscussion:(model_)->   
 				config = {parent:@$ul, model:model_}
-				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config, forceLoad_)
+				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config)
 				@$ul.append projectDiscussionThreadItemView.$el

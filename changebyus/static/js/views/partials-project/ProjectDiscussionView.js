@@ -41,34 +41,33 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
     },
     onSuccess: function() {
-      var model, response, _i, _len, _ref;
+      var model, response, userAvatar, _i, _len, _ref;
       this.$ul.html('');
       this.$form.html('');
       this.addDiscussion(this.model);
-      console.log('updateDiscussion onSuccess', this.model);
       _ref = this.model.attributes.responses;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         response = _ref[_i];
         model = new ProjectDiscussionModel({
           id: response.id
         });
-        this.addDiscussion(model, true);
+        this.addDiscussion(model);
       }
+      userAvatar = $('.profile-nav-header img').attr('src');
       return this.projectWysiwygFormView = new ProjectWysiwygFormView({
         parent: this.$threadFormID,
-        id: this.model.attributes.id
+        id: this.model.attributes.id,
+        slim: true,
+        userAvatar: userAvatar
       });
     },
-    addDiscussion: function(model_, forceLoad_) {
+    addDiscussion: function(model_) {
       var config, projectDiscussionThreadItemView;
-      if (forceLoad_ == null) {
-        forceLoad_ = false;
-      }
       config = {
         parent: this.$ul,
         model: model_
       };
-      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config, forceLoad_);
+      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config);
       return this.$ul.append(projectDiscussionThreadItemView.$el);
     }
   });

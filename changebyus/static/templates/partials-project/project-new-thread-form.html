@@ -1,11 +1,11 @@
-<form method="post" enctype=multipart/form-data class="form-project clearfix" name="new-thread" action="/api/post/add_discussion">
-
-    <div>
-
-        <label>TITLE</label>
-        <input type="text" maxlength="30" name="title" id="title" placeholder="Title" class="input-xxlarge">
-
-        <div id="new-thread-editor" class="wsyiwyg-editor"></div>
+<% if (data.userAvatar){ %>
+<div class="user-avatar">
+    <img src="<%= data.userAvatar %>" class="circle">
+</div>
+<% } %>
+<div class="update-content">
+    <form method="post" enctype=multipart/form-data class="form-project clearfix" name="new-thread" action="/api/post/add_discussion">
+        <div id="new-thread-editor" class="wsyiwyg-editor slim"></div>
 
         <div class="btn-toolbar" data-role="editor-toolbar" data-target="new-thread-editor">
             <div class="btn-group">
@@ -78,16 +78,11 @@
         </div>
 
         <input type="hidden" name="project_id" value="<%= data.project_id %>">
-
         <input type="hidden" id="description" name="description" value="">
-        <!-- 
-         <textarea rows="8" name="description" maxlength="600" id="description" placeholder="Description" class="input-xxlarge"></textarea>
-         -->
         <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>">
-
-
-    </div>
-
-    <input type="submit" class="btn btn-medium" value="Share">
-
-</form>
+        <div class="tr">
+            <input type="submit" class="btn btn-medium" value="Post">
+            <input type="button" class="btn btn-medium" value="Cancel">
+        </div>
+    </form>
+</div>

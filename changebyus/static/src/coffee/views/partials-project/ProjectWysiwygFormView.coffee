@@ -4,10 +4,15 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 			formName:"project-update" #default ID, but doublecheck that form ID is correct
 			editorID:"#editor" #default ID, but doublecheck that form ID is correct
+			slim:false
+			userAvatar:""
 			$updateForm:null
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
+				@slim       = options.slim || @slim
+				@userAvatar = options.userAvatar || @userAvatar
+
 				@render()
 
 			render: -> 
@@ -15,6 +20,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					project_id: window.projectID
 					response_to_id: @id 
 					editorID: @editorID
+					slim: @slim
+					userAvatar:@userAvatar
 
 				if @parent is "#update-form"
 					url = "/templates/partials-project/project-update-form.html" 
@@ -29,7 +36,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					@editorID = "#discussion-editor"
 					@formName = "new-thread"
 
-				@$el = $("<div class='content-wrapper'/>")
+				@$el = $("<div class='content-wrapper clearfix'/>")
 				@$el.template @templateDir+url,
 					{data: @viewData}, => @ajaxForm()
 
@@ -78,6 +85,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					target = $(overlay.data("target"))
 					overlay.css("opacity", 0).css("position", "absolute").offset(target.offset()).width(target.outerWidth()).height target.outerHeight()
 
+				###
 				if "onwebkitspeechchange" of document.createElement("input")
 					editorOffset = $editor.offset()
 					if editorOffset
@@ -86,6 +94,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 							left: editorOffset.left + $editor.innerWidth() - 75
 				else
 					$("#voiceBtn").hide()
+				###
+				$("#voiceBtn").hide()
 
 				$editor.wysiwyg fileUploadError: showErrorAlert
 				window.prettyPrint and prettyPrint()

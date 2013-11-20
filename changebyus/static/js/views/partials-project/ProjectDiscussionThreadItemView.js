@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/ProjectUpdateModel", "views/partials-project/ProjectPostReplyView"], function(_, Backbone, $, temp, moment, AbstractView, ProjectUpdateModel, ProjectPostReplyView) {
+define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/UserModel", "model/ProjectUpdateModel", "views/partials-project/ProjectPostReplyView"], function(_, Backbone, $, temp, moment, AbstractView, UserModel, ProjectUpdateModel, ProjectPostReplyView) {
   var ProjectDiscussionThreadItemView;
   return ProjectDiscussionThreadItemView = AbstractView.extend({
     model: ProjectUpdateModel,
@@ -6,17 +6,22 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     $postRight: null,
     $replyForm: null,
     tagName: "li",
-    initialize: function(options_, forceLoad_) {
-      AbstractView.prototype.initialize.call(this, options_);
-      if (forceLoad_) {
-        return this.loadModel();
-      } else {
-        return this.render();
-      }
-    },
-    loadModel: function() {
+    initialize: function(options_) {
       var _this = this;
+      AbstractView.prototype.initialize.call(this, options_);
+      console.log('loadModel', this.model);
       return this.model.fetch({
+        success: function() {
+          return _this.loadUser();
+        }
+      });
+    },
+    loadUser: function() {
+      var _this = this;
+      this.user = new UserModel({
+        id: this.model.attributes.user.id
+      });
+      return this.user.fetch({
         success: function() {
           return _this.render();
         }
@@ -29,8 +34,11 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.model.set({
         'created_at': m
       });
+      this.viewData = this.model.attributes;
+      this.viewData.image_url_round_small = this.user.attributes.image_url_round_small;
+      this.viewData.display_name = this.user.attributes.display_name;
       return $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
-        data: this.model.attributes
+        data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
@@ -41,13 +49,14 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
       this.$postRight = this.$el.find('.update-content');
       $replyToggle = this.$el.find('.reply-toggle').first();
-      return $replyToggle.click(function() {
+      $replyToggle.click(function() {
         var top;
         top = $("#add-thread-form").offset().top;
         return $("html, body").animate({
           scrollTop: top
         }, "slow");
       });
+      return onPageElementsLoad();
     }
   });
 });

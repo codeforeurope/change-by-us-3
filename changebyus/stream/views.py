@@ -8,6 +8,7 @@ from flask import Blueprint, request, render_template, current_app, redirect, ur
 from flask.ext.login import login_required, current_user
 
 from .api import _get_user_stream
+from ..frontend.views import _return_index
 from ..project.helpers import _get_user_involved_projects, _get_project_users_and_common_projects
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -24,7 +25,7 @@ List of views that allow a user to see project posts for a given group of scenar
 """
 
 @stream_view.route('/')
-@login_required
+@login_required 
 def projects_view():
     """
     ABOUT
@@ -132,21 +133,10 @@ def dashboard_view():
         Get
     INPUT
         None
-    OUTPUT
+    OUTPUT 
         Rendered dashboard template
     PRECONDITIONS
         User is logged in
     """
-    twitter_info = _get_user_name_and_thumbnail()
-    facebook_info = _get_fb_user_name_and_thumbnail()
-    twitter_name = twitter_info[1]
-    twitter_image = twitter_info[2]
-    fb_name = facebook_info[1]
-    fb_image = facebook_info[2]
-
-    # return render_template('dashboard.html', t_name=twitter_name, t_image=twitter_image, fb_name=fb_name, fb_image=fb_image)
-    if g.user.is_anonymous():
-        return render_template('index.html', login = True)
-    else:
-        return render_template('index.html', login = False)
+    return _return_index()
 

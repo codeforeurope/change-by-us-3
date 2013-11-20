@@ -18,17 +18,17 @@ define ["underscore",
 			parent: "#project-calendar"
 			projectEmbedCalendarModalView: null
 			
-			initialize: (options_) -> 
+			initialize: (options_) ->  
 				options           = options_ or {}
-				@id               = options_.id or @id
-				@templateDir      = options_.templateDir or @templateDir
-				@parent           = options_.parent or @parent
+				@id               = options.id or @id
+				@templateDir      = options.templateDir or @templateDir
+				@parent           = options.parent or @parent
 				@viewData         = @model.attributes
-				@viewData.isOwner = options_.isOwner || @isOwner 
-				
+				@viewData.isOwner = options.isOwner || @isOwner  
+				console.log '@viewData >>>>> ',@viewData,options
 				@render()
 				
-				console.log '@viewData >>>>> ',@viewData
+				
 			render: -> 
 				console.log '@viewData <<<<< ',@viewData
 				@$el = $("<div class='project'/>")

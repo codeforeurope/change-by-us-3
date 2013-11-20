@@ -7,13 +7,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     initialize: function(options_) {
       var options;
       options = options_ || {};
-      this.id = options_.id || this.id;
-      this.templateDir = options_.templateDir || this.templateDir;
-      this.parent = options_.parent || this.parent;
+      this.id = options.id || this.id;
+      this.templateDir = options.templateDir || this.templateDir;
+      this.parent = options.parent || this.parent;
       this.viewData = this.model.attributes;
-      this.viewData.isOwner = options_.isOwner || this.isOwner;
-      this.render();
-      return console.log('@viewData >>>>> ', this.viewData);
+      this.viewData.isOwner = options.isOwner || this.isOwner;
+      console.log('@viewData >>>>> ', this.viewData, options);
+      return this.render();
     },
     render: function() {
       var _this = this;

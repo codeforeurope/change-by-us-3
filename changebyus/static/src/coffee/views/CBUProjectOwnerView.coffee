@@ -51,11 +51,8 @@ define ["underscore",
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
 						
-						config = {id:@model.get("id"), name:@model.get("name"), model:@model}
-						console.log 'CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!',config
-
-						vData = 
-							viewData:{ isOwner:true }
+						config = {id:@model.get("id"), name:@model.get("name"), model:@model,isOwner:true} 
+	
 
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 						projectMembersCollection     = new ProjectMembersCollection(config)
@@ -66,7 +63,7 @@ define ["underscore",
 						@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
 						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
-						@projectCalenderView       = new ProjectCalenderView(vData) 
+						@projectCalenderView       = new ProjectCalenderView(config) 
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
 						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 

@@ -1,0 +1,23 @@
+<div class="modal-backdrop"></div>
+<div class="embed-modal">
+    <div class="close-x"></div>
+    <h1>
+        Embed a Google Calendar
+    </h1>
+    <p>
+        <a href="https://support.google.com/calendar/answer/41207?hl=en&ref_topic=1672470">More Info</a>
+    </p>
+    <form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/project/edit">
+        <br>
+        <textarea rows="3" name="gcal_code" id="project_description" placeholder="Embed" class="input-xxlarge" value="<%= data.gcal_code %>" />
+        <input type="hidden" name="project_id" value="<%= data.id %>">
+        <input type="hidden" name="project_slug" value="<%= data.slug %>">
+        <br>
+        <div class="modal-btns">
+            <input class="btn btn-large" type="button" value="Cancel">
+            <input class="btn btn-large" type="submit" value="Add Calendar">
+        </div>
+    </form>
+    <div class="modal-links"></div>
+    <div class="modal-feedback"></div>
+</div>

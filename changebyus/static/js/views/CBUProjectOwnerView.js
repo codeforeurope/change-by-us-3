@@ -47,7 +47,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         _this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
         _this.projectDiscussionsView.on('discussionClick', function(arg_) {
           console.log('projectDiscussionsView arg_', arg_);
-          _this.projectDiscussionView.updateDiscussion(arg_.model);
           return window.location.hash = "discussion/" + arg_.model.id;
         });
         /*
@@ -72,7 +71,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       return this.$el.prepend($header);
     },
     toggleSubView: function() {
-      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
+      var btn, id, v, view, _i, _j, _len, _len1, _ref, _ref1;
       view = window.location.hash.substring(1);
       _ref = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -84,8 +83,10 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         btn = _ref1[_j];
         btn.removeClass("active");
       }
-      console.log('view', view.indexOf("discussion/") > -1);
+      console.log('view --- ', view.indexOf("discussion/") > -1, view);
       if (view.indexOf("discussion/") > -1) {
+        id = view.split('/')[1];
+        this.projectDiscussionView.updateDiscussion(id);
         this.projectDiscussionView.show();
         this.discussionBTN.addClass("active");
         return;

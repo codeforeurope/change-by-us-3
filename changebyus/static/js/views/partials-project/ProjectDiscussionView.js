@@ -6,6 +6,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     $form: null,
     $threadFormID: '#add-thread-form',
     projectWysiwygFormView: null,
+    delayedDataLoad: false,
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -16,29 +17,49 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
     },
     onTemplateLoad: function() {
+      this.templateLoaded = true;
       this.$ul = this.$el.find('.bordered-item');
       this.$form = this.$el.find(this.$threadFormID);
-      return onPageElementsLoad();
+      onPageElementsLoad();
+      if (this.delayedDataLoad) {
+        return this.onSuccess();
+      }
     },
-    updateDiscussion: function(discussion_) {
+    updateDiscussion: function(id_) {
+      var _this = this;
+      this.model = new ProjectDiscussionModel({
+        id: id_
+      });
+      return this.model.fetch({
+        success: function() {
+          if (_this.templateLoaded === false) {
+            return _this.delayedDataLoad = true;
+          } else {
+            return _this.onSuccess();
+          }
+        }
+      });
+    },
+    onSuccess: function() {
       var model, response, _i, _len, _ref;
       this.$ul.html('');
       this.$form.html('');
-      this.addOne(discussion_);
-      _ref = discussion_.attributes.responses;
+      this.addDiscussion(this.model);
+      console.log('updateDiscussion onSuccess', this.model);
+      _ref = this.model.attributes.responses;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         response = _ref[_i];
         model = new ProjectDiscussionModel({
           id: response.id
         });
-        this.addOne(model, true);
+        this.addDiscussion(model, true);
       }
       return this.projectWysiwygFormView = new ProjectWysiwygFormView({
         parent: this.$threadFormID,
-        id: discussion_.attributes.id
+        id: this.model.attributes.id
       });
     },
-    addOne: function(model_, forceLoad_) {
+    addDiscussion: function(model_, forceLoad_) {
       var config, projectDiscussionThreadItemView;
       if (forceLoad_ == null) {
         forceLoad_ = false;

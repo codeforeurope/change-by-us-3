@@ -52,7 +52,6 @@ define ["underscore",
 					{data:@model.attributes}, =>
 						
 						config = {id:@model.get("id"), name:@model.get("name"), model:@model,isOwner:true} 
-	
 
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 						projectMembersCollection     = new ProjectMembersCollection(config)
@@ -69,7 +68,7 @@ define ["underscore",
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>
 							console.log 'projectDiscussionsView arg_',arg_
-							@projectDiscussionView.updateDiscussion(arg_.model)
+							# @projectDiscussionView.updateDiscussion(arg_.model)
 							window.location.hash = "discussion/"+arg_.model.id
 
 						###
@@ -101,9 +100,11 @@ define ["underscore",
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
 					btn.removeClass "active"
-				console.log 'view', (view.indexOf("discussion/")>-1)
+				console.log 'view --- ', (view.indexOf("discussion/")>-1), view
 
 				if view.indexOf("discussion/") > -1
+					id = view.split('/')[1]
+					@projectDiscussionView.updateDiscussion(id)
 					@projectDiscussionView.show()
 					@discussionBTN.addClass "active"
 					return

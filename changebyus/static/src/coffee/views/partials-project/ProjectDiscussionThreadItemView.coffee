@@ -39,12 +39,11 @@ define ["underscore",
 				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
 					{data: @model.attributes}, => @onTemplateLoad()
 
-				@ 
-
 			onTemplateLoad:-> 
 				self = @ 
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 				@$postRight     = @$el.find('.update-content')
 				$replyToggle    = @$el.find('.reply-toggle').first()
 				$replyToggle.click ->
-					# scroll to replybox
+					top = $("#add-thread-form").offset().top
+					$("html, body").animate({ scrollTop: top }, "slow")

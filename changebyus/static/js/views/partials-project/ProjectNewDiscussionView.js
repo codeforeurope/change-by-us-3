@@ -23,7 +23,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       return form.success = function(response_) {
         form.resetForm();
-        return window.location = "/project/" + _this.model.id + "#discussion/" + response_.data.id;
+        return window.location = "/project/" + _this.model.id + "/admin#discussion/" + response_.data.id;
       };
     }
   });

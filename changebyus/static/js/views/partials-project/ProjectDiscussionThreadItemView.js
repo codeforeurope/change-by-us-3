@@ -29,12 +29,11 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.model.set({
         'created_at': m
       });
-      $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
+      return $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
         data: this.model.attributes
       }, function() {
         return _this.onTemplateLoad();
       });
-      return this;
     },
     onTemplateLoad: function() {
       var $replyToggle, self;
@@ -42,7 +41,13 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
       this.$postRight = this.$el.find('.update-content');
       $replyToggle = this.$el.find('.reply-toggle').first();
-      return $replyToggle.click(function() {});
+      return $replyToggle.click(function() {
+        var top;
+        top = $("#add-thread-form").offset().top;
+        return $("html, body").animate({
+          scrollTop: top
+        }, "slow");
+      });
     }
   });
 });

@@ -73,7 +73,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       console.log('CBUProjectView >> config', config);
       this.$el.prepend(this.$header);
       this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
-      this.projectCalendarCollection = new ProjectCalendarCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);
       this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
       return this.projectMembersCollection.fetch({
@@ -94,8 +93,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         isMember: this.isMember
       });
       this.projectCalenderView = new ProjectCalenderView({
-        collection: this.projectCalendarCollection,
-        isMember: this.isMember
+        model: this.model,
+        isMember: this.isMember,
+        isOwner: this.isOwner
       });
       this.updatesBTN = $("a[href='#updates']").parent();
       this.membersBTN = $("a[href='#members']").parent();

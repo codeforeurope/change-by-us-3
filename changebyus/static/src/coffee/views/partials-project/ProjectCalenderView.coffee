@@ -23,8 +23,9 @@ define ["underscore",
 				@id               = options.id or @id
 				@templateDir      = options.templateDir or @templateDir
 				@parent           = options.parent or @parent
-				@viewData         = @model.attributes
-				@viewData.isOwner = options.isOwner || @isOwner  
+				if @model
+					@viewData     = @model.attributes || @viewData
+				@viewData.isOwner = options.isOwner || @isOwner
 				console.log '@viewData >>>>> ',@viewData,options
 				@render()
 				

@@ -79,8 +79,7 @@ define ["underscore",
 
 				console.log 'CBUProjectView >> config',config
 				@$el.prepend @$header
-				@projectUpdatesCollection  = new ProjectUpdatesCollection(config) 
-				@projectCalendarCollection = new ProjectCalendarCollection(config)
+				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
@@ -89,7 +88,7 @@ define ["underscore",
 				console.log 'onCollectionLoad'
 				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
 				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-				@projectCalenderView  = new ProjectCalenderView({collection: @projectCalendarCollection, isMember:@isMember})
+				@projectCalenderView  = new ProjectCalenderView({model: @model, isMember:@isMember, isOwner:@isOwner})
 				
 				@updatesBTN  = $("a[href='#updates']").parent()
 				@membersBTN  = $("a[href='#members']").parent()

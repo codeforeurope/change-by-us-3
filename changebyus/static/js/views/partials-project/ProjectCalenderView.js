@@ -10,7 +10,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.id = options.id || this.id;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
-      this.viewData = this.model.attributes;
+      if (this.model) {
+        this.viewData = this.model.attributes || this.viewData;
+      }
       this.viewData.isOwner = options.isOwner || this.isOwner;
       console.log('@viewData >>>>> ', this.viewData, options);
       return this.render();

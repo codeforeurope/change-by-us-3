@@ -36,10 +36,11 @@ require.config({
 
 require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "utils"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Utils) {
   $(document).ready(function() {
-    var $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
+    var $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight, isOwner;
     config = {
       parent: "#frame"
     };
+    isOwner = userID === projectOwnerID;
     CBURouter = Backbone.Router.extend({
       routes: {
         "project/:id": "project",
@@ -57,17 +58,18 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
       },
       project: function(id_) {
         config.model = {
-          id: id_,
-          isOwner: userID === projectOwnerID
+          id: id_
         };
+        config.isOwner = isOwner;
         return window.CBUAppView = new CBUProjectView(config);
       },
       projectAdmin: function(id_) {
         config.model = {
           id: id_
         };
-        window.CBUAppView = userID === projectOwnerID ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
-        return console.log('admin', window.CBUAppView, userID === projectOwnerID);
+        config.isOwner = isOwner;
+        window.CBUAppView = isOwner ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
+        return console.log('admin', window.CBUAppView, isOwner);
       },
       user: function(id_) {
         config.model = {

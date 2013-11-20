@@ -1,6 +1,6 @@
 @import "compass/css3";
 @import "compass/css3/border-radius";
-@import "compass/css3/opacity";
+@import "compass/css3/opacity"; 
 
 @import "bootstrap-combined-no-icons";
 @import "variables";
@@ -1517,6 +1517,19 @@ legend + .control-group {
     opacity: 0.4;
     filter: alpha(opacity = 40);
   }
+}
+
+.close-x{ 
+    position: absolute;
+    @include opacity(.9);
+    cursor: pointer;
+    background: url(../img/icon_close.png);
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px; 
+    top: 3px;
+    right: 3px;
+    &:hover{@include opacity(1);}
 }
 
 button.close {

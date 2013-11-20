@@ -3,12 +3,12 @@
 </div>
 
 <div class="content-wrapper">
-    <% console.log('data',data) %> 
+ 
     <% if (data.gcal_code){ %> 
         <%= data.gcal_code %> 
         <% if (data.isOwner){ %> 
             <br>
-            <span><a href="#" class="highlight">Embed new calendar</a></span>
+            <span><a href="#" class="highlight" id="embed-calendar">Embed new calendar</a></span>
         <% } %> 
     <% }else{ %> 
         <h2>

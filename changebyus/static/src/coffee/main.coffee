@@ -59,8 +59,7 @@ require ["jquery",
 	 ProjectCreateView, 
 	 Utils) ->
 		$(document).ready ->
-			config = parent: "#frame"
-			isOwner = (userID is projectOwnerID)
+			config = parent: "#frame" 
 
 			CBURouter = Backbone.Router.extend
 				routes:
@@ -79,14 +78,13 @@ require ["jquery",
 
 				project: (id_) ->
 					config.model = {id:id_} 
-					config.isOwner = isOwner
+					config.isOwner = (userID is projectOwnerID)
 					window.CBUAppView =  new CBUProjectView(config)
 
 				projectAdmin: (id_) ->
 					config.model = {id:id_}
-					config.isOwner = isOwner
+					config.isOwner = (userID is projectOwnerID)
 					window.CBUAppView = if (isOwner) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
-					console.log 'admin',window.CBUAppView,(isOwner)
 
 				user: (id_) ->
 					config.model = {id:id_}

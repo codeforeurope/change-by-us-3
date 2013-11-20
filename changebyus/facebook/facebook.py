@@ -106,13 +106,18 @@ def facebook_login():
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
-    if g.user.is_authenticated():
-        #return redirect(url_for('stream_view.dashboard_view')) 
-        return redirect(url_for('frontend_view.social_redirect_view',url=' '))
+    if g.user.is_authenticated(): 
+        return redirect(url_for('frontend_view.social_redirect_view',url=request.host_url))
 
+    """
+    host = request.host_url[:-1]
+    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
+        url='signup#facebook'))
+    """
     return facebook.authorize(callback=url_for('facebook_view.facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
+
 
 
 # link an existing account using facebook
@@ -142,9 +147,9 @@ def facebook_link():
                                                                                      g.user.facebook_id)
         current_app.logger.info(infoStr)
 
-    return facebook.authorize(callback=url_for('facebook_view.facebook_authorized',
-        next=request.args.get('next') or request.referrer or None,
-        _external=True))
+    host = request.host_url[:-1]
+    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
+        url='signup#facebook')) 
 
 
 @facebook_view.route('/revoke')
@@ -326,7 +331,10 @@ def facebook_authorized(resp):
         login_user(user.first())
 
     # user created account or logged in
-    return redirect(url_for('frontend_view.home'))
+    # return redirect(url_for('frontend_view.home'))
+    host = request.host_url[:-1]
+    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
+        url='signup#facebook'))
 
 
 

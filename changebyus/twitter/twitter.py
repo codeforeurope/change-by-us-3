@@ -117,11 +117,14 @@ def twitter_login():
         del session['twitter_oauth_tokens']
 
     if g.user.is_authenticated():
-        return redirect(url_for('stream_view.dashboard_view'))
+        #return redirect(url_for('stream_view.dashboard_view'))
+        return redirect(url_for('frontend_view.social_redirect_view', url=' '))
 
     return twitter.authorize(callback=url_for('twitter_view.twitter_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
+
+
 
 
 @twitter_view.route('/link')
@@ -228,7 +231,8 @@ def twitter_authorized(resp):
 
         if g.user.is_authenticated():
             # they were trying to link
-            return redirect(url_for('stream_view.dashboard_view'))
+            # return redirect(url_for('stream_view.dashboard_view'))
+            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
         else:
             # non-registered user
             return redirect(url_for('frontend_view.home'))
@@ -314,7 +318,13 @@ def twitter_authorized(resp):
         login_user(user.first())
 
     # user created account or logged in
-    return redirect(url_for('frontend_view.home'))
+    # return redirect(url_for('frontend_view.home'))
+
+    host = request.host_url[:-1]
+    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
+        url='signup#facebook'))
+
+
 
 
 # status max 140, will truncate

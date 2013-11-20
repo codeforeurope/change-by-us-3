@@ -1,12 +1,20 @@
 <div class="body-container">
-    <div class="feature-image" style="background-image:url(http://lorempixel.com/1018/430/);">
-        
-        <div style="background-image:url(http://lorempixel.com/255/255/)" class="preview circle"></div>
+    <div class="feature-image" style="background-image:url(<%= data.image_url_large_rect %>);">
 
-        <h1 class="overlay-title"><%= data.name %></h1>
-        <p class="overlay-description"><%= data.description %></p>
+        <div style="background-image:url(<%= data.image_url_round %>)" class="preview circle"></div>
+
+        <div class="header-icon flag-project">
+            <a href="/api/project/<%= data.id %>/flag"> Flag Project</a>
+        </div>
+
+        <h1 class="overlay-title">
+            <%= data.name %>
+        </h1>
+        <p class="overlay-description">
+            <%= data.description %>
+        </p>
         <div class="project-footer">
-            <a href="#" class="btn btn-large invs pull-right">Join Project</a>
+            <a href="#" class="btn btn-large invs invisible pull-right">Join Project</a>
             <div class="project-location">
                 Brooklyn, NY
                 <br>
@@ -16,17 +24,23 @@
     </div>
     <div class="tabs-pane">
         <ul class="tabs">
-            <li> 
+            <li>
                 <img src="/static/img/updates_icon.png">
-                <a href="#updates" data-toggle="tab"><span>Updates</span></a>
+                <a href="#updates" data-toggle="tab">
+                    <span>Updates</span>
+                </a>
             </li>
             <li>
                 <img src="/static/img/members_icon.png">
-                <a href="#members" data-toggle="tab"><span>Members</span></a>
+                <a href="#members" data-toggle="tab">
+                    <span>Members</span>
+                </a>
             </li>
             <li>
                 <img src="/static/img/cal_icon.png">
-                <a href="#calendar" data-toggle="tab"><span>Calendar</span></a>
+                <a href="#calendar" data-toggle="tab">
+                    <span>Calendar</span>
+                </a>
             </li>
         </ul>
     </div>

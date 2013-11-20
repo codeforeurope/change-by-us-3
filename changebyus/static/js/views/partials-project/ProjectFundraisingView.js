@@ -1,7 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"], function(_, Backbone, $, temp, form, AbstractView) {
   var ProjectFundraisingView;
   return ProjectFundraisingView = AbstractView.extend({
-    parent: "#project-calendar",
+    parent: "#project-fundraising",
     name: "My Project",
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
@@ -14,7 +14,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       if (this.started) {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-goals.html", {
           data: this.viewData
-        }, function() {});
+        }, function() {
+          return _this.onTemplateLoad();
+        });
       } else {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {
           return _this.getStarted();

@@ -12,6 +12,7 @@ module.exports = (grunt) ->
 				files: ["static/src/coffee/**/*.coffee"] # scans directory and all subdirectories for coffee files
 				tasks: ["coffee"]
 
+
 			sassrc:
 				files: ["static/src/sass/**/*.scss"] # scans directory and all subdirectories for scss files
 				tasks: ["compass"]
@@ -41,9 +42,10 @@ module.exports = (grunt) ->
 				ext: ".js"
 
 		compass:
-			dist: 
+			dev:  
 				options:
 					config:'static/src/sass/config.rb' # paths in config.rg should be relative to the Gruntfile
+					#sourcemap:true 
 
 		requirejs:
 			production:

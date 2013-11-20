@@ -7,6 +7,9 @@ require.config({
     "underscore": "ext/underscore/underscore-min",
     "backbone": "ext/backbone/backbone-min",
     "bootstrap": "ext/bootstrap/bootstrap.min",
+    "bootstrap-fileupload": "ext/bootstrap/bootstrap-fileupload",
+    "button": "ext/jquery/jquery.screwdefaultbuttonsV2.min",
+    "dropkick": "ext/jquery/jquery.dropkick-min",
     "hogan": "ext/hogan/hogan-2.0.0.amd",
     "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg",
     "autocomp": "ext/bootstrap/typeahead.min",
@@ -20,18 +23,20 @@ require.config({
     "project-owner-view": "views/CBUProjectOwnerView",
     "login-view": "views/CBULoginView",
     "signup-view": "views/CBUSignupView",
-    "create-view": "views/partials-universal/CreateProjectView",
+    "create-view": "views/partials-project/ProjectCreateView",
     "abstract-view": "views/partials-universal/AbstractView",
     "project-sub-view": "views/partials-project/ProjectSubView",
-    "user-view": "views/partials-user/CBUUserView",
-    "profile-view": "views/CBUProfileView",
+    "resource-project-view": "views/partials-universal/ResourceProjectPreviewView",
+    "user-view": "views/CBUUserView",
+    "dashboard-view": "views/CBUDashboardView",
+    "stream-view": "views/CBUStreamView",
     "utils": "utils/Utils"
   }
 });
 
-require(["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], function($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) {
+require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "utils"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Utils) {
   $(document).ready(function() {
-    var $navTop, CBUAppRouter, CBURouter, config;
+    var $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
       parent: "#frame"
     };
@@ -41,26 +46,30 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
         "project/:id/admin": "projectAdmin",
         "user/:id": "user",
         "discover": "discover",
+        "stream/dashboard": "dashboard",
         "create": "create",
         "login": "login",
         "signup": "signup",
         "project": "project",
-        "profile": "profile",
+        "stream": "stream",
+        "stream/": "stream",
         "": "default"
       },
       project: function(id_) {
         config.model = {
-          id: id_,
-          isOwner: userID === projectOwnerID
+          id: id_
         };
+        config.isOwner = userID === projectOwnerID;
         return window.CBUAppView = new CBUProjectView(config);
       },
       projectAdmin: function(id_) {
+        var isOwner;
+        isOwner = userID === projectOwnerID;
         config.model = {
           id: id_
         };
-        window.CBUAppView = userID === projectOwnerID ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
-        return console.log('admin', window.CBUAppView, userID === projectOwnerID);
+        config.isOwner = isOwner;
+        return window.CBUAppView = isOwner ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
       },
       user: function(id_) {
         config.model = {
@@ -71,8 +80,14 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       discover: function() {
         return window.CBUAppView = new CBUDiscoverView(config);
       },
+      dashboard: function() {
+        config.model = {
+          id: window.userID
+        };
+        return window.CBUAppView = new CBUDashboardView(config);
+      },
       create: function() {
-        return window.CBUAppView = new CreateProjectView(config);
+        return window.CBUAppView = new ProjectCreateView(config);
       },
       login: function() {
         return window.CBUAppView = new CBULoginView(config);
@@ -80,8 +95,8 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
       signup: function() {
         return window.CBUAppView = new CBUSignupView(config);
       },
-      profile: function() {
-        return window.CBUAppView = new CBUProfileView(config);
+      stream: function() {
+        return window.CBUAppView = new CBUStreamView(config);
       },
       "default": function() {
         return window.CBUAppView = new CBUMainView(config);
@@ -91,12 +106,53 @@ require(["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
     Backbone.history.start({
       pushState: true
     });
+    /* NAV*/
+
     $navTop = $('.nav.pull-left');
-    return $navTop.hover(function() {
+    $navTop.hover(function() {
       return $(this).toggleClass('active');
     }, function() {
       return $(this).removeClass('active');
     });
+    /* LOG OUT*/
+
+    $("a[href='/logout']").click(function(e) {
+      var _this = this;
+      e.preventDefault();
+      return $.ajax({
+        type: "GET",
+        url: "/logout"
+      }).done(function(response) {
+        return window.location.reload();
+      });
+    });
+    /* STICKY FOOTER*/
+
+    $window = $(window);
+    footerHeight = 0;
+    $footer = $(".footer-nav");
+    window.positionFooter = function() {
+      footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
+      console.log($footer.css('margin-top'), footerHeight);
+      if (($(document.body).height() + footerHeight) < $window.height()) {
+        return $footer.css({
+          position: "fixed",
+          bottom: 0
+        });
+      } else {
+        return $footer.css({
+          position: "relative"
+        });
+      }
+    };
+    positionFooter();
+    $window.scroll(positionFooter).resize(positionFooter);
+    return window.onPageElementsLoad = function() {
+      console.log('onPageElementsLoad');
+      return positionFooter();
+    };
+    /* END STICKY FOOTER*/
+
   });
   /* GLOBAL UTILS*/
 

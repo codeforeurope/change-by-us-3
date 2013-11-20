@@ -1,54 +1,80 @@
-<form>
-	<div class="content-wrapper clearfix">
-		<div class="form-left">
-			<label for="name">Project Name </label>
-			<input type="text" maxlength="30" name="name" id="name" placeholder="Project Name" class="input-xxlarge">
-			
-			<label for="description">Description</label>
-			<input type="text" maxlength="30" name="description" id="description" placeholder="Description" class="input-xxlarge">
-			
-			<label for="name">Category </label>
-			<select name="Category">
-				<option value="">Try Me!</option>
-				<option value="">Try Me!</option>
-				<option value="">Try Me!</option>
-			</select>
-			
-			<label for="description">Project Location</label>
-			<input type="text" maxlength="30" name="location" id="location" placeholder="Project Location" class="input-xxlarge">
-							
-			<label for="description">Website</label>
-			<input type="text" maxlength="30" name="website" id="website" placeholder="Website" class="input-xxlarge">
-					
-			<label for="name">Project Visibility</label>
-			<input type="radio" name="public" value="public">Public<br>
-			<input type="radio" name="private" value="private">Private
-		</div>
-		<div class="form-right">
-			<div class="edit-thumbnail">
-				<label>Project Thumbnail</label>
-				<a href="#edit-thumbnail" class="btn">Edit Thumbnail</a>
-				<img src="">
-				<span>upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ## MB</span>
-			</div>
-			<div class="social-btns">
-				<label>Social</label>
-				<div class="twitter">
-					<div class="icon-twitter"></div>
-					<a href="#" class="btn">Disconnect</a>
-				</div>
-				<div class="facebook">
-					<div class="icon-facebook"></div>
-					<a href="#" class="btn">Disconnect</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="form-footer">
-		<div class="pull-left">
-			<input type="submit" class="btn btn-medium" value="Save">
-			<input type="submit" class="btn btn-medium" value="Cancel">
-		</div>
-		<div class="pull-right"></div>
-	</div>
+<form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/project/edit">
+    <div class="content-wrapper clearfix">
+        <div class="form-left">
+            <label for="name">Project Name</label>
+            <input type="text" maxlength="30" name="name" id="project_name" placeholder="Project Name" class="input-xxlarge" value="<%= data.name %>">
+
+            <label for="description">Description</label>
+            <input type="text" rows="8" name="description" maxlength="600" id="project_description" placeholder="Description" class="input-xxlarge" value="<%= data.description %>">
+
+            <label for="category">Category</label>
+            <select name="category" id="project-category">
+                <option value="Animals">Animals</option>
+                <option value="Community">Community</option>
+                <option value="Education">Education</option>
+                <option value="Environment">Environment</option>
+                <option value="Food">Food</option>
+                <option value="Health">Health</option>
+                <option value="Politics">Politics</option>
+                <option value="Religion">Religion</option>
+            </select>
+
+            <label for="description">Project Location</label>
+            <input type="text" maxlength="30" name="zip" id="project_location" placeholder="Project Location" class="input-xxlarge" value="<%= data.location %>">
+
+            <label for="description">Website</label>
+            <input type="text" maxlength="30" name="website" id="website" placeholder="Website" class="input-xxlarge" value="<%= data.website %>">
+
+            <div class="public-visibility">
+                <label for="name">Project Visibility</label>
+                <input type="radio" name="visibility" value="public">
+                <span>Public</span>  
+                <div class="clearfix"></div>
+                <input type="radio" name="visibility" value="private">
+                <span>Private</span> 
+            </div>
+        </div>
+        <div class="form-right">
+            <div class="profile-image">
+                <label>Project Thumbnail</label>
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div>
+                        <span class="btn btn-file">
+                            <span class="fileupload-exists">Edit Thumbnail</span>
+                            <span class="fileupload-new">Upload</span>
+                            <input id="project_image" name="photo" type="file">
+                        </span>  
+                    </div>
+
+                    <div class="fileupload-preview thumbnail circle">
+                        <% if (data.image_url_round){ %>
+                            <img src="<%=  data.image_url_round %>">
+                        <% } %>
+                    </div>
+                    <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                </div>
+                <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+            </div>
+            <div class="social-btns">
+                <label>Social</label>
+                <div class="twitter">
+                    <div class="social-icon icon-twitter"></div>
+                    <a href="#" class="btn btn-medium">Disconnect</a>
+                </div>
+                <div class="facebook">
+                    <div class="social-icon icon-facebook"></div>
+                    <a href="#" class="btn btn-medium">Disconnect</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-footer clearfix">
+        <div class="pull-left">
+            <input type="submit" class="btn btn-medium" value="Save">
+            <input type="submit" class="btn btn-medium" value="Cancel">
+        </div>
+        <div class="pull-right"></div>
+    </div>
+    <input type="hidden" name="project_id" value="<%= data.id %>">
+    <input type="hidden" name="project_slug" value="<%= data.slug %>">
 </form>

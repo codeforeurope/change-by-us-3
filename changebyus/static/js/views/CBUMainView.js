@@ -1,33 +1,37 @@
-define(["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection", "collection/ResourceListCollection", "abstract-view"], function(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection, ResourceListCollection, AbstractView) {
   var CBUMainView;
-  return CBUMainView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
-    collection: {},
+  return CBUMainView = AbstractView.extend({
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.viewData = options.viewData || this.viewData;
       this.collection = options.collection || new ProjectListCollection();
+      this.resourceCollection = options.resourceCollection || new ResourceListCollection();
       return this.render();
     },
     render: function() {
       var _this = this;
       this.$el = $("<div class='projects-main'/>");
       return this.$el.template(this.templateDir + "/templates/main.html", {}, function() {
-        var bannerImageView, bannerParent;
-        $(_this.parent).prepend(_this.$el);
-        bannerParent = _this.$el.find(".body-container-wide");
-        bannerImageView = new BannerImageView({
-          parent: bannerParent
-        });
-        _this.collection.on("reset", _this.addAll, _this);
-        _this.collection.fetch({
-          reset: true
-        });
-        return _this.ajaxForm();
+        return _this.onTemplateLoad();
       });
+    },
+    onTemplateLoad: function() {
+      var bannerImageView, bannerParent;
+      $(this.parent).prepend(this.$el);
+      bannerParent = this.$el.find(".body-container-wide");
+      bannerImageView = new BannerImageView({
+        parent: bannerParent
+      });
+      this.collection.on("reset", this.addAll, this);
+      this.collection.fetch({
+        reset: true
+      });
+      this.resourceCollection.on("reset", this.addAllResources, this);
+      this.resourceCollection.fetch({
+        reset: true
+      });
+      return this.ajaxForm();
     },
     ajaxForm: function() {
       var $signin, $signup;
@@ -42,16 +46,31 @@ define(["underscore", "backbone", "jquery", "template", "form", "views/partials-
     },
     addAll: function() {
       var _this = this;
-      return this.collection.each(function(projectModel) {
-        return _this.addOne(projectModel);
+      this.collection.each(function(projectModel) {
+        return _this.addProject(projectModel);
       });
+      return onPageElementsLoad();
     },
-    addOne: function(projectModel) {
+    addProject: function(projectModel) {
       var view;
-      view = new ProjectPartialsView({
+      view = new ResourceProjectPreviewView({
         model: projectModel
       });
       return this.$el.find("#project-list").append(view.$el);
+    },
+    addAllResources: function() {
+      var _this = this;
+      this.resourceCollection.each(function(projectModel) {
+        return _this.addResource(projectModel);
+      });
+      return onPageElementsLoad();
+    },
+    addResource: function(projectModel) {
+      var view;
+      view = new ResourceProjectPreviewView({
+        model: projectModel
+      });
+      return this.$el.find("#resource-list").append(view.$el);
     }
   });
 });

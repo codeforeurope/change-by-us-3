@@ -1,9 +1,6 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], function(_, Backbone, $, temp, valid, AbstractView) {
   var CBUDLoginView;
-  return CBUDLoginView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
+  return CBUDLoginView = AbstractView.extend({
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
@@ -17,7 +14,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         data: this.viewData
       }, function() {
         _this.ajaxForm();
-        return _this.addListeners();
+        _this.addListeners();
+        return onPageElementsLoad();
       });
       return $(this.parent).append(this.$el);
     },
@@ -30,22 +28,28 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       });
     },
     ajaxForm: function() {
-      var $feedback, $login, $submit, options,
+      var $feedback, $form, $login, $submit, options,
         _this = this;
       $submit = $("input[type='submit']");
+      $form = $("form");
       $login = $("form[name='signin']");
-      $feedback = $("#login-feedback");
+      $feedback = $(".login-feedback");
       options = {
         beforeSubmit: function() {
-          $submit.prop("disabled", true);
-          return $feedback.removeClass("alert").html("");
+          if ($form.valid()) {
+            $form.find("input, textarea").attr("disabled", "disabled");
+            $feedback.removeClass("alert").removeClass("alert-danger").html("");
+            return true;
+          } else {
+            return false;
+          }
         },
         success: function(response) {
-          $submit.prop("disabled", false);
+          $form.find("input, textarea").removeAttr("disabled");
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {
-            return $feedback.addClass("alert").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
           }
         }
       };

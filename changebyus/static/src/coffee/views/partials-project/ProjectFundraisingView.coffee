@@ -1,7 +1,7 @@
 define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"], (_, Backbone, $, temp, form, AbstractView) ->
 	ProjectFundraisingView = AbstractView.extend
 		
-		parent: "#project-calendar"
+		parent: "#project-fundraising"
 		name:"My Project"
 		
 		initialize: (options) ->
@@ -13,7 +13,7 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 			@$el = $(@parent)
 			if @started
 				@$el.template @templateDir + "/templates/partials-project/project-fundraising-goals.html",
-					{data: @viewData}, =>
+					{data: @viewData}, => @onTemplateLoad()
 			else
 				@$el.template @templateDir + "/templates/partials-project/project-fundraising-get-started.html", 
 					{}, => @getStarted()

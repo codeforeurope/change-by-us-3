@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 <head>
-    <meta charset = "utf-8">
+    <meta charset="utf-8">
     <title>Change By Us</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <link href='http://fonts.googleapis.com/css?family=Asap:400,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Merriweather:400,700,300' rel='stylesheet' type='text/css'>
 
-    <link href="/static/css/bootstrap-combined.no-icons.min.css" rel="stylesheet"> 
     <link href="/static/css/style-merged.css" rel="stylesheet">
     <link href="/static/css/font-awesome.min.css" rel="stylesheet">
     <link href="/static/css/wysiwyg.css" rel="stylesheet"> 
@@ -25,21 +24,21 @@
            <div class="nav user pull-left">
               <div class="profile-nav-header">
                 <div class="user-avatar">
-                  <img src="http://lorempixel.com/70/70/" class="circle">
+                    <img src="{{ udata.image_url_round_small }}" class="circle">
                 </div>
                 <span>{{ current_user.display_name }}</span>
               </div>
               <div class="profile-nav-menu">
                 <ul>
-                  <li><a href="/dashboard">Dashboard</a></li>
-                  <li><a href="/user/{{ current_user.id }}">Profile</a></li>
+                  <li><a href="/stream/dashboard">Dashboard</a></li>
+                  <li><a href="/stream/dashboard#profile">Profile</a></li>
                   <li><a href="/logout">Sign Out</a></li> 
                 </ul>
               </div> 
           </div>
 
             <ul class="nav nav-pills pull-right">    
-              <li><a href="/" class="header-links">Stream</a></li>
+              <li><a href="/stream" class="header-links">Stream</a></li>
               <li><a href="/" class="header-links">City</a></li>
               <li><a href="/discover" class="header-links">Discover</a></li>
             </ul>
@@ -69,9 +68,13 @@
         </div>
   </div>
 
-  <div class="placeholder-frame" id="frame"> </div>
+  <div class="main-content" id="frame"> </div>
 
+  {% if index == true %}
+  <div class="footer-nav index clearfix">
+   {% else %}
   <div class="footer-nav clearfix">
+  {% endif %}
     <div class="body-container">
       <div class="pull-left">
         <a href="/create">Create a Project</a>
@@ -86,16 +89,17 @@
     </div>
   </div>
 
+    <script type="text/javascript">
+      window.userID         = "{{ current_user.id }}"; 
+      {% if project %}
+      window.projectID      = "{{ project.id }}";  
+      window.projectOwnerID = "{{ project.owner.id }}"; 
+      {% endif %}
+    </script>
+       
     <!-- ========= -->
     <!-- Libraries -->
     <!-- ========= -->
-    {% if project %}
-    <script type="text/javascript">
-      window.userID         = "{{ current_user.id }}"; 
-      window.projectID      = "{{ project.id }}";  
-      window.projectOwnerID = "{{ project.owner.id }}"; 
-    </script>
-    {% endif %}
 
     <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js" type="text/javascript"></script>
@@ -105,14 +109,12 @@
     <script src="/static/js/ext/jquery/jquery-form.js"></script>
     <script src="/static/js/ext/jquery/jquery.tinysort.js"></script>
     <script src="/static/js/ext/jquery/select-post.js"></script> 
-    
+    <script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script>  
     <!-- 
     <script src="/static/js/ext/bootstrap/bootstrap.min.js"></script>
     <script src="/static/js/ext/bootstrap/bootstrap-fileupload.js"></script>
     <script src="/static/js/ext/bootstrap/bootstrap-dropdown.js"></script>
-   -->
-
-    <script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script>  
+    -->
 
 </body>
 </html>

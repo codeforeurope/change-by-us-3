@@ -7,7 +7,8 @@ from ..extensions import db
 from ..helpers.crypt import handle_decryption
 from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
-from ..helpers.mixin import EntityMixin, HasActiveEntityMixin, FlaggableMixin, encode_model
+from ..helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
+    LocationEnabledEntityMixin, encode_model)
 from ..helpers.stringtools import slugify
 from ..stripe.models import StripeAccount
 from ..user.models import User
@@ -86,7 +87,8 @@ class Roles:
 ACTIVE_ROLES = [Roles.ORGANIZER, Roles.MEMBER]
 
 
-class Project(db.Document, HasActiveEntityMixin, FlaggableMixin):
+class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
+              LocationEnabledEntityMixin):
     """
     Project model.  Pretty straight forward.  For image_url we
     store the url (/images/image.jpg) so that we can move data between
@@ -94,6 +96,8 @@ class Project(db.Document, HasActiveEntityMixin, FlaggableMixin):
     """
     name = db.StringField(max_length=100, required=True, unique=True)
     description = db.StringField(max_length=600)
+    category = db.StringField()
+    gcal_code = db.StringField(max_length=500)
 
     image_name = db.StringField()
     #municipality = db.ReferenceField(Municipality)
@@ -101,11 +105,6 @@ class Project(db.Document, HasActiveEntityMixin, FlaggableMixin):
 
     stripe_account = db.ReferenceField(StripeAccount)
     retired_stripe_accounts = db.ListField()
-
-    location = db.StringField()
-
-    # Geo JSON Field
-    geo_location = db.PointField()
 
     # NOTE: This is very CBU specific
     # a project is either a project or a resource
@@ -176,6 +175,14 @@ class UserProjectLink(db.Document, EntityMixin):
             {'fields': ['user', 'project'], 'unique': True },
         ],
     }
+
+
+class ProjectCategory(db.Document, HasActiveEntityMixin):
+    """
+    A simple list of categories.  NOT to be implemented in the project model
+    as a reference.  This model is strictly for bookkeeping.
+    """
+    name = db.StringField(required=True, unique=True)
 
 
 signals.post_init.connect(Project.post_init, sender=Project)

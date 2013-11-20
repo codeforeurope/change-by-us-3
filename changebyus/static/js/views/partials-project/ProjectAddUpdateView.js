@@ -12,45 +12,47 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
-        var $shareOptions, $shareToggle, $submit, form;
-        _this.$ul = _this.$el.find('.updates-container ul');
-        form = new ProjectWysiwygFormView({
-          parent: "#update-form"
-        });
-        $submit = form.$el.find('input[type="submit"]');
-        console.log('$submit', $submit, form.$el);
-        form.beforeSubmit = function(arr_, form_, options_) {
-          var share;
-          $submit.attr("disabled", "disabled");
-          share = [];
-          if ($("#twitter").prop('checked')) {
-            share.push('twitter');
-          }
-          if ($("#facebook").prop('checked')) {
-            share.push('facebook');
-          }
-          arr_.push({
-            name: "social_sharing",
-            value: share,
-            type: "hidden",
-            required: false
-          });
-          return console.log('form.beforeSubmit', $("#twitter").prop('checked'), $("#facebook").prop('checked'));
-        };
-        form.success = function(response_) {
-          if (response_.success) {
-            _this.addModal(response_.data);
-          }
-          return console.log('response_', response_);
-        };
-        $shareOptions = $(".share-options");
-        $shareToggle = $(".share-toggle");
-        return $shareToggle.click(function() {
-          return $shareOptions.toggleClass("hide");
-        });
+        return _this.onTemplateLoad();
       });
     },
-    noResults: function() {},
+    onTemplateLoad: function() {
+      var $shareOptions, $shareToggle, $submit, form,
+        _this = this;
+      ProjectSubView.prototype.onTemplateLoad.call(this);
+      this.$ul = this.$el.find('.updates-container ul');
+      form = new ProjectWysiwygFormView({
+        parent: "#update-form"
+      });
+      $submit = form.$el.find('input[type="submit"]');
+      form.beforeSubmit = function(arr_, form_, options_) {
+        var share;
+        $submit.find("input, textarea").attr("disabled", "disabled");
+        share = [];
+        if ($("#twitter").prop('checked')) {
+          share.push('twitter');
+        }
+        if ($("#facebook").prop('checked')) {
+          share.push('facebook');
+        }
+        return arr_.push({
+          name: "social_sharing",
+          value: share,
+          type: "hidden",
+          required: false
+        });
+      };
+      form.success = function(response_) {
+        if (response_.success) {
+          _this.addModal(response_.data);
+        }
+        return console.log('response_', response_);
+      };
+      $shareOptions = $(".share-options");
+      $shareToggle = $(".share-toggle");
+      return $shareToggle.click(function() {
+        return $shareOptions.toggleClass("hide");
+      });
+    },
     addOne: function(model_) {
       var view;
       console.log("ProjectAddUpdateView addOne model", model_);

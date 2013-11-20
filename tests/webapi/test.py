@@ -21,7 +21,8 @@ from tests import BaseTestCase
 
 from tests import (string_generator, email_generator, password_generator,
                    timestamp_generator, name_generator, text_generator,
-                   unicode_generator, unicode_email_generator, zipcode_generator)
+                   unicode_generator, unicode_email_generator, zipcode_generator,
+                   url_generator, gcal_code_generator, project_category_generator)
 
 
 class AssertClass(BaseTestCase):
@@ -61,6 +62,9 @@ class UserClass():
         self.fname = self.name
         self.lname = self.name
         self.dname = self.name
+        self.bio = text_generator(50)
+        self.website = url_generator()
+        self.location = zipcode_generator()
 
     def s(self, field, val):
         self.vars[field] = val
@@ -69,17 +73,28 @@ class UserClass():
         return self.vars[field]
 
     def createUser(self, client):
+        loc_data = client.GET('/api/project/geopoint?s=%s' % self.location)['data'][0]
+        self.location = loc_data['name']
+        self.lat = loc_data['lat']
+        self.lon = loc_data['lon']    
+    
         create = {'email' : self.email,
                   'password' : self.pw,
                   'display_name' : self.dname,
                   'first_name' : self.fname,
-                  'last_name' : self.lname}
+                  'last_name' : self.lname,
+                  'bio': self.bio,
+                  'website': self.website,
+                  'location': self.location,
+                  'lat': self.lat,
+                  'lon': self.lon}
 
         resp = client.POST('/api/user/create', data = create)
         client.assertTrueMsg( resp['success'], resp['msg'] )
         self.user_id = resp['data']['id']
         self.data = resp['data']
 
+    ## TODO: No edit user test?
 
     def login(self, client):
         login = {'email' : self.email, 
@@ -141,6 +156,8 @@ class ProjectClass():
     def __init__(self):
         self.name = name_generator()
         self.description = text_generator(100)
+        self.category = project_category_generator()
+        self.gcal_code = gcal_code_generator()
         # zipcode gets turned into proper location later
         self.location = zipcode_generator()
 
@@ -155,6 +172,8 @@ class ProjectClass():
 
         create = { 'name' : self.name,
                    'description' : self.description,
+                   'category': self.category,
+                   'gcal_code': self.gcal_code,
                    'location' : self.location,
                    'lat': self.lat,
                    'lon': self.lon }
@@ -175,6 +194,8 @@ class ProjectClass():
         edit = { 'project_id' : self.project_id,
                  'name' : self.name,
                  'description' : self.description,
+                 'category': self.category,
+                 'gcal_code': self.gcal_code,
                  'location' : self.location,
                  'lat': self.lat,
                  'lon': self.lon }
@@ -464,6 +485,8 @@ class SearchTest(BaseTestCase):
     """
     All tests currently assume projects created with project tests, 
     i.e. they have 'lorem' in the text and a location in NYC
+    
+    TODO: get some verbosity in here
     """
     search_string = "lorem"
     # Brooklyn, NY, 11217
@@ -504,4 +527,17 @@ class SearchTest(BaseTestCase):
         results = self.GET(search_url)
                 
         self.assertTrue(len(results) > 0)
-    
+        
+    def test_category_search(self):
+        search_url = "{0}?s={1}&cat=animals".format(self.url, 
+                                                      self.search_string)
+        results = self.GET(search_url)
+                
+        self.assertTrue(len(results) > 0)
+ 
+            
+class BlacklistTest(BaseTestCase):
+    """
+    TODO
+    """
+    pass

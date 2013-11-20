@@ -6,6 +6,7 @@
 from flask import Blueprint, request, render_template, redirect, url_for, g, current_app
 from flask.ext.login import login_required, current_user
 
+from ..user.models import User
 from .models import Project
 from .helpers import _user_involved_in_project
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
@@ -90,7 +91,14 @@ def project_view_id(project_id):
             access_token=access_token,
             account_id=account_id)
     else:
+        user = User.objects.with_id(g.user.id)
+        udict = user.as_dict()
+        
+        keys_to_include = ['image_url_round_medium', 'image_url_round_small']
+        udata = {x:udict[x] for x in keys_to_include}
+
         return render_template('index.html', 
+            udata = udata,
             project = project.as_dict(), 
             posts = posts, 
             involved = involved, 

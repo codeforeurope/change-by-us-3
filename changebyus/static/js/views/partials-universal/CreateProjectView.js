@@ -13,7 +13,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
     render: function() {
       var _this = this;
       this.$el = $("<div class='create-project'/>");
-      this.$el.template(this.templateDir + "/templates/partials-universal/create-form.html", {
+      this.$el.template(this.templateDir + "/templates/partials-project/project-create-form.html", {
         data: this.viewData
       }, function() {
         return _this.ajaxForm();
@@ -21,8 +21,12 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $ajax, $form, $projectLocation, $submit, options,
+      var $dropkick, $form, $projectLocation, $submit, options,
         _this = this;
+      $('.fileupload').fileupload({
+        uploadtype: 'image'
+      });
+      $dropkick = $('#project-category').dropkick();
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
       options = {
@@ -30,9 +34,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');
-            console.log('>>>>>>', _this.location.name, $zip.val());
             if (_this.location.name !== "" && _this.location.name === $zip.val()) {
-              $submit.prop("disabled", true);
+              $form.find("input, textarea").attr("disabled", "disabled");
               return true;
             } else {
               if ($zip.val() === "") {
@@ -48,8 +51,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           }
         },
         success: function(res) {
-          console.log("res", res);
-          $submit.prop("disabled", false);
+          $form.find("input, textarea").remove("disabled");
           if (res.success) {
             $form.resetForm();
             return window.location = "/project/" + res.data.id;
@@ -59,7 +61,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
         }
       };
       $form.ajaxForm(options);
-      $ajax = null;
       $projectLocation = $("#project_location");
       return $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',

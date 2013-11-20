@@ -24,6 +24,13 @@ define(["underscore", "backbone"], function(_, Backbone) {
       display_name: "",
       roles: [],
       created_at: "2000-01-01 00:00:00.000000"
+    },
+    parse: function(resp_) {
+      if (resp_.data) {
+        return resp_.data;
+      } else {
+        return resp_;
+      }
     }
   });
 });

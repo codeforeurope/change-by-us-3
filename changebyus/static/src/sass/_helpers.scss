@@ -13,6 +13,8 @@
   }
 }
 
+.clear-both{clear: both;}
+
 .hide-text {
   font: 0 / 0 a;
   color: transparent;
@@ -77,6 +79,7 @@ span.highlight{
 
 .circle{
   @include border-radius(1000px, 1000px);
+  overflow: hidden;
 }
 
 /********** position helper ***********/

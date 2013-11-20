@@ -18,10 +18,13 @@
 	overflow-x: hidden;
 	outline: none;
 }
-  #editor, .wsyiwyg-editor a{
+  #editor a, .wsyiwyg-editor a{
     color: #111;
     text-decoration: underline;
   }
+
+  #editor.slim, .wsyiwyg-editor.slim { height: 40px; }
+
 
 #voiceBtn {
   width: 20px;

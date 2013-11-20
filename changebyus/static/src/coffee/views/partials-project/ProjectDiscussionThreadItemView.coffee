@@ -4,16 +4,16 @@ define ["underscore",
 		"template", 
 		"moment", 
 		"abstract-view", 
-		"model/ProjectUpdateModel", 
-		"views/partials-project/ProjectPostReplyView"], 
+		"model/UserModel",
+		"model/ProjectUpdateModel"], 
 	(_, 
 	 Backbone, 
 	 $, 
 	 temp, 
 	 moment, 
 	 AbstractView, 
-	 ProjectUpdateModel, 
-	 ProjectPostReplyView) ->
+	 UserModel,
+	 ProjectUpdateModel ) ->
 		ProjectDiscussionThreadItemView = AbstractView.extend
 			
 			model:ProjectUpdateModel
@@ -22,21 +22,28 @@ define ["underscore",
 			$replyForm: null
 			tagName: "li"
 
-			initialize: (options_, forceLoad_) ->
+			initialize: (options_) ->
 				AbstractView::initialize.call(@, options_)
-				if forceLoad_ then @loadModel() else @render()
-
-			loadModel:->
 				console.log 'loadModel',@model
-	 
-			render: ->
-				m = moment(@model.attributes.created_at).format("MMMM D hh:mm a")
-				@model.attributes.format_date = m
+				@model.fetch
+					success: =>@loadUser()
 
-				$(@el).template(@templateDir+"/templates/partials-project/project-thread-list-item.html",
-					{data: @model.attributes}, => @onTemplateLoad()
-				)
-				@ 
+			loadUser:->
+				@user = new UserModel(id:@model.attributes.user.id)
+				@user.fetch
+					success: =>@render()
+
+			render: ->
+				m = moment(@model.get('created_at')).format("MMMM D hh:mm a")
+				@model.set
+					'created_at':m
+
+				@viewData                       = @model.attributes
+				@viewData.image_url_round_small = @user.attributes.image_url_round_small
+				@viewData.display_name          = @user.attributes.display_name
+				
+				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
+					{data: @viewData}, => @onTemplateLoad()
 
 			onTemplateLoad:-> 
 				self = @ 
@@ -44,4 +51,7 @@ define ["underscore",
 				@$postRight     = @$el.find('.update-content')
 				$replyToggle    = @$el.find('.reply-toggle').first()
 				$replyToggle.click ->
-					# scroll to replybox
+					top = $("#add-thread-form").offset().top
+					$("html, body").animate({ scrollTop: top }, "slow")
+
+				onPageElementsLoad()

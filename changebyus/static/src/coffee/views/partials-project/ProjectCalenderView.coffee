@@ -1,12 +1,45 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView"], 
-	(_, Backbone, $, temp, ProjectSubView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"abstract-view"
+		"views/partials-project/ProjectSubView", 
+		"views/partials-project/ProjectEmbedCalendarModalView"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 AbstractView,
+	 ProjectSubView, 
+	 ProjectEmbedCalendarModalView) ->
+
 		ProjectCalenderView = ProjectSubView.extend
+			isOwner:false
 			parent: "#project-calendar"
+			projectEmbedCalendarModalView: null
+			
+			initialize: (options_) ->  
+				options           = options_ or {}
+				@id               = options.id or @id
+				@templateDir      = options.templateDir or @templateDir
+				@parent           = options.parent or @parent
+				if @model
+					@viewData     = @model.attributes || @viewData
+				@viewData.isOwner = options.isOwner || @isOwner
+				console.log '@viewData >>>>> ',@viewData,options
+				@render()
+				
+				
 			render: -> 
+				console.log '@viewData <<<<< ',@viewData
 				@$el = $("<div class='project'/>")
 				@$el.template @templateDir + "/templates/partials-project/project-calendar.html",
-					{data: @viewData}, =>
-						@$el.find(".preload").remove()
+					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
 
-			addOne: (model) ->
+			onTemplateLoad:->
+				@$el.find(".preload").remove()
+				$('#embed-calendar').click (e)=>
+					e.preventDefault()
+					@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
+

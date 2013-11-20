@@ -1,39 +1,42 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-	ProjectSubView = AbstractView.extend
+define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
+	(_, Backbone, $, temp, AbstractView) ->
+		ProjectSubView = AbstractView.extend
 
-		isDataLoaded: false
-	
-		initialize: (options) ->
-			console.log 'ProjectSubView options',options
-			AbstractView::initialize.call(@, options)
-			@render()
-
-		show: ->
-			console.log @,'ProjectSubView show',@isDataLoaded
-			@$el.show()
-			unless @isDataLoaded
-				if @collection
-					@collection.on "reset", @addAll, @
-					@collection.fetch {reset: true}
-
-		loadData: ->
-
-		# override in subview
-		noResults:->
+			isDataLoaded: false
 		
-		# override in subview
-		addOne: (model) ->
+			initialize: (options) ->
+				# console.log 'ProjectSubView options',options
+				AbstractView::initialize.call(@, options)
+				@render()
+
+			show: -> 
+				@$el.show()
+				if @collection and @isDataLoaded is false
+					if @templateLoaded
+						@loadData()
+					else
+						@delayedCollectionLoad = true
+
+			loadData: ->
+				@collection.on "reset", @onCollectionLoad, @
+				@collection.fetch {reset: true}
+
+			# override in subview
+			noResults:->
+				@$el.find('.no-results').show()
+
+			onCollectionLoad:->
+				@$el.find(".preload").remove()
+				@addAll()
 			
-		# override in subview
-		addAll: -> 
-			if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
+			# override in subview
+			addOne: (model) ->
+				
+			# override in subview
+			addAll: -> 
+				if @collection.models.length is 0 then @noResults() 
 
-			console.log 'ProjectSubView addAll @collection.',@collection.models
-			@collection.each (model) => 
-				console.log 'ProjectSubView >>>>',@
-				@addOne model
+				@collection.each (model) =>  
+					@addOne model
 
-			@isDataLoaded = true
-
-			
-
+				@isDataLoaded = true

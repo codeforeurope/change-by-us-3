@@ -14,29 +14,30 @@ define ["underscore",
 		"views/partials-project/ProjectAddUpdateView", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
-		"views/partials-project/ProjectInfoAppearanceView"], (_, 
-																Backbone, 
-																$, 
-																temp, 
-																CBUProjectView, 
-																ProjectDiscussionsCollection, 
-																ProjectUpdatesCollection, 
-																ProjectCalendarCollection, 
-																ProjectMembersCollection, 
-																ProjectDiscussionView, 
-																ProjectDiscussionsView, 
-																ProjectNewDiscussionView, 
-																ProjectFundraisingView, 
-																ProjectAddUpdateView, 
-																ProjectCalenderView, 
-																ProjectMembersView, 
-																ProjectInfoAppearanceView) ->
+		"views/partials-project/ProjectInfoAppearanceView"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 CBUProjectView, 
+	 ProjectDiscussionsCollection, 
+	 ProjectUpdatesCollection, 
+	 ProjectCalendarCollection, 
+	 ProjectMembersCollection, 
+	 ProjectDiscussionView, 
+	 ProjectDiscussionsView, 
+	 ProjectNewDiscussionView, 
+	 ProjectFundraisingView, 
+	 ProjectAddUpdateView, 
+	 ProjectCalenderView, 
+	 ProjectMembersView, 
+	 ProjectInfoAppearanceView) ->
 
 		CBUProjectOwnerView = CBUProjectView.extend
 
-			initialize: (options) ->
-				# console.log 'CBUProjectOwnerView',options
+			initialize: (options) -> 
 				CBUProjectView::initialize.call @, options
+				console.log 'CBUProjectOwnerView',@
 
 			render: -> 
 				@$el = $("<div class='project-container'/>")
@@ -50,28 +51,24 @@ define ["underscore",
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
 						
-						config = {id:@model.get("id"), name:@model.get("name")}
-						console.log 'CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!',config
-						# TO DO
-						# create all the subpage classes and HTML templates
+						config = {id:@model.get("id"), name:@model.get("name"), model:@model,isOwner:true} 
 
-						projectDiscussionsCollection = new ProjectDiscussionsCollection(config) 
-						projectCalendarCollection    = new ProjectCalendarCollection(config)
+						projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 						projectMembersCollection     = new ProjectMembersCollection(config)
-						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
+						projectUpdatesCollection     = new ProjectUpdatesCollection(config)
 						
 						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
 						@projectDiscussionView     = new ProjectDiscussionView()
-						@projectNewDiscussionView  = new ProjectNewDiscussionView({model:@model}) 
+						@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
 						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
-						@projectCalenderView       = new ProjectCalenderView({collection: projectCalendarCollection})
+						@projectCalenderView       = new ProjectCalenderView(config) 
 						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
-						@projectInfoAppearanceView = new ProjectInfoAppearanceView()
+						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>
 							console.log 'projectDiscussionsView arg_',arg_
-							@projectDiscussionView.updateDiscussion(arg_.model)
+							# @projectDiscussionView.updateDiscussion(arg_.model)
 							window.location.hash = "discussion/"+arg_.model.id
 
 						###
@@ -86,11 +83,8 @@ define ["underscore",
 						@membersBTN     = $("a[href='#members']")
 						@infoBTN        = $("a[href='#info']")
 						
-						hash = window.location.hash.substring(1)
-						@toggleSubView (if (hash is "") then "discussions" else hash)
-						$(window).bind "hashchange", (e) =>
-							hash = window.location.hash.substring(1)
-							@toggleSubView hash
+						$(window).bind "hashchange", (e) => @toggleSubView()
+						@toggleSubView()
 						
 						# temp hack because somewhere this event default is prevented
 						$("a[href^='#']").click (e) -> 
@@ -98,20 +92,24 @@ define ["underscore",
 
 				@$el.prepend $header
 
-			toggleSubView: (view_) -> 
-				for view in [@projectDiscussionsView, @projectDiscussionView, @projectNewDiscussionView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
-					view.hide()
+			toggleSubView: -> 
+				view = window.location.hash.substring(1)
+
+				for v in [@projectDiscussionsView, @projectDiscussionView, @projectNewDiscussionView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
+					v.hide()
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
 					btn.removeClass "active"
-				console.log 'view_', (view_.indexOf("discussion/")>-1)
+				console.log 'view --- ', (view.indexOf("discussion/")>-1), view
 
-				if view_.indexOf("discussion/") > -1
+				if view.indexOf("discussion/") > -1
+					id = view.split('/')[1]
+					@projectDiscussionView.updateDiscussion(id)
 					@projectDiscussionView.show()
 					@discussionBTN.addClass "active"
 					return
 
-				switch view_ 
+				switch view 
 					when "new-discussion" 
 						@projectNewDiscussionView.show()
 						@discussionBTN.addClass "active"

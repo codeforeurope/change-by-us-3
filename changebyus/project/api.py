@@ -18,9 +18,9 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 from ..mongo_search import search
 
-from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink
+from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
 
-from .helpers import ( _get_users_for_project, _get_user_joined_projects, 
+from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
                        _create_project, _edit_project, _get_lat_lon_from_location,
                        _get_user_owned_projects, _leave_project )
 
@@ -67,7 +67,7 @@ def api_get_geopoint():
 
 ## TODO WTForms for search?
 
-@project_api.route('/search', methods = ['POST'])
+@project_api.route('/search', methods = ['POST', 'GET'])
 def api_search_projects():
     """
     ABOUT
@@ -115,6 +115,16 @@ def api_search_projects():
                          units = 'mi')
 
     return jsonify_response(ReturnStructure(data = search_data))
+    
+
+@project_api.route('/categories')
+def api_categories():
+    cats = ProjectCategory.objects(active=True)
+    
+    data = {"categories": [c.name for c in cats]}
+    
+    return jsonify_response(ReturnStructure(data = data))
+
 
 # TODO WTForms for flagging?
 
@@ -134,6 +144,8 @@ class CreateProjectForm(Form):
 
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
+    category = TextField("category")
+    gcal_code = TextField("gcal_code")
     location = HiddenField("location")
     lat = HiddenField("lat")
     lon = HiddenField("lon")
@@ -215,7 +227,11 @@ class EditProjectForm(Form):
     project_id = TextField("project_id")
     name = TextField("title",)
     description = TextAreaField("description")
-    location = TextField("location")
+    category = TextField("category")
+    gcal_code = TextField("gcal_code")
+    location = HiddenField("location")
+    lat = HiddenField("lat")
+    lon = HiddenField("lon")
     photo = FileField("photo")    
 
 
@@ -249,7 +265,7 @@ def api_edit_project():
 
 @project_api.route('/<project_id>/users')
 # return a list of users given a project
-@login_required
+# @login_required
 @project_exists
 def api_view_project_users(project_id):
     """
@@ -356,12 +372,13 @@ def api_get_projects():
     limit = int(request.args.get('limit', 100))
     sort = request.args.get('sort')
     order = request.args.get('order', 'asc')
+    is_resource = bool(request.args.get('is_resource', False))
 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        projects = Project.objects.order_by(sort_order)
+        projects = Project.objects(resource=is_resource).order_by(sort_order)
     else:
-        projects = Project.objects()
+        projects = Project.objects(resource=is_resource)
 
     projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)

@@ -14,29 +14,45 @@ define ["underscore",
 			$form:null 
 			$threadFormID:'#add-thread-form'
 			projectWysiwygFormView:null
+			delayedDataLoad:false
 
 			render: ->
 				@$el = $(@parent)
-				@$el.template @templateDir + "/templates/partials-project/project-discussion.html",
-					{data: @viewData}, =>
-						@$ul = @$el.find('.bordered-item')
-						@$form = @$el.find(@$threadFormID)
+				@$el.template @templateDir+"/templates/partials-project/project-discussion.html",
+					{data: @viewData}, => @onTemplateLoad()
 
-			updateDiscussion:(discussion_)->
+			onTemplateLoad:->
+				@templateLoaded = true
+				@$ul = @$el.find('.bordered-item')
+				@$form = @$el.find(@$threadFormID)
+				onPageElementsLoad()
+				if @delayedDataLoad then @onSuccess()
+
+			updateDiscussion:(id_)->
+				@model = new ProjectDiscussionModel(id:id_)
+				@model.fetch
+					success:=> 
+						if @templateLoaded is false 
+							@delayedDataLoad = true
+						else
+							@onSuccess()
+			
+			onSuccess:-> 
 				@$ul.html('')
 				@$form.html('')
 
-				console.log 'updateDiscussion',discussion_, @$ul,@$form,discussion_.attributes.id
-
-				@addOne discussion_
-				for response in discussion_.attributes.responses
+				@addDiscussion @model
+				for response in @model.attributes.responses
 					model = new ProjectDiscussionModel({id:response.id})
-					@addOne model, true
+					@addDiscussion model 
 
-				@projectWysiwygFormView  = new ProjectWysiwygFormView({parent: @$threadFormID, id:discussion_.attributes.id})
+				userAvatar = $('.profile-nav-header img').attr('src')
+				@projectWysiwygFormView = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.attributes.id, slim:true, userAvatar:userAvatar})
+				@projectWysiwygFormView.success = ->
+					window.location.reload()
 
 
-			addOne:(model_, forceLoad_=false)->   
+			addDiscussion:(model_)->   
 				config = {parent:@$ul, model:model_}
-				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config, forceLoad_)
+				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config)
 				@$ul.append projectDiscussionThreadItemView.$el

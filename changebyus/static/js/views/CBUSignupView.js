@@ -1,9 +1,7 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
   var CBUSignupView;
-  return CBUSignupView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
+  return CBUSignupView = AbstractView.extend({
+    socialInfo: null,
     initialize: function(options) {
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
@@ -17,41 +15,117 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         data: this.viewData
       }, function() {
         _this.ajaxForm();
-        return _this.addListeners();
+        _this.addListeners();
+        return onPageElementsLoad();
       });
       return $(this.parent).append(this.$el);
     },
     addListeners: function() {
-      return $(".btn-info").click(function(e) {
+      var _this = this;
+      $(".btn-info").click(function(e) {
         var url;
         e.preventDefault();
         url = $(this).attr("href");
         return popWindow(url);
       });
+      $(window).bind("hashchange", function(e) {
+        return _this.toggleSubView();
+      });
+      return this.toggleSubView();
     },
     ajaxForm: function() {
-      var $feedback, $signin, $submit, options,
+      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options,
         _this = this;
-      $signin = $("form[name='signin']");
-      $submit = $("input[type='submit']");
-      $feedback = $("#login-feedback");
-      console.log('ajaxForm', $signin);
+      $signup = $(".init-signup");
+      $form = $signup.find("form");
+      $submit = $signup.find("input[type='submit']");
+      $feedback = $signup.find(".login-feedback");
       options = {
         beforeSubmit: function() {
           console.log('beforeSubmit');
-          $submit.prop("disabled", true);
-          return $feedback.removeClass("alert").html("");
+          $form.find("input, textarea").attr("disabled", "disabled");
+          return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
         success: function(response) {
-          $submit.prop("disabled", false);
+          console.log('signup', response);
+          $form.find("input, textarea").removeAttr("disabled");
           if (response.msg.toLowerCase() === "ok") {
             return window.location.href = "/";
           } else {
-            return $feedback.addClass("alert").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
           }
         }
       };
-      return $signin.ajaxForm(options);
+      $form.ajaxForm(options);
+      $socialSignup = $(".social-signup");
+      $socialForm = $socialSignup.find("form");
+      $socialSubmit = $socialSignup.find("input[type='submit']");
+      $socialFeedback = $socialSignup.find(".login-feedback");
+      options = {
+        beforeSubmit: function() {
+          console.log('beforeSubmit');
+          $socialForm.find("input, textarea").attr("disabled", "disabled");
+          return $socialFeedback.removeClass("alert").html("");
+        },
+        success: function(response) {
+          console.log('signup', response);
+          $socialForm.find("input, textarea").removeAttr("disabled");
+          if (response.msg.toLowerCase() === "ok") {
+            return window.location.href = "/";
+          } else {
+            return $socialFeedback.addClass("alert").html(response.msg);
+          }
+        }
+      };
+      return $socialForm.ajaxForm(options);
+    },
+    toggleSubView: function() {
+      var view;
+      view = window.location.hash.substring(1);
+      if (view === "facebook") {
+        $('.social-signup').show();
+        $('.init-signup').hide();
+        return this.getSocialInfo();
+      } else {
+        $('.social-signup').hide();
+        return $('.init-signup').show();
+      }
+    },
+    getSocialInfo: function() {
+      var $socialForm, $socialSignup,
+        _this = this;
+      if (this.socialInfo !== null) {
+        return;
+      }
+      $socialSignup = $(".social-signup");
+      $socialForm = $socialSignup.find("form");
+      $socialForm.find("input, textarea").attr("disabled", "disabled");
+      if (this.ajax) {
+        this.ajax.abort();
+      }
+      return this.ajax = $.ajax({
+        type: "GET",
+        url: "/api/user/socialinfo"
+      }).done(function(response_) {
+        console.log("response_", response_);
+        if (response_.msg.toLowerCase() === "ok") {
+          _this.setSocialInfo(response_.data);
+        }
+        return $socialForm.find("input, textarea").removeAttr("disabled");
+      });
+    },
+    setSocialInfo: function(data_) {
+      var $socialAvatar, $socialSignup, img, name;
+      img = data_.fb_image !== "" ? data_.fb_image : data_.twitter_image;
+      name = data_.fb_name !== "" ? data_.fb_name : data_.twitter_name;
+      $socialAvatar = $('.social-avatar');
+      $socialSignup = $(".social-signup");
+      $socialAvatar.find('img').attr('src', img);
+      $socialAvatar.find('span').html(name);
+      $socialSignup.find('input[name="id"]').val(data_.id);
+      $socialSignup.find('input[name="email"]').val(data_.email);
+      $socialSignup.find('input[name="display_name"]').val(data_.display_name);
+      return console.log(data_, $('.social-avatar').find('img'));
     }
   });
 });

@@ -3,53 +3,122 @@
 @import "compass/css3";
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
+@import "compass/css3/transform";
+
+/* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
+
+/*** HEADER *****/
+.header-icon{ 
+  position: absolute;
+  top: 15px;
+  right: 30px;
+  height: 20px;
+  width: auto;
+  font-size: 14px;
+  font-weight: bold;
+  background-position: left center;
+  background-repeat: no-repeat;
+  a{ 
+    padding-left: 30px;
+    @include text-shadow(rgba(0,0,0,.5) 0 0 5px);
+  }
+}
+
+.public-view{background-image: url(../img/icon_view_project.png);}
+.flag-project{background-image: url(../img/icon_flag.png);}
+
 
 .projects {
   padding: none;
   margin: none;
 }
 
+.project-preview:nth-child(3n+3){
+  .project-square {margin-right: 0;}
+}
+
 .project-square {
   @include box-skin;
+  padding: 10px;
   height: 525px;
-  width: 320px;
+  width: 328px;
   float: left;
-  margin-right: 15px;
-  margin-bottom: 15px;
+  margin-right: 16px;
+  margin-bottom: 16px;
+
+  &:hover{
+    .hover-overlay{ 
+      display: block;
+      @include opacity(1);
+    }
+  }
+  .side-tab{
+    position: absolute;
+    top:20px;
+    left:10px;
+    background-color: rgba(0,0,0,0.5);
+    padding:10px;
+    color: $white; 
+    z-index: 1;
+
+    @include border-top-right-radius(4px);
+    @include border-bottom-right-radius(4px);
+  }
+  .hover-overlay{
+    text-align: center;
+    //display: none;
+    background-color: rgba(255,255,255,0.5);
+    width:100%;
+    height: 100%;
+    position: absolute; 
+    top:0;
+    left: 0;
+    z-index: 2;
+    @include opacity(0);
+    @include transition-property(opacity);
+    @include transition-duration(.1s);
+  }
+  .btn{ 
+    padding: 15px 20px;
+    margin-top:150px; 
+  }
 }
 
 .user-info {
-    width: 600px;
+    width: 600px; 
     border: 1px solid #000;
 }
 
 .project-icon {
-  margin: 10px;
-  @include box-skin;
+  img{width: 100%; } 
 }
 
 .project-name {
-  margin: 15px;
-  font-size: 25 !important;
-  font-weight: bold;
+  @include font-styling("asap", 23px, $gray20, "normal", "bold");
+  margin-top: 15px;
 }
 
 .project-description {
-  margin: 15px;
+  @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
+  line-height: 1.6;
+  margin-top: 15px;
+}
+
+.project-category{
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  @include font-styling("bebas", 18px, $gray65 );
+  a{color: #868686;}
 }
 
 .project-container {
   h2 {
-    font-size: 44px;
-    font-weight: normal;
+    font-size: 42px;
+    font-weight: normal;  
     text-align: left;
   }
-   
-  h4{
-    text-transform: uppercase;
-    @include font-styling("asap", 10px, $gray65 );
-  }
-  
+
   &.feature-image .overlay-backdrop {
     background-color: $white;
   }
@@ -57,6 +126,12 @@
 
   .project-header{
     margin-top: 12px;
+  }
+
+  .project-section-header{
+    height: 120px;
+    z-index: 1;
+    h2{margin-top: 50px;}
   }
 
   .feature-image {
@@ -69,6 +144,8 @@
       @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
     }
 
+    .circle{ background: $defaultGray;}
+
     .preview{
       position: absolute;
       top:70px;
@@ -76,7 +153,6 @@
       width: 249px;
       height: 249px;
       border: 4px solid #fff;  
-      @include border-radius(128px);  
       @include background-clip(padding-box);  
     }
 
@@ -129,32 +205,22 @@
   }
   
   .tabs{
-    /*
-    li{
-      height: 45px;
-      background-repeat: no-repeat;
-      background-position: left center;
-    }*/
+ 
   }
-  .updates, .members, .calendar { 
-    h2{
-        margin: 50px 0 22px;
-    } 
-  }
-  
+
   .content-header{
     margin-top: 24px;
-
   }
  
   .content-wrapper {
     padding: 20px;
-    margin-top: 30px;
+    margin-top: 15px;
     margin-bottom: 30px;
-    //width: 100%;
     height: auto;
     @include box-skin;
 
+    a{color: $black;}
+    
     p{
       @include font-styling("asap", 20px, $gray20, "normal", "regular");
       margin-bottom: 28px;
@@ -169,13 +235,13 @@
     }
   }
 
-  .content-title{ 
+  h2.admin-title{ 
     @include font-styling("asap", 32px, $gray20, "normal", "regular");
-    margin: 0 0 22px;
+    margin: 0 0 16px;
   }
 
   .content-left, .content-right, .post-right, .reply-left, .reply-right{
-    float: left; 
+    float: left;  
   }
 
   .project-left{ 
@@ -188,15 +254,34 @@
   
   .content-right{
     width: 40%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
   }
+    .no-results{
+      h3{
+        font-weight: normal;
+        font-size: 32px; 
+      }
+    }
+
+    .large-icon{ margin-top: 50px; }
+
     .user-avatar{
       float: left;
       width: 70px;
       margin-right: 20px;
     }
+    
     .update-content{
       float: right;
-      width: 858px;
+      width: 880px;
+      .tr{
+        float: right;
+        margin-top: 10px;
+      }
+      input[type=submit]{background-color: $secondaryColor}
+      input[type=button]{background-color: $graySupport}
     }
     .post-title, .reply-title{
       color: $gray20;
@@ -271,7 +356,6 @@
   }
 
   .share-select{
-    
     margin-bottom: 20px;
   }
   .share-toggle-wrapper{
@@ -302,21 +386,11 @@
       font-size: 16px;
       line-height: 15px;
       padding-left: 20px;
-      margin-top: 10px;
-      background-repeat: no-repeat;
-      background-image: url('/static/img/black-check.png');
+      margin-top: 10px; 
       &:first-child{
         margin-top: 0;
       }
-    }
-
-
-    input[type=checkbox]{
-      display: none;
-    }
-    input[type=checkbox]:checked+label {
-      background-position: 0 -15px;
-    }
+    } 
   }
 
   .discussion{ 
@@ -359,19 +433,8 @@
 
     .content-wrapper{
       overflow: hidden;
-      /*
-      @include transition-property(height);
-      @include transition-duration(.5s);
-      
-      height: 461px;
-      &.invisible{
-       display: block;
-       height: 0;
-      }
-      */
     }
-    
-    
+     
     span{
       font-weight: bold;
       color:$primaryColor;
@@ -383,6 +446,7 @@
   .fundraising-right{
     float: left;
     width: 33%;
+    text-align: center;
   }
 
   .project-update-form{
@@ -440,3 +504,106 @@
     }
   } 
 }
+
+.team-members{
+  float: right;
+  width: auto;
+  //min-width: 150px;
+
+  a{ color: $black; }
+
+  ul{ 
+    float: right;
+    display: inline-block;
+    //margin-top: 20px;
+  }
+
+  li{ 
+    float: left; 
+    margin-left: 15px;
+    &:first-child{ margin-left: 0;}
+  }
+}
+  .member-avatar{
+    width: 70px;  
+    cursor: pointer;
+
+    .mail-icon{
+      float: right;
+      margin-top: 5px;
+    } 
+
+    &:hover{
+      .member-popup{
+        visibility: visible;
+        @include opacity(1);
+        top:78px;
+      }
+    }  
+
+    >a{z-index: 1;}
+    
+  }
+
+  .member-popup{
+    position: absolute;
+    visibility: hidden;
+    padding: 15px;
+    height: 75px;
+    width: 200px;
+    left: -110px;
+    top:58px;
+    @include opacity(0);
+    @include box-skin;
+    @include transition-property(opacity, top);
+    @include transition-duration(.1s);
+  }
+
+  .member-info{
+    span{
+      font-size: 14px;
+      color: #848484;
+    }
+  }
+
+  .hover-padding{
+    position: absolute;
+    width: 50%;
+    height: 80px;
+    top:-80px;
+    right: 0;
+  }
+
+  .popup-arrow{
+    position: absolute;
+    @include box-border;
+    @include rotate(45deg);
+    background-color: $white;
+    border-bottom: none;
+    border-right: none;
+    width: 15px;
+    height: 15px;
+    top: -7px;
+    left: 69%;
+  }
+
+  .icon_share_angle{
+    float: left;
+    background: url(../img/icon_share_angle.png);
+    padding-left: 25px;
+    margin-right: 15px;
+    line-height: 40px;
+    background-repeat: no-repeat;
+    background-position: left center;
+  }
+
+  input[type="text"].input-slim{
+    width: 50%;
+    height: auto;
+  }
+
+iframe{
+  width: 100%;
+}
+
+ 

@@ -1,12 +1,15 @@
 require.config
 	baseUrl: "/static/js"
-	paths:
+	paths: 
 		"jquery": "ext/jquery/jquery"
 		"hotkeys": "ext/jquery/jquery.hotkeys" 
 		"moment": "ext/moment/moment.min"
 		"underscore": "ext/underscore/underscore-min"
 		"backbone": "ext/backbone/backbone-min"
 		"bootstrap": "ext/bootstrap/bootstrap.min"
+		"bootstrap-fileupload": "ext/bootstrap/bootstrap-fileupload"
+		"button": "ext/jquery/jquery.screwdefaultbuttonsV2.min"
+		"dropkick": "ext/jquery/jquery.dropkick-min"
 		"hogan": "ext/hogan/hogan-2.0.0.amd"
 		"wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
 		"autocomp": "ext/bootstrap/typeahead.min"
@@ -20,38 +23,69 @@ require.config
 		"project-owner-view": "views/CBUProjectOwnerView"
 		"login-view": "views/CBULoginView"
 		"signup-view": "views/CBUSignupView"
-		"create-view": "views/partials-universal/CreateProjectView"
+		"create-view": "views/partials-project/ProjectCreateView"
 		"abstract-view": "views/partials-universal/AbstractView"
 		"project-sub-view": "views/partials-project/ProjectSubView"
-		"user-view": "views/partials-user/CBUUserView"
-		"profile-view": "views/CBUProfileView"
+		"resource-project-view": "views/partials-universal/ResourceProjectPreviewView"
+		"user-view": "views/CBUUserView"
+		"dashboard-view": "views/CBUDashboardView"
+		"stream-view": "views/CBUStreamView"
 		"utils": "utils/Utils"
 
-require ["jquery", "main-view", "backbone", "discover-view", "create-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "profile-view", "utils"], 
-	($, CBUMainView, Backbone, CBUDiscoverView, CreateProjectView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUProfileView, Utils) ->
+require ["jquery", 
+		"backbone", 
+		 "main-view", 
+		 "discover-view",  
+		 "project-view", 
+		 "project-owner-view", 
+		 "login-view", 
+		 "signup-view", 
+		 "user-view", 
+		 "dashboard-view", 
+		 "stream-view",
+		 "create-view", 
+		 "utils"], 
+	($, 
+	 Backbone, 
+	 CBUMainView, 
+	 CBUDiscoverView,  
+	 CBUProjectView, 
+	 CBUProjectOwnerView, 
+	 CBULoginView, 
+	 CBUSignupView, 
+	 CBUUserView, 
+	 CBUDashboardView, 
+	 CBUStreamView,
+	 ProjectCreateView, 
+	 Utils) ->
 		$(document).ready ->
-			config = parent: "#frame"
+			config = parent: "#frame" 
+
 			CBURouter = Backbone.Router.extend
 				routes:
 					"project/:id": "project"
 					"project/:id/admin": "projectAdmin"
 					"user/:id": "user"
 					"discover": "discover"
+					"stream/dashboard": "dashboard"
 					"create": "create"
 					"login": "login"
 					"signup": "signup"
-					"project": "project"
-					"profile": "profile"
+					"project": "project" 
+					"stream": "stream" 
+					"stream/": "stream" 
 					"": "default"
 
 				project: (id_) ->
-					config.model = {id:id_, isOwner:(userID is projectOwnerID)} 
+					config.model = {id:id_} 
+					config.isOwner = (userID is projectOwnerID)
 					window.CBUAppView =  new CBUProjectView(config)
 
 				projectAdmin: (id_) ->
+					isOwner = (userID is projectOwnerID)
 					config.model = {id:id_}
-					window.CBUAppView = if (userID is projectOwnerID) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
-					console.log 'admin',window.CBUAppView,(userID is projectOwnerID)
+					config.isOwner = isOwner
+					window.CBUAppView = if (isOwner) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
 
 				user: (id_) ->
 					config.model = {id:id_}
@@ -60,8 +94,12 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 				discover: ->
 					window.CBUAppView = new CBUDiscoverView(config)
 
+				dashboard: ->
+					config.model = {id:window.userID}
+					window.CBUAppView = new CBUDashboardView(config) 
+
 				create: ->
-					window.CBUAppView = new CreateProjectView(config)
+					window.CBUAppView = new ProjectCreateView(config)
 
 				login: ->
 					window.CBUAppView = new CBULoginView(config)
@@ -69,8 +107,8 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 				signup: ->
 					window.CBUAppView = new CBUSignupView(config)
 
-				profile: ->
-					window.CBUAppView = new CBUProfileView(config)
+				stream:->
+					window.CBUAppView = new CBUStreamView(config)
 
 				default: ->
 					# added in dev tool
@@ -79,12 +117,45 @@ require ["jquery", "main-view", "backbone", "discover-view", "create-view", "pro
 			CBUAppRouter = new CBURouter()
 			Backbone.history.start pushState: true
 
-			# NAV
+			### NAV ###
 			$navTop = $('.nav.pull-left')
 			$navTop.hover ->
 				$(this).toggleClass('active')
 			, ->
 				$(this).removeClass('active')
+
+			### LOG OUT ###
+			$("a[href='/logout']").click (e)->
+				e.preventDefault()
+				$.ajax(
+					type: "GET"
+					url: "/logout" 
+				).done (response)=> 
+					window.location.reload()
+
+			### STICKY FOOTER ###
+			$window      = $(window)
+			footerHeight = 0 
+			$footer      = $(".footer-nav")
+
+			window.positionFooter = ->
+				footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
+				console.log $footer.css('margin-top'), footerHeight
+
+				if ($(document.body).height() + footerHeight) < $window.height()
+					$footer.css
+						position: "fixed" 
+						bottom: 0
+				else
+					$footer.css position: "relative"
+			
+			positionFooter()
+			$window.scroll(positionFooter).resize(positionFooter)
+
+			window.onPageElementsLoad = ->
+				console.log 'onPageElementsLoad'
+				positionFooter()
+			### END STICKY FOOTER ###
 
 
 		### GLOBAL UTILS ###

@@ -1,6 +1,7 @@
 define ["underscore", "backbone"], (_, Backbone) ->
 	ProjectDiscussionModel = Backbone.Model.extend
-		urlRoot: ""
+		urlRoot: "/api/post"
+		
 		default: 
 			description: ""
 			title: ""
@@ -16,3 +17,5 @@ define ["underscore", "backbone"], (_, Backbone) ->
 			public: false,
 			responses: [ ]
 
+		parse:(resp_)->
+			if resp_.data then resp_.data else resp_

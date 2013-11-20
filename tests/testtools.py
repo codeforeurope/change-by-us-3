@@ -39,6 +39,23 @@ def unicode_generator():
 def unicode_email_generator():
     email = unicode_generator() + '@' + unicode_generator() + '.com'
     return email
+    
+def url_generator():
+    s = string_generator(10) + ".com"
+    return s
+
+
+def gcal_code_generator():
+    s = '''<iframe src="http://www.google.com/calendar/embed?src=localprojects.net_vcflvnq5uphrkid5h715gmgiis%40group.calendar.google.com&ctz=America/New_York" 
+style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>'''
+    
+    return s
+    
+def project_category_generator():
+    s = 'animals'
+    
+    return s
+    
 
 def zipcode_generator():
     """

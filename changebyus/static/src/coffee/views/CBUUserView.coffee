@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "views/partials-project/ProjectPartialsView"], 
-	(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ProjectPartialsView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "resource-project-view"], 
+	(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ResourceProjectPreviewView) ->
 		CBUUserView = AbstractView.extend
 			
 			joinedProjects:null
@@ -14,14 +14,16 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 
 			render: ->
 				console.log "this.model", @model
-	 
+
 				@$el = $("<div class='user'/>")
 				@$el.template @templateDir + "/templates/partials-user/user.html",
-					data: @model.attributes, => 
-						@ajaxForm()
-						@loadProjects()
-
+					data: @model.attributes, => @onTemplateLoad()
 				$(@parent).append @$el
+
+			onTemplateLoad:->
+				if (@model.id is window.userID) then $('.edit').removeClass('invisible')
+				@ajaxForm()
+				@loadProjects()
 
 			ajaxForm: ->
 				$signin = $("form[name=signin]")
@@ -29,7 +31,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 					console.log response
 
 			loadProjects:->
-				console.log 'onTemplateLoad'
 				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joinedprojects"})
 				@joinedProjects.on "reset", @addJoined, @
 				@joinedProjects.fetch reset: true
@@ -38,7 +39,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
 				
-
 			addJoined:->
 				@joinedProjects.each (projectModel) => @addOne projectModel, "#following-list"
 
@@ -46,11 +46,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@ownedProjects.each (projectModel) => @addOne projectModel, "#project-list"
 
 			addOne: (projectModel_, parent_) ->
-				view = new ProjectPartialsView(model: projectModel_)
+				view = new ResourceProjectPreviewView(model: projectModel_)
 				@$el.find(parent_).append view.$el
-
-		# to do
-		# if (success){}
-		# if (failure){}
-		# CBUUserView
-

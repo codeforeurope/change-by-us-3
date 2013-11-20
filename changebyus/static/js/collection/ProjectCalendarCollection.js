@@ -1,10 +1,10 @@
 define(["underscore", "backbone", "model/ProjectCalendarModel"], function(_, Backbone, ProjectCalendarModel) {
   var ProjectCalendarCollection;
-  ProjectCalendarCollection = Backbone.Collection.extend({
+  return ProjectCalendarCollection = Backbone.Collection.extend({
+    model: ProjectCalendarModel,
     initialize: function(options) {
       return this.id = options.id;
     },
-    model: ProjectCalendarModel,
     url: function() {
       return "/api/project/" + this.id + "/calendar";
     },
@@ -16,5 +16,4 @@ define(["underscore", "backbone", "model/ProjectCalendarModel"], function(_, Bac
       }
     }
   });
-  return ProjectCalendarCollection;
 });

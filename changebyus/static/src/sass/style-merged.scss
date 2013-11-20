@@ -1,16 +1,12 @@
+@import "compass/css3";
 @import "compass/css3/border-radius";
-@import "compass/css3/opacity";
+@import "compass/css3/opacity"; 
 
+@import "bootstrap-combined-no-icons";
 @import "variables";
-@import "projects";
-@import "modal";
-@import "helpers";
-@import "form";
-@import "profile";
-@import "login-signup";
 @import "mixins-and-functions";
 
-
+  
 /*!
  * Bootstrap v2.3.1
  *
@@ -19,7 +15,7 @@
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
- */
+ */  
 
 .input-block-level {
   display: block;
@@ -81,13 +77,13 @@ sub {
   bottom: -0.25em;
 }
 
-div{
+div{ 
   position: relative;
   box-sizing: border-box;
 }
 
 img {
-  width: auto\9;
+  //width: auto\9;
   height: auto;
   max-width: 100%;
   vertical-align: middle;
@@ -153,13 +149,15 @@ textarea {
 }
 
 @font-face {
-  font-family: 'AsapRegular';
-  src: url('fonts/Asap-Regular-webfont.eot');
-  src: url('fonts/Asap-Regular-webfont.eot?#iefix') format("embedded-opentype"), url('fonts/Asap-Regular-webfont.woff') format("woff"), url('fonts/Asap-Regular-webfont.ttf') format("truetype"), url('fonts/Asap-Regular-webfont.svg#AsapItalic') format("svg");
-  font-weight: normal;
-  font-style: normal;
+    font-family: 'bebas_neueregular';
+    src: url('../fonts/BebasNeue-webfont.eot');
+    src: url('../fonts/BebasNeue-webfont.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/BebasNeue-webfont.woff') format('woff'),
+         url('../fonts/BebasNeue-webfont.ttf') format('truetype'),
+         url('../fonts/BebasNeue-webfont.svg#bebas_neueregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
 }
-
 
 @media print {
   * {
@@ -221,7 +219,7 @@ body {
   /*font-size: 14px;*/
   line-height: 1.25;
   color: #333333;
-  background-color: #f8f8f8;
+  background-color: #F2F2F2;
   //padding-bottom: 50px;
   //margin-bottom: 50px;
 }
@@ -568,11 +566,9 @@ li {
   list-style: none;
 }
 
-/* TEMPORARY
-.custom{
-  margin-left:50 px;
-}  */
-
+a{
+ 
+}
 .custom {
   margin-left: none;
 }
@@ -635,8 +631,9 @@ dd {
 hr {
   margin: 40px 0;
   border: 0;
-  border-top: 10px solid #eeeeee;
-  border-bottom: 10px solid $white;
+  border-top: 2px solid $grayBorder;
+  border-bottom: 1px solid $white;
+  width: 100%;
 }
 
 .thin {
@@ -671,6 +668,7 @@ textarea {
 }
 
 label {
+  @include bebas;
   display: block;
   margin-bottom: 5px;
 }
@@ -1050,16 +1048,18 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   }
 }
 
-.form-signin {
+.form-signin,.form-signup {
   max-width: 600px;
-  padding: 1px 2px 29px;
+  padding-bottom:29px;
   background-color: $white;
   border: 0px solid #e5e5e5;
+
   .form-signin-heading, .checkbox {
     margin-bottom: 50px;
     font-size: 16px;
     color: #333333;
   }
+ 
   input {
     &[type="text"], &[type="firstname"], &[type="lastname"], &[type="email"], &[type="password"] {
       max-width: 500px;
@@ -1083,9 +1083,12 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
       }
     }
   }
+
   label{
     text-align: left;
   }
+
+  
 }
 
 .help-block, .help-inline {
@@ -1508,6 +1511,29 @@ legend + .control-group {
   }
 }
 
+.delete-x, .close-x{ 
+    position: absolute;
+    @include opacity(.9);
+    cursor: pointer;
+    background: url(../img/icon_close.png);
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px; 
+    
+    &:hover{@include opacity(1);}
+}
+
+.delete-x{
+  margin-top: -10px;
+  top: 50%;
+  right: 3px;
+}
+
+.close-x{ 
+    top: 3px;
+    right: 3px;
+}
+
 button.close {
   padding: 0;
   cursor: pointer;
@@ -1515,6 +1541,8 @@ button.close {
   border: 0;
   -webkit-appearance: none;
 }
+
+a.btn{ color: $white !important; }
 
 .btn {
   display: inline-block;
@@ -1531,9 +1559,12 @@ button.close {
   border: none;
   cursor: pointer;
   color: $white;
+  box-sizing: border-box;
   background-color: $primaryColor;
   background-image: none;
   @include border-radius(2px);
+  @include transition-property(background-color,color);
+  @include transition-duration(.5s);
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
     color: #333333;
     background-color: #e6e6e6;
@@ -1549,19 +1580,23 @@ button.close {
     // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
+    /*
     -webkit-transition: background-position 0.1s linear;
     -moz-transition: background-position 0.1s linear;
     -o-transition: background-position 0.1s linear;
     transition: background-position 0.1s linear;
+    */
   }
   &:focus {
     // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
+    /*
     -webkit-transition: background-position 0.1s linear;
     -moz-transition: background-position 0.1s linear;
     -o-transition: background-position 0.1s linear;
     transition: background-position 0.1s linear;
+    */
     outline: thin dotted #333;
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
@@ -2514,26 +2549,10 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   display: inline-block;
   *display: inline;
   float: none;
-  /*
-  margin-bottom: 20px;
-  margin-left: 20px;
-  */
 }
 
 .thumbnail {
-  display: block;
-  padding: 4px;
-  line-height: 20px;
-  border: none;
-  min-height: 100px;
-  max-height: 100px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-transition: all 0.2s ease-in-out;
-  -moz-transition: all 0.2s ease-in-out;
-  -o-transition: all 0.2s ease-in-out;
-  transition: all 0.2s ease-in-out;
+
   &:hover {
     font-weight: normal !important;
   }
@@ -2727,6 +2746,7 @@ a {
   overflow: hidden;
   position: relative;
   vertical-align: middle;
+  padding: 10px 20px;
   > input {
     position: absolute;
     top: 0;
@@ -2743,24 +2763,19 @@ a {
 
 .fileupload {
   margin-bottom: 9px;
+  .circle{
+    width:200px;
+    height:200px;
+    margin:10px auto;
+    border: 1px solid $grayBorder;
+  }
   .uneditable-input {
     display: inline-block;
     margin-bottom: 0;
     vertical-align: middle;
     cursor: text;
-  }
-  .thumbnail {
-    display: inline-block;
-    margin-bottom: 5px;
-    overflow: hidden;
-    text-align: center;
-    vertical-align: middle;
-    > img {
-      display: inline-block;
-      max-height: 100%;
-      vertical-align: middle !important;
-    }
-  }
+  } 
+ 
   .btn {
     vertical-align: middle;
   }
@@ -2769,6 +2784,8 @@ a {
 .fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
   display: none;
 }
+
+a.fileupload-exists{color: $white;}
 
 .fileupload-inline .fileupload-controls {
   display: inline;
@@ -2821,11 +2838,13 @@ a {
     font-size: 16px;
   }
   
+  /*
   .btn {
     background-color: $secondaryColor;
     padding: 20px 40px;
     font-size: 26px;
   }
+  */ 
 }
 
 .content {
@@ -2853,12 +2872,13 @@ a {
 
 .search-box {
   margin-top: 15px;
-  padding: 15px;
   border: 1px solid #dcdcdc;
   width: 730px;
   height: auto;
   background-color: $white;
   border-radius: 4px;
+  
+  >div{padding: 0 15px;}
 
   .input-label {
     font-size: 14px;
@@ -2866,9 +2886,13 @@ a {
   }
 
   .title {
-    margin-top: 20px;
-    margin-bottom: 30px;
+    margin-top: 10px;
+    margin-bottom: 20px;
     font-size: 40px;
+  }
+
+  .search-filters{
+    border-top: 1px solid $grayBorder;
   }
 }
 
@@ -2894,10 +2918,8 @@ a {
   height: 94px;
   z-index: 1;
   .btn {
-    margin-top: 30px;
-    padding-top: 20px;
-    width: 40px;
-    height: 35px;
+    margin-top: 37px;
+    padding: 20px;
     color: $white;
     font-size: 24px;
     background-color: $primaryColor;
@@ -2912,14 +2934,15 @@ a {
   @include box-skin;
 
   li{
-    padding:10px;
+    padding:10px 20px;
     cursor: pointer;
   }
+
+  h3{margin-left: 10px;} 
 
 }
 
 .search-filters{
-  margin-right: 40px;
   span{
     float: left;
   }
@@ -2932,6 +2955,11 @@ a {
 
 .filter-within{
   float: left;
+  select{width: 100px !important;}
+  .dk_container {
+    float: left;
+    width: 120px;
+  }
 }
 
 
@@ -2964,31 +2992,34 @@ a {
   h3{text-align: left;}
 }
 
-.discover-header-right {
+.discover-header-right, .dashboard-header-right{
   margin-left: 15px;
   width: 230px;
-  height: 200px;
   float: right;
 
   .btn {
-    width: 210px;
-    height: 40px;
+    width: 100%;
+    height: auto;
     line-height: 20px;
-    margin: none;
-    padding-top: 20px;
+    margin: auto;
+    padding: 20px; 
     font-size: 24px;
     background-color: $secondaryColor;
     color: $white;
     border-radius: 4px;
   }
-  .cities{
-    @include box-skin;
-    li{padding: 10px;}
-  }
 }
 
-.projects{
-
+.discover-header-right{
+  height: 200px;
+  .cities{
+    @include box-skin;
+    margin-top: 10px;
+    li{
+      padding: 10px;
+      &:last-child{border-top: 1px solid $grayBorder;  }
+    }
+  }
 }
 
 .header-links {
@@ -3003,7 +3034,7 @@ a {
   height: 690px;
   margin: auto;
 
-  background-image:url(/static/img/cover.png);
+  background-image:url(/static/img/cover.jpg);
   background-size: cover;
 
   .overlay {
@@ -3043,9 +3074,7 @@ a {
 }
 
 .homepage-block-info {
-  //width: 100%;
-  margin-top: 20px;
-  //margin-bottom: 60px;
+  margin-top: 20px; 
   padding-top: 40px;
   background-color: $secondaryColor;
   height: 765px;
@@ -3061,7 +3090,6 @@ a {
     color: #f4e291;
     font-weight: 100;
     text-align: center;
-    /*padding: 10px;*/ 
   }
 }
 
@@ -3093,8 +3121,8 @@ a {
   background-position: center center;
 }
 
-.resources{
-   
+.sub-link{
+  text-align: right;
   a{
     color: $black;
     font-size: 22px;
@@ -3103,12 +3131,9 @@ a {
 }
 
 .homepage-footer {
-  width: 100%;
-  //padding: 50px;
+  width: 100%; 
   background-color: #737373;
-  height: 340px;
-  /*float: left;*/
-  //margin-bottom: 50px;
+  height: 340px; 
   margin-top: 50px;
   text-align: center;
   h2 {
@@ -3122,7 +3147,8 @@ a {
 }
 
 .btn {
-    @include font-styling("asap", 22px, $white, "normal", "bold" );
+    @include font-styling("asap", 22px, $white, "normal", "regular" );
+    white-space: nowrap; 
     &.btn-xlarge{
       display: inline-block;
       width: 328px;
@@ -3153,8 +3179,8 @@ a {
 .icon-rackspace{}
 
 .footer-nav{
-
   margin-top: 48px; 
+  width: 100%;
   height: 60px;
   background-color: $primaryColor;
 
@@ -3166,4 +3192,30 @@ a {
   a{
     line-height: 60px;
   }
+
+  &.index{margin-top: 0; }
 }
+
+a.highlight{
+  @include highlight; 
+}
+
+a.ul{ 
+  color: $graySubtext;
+  text-decoration: underline ;
+}
+
+/***************************************
+ OVERRIDERS OR HELPERS
+ ***************************************/
+
+@import "projects";
+@import "modal";
+@import "helpers";
+@import "form";
+@import "profile";
+@import "dashboard";
+@import "login-signup";
+@import "dropkick";
+@import "social";
+@import "typography";

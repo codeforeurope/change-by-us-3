@@ -2,7 +2,6 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 	(_, Backbone, $, temp, moment, AbstractView, ProjectPostReplyModel) ->
 		ProjectPostReplyView = AbstractView.extend
 
-			model:null
 			tagName: "li"
 
 			initialize: (options) ->
@@ -12,9 +11,6 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 
 			render: ->
 				$reply = $("<div class='post-reply clearfix'/>")
-				$reply.template(@templateDir+"/templates/partials-project/project-post-reply-view.html", 
-					{data:{}}, =>
-				)
+				$reply.template @templateDir+"/templates/partials-project/project-post-reply-view.html", 
+					{data:{}}, => @onTemplateLoad()
 				$(@el).append $reply
-
-

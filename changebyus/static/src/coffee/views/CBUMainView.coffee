@@ -1,46 +1,76 @@
-define ["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
-(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) ->
-	
-	CBUMainView = Backbone.View.extend
-		parent: "body"
-		templateDir: "/static"
-		viewData: {}
-		collection: {}
-		
-		initialize: (options) ->
-			@templateDir = options.templateDir or @templateDir
-			@parent      = options.parent or @parent
-			@viewData    = options.viewData or @viewData
-			@collection  = options.collection or new ProjectListCollection()
-			@render()
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"form", 
+		"resource-project-view", 
+		"views/partials-homepage/BannerImageView", 
+		"collection/ProjectListCollection", 
+		"collection/ResourceListCollection", 
+		"abstract-view"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 form, 
+	 ResourceProjectPreviewView, 
+	 BannerImageView, 
+	 ProjectListCollection, 
+	 ResourceListCollection, 
+	 AbstractView) ->
+		CBUMainView = AbstractView.extend
 
-		render: -> 
-			@$el = $("<div class='projects-main'/>")
-			@$el.template @templateDir + "/templates/main.html", {}, =>
+			initialize: (options) ->
+				@templateDir        = options.templateDir or @templateDir
+				@parent             = options.parent or @parent
+				@viewData           = options.viewData or @viewData
+				@collection         = options.collection or new ProjectListCollection()
+				@resourceCollection = options.resourceCollection or new ResourceListCollection()
+				@render()
+
+			render: -> 
+				@$el = $("<div class='projects-main'/>")
+				@$el.template @templateDir + "/templates/main.html", {}, => @onTemplateLoad()
+
+			onTemplateLoad:->
 				$(@parent).prepend @$el
+				
 				bannerParent = @$el.find(".body-container-wide")
-				bannerImageView = new BannerImageView(parent: bannerParent)
+				bannerImageView = new BannerImageView({parent:bannerParent})
+				
 				@collection.on "reset", @addAll, @
 				@collection.fetch reset: true
+
+				@resourceCollection.on "reset", @addAllResources, @
+				@resourceCollection.fetch reset: true
+				
 				@ajaxForm()
 
-		ajaxForm: ->
-			# AJAXIFY THE SIGNUP FORM
-			$signup = $("form[name=signup]")
-			$signup.ajaxForm (response) ->
-				console.log response
-			
-			# AJAXIFY THE SIGNIN FORM
-			$signin = $("form[name=signin]")
-			$signin.ajaxForm (response) ->
-				console.log response
+			ajaxForm: ->
+				# AJAXIFY THE SIGNUP FORM
+				$signup = $("form[name=signup]")
+				$signup.ajaxForm (response) ->
+					console.log response
+				
+				# AJAXIFY THE SIGNIN FORM
+				$signin = $("form[name=signin]")
+				$signin.ajaxForm (response) ->
+					console.log response
 
-		addAll: -> 
-			#i = 0
-			@collection.each (projectModel) =>
-				#while i++ < 3 then @addOne projectModel
-				@addOne projectModel
+			addAll: ->  
+				@collection.each (projectModel) => 
+					@addProject projectModel
+				onPageElementsLoad() 
 
-		addOne: (projectModel) ->
-			view = new ProjectPartialsView(model: projectModel)
-			@$el.find("#project-list").append view.$el
+			addProject: (projectModel) ->
+				view = new ResourceProjectPreviewView(model: projectModel)
+				@$el.find("#project-list").append view.$el
+
+			addAllResources: ->
+				@resourceCollection.each (projectModel) => 
+					@addResource projectModel
+				onPageElementsLoad() 
+
+			addResource: (projectModel) ->
+				view = new ResourceProjectPreviewView(model: projectModel)
+				@$el.find("#resource-list").append view.$el

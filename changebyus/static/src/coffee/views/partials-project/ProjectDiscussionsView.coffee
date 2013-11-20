@@ -4,7 +4,13 @@ define ["underscore",
 		"template", 
 		"views/partials-project/ProjectSubView",
 		"views/partials-project/ProjectDiscussionListItemView"],
-	(_, Backbone, $, temp, ProjectSubView, ProjectDiscussionListItemView) ->
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 ProjectSubView, 
+	 ProjectDiscussionListItemView) ->
+
 		ProjectDiscussionsView = ProjectSubView.extend
 
 			parent: "#project-discussions"
@@ -12,19 +18,20 @@ define ["underscore",
 
 			render: ->  
 				@$el = $(@parent)
+				@templateLoaded = true
 
 			addAll: ->
 				console.log 'ProjectDiscussionsView addAll',@collection
 				
 				if @collection.models.length is 0
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
-						{}, =>
+						{}, => onPageElementsLoad()
 				else
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => 
 							@$ul = @$el.find('.bordered-item')
-							for model in @collection.models
-								@addOne model
+							ProjectSubView::addAll.call(@)
+							onPageElementsLoad()
 
 				@isDataLoaded = true
 
@@ -33,9 +40,7 @@ define ["underscore",
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
-				projectDiscussionListItemView.on 'delete', =>
-					# @trigger 'deleteDiscussion', config
-					console.log 'config',config.model.attributes.id
+				projectDiscussionListItemView.on 'delete', => 
 					@deleteDiscussion config.model.attributes.id
 				@$ul.append projectDiscussionListItemView.$el
 

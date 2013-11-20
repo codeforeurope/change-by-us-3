@@ -1,0 +1,27 @@
+.dashboard-header{margin-top: 24px;}
+.dashboard-tabs{
+	background: $gray37;
+	margin-top: 24px;
+	li{
+		padding: 20px;
+		font-size: 20px;
+	}
+	.active{background: $gray29;}
+	
+}
+
+.notify-wrapper{ 
+	margin-top: 30px;
+	width: 480px; 
+}
+.notify-row{
+  div{
+    float: left;
+    width: 10%; 
+    &:first-child{width: 80%;}
+  }
+}
+
+#manage-projects, #follow-projects{
+	margin-top: 20px;
+}

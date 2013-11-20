@@ -5,7 +5,7 @@ import random
 import re
 from unidecode import unidecode
 
-bool_strings = ['true', '1', 't', 'y']
+bool_strings = ['true', '1', 't', 'y', 'on']
 
 def string_generator(size=6, chars=string.ascii_uppercase + string.digits):
     """

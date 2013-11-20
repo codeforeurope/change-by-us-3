@@ -9,7 +9,7 @@ from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.imagetools import generate_thumbnail
 from ..helpers.stringtools import slugify
 
-from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES
+from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
 
 from ..wordlist import filter_model
 \
@@ -52,11 +52,16 @@ def _create_project( resource = False ):
 
     name = request.form.get('name')
     description = request.form.get('description')
+    category = request.form.get('category')
+    gcal_code = request.form.get('gcal_code')
     location = request.form.get('location')
-    geo_location = None
+    lat = request.form.get("lat")
+    lon = request.form.get("lon")
     
-    if ('lat' in request.form and 'lon' in request.form):
-        geo_location = [float(request.form.get('lon')), float(request.form.get('lat'))]
+    if (lat and lon):
+        geo_location = [float(lon), float(lat)]
+    else:
+        geo_location = None
 
     owner = User.objects.with_id(g.user.id)
     slug = slugify(name)
@@ -71,6 +76,8 @@ def _create_project( resource = False ):
 
     p = Project( name = name, 
                  description = description, 
+                 category = category,
+                 gcal_code = gcal_code,
                  location = location,
                  geo_location = geo_location,
                  owner = owner,
@@ -155,7 +162,11 @@ def _edit_project():
     project_id = request.form.get('project_id')
     name = request.form.get('name')
     description = request.form.get('description')
+    category = request.form.get('category')
+    gcal_code = request.form.get('gcal_code')
     location = request.form.get('location')
+    lat = request.form.get('lat')
+    lon = request.form.get('lon')
 
     p = Project.objects.with_id(project_id)
 
@@ -168,6 +179,12 @@ def _edit_project():
 
     if name: p.name = name
     if description: p.description = description
+    if category: p.category = category
+    if gcal_code: p.gcal_code = gcal_code
+    
+    if (lat and lon):
+        p.geo_location = [float(lon), float(lat)]
+    
 
     # TODO flag objects if new content needs to be flagged,
     # BUT don't double-flag existing, unchanged content
@@ -358,13 +375,17 @@ def _get_project_users_and_common_projects(project_id = None, user_id = None):
     return_list = []
     for user, projects in common_users.iteritems():
         # skip ourselves
+        
         if user == g.user.id:
             continue
 
-        user_dict = user.as_dict()
-        user_dict['common_projects'] = projects
+        try:
+            user_dict = user.as_dict()
+            user_dict['common_projects'] = projects
+            return_list.append(user_dict)
+        except AttributeError:
+            print "Oops!  not valid"
 
-        return_list.append(user_dict)
 
     return return_list
 
@@ -632,4 +653,10 @@ def _leave_project(project_id=None, user_id=None):
     return jsonify_response( ReturnStructure( ) )
 
 
-
+def _create_category(cat):
+    c = ProjectCategory(name=cat)
+    c.save()
+    
+    
+def _remove_category(cat):
+    pass

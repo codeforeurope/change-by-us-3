@@ -26,11 +26,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					beforeSubmit:(arr_, form_, options_)-> 
 						console.log 'arr_',arr_ 
 						if $form.valid()
-							###
+							showEmail = true
 							for i of arr_ 
 								if arr_[i].name is "public_email"
-									arr_[i].value = $form.find('input[name=public_email]').val()
-							### 
+									showEmail = false
+									break
+
+							if showEmail then arr_.push({name:"public_email",value:false})
 
 							$form.find("input, textarea").attr("disabled", "disabled")
 							return true

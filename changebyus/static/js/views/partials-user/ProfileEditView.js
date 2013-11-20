@@ -28,14 +28,22 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       $feedback = $("#feedback");
       options = {
         beforeSubmit: function(arr_, form_, options_) {
+          var i, showEmail;
           console.log('arr_', arr_);
           if ($form.valid()) {
-            /*
-            							for i of arr_ 
-            								if arr_[i].name is "public_email"
-            									arr_[i].value = $form.find('input[name=public_email]').val()
-            */
-
+            showEmail = true;
+            for (i in arr_) {
+              if (arr_[i].name === "public_email") {
+                showEmail = false;
+                break;
+              }
+            }
+            if (showEmail) {
+              arr_.push({
+                name: "public_email",
+                value: false
+              });
+            }
             $form.find("input, textarea").attr("disabled", "disabled");
             return true;
           } else {

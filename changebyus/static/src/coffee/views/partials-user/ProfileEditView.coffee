@@ -23,8 +23,15 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				$form = @$el.find("form")
 				$feedback = $("#feedback")
 				options =
-					beforeSubmit: => 
+					beforeSubmit:(arr_, form_, options_)-> 
+						console.log 'arr_',arr_ 
 						if $form.valid()
+							###
+							for i of arr_ 
+								if arr_[i].name is "public_email"
+									arr_[i].value = $form.find('input[name=public_email]').val()
+							###
+
 							$form.find("input, textarea").attr("disabled", "disabled")
 							return true
 						else

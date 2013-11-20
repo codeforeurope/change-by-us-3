@@ -22,7 +22,7 @@ from tests import BaseTestCase
 from tests import (string_generator, email_generator, password_generator,
                    timestamp_generator, name_generator, text_generator,
                    unicode_generator, unicode_email_generator, zipcode_generator,
-                   url_generator)
+                   url_generator, gcal_code_generator, project_category_generator)
 
 
 class AssertClass(BaseTestCase):
@@ -156,7 +156,8 @@ class ProjectClass():
     def __init__(self):
         self.name = name_generator()
         self.description = text_generator(100)
-        self.category = 'animals'
+        self.category = project_category_generator()
+        self.gcal_code = gcal_code_generator()
         # zipcode gets turned into proper location later
         self.location = zipcode_generator()
 
@@ -172,6 +173,7 @@ class ProjectClass():
         create = { 'name' : self.name,
                    'description' : self.description,
                    'category': self.category,
+                   'gcal_code': self.gcal_code,
                    'location' : self.location,
                    'lat': self.lat,
                    'lon': self.lon }
@@ -193,6 +195,7 @@ class ProjectClass():
                  'name' : self.name,
                  'description' : self.description,
                  'category': self.category,
+                 'gcal_code': self.gcal_code,
                  'location' : self.location,
                  'lat': self.lat,
                  'lon': self.lon }

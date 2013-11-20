@@ -29,10 +29,14 @@
 
              <br>
             <label for="email">EMAIL</label>
-            <input type="email" name="email" id="email" placeholder="" class="input-xxlarge" value="<%= data.email %>">
+            <input type="email" name="email" id="email" placeholder="email" class="input-xxlarge" value="<%= data.email %>">
              <br>
             <div class="public-email clearfix">
+                <% if (data.public_email){ %>
+                <input type="checkbox" name="public_email" checked>
+                <% } else { %>
                 <input type="checkbox" name="public_email">
+                <% } %> 
                 <span  class="sub-text">Display this email address so other members can contact me</span>
             </div>
             

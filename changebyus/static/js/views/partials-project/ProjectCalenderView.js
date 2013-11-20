@@ -1,30 +1,17 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-project/ProjectEmbedCalendarModalView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectEmbedCalendarModalView) {
+define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView"], function(_, Backbone, $, temp, ProjectSubView) {
   var ProjectCalenderView;
   return ProjectCalenderView = ProjectSubView.extend({
-    isOwner: false,
     parent: "#project-calendar",
-    projectEmbedCalendarModalView: null,
-    initialize: function(options_) {
-      var options;
-      options = options_ || {};
-      this.id = options_.id || this.id;
-      this.templateDir = options_.templateDir || this.templateDir;
-      this.parent = options_.parent || this.parent;
-      this.viewData = this.model.attributes;
-      this.viewData.isOwner = options_.isOwner || this.isOwner;
-      this.render();
-      return console.log('@viewData >>>>> ', this.viewData);
-    },
     render: function() {
       var _this = this;
-      console.log('@viewData <<<<< ', this.viewData);
       this.$el = $("<div class='project'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-calendar.html", {
         data: this.viewData
       }, function() {
-        return _this.onTemplateLoad();
+        return _this.$el.find(".preload").remove();
       });
       return $(this.parent).append(this.$el);
+<<<<<<< HEAD
     },
     onTemplateLoad: function() {
       var _this = this;
@@ -35,6 +22,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           model: _this.model
         });
       });
+=======
+>>>>>>> 5bfaf1db13a264c9c0fb7b8e30f4d187d708c531
     }
   });
 });

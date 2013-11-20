@@ -372,12 +372,13 @@ def api_get_projects():
     limit = int(request.args.get('limit', 100))
     sort = request.args.get('sort')
     order = request.args.get('order', 'asc')
+    is_resource = bool(request.args.get('is_resource', False))
 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        projects = Project.objects.order_by(sort_order)
+        projects = Project.objects(resource=is_resource).order_by(sort_order)
     else:
-        projects = Project.objects()
+        projects = Project.objects(resource=is_resource)
 
     projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)

@@ -12,7 +12,6 @@ from ..project.helpers import _get_user_involved_projects, _get_project_users_an
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
 from ..facebook.facebook import _get_fb_user_name_and_thumbnail
-from ..frontend.views import _return_index
 
 stream_view = Blueprint('stream_view', __name__, url_prefix='/stream')
 
@@ -60,7 +59,10 @@ def projects_view():
     return render_template('stream.html', data = projects, posts = posts, members = members, newPost=False)
     """
  
-    return _return_index()
+    if g.user.is_anonymous():
+        return render_template('index.html', projects = projects, login = True)
+    else:
+        return render_template('index.html', projects = projects, login = False)   
      
 
 @stream_view.route('/sort', methods = ['GET'])
@@ -143,5 +145,8 @@ def dashboard_view():
     fb_image = facebook_info[2]
 
     # return render_template('dashboard.html', t_name=twitter_name, t_image=twitter_image, fb_name=fb_name, fb_image=fb_image)
-    return _return_index()
+    if g.user.is_anonymous():
+        return render_template('index.html', login = True)
+    else:
+        return render_template('index.html', login = False)
 

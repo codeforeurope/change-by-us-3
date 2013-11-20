@@ -19,7 +19,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       this.$el.template(this.templateDir + "/templates/partials-project/project-info-appearance.html", {
         data: this.viewData
       }, function() {
-        onPageElementsLoad();
         return _this.ajaxForm();
       });
       return $(this.parent).append(this.$el);
@@ -104,9 +103,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         return console.log(datum);
       });
       return $('input:radio').screwDefaultButtons({
-        image: 'url("/static/img/icon-lock.png")',
-        width: 60,
-        height: 25
+        image: 'url("/static/img/black-check.png")',
+        width: 18,
+        height: 18
       });
     }
   });

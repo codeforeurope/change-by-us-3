@@ -2,7 +2,7 @@ define(["underscore", "backbone", "model/ProjectModel"], function(_, Backbone, P
   var ProjectListCollection;
   return ProjectListCollection = Backbone.Collection.extend({
     model: ProjectModel,
-    url: "/api/project/list?limit=6&sort=activity&order=desc",
+    url: "/api/project/list",
     parse: function(response) {
       return response.data;
     }

@@ -14,7 +14,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					{data:@viewData}, => 
 						@ajaxForm()
 						onPageElementsLoad()
-
+ 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
 
@@ -30,7 +30,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 							for i of arr_ 
 								if arr_[i].name is "public_email"
 									arr_[i].value = $form.find('input[name=public_email]').val()
-							###
+							### 
 
 							$form.find("input, textarea").attr("disabled", "disabled")
 							return true

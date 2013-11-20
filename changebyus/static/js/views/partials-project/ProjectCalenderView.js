@@ -8,10 +8,9 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$el.template(this.templateDir + "/templates/partials-project/project-calendar.html", {
         data: this.viewData
       }, function() {
-        return _this.$el.find(".preload").remove();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
-<<<<<<< HEAD
     },
     onTemplateLoad: function() {
       var _this = this;
@@ -22,8 +21,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
           model: _this.model
         });
       });
-=======
->>>>>>> 5bfaf1db13a264c9c0fb7b8e30f4d187d708c531
     }
   });
 });

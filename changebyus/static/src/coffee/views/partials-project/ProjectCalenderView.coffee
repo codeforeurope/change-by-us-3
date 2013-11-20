@@ -6,17 +6,11 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			render: -> 
 				@$el = $("<div class='project'/>")
 				@$el.template @templateDir + "/templates/partials-project/project-calendar.html",
-					{data: @viewData}, =>
-						@$el.find(".preload").remove()
+					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
 
-<<<<<<< HEAD
 			onTemplateLoad:->
 				@$el.find(".preload").remove()
 				$('#embed-calendar').click (e)=>
 					e.preventDefault()
 					@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
-
-=======
-			
->>>>>>> 5bfaf1db13a264c9c0fb7b8e30f4d187d708c531

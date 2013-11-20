@@ -1,12 +1,31 @@
-define ["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection", "abstract-view"], 
-	(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection, AbstractView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"form", 
+		"resource-project-view", 
+		"views/partials-homepage/BannerImageView", 
+		"collection/ProjectListCollection", 
+		"collection/ResourceListCollection", 
+		"abstract-view"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 form, 
+	 ResourceProjectPreviewView, 
+	 BannerImageView, 
+	 ProjectListCollection, 
+	 ResourceListCollection, 
+	 AbstractView) ->
 		CBUMainView = AbstractView.extend
 
 			initialize: (options) ->
-				@templateDir = options.templateDir or @templateDir
-				@parent      = options.parent or @parent
-				@viewData    = options.viewData or @viewData
-				@collection  = options.collection or new ProjectListCollection()
+				@templateDir        = options.templateDir or @templateDir
+				@parent             = options.parent or @parent
+				@viewData           = options.viewData or @viewData
+				@collection         = options.collection or new ProjectListCollection()
+				@resourceCollection = options.resourceCollection or new ResourceListCollection()
 				@render()
 
 			render: -> 
@@ -17,12 +36,14 @@ define ["underscore", "backbone", "jquery", "template", "form", "resource-projec
 				$(@parent).prepend @$el
 				
 				bannerParent = @$el.find(".body-container-wide")
-				bannerImageView = new BannerImageView(parent: bannerParent)
+				bannerImageView = new BannerImageView({parent:bannerParent})
 				
 				@collection.on "reset", @addAll, @
 				@collection.fetch reset: true
+
+				@resourceCollection.on "reset", @addAllResources, @
+				@resourceCollection.fetch reset: true
 				
-				onPageElementsLoad() 
 				@ajaxForm()
 
 			ajaxForm: ->
@@ -36,12 +57,20 @@ define ["underscore", "backbone", "jquery", "template", "form", "resource-projec
 				$signin.ajaxForm (response) ->
 					console.log response
 
-			addAll: -> 
-				#i = 0
-				@collection.each (projectModel) =>
-					#while i++ < 3 then @addOne projectModel
-					@addOne projectModel
+			addAll: ->  
+				@collection.each (projectModel) => 
+					@addProject projectModel
+				onPageElementsLoad() 
 
-			addOne: (projectModel) ->
+			addProject: (projectModel) ->
 				view = new ResourceProjectPreviewView(model: projectModel)
 				@$el.find("#project-list").append view.$el
+
+			addAllResources: ->
+				@resourceCollection.each (projectModel) => 
+					@addResource projectModel
+				onPageElementsLoad() 
+
+			addResource: (projectModel) ->
+				view = new ResourceProjectPreviewView(model: projectModel)
+				@$el.find("#resource-list").append view.$el

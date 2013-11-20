@@ -8,23 +8,24 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			initialize: (options) -> 
 				ProjectSubView::initialize.call(@, options)
 				@members           = options.members || @members
-				@viewData.isMember = options.isMember 
-				console.log '@viewData>>>>',@viewData
+				@viewData.isMember = options.isMember
 
 			render: ->  
 				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-updates.html",
-					{data: @viewData}, =>@onTemplateLoad() 
-				console.log '@viewData   >>>>',@viewData
+					{data: @viewData}, =>@onTemplateLoad()  
 
 			onTemplateLoad:->
 				ProjectSubView::onTemplateLoad.call @
 				
 				@$ul = @$el.find(".updates-container ul")
 				@$members = @$el.find(".team-members ul")
- 
+
+				length = 0
 				@members.each (model) => 
-					@addMemeber model
+					if (length++ < 4) then @addMemeber model
+
+				if length <= 4 then $('.team-members .pull-right').remove()
 
 				onPageElementsLoad()
 

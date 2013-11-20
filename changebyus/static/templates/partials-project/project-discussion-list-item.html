@@ -1,12 +1,10 @@
 <div class="discussion clearfix">
-    <div class="delete">
-        <img src="/static/img/close_icon.png">
-    </div>
+    <div class="delete-x"></div>
     <div class="date">
         <%= data.format_date %>
     </div>
     <div class="user-avatar">
-        <img src="http://lorempixel.com/70/70/" class="circle">
+        <img src="<%= data.image_url_round_small %>" class="circle">
     </div>
     <div class="description">
         <h5>

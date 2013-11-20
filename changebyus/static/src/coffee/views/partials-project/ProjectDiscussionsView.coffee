@@ -30,7 +30,7 @@ define ["underscore",
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => 
 							@$ul = @$el.find('.bordered-item')
-							ProjectSubView::addAll.call(@, options)
+							ProjectSubView::addAll.call(@)
 							onPageElementsLoad()
 
 				@isDataLoaded = true
@@ -40,9 +40,7 @@ define ["underscore",
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
-				projectDiscussionListItemView.on 'delete', =>
-					# @trigger 'deleteDiscussion', config
-					console.log 'config',config.model.attributes.id
+				projectDiscussionListItemView.on 'delete', => 
 					@deleteDiscussion config.model.attributes.id
 				@$ul.append projectDiscussionListItemView.$el
 

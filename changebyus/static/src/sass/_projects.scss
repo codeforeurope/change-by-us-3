@@ -8,7 +8,6 @@
 /* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
 
 /*** HEADER *****/
-
 .header-icon{ 
   position: absolute;
   top: 15px;
@@ -115,16 +114,11 @@
 
 .project-container {
   h2 {
-    font-size: 32px;
+    font-size: 42px;
     font-weight: normal;  
     text-align: left;
   }
-   
-  h4{  
-    text-transform: uppercase;
-    @include font-styling("asap", 10px, $gray65 );
-  }
-  
+
   &.feature-image .overlay-backdrop {
     background-color: $white;
   }
@@ -132,6 +126,12 @@
 
   .project-header{
     margin-top: 12px;
+  }
+
+  .project-section-header{
+    height: 120px;
+    z-index: 1;
+    h2{margin-top: 50px;}
   }
 
   .feature-image {
@@ -205,28 +205,16 @@
   }
   
   .tabs{
-    /*
-    li{
-      height: 45px;
-      background-repeat: no-repeat;
-      background-position: left center;
-    }*/
+ 
   }
-  //.updates, .members, .calendar { 
-  .members, .calendar { 
-    h2{
-        margin: 50px 0 22px;
-    } 
-  }
-  
+
   .content-header{
     margin-top: 24px;
-
   }
  
   .content-wrapper {
     padding: 20px;
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 30px;
     height: auto;
     @include box-skin;
@@ -270,6 +258,13 @@
     text-align: center;
     vertical-align: middle;
   }
+    .no-results{
+      h3{
+        font-weight: normal;
+        font-size: 32px; 
+      }
+    }
+
     .large-icon{ margin-top: 50px; }
 
     .user-avatar{
@@ -354,7 +349,6 @@
   }
 
   .share-select{
-    
     margin-bottom: 20px;
   }
   .share-toggle-wrapper{
@@ -504,22 +498,17 @@
   } 
 }
 
-.updates{
-  margin: 50px 0 22px;
-  z-index: 1;
-}
-
 .team-members{
   float: right;
   width: auto;
-  min-width: 150px;
+  //min-width: 150px;
 
   a{ color: $black; }
 
   ul{ 
     float: right;
     display: inline-block;
-    margin-top: 20px;
+    //margin-top: 20px;
   }
 
   li{ 
@@ -529,13 +518,12 @@
   }
 }
   .member-avatar{
-    width: 70px;
-    //height: 70px; 
+    width: 70px;  
     cursor: pointer;
 
     .mail-icon{
       float: right;
-      margin-top: 10px;
+      margin-top: 5px;
     } 
 
     &:hover{
@@ -544,7 +532,7 @@
         @include opacity(1);
         top:78px;
       }
-    } 
+    }  
 
     >a{z-index: 1;}
     
@@ -553,7 +541,7 @@
   .member-popup{
     position: absolute;
     visibility: hidden;
-    padding: 10px;
+    padding: 15px;
     height: 75px;
     width: 200px;
     left: -110px;
@@ -562,6 +550,13 @@
     @include box-skin;
     @include transition-property(opacity, top);
     @include transition-duration(.1s);
+  }
+
+  .member-info{
+    span{
+      font-size: 14px;
+      color: #848484;
+    }
   }
 
   .hover-padding{

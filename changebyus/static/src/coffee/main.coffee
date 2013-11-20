@@ -82,8 +82,9 @@ require ["jquery",
 					window.CBUAppView =  new CBUProjectView(config)
 
 				projectAdmin: (id_) ->
+					isOwner = (userID is projectOwnerID)
 					config.model = {id:id_}
-					config.isOwner = (userID is projectOwnerID)
+					config.isOwner = isOwner
 					window.CBUAppView = if (isOwner) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
 
 				user: (id_) ->

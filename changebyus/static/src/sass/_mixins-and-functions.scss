@@ -63,7 +63,7 @@
 }
 
 @mixin highlight{
-	color:$primaryColor;
+	color:$primaryColor !important;
 	font-weight: bold;
 }
 

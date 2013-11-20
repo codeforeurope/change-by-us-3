@@ -6,27 +6,32 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     initialize: function(options) {
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
-      this.viewData.isMember = options.isMember;
-      return console.log('@viewData>>>>', this.viewData);
+      return this.viewData.isMember = options.isMember;
     },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
+      return this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      return console.log('@viewData   >>>>', this.viewData);
     },
     onTemplateLoad: function() {
-      var _this = this;
+      var length,
+        _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$ul = this.$el.find(".updates-container ul");
       this.$members = this.$el.find(".team-members ul");
+      length = 0;
       this.members.each(function(model) {
-        return _this.addMemeber(model);
+        if (length++ < 4) {
+          return _this.addMemeber(model);
+        }
       });
+      if (length <= 4) {
+        $('.team-members .pull-right').remove();
+      }
       return onPageElementsLoad();
     },
     addMemeber: function(model_) {

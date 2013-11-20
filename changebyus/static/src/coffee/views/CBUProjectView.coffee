@@ -62,30 +62,33 @@ define ["underscore",
 					try 
 						if response.data.member
 							@isMember=true 
-						else 
-							$join.removeClass('invisible')
+
 					catch e then console.log e
+
+					@viewData = @model.attributes
+					@viewData.isMember = @isMember
 
 					@addSubViews()
 
 			addSubViews: ->  
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
-					{data:@model.attributes}, => @onHeaderLoaded()
+					{data:@viewData}, => @onHeaderLoaded()
 
 			onHeaderLoaded:->
 				id = @model.get("id")
 				config = {id:id}
 
-				console.log 'CBUProjectView >> config',config
+				if @isMember is false then @$header.find('.invisible').removeClass('invisible')
+
+				console.log '@$header',@$header,@isMember
 				@$el.prepend @$header
 				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
 
-			onCollectionLoad:->
-				console.log 'onCollectionLoad'
+			onCollectionLoad:-> 
 				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
 				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
 				@projectCalenderView  = new ProjectCalenderView({model: @model, isMember:@isMember, isOwner:@isOwner})
@@ -115,7 +118,7 @@ define ["underscore",
 					).done (response_)=>
 						console.log response_
 
-				id     = @model.get("id")
+				id = @model.get("id")
 
 				$join  = $(".project-footer .btn")
 				$join.click (e) =>
@@ -128,7 +131,7 @@ define ["underscore",
 					).done (response)=>
 						if response.msg.toLowerCase() is "ok"
 							@isMember = true
-							$join.html('isMember').css('background-color','#e6e6e6')
+							$join.html('Joined!').css('background-color','#e6e6e6')
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

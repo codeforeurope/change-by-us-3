@@ -1,9 +1,10 @@
-<div class="calendar">
-    <h2>Calendar</h2>
+<div class="project-section-header calendar">
+    <div class="pull-left">
+        <h2>Calendar</h2>
+    </div>
 </div>
 
 <div class="content-wrapper">
- 
     <% if (data.gcal_code){ %> 
         <%= data.gcal_code %> 
         <% if (data.isOwner){ %> 
@@ -11,9 +12,9 @@
             <span><a href="#" class="highlight" id="embed-calendar">Embed new calendar</a></span>
         <% } %> 
     <% }else{ %> 
-        <h2>
-            <em>Nothing here yet.</em>
-        </h2>
+        <h3>
+           <em>Nothing here yet.</em>
+        </h3>
         <% if (data.isOwner){ %> 
             <span>Why don't you <a href="#" class="highlight" id="embed-calendar">link your project's google calendar</a>?</span>
         <% } %> 

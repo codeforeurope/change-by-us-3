@@ -5,15 +5,7 @@
 @import "bootstrap-combined-no-icons";
 @import "variables";
 @import "mixins-and-functions";
-@import "projects";
-@import "modal";
-@import "helpers";
-@import "form";
-@import "profile";
-@import "dashboard";
-@import "login-signup";
-@import "dropkick";
-@import "social";
+
   
 /*!
  * Bootstrap v2.3.1
@@ -1519,7 +1511,7 @@ legend + .control-group {
   }
 }
 
-.close-x{ 
+.delete-x, .close-x{ 
     position: absolute;
     @include opacity(.9);
     cursor: pointer;
@@ -1527,9 +1519,19 @@ legend + .control-group {
     background-repeat: no-repeat;
     width: 20px;
     height: 20px; 
+    
+    &:hover{@include opacity(1);}
+}
+
+.delete-x{
+  margin-top: -10px;
+  top: 50%;
+  right: 3px;
+}
+
+.close-x{ 
     top: 3px;
     right: 3px;
-    &:hover{@include opacity(1);}
 }
 
 button.close {
@@ -1540,7 +1542,7 @@ button.close {
   -webkit-appearance: none;
 }
 
-a.btn{ color: $white; }
+a.btn{ color: $white !important; }
 
 .btn {
   display: inline-block;
@@ -2870,12 +2872,13 @@ a.fileupload-exists{color: $white;}
 
 .search-box {
   margin-top: 15px;
-  padding: 15px;
   border: 1px solid #dcdcdc;
   width: 730px;
   height: auto;
   background-color: $white;
   border-radius: 4px;
+  
+  >div{padding: 0 15px;}
 
   .input-label {
     font-size: 14px;
@@ -2886,6 +2889,10 @@ a.fileupload-exists{color: $white;}
     margin-top: 10px;
     margin-bottom: 20px;
     font-size: 40px;
+  }
+
+  .search-filters{
+    border-top: 1px solid $grayBorder;
   }
 }
 
@@ -3197,3 +3204,18 @@ a.ul{
   color: $graySubtext;
   text-decoration: underline ;
 }
+
+/***************************************
+ OVERRIDERS OR HELPERS
+ ***************************************/
+
+@import "projects";
+@import "modal";
+@import "helpers";
+@import "form";
+@import "profile";
+@import "dashboard";
+@import "login-signup";
+@import "dropkick";
+@import "social";
+@import "typography";

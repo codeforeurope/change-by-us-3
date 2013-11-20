@@ -45,13 +45,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         try {
           if (response.data.member) {
             _this.isMember = true;
-          } else {
-            $join.removeClass('invisible');
           }
         } catch (_error) {
           e = _error;
           console.log(e);
         }
+        _this.viewData = _this.model.attributes;
+        _this.viewData.isMember = _this.isMember;
         return _this.addSubViews();
       });
     },
@@ -59,7 +59,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       var _this = this;
       this.$header = $("<div class='project-header'/>");
       return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
-        data: this.model.attributes
+        data: this.viewData
       }, function() {
         return _this.onHeaderLoaded();
       });
@@ -70,7 +70,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       config = {
         id: id
       };
-      console.log('CBUProjectView >> config', config);
+      if (this.isMember === false) {
+        this.$header.find('.invisible').removeClass('invisible');
+      }
+      console.log('@$header', this.$header, this.isMember);
       this.$el.prepend(this.$header);
       this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);
@@ -81,7 +84,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onCollectionLoad: function() {
       var _this = this;
-      console.log('onCollectionLoad');
       this.projectUpdatesView = new ProjectUpdatesView({
         collection: this.projectUpdatesCollection,
         members: this.projectMembersCollection,
@@ -142,7 +144,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }).done(function(response) {
           if (response.msg.toLowerCase() === "ok") {
             _this.isMember = true;
-            return $join.html('isMember').css('background-color', '#e6e6e6');
+            return $join.html('Joined!').css('background-color', '#e6e6e6');
           }
         });
       });

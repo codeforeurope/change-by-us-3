@@ -63,10 +63,12 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         return window.CBUAppView = new CBUProjectView(config);
       },
       projectAdmin: function(id_) {
+        var isOwner;
+        isOwner = userID === projectOwnerID;
         config.model = {
           id: id_
         };
-        config.isOwner = userID === projectOwnerID;
+        config.isOwner = isOwner;
         return window.CBUAppView = isOwner ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
       },
       user: function(id_) {

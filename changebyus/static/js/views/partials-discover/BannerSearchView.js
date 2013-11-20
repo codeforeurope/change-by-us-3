@@ -1,7 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
-    sortByProjectResouces: 'Projects',
+    byProjectResouces: 'Projects',
     sortByPopularDistance: 'Popular',
     locationObj: null,
     ajax: null,
@@ -15,6 +15,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.$el.template(this.templateDir + "/templates/partials-discover/banner-search.html", {
         data: this.viewData
       }, function() {
+        _this.sendForm();
         return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
@@ -68,28 +69,31 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         $this.siblings().toggleClass('active');
         switch ($this.html()) {
           case 'Projects':
-            return this.sortByProjectResouces = 'Projects';
+            return this.byProjectResouces = 'Projects';
           case 'Resources':
-            return this.sortByProjectResouces = 'Resources';
+            return this.byProjectResouces = 'Resources';
           case 'Popular':
             return this.sortByPopularDistance = 'Popular';
           case 'Distance':
             return this.sortByPopularDistance = 'Distance';
         }
       });
-      return $('.search-inputs .btn').click(function() {
+      $('.search-inputs .btn').click(function() {
         return _this.sendForm();
       });
+      return onPageElementsLoad();
     },
     sendForm: function() {
       var dataObj,
         _this = this;
+      $("#projects-list").html("");
       dataObj = {
         s: $("#search-input").val(),
         loc: $("#search-near").val(),
         d: $("select[name='range']").val(),
-        type: this.sortByProjectResouces,
-        cat: this.sortByPopularDistance
+        type: this.byProjectResouces,
+        sort: this.sortByPopularDistance,
+        cat: $("#search-input").val()
       };
       if (this.ajax) {
         this.ajax.abort();
@@ -99,15 +103,17 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         url: "/api/project/search",
         data: dataObj
       }).done(function(response_) {
-        var k, v, _ref, _results;
+        var k, size, v, _ref;
         if (response_.msg.toLowerCase() === "ok") {
+          size = 0;
           _ref = response_.data;
-          _results = [];
           for (k in _ref) {
             v = _ref[k];
-            _results.push(_this.addProject(v._id));
+            _this.addProject(v._id);
+            size++;
           }
-          return _results;
+          $('h4').html(size + " Projects");
+          return onPageElementsLoad();
         }
       });
     },

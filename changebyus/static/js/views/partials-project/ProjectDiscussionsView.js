@@ -17,7 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       } else {
         this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
           _this.$ul = _this.$el.find('.bordered-item');
-          ProjectSubView.prototype.addAll.call(_this, options);
+          ProjectSubView.prototype.addAll.call(_this);
           return onPageElementsLoad();
         });
       }
@@ -34,7 +34,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.trigger('discussionClick', config);
       });
       projectDiscussionListItemView.on('delete', function() {
-        console.log('config', config.model.attributes.id);
         return _this.deleteDiscussion(config.model.attributes.id);
       });
       return this.$ul.append(projectDiscussionListItemView.$el);

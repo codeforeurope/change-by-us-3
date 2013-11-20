@@ -2,7 +2,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 	(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) ->
 		BannerSearchView = AbstractView.extend
 
-			sortByProjectResouces:'Projects'
+			byProjectResouces:'Projects'
 			sortByPopularDistance:'Popular'
 			locationObj:null
 			ajax:null
@@ -14,7 +14,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			render: -> 
 				@$el = $("<div class='banner-search'/>")
 				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
-					data: @viewData, => @onTemplateLoad()
+					data: @viewData, => 
+						@sendForm()
+						@onTemplateLoad()
 				$(@parent).append @$el
 
 			onTemplateLoad:->
@@ -55,9 +57,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 					switch $this.html()
 						when 'Projects'
-							@sortByProjectResouces = 'Projects'
+							@byProjectResouces = 'Projects'
 						when 'Resources'
-							@sortByProjectResouces = 'Resources'
+							@byProjectResouces = 'Resources'
 						when 'Popular'
 							@sortByPopularDistance = 'Popular'
 						when 'Distance'
@@ -65,13 +67,18 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				$('.search-inputs .btn').click => @sendForm()
 
+				onPageElementsLoad()
+
 			sendForm:->
+				$("#projects-list").html("")
+
 				dataObj = {
 					s: $("#search-input").val()
 					loc: $("#search-near").val()
 					d: $("select[name='range']").val()
-					type: @sortByProjectResouces
-					cat: @sortByPopularDistance
+					type: @byProjectResouces
+					sort: @sortByPopularDistance
+					cat:  $("#search-input").val()
 				}
 
 				if @ajax then @ajax.abort()
@@ -81,12 +88,14 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 					data: dataObj
 				).done (response_)=>
 					if response_.msg.toLowerCase() is "ok"
+						size=0
 						for k,v of response_.data
 							@addProject v._id
+							size++
+						$('h4').html(size+" Projects")
+						onPageElementsLoad()
 
 			addProject:(id_)->
 				projectModel = new ProjectModel({id:id_})
 				view = new ResourceProjectPreviewView({model: projectModel, parent: "#projects-list"})
-				view.fetch()
-
-				#console.log 'projectModel',projectModel,'view',view,'id_',id_
+				view.fetch() 

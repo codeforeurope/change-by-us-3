@@ -21,15 +21,19 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
-        var config, projectCalendarCollection, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
+        var config, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection, vData;
         config = {
           id: _this.model.get("id"),
           name: _this.model.get("name"),
           model: _this.model
         };
         console.log('CBUProjectOwnerView !!!!!!!!!!!!!!!!!!!!!!!!!', config);
+        vData = {
+          viewData: {
+            isOwner: true
+          }
+        };
         projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
-        projectCalendarCollection = new ProjectCalendarCollection(config);
         projectMembersCollection = new ProjectMembersCollection(config);
         projectUpdatesCollection = new ProjectUpdatesCollection(config);
         _this.projectDiscussionsView = new ProjectDiscussionsView({
@@ -41,9 +45,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           collection: projectUpdatesCollection
         });
         _this.projectFundraisingView = new ProjectFundraisingView(config);
-        _this.projectCalenderView = new ProjectCalenderView({
-          collection: projectCalendarCollection
-        });
+        _this.projectCalenderView = new ProjectCalenderView(vData);
         _this.projectMembersView = new ProjectMembersView({
           collection: projectMembersCollection
         });

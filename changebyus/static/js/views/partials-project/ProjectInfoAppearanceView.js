@@ -10,6 +10,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
+      this.location.name = this.viewData.location;
       console.log('@viewData', this.viewData);
       return this.render();
     },
@@ -39,6 +40,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');
+            console.log('$zip.val()  @location.name ', $zip, $zip.val(), _this.location.name);
             if (_this.location.name !== "" && _this.location.name === $zip.val()) {
               $form.find("input, textarea").attr("disabled", "disabled");
               return true;
@@ -64,9 +66,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
             $("html, body").animate({
               scrollTop: 0
             }, "slow");
-            return $feedback.addClass('.alert-success').removeClass('.alert-error');
+            return $feedback.addClass('alert-success').removeClass('alert-error');
           } else {
-            return $feedback.removeClass('.alert-success').addClass('.alert-error');
+            return $feedback.removeClass('alert-success').addClass('alert-error');
           }
         }
       };

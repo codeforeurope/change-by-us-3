@@ -8,6 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@viewData = @model.attributes
+				@location.name = @viewData.location
 				console.log '@viewData',@viewData
 				@render()
 
@@ -33,7 +34,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 					beforeSubmit: => 
 						if $form.valid()
 							$zip = $('input[name="zip"]')
-
+							console.log '$zip.val()  @location.name ',$zip, $zip.val(), @location.name 
 							if @location.name isnt "" and @location.name is $zip.val() 
 								$form.find("input, textarea").attr("disabled", "disabled")
 								return true
@@ -55,9 +56,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 
 						if res.success
 							$("html, body").animate({ scrollTop: 0 }, "slow")
-							$feedback.addClass('.alert-success').removeClass('.alert-error')
+							$feedback.addClass('alert-success').removeClass('alert-error')
 						else
-							$feedback.removeClass('.alert-success').addClass('.alert-error')
+							$feedback.removeClass('alert-success').addClass('alert-error')
 							
 				$form.ajaxForm options
 

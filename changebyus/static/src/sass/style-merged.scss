@@ -1048,49 +1048,6 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   }
 }
 
-.form-signin,.form-signup {
-  max-width: 600px;
-  padding-bottom:29px;
-  background-color: $white;
-  border: 0px solid #e5e5e5;
-
-  .form-signin-heading, .checkbox {
-    margin-bottom: 50px;
-    font-size: 16px;
-    color: #333333;
-  }
- 
-  input {
-    &[type="text"], &[type="firstname"], &[type="lastname"], &[type="email"], &[type="password"] {
-      max-width: 500px;
-      font-size: 16px;
-      height: auto;
-      margin-bottom: 15px;
-      padding: 7px 9px;
-      &.top{ 
-        @include border-bottom-left-radius(0);
-        @include border-bottom-right-radius(0);
-        margin-bottom: 0; 
-      }
-      &.middle{ 
-        border-top: none;
-        @include border-radius(0);
-      }
-      &.bottom{ 
-        border-top: none;
-        @include border-top-left-radius(0);
-        @include border-top-right-radius(0);
-      }
-    }
-  }
-
-  label{
-    text-align: left;
-  }
-
-  
-}
-
 .help-block, .help-inline {
   color: #595959;
 }

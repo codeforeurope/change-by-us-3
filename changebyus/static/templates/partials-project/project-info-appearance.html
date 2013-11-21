@@ -1,26 +1,27 @@
+
 <form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/project/edit">
     <div class="content-wrapper clearfix">
+        <div id="feedback" class="alert hide"></div>
         <div class="form-left">
             <label for="name">Project Name</label>
-            <input type="text" maxlength="30" name="name" id="project_name" placeholder="Project Name" class="input-xxlarge" value="<%= data.name %>">
+            <input type="text" maxlength="30" name="name" id="project_name" placeholder="Project Name" class="input-xxlarge" value="<%= data.name %>" required>
 
             <label for="description">Description</label>
             <input type="text" rows="8" name="description" maxlength="600" id="project_description" placeholder="Description" class="input-xxlarge" value="<%= data.description %>">
 
             <label for="category">Category</label>
             <select name="category" id="project-category">
-                <option value="Animals">Animals</option>
-                <option value="Community">Community</option>
-                <option value="Education">Education</option>
-                <option value="Environment">Environment</option>
-                <option value="Food">Food</option>
-                <option value="Health">Health</option>
-                <option value="Politics">Politics</option>
-                <option value="Religion">Religion</option>
+                <% _.each(["Animals","Community", "Education", "Environment", "Food", "Health", "Politics", "Religion"], function(i) { %>
+                    <% if (data.category == i){ %>
+                        <option value="<%= i %>" selected><%= i %></option>
+                    <% }else{ %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                <% }); %>
             </select>
 
             <label for="description">Project Location</label>
-            <input type="text" maxlength="30" name="zip" id="project_location" placeholder="Project Location" class="input-xxlarge" value="<%= data.location %>">
+            <input type="text" maxlength="30" name="zip" id="project_location" placeholder="Project Location" class="input-xxlarge" value="<%= data.location %>" required>
 
             <label for="description">Website</label>
             <input type="text" maxlength="30" name="website" id="website" placeholder="Website" class="input-xxlarge" value="<%= data.website %>">
@@ -75,6 +76,8 @@
         </div>
         <div class="pull-right"></div>
     </div>
+    <input type="hidden" name="lat" value="<%= data.lat %>">
+    <input type="hidden" name="lon" value="<%= data.lon %>">
     <input type="hidden" name="project_id" value="<%= data.id %>">
     <input type="hidden" name="project_slug" value="<%= data.slug %>">
 </form>

@@ -47,8 +47,8 @@
                     </div>
 
                     <div class="fileupload-preview thumbnail circle">
-                        <% if (data.image_url_round){ %>
-                            <img src="<%=  data.image_url_round %>">
+                         <% if (data.image_url_round){ %> 
+                            <div class="load-preview" style="background-image:url(<%= data.image_url_round %>)"></div>
                         <% } %>
                     </div>
                     <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>

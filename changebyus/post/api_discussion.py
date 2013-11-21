@@ -49,7 +49,17 @@ def api_get_project_discussions_fixed(project_id):
         User is logged in, user a member of the project
     """
 
-    posts = ProjectPost.objects( parent_id = None, 
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+    
+    print sort
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort) 
+        posts = ProjectPost.objects( parent_id = None, 
+                                 project = project_id,
+                                 public = False ).order_by(sort_order)[0:10]
+    else:
+        posts = ProjectPost.objects( parent_id = None, 
                                  project = project_id,
                                  public = False )[0:10]
 

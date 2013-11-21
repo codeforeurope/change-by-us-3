@@ -51,8 +51,7 @@ def api_get_project_discussions_fixed(project_id):
 
     sort = request.args.get('sort')
     order = request.args.get('order', 'asc')
-    
-    print sort
+ 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort) 
         posts = ProjectPost.objects( parent_id = None, 

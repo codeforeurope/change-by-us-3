@@ -102,6 +102,8 @@
   @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
   line-height: 1.6;
   margin-top: 15px;
+  overflow: hidden;
+  height: 125px;
 }
 
 .project-category{

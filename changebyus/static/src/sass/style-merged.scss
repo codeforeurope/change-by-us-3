@@ -2083,7 +2083,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 .topnav {
   height: 87px; 
   width: 100%;
-  font-size: 20px;
+  font-size: 22px;
   background-color: $primaryColor;
 }
 
@@ -3146,6 +3146,11 @@ a.fileupload-exists{color: $white;}
   .btn { background-color: $secondaryColor; }
 }
 
+.logo-lp{}
+.logo-ceo{}
+.logo-kf{}
+.logo-rh{}
+
 .btn {
     @include font-styling("asap", 22px, $white, "normal", "regular" );
     white-space: nowrap; 
@@ -3163,20 +3168,50 @@ a.fileupload-exists{color: $white;}
   }
 
 .icons-wrapper{
-  width: 690px;
-  margin-top: 60px; 
-  div{float: left;}
+  width: 675px;
+  margin: 60px auto 0; 
+  @include bebas;
+}
+
+.footer-btns{ 
+  .btn:last-child{margin-right: 0;}
 }
 
 .created-by,.supported-by{
   color: $graySupport;
   text-transform: uppercase;
+  float: left;
+  div{
+    float: left;
+    margin-right: 15px;
+    &:last-child{margin-right: 0;}
+  }
 }
+.created-by{ margin-right: 65px; }
 
-.icon-lp{ }
-.icon-ceofc{}
-.icon-knight{}
-.icon-rackspace{}
+.logo-lp,.logo-ceo,.logo-kf,.logo-rh{
+  background-repeat: no-repeat;
+}
+.logo-lp{
+  width: 52px;
+  height: 25px;
+  background-image:url(/static/img/logo-lp.png);
+}
+.logo-ceo{
+  width: 80px;
+  height: 22px;
+  background-image:url(/static/img/logo-ceo.png);
+}
+.logo-kf{
+  width: 177px;
+  height: 24px;
+  background-image:url(/static/img/logo-kf.png);
+}
+.logo-rh{
+  width: 114px;
+  height: 32px;
+  background-image:url(/static/img/logo-rh.png);
+}
 
 .footer-nav{
   margin-top: 48px; 

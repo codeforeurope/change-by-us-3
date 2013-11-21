@@ -528,6 +528,8 @@
     width: 70px;  
     cursor: pointer;
 
+    .circle{z-index: 1;}
+    
     .mail-icon{
       float: right;
       margin-top: 5px;
@@ -540,9 +542,6 @@
         top:78px;
       }
     }  
-
-    >a{z-index: 1;}
-    
   }
 
   .member-popup{

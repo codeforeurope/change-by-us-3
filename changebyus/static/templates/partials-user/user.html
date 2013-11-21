@@ -11,12 +11,12 @@
         <div class="user-info">
             <h1>
                 <%= data.display_name %> 
-                <% if (data.email){ %>
+                <% if (data.public_email){ %>
                     <a href="mailto:<%= data.email %>">
                         <img src="/static/img/profile_email.png">
                     </a>
                 <% }else{ %>
-                    <img src="/static/img/profile_email.png">
+                    <img src="/static/img/profile_email_deactive.png">
                 <% } %> 
             </h1>
 

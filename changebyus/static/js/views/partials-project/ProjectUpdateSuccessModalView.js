@@ -11,8 +11,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.$el = $("<div class='modal-fullscreen dark'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-share-success-overlay.html", {
         data: this.model
-      }, function() {});
+      }, function() {
+        return _this.onTemplateLoad();
+      });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      var _this = this;
+      return this.$el.find(".close-x").click(function() {
+        return _this.$el.remove();
+      });
     }
   });
 });

@@ -10,8 +10,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 
 			render: -> 
 				@$el = $("<div class='modal-fullscreen dark'/>") 
-				@$el.template @templateDir + "/templates/partials-project/project-share-success-overlay.html",
-					{data: @model}, => 
+				@$el.template @templateDir+"/templates/partials-project/project-share-success-overlay.html",
+					{data: @model}, => @onTemplateLoad()
+				$(@parent).append @$el 
 
-				$(@parent).append @$el
-						 
+			onTemplateLoad:->
+				@$el.find(".close-x").click => @$el.remove()

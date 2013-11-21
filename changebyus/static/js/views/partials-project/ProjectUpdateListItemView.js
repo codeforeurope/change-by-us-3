@@ -5,6 +5,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     $repliesHolder: null,
     $postRight: null,
     $replyForm: null,
+    tagName: "li",
     render: function() {
       var m,
         _this = this;

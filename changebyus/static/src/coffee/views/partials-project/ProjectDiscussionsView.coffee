@@ -33,22 +33,22 @@ define ["underscore",
 
 			loadDayTemplate:->
 				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-project/project-discussion-day.html",
+				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
 					{}, =>
 						model_ = @collection.models[0]
 						m = moment(model_.attributes.updated_at).format("MMMM D")
 						@newDay(m)
-						ProjectSubView::addAll.call(@)
+
+						@isDataLoaded = true
+
+						ProjectSubView::addAll.call(@) 
 
 			newDay:(date_)->
 				@currentData = date_
 				@$currentDay = @$day.clone()
 				@$el.append @$currentDay
 				@$currentDay.find('h4').html(date_)
-				@$ul = @$currentDay.find('.bordered-item')
-
-				# always reload disussions
-				#@isDataLoaded = true
+				@$ul = @$currentDay.find('.bordered-item') 
 
 			addOne:(model_)->
 				m = moment(model_.attributes.updated_at).format("MMMM D")

@@ -20,10 +20,6 @@ define ["underscore",
 		ProjectAddUpdateView = ProjectSubView.extend
 
 			parent: "#project-update"
-		
-			initialize: (options) ->
-				ProjectSubView::initialize.call @, options
-				@render()
 
 			render: -> 
 				@$el = $(@parent)
@@ -61,8 +57,31 @@ define ["underscore",
 					image: 'url("/static/img/black-check.png")'
 					width: 18
 					height: 18
+
+			addAll: -> 
+				console.log 'addAlladdAlladdAlladdAlladdAlladdAlladdAlladdAll'
+				@$day = $('<div />')
+				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+					{}, =>
+						model_ = @collection.models[0]
+						m = moment(model_.attributes.updated_at).format("MMMM D")
+						@newDay(m)
+
+						@isDataLoaded = true
+						ProjectSubView::addAll.call(@) 
+						onPageElementsLoad()
+
+			newDay:(date_)->
+				console.log 'newDay',date_
+				@currentData = date_
+				@$currentDay = @$day.clone()
+				@$el.append @$currentDay
+				@$currentDay.find('h4').html(date_)
+				@$ul = @$currentDay.find('.bordered-item') 
 					
 			addOne: (model_) ->
+				m = moment(model_.attributes.updated_at).format("MMMM D")
+				if @currentData isnt m then @newDay(m)
 				console.log "ProjectAddUpdateView addOne model", model_
 				view = new ProjectUpdateListItemView({model: model_})
 				@$ul.append view.render().$el 

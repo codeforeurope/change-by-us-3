@@ -19,6 +19,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       var $shareOptions, $shareToggle, $submit, form,
         _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
+      $("#post-update").click(function() {
+        return $("html, body").animate({
+          scrollTop: 0
+        }, "slow");
+      });
       this.$ul = this.$el.find('.updates-container ul');
       form = new ProjectWysiwygFormView({
         parent: "#update-form"
@@ -49,8 +54,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       };
       $shareOptions = $(".share-options");
       $shareToggle = $(".share-toggle");
-      return $shareToggle.click(function() {
+      $shareToggle.click(function() {
         return $shareOptions.toggleClass("hide");
+      });
+      return $('input:radio, input:checkbox').screwDefaultButtons({
+        image: 'url("/static/img/black-check.png")',
+        width: 18,
+        height: 18
       });
     },
     addOne: function(model_) {

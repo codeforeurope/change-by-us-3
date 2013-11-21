@@ -17,7 +17,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 			onTemplateLoad:->
 				ProjectSubView::onTemplateLoad.call @
-				
+
 				@$ul = @$el.find(".updates-container ul")
 				@$members = @$el.find(".team-members ul")
 
@@ -37,6 +37,5 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$members.append $member
 					
 			addOne: (model_) ->
-				#console.log "ProjectUpdatesView addOne model", model_
 				view = new ProjectUpdateListItemView({model: model_})
 				@$ul.append view.render().$el 

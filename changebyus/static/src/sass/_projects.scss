@@ -352,7 +352,8 @@
    * OWNER VIEW
    ******************************/
   .update-wrapper{
-     
+     input[type=submit]{background-color: $secondaryColor}
+     input[type=button]{background-color: $graySupport}
   }
 
   .share-select{
@@ -370,7 +371,6 @@
     cursor: pointer; 
     padding: 5px;
     @include box-skin;
-
     .caret{
       float: right;
       margin-top: 8px;
@@ -380,13 +380,13 @@
   .share-options{
     padding: 5px;
     @include box-skin;
-
+    .styledCheckbox{float: left;}
     label{ 
       height: 15px;
       font-size: 16px;
       line-height: 15px;
       padding-left: 20px;
-      margin-top: 10px; 
+      margin: 10px 10px; 
       &:first-child{
         margin-top: 0;
       }

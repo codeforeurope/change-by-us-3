@@ -32,6 +32,10 @@ define ["underscore",
 
 			onTemplateLoad:-> 
 				ProjectSubView::onTemplateLoad.call @
+
+				$("#post-update").click ->
+					$("html, body").animate({ scrollTop: 0 }, "slow")
+				
 				
 				@$ul = @$el.find('.updates-container ul')
 				form = new ProjectWysiwygFormView({parent:"#update-form"})
@@ -52,6 +56,11 @@ define ["underscore",
 				$shareOptions = $(".share-options")
 				$shareToggle = $(".share-toggle")
 				$shareToggle.click -> $shareOptions.toggleClass("hide")
+
+				$('input:radio, input:checkbox').screwDefaultButtons
+					image: 'url("/static/img/black-check.png")'
+					width: 18
+					height: 18
 					
 			addOne: (model_) ->
 				console.log "ProjectAddUpdateView addOne model", model_

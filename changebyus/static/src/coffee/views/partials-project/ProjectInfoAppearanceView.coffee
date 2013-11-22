@@ -18,8 +18,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 					data: @viewData, => 
 						onPageElementsLoad()
 						@ajaxForm()
-
-				$(@parent).append @$el 
+				$(@parent).append @$el
 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})

@@ -4,9 +4,9 @@
             <a href="mailto:<%= data.email %>">
                 <img src="/static/img/mail_icon.png">
             </a>
-            <% }else{ %>
-                <img src="/static/img/mail_icon_deactive.png">
-                <% } %>
+        <% }else{ %>
+               <img src="/static/img/mail_icon_deactive.png">
+        <% } %>
     </div>
     <div class="user-avatar">
         <img src="<%= data.image_url_round_small %>" class="circle">
@@ -18,10 +18,30 @@
         <%= data.first_name %>
         <%= data.last_name %>
     </div>
-    <div class="member-description">description
+    <div class="member-description">
+        description
         <%= data.description %>
     </div>
     <div class="member-roles grey">
-        <%= data.roles %>
+        <% if (data.view == "admin"){ %>  
+            <% if (data.roles == "Owner"){ %>
+            Project Owner
+            <% }else{ %>
+                <select name="category" id="<%= data.id %>">
+                <% _.each(["Organizer", "Member"], function(i) { %>
+                    <% if (i in data.roles){ %>
+                        <option value="<%= i %>" selected><%= i %></option>
+                    <% }else{ %>
+                        <option value="<%= i %>"><%= i %></option>
+                    <% } %>
+                <% }); %>
+                </select>
+            <% } %>
+        <% }else{ %>
+            <%= data.roles %>
+        <% } %>
     </div>
+    <% if (data.view == "admin"){ %>  
+        <div class="close-x"></div>
+    <% } %>
 </div>

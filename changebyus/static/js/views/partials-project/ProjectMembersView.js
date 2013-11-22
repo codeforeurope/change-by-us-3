@@ -8,15 +8,18 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     members: [],
     $teamList: null,
     $memberList: null,
+    view: "public",
     initialize: function(options) {
       this.isDataLoaded = options.isDataLoaded || this.isDataLoaded;
-      ProjectSubView.prototype.initialize.call(this, options);
-      return console.log("initialize @collection >> ", this.collection);
+      this.view = options.view || this.view;
+      return ProjectSubView.prototype.initialize.call(this, options);
     },
     render: function() {
-      var _this = this;
+      var templateURL,
+        _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-members.html", {}, function() {
+      templateURL = this.view === "public" ? "/templates/partials-project/project-members.html" : "/templates/partials-project/project-members-admin.html";
+      return this.$el.template(this.templateDir + templateURL, {}, function() {
         return _this.onTemplateLoad();
       });
     },
@@ -24,7 +27,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
-      if (this.collection.length > 0) {
+      if ((this.view === "public") && (this.collection.length > 0)) {
         this.onCollectionLoad();
       }
       return onPageElementsLoad();
@@ -32,14 +35,12 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
-      console.log("addAll @collection >> ", this.collection, this.collection.models.length);
       this.collection.each(function(model) {
         if (__indexOf.call(model.attributes.roles, "Project Owner") >= 0 || __indexOf.call(model.attributes.roles, "Organizer") >= 0) {
-          _this.team.push(model);
+          return _this.team.push(model);
         } else {
-          _this.members.push(model);
+          return _this.members.push(model);
         }
-        return console.log('ProjectMembersView model.roles', model);
       });
       _ref = this.team;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -54,13 +55,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       if (this.members.length > 0) {
         this.$memberList.parent().show();
       }
+      ProjectSubView.prototype.addAll.call(this, options);
       return this.isDataLoaded = true;
     },
     addTeam: function(model_) {
       var view;
       console.log('addTeam model_', model_);
       view = new ProjectMemberListItemView({
-        model: model_
+        model: model_,
+        view: this.view
       });
       return this.$teamList.append(view.el);
     },
@@ -68,7 +71,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       var view;
       console.log('addMember model_', model_);
       view = new ProjectMemberListItemView({
-        model: model_
+        model: model_,
+        view: this.view
       });
       return this.$memberList.append(view.el);
     }

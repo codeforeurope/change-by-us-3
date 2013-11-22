@@ -26,17 +26,17 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         url = "/templates/partials-project/project-update-form.html";
         this.editorID = "#editor";
         this.formName = "project-update";
-        this.$el = $("<div class='update-wrapper clearfix'/>");
+        this.$el = $("<div class='update-wrapper thin-pad clearfix'/>");
       } else if (this.parent === "#add-thread-form") {
         url = "/templates/partials-project/project-new-thread-form.html";
         this.editorID = "#new-thread-editor";
         this.formName = "new-discussion";
-        this.$el = $("<div class='content-wrapper clearfix'/>");
+        this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else {
         url = "/templates/partials-project/project-new-discussion-form.html";
         this.editorID = "#discussion-editor";
         this.formName = "new-thread";
-        this.$el = $("<div class='content-wrapper clearfix'/>");
+        this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       }
       this.$el.template(this.templateDir + url, {
         data: this.viewData

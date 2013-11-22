@@ -26,7 +26,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           id: _this.model.get("id"),
           name: _this.model.get("name"),
           model: _this.model,
-          isOwner: true
+          isOwner: true,
+          view: "admin"
         };
         projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
         projectMembersCollection = new ProjectMembersCollection(config);
@@ -42,7 +43,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         _this.projectFundraisingView = new ProjectFundraisingView(config);
         _this.projectCalenderView = new ProjectCalenderView(config);
         _this.projectMembersView = new ProjectMembersView({
-          collection: projectMembersCollection
+          collection: projectMembersCollection,
+          view: "admin"
         });
         _this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
         _this.projectDiscussionsView.on('discussionClick', function(arg_) {

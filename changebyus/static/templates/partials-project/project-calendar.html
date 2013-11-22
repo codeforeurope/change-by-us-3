@@ -1,10 +1,12 @@
+<% if (data.view == "public"){ %> 
 <div class="project-section-header calendar">
     <div class="pull-left">
         <h2>Calendar</h2>
     </div>
 </div>
+<% } %> 
 
-<div class="content-wrapper no-results">
+<div class="content-wrapper no-results clearfix">
     <% if (data.gcal_code){ %> 
         <%= data.gcal_code %> 
         <% if (data.isOwner){ %> 
@@ -12,10 +14,22 @@
             <span><a href="#" class="highlight" id="embed-calendar">Embed new calendar</a></span>
         <% } %> 
     <% }else{ %> 
-        <h3>
-           <em>Nothing here yet.</em>
-        </h3>
-        <% if (data.isOwner){ %> 
+        <% if (data.view == "admin"){ %> 
+            <div class="content-left">
+                <h2 class="admin-title">Plan Event</h2>
+                <br>
+                <p>
+                    Chances are you already have an existing means of keeping track of your project schedule. Now you can do it all in the same place.
+                </p>
+                <a href="#new-discussion" class="btn btn-large btn-secondary">Embed Google Calendar</a>
+            </div>
+            <div class="content-right">
+                <img src="/static/img/icon_embed_cal.png" class="large-icon">
+            </div>
+        <% }else{ %> 
+            <h3>
+               <em>Nothing here yet.</em>
+            </h3>
             <span>Why don't you <a href="#" class="highlight" id="embed-calendar">link your project's google calendar</a>?</span>
         <% } %> 
     <% } %> 

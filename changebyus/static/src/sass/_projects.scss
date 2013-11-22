@@ -215,10 +215,11 @@
   }
  
   .content-wrapper {
-    padding: 20px;
+    padding: 36px;
     margin-top: 15px;
     margin-bottom: 30px;
     height: auto;
+    overflow: hidden;
     @include box-skin;
 
     a{color: $black;}
@@ -235,6 +236,7 @@
         &:last-child{border: none;}
       }
     }
+    &.thin-pad{padding: 20px;}
   }
 
   h2.admin-title{ 
@@ -251,11 +253,11 @@
   }
  
   .content-left{
-    width: 60%;
+    width: 64%;
   } 
   
   .content-right{
-    width: 40%;
+    width: 36%;
     height: 100%;
     text-align: center;
     vertical-align: middle;
@@ -350,6 +352,14 @@
     }
   }
 
+  .admin{
+    .project-member{
+      .member-description{ width: 475px; }
+      .dk_container{width: 100%;}
+      select{width: 100%;}
+    }
+  }
+
   /******************************
    * OWNER VIEW
    ******************************/
@@ -430,12 +440,6 @@
   .fundraising-left{
     float: left;
     width: 66%;
-
-
-
-    .content-wrapper{
-      overflow: hidden;
-    }
      
     span{
       font-weight: bold;
@@ -478,16 +482,21 @@
 
   ul{margin-left: 30px;}
   li{
-    display: inline;
+    height: 100%;
+    display: inline-block;
     list-style-type: none;
-    padding-right: 20px;
-    margin: 0 18px;
+    padding: 0 10px;
+    margin: 0 18px; 
   }  
   a{
     line-height: 58px;
     @include font-styling("asap", 22px, $white, "normal", "bold");
     @include text-shadow(0 1px 5px rgba(0,0,0,.75)); // drop shadow
   }
+}
+
+.owner-tabs-pane{
+  li.active{background-color: rgba(0,0,0,.75);}
 }
 
 .tabs-pane{

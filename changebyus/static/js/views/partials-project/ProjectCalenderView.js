@@ -4,6 +4,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     isOwner: false,
     parent: "#project-calendar",
     projectEmbedCalendarModalView: null,
+    view: "public",
     initialize: function(options_) {
       var options;
       options = options_ || {};
@@ -14,7 +15,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         this.viewData = this.model.attributes || this.viewData;
       }
       this.viewData.isOwner = options.isOwner || this.isOwner;
-      console.log('@viewData >>>>> ', this.viewData, options);
+      this.viewData.view = options.view || this.view;
       return this.render();
     },
     render: function() {

@@ -456,10 +456,6 @@
     @include box-skin;
     .btn-medium{
       float: right;
-      background-color:$secondaryColor;
-      &:hover{ 
-        background-color:$secondaryHoverColor;
-      }
     }
   }
 
@@ -471,9 +467,6 @@
 .btn-large{
   font-weight: bold;
   padding: 20px 22px;
-  &.invs{ 
-    background-color:$secondaryColor; 
-  }
 }
 
 .tabs-pane, .owner-tabs-pane{

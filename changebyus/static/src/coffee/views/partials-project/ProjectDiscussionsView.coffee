@@ -35,9 +35,10 @@ define ["underscore",
 				@$day = $('<div />')
 				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
 					{}, =>
-						model_ = @collection.models[0]
-						m = moment(model_.attributes.updated_at).format("MMMM D")
-						@newDay(m)
+						if @collection.length > 0
+							model_ = @collection.models[0]
+							m = moment(model_.attributes.updated_at).format("MMMM D")
+							@newDay(m)
 
 						@isDataLoaded = true
 

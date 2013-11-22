@@ -1517,7 +1517,7 @@ a.btn{ color: $white !important; }
   cursor: pointer;
   color: $white;
   box-sizing: border-box;
-  background-color: $primaryColor;
+  //background-color: $primaryColor;
   background-image: none;
   @include border-radius(2px);
   @include transition-property(background-color,color);
@@ -1669,6 +1669,7 @@ input {
 
 .btn-primary {
   color: $white;
+  /*
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #006dcc;
   *background-color: #0044cc;
@@ -1680,6 +1681,7 @@ input {
   &:active, &.active {
     background-color: #003399 \9;
   }
+  */
 }
 
 .btn-success {
@@ -1797,6 +1799,9 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 0;
+  .btn{
+    background-color: $primaryColor;
+  }
   > {
     .btn + .btn, .btn-group + .btn, .btn + .btn-group {
       margin-left: 5px;
@@ -2885,10 +2890,8 @@ a.fileupload-exists{color: $white;}
   z-index: 1;
   .btn {
     margin-top: 37px;
-    padding: 20px;
-    color: $white;
-    font-size: 24px;
-    background-color: $primaryColor;
+    padding: 20px; 
+    font-size: 24px; 
     border-radius: 4px;
   }
 }
@@ -2970,14 +2973,13 @@ a.fileupload-exists{color: $white;}
     margin: auto;
     padding: 20px; 
     font-size: 24px;
-    background-color: $secondaryColor;
-    color: $white;
     border-radius: 4px;
   }
 }
 
 .discover-header-right{
   height: 200px;
+  
   .cities{
     @include box-skin;
     margin-top: 10px;
@@ -3108,8 +3110,7 @@ a.fileupload-exists{color: $white;}
     text-align: center;
     padding: 40px;
     color: $white;
-  }
-  .btn { background-color: $secondaryColor; }
+  } 
 }
 
 .logo-lp{}
@@ -3127,9 +3128,6 @@ a.fileupload-exists{color: $white;}
       font-weight: bold;
       padding: 26px 0; 
       margin-right: 16px;
-      &.invs{
-        background-color: $graySupport;
-      }
     }
   }
 
@@ -3220,3 +3218,4 @@ a.ul{
 @import "dropkick";
 @import "social";
 @import "typography";
+@import "buttons";

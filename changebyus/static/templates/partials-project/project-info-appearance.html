@@ -40,7 +40,7 @@
                 <label>Project Thumbnail</label>
                 <div class="fileupload fileupload-new" data-provides="fileupload">
                     <div>
-                        <span class="btn btn-file">
+                        <span class="btn btn-file btn-primary">
                             <span class="fileupload-exists">Edit Thumbnail</span>
                             <span class="fileupload-new">Upload</span>
                             <input id="project_image" name="photo" type="file">
@@ -52,7 +52,7 @@
                             <div class="load-preview" style="background-image:url(<%= data.image_url_round %>)"></div>
                         <% } %>
                     </div>
-                    <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                    <a class="btn btn-file btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
                 </div>
                 <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div>
@@ -60,19 +60,19 @@
                 <label>Social</label>
                 <div class="twitter">
                     <div class="social-icon icon-twitter"></div>
-                    <a href="#" class="btn btn-medium">Disconnect</a>
+                    <a href="#" class="btn btn-medium btn-primary">Disconnect</a>
                 </div>
                 <div class="facebook">
                     <div class="social-icon icon-facebook"></div>
-                    <a href="#" class="btn btn-medium">Disconnect</a>
+                    <a href="#" class="btn btn-medium btn-primary">Disconnect</a>
                 </div>
             </div>
         </div>
     </div>
     <div class="form-footer clearfix">
         <div class="pull-left">
-            <input type="submit" class="btn btn-medium" value="Save">
-            <input type="submit" class="btn btn-medium" value="Cancel">
+            <input type="submit" class="btn btn-large btn-secondary" value="Save">
+            <input type="button" class="btn btn-large btn-tertiary" value="Cancel">
         </div>
         <div class="pull-right"></div>
     </div>

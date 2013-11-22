@@ -26,9 +26,11 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$day = $('<div />');
       return this.$day.template(this.templateDir + "/templates/partials-project/project-entries-day-wrapper.html", {}, function() {
         var m, model_;
-        model_ = _this.collection.models[0];
-        m = moment(model_.attributes.updated_at).format("MMMM D");
-        _this.newDay(m);
+        if (_this.collection.length > 0) {
+          model_ = _this.collection.models[0];
+          m = moment(model_.attributes.updated_at).format("MMMM D");
+          _this.newDay(m);
+        }
         _this.isDataLoaded = true;
         return ProjectSubView.prototype.addAll.call(_this);
       });

@@ -312,6 +312,12 @@ def _get_users_for_project( project_id = None ):
 
     return db_list_to_dict_list(users)
 
+def _get_user_roles_for_project(project, user_id):
+    project_id = project.id if isinstance(project, Project) else project
+    upl = UserProjectLink.objects( user = user_id,
+                                   project = project_id )
+    return upl
+
 
 def _get_project_users_and_common_projects(project_id = None, user_id = None):
     """

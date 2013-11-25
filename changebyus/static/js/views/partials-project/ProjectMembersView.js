@@ -31,7 +31,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
-      this.collection.on('change:roles', function() {
+      this.collection.on('change', function() {
+        return _this.addAll();
+      });
+      this.collection.on('remove', function() {
         return _this.addAll();
       });
       if ((this.view === "public") && (this.collection.length > 0)) {

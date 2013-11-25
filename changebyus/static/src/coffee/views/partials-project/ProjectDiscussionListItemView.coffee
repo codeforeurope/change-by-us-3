@@ -25,4 +25,4 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@$el.find('.user-avatar, .description').click =>
 					@trigger "click", @model
 				@$el.find('.delete').click =>
-					@trigger "delete", @model 
+					@trigger "delete", @model  

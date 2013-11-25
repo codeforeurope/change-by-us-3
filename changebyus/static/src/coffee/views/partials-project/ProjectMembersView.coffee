@@ -29,7 +29,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$teamList   = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
 
-				@collection.on('change:roles', =>@addAll())
+				@collection.on('change', =>@addAll())
+				@collection.on('remove', =>@addAll())
 
 				if (@view is "public") and (@collection.length > 0) then @onCollectionLoad()
 

@@ -17,24 +17,38 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 
 			@render()
 
+		events: 
+			"click .delete-x": "deleteItem",
+
 		render: ->
 			@$el = $(@el)
 			@$el.template @templateDir+"/templates/partials-project/project-member-list-item.html",
 				{data:@viewData}, => @onTemplateLoad()
 			@
 
-		onTemplateLoad:->
-			console.log 'onTemplateLoad onTemplateLoad onTemplateLoad'
-			delay 1, =>
-				if (@view is "admin")
-					$dk = $("#"+@viewData.sid).dropkick
-						change: (value_, label_) =>
-							$.ajax(
-								type: "POST"
-								url: "/api/project/change_user_role"
-								data: { project_id:@projectID, user_id:@model.id, user_role:value_}
-							).done (response_)=>
-								if (response_.msg.toLowerCase() == "ok")
-									$dk = null
-									@model.set('roles', [value_])
-					console.log $dk
+		onTemplateLoad:-> 
+			if (@view is "admin")
+				delay 1, => @addDropKick()
+
+		addDropKick:->
+			$("#"+@viewData.sid).dropkick
+				change: (value_, label_) =>
+					$.ajax(
+						type: "POST"
+						url: "/api/project/change_user_role"
+						data: { project_id:@projectID, user_id:@model.id, user_role:value_}
+					).done (response_)=>
+						if (response_.msg.toLowerCase() == "ok")
+							@model.set('roles', [value_])
+
+		deleteItem:->
+			$.ajax(
+				type: "POST"
+				url: "/api/project/remove_member"
+				data: { project_id:@projectID, user_id:@model.id}
+			).done (response_)=>
+				if (response_.msg.toLowerCase() == "ok")
+					c = @model.collection
+					console.log '@model.collection',c
+					@model.collection.remove @model
+					console.log '@model.collection',c

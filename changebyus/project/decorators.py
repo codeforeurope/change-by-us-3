@@ -3,6 +3,7 @@
 from functools import wraps
 from .models import Project, Roles, UserProjectLink, ACTIVE_ROLES
 from ..helpers.flasktools import *
+from .helpers import _get_user_roles_for_project
 
 from flask import g, request, current_app
 

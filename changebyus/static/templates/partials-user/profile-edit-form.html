@@ -115,9 +115,25 @@
                 </div>
                 <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div>
-        </div>
-        <div class="social-links">
-
+        </div>     
+        <div class="social-btns">
+            <label>Social</label>
+            <div class="twitter">
+                <div class="social-icon icon-twitter"></div>
+                <% if (data.twitter){ %> 
+                    <a href="/social/twitter/link" class="btn btn-medium btn-tertiary">Disconnect</a>
+                <% }else{ %>
+                    <a href="/social/twitter/link" class="btn btn-medium btn-primary">Connect</a>
+                <% } %>
+            </div>
+            <div class="facebook">
+                <div class="social-icon icon-facebook"></div>
+                <% if (data.facebook){ %> 
+                    <a href="/social/facebook/link" class="btn btn-medium btn-tertiary">Disconnect</a>
+                <% }else{ %>
+                    <a href="/social/facebook/link" class="btn btn-medium btn-primary">Connect</a>
+                <% } %>
+            </div>
         </div>
     </div>
 

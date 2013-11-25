@@ -44,7 +44,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         _this.projectCalenderView = new ProjectCalenderView(config);
         _this.projectMembersView = new ProjectMembersView({
           collection: projectMembersCollection,
-          view: "admin"
+          view: "admin",
+          projectID: _this.model.id
         });
         _this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
         _this.projectDiscussionsView.on('discussionClick', function(arg_) {

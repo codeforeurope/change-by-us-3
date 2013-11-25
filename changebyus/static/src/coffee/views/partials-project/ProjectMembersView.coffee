@@ -7,12 +7,14 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			members:[]
 			$teamList: null
 			$memberList: null
+			projectID:0
 			view:"public"
 
 			initialize: (options) ->
 				@isDataLoaded = options.isDataLoaded || @isDataLoaded
 				@view         = options.view || @view
-
+				@projectID    = options.projectID || @projectID
+				console.log 'options',options
 				ProjectSubView::initialize.call(@, options) 
 
 			render: ->
@@ -27,35 +29,47 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$teamList   = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
 
+				@collection.on('change:roles', =>@addAll())
+
 				if (@view is "public") and (@collection.length > 0) then @onCollectionLoad()
 
 				onPageElementsLoad()
 
 			# override in subview
 			addAll: -> 
-				# console.log "addAll @collection >> ",@collection, @collection.models.length
+				@team = []
+				@members = []
+
+				console.log '@collection',@collection
 				@collection.each (model) => 
-					if "Project Owner" in model.attributes.roles or "Organizer" in model.attributes.roles
-						@team.push model
-					else
+					console.log 'model.attributes.roles',model.attributes.roles
+					if ("MEMBER" in model.attributes.roles) or ("Member" in model.attributes.roles)
 						@members.push model
+					else
+						@team.push model
+
+				@$teamList.html('')
+				@$memberList.html('')
+
+				if @team.length is 0 then @$teamList.parent().parent().hide() else @$teamList.parent().parent().show()
+				if @members.length is 0 then @$memberList.parent().parent().hide() else @$memberList.parent().parent().show()
+
+				console.log @members.length,@$memberList.parent()
 
 				@addTeam(model) for model in @team
 				@addMember(model) for model in @members
 
-				if @members.length > 0 then @$memberList.parent().show()
-
-				ProjectSubView::addAll.call(@, options) 
+				ProjectSubView::addAll.call(@) 
 				@isDataLoaded = true
 
 			addTeam: (model_) -> 
 				#to do 
 				console.log 'addTeam model_',model_
-				view = new ProjectMemberListItemView({model:model_, view:@view})
+				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
 				@$teamList.append view.el
 
 			addMember: (model_) -> 
 				#to do 
 				console.log 'addMember model_',model_
-				view = new ProjectMemberListItemView({model:model_, view:@view})
+				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
 				@$memberList.append view.el

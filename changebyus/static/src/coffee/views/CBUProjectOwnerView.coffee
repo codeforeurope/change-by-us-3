@@ -63,7 +63,7 @@ define ["underscore",
 						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
 						@projectCalenderView       = new ProjectCalenderView(config) 
-						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin"})
+						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
 						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>

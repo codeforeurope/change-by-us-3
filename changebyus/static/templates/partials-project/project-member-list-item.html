@@ -24,16 +24,25 @@
     </div>
     <div class="member-roles grey">
         <% if (data.view == "admin"){ %>  
-            <% if (data.roles == "Owner"){ %>
+            <% console.log('data',data) %>
+            <% if (data.roles == "OWNER"){ %>
             Project Owner
             <% }else{ %>
-                <select name="category" id="<%= data.id %>">
+                <select name="category" id="<%= data.sid %>">
                 <% _.each(["Organizer", "Member"], function(i) { %>
-                    <% if (i in data.roles){ %>
-                        <option value="<%= i %>" selected><%= i %></option>
-                    <% }else{ %>
-                        <option value="<%= i %>"><%= i %></option>
-                    <% } %>
+                     <% var roleMatch = false %>
+                     <% _.each(data.roles, function(r) { %>
+                        <% if (i.toUpperCase() == r.toUpperCase()){ %>
+                             <% console.log(i,r) %>
+                             <% roleMatch = true %>
+                        <% } %>
+                     <% }) %>
+                    
+                     <% if (roleMatch){ %>
+                            <option value="<%= i %>" selected><%= i %></option>
+                     <% }else{ %>
+                            <option value="<%= i %>"><%= i %></option>
+                     <% } %>
                 <% }); %>
                 </select>
             <% } %>
@@ -42,6 +51,6 @@
         <% } %>
     </div>
     <% if (data.view == "admin"){ %>  
-        <div class="close-x"></div>
+        <div class="delete-x"></div>
     <% } %>
 </div>

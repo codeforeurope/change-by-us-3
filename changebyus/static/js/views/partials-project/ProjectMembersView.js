@@ -62,13 +62,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$teamList.parent().parent().hide();
       } else {
         this.$teamList.parent().parent().show();
+        this.$teamList.parent().parent().find('h4').html(this.team.length + ' Person Team');
       }
       if (this.members.length === 0) {
         this.$memberList.parent().parent().hide();
       } else {
         this.$memberList.parent().parent().show();
+        this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
-      console.log(this.members.length, this.$memberList.parent());
       _ref = this.team;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         model = _ref[_i];

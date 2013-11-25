@@ -337,8 +337,16 @@
     }
     .member-description{ 
       float: left; 
-      margin-top: 15px;
+      //margin-top: 15px;
       width: 505px;
+      height: 80px;
+      display: table;
+
+      span{
+        height: 100%;
+        vertical-align: middle;
+        display: table-cell;
+      }
     }
     .member-roles{ 
       float: left;

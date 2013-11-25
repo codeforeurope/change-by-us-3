@@ -1,6 +1,6 @@
 <div class="project-member clearfix">
     <div class="mail-icon">
-        <% if (data.email){ %>
+        <% if (data.public_email){ %>
             <a href="mailto:<%= data.email %>">
                 <img src="/static/img/mail_icon.png">
             </a>
@@ -19,8 +19,7 @@
         <%= data.last_name %>
     </div>
     <div class="member-description">
-        description
-        <%= data.description %>
+        <span><%= data.bio %></span> 
     </div>
     <div class="member-roles grey">
         <% if (data.view == "admin"){ %>  

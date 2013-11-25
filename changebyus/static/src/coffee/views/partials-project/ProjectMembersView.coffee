@@ -52,10 +52,17 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$teamList.html('')
 				@$memberList.html('')
 
-				if @team.length is 0 then @$teamList.parent().parent().hide() else @$teamList.parent().parent().show()
-				if @members.length is 0 then @$memberList.parent().parent().hide() else @$memberList.parent().parent().show()
+				if @team.length is 0 
+					@$teamList.parent().parent().hide()
+				else
+					@$teamList.parent().parent().show()
+					@$teamList.parent().parent().find('h4').html(@team.length+' Person Team')
 
-				console.log @members.length,@$memberList.parent()
+				if @members.length is 0
+					@$memberList.parent().parent().hide()
+				else
+					@$memberList.parent().parent().show()
+					@$memberList.parent().parent().find('h4').html(@members.length+' Members')
 
 				@addTeam(model) for model in @team
 				@addMember(model) for model in @members

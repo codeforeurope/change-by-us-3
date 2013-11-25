@@ -480,7 +480,7 @@ def remove_project_user():
                                                                                   project_id)
     current_app.logger.info(infoStr)
 
-    return leave_project(project_id=project_id, user_id=user_id)
+    return _leave_project(project_id=project_id, user_id=user_id)
 
 
 class LeaveProjectForm(Form):
@@ -509,7 +509,7 @@ def api_leave_project():
 
     project_id = request.form.get('project_id')
 
-    return leave_project(project_id=project_id, user_id=g.user.id)
+    return _leave_project(project_id=project_id, user_id=g.user.id)
 
 
 @project_api.route('/am_i_a_member/<project_id>')

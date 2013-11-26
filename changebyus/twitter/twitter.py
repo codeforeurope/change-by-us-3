@@ -156,8 +156,6 @@ def twitter_link():
         next=request.args.get('next') or request.referrer or None,
         _external=True))
 
-#url_for('stream_view.dashboard_view')+"#profile"
-
 @twitter_view.route('/disconnect')
 @login_required
 def twitter_disconnect():
@@ -229,8 +227,7 @@ def twitter_authorized(resp):
         current_app.logger.warning(warningStr)
 
         if g.user.is_authenticated():
-            # they were trying to link
-            # return redirect(url_for('stream_view.dashboard_view'))
+            # they were trying to link 
             host = request.host_url[:-1]
             return redirect(host+url_for('frontend_view.social_redirect_view', url='reload'))
         else:
@@ -267,8 +264,7 @@ def twitter_authorized(resp):
 
             debugStr = "Linked user {0} with twitter id {1}".format(g.user.id, twitter_id)
             current_app.logger.debug(debugStr)
-            # or wherever they were originally from
-            # return redirect(url_for('stream_view.dashboard_view')+"#profile")
+            # or wherever they were originally from 
             return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
         else:
@@ -276,8 +272,7 @@ def twitter_authorized(resp):
             errStr = "Unable to link user {0} with twitter id {1}".format(g.user.id, twitter_id)
             # or wherever they were originally from
             current_app.logger.error(errStr)
-
-        # return redirect(url_for('stream_view.dashboard_view'))
+ 
         return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
 
@@ -321,8 +316,7 @@ def twitter_authorized(resp):
 
         login_user(user.first())
 
-        # user logged in
-        # return redirect(url_for('frontend_view.home'))
+        # user logged in 
         return redirect(url_for('frontend_view.social_redirect_view', url=' '))
 
     

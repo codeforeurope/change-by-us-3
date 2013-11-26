@@ -156,6 +156,7 @@ def twitter_link():
         next=request.args.get('next') or request.referrer or None,
         _external=True))
 
+#url_for('stream_view.dashboard_view')+"#profile"
 
 @twitter_view.route('/disconnect')
 @login_required
@@ -267,7 +268,8 @@ def twitter_authorized(resp):
             debugStr = "Linked user {0} with twitter id {1}".format(g.user.id, twitter_id)
             current_app.logger.debug(debugStr)
             # or wherever they were originally from
-            return redirect(url_for('stream_view.dashboard_view')+"#profile")
+            # return redirect(url_for('stream_view.dashboard_view')+"#profile")
+            return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
         else:
 

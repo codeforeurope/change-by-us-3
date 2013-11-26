@@ -27,7 +27,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       });
     },
     onTemplateLoaded: function() {
-      $(".social-btns a").click(function(e) {
+      $(".social-btns .btn-primary").click(function(e) {
         var url;
         e.preventDefault();
         url = $(this).attr("href");

@@ -82,7 +82,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     toggleSubView: function() {
       var view;
       view = window.location.hash.substring(1);
-      if (view === "facebook") {
+      if (view === "facebook" || view === "twitter") {
         $('.social-signup').show();
         $('.init-signup').hide();
         return this.getSocialInfo();
@@ -94,38 +94,40 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     getSocialInfo: function() {
       var $socialForm, $socialSignup,
         _this = this;
-      if (this.socialInfo !== null) {
-        return;
-      }
-      $socialSignup = $(".social-signup");
-      $socialForm = $socialSignup.find("form");
-      $socialForm.find("input, textarea").attr("disabled", "disabled");
-      if (this.ajax) {
-        this.ajax.abort();
-      }
-      return this.ajax = $.ajax({
-        type: "GET",
-        url: "/api/user/socialinfo"
-      }).done(function(response_) {
-        console.log("response_", response_);
-        if (response_.msg.toLowerCase() === "ok") {
-          _this.setSocialInfo(response_.data);
+      if (!this.socialInfo) {
+        $socialSignup = $(".social-signup");
+        $socialForm = $socialSignup.find("form");
+        $socialForm.find("input, textarea").attr("disabled", "disabled");
+        if (this.ajax) {
+          this.ajax.abort();
         }
-        return $socialForm.find("input, textarea").removeAttr("disabled");
-      });
+        return this.ajax = $.ajax({
+          type: "GET",
+          url: "/api/user/socialinfo"
+        }).done(function(response_) {
+          console.log("response_", response_);
+          if (response_.msg.toLowerCase() === "ok") {
+            _this.setSocialInfo(response_.data);
+          }
+          return $socialForm.find("input, textarea").removeAttr("disabled");
+        });
+      }
     },
     setSocialInfo: function(data_) {
       var $socialAvatar, $socialSignup, img, name;
-      img = data_.fb_image !== "" ? data_.fb_image : data_.twitter_image;
-      name = data_.fb_name !== "" ? data_.fb_name : data_.twitter_name;
+      this.socialInfo = data_;
+      img = this.socialInfo.fb_image !== "" ? this.socialInfo.fb_image : this.socialInfo.twitter_image;
+      name = this.socialInfo.fb_name !== "" ? this.socialInfo.fb_name : this.socialInfo.twitter_name;
       $socialAvatar = $('.social-avatar');
       $socialSignup = $(".social-signup");
       $socialAvatar.find('img').attr('src', img);
       $socialAvatar.find('span').html(name);
-      $socialSignup.find('input[name="id"]').val(data_.id);
-      $socialSignup.find('input[name="email"]').val(data_.email);
-      $socialSignup.find('input[name="display_name"]').val(data_.display_name);
-      return console.log(data_, $('.social-avatar').find('img'));
+      $socialSignup.find('input[name="id"]').val(this.socialInfo.id);
+      if (this.socialInfo.email !== "None") {
+        $socialSignup.find('input[name="email"]').val(this.socialInfo.email);
+      }
+      $socialSignup.find('input[name="display_name"]').val(this.socialInfo.display_name);
+      return console.log(this.socialInfo, $('.social-avatar').find('img'));
     }
   });
 });

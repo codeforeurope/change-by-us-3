@@ -22,7 +22,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						
 
 			onTemplateLoaded:->
-				$(".social-btns a").click (e) ->
+				$(".social-btns .btn-primary").click (e) ->
 					e.preventDefault()
 					url = $(this).attr("href")
 					popWindow url

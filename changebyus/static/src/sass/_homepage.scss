@@ -104,7 +104,7 @@
 .homepage-footer {
   width: 100%; 
   background-color: #737373;
-  height: 340px; 
+  //height: 340px; 
   margin-top: 50px;
   text-align: center;
 
@@ -115,6 +115,15 @@
     padding: 40px;
     color: $white;
   } 
+}
+
+.logged-in{
+  .homepage-footer {
+    padding-top: 50px;
+    h2{display: none;}
+    a[href='/signup']{display: none;}
+    a[href='/discover']{ background-color:$primaryColor;}
+  }
 }
 
 .btn {
@@ -133,7 +142,8 @@
 
 .icons-wrapper{
   width: 675px;
-  margin: 60px auto 0; 
+  margin: 60px auto 0;
+  padding-bottom: 20px;
   @include bebas;
 }
 

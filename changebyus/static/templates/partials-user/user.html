@@ -5,7 +5,7 @@
         </div>
         <div class="user-avatar">
             <% if (data.image_url_round_medium){ %>
-                <img src="<%=  data.image_url_round_medium %>" class="circle">
+                <img src="<%= data.image_url_round_medium %>" class="circle" alt="User Avatar">
             <% } %>
         </div>
         <div class="user-info">
@@ -13,10 +13,10 @@
                 <%= data.display_name %> 
                 <% if (data.public_email){ %>
                     <a href="mailto:<%= data.email %>">
-                        <img src="/static/img/profile_email.png">
+                        <img src="/static/img/profile_email.png" alt="Email">
                     </a>
                 <% }else{ %>
-                    <img src="/static/img/profile_email_deactive.png">
+                    <img src="/static/img/profile_email_deactive.png" alt="Email">
                 <% } %> 
             </h1>
 

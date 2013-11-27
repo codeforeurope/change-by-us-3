@@ -2,14 +2,14 @@
     <div class="mail-icon">
         <% if (data.public_email){ %>
             <a href="mailto:<%= data.email %>">
-                <img src="/static/img/mail_icon.png">
+                <img src="/static/img/mail_icon.png" alt="Email">
             </a>
         <% }else{ %>
-               <img src="/static/img/mail_icon_deactive.png">
+               <img src="/static/img/mail_icon_deactive.png" alt="Email">
         <% } %>
     </div>
     <div class="user-avatar">
-        <img src="<%= data.image_url_round_small %>" class="circle">
+        <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avatar">
     </div>
     <div class="member-title">
         <%= data.display_name %>

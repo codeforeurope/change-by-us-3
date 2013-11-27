@@ -6,9 +6,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 			@render()
 
 		render: ->
-			@$el = $("<div class='project-preview'/>")
+			@$el = $("<div class='modal-fullscreen dark'/>") 
 			@$el.template @templateDir + "/templates/partials-project/project-create-modal.html",
-				data: @viewData, ->
-
+				data: @viewData,  => @onTemplateLoad()
 			$(@parent).append @$el 
 
+			onTemplateLoad:->
+				@$el.find(".close-x").click => 
+					console.log('close')
+					@$el.remove()

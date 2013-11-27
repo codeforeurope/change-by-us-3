@@ -13,8 +13,11 @@
     <link href="/static/css/wysiwyg.css" rel="stylesheet"> 
 </head>
 
+{% if login == false %}
+<body class="logged-in">
+{% else %}
 <body>
-
+{% endif %}
     <div class="topnav clearfix">
       <div class="body-container">
           <!-- masthead -->

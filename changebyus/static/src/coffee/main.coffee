@@ -30,7 +30,6 @@ require.config
 		"user-view": "views/CBUUserView"
 		"dashboard-view": "views/CBUDashboardView"
 		"stream-view": "views/CBUStreamView"
-		"utils": "utils/Utils"
 
 require ["jquery", 
 		"backbone", 
@@ -43,8 +42,7 @@ require ["jquery",
 		 "user-view", 
 		 "dashboard-view", 
 		 "stream-view",
-		 "create-view", 
-		 "utils"], 
+		 "create-view"], 
 	($, 
 	 Backbone, 
 	 CBUMainView, 
@@ -56,8 +54,7 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
-	 ProjectCreateView, 
-	 Utils) ->
+	 ProjectCreateView) ->
 		$(document).ready ->
 			config = parent: "#frame" 
 

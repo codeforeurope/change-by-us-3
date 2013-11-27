@@ -116,12 +116,8 @@
     
     span{text-align: left;}
   }
-
-  .btn{ background-color: $gray59; }
-  .btn-xlarge{ background-color: $secondaryColor; }
-
+  
   textarea{ @include asap; }
-
 }
 
 .create-modal { @extend .modal; } 
@@ -133,12 +129,16 @@
     width: 494px;
   }
 } 
+
 .success-modal { 
   @extend .modal;
   padding: 0;
   width: 730px;
   
-  h1{font-size: 54px;}
+  h1{
+    font-size: 54px;
+    margin: 24px auto;
+  }
   span{font-size: 24px;}
   
   .btn-xlarge{width: 100% !important;}
@@ -148,4 +148,9 @@
   width: 490px;
   text-align: right;
   margin: auto;
+}
+
+.modal-feedback{
+  font-size: 22px;
+  margin-bottom: 32px;
 }

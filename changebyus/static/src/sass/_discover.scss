@@ -1,0 +1,152 @@
+/********************************************************  
+ DISCOVER 
+ ********************************************************/
+.search-projects {
+  width: 290px;
+  margin-right: 10px;
+  z-index: 1;
+  /*float: left;*/
+}
+
+.search-forms {
+  float: left;
+  height: 94px;
+  z-index: 1;
+  .btn {
+    margin-top: 37px;
+    padding: 20px; 
+    font-size: 24px; 
+    border-radius: 4px;
+  }
+}
+
+.search-catagories{
+  display: none;
+  margin-top: -15px;
+  width: 290px;
+  @include box-skin;
+
+  li{
+    padding:10px 20px;
+    cursor: pointer;
+  }
+
+  h3{margin-left: 10px;} 
+
+}
+
+.search-filters{
+  span{ float: left; }
+}
+.search-toggles{
+  float: left;
+  width: 420px;
+  margin-right: 10px;
+}
+
+.filter-within{
+  float: left;
+  
+  select{width: 100px !important;}
+  
+  .dk_container {
+    float: left;
+    width: 120px;
+  }
+}
+
+
+.pill-toggle{
+  @include box-skin;
+  float: left;
+  margin-right: 10px;
+  width: 200px;
+}
+
+.pill-selection{
+  color: $gray80;
+  float: left;
+  width: 50%;
+  text-align: center;
+  padding: 10px;
+  cursor: pointer;
+
+  &.active{
+    background: $gray80;
+    color: $black;
+  }
+ 
+  &:first-child{
+    border-right: 1px solid $grayBorder;
+  }
+}
+
+.banner-search {
+  width: 100%;
+  margin-bottom: 20px;
+  
+  h3{text-align: left;}
+}
+
+.discover-header-right, .dashboard-header-right{
+  margin-left: 15px;
+  width: 230px;
+  float: right;
+
+  .btn {
+    width: 100%;
+    height: auto;
+    line-height: 20px;
+    margin: auto;
+    padding: 20px; 
+    font-size: 24px;
+    border-radius: 4px;
+  }
+}
+
+.discover-header-right{
+  height: 200px;
+  .cities{
+    @include box-skin;
+    margin-top: 10px;
+    
+    li{
+      padding: 10px;
+      &:last-child{border-top: 1px solid $grayBorder;  }
+    }
+  }
+}
+
+
+.search-box {
+  margin-top: 15px;
+  border: 1px solid #dcdcdc;
+  width: 730px;
+  height: auto;
+  background-color: $white;
+  border-radius: 4px;
+  
+  >div{padding: 0 15px;}
+
+  .input-label {
+    font-size: 14px;
+    color: #8a8a8a;
+  }
+
+  .title {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 40px;
+  }
+
+  .search-filters{ border-top: 1px solid $grayBorder; }
+}
+
+.search-box-geo {
+  width: 760px;
+  height: 90px;
+  border: 1px solid #dcdcdc;
+  border-top: none;
+  background-color: #fafafa;
+  border-radius: 4px;
+}

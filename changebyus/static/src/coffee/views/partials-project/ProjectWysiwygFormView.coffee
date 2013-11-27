@@ -41,11 +41,13 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 				
 				@$el.template @templateDir+url,
-					{data: @viewData}, => 
-						@ajaxForm()
-						onPageElementsLoad()
-
+					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
+
+			onTemplateLoad:->
+				@trigger 'ON_TEMPLATE_LOAD'
+				@ajaxForm()
+				onPageElementsLoad()
 
 			ajaxForm: -> 
 				# AJAXIFY THE FORM

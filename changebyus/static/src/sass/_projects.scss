@@ -18,6 +18,7 @@
   font-weight: bold;
   background-position: left center;
   background-repeat: no-repeat;
+  
   a{ 
     padding-left: 30px;
     @include text-shadow(rgba(0,0,0,.5) 0 0 5px);
@@ -25,8 +26,8 @@
 }
 
 .public-view{background-image: url(../img/icon_view_project.png);}
-.flag-project{background-image: url(../img/icon_flag.png);}
 
+.flag-project{background-image: url(../img/icon_flag.png);}
 
 .projects {
   padding: none;
@@ -52,6 +53,7 @@
       @include opacity(1);
     }
   }
+
   .side-tab{
     position: absolute;
     top:20px;
@@ -60,13 +62,12 @@
     padding:10px;
     color: $white; 
     z-index: 1;
-
     @include border-top-right-radius(4px);
     @include border-bottom-right-radius(4px);
   }
+
   .hover-overlay{
-    text-align: center;
-    //display: none;
+    text-align: center; 
     background-color: rgba(255,255,255,0.5);
     width:100%;
     height: 100%;
@@ -78,6 +79,7 @@
     @include transition-property(opacity);
     @include transition-duration(.1s);
   }
+
   .btn{ 
     padding: 15px 20px;
     margin-top:150px; 
@@ -111,6 +113,7 @@
   bottom: 10px;
   left: 10px;
   @include font-styling("bebas", 18px, $gray65 );
+  
   a{color: #868686;}
 }
 
@@ -126,355 +129,353 @@
   }
 }
 
-  .project-header{
-    margin-top: 12px;
+.project-header{
+  margin-top: 12px;
+}
+
+.project-section-header{
+  height: 120px;
+  z-index: 1;
+  
+  h2{margin-top: 50px;}
+}
+
+.feature-image {
+  width: 100%;
+  height: 430px;
+  position: relative;
+
+  h1{
+    @include font-styling("asap", 48px, $white, "normal", "bold");
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
   }
 
-  .project-section-header{
-    height: 120px;
-    z-index: 1;
-    h2{margin-top: 50px;}
+  .circle{ background: $defaultGray;}
+
+  .preview{
+    position: absolute;
+    top:70px;
+    left: 30px;
+    width: 249px;
+    height: 249px;
+    border: 4px solid #fff;  
+    @include background-clip(padding-box);  
   }
 
-  .feature-image {
+  .project-location{
+    display: inline-block;
+    @include font-styling("asap", 21px, $white );
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
+  }
+
+  .project-footer{
+    position: absolute;
+    left: 310px;
+    top: 257px;
+    width: 620px;
+  }
+
+  .overlay-title {
+    left: 310px;
     width: 100%;
-    height: 430px;
-    position: relative;
+    top: 100px;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+  }
 
-    h1{
-      @include font-styling("asap", 48px, $white, "normal", "bold");
-      @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
-    }
+  .overlay-description {
+    position: absolute; 
+    top: 160px; 
+    left: 310px;
+    width: 650px;
+    line-height: 24px;
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
+    @include font-styling("merriweather", 18px, $white );
+  }
 
-    .circle{ background: $defaultGray;}
-
-    .preview{
-      position: absolute;
-      top:70px;
-      left: 30px;
-      width: 249px;
-      height: 249px;
-      border: 4px solid #fff;  
-      @include background-clip(padding-box);  
-    }
-
-    .project-info{
-
-    }
-
-    .project-location{
-      display: inline-block;
-      @include font-styling("asap", 21px, $white );
-      @include text-shadow(0 1px 5px rgba(0,0,0,.75));
-    }
-
-    .project-footer{
-      position: absolute;
-      left: 310px;
-      top: 257px;
-      width: 620px;
-    }
-
+  &.slim{ 
     .overlay-title {
-      left: 310px;
-      width: 100%;
-      top: 100px;
-      padding: 0;
-      margin: 0;
-      position: absolute;
+      left: 30px;
+      top: 40px;
+      line-height: 1;
     }
 
-    .overlay-description {
-      position: absolute; 
-      top: 160px; 
-      left: 310px;
-      width: 650px;
-
-      @include text-shadow(0 1px 5px rgba(0,0,0,.75));
-      @include font-styling("merriweather", 18px, $white );
-      line-height: 24px;
-    }
-
-    &.slim{ 
-      .overlay-title {
-        left: 30px;
-        top: 40px;
-        line-height: 1;
-        
-      }
-      height: 167px;
-    }
+    height: 167px;
   }
+}
+
+.tabs{ }
+
+.content-header{ margin-top: 24px; }
+
+.content-wrapper {
+  padding: 36px;
+  margin-top: 15px;
+  margin-bottom: 30px;
+  height: auto;
+  @include box-skin;
+
+  a{color: $black;}
   
-  .tabs{
- 
+  p{
+    @include font-styling("asap", 20px, $gray20, "normal", "regular");
+    margin-bottom: 28px;
   }
 
-  .content-header{
-    margin-top: 24px;
+  ul.bordered-item{
+    >li{
+      padding: 20px;
+      border-bottom: 1px solid #dcdcdc;
+      &:last-child{border: none;}
+    }
   }
- 
-  .content-wrapper {
-    padding: 36px;
-    margin-top: 15px;
-    margin-bottom: 30px;
-    height: auto;
-    overflow: hidden;
-    @include box-skin;
+  &.thin-pad{padding: 20px;}
+}
 
-    a{color: $black;}
+h2.admin-title{ 
+  @include font-styling("asap", 32px, $gray20, "normal", "regular");
+  margin: 0 0 16px;
+}
+
+.content-left, .content-right, .post-right, .reply-left, .reply-right{
+  float: left;  
+}
+
+.project-left{ width: 80px; }
+
+.content-left{ width: 64%; } 
+
+.content-right{
+  width: 36%;
+  height: 100%;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.no-results{
+  h3{
+    font-weight: normal;
+    font-size: 32px; 
+  }
+}
+
+.large-icon{ margin-top: 50px; }
+
+.user-avatar{
+  float: left;
+  width: 70px;
+  margin-right: 20px;
+}
+
+.update-content{
+  float: right;
+  width: 880px;
+
+  input[type=button]{background-color: $graySupport;}
+  input[type=submit]{
+    background-color: $secondaryColor;
+    margin-left: 16px;
+  }
     
-    p{
-      @include font-styling("asap", 20px, $gray20, "normal", "regular");
-      margin-bottom: 28px;
-    }
- 
-    ul.bordered-item{
-      >li{
-        padding: 20px;
-        border-bottom: 1px solid #dcdcdc;
-        &:last-child{border: none;}
-      }
-    }
-    &.thin-pad{padding: 20px;}
+  .tr{
+    float: right;
+    margin-top: 10px;
   }
+}
 
-  h2.admin-title{ 
-    @include font-styling("asap", 32px, $gray20, "normal", "regular");
-    margin: 0 0 16px;
-  }
+.post-title, .reply-title{
+  color: $gray20;
+}
 
-  .content-left, .content-right, .post-right, .reply-left, .reply-right{
-    float: left;  
-  }
+.post-content, .reply-content{
+  @include font-styling("merriweather", 14px, $gray20);
+}
 
-  .project-left{ 
-    width: 80px;
-  }
- 
-  .content-left{
-    width: 64%;
+.post-footer, .reply-date{ 
+  margin-top: 10px;
+  @include font-styling("asap", 14px, $gray53);
+}
+
+.post-replies{ padding: 0; }
+
+.reply-toggle{
+  .reply{
+    cursor: pointer;
+    text-decoration: underline;
   } 
-  
-  .content-right{
-    width: 36%;
-    height: 100%;
-    text-align: center;
-    vertical-align: middle;
+
+  .jq-date{
+    text-decoration: none;
   }
-    .no-results{
-      h3{
-        font-weight: normal;
-        font-size: 32px; 
-      }
+}
+
+.post-reply-form{
+  .input-xxlarge{
+    height: 32px;
+    width: 568px;
+  }
+}
+
+.reply-right{
+  margin-top: 12px;
+  width: 686px;
+}
+
+.project-member{
+  .mail-icon{ 
+    float: left; 
+    width: 60px;
+  
+    img{ margin-top: 20px; }
+  }
+  
+  .member-title{  
+    float: left;  
+    margin-top: 15px; 
+    width: 175px;
+    padding-right: 15px;
+  }
+  
+  .member-description{ 
+    float: left;  
+    width: 505px;
+    height: 80px;
+    display: table;
+
+    span{
+      height: 100%;
+      vertical-align: middle;
+      display: table-cell;
     }
+  }
+  .member-roles{ 
+    float: left;
+    margin-top: 25px;
+    width: 120px; 
+  }
+  .aka{ @include font-styling("asap", 15px, $gray80, "italic"); }
+  .grey{ @include font-styling("asap", 15px, $gray80); }
+}
 
-    .large-icon{ margin-top: 50px; }
+.admin{
+  .project-member{
+    .member-description{ width: 475px; }
+    .dk_container{width: 100%;}
+   
+    select{width: 100%;}
+  }
+}
 
-    .user-avatar{
-      float: left;
-      width: 70px;
-      margin-right: 20px;
+/******************************
+ * OWNER VIEW
+ ******************************/
+.update-wrapper{
+   input[type=submit]{background-color: $secondaryColor}
+   input[type=button]{background-color: $graySupport}
+}
+
+.share-select{ margin-bottom: 20px; }
+
+.share-toggle-wrapper{
+  float: left;
+  height: 25px;
+  width: 205px;
+  z-index: 1;
+  top:-7px;
+  left: 5px;
+}
+
+.share-toggle{
+  cursor: pointer; 
+  padding: 5px;
+  @include box-skin;
+  
+  .caret{
+    float: right;
+    margin-top: 8px;
+    margin-right: 5px;
+  }
+}
+.share-options{
+  padding: 5px 5px 0;
+  @include box-skin;
+  
+  .styledRadio, .styledCheckbox{float: left;}
+  
+  label{ 
+    height: 15px; 
+    font-size: 16px;
+    line-height: 15px;
+    margin: 0 0 12px 24px;  
+
+    &:first-child{
+      margin-top: 0;
+    }
+  } 
+}
+
+.discussion{ 
+
+  .description{
+    float: left;
+    
+    h5{
+      margin-bottom: 0;
+      @include font-styling("asap", 18px, $gray20, "normal", "bold" );
     }
     
-    .update-content{
-      float: right;
-      width: 880px;
-      .tr{
-        float: right;
-        margin-top: 10px;
-      }
-      input[type=submit]{background-color: $secondaryColor}
-      input[type=button]{background-color: $graySupport}
-    }
-    .post-title, .reply-title{
-      color: $gray20;
-    }
-    .post-content, .reply-content{
+    span{
       @include font-styling("merriweather", 14px, $gray20);
     }
-    .post-footer, .reply-date{ 
-      margin-top: 10px;
-      @include font-styling("asap", 14px, $gray53);
-    }
-    .post-replies{
-      padding: 0; 
-    }
-
-  .reply-toggle{
-    .reply{
-      cursor: pointer;
-      text-decoration: underline;
-    } 
-    .jq-date{
-      text-decoration: none;
-    }
+  }
+  
+  .date{
+    float: right;
+    margin-top: 20px;
+    margin-right: 55px;
+    @include font-styling("asap", 15px, $gray65);
   }
 
-  .post-reply-form{
-    .input-xxlarge{
-      height: 32px;
-      width: 568px;
-    }
+  .delete,.close{
+    margin-top: 20px;
+    margin-right: 20px; 
   }
-
-  .reply-right{
-    margin-top: 12px;
-    width: 670px;
-  }
-
-  .project-member{
-    .mail-icon{ 
-      float: left; 
-      width: 60px;
-      img{ margin-top: 20px; }
-    }
-    .member-title{  
-      float: left;  
-      margin-top: 15px; 
-      width: 175px;
-      padding-right: 15px;
-    }
-    .member-description{ 
-      float: left; 
-      //margin-top: 15px;
-      width: 505px;
-      height: 80px;
-      display: table;
-
-      span{
-        height: 100%;
-        vertical-align: middle;
-        display: table-cell;
-      }
-    }
-    .member-roles{ 
-      float: left;
-      margin-top: 25px;
-      width: 120px; 
-    }
-    .aka{ @include font-styling("asap", 15px, $gray80, "italic"); }
-    .grey{ 
-        //@include opacity(.5); // layer alpha
-        @include font-styling("asap", 15px, $gray80);
-    }
-  }
-
-  .admin{
-    .project-member{
-      .member-description{ width: 475px; }
-      .dk_container{width: 100%;}
-      select{width: 100%;}
-    }
-  }
-
-  /******************************
-   * OWNER VIEW
-   ******************************/
-  .update-wrapper{
-     input[type=submit]{background-color: $secondaryColor}
-     input[type=button]{background-color: $graySupport}
-  }
-
-  .share-select{
-    margin-bottom: 20px;
-  }
-  .share-toggle-wrapper{
-    float: left;
-    height: 25px;
-    width: 205px;
-    z-index: 1;
-    top:-7px;
-    left: 5px;
-  }
-  .share-toggle{
-    cursor: pointer; 
-    padding: 5px;
-    @include box-skin;
-    .caret{
-      float: right;
-      margin-top: 8px;
-      margin-right: 5px;
-    }
-  }
-  .share-options{
-    padding: 5px;
-    @include box-skin;
-    .styledCheckbox{float: left;}
-    label{ 
-      height: 15px;
-      font-size: 16px;
-      line-height: 15px;
-      padding-left: 20px;
-      margin: 10px 10px; 
-      &:first-child{
-        margin-top: 0;
-      }
-    } 
-  }
-
-  .discussion{ 
-
-    .description{
-      float: left;
-      h5{
-        margin-bottom: 0;
-        @include font-styling("asap", 18px, $gray20, "normal", "bold" );
-      }
-      span{
-        @include font-styling("merriweather", 14px, $gray20);
-      }
-    }
-    
-    .date{
-      float: right;
-      margin-top: 20px;
-      margin-right: 55px;
-      @include font-styling("asap", 15px, $gray65);
-    }
-
-    .delete,.close{
-      margin-top: 20px;
-      margin-right: 20px; 
-    }
-  }
-
-  .fundraising-wrapper{
-    padding: 30px;
-    @include box-skin;
-    
-  }
-
-  .fundraising-left{
-    float: left;
-    width: 66%;
-     
-    span{
-      font-weight: bold;
-      color:$primaryColor;
-    }
-    
-    p{ margin-bottom: 24px; }
-  }
-
-  .fundraising-right{
-    float: left;
-    width: 33%;
-    text-align: center;
-  }
-
-  .project-update-form{
-    padding: 30px;
-    @include box-skin;
-    .btn-medium{
-      float: right;
-    }
-  }
-
-
-.body-container {
-  position: relative;
 }
+
+.fundraising-wrapper{
+  padding: 30px;
+  @include box-skin;
+}
+
+.fundraising-left{
+  float: left;
+  width: 66%;
+   
+  span{
+    font-weight: bold;
+    color:$primaryColor;
+  }
+  
+  p{ margin-bottom: 24px; }
+}
+
+.fundraising-right{
+  float: left;
+  width: 33%;
+  text-align: center;
+}
+
+.project-update-form{
+  padding: 30px;
+  @include box-skin;
+  .btn-medium{
+    float: right;
+  }
+}
+
+
+.body-container { position: relative; }
 
 .btn-large{
   font-weight: bold;
@@ -509,8 +510,8 @@
 
 .tabs-pane{
   img{vertical-align:initial;}
-  li a{ vertical-align: text-bottom; }
   li{
+    a{ vertical-align: text-bottom; }
     &.active {
       a{ display: none; }
     }
@@ -519,15 +520,13 @@
 
 .team-members{
   float: right;
-  width: auto;
-  //min-width: 150px;
+  width: auto; 
 
   a{ color: $black; }
 
   ul{ 
     float: right;
-    display: inline-block;
-    //margin-top: 20px;
+    display: inline-block; 
   }
 
   li{ 
@@ -536,85 +535,83 @@
     &:first-child{ margin-left: 0;}
   }
 }
-  .member-avatar{
-    width: 70px;  
-    cursor: pointer;
+.member-avatar{
+  width: 70px;  
+  cursor: pointer;
 
-    .circle{z-index: 1;}
-    
-    .mail-icon{
-      float: right;
-      margin-top: 5px;
-    } 
+  .circle{z-index: 1;}
+  
+  .mail-icon{
+    float: right;
+    margin-top: 5px;
+  } 
 
-    &:hover{
-      .member-popup{
-        visibility: visible;
-        @include opacity(1);
-        top:78px;
-      }
-    }  
-  }
-
-  .member-popup{
-    position: absolute;
-    visibility: hidden;
-    padding: 15px;
-    height: 75px;
-    width: 200px;
-    left: -110px;
-    top:58px;
-    @include opacity(0);
-    @include box-skin;
-    @include transition-property(opacity, top);
-    @include transition-duration(.1s);
-  }
-
-  .member-info{
-    span{
-      font-size: 14px;
-      color: #848484;
+  &:hover{
+    .member-popup{
+      visibility: visible;
+      @include opacity(1);
+      top:78px;
     }
-  }
-
-  .hover-padding{
-    position: absolute;
-    width: 50%;
-    height: 80px;
-    top:-80px;
-    right: 0;
-  }
-
-  .popup-arrow{
-    position: absolute;
-    @include box-border;
-    @include rotate(45deg);
-    background-color: $white;
-    border-bottom: none;
-    border-right: none;
-    width: 15px;
-    height: 15px;
-    top: -7px;
-    left: 69%;
-  }
-
-  .icon_share_angle{
-    float: left;
-    background: url(../img/icon_share_angle.png);
-    padding-left: 25px;
-    margin-right: 15px;
-    line-height: 40px;
-    background-repeat: no-repeat;
-    background-position: left center;
-  }
-
-  input[type="text"].input-slim{
-    width: 50%;
-    height: auto;
-  }
-
-iframe{
-  width: 100%;
+  }  
 }
+
+.member-popup{
+  position: absolute;
+  visibility: hidden;
+  padding: 15px;
+  height: 75px;
+  width: 200px;
+  left: -110px;
+  top:58px;
+  @include opacity(0);
+  @include box-skin;
+  @include transition-property(opacity, top);
+  @include transition-duration(.1s);
+}
+
+.member-info{
+  span{
+    font-size: 14px;
+    color: #848484;
+  }
+}
+
+.hover-padding{
+  position: absolute;
+  width: 50%;
+  height: 80px;
+  top:-80px;
+  right: 0;
+}
+
+.popup-arrow{
+  @include box-border;
+  @include rotate(45deg);
+  position: absolute;
+  background-color: $white;
+  border-bottom: none;
+  border-right: none;
+  width: 15px;
+  height: 15px;
+  top: -7px;
+  left: 69%;
+}
+
+.icon_share_angle{
+  float: left;
+  background: url(../img/icon_share_angle.png);
+  padding-left: 25px;
+  margin-right: 15px;
+  line-height: 40px;
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+
+input[type="text"].input-slim{
+  width: 50%;
+  height: auto;
+}
+
+iframe{ width: 100%; }
 
  

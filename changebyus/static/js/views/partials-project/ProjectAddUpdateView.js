@@ -12,51 +12,40 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onTemplateLoad: function() {
-      var $shareOptions, $shareToggle, $submit, form,
+      var form,
         _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
-      $("#post-update").click(function() {
-        return $("html, body").animate({
-          scrollTop: 0
-        }, "slow");
-      });
       this.$ul = this.$el.find('.updates-container ul');
       form = new ProjectWysiwygFormView({
         parent: "#update-form"
       });
-      $submit = form.$el.find('input[type="submit"]');
-      form.beforeSubmit = function(arr_, form_, options_) {
-        var share;
-        $submit.find("input, textarea").attr("disabled", "disabled");
-        share = [];
-        if ($("#twitter").prop('checked')) {
-          share.push('twitter');
-        }
-        if ($("#facebook").prop('checked')) {
-          share.push('facebook');
-        }
-        return arr_.push({
-          name: "social_sharing",
-          value: share,
-          type: "hidden",
-          required: false
+      return form.on('ON_TEMPLATE_LOAD', function() {
+        var $shareOptions, $shareToggle, $submit;
+        $("#post-update").click(function() {
+          return $("html, body").animate({
+            scrollTop: 0
+          }, "slow");
         });
-      };
-      form.success = function(response_) {
-        if (response_.success) {
-          _this.addModal(response_.data);
-        }
-        return console.log('response_', response_);
-      };
-      $shareOptions = $(".share-options");
-      $shareToggle = $(".share-toggle");
-      $shareToggle.click(function() {
-        return $shareOptions.toggleClass("hide");
-      });
-      return $('input:radio, input:checkbox').screwDefaultButtons({
-        image: 'url("/static/img/black-check.png")',
-        width: 18,
-        height: 18
+        $submit = form.$el.find('input[type="submit"]');
+        form.beforeSubmit = function(arr_, form_, options_) {
+          return $submit.find("input, textarea").attr("disabled", "disabled");
+        };
+        form.success = function(response_) {
+          if (response_.success) {
+            _this.addModal(response_.data);
+          }
+          return console.log('response_', response_);
+        };
+        $shareOptions = $(".share-options");
+        $shareToggle = $(".share-toggle");
+        $shareToggle.click(function() {
+          return $shareOptions.toggleClass("hide");
+        });
+        return $('input:radio, input:checkbox').screwDefaultButtons({
+          image: 'url("/static/img/black-check.png")',
+          width: 18,
+          height: 18
+        });
       });
     },
     addAll: function() {

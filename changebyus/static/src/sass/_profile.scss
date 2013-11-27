@@ -27,8 +27,7 @@
     border: none; 
     margin: 35px 0 10px;
 
-    em{color: $gray59;}
-
+    em{ color: $gray59; }
     a{ color: $black; }
 
     h1{
@@ -43,10 +42,6 @@
         font-size: 42px;
         font-weight: normal;
     }
-
-    span {
-        
-    }
 }
 
 
@@ -55,28 +50,10 @@
     width: 400px;
 }
 
-.user-projects {
-    
+.user-projects, .user-following {
     h2 {
         font-size: 42px;
         font-weight: normal;
     }
-
-    span {
-        font-size: 18px;
-    }
-}
-
-.user-following {
-    // width: 1000px;
-
-    h2 {
-        font-size: 42px;
-        font-weight: normal;
-    }
-
-    span {
-        font-size: 18px;
-    }
-
+    span { font-size: 18px; }
 }

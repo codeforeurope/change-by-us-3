@@ -1,10 +1,12 @@
 .clearfix {
   *zoom: 1;
+
   &:before {
     display: table;
     line-height: 0;
     content: "";
   }
+  
   &:after {
     display: table;
     line-height: 0;
@@ -32,42 +34,26 @@
   float: right;
 }
 
-.pull-left {
-  float: left;
-}
+.pull-left { float: left; }
 
-.tl{
-  text-align: left;
-}
+.tl{ text-align: left; }
 
-.tr{
-  text-align: right;
-}
+.tr{ text-align: right; }
 
-.hide {
-  display: none;
-}
+.hide{ display: none; }
 
-.show {
-  display: block;
-}
+.show{ display: block; }
 
-.invisible {
-  visibility: hidden;
-}
+.invisible { visibility: hidden;}
 
-.affix {
-  position: fixed;
-}
+.affix { position: fixed; }
 
 .emphasis {
   font-size: 16px;
   letter-spacing: .1em;
 }
 
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
 .unhidden {
   text-align: center;
@@ -81,6 +67,15 @@ span.highlight{
 .circle{
   @include border-radius(1000px, 1000px);
   overflow: hidden;
+}
+
+a.highlight{
+  @include highlight; 
+}
+
+a.ul{ 
+  color: $graySubtext;
+  text-decoration: underline ;
 }
 
 /********** position helper ***********/

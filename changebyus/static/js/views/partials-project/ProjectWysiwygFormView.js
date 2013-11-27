@@ -41,10 +41,14 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       this.$el.template(this.templateDir + url, {
         data: this.viewData
       }, function() {
-        _this.ajaxForm();
-        return onPageElementsLoad();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      this.trigger('ON_TEMPLATE_LOAD');
+      this.ajaxForm();
+      return onPageElementsLoad();
     },
     ajaxForm: function() {
       var $editor, options, showErrorAlert,

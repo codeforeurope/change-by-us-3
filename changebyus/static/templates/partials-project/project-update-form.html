@@ -1,4 +1,23 @@
-<form method="post" enctype=multipart/form-data class="form-project clearfix" name="project-update" action="/api/post/add_update">
+<!-- <form method="post" enctype=multipart/form-data class="form-project clearfix" name="project-update" action="/api/post/add_update"> -->
+<form method="post" enctype=multipart/form-data class="form-project clearfix" name="project-update" action="/api/post/add_post">
+        <div class="share-select clearfix">
+            <span class="pull-left">Share:</span>
+            <div class="share-toggle-wrapper">
+                <div class="share-toggle dropdown-toggle">
+                    Project Page
+                    <span class="caret"></span>
+                </div>
+                <div class="share-options hide">      
+                    <input type="checkbox" name="share_to[]" value="project-page" id="project-page">
+                    <label for="project-page">Project Page</label>
+                    <input type="checkbox" name="share_to[]" value="twitter" id="twitter">
+                    <label for="twitter">Twitter</label>
+                    <input type="checkbox" name="share_to[]" value="facebook" id="facebook">
+                    <label for="facebook">Facebook Wall</label>
+                </div>
+            </div>
+        </div>
+
         <label>TITLE</label>
         <input type="text" maxlength="30" name="title" id="title" placeholder="Title" class="input-xxlarge">
 
@@ -75,8 +94,10 @@
         </div>
 
         <input type="hidden" name="project_id" value="<%= data.project_id %>">
-
         <input type="hidden" id="description" name="description" value="">
+        <input type="hidden" id="visibility" name="visibility" value="public">
+        <input type="hidden" id="share_to" name="share_to" value="">
+         <!-- Hardcoded to true--> 
         <!-- 
          <textarea rows="8" name="description" maxlength="600" id="description" placeholder="Description" class="input-xxlarge"></textarea>
         

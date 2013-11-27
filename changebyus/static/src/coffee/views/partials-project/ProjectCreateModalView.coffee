@@ -7,11 +7,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Ba
 
 		render: ->
 			@$el = $("<div class='modal-fullscreen dark'/>") 
-			@$el.template @templateDir + "/templates/partials-project/project-create-modal.html",
-				data: @viewData,  => @onTemplateLoad()
+			@$el.template @templateDir+"/templates/partials-project/project-create-modal.html",
+				{data: @viewData},  =>@onTemplateLoad()
 			$(@parent).append @$el 
 
-			onTemplateLoad:->
-				@$el.find(".close-x").click => 
-					console.log('close')
-					@$el.remove()
+		onTemplateLoad:->
+			console.log('close',@$el.find(".close-x"))
+			@$el.find(".close-x").click => @$el.remove()

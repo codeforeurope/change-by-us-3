@@ -13,16 +13,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       }, function() {
         return _this.onTemplateLoad();
       });
-      $(this.parent).append(this.$el);
-      return {
-        onTemplateLoad: function() {
-          var _this = this;
-          return this.$el.find(".close-x").click(function() {
-            console.log('close');
-            return _this.$el.remove();
-          });
-        }
-      };
+      return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      var _this = this;
+      console.log('close', this.$el.find(".close-x"));
+      return this.$el.find(".close-x").click(function() {
+        return _this.$el.remove();
+      });
     }
   });
 });

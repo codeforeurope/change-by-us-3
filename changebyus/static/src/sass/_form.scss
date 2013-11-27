@@ -5,11 +5,10 @@
 	float: left;
 	width: 60%;
 	
-	label{
-		margin-top: 30px;
-		&:first-child{margin-top: 0;}
-	}
+	label{ margin-top: 30px; }
+	>label:first-child{margin-top: 0;}
 }
+
 .form-right {
 	float: right;
 	width: 40%;

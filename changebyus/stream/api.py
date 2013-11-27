@@ -3,7 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, g, render_template, redirect, url_for
 from flask.ext.login import login_required, current_user, login_user
 
 from ..project.helpers import _get_user_involved_projects
@@ -49,7 +49,7 @@ def _get_user_stream(user_id, project_id=None, max_posts=100):
         for project in projects:
             # we got back a dict so base on id
             # TODO this should be a function from ProjectPost now a low level DB call
-            project_posts = ProjectPost.objects( project = project['id'] )
+            project_posts = ProjectPost.objects( project = project['id'], parent_id = None )
             for post in project_posts:
                 posts.append(post)
 
@@ -59,7 +59,7 @@ def _get_user_stream(user_id, project_id=None, max_posts=100):
             return cmp(b.created_at, a.created_at)
 
         posts.sort(postCompare)
-        return db_list_to_dict_list(posts[0:max_posts])
+        return db_list_to_dict_list(posts[0:max_posts], depth=5, recursive=True)
 
     else:
         # TODO this should be a function from ProjectPost now a low level DB call
@@ -84,7 +84,5 @@ def api_stream():
     PRECONDITIONS
         API key exists in the config file
     """
-    # TODO fix
-    #streamList = _get_user_stream(g.user.id)
-    #return gen_ok( jsonify(stream=streamList))
-    return ""
+    streamList = _get_user_stream(g.user.id)
+    return jsonify_response(ReturnStructure(data=streamList))

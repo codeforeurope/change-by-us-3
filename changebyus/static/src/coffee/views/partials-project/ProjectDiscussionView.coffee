@@ -6,7 +6,14 @@ define ["underscore",
 		"views/partials-project/ProjectSubView", 
 		"views/partials-project/ProjectWysiwygFormView", 
 		"views/partials-project/ProjectDiscussionThreadItemView"], 
-	(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, ProjectWysiwygFormView, ProjectDiscussionThreadItemView) ->
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 ProjectDiscussionModel, 
+	 ProjectSubView, 
+	 ProjectWysiwygFormView, 
+	 ProjectDiscussionThreadItemView) ->
 		ProjectDiscussionView = ProjectSubView.extend
 
 			parent: "#project-discussion"

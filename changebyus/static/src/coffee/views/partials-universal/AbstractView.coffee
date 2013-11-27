@@ -18,6 +18,7 @@ define ["underscore", "backbone", "jquery", "template"],
 				# console.log 'options_',options.parent,@parent
 
 			onTemplateLoad:->
+				@trigger 'ON_TEMPLATE_LOAD'
 				@templateLoaded = true
 				if @delayedCollectionLoad then @loadData()
 				#override in subview

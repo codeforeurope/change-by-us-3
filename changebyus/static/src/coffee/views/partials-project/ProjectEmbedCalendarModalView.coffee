@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", ], 
+define ["underscore", "backbone", "jquery", "template", "form", "abstract-view"], 
 	(_, Backbone, $, temp, form, AbstractView) ->
 		ProjectEmbedCalendarModalView = AbstractView.extend
 		

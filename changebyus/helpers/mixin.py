@@ -217,11 +217,17 @@ def lazy_load_model_classes(collection):
     if classname in globals().keys():
         return classname
     
+    MODEL_MAPPING = {'ProjectPost': 'post'}
     model_path = u"changebyus.%s.models" % (collection)
     # import all release models into (global) namespace
     try:
         exec("from %s import %s" % (model_path, classname)) in globals()
-    except Exception:
+    except ImportError as exc:
+        # Look to see if there's a model mapping somewhere?
+        if MODEL_MAPPING.get(classname):
+            exec("from %s import %s" % ('changebyus.%s.models' % MODEL_MAPPING.get(classname),
+                                        classname)) in globals()
+    except Exception as exc:
         app.logger.error("Exception lazy loading %s" % collection, exc_info=True)
 
     if classname not in globals().keys():

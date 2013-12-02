@@ -73,9 +73,12 @@ define ["underscore",
 					projectPostReplyView = new ProjectPostReplyView({viewData:reply})
 					@$repliesHolder.append projectPostReplyView.$el 
 
+				@viewData = @model.attributes
+				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
+
 				@$replyForm = $('<li class="post-reply-form"/>')
 				@$replyForm.template @templateDir+"/templates/partials-project/project-post-reply-form.html",
-					{data:@model.attributes}, => @onFormLoaded()
+					{data:@viewData}, => @onFormLoaded()
 
 			onFormLoaded:->
 				@$postRight.append @$repliesHolder

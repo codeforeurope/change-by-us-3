@@ -1,6 +1,8 @@
 @import "mixins-and-functions";
 @import "variables";
 
+p{line-height: 1.7;}
+
 h4{
 	@include bebas;
 	font-size: 18px;

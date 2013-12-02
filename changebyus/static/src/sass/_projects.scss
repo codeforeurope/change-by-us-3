@@ -287,12 +287,16 @@ h2.admin-title{
 
 .post-title, .reply-title{
   color: $gray20;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
-
-.reply-title{ margin-bottom: 10px;}
+ 
 
 .post-content, .reply-content{
   @include font-styling("merriweather", 14px, $gray20);
+  p{
+    @include font-styling("merriweather", 14px, $gray20);
+  }
 }
 
 .post-footer, .reply-date{ 

@@ -44,6 +44,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       var model, response, userAvatar, _i, _len, _ref;
       this.$ul.html('');
       this.$form.html('');
+      console.log('onSuccess', this.model);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

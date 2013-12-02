@@ -4,13 +4,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			isDataLoaded: false
 		
-			initialize: (options) ->
-				# console.log 'ProjectSubView options',options
+			initialize: (options) -> 
 				AbstractView::initialize.call(@, options)
 				@render()
 
 			show: -> 
 				@$el.show()
+				 
 				if @collection and @isDataLoaded is false
 					if @templateLoaded
 						@loadData()

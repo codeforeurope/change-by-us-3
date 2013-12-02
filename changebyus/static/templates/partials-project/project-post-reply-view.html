@@ -1,9 +1,9 @@
 <div class="user-avatar">
-    <img src="<%= data.user.image_name %>" class="circle" alt="User Avatar">
+    <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avatar">
 </div>
 <div class="reply-right">
     <div class="reply-title">
-    	<strong><%= data.user.display_name %></strong>
+    	<%= data.user.display_name %>
     </div>
     <div class="reply-content">
     	<%= unescape(data.description) %>

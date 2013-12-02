@@ -21,7 +21,7 @@ define ["underscore",
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@viewData = @model.attributes
-				@user = new UserModel(id:@model.get("user.id"))
+				@user = new UserModel(id:@model.get("user").id)
 				@user.fetch
 					success: =>@render()
 

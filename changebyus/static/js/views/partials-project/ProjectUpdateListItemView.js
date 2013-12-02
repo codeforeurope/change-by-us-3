@@ -69,9 +69,11 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         });
         this.$repliesHolder.append(projectPostReplyView.$el);
       }
+      this.viewData = this.model.attributes;
+      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
       this.$replyForm = $('<li class="post-reply-form"/>');
       return this.$replyForm.template(this.templateDir + "/templates/partials-project/project-post-reply-form.html", {
-        data: this.model.attributes
+        data: this.viewData
       }, function() {
         return _this.onFormLoaded();
       });

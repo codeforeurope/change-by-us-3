@@ -47,7 +47,7 @@ define ["underscore",
 			onSuccess:-> 
 				@$ul.html('')
 				@$form.html('')
-
+				console.log 'onSuccess',@model
 				@addDiscussion @model
 				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})

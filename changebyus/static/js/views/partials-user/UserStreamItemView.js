@@ -7,7 +7,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.user = new UserModel({
-        id: this.model.get("user.id")
+        id: this.model.get("user").id
       });
       return this.user.fetch({
         success: function() {

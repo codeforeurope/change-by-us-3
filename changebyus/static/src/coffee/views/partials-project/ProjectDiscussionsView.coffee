@@ -16,10 +16,11 @@ define ["underscore",
 			parent: "#project-discussions"
 			$ul:null
 			currentData:""
-
+ 
 			render: ->  
 				@$el = $(@parent)
 				@templateLoaded = true
+				console.log 'ProjectDiscussionsView',@collection,@
 
 			addAll: ->
 				console.log 'ProjectDiscussionsView addAll',@collection

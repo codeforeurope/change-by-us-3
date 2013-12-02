@@ -6,9 +6,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 				
 			initialize: (options) ->
 				# this is added later
-				@templateDir = options.templateDir or @templateDir
-				@parent      = options.parent or @parent
-				@viewData    = options.viewData or @viewData
+				AbstractView::initialize.call @, options
 				@collection  = options.collection or new ProjectListCollection()
 				@render()
 

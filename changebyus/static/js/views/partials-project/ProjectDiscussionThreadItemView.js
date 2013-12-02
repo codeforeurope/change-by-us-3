@@ -19,7 +19,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     loadUser: function() {
       var _this = this;
       this.user = new UserModel({
-        id: this.model.attributes.user.id
+        id: this.model.get("user.id")
       });
       return this.user.fetch({
         success: function() {
@@ -35,8 +35,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         'created_at': m
       });
       this.viewData = this.model.attributes;
-      this.viewData.image_url_round_small = this.user.attributes.image_url_round_small;
-      this.viewData.display_name = this.user.attributes.display_name;
+      this.viewData.image_url_round_small = this.user.get("image_url_round_small");
+      this.viewData.display_name = this.user.get("display_name");
       return $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
         data: this.viewData
       }, function() {

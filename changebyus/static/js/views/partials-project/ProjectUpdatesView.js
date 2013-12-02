@@ -41,7 +41,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.attributes.updated_at).format("MMMM D");
+          m = moment(model_.get("updated_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -61,7 +61,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     newDay: function(date_) {
       console.log('newDay', date_);
-      this.currentData = date_;
+      this.currentDate = date_;
       this.$currentDay = this.$day.clone();
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
@@ -70,14 +70,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addOne: function(model_) {
       var m, view;
       console.log(model_, this.$ul);
-      m = moment(model_.attributes.updated_at).format("MMMM D");
-      if (this.currentData !== m) {
+      m = moment(model_.get("updated_at")).format("MMMM D");
+      if (this.currentDate !== m) {
         this.newDay(m);
       }
       view = new ProjectUpdateListItemView({
         model: model_
       });
-      return this.$ul.append(view.render().$el);
+      return this.$ul.append(view.$el);
     }
   });
 });

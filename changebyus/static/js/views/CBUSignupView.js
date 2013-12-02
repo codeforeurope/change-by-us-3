@@ -3,9 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   return CBUSignupView = AbstractView.extend({
     socialInfo: null,
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {

@@ -1,8 +1,14 @@
 <div class="user-avatar">
-    <img src="http://lorempixel.com/70/70/" class="circle" alt="User Avatar">
+    <img src="<%= data.user.image_name %>" class="circle" alt="User Avatar">
 </div>
 <div class="reply-right">
-    <div class="reply-title">title</div>
-    <div class="reply-content">title</div>
-    <div class="reply-date jq-date">date</div>
+    <div class="reply-title">
+    	<strong><%= data.user.display_name %></strong>
+    </div>
+    <div class="reply-content">
+    	<%= unescape(data.description) %>
+    </div>
+    <div class="reply-date jq-date">
+    	<%= data.format_date %>
+    </div>
 </div>

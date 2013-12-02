@@ -6,11 +6,11 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
-				@model = new ProjectPostReplyModel({id:options.id})
 				@render()
-
+			
 			render: ->
+				console.log '@viewData',@viewData
 				$reply = $("<div class='post-reply clearfix'/>")
 				$reply.template @templateDir+"/templates/partials-project/project-post-reply-view.html", 
-					{data:{}}, => @onTemplateLoad()
+					{data:@viewData}, => @onTemplateLoad()
 				$(@el).append $reply

@@ -56,7 +56,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.attributes.updated_at).format("MMMM D");
+          m = moment(model_.get("updated_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -66,7 +66,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     newDay: function(date_) {
       console.log('newDay', date_);
-      this.currentData = date_;
+      this.currentDate = date_;
       this.$currentDay = this.$day.clone();
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
@@ -74,15 +74,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     addOne: function(model_) {
       var m, view;
-      m = moment(model_.attributes.updated_at).format("MMMM D");
-      if (this.currentData !== m) {
+      m = moment(model_.get("updated_at")).format("MMMM D");
+      if (this.currentDate !== m) {
         this.newDay(m);
       }
       console.log("ProjectAddUpdateView addOne model", model_);
       view = new ProjectUpdateListItemView({
         model: model_
       });
-      return this.$ul.append(view.render().$el);
+      return this.$ul.append(view.$el);
     },
     addModal: function(data_) {
       console.log("ProjectAddUpdateView addModal model", data_);

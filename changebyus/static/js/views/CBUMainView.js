@@ -2,9 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
   var CBUMainView;
   return CBUMainView = AbstractView.extend({
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();
       this.resourceCollection = options.resourceCollection || new ResourceListCollection();
       return this.render();

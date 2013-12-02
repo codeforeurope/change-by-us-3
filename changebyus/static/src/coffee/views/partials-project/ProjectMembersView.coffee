@@ -43,8 +43,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 				console.log '@collection',@collection
 				@collection.each (model) => 
-					console.log 'model.attributes.roles',model.attributes.roles
-					if ("MEMBER" in model.attributes.roles) or ("Member" in model.attributes.roles)
+					console.log 'model.get("roles',model.get("roles")
+					if ("MEMBER" in model.get("roles")) or ("Member" in model.get("roles"))
 						@members.push model
 					else
 						@team.push model

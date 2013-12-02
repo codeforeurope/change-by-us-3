@@ -3,9 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
   return CBUDiscoverView = AbstractView.extend({
     bannerSearchView: null,
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();
       return this.render();
     },

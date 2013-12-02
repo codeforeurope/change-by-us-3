@@ -17,6 +17,7 @@
   overflow-y: scroll;
 	overflow-x: hidden;
 	outline: none;
+  max-width: 840px;
 }
   #editor a, .wsyiwyg-editor a{
     color: #111;

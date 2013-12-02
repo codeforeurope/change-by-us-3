@@ -49,8 +49,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.members = [];
       console.log('@collection', this.collection);
       this.collection.each(function(model) {
-        console.log('model.attributes.roles', model.attributes.roles);
-        if ((__indexOf.call(model.attributes.roles, "MEMBER") >= 0) || (__indexOf.call(model.attributes.roles, "Member") >= 0)) {
+        console.log('model.get("roles', model.get("roles"));
+        if ((__indexOf.call(model.get("roles"), "MEMBER") >= 0) || (__indexOf.call(model.get("roles"), "Member") >= 0)) {
           return _this.members.push(model);
         } else {
           return _this.team.push(model);

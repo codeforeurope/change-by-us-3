@@ -61,7 +61,7 @@ define ["underscore",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
-							m = moment(model_.attributes.updated_at).format("MMMM D")
+							m = moment(model_.get("updated_at")).format("MMMM D")
 							@newDay(m)
 
 						@isDataLoaded = true
@@ -70,18 +70,18 @@ define ["underscore",
 
 			newDay:(date_)->
 				console.log 'newDay',date_
-				@currentData = date_
+				@currentDate = date_
 				@$currentDay = @$day.clone()
 				@$el.append @$currentDay
 				@$currentDay.find('h4').html(date_)
 				@$ul = @$currentDay.find('.bordered-item') 
 					
 			addOne: (model_) ->
-				m = moment(model_.attributes.updated_at).format("MMMM D")
-				if @currentData isnt m then @newDay(m)
+				m = moment(model_.get("updated_at")).format("MMMM D")
+				if @currentDate isnt m then @newDay(m)
 				console.log "ProjectAddUpdateView addOne model", model_
 				view = new ProjectUpdateListItemView({model: model_})
-				@$ul.append view.render().$el 
+				@$ul.append view.$el 
 
 			addModal:(data_)->
 				console.log "ProjectAddUpdateView addModal model", data_

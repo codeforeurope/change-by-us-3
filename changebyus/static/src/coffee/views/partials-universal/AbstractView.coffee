@@ -15,7 +15,6 @@ define ["underscore", "backbone", "jquery", "template"],
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent
 				@viewData    = options.viewData or @viewData
-				# console.log 'options_',options.parent,@parent
 
 			onTemplateLoad:->
 				@trigger 'ON_TEMPLATE_LOAD'

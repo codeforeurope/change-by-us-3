@@ -270,11 +270,12 @@ h2.admin-title{
 
 .update-content{
   float: right;
-  width: 880px;
+  //width: 880px;
+  width: 840px;
 
   input[type=button]{background-color: $graySupport;}
   input[type=submit]{
-    background-color: $secondaryColor;
+    //background-color: $secondaryColor;
     margin-left: 16px;
   }
     
@@ -287,6 +288,8 @@ h2.admin-title{
 .post-title, .reply-title{
   color: $gray20;
 }
+
+.reply-title{ margin-bottom: 10px;}
 
 .post-content, .reply-content{
   @include font-styling("merriweather", 14px, $gray20);
@@ -605,6 +608,16 @@ h2.admin-title{
   line-height: 40px;
   background-repeat: no-repeat;
   background-position: left center;
+}
+
+.project-name-corner{
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  display: inline-block;
+  width: auto;
+  padding: 5px;
+  @include box-border;
 }
 
 input[type="text"].input-slim{

@@ -20,7 +20,7 @@ define ["underscore",
 			$repliesHolder: null
 			$postRight: null
 			$replyForm: null
-			tagName: "li"
+			tagName: "li" 
 
 			initialize: (options_) ->
 				AbstractView::initialize.call(@, options_)
@@ -29,7 +29,7 @@ define ["underscore",
 					success: =>@loadUser()
 
 			loadUser:->
-				@user = new UserModel(id:@model.attributes.user.id)
+				@user = new UserModel(id:@model.get("user.id"))
 				@user.fetch
 					success: =>@render()
 
@@ -39,8 +39,8 @@ define ["underscore",
 					'created_at':m
 
 				@viewData                       = @model.attributes
-				@viewData.image_url_round_small = @user.attributes.image_url_round_small
-				@viewData.display_name          = @user.attributes.display_name
+				@viewData.image_url_round_small = @user.get("image_url_round_small")
+				@viewData.display_name          = @user.get("display_name")
 				
 				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
 					{data: @viewData}, => @onTemplateLoad()

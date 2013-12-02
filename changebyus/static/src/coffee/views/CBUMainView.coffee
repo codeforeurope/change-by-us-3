@@ -21,9 +21,7 @@ define ["underscore",
 		CBUMainView = AbstractView.extend
 
 			initialize: (options) ->
-				@templateDir        = options.templateDir or @templateDir
-				@parent             = options.parent or @parent
-				@viewData           = options.viewData or @viewData
+				AbstractView::initialize.call @, options
 				@collection         = options.collection or new ProjectListCollection()
 				@resourceCollection = options.resourceCollection or new ResourceListCollection()
 				@render()

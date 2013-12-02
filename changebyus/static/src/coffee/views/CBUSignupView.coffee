@@ -5,9 +5,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			socialInfo:null
 
 			initialize: (options) ->
-				@templateDir = options.templateDir or @templateDir
-				@parent = options.parent or @parent
-				@viewData = options.viewData or @viewData
+				AbstractView::initialize.call @, options
 				@render()
 
 			render: -> 

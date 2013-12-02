@@ -26,9 +26,7 @@ define ["underscore",
 			location:{name: "", lat: 0, lon: 0} 
 
 			initialize: (options) ->  
-				@templateDir = options.templateDir or @templateDir
-				@parent = options.parent or @parent
-				@viewData = options.viewData or @viewData 
+				AbstractView::initialize.call @, options
 				@userModel = new UserModel(id:@model.id)
 				@userModel.fetch 
 					success: =>@render() 

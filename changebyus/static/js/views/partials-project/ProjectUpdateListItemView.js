@@ -47,7 +47,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       return this.addReplies();
     },
     addReplies: function() {
-      var $replyToggle, m, projectPostReplyView, reply, self, _i, _len, _ref,
+      var $replyToggle, reply, self, viewData, _i, _len, _ref,
         _this = this;
       console.log('addReplies', this.model);
       self = this;
@@ -61,30 +61,38 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       _ref = this.model.get('responses');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         reply = _ref[_i];
-        console.log('reply', reply);
-        m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
-        reply.format_date = m;
-        projectPostReplyView = new ProjectPostReplyView({
-          viewData: reply
-        });
-        this.$repliesHolder.append(projectPostReplyView.$el);
+        this.addReply(reply);
       }
-      this.viewData = this.model.attributes;
-      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+      viewData = this.model.attributes;
+      viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
       this.$replyForm = $('<li class="post-reply-form"/>');
       return this.$replyForm.template(this.templateDir + "/templates/partials-project/project-post-reply-form.html", {
-        data: this.viewData
+        data: viewData
       }, function() {
         return _this.onFormLoaded();
       });
     },
+    addReply: function(reply_) {
+      var projectPostReplyView;
+      projectPostReplyView = new ProjectPostReplyView({
+        model: reply_
+      });
+      if ($('.post-reply-form').length > 0) {
+        return projectPostReplyView.$el.insertBefore('.post-reply-form');
+      } else {
+        return this.$repliesHolder.append(projectPostReplyView.$el);
+      }
+    },
     onFormLoaded: function() {
-      var options;
+      var options,
+        _this = this;
       this.$postRight.append(this.$repliesHolder);
       this.$repliesHolder.append(this.$replyForm);
       options = {
-        success: function(response) {
-          return console.log(response);
+        success: function(response_) {
+          console.log(response_);
+          _this.$replyForm.find('form').resetForm();
+          return _this.addReply(response_.data);
         }
       };
       return this.$replyForm.find('form').ajaxForm(options);

@@ -25,7 +25,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addAll: function() {
       var length,
         _this = this;
-      console.log('members addAll');
       this.$members = this.$el.find(".team-members ul");
       length = 0;
       this.members.each(function(model) {
@@ -52,12 +51,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addMemeber: function(model_) {
       var $member,
         _this = this;
-      console.log('addMemeber', model_);
+      if (model_.get("roles").length === 0) {
+        model_.set("roles", ["Owner"]);
+      }
       $member = $('<li/>');
       $member.template(this.templateDir + "/templates/partials-project/project-member-avatar.html", {
         data: model_.attributes
       }, function() {});
-      return this.$members.append($member);
+      this.$members.append($member);
+      return console.log('addMemeber >>> ', model_);
     },
     newDay: function(date_) {
       console.log('newDay', date_);

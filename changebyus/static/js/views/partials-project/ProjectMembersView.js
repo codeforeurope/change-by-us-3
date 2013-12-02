@@ -14,7 +14,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.isDataLoaded = options.isDataLoaded || this.isDataLoaded;
       this.view = options.view || this.view;
       this.projectID = options.projectID || this.projectID;
-      console.log('options', options);
       return ProjectSubView.prototype.initialize.call(this, options);
     },
     render: function() {
@@ -27,30 +26,38 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     onTemplateLoad: function() {
-      var _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
-      this.collection.on('change', function() {
-        return _this.addAll();
-      });
-      this.collection.on('remove', function() {
-        return _this.addAll();
-      });
       if ((this.view === "public") && (this.collection.length > 0)) {
         this.onCollectionLoad();
       }
       return onPageElementsLoad();
+    },
+    onCollectionLoad: function() {
+      var _this = this;
+      ProjectSubView.prototype.onCollectionLoad.call(this);
+      this.collection.on('change', function() {
+        return _this.addAll();
+      });
+      return this.collection.on('remove', function() {
+        return _this.addAll();
+      });
     },
     addAll: function() {
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
       this.team = [];
       this.members = [];
-      console.log('@collection', this.collection);
+      console.log('@collection addAll', this.collection);
       this.collection.each(function(model) {
-        console.log('model.get("roles', model.get("roles"));
-        if ((__indexOf.call(model.get("roles"), "MEMBER") >= 0) || (__indexOf.call(model.get("roles"), "Member") >= 0)) {
+        var roles;
+        roles = model.get("roles");
+        console.log('roles', roles);
+        if (roles.length === 0) {
+          model.set("roles", ["Owner"]);
+        }
+        if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
           return _this.members.push(model);
         } else {
           return _this.team.push(model);

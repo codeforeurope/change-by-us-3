@@ -5,7 +5,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     view: "public",
     projectID: 0,
     initialize: function(options_) {
-      console.log('initialize initialize initialize initialize');
       AbstractView.prototype.initialize.call(this, options_);
       this.view = options_.view || this.view;
       this.projectID = options_.projectID || this.projectID;

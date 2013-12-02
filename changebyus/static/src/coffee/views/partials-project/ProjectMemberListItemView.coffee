@@ -6,8 +6,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			view:"public"
 			projectID:0
 
-			initialize: (options_) ->
-				console.log 'initialize initialize initialize initialize'
+			initialize: (options_) -> 
 				AbstractView::initialize.call @, options_ 
 
 				@view          = options_.view || @view

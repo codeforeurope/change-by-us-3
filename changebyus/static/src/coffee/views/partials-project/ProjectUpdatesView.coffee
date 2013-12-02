@@ -31,8 +31,7 @@ define ["underscore",
 			onTemplateLoad:->
 				ProjectSubView::onTemplateLoad.call @ 
 
-			addAll: -> 
-				console.log 'members addAll'
+			addAll: ->  
 				# members
 				@$members = @$el.find(".team-members ul")
 				length = 0
@@ -52,12 +51,13 @@ define ["underscore",
 						ProjectSubView::addAll.call(@) 
 						onPageElementsLoad()
 
-			addMemeber: (model_) ->
-				console.log 'addMemeber',model_
+			addMemeber: (model_) -> 
+				if model_.get("roles").length is 0 then model_.set("roles", ["Owner"]) # temp fix
 				$member = $('<li/>')
-				$member.template @templateDir + "/templates/partials-project/project-member-avatar.html",
+				$member.template @templateDir+"/templates/partials-project/project-member-avatar.html",
 					{data: model_.attributes}, =>  
 				@$members.append $member
+				console.log 'addMemeber >>> ',model_
 
 			newDay:(date_)->
 				console.log 'newDay',date_

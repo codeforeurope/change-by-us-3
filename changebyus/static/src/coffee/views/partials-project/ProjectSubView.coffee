@@ -18,7 +18,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@delayedCollectionLoad = true
 
 			loadData: ->
-				console.log 'loadData', @
 				@collection.on "reset", @onCollectionLoad, @
 				@collection.fetch {reset: true}
 
@@ -26,7 +25,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			noResults:->
 				@$el.find('.no-results').show()
 
-			onCollectionLoad:->
+			onCollectionLoad:-> 
 				@$el.find(".preload").remove()
 				@addAll()
 			

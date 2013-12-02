@@ -5,6 +5,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
+      console.log('ProjectAddUpdateView >>> ', this.model);
+      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
       return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {

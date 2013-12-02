@@ -164,7 +164,26 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     top = (screen.height / 2) - (h / 2);
     return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
   };
-  return window.delay = function(time, fn) {
+  window.delay = function(time, fn) {
     return setTimeout(fn, time);
+  };
+  window.arrayToListString = function(arr_) {
+    var i, str, _i, _len;
+    for (i = _i = 0, _len = arr_.length; _i < _len; i = ++_i) {
+      str = arr_[i];
+      arr_[i] = capitalize(str);
+    }
+    if (arr_.length <= 1) {
+      str = arr_.join();
+    } else {
+      str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length - 1];
+    }
+    return str;
+  };
+  return window.capitalize = function(str_) {
+    var str;
+    return str = str_.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   };
 });

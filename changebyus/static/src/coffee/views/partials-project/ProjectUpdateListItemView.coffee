@@ -66,26 +66,30 @@ define ["underscore",
 					$(this).find('.reply').toggleClass('hide')
 					self.$repliesHolder.toggleClass('hide')
 
-				for reply in @model.get('responses') 
-					console.log 'reply', reply
-					m = moment(@model.get("created_at")).format("MMMM D hh:mm a")
-					reply.format_date = m
-					projectPostReplyView = new ProjectPostReplyView({viewData:reply})
-					@$repliesHolder.append projectPostReplyView.$el 
+				@addReply(reply) for reply in @model.get('responses') 
 
-				@viewData = @model.attributes
-				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
+				viewData = @model.attributes
+				viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
 
 				@$replyForm = $('<li class="post-reply-form"/>')
 				@$replyForm.template @templateDir+"/templates/partials-project/project-post-reply-form.html",
-					{data:@viewData}, => @onFormLoaded()
+					{data:viewData}, => @onFormLoaded()
+
+			addReply:(reply_)->
+				projectPostReplyView = new ProjectPostReplyView({model:reply_})
+				if $('.post-reply-form').length > 0
+					projectPostReplyView.$el.insertBefore('.post-reply-form')
+				else
+					@$repliesHolder.append projectPostReplyView.$el
 
 			onFormLoaded:->
 				@$postRight.append @$repliesHolder
 				@$repliesHolder.append @$replyForm
 				
 				options =
-					success: (response) ->
-						console.log response
+					success: (response_) =>
+						console.log response_
+						@$replyForm.find('form').resetForm()
+						@addReply response_.data
 
 				@$replyForm.find('form').ajaxForm options

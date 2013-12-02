@@ -99,21 +99,13 @@ def facebook_login():
         None
     """
 
-    # use this to close window for facebook/twitter login
-    # redirect(url_for('frontend_view.social_redirect_view',url=' '))
-
     # clear out any old facebook data
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
     if g.user.is_authenticated(): 
-        return redirect(url_for('frontend_view.social_redirect_view',url=request.host_url))
+        return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
-    """
-    host = request.host_url[:-1]
-    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
-        url='signup#facebook'))
-    """
     return facebook.authorize(callback=url_for('facebook_view.facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
         _external=True))
@@ -147,9 +139,9 @@ def facebook_link():
                                                                                      g.user.facebook_id)
         current_app.logger.info(infoStr)
 
-    host = request.host_url[:-1]
-    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
-        url='signup#facebook')) 
+    return facebook.authorize(callback=url_for('facebook_view.facebook_authorized',
+        next=request.args.get('next') or request.referrer or None,
+        _external=True))
 
 
 @facebook_view.route('/revoke')
@@ -213,8 +205,7 @@ def facebook_disconnect():
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
-    # return redirect(url_for('stream_view.dashboard_view')) 
-    return redirect(url_for('frontend_view.social_redirect_view',url=' '))
+    return redirect(url_for('stream_view.dashboard_view')+"#profile")
 
 @facebook_view.route('/authorized')
 @facebook.authorized_handler
@@ -249,9 +240,8 @@ def facebook_authorized(resp):
         current_app.logger.warning(warningStr)
 
         if g.user.is_authenticated():
-            # they were trying to link
-            # return redirect(url_for('stream_view.dashboard_view'))
-            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
+            # they were trying to link 
+            return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
         else:
             # non-registered user
             return redirect(url_for('frontend_view.home'))
@@ -276,15 +266,13 @@ def facebook_authorized(resp):
             debugStr = "Linked user {0} with facebook id {1}".format(g.user.id, facebook_id)
             current_app.logger.debug(debugStr)
             # or return them to where they were
-            # return redirect(url_for('stream_view.dashboard_view')) 
-            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
+            return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
         else:
 
             errStr = "Unable to link user {0} with facebook id {1}".format(g.user.id, facebook_id)
             current_app.logger.error(errStr)
             # or return them to where they were            
-            # return redirect(url_for('stream_view.dashboard_view')) 
-            return redirect(url_for('frontend_view.social_redirect_view',url=' '))
+            return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
     # otherwise let's make an account given their facebook credentials
     user = [] if facebook_id is None else User.objects(facebook_id = facebook_id)
@@ -322,6 +310,9 @@ def facebook_authorized(resp):
        
         login_user(u)
 
+        # user created account
+        return redirect(url_for('frontend_view.social_redirect_view', url='signup#twitter'))
+
     else:
 
         if user.count() > 1:
@@ -330,11 +321,8 @@ def facebook_authorized(resp):
 
         login_user(user.first())
 
-    # user created account or logged in
-    # return redirect(url_for('frontend_view.home'))
-    host = request.host_url[:-1]
-    return facebook.authorize(callback=host+url_for('frontend_view.social_redirect_view',
-        url='signup#facebook'))
+        # user created account or logged in
+        return redirect(url_for('frontend_view.social_redirect_view', url=' '))
 
 
 

@@ -29,12 +29,11 @@ require.config({
     "resource-project-view": "views/partials-universal/ResourceProjectPreviewView",
     "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
-    "stream-view": "views/CBUStreamView",
-    "utils": "utils/Utils"
+    "stream-view": "views/CBUStreamView"
   }
 });
 
-require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "utils"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Utils) {
+require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView) {
   $(document).ready(function() {
     var $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {

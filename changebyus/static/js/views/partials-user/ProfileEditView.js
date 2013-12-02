@@ -2,10 +2,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   var ProfileEditView;
   return ProfileEditView = AbstractView.extend({
     initialize: function(options) {
+      var _this = this;
       console.log('ProfileEditView', options);
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
-      return this.render();
+      return $.get("/api/user/socialstatus", function(response_) {
+        var e;
+        try {
+          _this.viewData.facebook = response_.data.facebook;
+          _this.viewData.twitter = response_.data.twitter;
+        } catch (_error) {
+          e = _error;
+        }
+        return _this.render();
+      });
     },
     render: function() {
       var _this = this;
@@ -13,9 +23,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "/templates/partials-user/profile-edit-form.html", {
         data: this.viewData
       }, function() {
-        _this.ajaxForm();
-        return onPageElementsLoad();
+        return _this.onTemplateLoaded();
       });
+    },
+    onTemplateLoaded: function() {
+      $(".social-btns .btn-primary").click(function(e) {
+        var url;
+        e.preventDefault();
+        url = $(this).attr("href");
+        return popWindow(url);
+      });
+      this.ajaxForm();
+      return onPageElementsLoad();
     },
     ajaxForm: function() {
       var $feedback, $form, $projectLocation, $submit, options,

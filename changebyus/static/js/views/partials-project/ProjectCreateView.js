@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp", "hogan", "validate", "dropkick"], function(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan, valid, dropkick) {
+define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-project/ProjectCreateModalView", "bootstrap", "autocomp", "hogan", "validate", "dropkick"], function(_, Backbone, $, temp, form, AbstractView, ProjectCreateModalView, bootstrap, autocomp, Hogan, valid, dropkick) {
   var ProjectCreateView;
   return ProjectCreateView = AbstractView.extend({
     location: {
@@ -52,10 +52,14 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           }
         },
         success: function(res) {
+          var modal;
+          console.log('res', res);
           $form.find("input, textarea").remove("disabled");
           if (res.success) {
             $form.resetForm();
-            return window.location = "/project/" + res.data.id + "/admin";
+            return modal = new ProjectCreateModalView({
+              viewData: res
+            });
           } else {
 
           }

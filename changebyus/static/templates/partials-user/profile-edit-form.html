@@ -99,7 +99,7 @@
 
                 <div class="fileupload fileupload-new" data-provides="fileupload">
                     <div>
-                        <span class="btn btn-file">
+                        <span class="btn btn-file btn-primary">
                             <span class="fileupload-exists">Edit Thumbnail</span>
                             <span class="fileupload-new">Upload</span>
                             <input id="project_image" name="photo" type="file">
@@ -107,24 +107,40 @@
                     </div>
 
                     <div class="fileupload-preview thumbnail circle">
-                        <% if (data.image_url_round_medium){ %>
-                            <img src="<%=  data.image_url_round_medium %>">
+                        <% if (data.image_url_round_medium){ %> 
+                            <div class="load-preview" style="background-image:url(<%= data.image_url_round_medium %>)"></div>
                         <% } %>
                     </div>
-                    <a class="btn btn-file fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                    <a class="btn btn-file btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
                 </div>
                 <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+            </div> 
+            <div class="social-btns">
+                <label>Social</label>
+                <div class="twitter">
+                    <div class="social-icon icon-twitter"></div>
+                    <% if (data.twitter){ %> 
+                        <a href="/social/twitter/disconnect" class="btn btn-medium btn-tertiary">Disconnect</a>
+                    <% }else{ %>
+                        <a href="/social/twitter/link" class="btn btn-medium btn-primary">Connect</a>
+                    <% } %>
+                </div>
+                <div class="facebook">
+                    <div class="social-icon icon-facebook"></div>
+                    <% if (data.facebook){ %> 
+                        <a href="/social/facebook/disconnect" class="btn btn-medium btn-tertiary">Disconnect</a>
+                    <% }else{ %>
+                        <a href="/social/facebook/link" class="btn btn-medium btn-primary">Connect</a>
+                    <% } %>
+                </div>
             </div>
-        </div>
-        <div class="social-links">
-
-        </div>
+        </div>  
     </div>
 
     <div class="form-footer clearfix">
         <div class="pull-left">
-            <input type="submit" class="btn btn-large" id="save" value="Save">
-            <input type="button" class="btn btn-large" id="cancel" value="Cancel">
+            <input type="submit" class="btn btn-large btn-secondary" id="save" value="Save">
+            <input type="button" class="btn btn-large btn-tertiary" id="cancel" value="Cancel">
             <input type="hidden" name="id" value="<%= data.id %>">
             <input type="hidden" name="lat" value="<%= data.lat %>">
             <input type="hidden" name="lon" value="<%= data.lon %>">

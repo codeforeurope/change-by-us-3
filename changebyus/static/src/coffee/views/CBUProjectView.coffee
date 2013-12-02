@@ -89,6 +89,7 @@ define ["underscore",
 				@projectMembersCollection.fetch {reset: true}
 
 			onCollectionLoad:-> 
+				console.log "onCollectionLoad"
 				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
 				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
 				@projectCalenderView  = new ProjectCalenderView({model: @model, isMember:@isMember, isOwner:@isOwner})

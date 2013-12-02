@@ -10,27 +10,28 @@
   left: 0;
   z-index: 1040;
   background-color: $black;
+  @include opacity(0.8);
+
   &.fade {
     opacity: 0;
+  
     &.in {
       opacity: 0.8;
       filter: alpha(opacity = 80);
     }
   }
-  opacity: 0.8;
-  filter: alpha(opacity = 80);
 }
 
 .modal-header {
   padding: 9px 15px;
   border-bottom: 1px solid #eee;
-  .close {
-    margin-top: 2px;
-  }
+  
   h3 {
     margin: 0;
     line-height: 30px;
   }
+
+  .close { margin-top: 2px; }
 }
 
 .modal-body {
@@ -55,11 +56,13 @@
   -webkit-box-shadow: inset 0 1px 0 $white;
   -moz-box-shadow: inset 0 1px 0 $white;
   box-shadow: inset 0 1px 0 $white;
+  
   &:before {
     display: table;
     line-height: 0;
     content: "";
   }
+  
   &:after {
     display: table;
     line-height: 0;
@@ -74,10 +77,12 @@
   right: 0;
   bottom: 0;
   left: 0;
+  z-index: 9998;
+
   &.dark{
     background-color: rgba(0,0,0,.5);
   }
-  z-index: 9998;
+  
 }
 
 .modal{
@@ -108,30 +113,34 @@
   .modal-innerwrapper{
     width: 505px;
     margin: auto;
+    
     span{text-align: left;}
   }
-
-  .btn{ background-color: $gray59; }
-  .btn-xlarge{ background-color: $secondaryColor; }
-
+  
   textarea{ @include asap; }
-
 }
 
 .create-modal { @extend .modal; } 
 .embed-modal { 
   @extend .modal; 
+  
   .modal-footer{
     padding: 0;
     width: 494px;
   }
 } 
+
 .success-modal { 
   @extend .modal;
   padding: 0;
   width: 730px;
-  h1{font-size: 54px;}
+  
+  h1{
+    font-size: 54px;
+    margin: 24px auto;
+  }
   span{font-size: 24px;}
+  
   .btn-xlarge{width: 100% !important;}
 } 
  
@@ -139,4 +148,9 @@
   width: 490px;
   text-align: right;
   margin: auto;
+}
+
+.modal-feedback{
+  font-size: 22px;
+  margin-bottom: 32px;
 }

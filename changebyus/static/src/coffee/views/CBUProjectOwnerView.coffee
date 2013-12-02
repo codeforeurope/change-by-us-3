@@ -51,7 +51,7 @@ define ["underscore",
 				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>
 						
-						config = {id:@model.get("id"), name:@model.get("name"), model:@model,isOwner:true} 
+						config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:true, view:"admin"} 
 
 						projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 						projectMembersCollection     = new ProjectMembersCollection(config)
@@ -63,7 +63,7 @@ define ["underscore",
 						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
 						@projectFundraisingView    = new ProjectFundraisingView(config) 
 						@projectCalenderView       = new ProjectCalenderView(config) 
-						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection})
+						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
 						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>

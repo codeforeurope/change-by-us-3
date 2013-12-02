@@ -18,6 +18,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@delayedCollectionLoad = true
 
 			loadData: ->
+				console.log 'loadData', @
 				@collection.on "reset", @onCollectionLoad, @
 				@collection.fetch {reset: true}
 

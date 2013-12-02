@@ -10,11 +10,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 
 				@model = new UserModel(options.model)
 				@model.fetch success: =>
-					@render()
+					@render() 
 
 			render: ->
-				console.log "this.model", @model
-
 				@$el = $("<div class='user'/>")
 				@$el.template @templateDir + "/templates/partials-user/user.html",
 					data: @model.attributes, => @onTemplateLoad()

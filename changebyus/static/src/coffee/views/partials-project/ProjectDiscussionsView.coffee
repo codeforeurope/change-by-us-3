@@ -15,6 +15,7 @@ define ["underscore",
 
 			parent: "#project-discussions"
 			$ul:null
+			currentData:""
 
 			render: ->  
 				@$el = $(@parent)
@@ -28,14 +29,32 @@ define ["underscore",
 						{}, => onPageElementsLoad()
 				else
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
-						{}, => 
-							@$ul = @$el.find('.bordered-item')
-							ProjectSubView::addAll.call(@)
-							onPageElementsLoad()
+						{}, => @loadDayTemplate()
 
-				@isDataLoaded = true
+			loadDayTemplate:->
+				@$day = $('<div />')
+				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+					{}, =>
+						if @collection.length > 0
+							model_ = @collection.models[0]
+							m = moment(model_.attributes.updated_at).format("MMMM D")
+							@newDay(m)
 
-			addOne:(model_)->  
+						@isDataLoaded = true
+
+						ProjectSubView::addAll.call(@) 
+
+			newDay:(date_)->
+				@currentData = date_
+				@$currentDay = @$day.clone()
+				@$el.append @$currentDay
+				@$currentDay.find('h4').html(date_)
+				@$ul = @$currentDay.find('.bordered-item') 
+
+			addOne:(model_)->
+				m = moment(model_.attributes.updated_at).format("MMMM D")
+				if @currentData isnt m then @newDay(m)
+
 				config = {model:model_}
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
 				projectDiscussionListItemView.on 'click', =>
@@ -43,6 +62,8 @@ define ["underscore",
 				projectDiscussionListItemView.on 'delete', => 
 					@deleteDiscussion config.model.attributes.id
 				@$ul.append projectDiscussionListItemView.$el
+
+				onPageElementsLoad()
 
 
 			deleteDiscussion:(id_)->

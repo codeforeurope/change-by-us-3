@@ -20,10 +20,6 @@ define ["underscore",
 		ProjectAddUpdateView = ProjectSubView.extend
 
 			parent: "#project-update"
-		
-			initialize: (options) ->
-				ProjectSubView::initialize.call @, options
-				@render()
 
 			render: -> 
 				@$el = $(@parent)
@@ -35,25 +31,54 @@ define ["underscore",
 				
 				@$ul = @$el.find('.updates-container ul')
 				form = new ProjectWysiwygFormView({parent:"#update-form"})
-				$submit = form.$el.find('input[type="submit"]')
-				
-				form.beforeSubmit = (arr_, form_, options_)-> 
-					$submit.find("input, textarea").attr("disabled", "disabled")
-					share = []
-					if $("#twitter").prop('checked') then share.push 'twitter'
-					if $("#facebook").prop('checked') then share.push 'facebook'
-					arr_.push {name: "social_sharing", value:share, type: "hidden", required: false} 
+				form.on 'ON_TEMPLATE_LOAD', => 
+					$("#post-update").click ->
+						$("html, body").animate({ scrollTop: 0 }, "slow")
 
-				form.success = (response_)=>
-					if response_.success
-						@addModal response_.data
-					console.log 'response_',response_
+					$submit = form.$el.find('input[type="submit"]')
+					
+					form.beforeSubmit = (arr_, form_, options_)->  
+						$submit.find("input, textarea").attr("disabled", "disabled")
 
-				$shareOptions = $(".share-options")
-				$shareToggle = $(".share-toggle")
-				$shareToggle.click -> $shareOptions.toggleClass("hide")
+					form.success = (response_)=>
+						if response_.success
+							@addModal response_.data
+						console.log 'response_',response_
+
+					$shareOptions = $(".share-options")
+					$shareToggle = $(".share-toggle")
+					$shareToggle.click -> $shareOptions.toggleClass("hide")
+
+					$('input:radio, input:checkbox').screwDefaultButtons
+						image: 'url("/static/img/black-check.png")'
+						width: 18
+						height: 18
+
+			addAll: -> 
+				console.log 'addAlladdAlladdAlladdAlladdAlladdAlladdAlladdAll'
+				@$day = $('<div />')
+				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+					{}, =>
+						if @collection.length > 0
+							model_ = @collection.models[0]
+							m = moment(model_.attributes.updated_at).format("MMMM D")
+							@newDay(m)
+
+						@isDataLoaded = true
+						ProjectSubView::addAll.call(@) 
+						onPageElementsLoad()
+
+			newDay:(date_)->
+				console.log 'newDay',date_
+				@currentData = date_
+				@$currentDay = @$day.clone()
+				@$el.append @$currentDay
+				@$currentDay.find('h4').html(date_)
+				@$ul = @$currentDay.find('.bordered-item') 
 					
 			addOne: (model_) ->
+				m = moment(model_.attributes.updated_at).format("MMMM D")
+				if @currentData isnt m then @newDay(m)
 				console.log "ProjectAddUpdateView addOne model", model_
 				view = new ProjectUpdateListItemView({model: model_})
 				@$ul.append view.render().$el 

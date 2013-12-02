@@ -84,6 +84,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onCollectionLoad: function() {
       var _this = this;
+      console.log("onCollectionLoad");
       this.projectUpdatesView = new ProjectUpdatesView({
         collection: this.projectUpdatesCollection,
         members: this.projectMembersCollection,

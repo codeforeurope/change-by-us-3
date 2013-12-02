@@ -12,7 +12,6 @@ from ..helpers.stringtools import slugify
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
 
 from ..wordlist import filter_model
-\
 from flask.ext.cdn_rackspace import upload_rackspace_image
 
 import requests
@@ -149,7 +148,6 @@ def _create_project( resource = False ):
     p.save()
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)
     current_app.logger.info(infoStr)
-
 
     from ..post.activity import update_project_activity
     update_project_activity( p.id )
@@ -311,6 +309,12 @@ def _get_users_for_project( project_id = None ):
             users.append( upl.user )
 
     return db_list_to_dict_list(users)
+
+def _get_user_roles_for_project(project, user_id):
+    project_id = project.id if isinstance(project, Project) else project
+    upl = UserProjectLink.objects( user = user_id,
+                                   project = project_id )
+    return upl
 
 
 def _get_project_users_and_common_projects(project_id = None, user_id = None):
@@ -629,11 +633,11 @@ def _leave_project(project_id=None, user_id=None):
 
     project = Project.objects.with_id(project_id)
 
-    if project.owner.id == g.user.id:
+    if project.owner.id == user_id:
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = 'Project owner can not leave the project.' ) )
     
-    links = UserProjectLink.objects( user = g.user.id,
+    links = UserProjectLink.objects( user = user_id,
                                     project = project_id)
 
 
@@ -641,13 +645,14 @@ def _leave_project(project_id=None, user_id=None):
         return jsonify_response( ReturnStructure( success = True,
                                                   msg = 'User was not involved in project.' ) )
     if links.count() > 1:
-        warnStr = "Warning, user {0} has multiple user_project_links on project {1}".format(g.user.id,
+        warnStr = "Warning, user {0} has multiple user_project_links on project {1}".format(user_id,
                                                                                             project_id)
         current_app.logger.warn(warnStr)
 
     for link in links:
         link.delete()
 
+    from ..post.activity import update_project_activity
     update_project_activity( project_id )
 
     return jsonify_response( ReturnStructure( ) )

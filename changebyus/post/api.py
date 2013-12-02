@@ -32,11 +32,11 @@ from ..project.decorators import ( project_exists, project_member,
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure
 
-
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
 from ..facebook.facebook import _get_fb_user_name_and_thumbnail
 
+from .helpers import _create_project_post
 from .helpers import _get_posts_for_project
 
 post_api = Blueprint('post_api', __name__, url_prefix='/api/post')
@@ -197,12 +197,12 @@ def api_get_project_posts(project_id, number_posts):
 
 
 class CreateProjectPostForm(Form):
-    title = TextField("title", validators=[Required()])
-    description = TextAreaField("description", validators=[Required()])
+    title          = TextField("title", validators=[Required()])
+    description    = TextAreaField("description", validators=[Required()])
     social_sharing = FieldList( TextField("social_sharing"), min_entries=0 )
-    project_id = TextField("project_id", validators=[Required()])
+    project_id     = TextField("project_id", validators=[Required()])
     response_to_id = TextField("response_to_id")
-    visibility = TextField("visibility")
+    visibility     = TextField("visibility")
 
 
 @post_api.route('/add_post', methods = ['POST'])
@@ -238,13 +238,12 @@ def api_add_project_post():
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    title = request.form.get('title')
-    description = request.form.get('description')
+    title          = request.form.get('title')
+    description    = request.form.get('description')
     social_sharing = request.form.getlist('share_to')
-    project_id = request.form.get('project_id')
+    project_id     = request.form.get('project_id')
     response_to_id = request.form.get('response_to_id')
-    visibility = requests.form.get('visibility')
-
+    visibility     = request.form.get('visibility')
 
     return _create_project_post(title = title,
                                 description = description,
@@ -256,8 +255,8 @@ def api_add_project_post():
 
 
 class EditProjectPostForm(Form):
-    post_id = TextField("post_id", validators=[Required()])
-    title = TextField("title")
+    post_id     = TextField("post_id", validators=[Required()])
+    title       = TextField("title")
     description = TextAreaField("description")
 
 

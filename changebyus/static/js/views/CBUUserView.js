@@ -15,7 +15,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     render: function() {
       var _this = this;
-      console.log("this.model", this.model);
       this.$el = $("<div class='user'/>");
       this.$el.template(this.templateDir + "/templates/partials-user/user.html", {
         data: this.model.attributes

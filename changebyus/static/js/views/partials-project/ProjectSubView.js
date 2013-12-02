@@ -17,6 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       }
     },
     loadData: function() {
+      console.log('loadData', this);
       this.collection.on("reset", this.onCollectionLoad, this);
       return this.collection.fetch({
         reset: true

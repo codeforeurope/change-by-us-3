@@ -76,7 +76,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			toggleSubView:->
 				view = window.location.hash.substring(1)
 
-				if view is "facebook"
+				if view is "facebook" or view is "twitter"
 					$('.social-signup').show()
 					$('.init-signup').hide()
 					@getSocialInfo()
@@ -85,33 +85,33 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					$('.init-signup').show()
 
 			getSocialInfo:->
-				if @socialInfo isnt null then return
+				unless @socialInfo
+					$socialSignup   = $(".social-signup")
+					$socialForm     = $socialSignup.find("form")
+					$socialForm.find("input, textarea").attr("disabled", "disabled")
 
-				$socialSignup   = $(".social-signup")
-				$socialForm     = $socialSignup.find("form")
-				$socialForm.find("input, textarea").attr("disabled", "disabled")
-
-				if @ajax then @ajax.abort()
-				@ajax = $.ajax(
-					type: "GET"
-					url: "/api/user/socialinfo"
-				).done (response_)=>
-					console.log "response_",response_
-					if response_.msg.toLowerCase() is "ok"
-						@setSocialInfo(response_.data)
-					$socialForm.find("input, textarea").removeAttr("disabled")
+					if @ajax then @ajax.abort()
+					@ajax = $.ajax(
+						type: "GET"
+						url: "/api/user/socialinfo"
+					).done (response_)=>
+						console.log "response_",response_
+						if response_.msg.toLowerCase() is "ok"
+							@setSocialInfo(response_.data)
+						$socialForm.find("input, textarea").removeAttr("disabled")
 
 			setSocialInfo:(data_)->
-				img = if (data_.fb_image isnt "") then data_.fb_image else data_.twitter_image
-				name = if (data_.fb_name isnt "") then  data_.fb_name else data_.twitter_name
+				@socialInfo = data_
+				img = if (@socialInfo.fb_image isnt "") then @socialInfo.fb_image else @socialInfo.twitter_image
+				name = if (@socialInfo.fb_name isnt "") then  @socialInfo.fb_name else @socialInfo.twitter_name
 
 				$socialAvatar = $('.social-avatar')
 				$socialSignup = $(".social-signup")
 
 				$socialAvatar.find('img').attr('src',img)
 				$socialAvatar.find('span').html name
-				$socialSignup.find('input[name="id"]').val data_.id
-				$socialSignup.find('input[name="email"]').val data_.email
-				$socialSignup.find('input[name="display_name"]').val data_.display_name
+				$socialSignup.find('input[name="id"]').val @socialInfo.id
+				$socialSignup.find('input[name="email"]').val @socialInfo.email if @socialInfo.email isnt "None"
+				$socialSignup.find('input[name="display_name"]').val @socialInfo.display_name
 
-				console.log data_,$('.social-avatar').find('img')
+				console.log @socialInfo,$('.social-avatar').find('img')

@@ -6,7 +6,7 @@ define(["underscore", "backbone", "model/ProjectUpdateModel"], function(_, Backb
       return this.id = options.id;
     },
     url: function() {
-      return "/api/post/project/" + this.id + "/list_updates";
+      return "/api/post/project/" + this.id + "/list_updates?sort=created_at&order=desc&";
     },
     parse: function(response) {
       if (response.msg === "OK") {

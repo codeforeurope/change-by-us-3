@@ -5,6 +5,7 @@ define ["underscore",
 		"moment", 
 		"abstract-view", 
 		"model/ProjectUpdateModel", 
+		"model/UserModel",
 		"views/partials-project/ProjectPostReplyView"], 
 	(_, 
 	 Backbone, 
@@ -13,6 +14,7 @@ define ["underscore",
 	 moment, 
 	 AbstractView, 
 	 ProjectUpdateModel, 
+	 UserModel,
 	 ProjectPostReplyView) ->
 		ProjectUpdateListItemView = AbstractView.extend
 			
@@ -20,14 +22,24 @@ define ["underscore",
 			$repliesHolder: null
 			$postRight: null
 			$replyForm: null
+			tagName: "li"
+
+			initialize: (options) ->
+				AbstractView::initialize.call @, options
+				@viewData = @model.attributes
+				@user = new UserModel(id:@model.attributes.user.id)
+				@user.fetch
+					success: =>@render()
 
 			render: ->
+				@viewData.image_url_round_small = @user.attributes.image_url_round_small
+				@viewData.display_name          = @user.attributes.display_name
+				
 				m = moment(@model.attributes.created_at).format("MMMM D hh:mm a")
 				@model.attributes.format_date = m
 
-				$(@el).template(@templateDir+"/templates/partials-project/project-update-list-item.html",
-					{data: @model.attributes}, => @addReplies()
-				)
+				$(@el).template @templateDir+"/templates/partials-project/project-update-list-item.html",
+					{data:@viewData}, => @addReplies()
 				@
 
 			addReplies:-> 
@@ -44,9 +56,8 @@ define ["underscore",
 					@$repliesHolder.append projectPostReplyView.$el 
 
 				@$replyForm = $('<li class="post-reply-form"/>')
-				@$replyForm.template(@templateDir+"/templates/partials-project/project-post-reply-form.html",
+				@$replyForm.template @templateDir+"/templates/partials-project/project-post-reply-form.html",
 					{data:@model.attributes}, => @onFormLoaded()
-				)
 
 			onFormLoaded:->
 				@$postRight.append @$repliesHolder

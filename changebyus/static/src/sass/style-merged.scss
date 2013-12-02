@@ -1048,49 +1048,6 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   }
 }
 
-.form-signin,.form-signup {
-  max-width: 600px;
-  padding-bottom:29px;
-  background-color: $white;
-  border: 0px solid #e5e5e5;
-
-  .form-signin-heading, .checkbox {
-    margin-bottom: 50px;
-    font-size: 16px;
-    color: #333333;
-  }
- 
-  input {
-    &[type="text"], &[type="firstname"], &[type="lastname"], &[type="email"], &[type="password"] {
-      max-width: 500px;
-      font-size: 16px;
-      height: auto;
-      margin-bottom: 15px;
-      padding: 7px 9px;
-      &.top{ 
-        @include border-bottom-left-radius(0);
-        @include border-bottom-right-radius(0);
-        margin-bottom: 0; 
-      }
-      &.middle{ 
-        border-top: none;
-        @include border-radius(0);
-      }
-      &.bottom{ 
-        border-top: none;
-        @include border-top-left-radius(0);
-        @include border-top-right-radius(0);
-      }
-    }
-  }
-
-  label{
-    text-align: left;
-  }
-
-  
-}
-
 .help-block, .help-inline {
   color: #595959;
 }
@@ -1560,7 +1517,6 @@ a.btn{ color: $white !important; }
   cursor: pointer;
   color: $white;
   box-sizing: border-box;
-  background-color: $primaryColor;
   background-image: none;
   @include border-radius(2px);
   @include transition-property(background-color,color);
@@ -1577,26 +1533,12 @@ a.btn{ color: $white !important; }
     *margin-left: 0;
   }
   &:hover {
-    // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
-    /*
-    -webkit-transition: background-position 0.1s linear;
-    -moz-transition: background-position 0.1s linear;
-    -o-transition: background-position 0.1s linear;
-    transition: background-position 0.1s linear;
-    */
   }
   &:focus {
-    // color: #333333; 
     text-decoration: none;
     background-position: 0 -15px;
-    /*
-    -webkit-transition: background-position 0.1s linear;
-    -moz-transition: background-position 0.1s linear;
-    -o-transition: background-position 0.1s linear;
-    transition: background-position 0.1s linear;
-    */
     outline: thin dotted #333;
     outline: 5px auto -webkit-focus-ring-color;
     outline-offset: -2px;
@@ -1712,6 +1654,7 @@ input {
 
 .btn-primary {
   color: $white;
+  /*
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
   background-color: #006dcc;
   *background-color: #0044cc;
@@ -1723,6 +1666,7 @@ input {
   &:active, &.active {
     background-color: #003399 \9;
   }
+  */
 }
 
 .btn-success {
@@ -1840,6 +1784,9 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   margin-top: 10px;
   margin-bottom: 10px;
   font-size: 0;
+  .btn{
+    background-color: $primaryColor;
+  }
   > {
     .btn + .btn, .btn-group + .btn, .btn + .btn-group {
       margin-left: 5px;
@@ -2083,7 +2030,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 .topnav {
   height: 87px; 
   width: 100%;
-  font-size: 20px;
+  font-size: 22px;
   background-color: $primaryColor;
 }
 
@@ -2775,11 +2722,12 @@ a {
     vertical-align: middle;
     cursor: text;
   } 
- 
+  
   .btn {
     vertical-align: middle;
   }
 }
+
 
 .fileupload-exists .fileupload-new, .fileupload-new .fileupload-exists {
   display: none;
@@ -2795,6 +2743,14 @@ a.fileupload-exists{color: $white;}
   -webkit-border-radius: 0 3px 3px 0;
   -moz-border-radius: 0 3px 3px 0;
   border-radius: 0 3px 3px 0;
+}
+
+.load-preview{
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .thumbnail-borderless .thumbnail {
@@ -2837,14 +2793,6 @@ a.fileupload-exists{color: $white;}
     color: #9c9c9c;
     font-size: 16px;
   }
-  
-  /*
-  .btn {
-    background-color: $secondaryColor;
-    padding: 20px 40px;
-    font-size: 26px;
-  }
-  */ 
 }
 
 .content {
@@ -2865,160 +2813,7 @@ a.fileupload-exists{color: $white;}
     font-size: 25px;
     color: #9b9b9b;
     font-weight: 100;
-    text-align: center;
-    /*padding: 10px;*/
-  }
-}
-
-.search-box {
-  margin-top: 15px;
-  border: 1px solid #dcdcdc;
-  width: 730px;
-  height: auto;
-  background-color: $white;
-  border-radius: 4px;
-  
-  >div{padding: 0 15px;}
-
-  .input-label {
-    font-size: 14px;
-    color: #8a8a8a;
-  }
-
-  .title {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 40px;
-  }
-
-  .search-filters{
-    border-top: 1px solid $grayBorder;
-  }
-}
-
-.search-box-geo {
-  width: 760px;
-  height: 90px;
-  border: 1px solid #dcdcdc;
-  border-top: none;
-  background-color: #fafafa;
-  border-radius: 4px;
-}
-
-/***************  DISCOVER **********************/
-.search-projects {
-  width: 290px;
-  margin-right: 10px;
-  z-index: 1;
-  /*float: left;*/
-}
-
-.search-forms {
-  float: left;
-  height: 94px;
-  z-index: 1;
-  .btn {
-    margin-top: 37px;
-    padding: 20px;
-    color: $white;
-    font-size: 24px;
-    background-color: $primaryColor;
-    border-radius: 4px;
-  }
-}
-
-.search-catagories{
-  display: none;
-  margin-top: -15px;
-  width: 290px;
-  @include box-skin;
-
-  li{
-    padding:10px 20px;
-    cursor: pointer;
-  }
-
-  h3{margin-left: 10px;} 
-
-}
-
-.search-filters{
-  span{
-    float: left;
-  }
-}
-.search-toggles{
-  float: left;
-  width: 420px;
-  margin-right: 10px;
-}
-
-.filter-within{
-  float: left;
-  select{width: 100px !important;}
-  .dk_container {
-    float: left;
-    width: 120px;
-  }
-}
-
-
-.pill-toggle{
-  @include box-skin;
-  float: left;
-  margin-right: 10px;
-  width: 200px;
-}
-
-.pill-selection{
-  color: $gray80;
-  float: left;
-  width: 50%;
-  text-align: center;
-  padding: 10px;
-  cursor: pointer;
-  &.active{
-    background: $gray80;
-    color: $black;
-  }
-  &:first-child{
-    border-right: 1px solid $grayBorder;
-  }
-}
-
-.banner-search {
-  width: 100%;
-  margin-bottom: 20px;
-  h3{text-align: left;}
-}
-
-.discover-header-right, .dashboard-header-right{
-  margin-left: 15px;
-  width: 230px;
-  float: right;
-
-  .btn {
-    width: 100%;
-    height: auto;
-    line-height: 20px;
-    margin: auto;
-    padding: 20px; 
-    font-size: 24px;
-    background-color: $secondaryColor;
-    color: $white;
-    border-radius: 4px;
-  }
-}
-
-.discover-header-right{
-  height: 200px;
-  .cities{
-    @include box-skin;
-    margin-top: 10px;
-    li{
-      padding: 10px;
-      &:last-child{border-top: 1px solid $grayBorder;  }
-    }
+    text-align: center; 
   }
 }
 
@@ -3027,182 +2822,6 @@ a.fileupload-exists{color: $white;}
   padding-left: 20px;
   padding-bottom: 20px;
   text-decoration: bold;
-}
-
-.header-image {
-  width: 100%;
-  height: 690px;
-  margin: auto;
-
-  background-image:url(/static/img/cover.jpg);
-  background-size: cover;
-
-  .overlay {
-    opacity: 1;
-    position: absolute;
-    top: 303px;
-    left: 200px;
-    width: 912px;
-    height: 225px;
-    text-align: center;
-    background: url("/static/img/community-text.png") no-repeat;
-  }
-  .overlay-text{ 
-    position: absolute;
-    top: 175px;
-    left: 200px;
-    width: 1015px;
-    height: 225px; 
-    h1{ 
-      display: inline-block;
-      color: #fff; // text color
-      @include asap;
-      font-weight: normal;
-      font-size: 85px;
-      line-height: 1.25;
-      padding: 0 15px; 
-      margin-bottom: 0;
-      background-color: rgba(0,0,0,.45); // layer fill content
-    }
-  }
-  .btn-large{
-    margin-top: 46px;
-    padding: 30px 50px;
-    font-size: 32px;
-    font-weight: bold;
-  }
-}
-
-.homepage-block-info {
-  margin-top: 20px; 
-  padding-top: 40px;
-  background-color: $secondaryColor;
-  height: 765px;
-   
-  h2 {
-    font-size: 60px;
-    font-weight: normal;
-    text-align: center;
-    color: $white;
-  }
-  h3 {
-    font-size: 25px;
-    color: #f4e291;
-    font-weight: 100;
-    text-align: center;
-  }
-}
-
-.homepage-tools-wrapper{
-  width:1018px;
-  margin: 110px auto auto;
-  color: $white;
-}
-
-.homepage-tools{
-  float: left;
-  width: 33%;
-
-  h4{
-    @include font-styling("asap", 22px, $white, "normal", "bold" );
-  }
-  p{
-    @include font-styling("asap", 22px, $white);
-    width:95%;
-  }
-}
-
-.homepage-tool-icon{
-  width: 215px;
-  height: 165px;
-  margin:0 auto 32px;
-
-  background-repeat: no-repeat;
-  background-position: center center;
-}
-
-.sub-link{
-  text-align: right;
-  a{
-    color: $black;
-    font-size: 22px;
-    font-weight: bold;
-  }
-}
-
-.homepage-footer {
-  width: 100%; 
-  background-color: #737373;
-  height: 340px; 
-  margin-top: 50px;
-  text-align: center;
-  h2 {
-    font-size: 60px;
-    font-weight: normal;
-    text-align: center;
-    padding: 40px;
-    color: $white;
-  }
-  .btn { background-color: $secondaryColor; }
-}
-
-.btn {
-    @include font-styling("asap", 22px, $white, "normal", "regular" );
-    white-space: nowrap; 
-    &.btn-xlarge{
-      display: inline-block;
-      width: 328px;
-      font-size: 30px;
-      font-weight: bold;
-      padding: 26px 0; 
-      margin-right: 16px;
-      &.invs{
-        background-color: $graySupport;
-      }
-    }
-  }
-
-.icons-wrapper{
-  width: 690px;
-  margin-top: 60px; 
-  div{float: left;}
-}
-
-.created-by,.supported-by{
-  color: $graySupport;
-  text-transform: uppercase;
-}
-
-.icon-lp{ }
-.icon-ceofc{}
-.icon-knight{}
-.icon-rackspace{}
-
-.footer-nav{
-  margin-top: 48px; 
-  width: 100%;
-  height: 60px;
-  background-color: $primaryColor;
-
-  li{
-    float: left;
-    list-style: none;
-    margin-left: 24px;
-  }
-  a{
-    line-height: 60px;
-  }
-
-  &.index{margin-top: 0; }
-}
-
-a.highlight{
-  @include highlight; 
-}
-
-a.ul{ 
-  color: $graySubtext;
-  text-decoration: underline ;
 }
 
 /***************************************
@@ -3219,3 +2838,7 @@ a.ul{
 @import "dropkick";
 @import "social";
 @import "typography";
+@import "buttons";
+@import "admin";
+@import "discover";
+@import "homepage";

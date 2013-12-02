@@ -3,6 +3,7 @@
 from functools import wraps
 from .models import Project, Roles, UserProjectLink, ACTIVE_ROLES
 from ..helpers.flasktools import *
+from .helpers import _get_user_roles_for_project
 
 from flask import g, request, current_app
 
@@ -27,10 +28,7 @@ def _is_organizer(project, user_id):
     return _check_for_roles(project, user_id, [Roles.ORGANIZER])
 
 def _check_for_roles(project, user_id, roles_list):
-
-    project_id = project.id if isinstance(project, Project) else project
-    upl = UserProjectLink.objects( user = user_id,
-                                   project = project_id )
+    upl = _get_user_roles_for_project(project, user_id)
 
     if upl.count() == 0:
         return False
@@ -39,6 +37,7 @@ def _check_for_roles(project, user_id, roles_list):
         return True
 
     return False
+
 
     
 def project_exists(f):

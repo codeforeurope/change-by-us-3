@@ -1,29 +1,12 @@
-<h2>Share Updates Or News</h2>
+<div class="admin-header">
+    <h2>Share Updates Or News</h2>
+</div>
 
 <div class="content-wrapper clearfix">
     <div class="user-avatar">
         <img src="http://lorempixel.com/70/70/" class="circle">
     </div>
-    <div class="pull-left">
-        <div class="share-select clearfix">
-            <span class="pull-left">Share:</span>
-            <div class="share-toggle-wrapper">
-                <div class="share-toggle dropdown-toggle">
-                    Project Page
-                    <span class="caret"></span>
-                </div>
-                <div class="share-options hide">
-                    <form name="share-toggle">
-                        <input type="checkbox" name="project-page" id="project-page">
-                        <label for="project-page">Project Page</label>
-                        <input type="checkbox" name="twitter" id="twitter">
-                        <label for="twitter">Twitter</label>
-                        <input type="checkbox" name="facebook" id="facebook">
-                        <label for="facebook">Facebook Wall</label>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div class="pull-left"> 
         <div id="update-form"></div>
     </div>
 </div>
@@ -31,20 +14,18 @@
 <h2>Previous Updates</h2>
 
 <div class="updates-container">
-    <div class="content-wrapper">
-        <div class="preload">
-            <h2>
-                <em>Loading...</em>
-            </h2>
-        </div>
-        <div class="no-results hide">
-            <h3>
-                <em>Nothing here yet.</em>
-            </h3>
-            <span>
-                Why don't you <a href="#" class="highlight">add your first post</a>?
-            </span>
-        </div>
+    <div class="preload content-wrapper">
+        <h2>
+            <em>Loading...</em>
+        </h2>
+    </div>
+    <div class="no-results content-wrapper hide">
+        <h3>
+            <em>Nothing here yet.</em>
+        </h3>
+        <span>
+            Why don't you <a href="/project/<%= window.projectID %>/admin#updates" class="highlight" id="post-update">add your first post</a>?
+        </span>
     </div>
     <ul></ul>
 </div>

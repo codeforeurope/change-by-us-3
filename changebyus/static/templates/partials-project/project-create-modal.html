@@ -1,23 +1,21 @@
-
-<div class="modal-backdrop"></div>
-<div class="create-modal">
+<div class="success-modal">
     <div class="close-x"></div>
-    <% if (data.msg.toLowerCase()=="ok" ) { %>
-        <h2>
-            <%= data.msg %>
-        </h2>
-        <div class="modal-feedback">
-            Your project:
-            <br>
-            <%= data.data.name %>has been created.
-        </div>
-        <div class="modal-links">
-            <a href="/project/<%= data.data.id %>" class="btn">Share Invite Link</a>
-            <a href="/project/<%= data.data.id %>" class="btn">View Project</a>
-        </div>
+    <div class="modal-innerwrapper">
+        <% if (data.msg.toLowerCase()=="ok" ) { %>
+            <h1>Success!</h1>
+            <p class="modal-feedback">
+                Your project:<br>
+                <%= data.data.name %>has been created.
+                <br>
+            </p>
+            <div class="modal-links">
+                <a href="/project/<%= data.data.id %>" class="btn btn-large btn-secondary">Share Invite Link</a>
+                <a href="/project/<%= data.data.id %>" class="btn btn-large btn-tertiary">View Project</a>
+            </div>
         <% } else { %>
             <div class="modal-feedback">
                 <%= data.msg %>
             </div>
         <% } %>
+    </div>
 </div>

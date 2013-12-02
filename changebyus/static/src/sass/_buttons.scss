@@ -1,0 +1,32 @@
+@import "mixins-and-functions";
+@import "variables";
+
+.btn-text{
+	color: $white !important;
+	font-weight: bold;
+}
+
+.btn-primary{
+	@extend .btn-text;
+	background-color: $primaryColor;
+	&:hover{
+		@extend .btn-text;
+		background-color: $primaryHoverColor;
+	}
+}
+.btn-secondary{
+	@extend .btn-text;
+	background-color: $secondaryColor;
+	&:hover{
+		@extend .btn-text;
+		background-color: $secondaryHoverColor;
+	}
+}
+.btn-tertiary{
+	@extend .btn-text;
+	background-color: $graySupport;
+	&:hover{
+		@extend .btn-text;
+		background-color: $gray80;
+	}
+}

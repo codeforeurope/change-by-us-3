@@ -124,7 +124,7 @@ def api_create_user():
 
 
 @user_api.route('/<id>')    
-@login_required
+# @login_required # not sure if this is needed
 def api_get_user(id):
     """
     ABOUT
@@ -151,11 +151,16 @@ def api_get_user(id):
     ret = ReturnStructure( data = u.as_dict() )
 
     # Remove email from visibility
-    if not u.public_email:
-        if ret.data.has_key('email'):
-
-            del ret.data['email']
-
+    if g.user.is_anonymous():
+        if not u.public_email:
+            if ret.data.has_key('email'):
+                del ret.data['email']
+    else: 
+        if current_user.id != u.id:
+            if not u.public_email:
+                if ret.data.has_key('email'):
+                    del ret.data['email']
+        
     return jsonify_response( ret )
 
 

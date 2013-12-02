@@ -16,6 +16,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return this.viewData = options.viewData || this.viewData;
     },
     onTemplateLoad: function() {
+      this.trigger('ON_TEMPLATE_LOAD');
       this.templateLoaded = true;
       if (this.delayedCollectionLoad) {
         return this.loadData();

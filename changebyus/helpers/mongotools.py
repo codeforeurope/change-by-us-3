@@ -1,6 +1,6 @@
 
 
-def db_list_to_dict_list(l):
+def db_list_to_dict_list(l, **kwargs):
     """
     ABOUT
         Convert a list of database objects into their .as_dict objects
@@ -13,7 +13,7 @@ def db_list_to_dict_list(l):
     dict_list = []
     for db_item in l:
         try:
-            dict_list.append( db_item.as_dict() )
+            dict_list.append( db_item.as_dict(**kwargs) )
         except AttributeError:
             print "Oops!  not valid"
 

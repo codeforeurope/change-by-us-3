@@ -27,20 +27,27 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					url = "/templates/partials-project/project-update-form.html" 
 					@editorID =  "#editor"
 					@formName = "project-update"
+					@$el = $("<div class='update-wrapper thin-pad clearfix'/>")
 				else if @parent is "#add-thread-form"
 					url = "/templates/partials-project/project-new-thread-form.html" 
 					@editorID =  "#new-thread-editor"
 					@formName = "new-discussion"
+					@$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 				else
 					url = "/templates/partials-project/project-new-discussion-form.html" 
 					@editorID = "#discussion-editor"
 					@formName = "new-thread"
+					@$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 
-				@$el = $("<div class='content-wrapper clearfix'/>")
+				
 				@$el.template @templateDir+url,
-					{data: @viewData}, => @ajaxForm()
-
+					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
+
+			onTemplateLoad:->
+				@trigger 'ON_TEMPLATE_LOAD'
+				@ajaxForm()
+				onPageElementsLoad()
 
 			ajaxForm: -> 
 				# AJAXIFY THE FORM

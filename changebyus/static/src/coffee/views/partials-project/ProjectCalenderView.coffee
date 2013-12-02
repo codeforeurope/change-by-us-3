@@ -17,18 +17,19 @@ define ["underscore",
 			isOwner:false
 			parent: "#project-calendar"
 			projectEmbedCalendarModalView: null
+			view: "public"
 			
 			initialize: (options_) ->  
 				options           = options_ or {}
 				@id               = options.id or @id
 				@templateDir      = options.templateDir or @templateDir
-				@parent           = options.parent or @parent
+				@parent           = options.parent or @parent 
 				if @model
 					@viewData     = @model.attributes || @viewData
 				@viewData.isOwner = options.isOwner || @isOwner
-				console.log '@viewData >>>>> ',@viewData,options
+				@viewData.view    = options.view || @view
+
 				@render()
-				
 				
 			render: -> 
 				console.log '@viewData <<<<< ',@viewData

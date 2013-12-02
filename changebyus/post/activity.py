@@ -1,5 +1,5 @@
 from .models import ProjectPost, Project, User
-from ..project.models import UserProjectLink
+from ..project.models import UserProjectLink, Project
 
 def update_project_activity(project_id): 
     """
@@ -10,7 +10,6 @@ def update_project_activity(project_id):
     project.activity = calculate_project_activity(project)
     
     project.save()
-    
     
 def calculate_project_activity(project):
     """
@@ -26,15 +25,15 @@ def calculate_project_activity(project):
     return activity
     
     
-def _get_num_private_posts(project):
+def _get_num_private_posts(project): 
     return ProjectPost.objects(project = project, parent_id = None, public = False).count()
     
     
-def _get_num_public_posts(project):
+def _get_num_public_posts(project): 
     return ProjectPost.objects(project = project, parent_id = None, public = True).count()
     
     
-def _get_num_comments(project):
+def _get_num_comments(project): 
     return ProjectPost.objects(project = project, parent_id__ne = None, public = True).count()
     
     

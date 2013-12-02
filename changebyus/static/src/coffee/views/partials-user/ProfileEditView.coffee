@@ -6,15 +6,30 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				console.log 'ProfileEditView',options
 				AbstractView::initialize.call @, options
 				@viewData = @model.attributes
-				@render()
+
+				$.get "/api/user/socialstatus", (response_)=>
+					try
+						@viewData.facebook = response_.data.facebook
+						@viewData.twitter  = response_.data.twitter
+					catch e
+						
+					@render()
 
 			render: ->
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-user/profile-edit-form.html", 
-					{data:@viewData}, => 
-						@ajaxForm()
-						onPageElementsLoad()
- 
+					{data:@viewData}, => @onTemplateLoaded()
+						
+
+			onTemplateLoaded:->
+				$(".social-btns .btn-primary").click (e) ->
+					e.preventDefault()
+					url = $(this).attr("href")
+					popWindow url
+
+				@ajaxForm()
+				onPageElementsLoad()
+
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
 

@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "bootstrap", "autocomp","hogan", "validate", "dropkick"], 
-	(_, Backbone, $, temp, form, AbstractView, bootstrap, autocomp, Hogan, valid, dropkick) ->
+define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-project/ProjectCreateModalView", "bootstrap", "autocomp","hogan", "validate", "dropkick"], 
+	(_, Backbone, $, temp, form, AbstractView, ProjectCreateModalView, bootstrap, autocomp, Hogan, valid, dropkick) ->
 		ProjectCreateView = AbstractView.extend
 
 			location:{name: "", lat: 0, lon: 0} 
@@ -44,11 +44,13 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							return false
 
 					success: (res) -> 
+						console.log 'res',res
 						$form.find("input, textarea").remove("disabled")
 						
 						if res.success
 							$form.resetForm()
-							window.location = "/project/"+res.data.id+"/admin"
+							modal = new ProjectCreateModalView({viewData:res})
+							#window.location = "/project/"+res.data.id+"/admin"
 						else
 							# $form.resetForm()
 							

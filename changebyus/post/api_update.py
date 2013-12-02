@@ -37,7 +37,17 @@ def api_get_project_updates_fixed(project_id):
         User is logged in, user a member of the project
     """
 
-    posts = ProjectPost.objects( parent_id = None, 
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+ 
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort) 
+        posts = ProjectPost.objects( parent_id = None, 
+                                 project = project_id,
+                                 public = True ).order_by(sort_order)[0:10]
+    else:
+
+        posts = ProjectPost.objects( parent_id = None, 
                                  project = project_id,
                                  public = True )[0:10]
 
@@ -63,9 +73,21 @@ def api_get_project_updates(project_id, number_posts):
         Add filtering for the user, ie max number of posts, search by string, etc
     """
 
-    posts = Projects.objects( parent_id = None, 
-                              project = project_id,
-                              public = True )[0:number_posts]
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+ 
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort) 
+        posts = ProjectPost.objects( parent_id = None, 
+                                 project = project_id,
+                                 public = True ).order_by(sort_order)[0:10]
+    else:
+
+        posts = ProjectPost.objects( parent_id = None, 
+                                 project = project_id,
+                                 public = True )[0:number_posts]
+
+    return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )
 
     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )
 

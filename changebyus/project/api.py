@@ -21,7 +21,7 @@ from ..mongo_search import search
 from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
 
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
-                       _create_project, _edit_project, _get_lat_lon_from_location,
+                       _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location,
                        _get_user_owned_projects, _leave_project )
 
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
@@ -283,6 +283,12 @@ def api_view_project_users(project_id):
 
     users = _get_users_for_project(project_id)
 
+    for u in users:
+        upls = _get_user_roles_for_project(project_id, u['id'])
+        if upls.count() > 0:
+            for upl in upls:
+                u['roles'].append(upl['role'])
+
     return jsonify_response( ReturnStructure( data = users ))
 
 
@@ -474,7 +480,7 @@ def remove_project_user():
                                                                                   project_id)
     current_app.logger.info(infoStr)
 
-    return leave_project(project_id=project_id, user_id=user_id)
+    return _leave_project(project_id=project_id, user_id=user_id)
 
 
 class LeaveProjectForm(Form):
@@ -503,7 +509,7 @@ def api_leave_project():
 
     project_id = request.form.get('project_id')
 
-    return leave_project(project_id=project_id, user_id=g.user.id)
+    return _leave_project(project_id=project_id, user_id=g.user.id)
 
 
 @project_api.route('/am_i_a_member/<project_id>')

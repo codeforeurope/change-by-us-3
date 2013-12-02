@@ -1,7 +1,6 @@
-<div class="content-wrapper clearfix">
-    <div class="user-avatar">
-        <img src="http://lorempixel.com/70/70/" class="circle">
-        <img src="<%= data.user_avatar %>" class="circle">
+<div class="clearfix">
+    <div class="user-avatar"> 
+        <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avater">
     </div>
     <div class="update-content">
         <div class="post-title">
@@ -13,16 +12,11 @@
         <div class="post-footer">
             <div class="reply-toggle">
                 <% if(data.responses.length>0) { %>
-                    <span class="reply">
-                        <%= data.responses.length %>Replies</span>
-                    <% } else { %>
-                        <span class="reply">Reply</span>
-                        <% } %>
-                            <span class="reply hide">Hide Reply</span>
-                            *
-                            <span class="jq-date">
-                                <%= data.format_date %>
-                            </span>
+                    <span class="reply"> <%= data.responses.length %>Replies</span>
+                <% } else { %>
+                    <span class="reply">Reply</span>
+                <% } %>
+                    <span class="reply hide">Hide Reply</span> * <span class="jq-date"><%= data.format_date %></span>
             </div>
         </div>
     </div>

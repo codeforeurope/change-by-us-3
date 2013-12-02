@@ -57,14 +57,16 @@ def projects_view():
             project['account_key'] = project['stripe_account']['publishable_key']
             project['stripe_description'] = project['stripe_account']['description']
 
+
     return render_template('stream.html', data = projects, posts = posts, members = members, newPost=False)
-    """
+ 
  
     if g.user.is_anonymous():
         return render_template('index.html', projects = projects, login = True)
     else:
         return render_template('index.html', projects = projects, login = False)   
-     
+    """
+    return _return_index()
 
 @stream_view.route('/sort', methods = ['GET'])
 @login_required

@@ -178,8 +178,11 @@ class ProjectClass():
                    'lat': self.lat,
                    'lon': self.lon }
 
-        resp = client.POST('/api/project/create', data = create)
+        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        resp = client.POST('/api/project/create', data = create, headers = headers)
   
+        print resp
+
         client.assertTrueMsg( resp['success'] , resp['msg'])
         client.assertTrueMsg( resp['data']['name'] == self.name, resp['msg'] )
 

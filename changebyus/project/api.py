@@ -168,7 +168,7 @@ def api_create_project():
         User is logged in
     """
 
-    form = CreateProjectForm()
+    form = CreateProjectForm(request.json)
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 

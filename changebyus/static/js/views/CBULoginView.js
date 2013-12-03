@@ -2,9 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
   var CBUDLoginView;
   return CBUDLoginView = AbstractView.extend({
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {

@@ -44,8 +44,9 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       var model, response, userAvatar, _i, _len, _ref;
       this.$ul.html('');
       this.$form.html('');
+      console.log('onSuccess', this.model);
       this.addDiscussion(this.model);
-      _ref = this.model.attributes.responses;
+      _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         response = _ref[_i];
         model = new ProjectDiscussionModel({
@@ -56,7 +57,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       userAvatar = $('.profile-nav-header img').attr('src');
       this.projectWysiwygFormView = new ProjectWysiwygFormView({
         parent: this.$threadFormID,
-        id: this.model.attributes.id,
+        id: this.model.get("id"),
         slim: true,
         userAvatar: userAvatar
       });

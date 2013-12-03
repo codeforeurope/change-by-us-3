@@ -80,19 +80,17 @@ define ["underscore",
 				config = {id:id}
 
 				if @isMember is false then @$header.find('.invisible').removeClass('invisible')
-
-				console.log '@$header',@$header,@isMember
+ 
 				@$el.prepend @$header
 				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
 
-			onCollectionLoad:-> 
-				console.log "onCollectionLoad"
-				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
-				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-				@projectCalenderView  = new ProjectCalenderView({model: @model, isMember:@isMember, isOwner:@isOwner})
+			onCollectionLoad:->  
+				@projectUpdatesView   = new ProjectUpdatesView({collection:@projectUpdatesCollection, members:@projectMembersCollection, isMember:@isMember})
+				@projectMembersView   = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
+				@projectCalenderView  = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
 				
 				@updatesBTN  = $("a[href='#updates']").parent()
 				@membersBTN  = $("a[href='#members']").parent()

@@ -6,7 +6,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     currentData: "",
     render: function() {
       this.$el = $(this.parent);
-      return this.templateLoaded = true;
+      this.templateLoaded = true;
+      return console.log('ProjectDiscussionsView', this.collection, this);
     },
     addAll: function() {
       var _this = this;
@@ -28,7 +29,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.attributes.updated_at).format("MMMM D");
+          m = moment(model_.get("updated_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -36,7 +37,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     newDay: function(date_) {
-      this.currentData = date_;
+      this.currentDate = date_;
       this.$currentDay = this.$day.clone();
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
@@ -45,8 +46,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addOne: function(model_) {
       var config, m, projectDiscussionListItemView,
         _this = this;
-      m = moment(model_.attributes.updated_at).format("MMMM D");
-      if (this.currentData !== m) {
+      m = moment(model_.get("updated_at")).format("MMMM D");
+      if (this.currentDate !== m) {
         this.newDay(m);
       }
       config = {
@@ -57,7 +58,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.trigger('discussionClick', config);
       });
       projectDiscussionListItemView.on('delete', function() {
-        return _this.deleteDiscussion(config.model.attributes.id);
+        return _this.deleteDiscussion(config.model.get("id"));
       });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();

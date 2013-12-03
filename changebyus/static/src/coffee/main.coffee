@@ -166,3 +166,18 @@ require ["jquery",
 
 		window.delay = (time, fn) ->
 			setTimeout fn, time
+
+		window.arrayToListString = (arr_) ->
+			for str,i in arr_
+				arr_[i] = capitalize(str)
+
+			if (arr_.length <= 1) 
+				str = arr_.join()
+			else
+				str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length-1]
+			str
+
+		window.capitalize = (str_) ->
+			str = str_.replace /\w\S*/g, (txt) ->
+				txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+	 

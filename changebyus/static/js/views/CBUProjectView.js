@@ -73,7 +73,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       if (this.isMember === false) {
         this.$header.find('.invisible').removeClass('invisible');
       }
-      console.log('@$header', this.$header, this.isMember);
       this.$el.prepend(this.$header);
       this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);
@@ -84,7 +83,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onCollectionLoad: function() {
       var _this = this;
-      console.log("onCollectionLoad");
       this.projectUpdatesView = new ProjectUpdatesView({
         collection: this.projectUpdatesCollection,
         members: this.projectMembersCollection,

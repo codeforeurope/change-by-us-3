@@ -52,11 +52,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           console.log('projectDiscussionsView arg_', arg_);
           return window.location.hash = "discussion/" + arg_.model.id;
         });
-        /*
-        						@projectDiscussionsView.on 'deleteDiscussion', (arg_)=>
-        							console.log 'deleteDiscussion arg_',arg_
-        */
-
         _this.discussionBTN = $("a[href='#discussions']");
         _this.updatesBTN = $("a[href='#updates']");
         _this.fundraisingBTN = $("a[href='#fundraising']");

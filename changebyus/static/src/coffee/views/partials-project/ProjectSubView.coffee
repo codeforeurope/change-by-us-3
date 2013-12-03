@@ -4,13 +4,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			isDataLoaded: false
 		
-			initialize: (options) ->
-				# console.log 'ProjectSubView options',options
+			initialize: (options) -> 
 				AbstractView::initialize.call(@, options)
 				@render()
 
 			show: -> 
 				@$el.show()
+				 
 				if @collection and @isDataLoaded is false
 					if @templateLoaded
 						@loadData()
@@ -18,7 +18,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@delayedCollectionLoad = true
 
 			loadData: ->
-				console.log 'loadData', @
 				@collection.on "reset", @onCollectionLoad, @
 				@collection.fetch {reset: true}
 
@@ -26,7 +25,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			noResults:->
 				@$el.find('.no-results').show()
 
-			onCollectionLoad:->
+			onCollectionLoad:-> 
 				@$el.find(".preload").remove()
 				@addAll()
 			

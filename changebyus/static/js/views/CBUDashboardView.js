@@ -94,12 +94,15 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     addJoined: function() {
       var _this = this;
+      $('a[href=#follow]').append(" (" + this.joinedProjects.length + ")");
+      console.log($('#follow'));
       return this.joinedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.followView.find("ul"), false, true);
       });
     },
     addOwned: function() {
       var _this = this;
+      $('a[href=#manage]').append(" (" + this.ownedProjects.length + ")");
       return this.ownedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.manageView.find("ul"), true, false);
       });

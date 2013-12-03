@@ -28,11 +28,14 @@
       margin-bottom: 20px;
       margin-left: 250px;
      
-      span{
+      >span{
         font-size: 14px;
-        color: $gray80;
-       
-        a{color: $gray80;}
+        color: $gray37;
+        a{
+          font-size: 14px;
+          color: $gray37;
+          text-decoration: underline;
+        }
       }
     }
   }
@@ -102,20 +105,24 @@
   
   span {
     color: $black;
+    font-size: 20px;
     background-color: $white;
-    padding: 0 15px;
+    padding: 0 30px;
   }
 }
 
 .login-signup-footer{
   color: $black;
-  a{color: $black;}
+  a{
+    color: $black;
+    font-weight: bold;
+  }
 }
 
-.init-signup{
-    a:first-child{margin-right: 5%;}
+.justified-btns{
+  margin-top: 28px;
+  .btn:first-child{ margin-right: 5%; }
 }
-
 
 .form-signin, .init-signup{
   max-width: 600px;
@@ -123,9 +130,7 @@
   background-color: $white;
   border: 0px solid #e5e5e5; 
 
-  .btn-info{
-    &:first-child{margin-right: 5%;}
-  }
+  
 
   .form-signin-heading, .checkbox {
     margin-bottom: 50px;

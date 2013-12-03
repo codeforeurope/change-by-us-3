@@ -137,13 +137,17 @@
   
   h1{
     font-size: 54px;
-    margin: 24px auto;
+    margin: 36px auto;
   }
   span{font-size: 24px;}
   
   .btn-xlarge{width: 100% !important;}
 } 
- 
+
+.modal-links{
+  .btn:first-child{ margin-right: 12px;}
+}
+
 .modal-btns{
   width: 490px;
   text-align: right;

@@ -81,8 +81,10 @@
   }
 
   .btn{ 
-    padding: 15px 20px;
-    margin-top:150px; 
+    padding: 12px 18px;
+    margin-top: 150px;
+    font-size: 18px;
+    font-weight: bold;
   }
 }
 
@@ -362,8 +364,8 @@ h2.admin-title{
     margin-top: 25px;
     width: 120px; 
   }
-  .aka{ @include font-styling("asap", 15px, $gray80, "italic"); }
-  .grey{ @include font-styling("asap", 15px, $gray80); }
+  .aka{ @include font-styling("asap", 15px, $gray53); }
+  .grey{ @include font-styling("asap", 15px, $gray53); }
 }
 
 .admin{
@@ -485,7 +487,7 @@ h2.admin-title{
 
 .body-container { position: relative; }
 
-.btn-large{
+.btn.btn-large{
   font-weight: bold;
   padding: 20px 22px;
 }
@@ -621,8 +623,42 @@ h2.admin-title{
   right: -1px;
   display: inline-block;
   width: auto;
-  padding: 5px;
+  padding: 8px;
   @include box-border;
+  @include border-bottom-left-radius(4px);
+  color: $gray53;
+  font-size: 14px;
+}
+
+.stream-wrapper{
+  .content-wrapper{overflow: hidden;}
+}
+
+.create-project{
+  h1{
+    font-size: 52px;
+    font-weight: normal;
+  }
+}
+
+.form-project{
+  p{
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .dk_toggle{
+    padding: 16px;
+  }
+  .dk_label{
+    font-size: 18px;
+    font-weight: normal;
+  }
+  .dk_options a{
+    font-size: 18px;
+    font-weight: normal;
+    padding: 16px;
+  }
 }
 
 input[type="text"].input-slim{

@@ -56,7 +56,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				$socialSubmit   = $socialSignup.find("input[type='submit']")
 				$socialFeedback = $socialSignup.find(".login-feedback")
 
-				options =
+				socialOptions =
 					beforeSubmit: =>
 						console.log 'beforeSubmit'
 						$socialForm.find("input, textarea").attr("disabled", "disabled")
@@ -69,7 +69,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 							window.location.href = "/"
 						else
 							$socialFeedback.addClass("alert").html response.msg
-				$socialForm.ajaxForm options
+				$socialForm.ajaxForm socialOptions
 
 			toggleSubView:->
 				view = window.location.hash.substring(1)

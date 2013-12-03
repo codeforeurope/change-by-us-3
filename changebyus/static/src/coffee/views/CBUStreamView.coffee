@@ -44,7 +44,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				@$currentDay = @$day.clone()
 				@$currentDay.find('h4').html(date_)
 				@$container.append(@$currentDay)
-				@$projects = @$currentDay.find('.projects-wrapper') 
+				@$projects = @$currentDay.find('.stream-wrapper')
 					
 			addOne: (model_) ->
 				console.log model_, @$ul

@@ -1561,7 +1561,7 @@ a.btn{ color: $white !important; }
   }
 }
 
-.btn-medium{
+.btn.btn-medium{
   font-weight: bold;
   font-size: 16px;
   padding: 10px 16px;
@@ -2008,6 +2008,8 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
       padding-bottom: 20px;
       line-height: 20px;
       height: 20px;
+      font-weight: bold;
+      font-size: 28px;
     }
   }
   .open .dropdown-toggle {

@@ -7,7 +7,7 @@
     <p>
         <a href="https://support.google.com/calendar/answer/41207?hl=en&ref_topic=1672470">More Info</a>
     </p>
-    <form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/project/edit">
+    <form method="post" enctype="multipart/form-data" class="form-project" name="createproject" action="/api/project/edit">
         <br>
         <textarea rows="3" name="gcal_code" id="project_description" placeholder="Embed" class="input-xxlarge" value="<%= data.gcal_code %>" />
         <input type="hidden" name="project_id" value="<%= data.id %>">

@@ -9,6 +9,7 @@ require.config({
     "bootstrap": "ext/bootstrap/bootstrap.min",
     "bootstrap-fileupload": "ext/bootstrap/bootstrap-fileupload",
     "button": "ext/jquery/jquery.screwdefaultbuttonsV2.min",
+    "serializeObject": "ext/jquery/jquery.serializeObject.min",
     "dropkick": "ext/jquery/jquery.dropkick-min",
     "hogan": "ext/hogan/hogan-2.0.0.amd",
     "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg",

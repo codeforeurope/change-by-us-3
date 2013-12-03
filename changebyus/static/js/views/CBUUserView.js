@@ -27,15 +27,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       if (this.model.id === window.userID) {
         $('.edit').removeClass('invisible');
       }
-      this.ajaxForm();
       return this.loadProjects();
-    },
-    ajaxForm: function() {
-      var $signin;
-      $signin = $("form[name=signin]");
-      return $signin.ajaxForm(function(response) {
-        return console.log(response);
-      });
     },
     loadProjects: function() {
       this.joinedProjects = new ProjectListCollection({

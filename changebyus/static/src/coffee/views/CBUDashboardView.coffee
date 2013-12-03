@@ -89,9 +89,12 @@ define ["underscore",
 				@ownedProjects.fetch reset: true
 
 			addJoined:->
+				$('a[href=#follow]').append " (#{@joinedProjects.length})"
+				console.log $('#follow')
 				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
 
 			addOwned:->
+				$('a[href=#manage]').append " (#{@ownedProjects.length})"
 				@ownedProjects.each (projectModel) => @addOne(projectModel, @manageView.find("ul"), true, false)
 
 			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->

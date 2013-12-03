@@ -16,6 +16,7 @@
 
 .form-footer{
 	margin-bottom: 48px;
+	.pull-right{ font-size: 14px; }
 }
 
 .tt-dropdown-menu {
@@ -75,6 +76,14 @@
 	}
 	
 	span{line-height: 1.5;}
+}
+
+.warning{
+	color: red;
+	text-decoration: underline;
+	&:hover{
+		text-decoration: underline;
+	}
 }
 
 select[name=category]{

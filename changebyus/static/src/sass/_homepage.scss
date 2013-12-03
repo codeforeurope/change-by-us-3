@@ -127,7 +127,7 @@
 }
 
 .btn {
-  @include font-styling("asap", 22px, $white, "normal", "regular" );
+  @include font-styling("asap", 24px, $white, "normal", "regular" );
   white-space: nowrap; 
 
   &.btn-xlarge{

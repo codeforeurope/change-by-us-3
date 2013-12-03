@@ -19,14 +19,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				if (@model.id is window.userID) then $('.edit').removeClass('invisible')
-				@ajaxForm()
+				if (@model.id is window.userID) then $('.edit').removeClass('invisible') 
 				@loadProjects()
-
-			ajaxForm: ->
-				$signin = $("form[name=signin]")
-				$signin.ajaxForm (response) ->
-					console.log response
 
 			loadProjects:->
 				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joinedprojects"})

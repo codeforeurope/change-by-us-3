@@ -32,7 +32,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.toggleSubView();
     },
     ajaxForm: function() {
-      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options,
+      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options, socialOptions,
         _this = this;
       $signup = $(".init-signup");
       $form = $signup.find("form");
@@ -59,7 +59,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
       $socialFeedback = $socialSignup.find(".login-feedback");
-      options = {
+      socialOptions = {
         beforeSubmit: function() {
           console.log('beforeSubmit');
           $socialForm.find("input, textarea").attr("disabled", "disabled");
@@ -75,7 +75,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
           }
         }
       };
-      return $socialForm.ajaxForm(options);
+      return $socialForm.ajaxForm(socialOptions);
     },
     toggleSubView: function() {
       var view;

@@ -26,20 +26,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
         reset: true
       });
       this.resourceCollection.on("reset", this.addAllResources, this);
-      this.resourceCollection.fetch({
+      return this.resourceCollection.fetch({
         reset: true
-      });
-      return this.ajaxForm();
-    },
-    ajaxForm: function() {
-      var $signin, $signup;
-      $signup = $("form[name=signup]");
-      $signup.ajaxForm(function(response) {
-        return console.log(response);
-      });
-      $signin = $("form[name=signin]");
-      return $signin.ajaxForm(function(response) {
-        return console.log(response);
       });
     },
     addAll: function() {

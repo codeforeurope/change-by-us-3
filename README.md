@@ -53,6 +53,20 @@ The following organizations (and individuals) contributed to ChangeByUs:
 * $ grunt
 
 
+### Mongo index setup
+
+Pending automaticing the creation of text indexes, here are the steps to manually create them.
+
+1. Make sure your running mongod process has text indexes enabled, e.g.
+
+`mongod --dbpath <your mongo data path> --setParameter textSearchEnabled=true`
+
+2. From your mongo client of choice (I'm a cmdline guy myself), run this line,
+
+`db.project.ensureIndex({"name":"text",
+                        "description":"text"},
+		       {"weights":{"name":10,"description":5},
+			"name":"TextIndex"})`
 
 ### Optional Encryption
 * If you choose to use the two part encryption, where one key is stored

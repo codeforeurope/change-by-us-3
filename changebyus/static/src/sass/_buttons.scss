@@ -1,32 +1,60 @@
+@import "compass/css3/transform";
+
 @import "mixins-and-functions";
 @import "variables";
 
 .btn-text{
 	color: $white !important;
-	font-weight: bold;
+	font-weight: bold !important;
 }
 
 .btn-primary{
 	@extend .btn-text;
 	background-color: $primaryColor;
-	&:hover{
+	&:hover, &.btn-3d:before{
 		@extend .btn-text;
 		background-color: $primaryHoverColor;
 	}
 }
+
 .btn-secondary{
 	@extend .btn-text;
 	background-color: $secondaryColor;
-	&:hover{
+	&:hover, &.btn-3d:before{
 		@extend .btn-text;
 		background-color: $secondaryHoverColor;
 	}
 }
+
 .btn-tertiary{
 	@extend .btn-text;
 	background-color: $graySupport;
-	&:hover{
+	&:hover, &.btn-3d:before{
 		@extend .btn-text;
 		background-color: $gray80;
 	}
 }
+
+/**** BUTTON HOVER 
+.btn-3d-parent{
+	@include perspective(1000);
+}
+
+.btn-3d{
+  @include transform-style(preserve-3d);
+  @include transform-origin(50%, 0);
+  @include rotateX(0);
+  &:before{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    content: attr(data-content);
+    @include transform-origin(50%, 0);
+    @include rotateX(-90deg);
+  }
+  &:hover{
+     @include transform(rotateX(90deg) ); //translateY(-60px)
+  }
+}
+
+****/

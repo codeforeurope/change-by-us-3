@@ -56,6 +56,14 @@ def _create_project( resource = False ):
     location = request.form.get('location')
     lat = request.form.get("lat")
     lon = request.form.get("lon")
+
+    print name
+    print description
+    print category
+    print gcal_code
+    print location
+    print lat
+    print lon
     
     if (lat and lon):
         geo_location = [float(lon), float(lat)]

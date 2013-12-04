@@ -14,10 +14,10 @@
   z-index: 1;
   .btn {
     margin-top: 37px;
-    padding: 20px; 
-    font-size: 24px; 
-    border-radius: 4px;
-  }
+    //padding: 20px; 
+    //font-size: 24px; 
+    //border-radius: 4px;
+  } 
 }
 
 .search-catagories{
@@ -88,25 +88,22 @@
   h3{text-align: left;}
 }
 
+//
 .discover-header-right, .dashboard-header-right{
-  margin-left: 15px;
-  width: 230px;
   float: right;
-
-  .btn {
-    width: 100%;
-    height: auto;
-    line-height: 20px;
-    margin: auto;
-    padding: 20px; 
-    font-size: 24px;
-    border-radius: 4px;
-  }
-  a.btn{font-weight: bold;}
 }
 
 .discover-header-right{
-  height: 200px;
+   width: 230px;
+   height: 200px;
+   margin-left: 15px;
+  .btn-large {
+    width: 100%;
+    line-height: 20px;
+    margin: auto;
+    padding: 20px 0;
+  }
+  
   .cities{
     @include box-skin;
     margin-top: 10px;

@@ -88,7 +88,8 @@
 .modal{
   position: absolute;
   width: 730px;
-  height: 390px;
+  min-height: 390px;
+  height: auto;
   top: 50%;
   left: 50%;
   margin-top: -185px;
@@ -99,22 +100,9 @@
   outline: none;
   z-index: 9999;
 
-  &.fade {
-    top: -25%;
-    -webkit-transition: opacity 0.3s linear, top 0.3s ease-out;
-    -moz-transition: opacity 0.3s linear, top 0.3s ease-out;
-    -o-transition: opacity 0.3s linear, top 0.3s ease-out;
-    transition: opacity 0.3s linear, top 0.3s ease-out;
-    &.in {
-      top: 50%;
-    }
-  }
-
   .modal-innerwrapper{
     width: 505px;
-    margin: auto;
-    
-    span{text-align: left;}
+    margin: 48px auto;
   }
   
   textarea{ @include asap; }
@@ -132,20 +120,34 @@
 
 .success-modal { 
   @extend .modal;
-  padding: 0;
-  width: 730px;
+  @include transition-property(all);
+  @include transition-duration(.4s);
+  @include opacity(1);
+  @include scale(1);
   
   h1{
     font-size: 54px;
-    margin: 36px auto;
+    margin: 0 auto 36px;
   }
+
+  >span{
+    text-align: left;
+    margin-bottom: 24px;
+    display: block;
+  }
+
   span{font-size: 24px;}
   
   .btn-xlarge{width: 100% !important;}
+
+  &.scaled-fade{
+    @include opacity(0);
+    @include scale(2);
+  }
 } 
 
 .modal-links{
-  .btn:first-child{ margin-right: 12px;}
+  .btn:first-child{ margin-right: 5px;}
 }
 
 .modal-btns{

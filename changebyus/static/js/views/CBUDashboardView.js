@@ -95,7 +95,6 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     addJoined: function() {
       var _this = this;
       $('a[href=#follow]').append(" (" + this.joinedProjects.length + ")");
-      console.log($('#follow'));
       return this.joinedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.followView.find("ul"), false, true);
       });
@@ -122,7 +121,11 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         isProject: true,
         isResource: false
       });
-      return this.$el.find(parent_).append(view.$el);
+      this.$el.find(parent_).append(view.$el);
+      return delay(100, function() {
+        buttonize3D();
+        return positionFooter();
+      });
     }
   });
 });

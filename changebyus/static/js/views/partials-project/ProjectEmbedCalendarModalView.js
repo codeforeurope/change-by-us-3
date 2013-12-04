@@ -1,8 +1,8 @@
-define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"], function(_, Backbone, $, temp, form, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-view"], function(_, Backbone, $, temp, form, AbstractModalView) {
   var ProjectEmbedCalendarModalView;
-  return ProjectEmbedCalendarModalView = AbstractView.extend({
+  return ProjectEmbedCalendarModalView = AbstractModalView.extend({
     initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractModalView.prototype.initialize.call(this, options);
       this.viewData.id = this.model.id;
       this.viewData.slug = this.model.slug;
       return this.render();
@@ -18,11 +18,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var options,
-        _this = this;
-      this.$el.find(".close-x").click(function() {
-        return _this.$el.remove();
-      });
+      var options;
+      AbstractModalView.prototype.onTemplateLoad.call(this, options);
       options = {
         success: function(response) {
           console.log(response);

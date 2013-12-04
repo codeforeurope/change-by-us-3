@@ -90,7 +90,6 @@ define ["underscore",
 
 			addJoined:->
 				$('a[href=#follow]').append " (#{@joinedProjects.length})"
-				console.log $('#follow')
 				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
 
 			addOwned:->
@@ -106,3 +105,6 @@ define ["underscore",
 					isResource: false
 
 				@$el.find(parent_).append view.$el
+				delay 100, ->
+					buttonize3D()
+					positionFooter()

@@ -80,11 +80,9 @@
     @include transition-duration(.1s);
   }
 
-  .btn{ 
-    padding: 12px 18px;
+  .btn, .btn-3d:hover{ 
     margin-top: 150px;
     font-size: 18px;
-    font-weight: bold;
   }
 }
 
@@ -476,6 +474,7 @@ h2.admin-title{
   text-align: center;
 }
 
+/*
 .project-update-form{
   padding: 30px;
   @include box-skin;
@@ -483,14 +482,9 @@ h2.admin-title{
     float: right;
   }
 }
-
+*/
 
 .body-container { position: relative; }
-
-.btn.btn-large{
-  font-weight: bold;
-  padding: 20px 22px;
-}
 
 .tabs-pane, .owner-tabs-pane{
   position: absolute;
@@ -575,7 +569,7 @@ h2.admin-title{
   top:58px;
   @include opacity(0);
   @include box-skin;
-  @include transition-property(opacity, top);
+  @include transition-property(all);
   @include transition-duration(.1s);
 }
 

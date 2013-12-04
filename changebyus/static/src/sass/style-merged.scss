@@ -1,6 +1,7 @@
 @import "compass/css3";
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity"; 
+@import "compass/css3/transform";
 
 @import "bootstrap-combined-no-icons";
 @import "variables";
@@ -1499,9 +1500,9 @@ button.close {
   -webkit-appearance: none;
 }
 
-a.btn{ color: $white !important; }
+a.btn, a.btn-3d:before{ color: $white !important; }
 
-.btn {
+.btn, .btn-3d:before {
   display: inline-block;
   *display: inline;
   padding: 4px 12px;
@@ -1519,8 +1520,8 @@ a.btn{ color: $white !important; }
   box-sizing: border-box;
   background-image: none;
   @include border-radius(2px);
-  @include transition-property(background-color,color);
-  @include transition-duration(.5s);
+  @include transition-property(all);
+  @include transition-duration(.4s);
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
     color: #333333;
     background-color: #e6e6e6;
@@ -1561,13 +1562,13 @@ a.btn{ color: $white !important; }
   }
 }
 
-.btn.btn-medium{
+.btn.btn-medium, .btn.btn-medium.btn-3d:before{
   font-weight: bold;
   font-size: 16px;
   padding: 10px 16px;
 }
 
-.btn-large {
+.btn.btn-large, .btn.btn-large.btn-3d:before {
   padding: 20px 40px;
   font-size: 26px;
   @include border-radius(3px);

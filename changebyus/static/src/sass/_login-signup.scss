@@ -24,10 +24,7 @@
   .content-wrapper {
     .centered {
       width: 500px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      margin-left: 250px;
-     
+      margin: 20px auto; 
       >span{
         font-size: 14px;
         color: $gray37;
@@ -122,6 +119,17 @@
 .justified-btns{
   margin-top: 28px;
   .btn:first-child{ margin-right: 5%; }
+  &.social{
+    .btn{
+      padding: 20px 0;
+      &:first-child{ 
+        margin-right: 1px;
+        width: 43%; 
+      }
+      &:last-child{ width: 55%; }
+    }
+    
+  }
 }
 
 .form-signin, .init-signup{

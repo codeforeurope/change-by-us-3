@@ -177,7 +177,6 @@
 
   .overlay-title {
     left: 310px;
-    width: 100%;
     top: 100px;
     padding: 0;
     margin: 0;
@@ -538,6 +537,8 @@ h2.admin-title{
     margin-left: 15px;
     &:first-child{ margin-left: 0;}
   }
+
+  h4{margin-bottom:10px;}
 }
 .member-avatar{
   width: 70px;  

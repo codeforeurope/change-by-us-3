@@ -2,6 +2,37 @@
  * Modal
  *******************************************/
 
+.modal{
+  position: absolute;
+  width: 730px;
+  min-height: 390px;
+  height: auto;
+  top: 50%;
+  left: 50%;
+  margin-top: -185px;
+  margin-left: -365px;
+  text-align: center;
+  background-color: $white;
+  @include border-radius(4px);
+  @include transition-property(all);
+  @include transition-duration(.4s);
+  @include opacity(1);
+  @include scale(1);
+  outline: none;
+  z-index: 9999;
+
+  .modal-innerwrapper{
+    width: 505px;
+    margin: 48px auto;
+  }
+  
+  a{ 
+    color: $black; 
+    text-decoration: underline;
+  }
+  textarea{ @include asap; }
+}
+
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -41,9 +72,7 @@
   overflow-y: auto;
 }
 
-.modal-form {
-  margin-bottom: 0;
-}
+.modal-form { margin-bottom: 0; }
 
 .modal-footer {
   padding: 14px 15px 15px;
@@ -79,57 +108,30 @@
   left: 0;
   z-index: 9998;
 
-  &.dark{
-    background-color: rgba(0,0,0,.5);
-  }
-  
+  &.dark{ background-color: rgba(0,0,0,.5); }
 }
 
-.modal{
-  position: absolute;
-  width: 730px;
-  min-height: 390px;
-  height: auto;
-  top: 50%;
-  left: 50%;
-  margin-top: -185px;
-  margin-left: -365px;
-  text-align: center;
-  background-color: $white;
-  @include border-radius(4px);
-  outline: none;
-  z-index: 9999;
-
-  .modal-innerwrapper{
-    width: 505px;
-    margin: 48px auto;
-  }
-  
-  textarea{ @include asap; }
-}
-
-.create-modal { @extend .modal; } 
-.embed-modal { 
-  @extend .modal; 
-  
-  .modal-footer{
-    padding: 0;
-    width: 494px;
-  }
-} 
-
-.success-modal { 
+.success-modal, .embed-modal, .create-modal{ 
   @extend .modal;
-  @include transition-property(all);
-  @include transition-duration(.4s);
-  @include opacity(1);
-  @include scale(1);
   
   h1{
     font-size: 54px;
     margin: 0 auto 36px;
+    white-space: nowrap;
   }
 
+  &.scaled-fade{
+    @include opacity(0);
+    @include scale(2);
+  }
+}
+
+.embed-modal{
+  p{text-align: left;}
+  h1{margin-bottom: 6px;}
+}
+
+.success-modal { 
   >span{
     text-align: left;
     margin-bottom: 24px;
@@ -137,13 +139,7 @@
   }
 
   span{font-size: 24px;}
-  
   .btn-xlarge{width: 100% !important;}
-
-  &.scaled-fade{
-    @include opacity(0);
-    @include scale(2);
-  }
 } 
 
 .modal-links{

@@ -41,6 +41,8 @@ define ["underscore",
 			onTemplateLoad:->
 				@$el.find(".preload").remove()
 				$('#embed-calendar').click (e)=>
+
 					e.preventDefault()
 					@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
+					console.log @projectEmbedCalendarModalView
 

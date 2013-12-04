@@ -50,10 +50,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 							window.location.href = "/"
 						else
 							$feedback.addClass("alert").addClass("alert-danger").html response.msg
-
-				#$form.ajaxForm options
-				$form.submit ->
-					#json_str = JSON.stringify($form.serializeObject())
+ 
+				$form.submit -> 
 					json_str = JSON.stringify($form.serializeJSON())
 					options.data = json_str
 					console.log 'options.data',options.data
@@ -82,7 +80,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 							window.location.href = "/"
 						else
 							$socialFeedback.addClass("alert").html response.msg
-				#$socialForm.ajaxForm socialOptions
+
 				$socialForm.submit ->
 					json_str = JSON.stringify($socialForm.serializeJSON())
 					options.data = json_str

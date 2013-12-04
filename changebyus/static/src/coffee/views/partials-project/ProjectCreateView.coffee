@@ -56,8 +56,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							#window.location = "/project/"+res.data.id+"/admin"
 						else
 							# $form.resetForm()
-							
-				# $form.ajaxForm options
+							 
 				$form.submit ->
 					json_str = JSON.stringify($form.serializeJSON())
 					options.data = json_str

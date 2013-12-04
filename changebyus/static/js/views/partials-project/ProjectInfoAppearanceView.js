@@ -36,7 +36,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       $form = this.$el.find("form");
       $feedback = $("#feedback");
       options = {
-        beforeSubmit: function() {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');
@@ -72,7 +76,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           }
         }
       };
-      $form.ajaxForm(options);
+      $form.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($form.serializeJSON());
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
       $projectLocation = $("#project_location");
       $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',

@@ -26,10 +26,13 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 			ajaxForm: -> 
 				$submit   = $("input[type='submit']")
 				$form     = $("form")
-				$login    = $("form[name='signin']")
 				$feedback = $(".login-feedback")
 				options   =
-					beforeSubmit: =>
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: => 
 						if $form.valid()
 							$form.find("input, textarea").attr("disabled", "disabled")
 							$feedback.removeClass("alert").removeClass("alert-danger").html ""
@@ -45,4 +48,9 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 						else
 							$feedback.addClass("alert").addClass("alert-danger").html response.msg
 
-				$login.ajaxForm options
+				$form.submit ->
+					json_str = JSON.stringify($form.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false

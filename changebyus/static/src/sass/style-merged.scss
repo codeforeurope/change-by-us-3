@@ -1008,15 +1008,6 @@ input {
   }
 }
 
-/*
-[class^="icon-"],[class*=" icon-"]{display:inline-block;width:14px;height:14px;*margin-right:.3em;line-height:14px;vertical-align:text-top;background-image:url("../img/glyphicons-halflings.png");background-position:14px 14px;background-repeat:no-repeat;margin-top:1px;}
-.icon-white,.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:focus>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>li>a:focus>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"],.dropdown-submenu:hover>a>[class^="icon-"],.dropdown-submenu:focus>a>[class^="icon-"],.dropdown-submenu:hover>a>[class*=" icon-"],.dropdown-submenu:focus>a>[class*=" icon-"]{background-image:url("../img/glyphicons-halflings-white.png");}
-
-.icon-envelope {background-position: -72px 0;}
-.icon-ok{background-position:-288px 0;}
-.icon-check{background-position:-144px -72px;}
-*/
-
 textarea:focus:invalid, select:focus:invalid {
   color: #b94a48;
   border-color: #ee5f5b;
@@ -2028,15 +2019,19 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 /*GENERAL NAV*/
-
-
 .topnav {
-  height: 87px; 
+  height: 76px; 
   width: 100%;
-  font-size: 22px;
   background-color: $primaryColor;
+  li{font-size: 22px;}
 }
 
+.logged-in{
+  .topnav {
+    height: 88px; 
+    li{font-size: 28px;}
+  }
+}
 
 .nav {
   margin-top: 22px;
@@ -2057,17 +2052,23 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     >span{ 
       color: $white; 
       line-height: 87px; 
+      font-size: 22px;
     }
   }
 
   .profile-nav-menu{
+    height: 0;
     width: 100%;
     background-color: $white;
-    display: none;
+    visibility: hidden;
     border: 1px solid $grayBorder;
     border-top: none;
+    overflow: hidden;
+    @include opacity(0);
     @include border-bottom-left-radius(4px);
     @include border-bottom-right-radius(4px);
+    @include transition-property(height, opacity);
+    @include transition-duration(.4s);
     a{
       font-size: 22px;
       color: $black;
@@ -2083,7 +2084,11 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
   &.active{
     .profile-nav-header{background-color: $primaryAltHoverColor;}
-    .profile-nav-menu{display: block;}
+    .profile-nav-menu{
+      height: 158px;
+      visibility: visible;
+      @include opacity(1);
+    }
   }
 
   .user-avatar { 
@@ -2825,6 +2830,14 @@ a.fileupload-exists{color: $white;}
   padding-left: 20px;
   padding-bottom: 20px;
   text-decoration: bold;
+}
+
+.main-content{
+  min-height: calc(100% - 188px); 
+}
+
+html, body, #page-wrapper{
+  height: 100%;
 }
 
 /***************************************

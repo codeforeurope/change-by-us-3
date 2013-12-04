@@ -133,30 +133,6 @@ require ["jquery",
 				).done (response)=> 
 					window.location.reload()
 
-			### STICKY FOOTER ###
-			$window      = $(window)
-			footerHeight = 0 
-			$footer      = $(".footer-nav")
-
-			window.positionFooter = ->
-				footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
-				console.log $footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height()
-
-				if ($(document.body).height()+footerHeight) < $window.height()
-					$footer.css
-						position: "fixed" 
-						bottom: 0
-				else
-					$footer.css position: "relative"
-			
-			positionFooter()
-			$window.scroll(positionFooter).resize(positionFooter)
-
-			window.onPageElementsLoad = ->
-				console.log 'onPageElementsLoad'
-				positionFooter()
-			### END STICKY FOOTER ###
-
 			### GLOBAL UTILS ###
 			window.popWindow = (url) ->
 				title = "social"
@@ -191,3 +167,27 @@ require ["jquery",
 					$btn.parent().addClass('btn-3d-parent')
 					$btn.attr('data-content', $btn.html())
 		 
+			### STICKY FOOTER ###
+			$window      = $(window)
+			footerHeight = 0 
+			$footer      = $(".footer-nav")
+
+			window.positionFooter = ->
+				delay 100, ->
+					footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
+					console.log $footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height()
+
+					if ($(document.body).height()+footerHeight) < $window.height()
+						$footer.css
+							position: "fixed" 
+							bottom: 0
+					else
+						$footer.css position: "relative"
+			
+			positionFooter()
+			$window.scroll(positionFooter).resize(positionFooter)
+
+			window.onPageElementsLoad = ->
+				console.log 'onPageElementsLoad'
+				positionFooter()
+			### END STICKY FOOTER ### 

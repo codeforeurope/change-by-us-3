@@ -88,8 +88,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         }
       };
       $form.submit(function() {
-        var json_str;
-        json_str = JSON.stringify($form.serializeObject());
+        var json_str, obj;
+        obj = $form.serializeJSON();
+        if (obj.public_email === "on") {
+          obj.public_email = true;
+        } else {
+          obj.public_email = false;
+        }
+        json_str = JSON.stringify(obj);
         options.data = json_str;
         console.log('options.data', options.data);
         $.ajax(options);

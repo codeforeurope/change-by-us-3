@@ -128,33 +128,6 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         return window.location.reload();
       });
     });
-    /* STICKY FOOTER*/
-
-    $window = $(window);
-    footerHeight = 0;
-    $footer = $(".footer-nav");
-    window.positionFooter = function() {
-      footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
-      console.log($footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height());
-      if (($(document.body).height() + footerHeight) < $window.height()) {
-        return $footer.css({
-          position: "fixed",
-          bottom: 0
-        });
-      } else {
-        return $footer.css({
-          position: "relative"
-        });
-      }
-    };
-    positionFooter();
-    $window.scroll(positionFooter).resize(positionFooter);
-    window.onPageElementsLoad = function() {
-      console.log('onPageElementsLoad');
-      return positionFooter();
-    };
-    /* END STICKY FOOTER*/
-
     /* GLOBAL UTILS*/
 
     window.popWindow = function(url) {
@@ -188,7 +161,7 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
     };
-    return window.buttonize3D = function() {
+    window.buttonize3D = function() {
       var $btn, $btn3d, btn, _i, _len, _results;
       $btn3d = $('.btn-3d');
       _results = [];
@@ -201,5 +174,34 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
       }
       return _results;
     };
+    /* STICKY FOOTER*/
+
+    $window = $(window);
+    footerHeight = 0;
+    $footer = $(".footer-nav");
+    window.positionFooter = function() {
+      return delay(100, function() {
+        footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
+        console.log($footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height());
+        if (($(document.body).height() + footerHeight) < $window.height()) {
+          return $footer.css({
+            position: "fixed",
+            bottom: 0
+          });
+        } else {
+          return $footer.css({
+            position: "relative"
+          });
+        }
+      });
+    };
+    positionFooter();
+    $window.scroll(positionFooter).resize(positionFooter);
+    return window.onPageElementsLoad = function() {
+      console.log('onPageElementsLoad');
+      return positionFooter();
+    };
+    /* END STICKY FOOTER*/
+
   });
 });

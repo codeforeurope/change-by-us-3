@@ -15,5 +15,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			fadeOut:->
 				$('#page-wrapper').removeClass('blur')
-				$('.success-modal').addClass('scaled-fade')
+				$('.success-modal, .embed-modal').addClass('scaled-fade')
 				$('.modal-fullscreen').fadeOut 500, => @$el.remove()

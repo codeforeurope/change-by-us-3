@@ -26,14 +26,17 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       });
     },
     ajaxForm: function() {
-      var $feedback, $form, $login, $submit, options,
+      var $feedback, $form, $submit, options,
         _this = this;
       $submit = $("input[type='submit']");
       $form = $("form");
-      $login = $("form[name='signin']");
       $feedback = $(".login-feedback");
       options = {
-        beforeSubmit: function() {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           if ($form.valid()) {
             $form.find("input, textarea").attr("disabled", "disabled");
             $feedback.removeClass("alert").removeClass("alert-danger").html("");
@@ -51,7 +54,14 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
           }
         }
       };
-      return $login.ajaxForm(options);
+      return $form.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($form.serializeJSON());
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
     }
   });
 });

@@ -60,7 +60,9 @@
   display: block;
 }
 
-.blur{ @include filter(blur(2px)); }
+.blur{ 
+  @include filter(blur(2px)); 
+}
 
 span.highlight{ @include highlight; }
 

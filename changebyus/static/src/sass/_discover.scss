@@ -1,29 +1,43 @@
 /********************************************************  
  DISCOVER 
  ********************************************************/
-.search-projects {
-  width: 290px;
-  margin-right: 10px;
-  z-index: 1;
-  /*float: left;*/
-}
-
 .search-forms {
   float: left;
   height: 94px;
   z-index: 1;
+  
+  input {
+    width: 304px;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    z-index: 1;
+    padding: 29px 10px;
+
+    &.category{
+      padding-left: 36px;
+      background-image: url('../img/icon_search.jpg');
+      background-position: 10px center;
+    }
+
+    &.zip{
+      background-image: url('../img/location-marker.jpg');
+      background-position: 95% center;
+    }
+  }
+
   .btn {
     margin-top: 37px;
-    //padding: 20px; 
-    //font-size: 24px; 
-    //border-radius: 4px;
+    padding: 20px 19px;
   } 
 }
+
+.search-inputs{margin-bottom: 12px;}
 
 .search-catagories{
   display: none;
   margin-top: -15px;
-  width: 290px;
+  width: 304px;
   @include box-skin;
 
   li{
@@ -47,12 +61,14 @@
 .filter-within{
   float: left;
   
-  select{width: 100px !important;}
+  select{width: 120px;}
   
   .dk_container {
     float: left;
     width: 120px;
+    margin-bottom:0;
   }
+  .dk_toggle{padding: 13px;}
 }
 
 
@@ -137,7 +153,10 @@
     font-size: 40px;
   }
 
-  .search-filters{ border-top: 1px solid $grayBorder; }
+  .search-filters{
+    border-top: 1px solid $grayBorder; 
+    padding-bottom: 16px;
+  }
 }
 
 .search-box-geo {

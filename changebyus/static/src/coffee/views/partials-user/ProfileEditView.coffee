@@ -68,10 +68,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 							$feedback.addClass('.alert-success').removeClass('.alert-error')
 						else
 							$feedback.removeClass('.alert-success').addClass('.alert-error')
-				
-				# $form.ajaxForm options
+
 				$form.submit ->
-					json_str = JSON.stringify($form.serializeObject())
+					obj = $form.serializeJSON()
+					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
+					json_str = JSON.stringify(obj)
 					options.data = json_str
 					console.log 'options.data',options.data
 					$.ajax options

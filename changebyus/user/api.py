@@ -19,7 +19,7 @@ from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField,
                             SubmitField, Required, ValidationError, 
                             PasswordField, HiddenField)
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure
+from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 from ..helpers.mongotools import db_list_to_dict_list 
 
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -70,22 +70,22 @@ def api_create_user():
         errStr = "You can not create an account when logged in." 
         return jsonify_response( ReturnStructure(msg = errStr, success = False) )
 
-    form = CreateUserForm()
+    form = CreateUserForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    email = request.form.get('email')
-    password = request.form.get('password')
-    display_name = request.form.get('display_name')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    bio = request.form.get('bio')
-    website = request.form.get('website')
-    location = request.form.get('location')
-    lat = request.form.get("lat")
-    lon = request.form.get("lon")
+    email = form.email.data
+    password = form.password.data
+    display_name = form.display_name.data
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    bio = form.bio.data
+    website = form.website.data
+    location = form.location.data
+    lat = form.lat.data
+    lon = form.lon.data
     
     if (lat and lon):
         geo_location = [float(lon), float(lat)]
@@ -115,6 +115,10 @@ def api_create_user():
                      website=website,
                      location=location,
                      geo_location=geo_location)
+
+    if u is None:
+        errStr += "Sorry, user creation failed.  Was a password included"
+        return jsonify_response( ReturnStructure(msg = errStr, success = False) )
 
     login_user(u)
 
@@ -151,15 +155,10 @@ def api_get_user(id):
     ret = ReturnStructure( data = u.as_dict() )
 
     # Remove email from visibility
-    if g.user.is_anonymous():
+    if g.user.is_anonymous() or current_user.id != u.id:
         if not u.public_email:
             if ret.data.has_key('email'):
-                del ret.data['email']
-    else: 
-        if current_user.id != u.id:
-            if not u.public_email:
-                if ret.data.has_key('email'):
-                    del ret.data['email']
+                ret.data['email'] = None
         
     return jsonify_response( ret )
 
@@ -195,7 +194,7 @@ def api_edit_user():
         API key exists in the config file
     """
 
-    form = EditUserForm()
+    form = EditUserForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -203,20 +202,18 @@ def api_edit_user():
 
     u = User.objects.with_id(g.user.id)
 
-    public_email = request.form.get('public_email')
-    if public_email:
-        u.public_email = request.form.get('public_email').lower() in bool_strings
+    u.public_email = form.public_email.data
 
-    email = request.form.get('email')
-    password = request.form.get('password')
-    display_name = request.form.get('display_name')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    bio = request.form.get('bio')
-    website = request.form.get('website')
-    location = request.form.get('location')
-    lat = request.form.get("lat")
-    lon = request.form.get("lon")
+    email = form.email.data
+    password = form.password.data
+    display_name = form.display_name.data
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    bio = form.bio.data
+    website = form.website.data
+    location = form.location.data
+    lat = form.lat.data
+    lon = form.lon.data
     
     if email: u.email = email
     if password: u.password = password
@@ -280,7 +277,6 @@ def api_edit_user():
 
 
     u.save()
-
 
     # defaults to success and 'OK'
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )

@@ -193,10 +193,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     # we override the as_dict to handle the email logic
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
         resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
- 
-        #if not self['public_email']:
-        #    resp['email'] = None
- 
+  
         image_urls = gen_image_urls(self.image_name)
 
         for image, url in image_urls.iteritems():

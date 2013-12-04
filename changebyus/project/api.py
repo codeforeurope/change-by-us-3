@@ -13,7 +13,7 @@ from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenFiel
 
 from ..geonames import get_geopoint
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure
+from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 from ..helpers.mongotools import db_list_to_dict_list
 
 from ..mongo_search import search
@@ -168,13 +168,14 @@ def api_create_project():
         User is logged in
     """
 
-    form = CreateProjectForm(request.json)
+    form = CreateProjectForm(as_multidict(request.json))
+
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    return _create_project()
+    return _create_project(form)
 
 
 @project_api.route('/slug/<project_slug>')
@@ -253,13 +254,13 @@ def api_edit_project():
         User is logged in and owns the project
     """
 
-    form = EditProjectForm()
+    form = EditProjectForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    return _edit_project()
+    return _edit_project(form)
 
 
 
@@ -413,20 +414,19 @@ def api_join_project():
         User is logged in
     """
 
-    form = JoinProjectForm()
+    form = JoinProjectForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    project_id = request.form.get('project_id')
+    project_id = form.project_id.data
 
     user = User.objects.with_id(g.user.id)
     project = Project.objects.with_id(project_id)
 
     old_upl = UserProjectLink.objects(user = user,
                                       project = project)
-
 
 
     if project.owner == user or old_upl.count() == 1:
@@ -466,14 +466,14 @@ def remove_project_user():
         User is logged in, user is an organizer of the project
     """    
 
-    form = RemoveMemberForm()
+    form = RemoveMemberForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    project_id = request.form.get('project_id')
-    user_id = request.form.get('user_id')
+    project_id = form.project_id.data
+    user_id = form.user_id.data
 
     infoStr = "User {0} is attempting removal of user {1} on project {2}.".format(g.user.id,
                                                                                   user_id,
@@ -501,13 +501,13 @@ def api_leave_project():
         User is logged in, user is a member of the project.
     """
 
-    form = LeaveProjectForm()
+    form = LeaveProjectForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    project_id = request.form.get('project_id')
+    project_id = form.project_id.data
 
     return _leave_project(project_id=project_id, user_id=g.user.id)
 
@@ -561,15 +561,15 @@ def api_change_user_role():
         User is logged in, user is an organizer of the project.
     """
 
-    form = ChangeUserRoleForm()
+    form = ChangeUserRoleForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    project_id = request.form.get('project_id')
-    user_id = request.form.get('user_id')
-    role = request.form.get('user_role').upper()
+    project_id = form.project_id.data
+    user_id = form.user_id.data
+    role = form.user_role.data
 
     if role not in ACTIVE_ROLES:
         errStr = "role_name was not one of {0}".ACTIVE_ROLES

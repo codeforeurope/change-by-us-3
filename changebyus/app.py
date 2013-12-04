@@ -32,7 +32,7 @@ from .project import project_view, project_api, resource_api
 from .facebook import facebook_view
 from .twitter import twitter_view
 from .stream import stream_view, stream_api
-from .user import user_view, user_api
+from .user import user_api
 from .frontend import frontend_view, frontend_api
 
 from .helpers.encryption import assemble_key
@@ -76,7 +76,6 @@ DEFAULT_BLUEPRINTS = (
     stripe_view,
     stream_view,
     stream_api,
-    user_view,
     user_api,
 )
 
@@ -312,44 +311,41 @@ def configure_error_handlers(app=None):
 
     @app.errorhandler(400)
     def bad_request(error=""):
-        userStr = '' if g.user.is_anonymous() else ' user[' + str(g.user.id) + '] '
-        current_app.logger.error("400 error occured " + userStr + " : " + str(error))
-        current_app.logger.exception(error)
+        current_app.logger.info(error)
+        return render_template('error.html', site=siteinfo, ga=ga,
+                               error=error)
 
-        return render_template('error.html', error="Sorry, this page is missing.")
-
-
-    # TODO discuss how these errors are handled
     @app.errorhandler(403)
     def forbidden_request(error=""):
-        userStr = '' if g.user.is_anonymous() else ' user[' + str(g.user.id) + '] '
-        current_app.logger.error("403 error occured " + userStr + " : " + str(error))
-        current_app.logger.exception(error)
+        current_app.logger.warning(error)
+        return render_template('403.html', site=siteinfo, ga=ga, 
+                               error="Sorry, forbidden request.")
 
-        return render_template('error.html', error="Sorry, forbidden request.")
-
-    # TODO discuss how these errors are handled
     @app.errorhandler(404)
     def not_found(error=""):
-        current_app.logger.error(str(error))
-        current_app.logger.error(str(request))
-        return render_template('error.html', error="Sorry, this page doesn't exist.")
+        current_app.logger.warning("[%s] %s" % (request.url, str(error)))
+        return render_template('404.html', site=siteinfo, ga=ga, 
+                               error=str(error), description=error.description)
     
     @app.errorhandler(405)
     def no_permission(error=""):
-        userStr = '' if g.user.is_anonymous() else ' user[' + str(g.user.id) + '] '
-        current_app.logger.error("405 error occured " + userStr + " : " + str(error))
-        current_app.logger.exception(error)
+        current_app.logger.info(error)
 
-        return render_template('error.html', error="Sorry, you're not authorized to see this page.")
+        return render_template('error.html', site=siteinfo, ga=ga, 
+                               error=str(error), description=error.description)
 
     @app.errorhandler(500)
     def internal_server_error(error=""):
-        userStr = '' if g.user.is_anonymous() else ' user[' + str(g.user.id) + '] '
-        current_app.logger.error("500 error occured " + userStr + " : " + str(error))
         current_app.logger.exception(error)
 
-        return render_template('error.html', error="Sorry, there was a server error.")
+        return render_template('error.html', site=siteinfo, ga=ga, 
+                               error=str(error), description=error.description)
+
+    @app.errorhandler(413)
+    def upload_too_large(error=""):
+        current_app.logger.exception(error)
+        return render_template('error.html', site=siteinfo, ga=ga, 
+                               error=str(error), description=error.description)
 
     if app.config['DEBUG'] is False:
         @app.errorhandler(Exception)

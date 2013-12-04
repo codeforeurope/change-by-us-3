@@ -15,7 +15,7 @@ from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, PasswordFi
 from ..user.models import User
 from ..user.helpers import ( _get_user_by_email, _verify_user_password )
 from ..project.api import api_get_projects
-from ..helpers.flasktools import ReturnStructure, jsonify_response
+from ..helpers.flasktools import ReturnStructure, jsonify_response, as_multidict
 
 frontend_api = Blueprint('frontend_api', __name__)
 
@@ -35,14 +35,14 @@ class LoginForm(Form):
 @frontend_api.route('/login', methods = ['POST'])
 def user_login():
 
-    form = LoginForm()
+    form = LoginForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request container errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
     
-    email = request.form.get('email')
-    password = request.form.get('password')
+    email = form.email.data
+    password = form.password.data
 
     user = _get_user_by_email(email = email)
 

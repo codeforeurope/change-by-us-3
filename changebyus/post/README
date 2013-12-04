@@ -1,7 +1,8 @@
 For CBU, there is a superficial distinction between a discussion and an update.
 For all intensive purposes, one is simply considered public and one considered private.
 
+update = public
+discussion = private
+
 The data structure is the same, and the way they act is the same, but for CBU
-we decided to seporate it into a discussions api and an updates api to avoid
-confusion.  This is why there are the files api_discussions and api_updates, 
-even though they just call helper funcs.
+we decided to seporate it api wise.

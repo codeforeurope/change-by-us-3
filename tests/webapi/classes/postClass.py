@@ -36,8 +36,8 @@ class PostClass():
         if response_to:
             update['response_to_id'] =  response_to
 
-        resp = client.POST('/api/post/add_update', data = json.dumps(update), content_type="application/json")
-        print resp
+        resp = client.POST('/api/post/add/update', data = json.dumps(update), content_type="application/json")
+
         if expected:
             client.assertTrue( resp['success'] )
             self.update_id = resp['data']['id']
@@ -61,8 +61,8 @@ class PostClass():
         if response_to:
             update['response_to_id'] = response_to
 
-        resp = client.POST('/api/post/add_discussion', data = json.dumps(update), content_type="application/json")
-        print resp
+        resp = client.POST('/api/post/add/discussion', data = json.dumps(update), content_type="application/json")
+
         if expected:
             client.assertTrue( resp['success'] )
             self.discussion_id = resp['data']['id']

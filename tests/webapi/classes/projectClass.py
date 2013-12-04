@@ -35,8 +35,6 @@ class ProjectClass():
 
         headers = {'Content-type': 'application/json', 'Accept': 'application/json'}
         resp = client.POST('/api/project/create', data = json.dumps(create), content_type="application/json")
-  
-        print resp
 
         client.assertTrue( resp['success'] )
         client.assertTrue( resp['data']['name'] == self.name )

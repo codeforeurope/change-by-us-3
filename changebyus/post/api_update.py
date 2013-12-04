@@ -125,7 +125,9 @@ def api_add_project_update():
     title = form.title.data
     description = form.description.data
     project_id = form.project_id.data
-    response_to_id = form.response_to_id.data
+
+    response_to_id = form.response_to_id.data if form.response_to_id.data != '' else None
+
 
     return _create_project_post(title = title,
                                 description = description,

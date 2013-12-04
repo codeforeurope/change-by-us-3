@@ -47,23 +47,15 @@ def _get_lat_lon_from_location(loc):
 
     return latlon
 
-def _create_project( resource = False ):
+def _create_project(form, resource = False ):
 
-    name = request.form.get('name')
-    description = request.form.get('description')
-    category = request.form.get('category')
-    gcal_code = request.form.get('gcal_code')
-    location = request.form.get('location')
-    lat = request.form.get("lat")
-    lon = request.form.get("lon")
-
-    print name
-    print description
-    print category
-    print gcal_code
-    print location
-    print lat
-    print lon
+    name = form.name.data
+    description = form.description.data
+    category = form.category.data
+    gcal_code = form.gcal_code.data
+    location = form.location.data
+    lat = form.lat.data
+    lon = form.lon.data
     
     if (lat and lon):
         geo_location = [float(lon), float(lat)]
@@ -163,16 +155,16 @@ def _create_project( resource = False ):
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
 
-def _edit_project():
+def _edit_project(form):
     
-    project_id = request.form.get('project_id')
-    name = request.form.get('name')
-    description = request.form.get('description')
-    category = request.form.get('category')
-    gcal_code = request.form.get('gcal_code')
-    location = request.form.get('location')
-    lat = request.form.get('lat')
-    lon = request.form.get('lon')
+    project_id = form.project_id.data
+    name = form.name.data
+    description = form.description.data
+    category = form.category.data
+    gcal_code = form.gcal_code.data
+    location = form.location.data
+    lat = form.lat.data
+    lon = form.lon.data
 
     p = Project.objects.with_id(project_id)
 
@@ -248,7 +240,7 @@ def _edit_project():
 
     infoStr = "User {0} has edited project {1} with request {2}".format(g.user.id,
                                                                         project_id,
-                                                                        str(request.form))
+                                                                        str(request.json))
     current_app.logger.info(infoStr)
 
     return jsonify_response( ReturnStructure( data = p.as_dict() ))

@@ -30,7 +30,7 @@ from ..project.helpers import ( _get_user_involved_projects, _get_project_users_
 from ..project.decorators import ( project_exists, project_member, 
                                    _is_organizer as _is_project_organizer )
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure
+from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -232,18 +232,18 @@ def api_add_project_post():
         User is logged in, user is a member or owner of the project
     """
 
-    form = CreateProjectPostForm()
+    form = CreateProjectPostForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    title          = request.form.get('title')
-    description    = request.form.get('description')
-    social_sharing = request.form.getlist('share_to')
-    project_id     = request.form.get('project_id')
-    response_to_id = request.form.get('response_to_id')
-    visibility     = request.form.get('visibility')
+    title          = form.title.data
+    description    = form.description.data
+    social_sharing = form.social_sharing.data
+    project_id     = form.project_id.data
+    response_to_id = form.response_to_id.data
+    visibility     = form.visibility.data
 
     return _create_project_post(title = title,
                                 description = description,
@@ -281,16 +281,16 @@ def api_edit_post():
         social posts.
     """
 
-    form = EditProjectPostForm()
+    form = EditProjectPostForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
 
-    post_id = request.form.get('post_id')
-    description = request.form.get('description')
-    title = request.form.get('title')
+    post_id = form.post_id.data
+    description = form.description.data
+    title = form.title.data
 
     post = ProjectPost.objects.with_id(post_id)
 
@@ -316,13 +316,13 @@ class DeleteProjectPostForm(Form):
 @post_delete_permission
 def api_delete_post():
 
-    form = DeleteProjectPostForm()
+    form = DeleteProjectPostForm(as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    post_id = requests.form.get('post_id')
+    post_id = form.post_id.data
 
     post = ProjectPosts.objects.with_id( post_id )
     post.delete()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    NS11MM Tests Init
+    CBU Tests Init
     ~~~~~~~~~~~~~~~~~~
 
     Initialize the app and the database for the tests and provide common
@@ -12,7 +12,7 @@
         from nose.tools import set_trace; set_trace()
 
 
-    :copyright: (c) 2011 Local Projects
+    :copyright: (c) 2013 Local Projects
     :license: 
 """
 from flask.ext.testing import TestCase
@@ -28,18 +28,6 @@ class BaseTestCase(TestCase):
     """Base TestClass for application"""
     TESTING = True
     CSRF_ENABLED = False
-
-    #--------- For Authenticated Resources ----------
-    json_user = {"login": "test_json_user@lp.net"}
-    admin_user = {"login": "sundar@localprojects.net", "password": "sundar"}
-
-    def login_as(self, next=None, login=None, password=None):
-        if next is not None: next = "next=%s" % next
-        else: next = ""
-        response = self.POST('/login?%s' % next, 
-                             data={"login":login, 
-                                   "password":password})
-        return response
 
     def create_app(self):
         #print "cbu_app ", dir(cbu_app)
@@ -117,21 +105,3 @@ class BaseTestCase(TestCase):
         
         return data
     
-
-class BaseProgramsTest(BaseTestCase):
-    prefix = "[ProgramsTests] "
-    program_type = None
-    
-    def setUp(self):
-        # Create test records
-        self._create_test_programs()
-    
-    def tearDown(self):
-        # Remove test records
-        self._delete_test_programs()
-
-    def _create_test_programs(self):
-        pass
-        
-    def _delete_test_programs(self):
-        pass

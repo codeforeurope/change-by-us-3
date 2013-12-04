@@ -1,4 +1,5 @@
 from flask import request, current_app
+from werkzeug import MultiDict
 
 try:
     import simplejson as json
@@ -80,3 +81,15 @@ def gen_blank_ok():
 
     resp = jsonify_response( { } )
     return resp
+
+
+def as_multidict(data=None):
+    if data is None: return None
+    
+    resp = MultiDict()
+    for key, val in data.items():
+        if not isinstance(val, list): val = [val]
+        resp.setlist(key, val)
+    
+    return resp
+

@@ -43,8 +43,12 @@ def _check_for_roles(project, user_id, roles_list):
 def project_exists(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
-        project_slug = request.form.get('project_slug') or request.view_args.get('project_slug')
+        if(request.json):
+            project_id = request.json.get('project_id')
+            project_slug = request.json.get('project_slug')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
+            project_slug = request.form.get('project_slug') or request.view_args.get('project_slug')
 
         errStr = ''
         if project_id is None and project_slug is None:
@@ -83,7 +87,10 @@ def project_exists(f):
 def project_member(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        if(request.json):
+            project_id = request.json.get('project_id')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         if _is_member(project_id, g.user.id):
             return f(*args, **kwargs)
@@ -97,7 +104,10 @@ def project_member(f):
 def project_ownership(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        if(request.json):
+            project_id = request.json.get('project_id')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         project = Project.objects.with_id(project_id)
         if _is_owner(project, g.user.id):
@@ -113,7 +123,10 @@ def project_ownership(f):
 def project_organizer(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        if(request.json):
+            project_id = request.json.get('project_id')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         project = Project.objects.with_id(project_id)
 

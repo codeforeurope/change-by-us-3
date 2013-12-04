@@ -64,7 +64,7 @@ def _create_user(email=None,
 
     # we at least need a password
     if password is None:
-        return False
+        return None
 
     u = User(email=email,
              display_name=display_name,

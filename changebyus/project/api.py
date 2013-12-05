@@ -168,7 +168,7 @@ def api_create_project():
         User is logged in
     """
 
-    form = CreateProjectForm(as_multidict(request.json))
+    form = CreateProjectForm(request.form or as_multidict(request.json))
 
     if not form.validate():
         errStr = "Request contained errors."
@@ -254,7 +254,7 @@ def api_edit_project():
         User is logged in and owns the project
     """
 
-    form = EditProjectForm(as_multidict(request.json))
+    form = EditProjectForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -414,7 +414,7 @@ def api_join_project():
         User is logged in
     """
 
-    form = JoinProjectForm(as_multidict(request.json))
+    form = JoinProjectForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -466,7 +466,7 @@ def remove_project_user():
         User is logged in, user is an organizer of the project
     """    
 
-    form = RemoveMemberForm(as_multidict(request.json))
+    form = RemoveMemberForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -501,7 +501,7 @@ def api_leave_project():
         User is logged in, user is a member of the project.
     """
 
-    form = LeaveProjectForm(as_multidict(request.json))
+    form = LeaveProjectForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -561,7 +561,7 @@ def api_change_user_role():
         User is logged in, user is an organizer of the project.
     """
 
-    form = ChangeUserRoleForm(as_multidict(request.json))
+    form = ChangeUserRoleForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 

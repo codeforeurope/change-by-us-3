@@ -35,7 +35,7 @@ class LoginForm(Form):
 @frontend_api.route('/login', methods = ['POST'])
 def user_login():
 
-    form = LoginForm(as_multidict(request.json))
+    form = LoginForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request container errors."
         return jsonify_response( ReturnStructure( success = False, 

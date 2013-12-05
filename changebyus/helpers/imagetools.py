@@ -1,7 +1,7 @@
 import os
 from PIL import Image, ImageOps, ImageDraw, ImageFilter
 from flask import current_app
-
+from flask.ext.cdn_rackspace import upload_rackspace_image
 
 class NamedImage():
     def __init__(self, name=None, image=None, extension=None ):
@@ -96,10 +96,37 @@ def generate_thumbnail( filepath, size, blurs = 0 ):
         return None
 
 
-def generate_blurred_bg():
-    # LV TODO
-    pass
+def upload_image(photo, manipulators):
 
-def generate_circled_crop():
-    # LV TODO
-    pass
+    file_name = None
+
+    if len(photo.filename) > 3:
+
+        try:
+            result = upload_rackspace_image( photo )
+
+            if result.success:
+                file_name = result.name
+                file_path = result.path
+                image_url = result.url
+
+                for manipulator in manipulators:
+
+                    manip_image = manipulator.converter(file_path)
+                    base, extension = os.path.splitext(file_name)
+                    manip_image_name = manipulator.prefix + '.' + base + manipulator.extension
+
+                    if not upload_rackspace_image( manip_image.image, 
+                                                   manip_image_name).success:
+
+                        return None
+            else:
+                return None
+
+        except Exception as e:
+            current_app.logger.exception(e)
+            return None
+
+        file_name = result.name
+
+    return file_name

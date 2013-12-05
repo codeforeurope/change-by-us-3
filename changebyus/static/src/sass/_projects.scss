@@ -32,6 +32,8 @@
 .projects {
   padding: none;
   margin: none;
+  
+  h4{margin-bottom:10px;}
 }
 
 .project-preview:nth-child(3n+3){
@@ -472,18 +474,6 @@ h2.admin-title{
   width: 33%;
   text-align: center;
 }
-
-/*
-.project-update-form{
-  padding: 30px;
-  @include box-skin;
-  .btn-medium{
-    float: right;
-  }
-}
-*/
-
-.body-container { position: relative; }
 
 .tabs-pane, .owner-tabs-pane{
   position: absolute;

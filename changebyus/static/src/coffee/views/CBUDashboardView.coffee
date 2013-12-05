@@ -24,6 +24,7 @@ define ["underscore",
 		CBUDashboardView = AbstractView.extend
 
 			location:{name: "", lat: 0, lon: 0} 
+			className: "body-container"
 
 			initialize: (options) ->  
 				AbstractView::initialize.call @, options
@@ -31,8 +32,7 @@ define ["underscore",
 				@userModel.fetch 
 					success: =>@render() 
 
-			render: -> 
-				console.log '@userModel',@userModel
+			render: ->  
 				@$el.template @templateDir+"/templates/dashboard.html", 
 					{data:@userModel.attributes}, => 
 						@onTemplateLoad()
@@ -56,8 +56,6 @@ define ["underscore",
 					window.location.hash = $(this).attr("href").substring(1)
 
 				profileEditView = new ProfileEditView({model:@userModel, parent:@profileView})
-
-				console.log '@model',@model
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

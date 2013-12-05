@@ -2778,10 +2778,9 @@ a.fileupload-exists{color: $white;}
 }
 
 .body-container {
-  width: 1018px;
-  /*border: 1px dotted $black;*/
-  margin: 0 auto;
-  /*padding: 20px;*/
+  margin: 0 auto; 
+  max-width: 1018px; 
+  width: 100%;
 }
 
 .create {
@@ -2858,3 +2857,6 @@ html, body, #page-wrapper{
 @import "admin";
 @import "discover";
 @import "homepage";
+@import "responsive_tablet_portrait";
+@import "responsive_mobile_landscape";
+@import "responsive_mobile_portrait";

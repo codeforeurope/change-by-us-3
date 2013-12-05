@@ -6,6 +6,7 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       lat: 0,
       lon: 0
     },
+    className: "body-container",
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
@@ -20,7 +21,6 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     render: function() {
       var _this = this;
-      console.log('@userModel', this.userModel);
       this.$el.template(this.templateDir + "/templates/dashboard.html", {
         data: this.userModel.attributes
       }, function() {
@@ -45,11 +45,10 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       $("a[href^='#']").click(function(e) {
         return window.location.hash = $(this).attr("href").substring(1);
       });
-      profileEditView = new ProfileEditView({
+      return profileEditView = new ProfileEditView({
         model: this.userModel,
         parent: this.profileView
       });
-      return console.log('@model', this.model);
     },
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;

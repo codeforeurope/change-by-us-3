@@ -36,19 +36,14 @@
   h4{margin-bottom:10px;}
 }
 
-.project-preview:nth-child(3n+3){
-  .project-square {margin-right: 0;}
-}
-
 .project-square {
-  @include box-skin;
-  box-sizing: initial;
+  @include box-skin; 
   padding: 10px;
   height: 525px;
-  width: 306px;
+  width: 328px;
   float: left;
   margin-right: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 22px;
 
   &:hover{ 
     .hover-overlay{ 
@@ -78,7 +73,7 @@
 
   .hover-btn{
     text-align: center;
-    width: 306px;
+    width: 328px;
     top: 10px;
     left: 10px;
     @include transition-duration(.3s);

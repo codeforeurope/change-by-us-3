@@ -4,15 +4,14 @@
              <div class="side-tab">Resource</div>
         <% } %>
     <% } %>
-    
-    
+     
     <div class="project-dashboard-image">
         <img src="<%= data.image_url_small_square %>" alt="Project Icon">
     </div> 
     <div class="project-name"><%= data.name %></div>
     <div class="project-description"><%= data.description %></div>
     <div class="project-category"><a href="/discover"><%= data.category %></a> </div>
-    <div class="hover-overlay"></div>
+    
     <% if(data.isProject){ %>
         <div class="hover-btn">
             <% if(data.isOwned){ %> 
@@ -23,5 +22,12 @@
                 <div class="close-x"></div>
             <% } %>
         </div>
+        <div class="hover-overlay"></div>
+    <% }else{ %>
+        <a href="/project/<%= data.id %>" class="btn btn-medium btn-primary btn-3d">
+            <div class="hover-overlay"></div>
+        </a>
     <% } %>
+
+    
 </div>

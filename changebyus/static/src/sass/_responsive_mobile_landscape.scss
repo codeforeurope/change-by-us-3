@@ -1,7 +1,7 @@
 /**** affects all sizes from 0 to 767px **/
 
 @media only screen and (max-width: 767px) {
-	body{background: red;}
+	body.debug{background: red;}
 
 	.nav.user{
 		width: 100px;
@@ -29,10 +29,17 @@
 		.input-xxlarge{width: 100%;}
 	}
 
+	select[name=category]{
+		width: 100%;
+	}
+
 	.form-right{
 		margin-top: 40px;
 	}
 
-	
+	.project-square{
+		width: 96%;
+		margin: auto 2% !important;
+	}
 
 }

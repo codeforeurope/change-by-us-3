@@ -26,10 +26,13 @@
     margin: 48px auto;
   }
   
-  a{ 
-    color: $black; 
-    text-decoration: underline;
+  span, p{
+    a{ 
+      color: $black; 
+      text-decoration: underline;
+    }
   }
+  
   textarea{ @include asap; }
 }
 

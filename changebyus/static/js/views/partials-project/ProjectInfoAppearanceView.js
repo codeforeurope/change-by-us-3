@@ -39,8 +39,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         type: $form.attr('method'),
         url: $form.attr('action'),
         dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        beforeSend: function() {
+        contentType: "multipart/form-data; charset=utf-8",
+        beforeSubmit: function() {
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');
@@ -76,14 +76,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           }
         }
       };
-      $form.submit(function() {
-        var json_str;
-        json_str = JSON.stringify($form.serializeJSON());
-        options.data = json_str;
-        console.log('options.data', options.data);
-        $.ajax(options);
-        return false;
-      });
+      /*
+      				$form.submit ->
+      					options.data = json_str
+      					$.ajax options
+      					false
+      */
+
+      $form.ajaxForm(options);
       $projectLocation = $("#project_location");
       $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',
@@ -116,7 +116,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         $('input[name="lon"]').val(_this.location.lon);
         return console.log(datum);
       });
-      return $('input:radio').screwDefaultButtons({
+      return this.$el.find('input:radio').screwDefaultButtons({
         image: 'url("/static/img/icon-lock.png")',
         width: 60,
         height: 25

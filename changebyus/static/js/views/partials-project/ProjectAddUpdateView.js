@@ -43,7 +43,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         $shareToggle.click(function() {
           return $shareOptions.toggleClass("hide");
         });
-        return $('input:radio, input:checkbox').screwDefaultButtons({
+        return _this.$el.find('input:radio, input:checkbox').screwDefaultButtons({
           image: 'url("/static/img/black-check.png")',
           width: 18,
           height: 18

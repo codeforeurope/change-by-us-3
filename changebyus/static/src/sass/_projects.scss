@@ -506,8 +506,8 @@ h2.admin-title{
     height: 100%;
     display: inline-block;
     list-style-type: none;
-    padding: 0 10px;
-    margin: 0 18px; 
+    padding: 0 1%; 
+    margin: 0 1%; 
   }  
   a{
     line-height: 58px;
@@ -518,6 +518,10 @@ h2.admin-title{
 
 .owner-tabs-pane{
   li.active{background-color: rgba(0,0,0,.75);}
+  
+  .view-project{
+    display: none;
+  }
 }
 
 .tabs-pane{

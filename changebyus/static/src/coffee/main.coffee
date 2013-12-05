@@ -161,8 +161,7 @@ require ["jquery",
 
 			window.buttonize3D = ->
 				$btn3d = $('.btn-3d')
-				for btn in $btn3d
-					console.log btn
+				for btn in $btn3d 
 					$btn = $(btn)
 					$btn.parent().addClass('btn-3d-parent')
 					$btn.attr('data-content', $btn.html())

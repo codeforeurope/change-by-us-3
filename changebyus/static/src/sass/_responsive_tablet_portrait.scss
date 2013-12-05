@@ -1,3 +1,34 @@
-@media only screen and (min-width: 768px) and (max-width: 959px) {
-         
-}
+/**** affects all sizes from 0 to 959px **/
+
+@media only screen and (max-width: 959px) {
+	body{background: blue;}
+
+	//.main-content{padding: 0 20px;}
+
+	.feature-image{display: none;}
+
+	.tabs-pane, .owner-tabs-pane{
+		height: auto;
+		position: relative;
+		bottom: auto;
+		background: transparent;
+		
+		li{ 
+			display: list-item !important;
+			margin: auto;
+			&.active{background: transparent;}
+		}
+		
+		a{
+			text-shadow: none;
+			line-height: 58px;
+			@include font-styling("asap", 22px, $black, "normal", "bold");
+		}
+
+		.view-project{
+			margin-left: 30px;
+			display: block;
+		}
+	}
+	
+} 

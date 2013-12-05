@@ -1,3 +1,38 @@
-@media only screen and (min-width: 480px) and (max-width: 767px) {
-         
+/**** affects all sizes from 0 to 767px **/
+
+@media only screen and (max-width: 767px) {
+	body{background: red;}
+
+	.nav.user{
+		width: 100px;
+		span{display: none;}
+	}
+
+	.logged-in .topnav li{
+		font-size: 22px;
+	}
+
+	.nav-pills>li {
+		padding-right: 12px;
+	}
+
+	.profile-nav-menu{
+		display: none;
+	}
+
+	.form-right, .form-left{
+		float: none;
+		width: 100%;
+	}
+	
+	.form-left{
+		.input-xxlarge{width: 100%;}
+	}
+
+	.form-right{
+		margin-top: 40px;
+	}
+
+	
+
 }

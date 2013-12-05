@@ -33,8 +33,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 					type: $form.attr('method')
 					url: $form.attr('action')
 					dataType: "json" 
-					contentType: "application/json; charset=utf-8"
-					beforeSend: =>  
+					#contentType: "application/json; charset=utf-8"
+					contentType: "multipart/form-data; charset=utf-8"
+					beforeSubmit: =>  
+					#beforeSend: =>  
 						if $form.valid()
 							$zip = $('input[name="zip"]')
 							console.log '$zip.val()  @location.name ',$zip, $zip.val(), @location.name 
@@ -49,7 +51,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 									$('.tt-dropdown-menu').show()
 								return false
 						else
-							return false
+							return false 
 
 					success: (res) -> 
 						msg = if res.msg.toLowerCase() is "ok" then "Updated Successfully" else res.msg
@@ -63,12 +65,15 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 						else
 							$feedback.removeClass('alert-success').addClass('alert-error')
 							
-				$form.submit -> 
-					json_str = JSON.stringify($form.serializeJSON())
+				###
+				$form.submit ->
 					options.data = json_str
-					console.log 'options.data',options.data
 					$.ajax options
 					false
+				### 
+
+				$form.ajaxForm options
+
 
 				# location autocomplete
 				$projectLocation = $("#project_location")
@@ -93,7 +98,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 						console.log(datum)
 				)
 
-				$('input:radio').screwDefaultButtons
+
+				@$el.find('input:radio').screwDefaultButtons
 					image: 'url("/static/img/icon-lock.png")'
 					width: 60
 					height: 25

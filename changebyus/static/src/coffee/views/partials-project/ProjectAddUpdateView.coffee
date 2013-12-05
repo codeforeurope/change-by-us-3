@@ -51,7 +51,7 @@ define ["underscore",
 					$shareToggle = $(".share-toggle")
 					$shareToggle.click -> $shareOptions.toggleClass("hide")
 
-					$('input:radio, input:checkbox').screwDefaultButtons
+					@$el.find('input:radio, input:checkbox').screwDefaultButtons
 						image: 'url("/static/img/black-check.png")'
 						width: 18
 						height: 18

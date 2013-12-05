@@ -167,7 +167,6 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
       _results = [];
       for (_i = 0, _len = $btn3d.length; _i < _len; _i++) {
         btn = $btn3d[_i];
-        console.log(btn);
         $btn = $(btn);
         $btn.parent().addClass('btn-3d-parent');
         _results.push($btn.attr('data-content', $btn.html()));

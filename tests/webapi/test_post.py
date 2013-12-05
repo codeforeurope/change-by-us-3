@@ -122,16 +122,11 @@ class PostTests(BaseTestCase):
                                              response_to = self.owner_post.discussion_id,
                                              expected = False )
 
-
         # now be sure we get the data formatted as we like it
 
-
-        print "\n\n\n\n\n\n********** DECODING **********\n\n\n"
-
-        from pprint import pprint
-        updates_url = '/api/post/project/{0}/list_updates'.format(self.project.project_id)
+        updates_url = '/api/post/project/{0}/updates'.format(self.project.project_id)
         updates = self.GET( updates_url )
-        self.assertTrueMsg( updates['success'], updates['msg'] )
+        self.assertTrue( updates['success'] )
 
         success = False
         for update in updates['data']:
@@ -143,13 +138,12 @@ class PostTests(BaseTestCase):
                 if update['responses'][0]['id'] == self.response_post.update_id:
                     success = True
 
-        self.assertTrueMsg( success, updates['msg'] )
+        self.assertTrue( success )
 
       
-        discussions_url = '/api/post/project/{0}/list_discussions'.format(self.project.project_id)
+        discussions_url = '/api/post/project/{0}/discussions'.format(self.project.project_id)
         discussions = self.GET( discussions_url )
-        self.assertTrueMsg( updates['success'], updates['msg'] )
+        self.assertTrue( updates['success'] )
 
-        pprint(updates)
+        self.assertTrue( success )
 
-        self.assertTrueMsg( success, updates['msg'] )

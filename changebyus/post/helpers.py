@@ -16,18 +16,6 @@ from .models import Project, ProjectPost, SocialMediaObject
 from ..post.activity import update_project_activity
 
 
-def _get_posts_for_project(project_id = None, 
-                           private_posts = False, 
-                           max_posts = 10):
-
-    if private_posts:
-        posts = ProjectPost.objects( project = project_id )[0:max_posts]
-    else:
-        posts = ProjectPost.objects( project = project_id,
-                                     public = True )[0:max_posts]
-
-    return posts
-
 
 def _get_project_post_stream(id=None, private_data=False):
     """
@@ -78,19 +66,13 @@ def _create_project_post(title = None,
 
 
     # a little validation
-    errStr = ''
     if not (visibility is None or visibility.lower() in ['public', 'private']):
-        errStr += "Visibility must be public or private.  "
-    if not (social_sharing is None or social_sharing.lower() in ['facebook', 'twitter']):
-        errStr += "Social Sharing must be blank or facebook / twitter."
-
-    if len(errStr) > 0:
+        errStr = "Visibility must be public or private.  "
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
     project = Project.objects().with_id(project_id)
     user = User.objects.with_id(g.user.id)
-
 
     # verify the user has permission for the post.
     # - we have logic where you need to be an organizer to make a public post,
@@ -101,7 +83,7 @@ def _create_project_post(title = None,
     is_response_post = response_to_id is not None
     is_organizer = _is_project_organizer(project, user.id)
     is_private_post = True if visibility is None else visibility.lower() == 'private'
-    is_social_post = social_sharing is not None
+    is_social_post = 'facebook' in social_sharing or 'twitter' in social_sharing
 
     permission = False
 
@@ -115,7 +97,7 @@ def _create_project_post(title = None,
         permission = False
 
     if not permission:
-        errMsg = "User does not have permission for this type of post."
+        errStr = "User does not have permission for this type of post."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
@@ -154,11 +136,12 @@ def _create_project_post(title = None,
         if pp.is_new():
             pp.save()
 
+        # TODO convert this to slug
         project_url = url_for('project_view.project_view_id', id=id, _external=True)
 
         # do social posts as necessary
         fb_post = None
-        if 'facebook' in social_sharing.lower():
+        if 'facebook' in social_sharing:
 
             # socialMediaObject is an optional embedded field
             if pp.social_object == None:
@@ -173,7 +156,7 @@ def _create_project_post(title = None,
 
 
         twitter_tweet = None
-        if 'twitter' in social_sharing.lower():
+        if 'twitter' in social_sharing:
 
             # socialMediaObject is an optional embedded field
             if pp.social_object == None:

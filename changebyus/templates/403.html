@@ -1,0 +1,15 @@
+{% extends "error.html" %}
+
+{% block errordetails %}
+<div id="error-403">
+    <div id="error-container">
+        <h1 class="error-title">{{error}}</h1>
+        <p class="error-message">You are not authorized to access that page</p>
+        <div class="btn btn-lg btn-link" >
+            <a href="http://localhost/">Go Home</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+

@@ -1,13 +1,17 @@
 /**** affects all sizes from 0 to 959px **/
 
+@import "variables";
+
 @media only screen and (max-width: 959px) {
-	body{background: blue;}
+	body.debug{background: blue;}
 
 	//.main-content{padding: 0 20px;}
 
 	.feature-image{display: none;}
 
-	.tabs-pane, .owner-tabs-pane{
+	.project-header{margin-top: 0;}
+
+	.tabs-pane, .owner-tabs-pane{ 
 		height: auto;
 		position: relative;
 		bottom: auto;
@@ -15,11 +19,14 @@
 		
 		li{ 
 			display: list-item !important;
-			margin: auto;
+			margin: auto; 
+			padding: 0 0 0 30px;
+			border-top: 1px solid $grayBorder;
 			&.active{background: transparent;}
 		}
 		
 		a{
+			font-size: 18px;
 			text-shadow: none;
 			line-height: 58px;
 			@include font-styling("asap", 22px, $black, "normal", "bold");
@@ -29,6 +36,25 @@
 			margin-left: 30px;
 			display: block;
 		}
+
+		.profile-image{display: none;}
+	}
+
+	.project-preview:nth-child(2n+2){
+		.project-square {margin-left: 0;}
 	}
 	
+	.project-square { 
+		width: 47%;
+		margin: 16px 2%;
+	}
+
+	.project-dashboard-image{
+		width: 100%;
+	}
+
+	.project-square .hover-btn {
+		width: 100%;
+	}
+
 } 

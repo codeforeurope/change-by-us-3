@@ -42,18 +42,20 @@
 
 .project-square {
   @include box-skin;
+  box-sizing: initial;
   padding: 10px;
   height: 525px;
-  width: 328px;
+  width: 306px;
   float: left;
   margin-right: 16px;
   margin-bottom: 16px;
 
-  &:hover{
+  &:hover{ 
     .hover-overlay{ 
-      display: block;
+      visibility: visible;
       @include opacity(1);
     }
+    .hover-btn{ @include opacity(1); }
   }
 
   .side-tab{
@@ -68,17 +70,26 @@
     @include border-bottom-right-radius(4px);
   }
 
-  .hover-overlay{
-    text-align: center; 
-    background-color: rgba(255,255,255,0.5);
-    width:100%;
-    height: 100%;
-    position: absolute; 
-    top:0;
-    left: 0;
-    z-index: 2;
+  .hover-btn, .hover-overlay{
+    position: absolute;
     @include opacity(0);
     @include transition-property(opacity);
+  }
+
+  .hover-btn{
+    text-align: center;
+    width: 306px;
+    top: 10px;
+    left: 10px;
+    @include transition-duration(.3s);
+  }
+
+  .hover-overlay{ 
+    background-color: rgba(255,255,255,0.5);
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0; 
     @include transition-duration(.1s);
   }
 
@@ -93,8 +104,16 @@
     border: 1px solid #000;
 }
 
-.project-icon {
-  img{width: 100%; } 
+.project-dashboard-image {
+  text-align: center;
+  width: 306px;
+  height: 306px;
+  img{ 
+    width: 100%; 
+    position: absolute;
+    top: 0;
+    left: 0;
+  } 
 }
 
 .project-name {

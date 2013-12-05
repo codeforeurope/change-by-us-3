@@ -1511,7 +1511,7 @@ a.btn, a.btn-3d:before{ color: $white !important; }
   box-sizing: border-box;
   background-image: none;
   @include border-radius(2px);
-  @include transition-property(all);
+  @include transition-property(opacity, background);
   @include transition-duration(.4s);
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
     color: #333333;

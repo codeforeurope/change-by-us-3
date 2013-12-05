@@ -25,10 +25,12 @@ List of views that allow a user to see project posts for a given group of scenar
 """
 
 @stream_view.route('/')
-@stream_view.route('/dashboard')
 @login_required 
 def projects_view():
-    
     return _return_index()
 
 
+@stream_view.route('/dashboard')
+@login_required 
+def dashboard_view():
+    return _return_index()

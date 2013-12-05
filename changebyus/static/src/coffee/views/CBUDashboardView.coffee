@@ -24,6 +24,7 @@ define ["underscore",
 		CBUDashboardView = AbstractView.extend
 
 			location:{name: "", lat: 0, lon: 0} 
+			className: "body-container"
 
 			initialize: (options) ->  
 				AbstractView::initialize.call @, options
@@ -31,8 +32,7 @@ define ["underscore",
 				@userModel.fetch 
 					success: =>@render() 
 
-			render: -> 
-				console.log '@userModel',@userModel
+			render: ->  
 				@$el.template @templateDir+"/templates/dashboard.html", 
 					{data:@userModel.attributes}, => 
 						@onTemplateLoad()
@@ -56,8 +56,6 @@ define ["underscore",
 					window.location.hash = $(this).attr("href").substring(1)
 
 				profileEditView = new ProfileEditView({model:@userModel, parent:@profileView})
-
-				console.log '@model',@model
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)
@@ -89,9 +87,11 @@ define ["underscore",
 				@ownedProjects.fetch reset: true
 
 			addJoined:->
+				$('a[href=#follow]').append " (#{@joinedProjects.length})"
 				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
 
 			addOwned:->
+				$('a[href=#manage]').append " (#{@ownedProjects.length})"
 				@ownedProjects.each (projectModel) => @addOne(projectModel, @manageView.find("ul"), true, false)
 
 			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->
@@ -103,3 +103,6 @@ define ["underscore",
 					isResource: false
 
 				@$el.find(parent_).append view.$el
+				delay 100, ->
+					buttonize3D()
+					positionFooter()

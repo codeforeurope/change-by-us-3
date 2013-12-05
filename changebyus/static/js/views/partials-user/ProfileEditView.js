@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "serializeObject"], function(_, Backbone, $, temp, AbstractView, serializeObject) {
   var ProfileEditView;
   return ProfileEditView = AbstractView.extend({
     initialize: function(options) {
@@ -46,9 +46,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       $form = this.$el.find("form");
       $feedback = $("#feedback");
       options = {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
         beforeSubmit: function(arr_, form_, options_) {
           var i, showEmail;
-          console.log('arr_', arr_);
           if ($form.valid()) {
             showEmail = true;
             for (i in arr_) {
@@ -84,8 +87,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
           }
         }
       };
-      $form.ajaxForm(options);
-      console.log('$form', $form);
+      $form.submit(function() {
+        var json_str, obj;
+        obj = $form.serializeJSON();
+        if (obj.public_email === "on") {
+          obj.public_email = true;
+        } else {
+          obj.public_email = false;
+        }
+        json_str = JSON.stringify(obj);
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
       $projectLocation = $("#location");
       $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',

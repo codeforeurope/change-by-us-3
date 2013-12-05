@@ -14,7 +14,6 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 					data: @viewData, => 
 						onPageElementsLoad()
 						@ajaxForm()
-
 				$(@parent).append @$el
 
 			ajaxForm: ->
@@ -26,7 +25,11 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				$submit = $("input[type=submit]")
 				$form = @$el.find("form")
 				options =
-					beforeSubmit: => 
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: =>  
 						if $form.valid()
 							$zip = $('input[name="zip"]')
 
@@ -45,7 +48,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 
 					success: (res) -> 
 						console.log 'res',res
-						$form.find("input, textarea").remove("disabled")
+						$form.find("input, textarea").removeAttr("disabled")
 						
 						if res.success
 							$form.resetForm()
@@ -53,8 +56,14 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							#window.location = "/project/"+res.data.id+"/admin"
 						else
 							# $form.resetForm()
-							
-				$form.ajaxForm options
+							 
+				$form.submit ->
+					json_str = JSON.stringify($form.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
+
 
 				# location autocomplete
 				$projectLocation = $("#project_location")

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "serializeJSON"], function(_, Backbone, $, temp, AbstractView, serialize) {
   var CBUSignupView;
   return CBUSignupView = AbstractView.extend({
     socialInfo: null,
@@ -32,15 +32,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.toggleSubView();
     },
     ajaxForm: function() {
-      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options,
+      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options, socialOptions,
         _this = this;
       $signup = $(".init-signup");
       $form = $signup.find("form");
       $submit = $signup.find("input[type='submit']");
       $feedback = $signup.find(".login-feedback");
       options = {
-        beforeSubmit: function() {
-          console.log('beforeSubmit');
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           $form.find("input, textarea").attr("disabled", "disabled");
           return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
@@ -54,14 +57,24 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
           }
         }
       };
-      $form.ajaxForm(options);
+      $form.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($form.serializeJSON());
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
       $socialSignup = $(".social-signup");
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
       $socialFeedback = $socialSignup.find(".login-feedback");
-      options = {
-        beforeSubmit: function() {
-          console.log('beforeSubmit');
+      socialOptions = {
+        type: $socialForm.attr('method'),
+        url: $socialForm.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           $socialForm.find("input, textarea").attr("disabled", "disabled");
           return $socialFeedback.removeClass("alert").html("");
         },
@@ -75,7 +88,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
           }
         }
       };
-      return $socialForm.ajaxForm(options);
+      return $socialForm.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($socialForm.serializeJSON());
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
     },
     toggleSubView: function() {
       var view;

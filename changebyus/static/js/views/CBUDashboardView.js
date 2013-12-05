@@ -6,6 +6,7 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       lat: 0,
       lon: 0
     },
+    className: "body-container",
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
@@ -20,7 +21,6 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     render: function() {
       var _this = this;
-      console.log('@userModel', this.userModel);
       this.$el.template(this.templateDir + "/templates/dashboard.html", {
         data: this.userModel.attributes
       }, function() {
@@ -45,11 +45,10 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       $("a[href^='#']").click(function(e) {
         return window.location.hash = $(this).attr("href").substring(1);
       });
-      profileEditView = new ProfileEditView({
+      return profileEditView = new ProfileEditView({
         model: this.userModel,
         parent: this.profileView
       });
-      return console.log('@model', this.model);
     },
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
@@ -94,12 +93,14 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     addJoined: function() {
       var _this = this;
+      $('a[href=#follow]').append(" (" + this.joinedProjects.length + ")");
       return this.joinedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.followView.find("ul"), false, true);
       });
     },
     addOwned: function() {
       var _this = this;
+      $('a[href=#manage]').append(" (" + this.ownedProjects.length + ")");
       return this.ownedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.manageView.find("ul"), true, false);
       });
@@ -119,7 +120,11 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         isProject: true,
         isResource: false
       });
-      return this.$el.find(parent_).append(view.$el);
+      this.$el.find(parent_).append(view.$el);
+      return delay(100, function() {
+        buttonize3D();
+        return positionFooter();
+      });
     }
   });
 });

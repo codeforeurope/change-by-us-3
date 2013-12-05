@@ -53,7 +53,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       this.$currentDay = this.$day.clone();
       this.$currentDay.find('h4').html(date_);
       this.$container.append(this.$currentDay);
-      return this.$projects = this.$currentDay.find('.projects-wrapper');
+      return this.$projects = this.$currentDay.find('.stream-wrapper');
     },
     addOne: function(model_) {
       var m, view;

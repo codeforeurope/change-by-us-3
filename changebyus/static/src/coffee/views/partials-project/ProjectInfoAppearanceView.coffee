@@ -30,7 +30,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				$form     = @$el.find("form")
 				$feedback = $("#feedback")
 				options   =
-					beforeSubmit: => 
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: =>  
 						if $form.valid()
 							$zip = $('input[name="zip"]')
 							console.log '$zip.val()  @location.name ',$zip, $zip.val(), @location.name 
@@ -59,7 +63,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 						else
 							$feedback.removeClass('alert-success').addClass('alert-error')
 							
-				$form.ajaxForm options
+				$form.submit -> 
+					json_str = JSON.stringify($form.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
 
 				# location autocomplete
 				$projectLocation = $("#project_location")

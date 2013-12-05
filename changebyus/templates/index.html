@@ -18,80 +18,81 @@
 {% else %}
 <body>
 {% endif %}
+  <div id="page-wrapper">
     <div class="topnav clearfix">
       <div class="body-container">
-          <!-- masthead -->
+        <!-- masthead -->
 
-          {% if login == false %}
+        {% if login == false %}
 
-           <div class="nav user pull-left">
-              <div class="profile-nav-header">
-                <div class="user-avatar">
-                    <img src="{{ udata.image_url_round_small }}" class="circle">
-                </div>
-                <span>{{ current_user.display_name }}</span>
+         <div class="nav user pull-left">
+            <div class="profile-nav-header">
+              <div class="user-avatar">
+                  <img src="{{ udata.image_url_round_small }}" class="circle">
               </div>
-              <div class="profile-nav-menu">
-                <ul>
-                  <li><a href="/stream/dashboard">Dashboard</a></li>
-                  <li><a href="/stream/dashboard#profile">Profile</a></li>
-                  <li><a href="/logout">Sign Out</a></li> 
-                </ul>
-              </div> 
-          </div>
-
-            <ul class="nav nav-pills pull-right">    
-              <li><a href="/stream" class="header-links">Stream</a></li>
-              <li><a href="/" class="header-links">City</a></li>
-              <li><a href="/discover" class="header-links">Discover</a></li>
-            </ul>
-
-            {% else %}
-
-             <ul class="nav nav-pills pull-left">
-                <li>
-                  <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
-                </li>
-                 <li>
-                  <a href="/create">Create a Project</a>
-                </li>
-                <li>
-                  <a href="/discover">Discover Projects</a>
-                </li>
-             </ul>
-
-             <ul class="nav nav-pills pull-right">    
-              <li><a href="/signup" class="header-links">Sign Up</a></li>
-              <li><a href="/login" class="header-links">Log In</a></li>
-            </ul>
-
-            {% endif %}
-
-          <!-- end masthead-->
+              <span>{{ current_user.display_name }}</span>
+            </div>
+            <div class="profile-nav-menu">
+              <ul>
+                <li><a href="/stream/dashboard">Dashboard</a></li>
+                <li><a href="/stream/dashboard#profile">Profile</a></li>
+                <li><a href="/logout">Sign Out</a></li> 
+              </ul>
+            </div> 
         </div>
-  </div>
 
-  <div class="main-content" id="frame"> </div>
+          <ul class="nav nav-pills pull-right">    
+            <li><a href="/stream" class="header-links">Stream</a></li>
+            <li><a href="/" class="header-links">City</a></li>
+            <li><a href="/discover" class="header-links">Discover</a></li>
+          </ul>
 
-  {% if index == true %}
-  <div class="footer-nav index clearfix">
-   {% else %}
-  <div class="footer-nav clearfix">
-  {% endif %}
-    <div class="body-container">
-      <div class="pull-left">
-        <a href="/create">Create a Project</a>
+          {% else %}
+
+           <ul class="nav nav-pills pull-left">
+              <li>
+                <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
+              </li>
+               <li>
+                <a href="/create">Create a Project</a>
+              </li>
+              <li>
+                <a href="/discover">Discover Projects</a>
+              </li>
+           </ul>
+
+           <ul class="nav nav-pills pull-right">    
+            <li><a href="/signup" class="header-links">Sign Up</a></li>
+            <li><a href="/login" class="header-links">Log In</a></li>
+          </ul>
+
+          {% endif %}
+
+        <!-- end masthead-->
       </div>
-      <div class="pull-right">
-        <ul>
-          <li><a href="/policies">Policies</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
+    </div>
+
+    <div class="main-content" id="frame">&nbsp;</div>
+
+    {% if index == true %}
+    <div class="footer-nav index clearfix">
+     {% else %}
+    <div class="footer-nav clearfix">
+    {% endif %}
+      <div class="body-container">
+        <div class="pull-left">
+          <a href="/create">Create a Project</a>
+        </div>
+        <div class="pull-right">
+          <ul>
+            <li><a href="/policies">Policies</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
-
     <script type="text/javascript">
       window.userID         = "{{ current_user.id }}"; 
       {% if project %}

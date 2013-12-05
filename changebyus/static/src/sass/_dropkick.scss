@@ -1,3 +1,5 @@
+@import "variables";
+
 /**
  * Default DropKick theme
  *
@@ -107,7 +109,7 @@
   }
   a:hover,
   .dk_option_current a {
-    background-color: #0084c7;
+    background-color: $primaryColor;
     border-bottom-color: #004c72;
     color: #fff;
     text-decoration: none;

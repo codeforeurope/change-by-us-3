@@ -86,10 +86,21 @@ define ["underscore",
 				@$postRight.append @$repliesHolder
 				@$repliesHolder.append @$replyForm
 				
+				$form = @$replyForm.find('form')
+				
 				options =
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
 					success: (response_) =>
 						console.log response_
-						@$replyForm.find('form').resetForm()
+						$form.find('form').resetForm()
 						@addReply response_.data
 
-				@$replyForm.find('form').ajaxForm options
+				$form.submit -> 
+					obj = $form.serializeJSON()
+					json_str = JSON.stringify(obj)
+					options.data = json_str
+					$.ajax options
+					false

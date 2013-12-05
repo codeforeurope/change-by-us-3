@@ -9,6 +9,8 @@ require.config
 		"bootstrap": "ext/bootstrap/bootstrap.min"
 		"bootstrap-fileupload": "ext/bootstrap/bootstrap-fileupload"
 		"button": "ext/jquery/jquery.screwdefaultbuttonsV2.min"
+		"serializeObject": "ext/jquery/jquery.serializeObject.min"
+		"serializeJSON": "ext/jquery/jquery.serializeJSON.min"
 		"dropkick": "ext/jquery/jquery.dropkick-min"
 		"hogan": "ext/hogan/hogan-2.0.0.amd"
 		"wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
@@ -25,6 +27,7 @@ require.config
 		"signup-view": "views/CBUSignupView"
 		"create-view": "views/partials-project/ProjectCreateView"
 		"abstract-view": "views/partials-universal/AbstractView"
+		"abstract-modal-view": "views/partials-universal/AbstractModalView"
 		"project-sub-view": "views/partials-project/ProjectSubView"
 		"resource-project-view": "views/partials-universal/ResourceProjectPreviewView"
 		"user-view": "views/CBUUserView"
@@ -130,21 +133,56 @@ require ["jquery",
 				).done (response)=> 
 					window.location.reload()
 
+			### GLOBAL UTILS ###
+			window.popWindow = (url) ->
+				title = "social"
+				w = 650
+				h = 650
+				left = (screen.width / 2) - (w / 2)
+				top = (screen.height / 2) - (h / 2)
+				window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
+
+			window.delay = (time, fn) ->
+				setTimeout fn, time
+
+			window.arrayToListString = (arr_) ->
+				for str,i in arr_
+					arr_[i] = capitalize(str)
+
+				if (arr_.length <= 1) 
+					str = arr_.join()
+				else
+					str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length-1]
+				str
+
+			window.capitalize = (str_) ->
+				str = str_.replace /\w\S*/g, (txt) ->
+					txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+
+			window.buttonize3D = ->
+				$btn3d = $('.btn-3d')
+				for btn in $btn3d
+					console.log btn
+					$btn = $(btn)
+					$btn.parent().addClass('btn-3d-parent')
+					$btn.attr('data-content', $btn.html())
+		 
 			### STICKY FOOTER ###
 			$window      = $(window)
 			footerHeight = 0 
 			$footer      = $(".footer-nav")
 
 			window.positionFooter = ->
-				footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
-				console.log $footer.css('margin-top'), footerHeight
+				delay 100, ->
+					footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
+					console.log $footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height()
 
-				if ($(document.body).height() + footerHeight) < $window.height()
-					$footer.css
-						position: "fixed" 
-						bottom: 0
-				else
-					$footer.css position: "relative"
+					if ($(document.body).height()+footerHeight) < $window.height()
+						$footer.css
+							position: "fixed" 
+							bottom: 0
+					else
+						$footer.css position: "relative"
 			
 			positionFooter()
 			$window.scroll(positionFooter).resize(positionFooter)
@@ -152,32 +190,4 @@ require ["jquery",
 			window.onPageElementsLoad = ->
 				console.log 'onPageElementsLoad'
 				positionFooter()
-			### END STICKY FOOTER ###
-
-
-		### GLOBAL UTILS ###
-		window.popWindow = (url) ->
-			title = "social"
-			w = 650
-			h = 650
-			left = (screen.width / 2) - (w / 2)
-			top = (screen.height / 2) - (h / 2)
-			window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
-
-		window.delay = (time, fn) ->
-			setTimeout fn, time
-
-		window.arrayToListString = (arr_) ->
-			for str,i in arr_
-				arr_[i] = capitalize(str)
-
-			if (arr_.length <= 1) 
-				str = arr_.join()
-			else
-				str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length-1]
-			str
-
-		window.capitalize = (str_) ->
-			str = str_.replace /\w\S*/g, (txt) ->
-				txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-	 
+			### END STICKY FOOTER ### 

@@ -1,6 +1,7 @@
 @import "compass/css3";
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity"; 
+@import "compass/css3/transform";
 
 @import "bootstrap-combined-no-icons";
 @import "variables";
@@ -1007,15 +1008,6 @@ input {
   }
 }
 
-/*
-[class^="icon-"],[class*=" icon-"]{display:inline-block;width:14px;height:14px;*margin-right:.3em;line-height:14px;vertical-align:text-top;background-image:url("../img/glyphicons-halflings.png");background-position:14px 14px;background-repeat:no-repeat;margin-top:1px;}
-.icon-white,.nav-pills>.active>a>[class^="icon-"],.nav-pills>.active>a>[class*=" icon-"],.nav-list>.active>a>[class^="icon-"],.nav-list>.active>a>[class*=" icon-"],.navbar-inverse .nav>.active>a>[class^="icon-"],.navbar-inverse .nav>.active>a>[class*=" icon-"],.dropdown-menu>li>a:hover>[class^="icon-"],.dropdown-menu>li>a:focus>[class^="icon-"],.dropdown-menu>li>a:hover>[class*=" icon-"],.dropdown-menu>li>a:focus>[class*=" icon-"],.dropdown-menu>.active>a>[class^="icon-"],.dropdown-menu>.active>a>[class*=" icon-"],.dropdown-submenu:hover>a>[class^="icon-"],.dropdown-submenu:focus>a>[class^="icon-"],.dropdown-submenu:hover>a>[class*=" icon-"],.dropdown-submenu:focus>a>[class*=" icon-"]{background-image:url("../img/glyphicons-halflings-white.png");}
-
-.icon-envelope {background-position: -72px 0;}
-.icon-ok{background-position:-288px 0;}
-.icon-check{background-position:-144px -72px;}
-*/
-
 textarea:focus:invalid, select:focus:invalid {
   color: #b94a48;
   border-color: #ee5f5b;
@@ -1499,9 +1491,9 @@ button.close {
   -webkit-appearance: none;
 }
 
-a.btn{ color: $white !important; }
+a.btn, a.btn-3d:before{ color: $white !important; }
 
-.btn {
+.btn, .btn-3d:before {
   display: inline-block;
   *display: inline;
   padding: 4px 12px;
@@ -1519,8 +1511,8 @@ a.btn{ color: $white !important; }
   box-sizing: border-box;
   background-image: none;
   @include border-radius(2px);
-  @include transition-property(background-color,color);
-  @include transition-duration(.5s);
+  @include transition-property(all);
+  @include transition-duration(.4s);
   &:hover, &:focus, &:active, &.active, &.disabled, &[disabled] {
     color: #333333;
     background-color: #e6e6e6;
@@ -1561,13 +1553,13 @@ a.btn{ color: $white !important; }
   }
 }
 
-.btn-medium{
+.btn.btn-medium, .btn.btn-medium.btn-3d:before{
   font-weight: bold;
   font-size: 16px;
   padding: 10px 16px;
 }
 
-.btn-large {
+.btn.btn-large, .btn.btn-large.btn-3d:before {
   padding: 20px 40px;
   font-size: 26px;
   @include border-radius(3px);
@@ -2008,6 +2000,8 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
       padding-bottom: 20px;
       line-height: 20px;
       height: 20px;
+      font-weight: bold;
+      font-size: 28px;
     }
   }
   .open .dropdown-toggle {
@@ -2025,15 +2019,19 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 }
 
 /*GENERAL NAV*/
-
-
 .topnav {
-  height: 87px; 
+  height: 76px; 
   width: 100%;
-  font-size: 22px;
   background-color: $primaryColor;
+  li{font-size: 22px;}
 }
 
+.logged-in{
+  .topnav {
+    height: 88px; 
+    li{font-size: 28px;}
+  }
+}
 
 .nav {
   margin-top: 22px;
@@ -2054,17 +2052,23 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     >span{ 
       color: $white; 
       line-height: 87px; 
+      font-size: 22px;
     }
   }
 
   .profile-nav-menu{
+    height: 0;
     width: 100%;
     background-color: $white;
-    display: none;
+    visibility: hidden;
     border: 1px solid $grayBorder;
     border-top: none;
+    overflow: hidden;
+    @include opacity(0);
     @include border-bottom-left-radius(4px);
     @include border-bottom-right-radius(4px);
+    @include transition-property(height, opacity);
+    @include transition-duration(.4s);
     a{
       font-size: 22px;
       color: $black;
@@ -2080,7 +2084,11 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
   &.active{
     .profile-nav-header{background-color: $primaryAltHoverColor;}
-    .profile-nav-menu{display: block;}
+    .profile-nav-menu{
+      height: 158px;
+      visibility: visible;
+      @include opacity(1);
+    }
   }
 
   .user-avatar { 
@@ -2770,10 +2778,9 @@ a.fileupload-exists{color: $white;}
 }
 
 .body-container {
-  width: 1018px;
-  /*border: 1px dotted $black;*/
-  margin: 0 auto;
-  /*padding: 20px;*/
+  margin: 0 auto; 
+  max-width: 1018px; 
+  width: 100%;
 }
 
 .create {
@@ -2824,6 +2831,14 @@ a.fileupload-exists{color: $white;}
   text-decoration: bold;
 }
 
+.main-content{
+  min-height: calc(100% - 188px); 
+}
+
+html, body, #page-wrapper{
+  height: 100%;
+}
+
 /***************************************
  OVERRIDERS OR HELPERS
  ***************************************/
@@ -2842,3 +2857,6 @@ a.fileupload-exists{color: $white;}
 @import "admin";
 @import "discover";
 @import "homepage";
+@import "responsive_tablet_portrait";
+@import "responsive_mobile_landscape";
+@import "responsive_mobile_portrait";

@@ -64,31 +64,26 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
       $editor = $(this.editorID);
-      console.log('$editor', $editor, this.editorID);
+      this.$updateForm = this.$el.find("form");
       options = {
-        beforeSubmit: function(arr_, form_, options_) {
-          var i, _results;
-          _this.beforeSubmit(arr_, form_, options_);
-          _results = [];
-          for (i in arr_) {
-            console.log("obj.name", arr_[i].name, arr_[i], $editor);
-            if (arr_[i].name === "description") {
-              arr_[i].value = escape($editor.html());
-              _results.push(console.log('des', arr_[i].value));
-            } else {
-              _results.push(void 0);
-            }
-          }
-          return _results;
-        },
+        type: this.$updateForm.attr('method'),
+        url: this.$updateForm.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
         success: function(response_) {
           _this.success(response_);
           return console.log(response_);
         }
       };
-      this.$updateForm = this.$el.find("form");
-      this.$updateForm.ajaxForm(options);
-      console.log("$updateForm", this.$updateForm);
+      this.$updateForm.submit(function() {
+        var json_str, obj;
+        obj = _this.$updateForm.serializeJSON();
+        obj.description = escape($editor.html());
+        json_str = JSON.stringify(obj);
+        options.data = json_str;
+        $.ajax(options);
+        return false;
+      });
       $("a[title]").tooltip({
         container: "body"
       });

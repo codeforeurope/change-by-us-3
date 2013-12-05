@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
-	(_, Backbone, $, temp, AbstractView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "serializeJSON"], 
+	(_, Backbone, $, temp, AbstractView, serialize) ->
 		CBUSignupView = AbstractView.extend
 
 			socialInfo:null
@@ -35,8 +35,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				$feedback = $signup.find(".login-feedback")
 
 				options =
-					beforeSubmit: =>
-						console.log 'beforeSubmit'
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: => 
 						$form.find("input, textarea").attr("disabled", "disabled")
 						$feedback.removeClass("alert").removeClass("alert-danger").html ""
 
@@ -47,8 +50,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 							window.location.href = "/"
 						else
 							$feedback.addClass("alert").addClass("alert-danger").html response.msg
-
-				$form.ajaxForm options
+ 
+				$form.submit -> 
+					json_str = JSON.stringify($form.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
 
 				# social signup --------------------------------------------------
 				$socialSignup   = $(".social-signup")
@@ -56,9 +64,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				$socialSubmit   = $socialSignup.find("input[type='submit']")
 				$socialFeedback = $socialSignup.find(".login-feedback")
 
-				options =
-					beforeSubmit: =>
-						console.log 'beforeSubmit'
+				socialOptions =
+					type: $socialForm.attr('method')
+					url: $socialForm.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: => 
 						$socialForm.find("input, textarea").attr("disabled", "disabled")
 						$socialFeedback.removeClass("alert").html ""
 
@@ -69,7 +80,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 							window.location.href = "/"
 						else
 							$socialFeedback.addClass("alert").html response.msg
-				$socialForm.ajaxForm options
+
+				$socialForm.submit ->
+					json_str = JSON.stringify($socialForm.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
 
 			toggleSubView:->
 				view = window.location.hash.substring(1)

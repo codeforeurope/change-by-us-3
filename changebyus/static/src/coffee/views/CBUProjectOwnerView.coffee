@@ -94,7 +94,6 @@ define ["underscore",
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
 					btn.removeClass "active"
-				console.log 'view --- ', (view.indexOf("discussion/")>-1), view
 
 				if view.indexOf("discussion/") > -1
 					id = view.split('/')[1]

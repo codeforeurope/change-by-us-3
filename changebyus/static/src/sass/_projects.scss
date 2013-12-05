@@ -32,6 +32,8 @@
 .projects {
   padding: none;
   margin: none;
+  
+  h4{margin-bottom:10px;}
 }
 
 .project-preview:nth-child(3n+3){
@@ -80,9 +82,9 @@
     @include transition-duration(.1s);
   }
 
-  .btn{ 
-    padding: 15px 20px;
-    margin-top:150px; 
+  .btn, .btn-3d:hover{ 
+    margin-top: 150px;
+    font-size: 18px;
   }
 }
 
@@ -177,7 +179,6 @@
 
   .overlay-title {
     left: 310px;
-    width: 100%;
     top: 100px;
     padding: 0;
     margin: 0;
@@ -362,8 +363,8 @@ h2.admin-title{
     margin-top: 25px;
     width: 120px; 
   }
-  .aka{ @include font-styling("asap", 15px, $gray80, "italic"); }
-  .grey{ @include font-styling("asap", 15px, $gray80); }
+  .aka{ @include font-styling("asap", 15px, $gray53); }
+  .grey{ @include font-styling("asap", 15px, $gray53); }
 }
 
 .admin{
@@ -474,22 +475,6 @@ h2.admin-title{
   text-align: center;
 }
 
-.project-update-form{
-  padding: 30px;
-  @include box-skin;
-  .btn-medium{
-    float: right;
-  }
-}
-
-
-.body-container { position: relative; }
-
-.btn-large{
-  font-weight: bold;
-  padding: 20px 22px;
-}
-
 .tabs-pane, .owner-tabs-pane{
   position: absolute;
   bottom: 0;
@@ -542,6 +527,8 @@ h2.admin-title{
     margin-left: 15px;
     &:first-child{ margin-left: 0;}
   }
+
+  h4{margin-bottom:10px;}
 }
 .member-avatar{
   width: 70px;  
@@ -573,7 +560,7 @@ h2.admin-title{
   top:58px;
   @include opacity(0);
   @include box-skin;
-  @include transition-property(opacity, top);
+  @include transition-property(all);
   @include transition-duration(.1s);
 }
 
@@ -621,8 +608,42 @@ h2.admin-title{
   right: -1px;
   display: inline-block;
   width: auto;
-  padding: 5px;
+  padding: 8px;
   @include box-border;
+  @include border-bottom-left-radius(4px);
+  color: $gray53;
+  font-size: 14px;
+}
+
+.stream-wrapper{
+  .content-wrapper{overflow: hidden;}
+}
+
+.create-project{
+  h1{
+    font-size: 52px;
+    font-weight: normal;
+  }
+}
+
+.form-project{
+  p{
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .dk_toggle{
+    padding: 16px;
+  }
+  .dk_label{
+    font-size: 18px;
+    font-weight: normal;
+  }
+  .dk_options a{
+    font-size: 18px;
+    font-weight: normal;
+    padding: 16px;
+  }
 }
 
 input[type="text"].input-slim{

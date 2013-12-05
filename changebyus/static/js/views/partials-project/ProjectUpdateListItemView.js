@@ -84,18 +84,30 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       }
     },
     onFormLoaded: function() {
-      var options,
+      var $form, options,
         _this = this;
       this.$postRight.append(this.$repliesHolder);
       this.$repliesHolder.append(this.$replyForm);
+      $form = this.$replyForm.find('form');
       options = {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
         success: function(response_) {
           console.log(response_);
-          _this.$replyForm.find('form').resetForm();
+          $form.find('form').resetForm();
           return _this.addReply(response_.data);
         }
       };
-      return this.$replyForm.find('form').ajaxForm(options);
+      return $form.submit(function() {
+        var json_str, obj;
+        obj = $form.serializeJSON();
+        json_str = JSON.stringify(obj);
+        options.data = json_str;
+        $.ajax(options);
+        return false;
+      });
     }
   });
 });

@@ -1,5 +1,5 @@
 <div id="feedback" class="feedback alert hide"></div>
-<form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/user/edit">
+<form method="post" enctype="multipart/form-data" class="form-project" name="createproject" action="/api/user/edit">
     <div class="content-wrapper clearfix">
         
         <div class="form-left">
@@ -40,7 +40,6 @@
                 <span  class="sub-text">Display this email address so other members can contact me</span>
             </div>
             
-            <!---->
             <br>
             <div class="password-title clearfix">
                 <label for="password">PASSWORD</label>
@@ -99,7 +98,7 @@
 
                 <div class="fileupload fileupload-new" data-provides="fileupload">
                     <div>
-                        <span class="btn btn-file btn-primary">
+                        <span class="btn btn-file btn-medium btn-primary">
                             <span class="fileupload-exists">Edit Thumbnail</span>
                             <span class="fileupload-new">Upload</span>
                             <input id="project_image" name="photo" type="file">
@@ -111,9 +110,9 @@
                             <div class="load-preview" style="background-image:url(<%= data.image_url_round_medium %>)"></div>
                         <% } %>
                     </div>
-                    <a class="btn btn-file btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                    <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
                 </div>
-                <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+                <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div> 
             <div class="social-btns">
                 <label>Social</label>
@@ -146,7 +145,7 @@
             <input type="hidden" name="lon" value="<%= data.lon %>">
         </div>
         <div class="pull-right">
-            <span class="sub-text">Member since</span> * <a href="/delete">Delete Account</a>
+            <span class="sub-text">Member since</span> * <a href="/delete" class="warning">Delete Account</a>
         </div>
     </div>
 

@@ -41,19 +41,6 @@ define ["underscore",
 
 				@resourceCollection.on "reset", @addAllResources, @
 				@resourceCollection.fetch reset: true
-				
-				@ajaxForm()
-
-			ajaxForm: ->
-				# AJAXIFY THE SIGNUP FORM
-				$signup = $("form[name=signup]")
-				$signup.ajaxForm (response) ->
-					console.log response
-				
-				# AJAXIFY THE SIGNIN FORM
-				$signin = $("form[name=signin]")
-				$signin.ajaxForm (response) ->
-					console.log response
 
 			addAll: ->  
 				@collection.each (projectModel) => 

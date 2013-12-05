@@ -7,12 +7,12 @@
     <% if(data.isProject){ %>
         <% if(data.isOwned){ %>
                 <div class="hover-overlay">
-                   <a href="/project/<%= data.id %>/admin" class="btn btn-primary">Manage</a>
+                   <a href="/project/<%= data.id %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
                 </div>
         <% } %>
         <% if(data.isFollowed){ %>
                 <div class="hover-overlay">
-                   <a href="/project/<%= data.id %>" class="btn btn-primary">View</a>
+                   <a href="/project/<%= data.id %>" class="btn btn-medium btn-primary btn-3d">View</a>
                    <div class="close-x"></div>
                 </div>
         <% } %>

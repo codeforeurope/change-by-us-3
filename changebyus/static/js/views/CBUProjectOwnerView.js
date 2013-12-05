@@ -81,7 +81,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         btn = _ref1[_j];
         btn.removeClass("active");
       }
-      console.log('view --- ', view.indexOf("discussion/") > -1, view);
       if (view.indexOf("discussion/") > -1) {
         id = view.split('/')[1];
         this.projectDiscussionView.updateDiscussion(id);

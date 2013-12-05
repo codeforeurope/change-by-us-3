@@ -1,15 +1,14 @@
-define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"], function(_, Backbone, $, temp, form, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-view"], function(_, Backbone, $, temp, form, AbstractModalView) {
   var ProjectEmbedCalendarModalView;
-  return ProjectEmbedCalendarModalView = AbstractView.extend({
+  return ProjectEmbedCalendarModalView = AbstractModalView.extend({
     initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractModalView.prototype.initialize.call(this, options);
       this.viewData.id = this.model.id;
-      this.viewData.slug = this.model.slug;
-      return this.render();
+      return this.viewData.slug = this.model.slug;
     },
     render: function() {
       var _this = this;
-      this.$el = $("<div class='modal-fullscreen'/>");
+      this.$el = $("<div class='modal-fullscreen dark'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-embed-calendar.html", {
         data: this.viewData
       }, function() {
@@ -18,12 +17,14 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var options,
-        _this = this;
-      this.$el.find(".close-x").click(function() {
-        return _this.$el.remove();
-      });
+      var $form, options;
+      AbstractModalView.prototype.onTemplateLoad.call(this, options);
+      $form = this.$el.find('form');
       options = {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
         success: function(response) {
           console.log(response);
           if (response.msg.toLowerCase() === "ok") {
@@ -31,7 +32,14 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           }
         }
       };
-      return this.$el.find('form').ajaxForm(options);
+      return $form.submit(function() {
+        var json_str, obj;
+        obj = $form.serializeJSON();
+        json_str = JSON.stringify(obj);
+        options.data = json_str;
+        $.ajax(options);
+        return false;
+      });
     }
   });
 });

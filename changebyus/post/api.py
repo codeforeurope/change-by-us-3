@@ -90,7 +90,7 @@ def api_get_project_posts(project_id, post_type):
         limit: Maxinum number of posts to return
 
     Returns:
-        A dict of all requested posts
+        Al list of dicts of all requested posts
     """
 
     limit = int(request.args.get('limit', 500))

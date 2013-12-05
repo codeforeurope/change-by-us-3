@@ -15,29 +15,31 @@ from .models import Project, ProjectPost, SocialMediaObject
 
 from ..post.activity import update_project_activity
 
+"""
+.. module:: post/helpers
 
+   :synopsis: Set of helper functions that handle project posts
 
-def _get_project_post_stream(id=None, private_data=False):
+"""
+
+def _get_project_post_stream(project_id=None, private_data=False):
+    """Gets a list of posts for a given project
+
+    Args:
+        project_id: the id of the project
+        private_date: boolean dictating whether or not we should return private posts
+    Returns:
+        A list of dicts of posts
     """
-    ABOUT
-        Get a list of all the posts for a given project.  Either include
-        or don't include the private posts
-    METHOD
-        Get
-    INPUT
-        project id, private_data boolean
-    OUTPUT
-        Python Dict list of project posts
-    PRECONDITIONS
-        None
-    """
-    project = Project.objects.with_id(id)
+    project = Project.objects.with_id(project_id)
 
     if private_data:
         # force a created_at sort, especially important for imported data
-        posts = ProjectPost.objects(project=project).order_by('-created_at')
+        posts = ProjectPost.objects(project=project).order_by('-created_at',
+                                    parent_id = None)
     else:
         posts = ProjectPost.objects(project=project,
+                                    parent_id = None,
                                     public=True).order_by('-created_at')
 
     return db_list_to_dict_list(posts)
@@ -53,15 +55,24 @@ def _create_project_post(title = None,
                          response_to_id = None,
                          visibility = None):
 
+    """Creates a project post
 
-    """
-    RULES
-    Only organizers can create updates
-    Members can respond to updates
+    Args:
+        title: title of post
+        description: description of post
+        social_sharing: list with either 'facebook', 'twitter', or both
+        project_id: the id of the project post is appended to
+        response_to_id: the id of the post this is a response to
+        visibility: 'public' or 'private'
 
-    Only organizers can create discussions
-    Only orgnizers can respond to discussions
+    Rules:
+        Only organizers can create updates
+        Members can respond to updates
+        Only organizers can create discussions
+        Only orgnizers can respond to discussions
 
+    Returns:
+        A dict representing the post if successful
     """
 
 

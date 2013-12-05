@@ -7,13 +7,29 @@ from ..project.decorators import _is_owner, _is_organizer, _is_member
 from ..helpers.flasktools import *
 from flask import g, request, current_app
 
+"""
+.. module:: post/decorators
+
+   :synopsis: Set of decorators that help with post requests
+
+"""
+
 def post_delete_permission(f):
+    """Decorator that checks for user permission to delete a post
+
+    Args: 
+        post_id
+    Returns:
+        Method or error code
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
 
         # TODO see if user is site admin
-
-        post_id = request.form.get('post_id') or request.view_args.get('post_id')
+        if(request.json):
+            post_id = request.json.get('post_id')
+        else:
+            post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:
@@ -55,12 +71,22 @@ def post_delete_permission(f):
 
 
 def post_edit_permission(f):
+    """Decorator that checks for user permission to edit a post
+
+    Args: 
+        post_id
+    Returns:
+        Method or error code
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
 
         # TODO see if user is site admin
 
-        post_id = request.form.get('post_id') or request.view_args.get('post_id')
+        if(request.json):
+            post_id = request.json.get('post_id')
+        else:
+            post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:
@@ -101,9 +127,20 @@ def post_edit_permission(f):
 
 
 def post_exists(f):
+    """Decorator that checks to ensure a post exists
+
+    Args: 
+        post_id
+    Returns:
+        Method or error code
+    """
    @wraps(f)
    def decorated_function(*args, **kwargs):
-        post_id = request.form.get('post_id') or request.view_args.get('post_id')
+        
+        if(request.json):
+            post_id = request.json.get('post_id')
+        else:
+            post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:

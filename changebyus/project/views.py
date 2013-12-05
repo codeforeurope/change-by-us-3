@@ -3,7 +3,8 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, request, render_template, redirect, url_for, g, current_app
+from flask import (Blueprint, request, render_template, redirect, 
+                  url_for, g, current_app)
 from flask.ext.login import login_required, current_user
 
 from ..user.models import User
@@ -26,6 +27,7 @@ Web facing views for interacting with projects.
 
 @project_view.route('/<project_id>')
 @project_view.route('/<project_id>/admin')
+@project_exists
 def project_view_id(project_id):
     """
     ABOUT:

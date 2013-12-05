@@ -35,6 +35,8 @@ from .stream import stream_view, stream_api
 from .user import user_api
 from .frontend import frontend_view, frontend_api
 
+from .helpers.flasktools import jsonify_response, ReturnStructure
+
 from .helpers.encryption import assemble_key
 from .extensions import db, login_manager
 
@@ -306,44 +308,28 @@ def configure_error_handlers(app=None):
         We only capture exceptions if Debug=False.  So for a dev machine
         you'll still see exceptions in the browser for development purposes
     """
+    siteinfo = app.settings.get('SITEINFO')
+    ga = app.settings.get('GOOGLE_ANALYTICS')
 
     @app.errorhandler(400)
-    def bad_request(error=""):
-        current_app.logger.info(error)
-        return render_template('error.html', site=siteinfo, ga=ga,
-                               error=error)
-
     @app.errorhandler(403)
-    def forbidden_request(error=""):
-        current_app.logger.warning(error)
-        return render_template('403.html', site=siteinfo, ga=ga, 
-                               error="Sorry, forbidden request.")
-
     @app.errorhandler(404)
-    def not_found(error=""):
-        current_app.logger.warning("[%s] %s" % (request.url, str(error)))
-        return render_template('404.html', site=siteinfo, ga=ga, 
-                               error=str(error), description=error.description)
-    
     @app.errorhandler(405)
-    def no_permission(error=""):
-        current_app.logger.info(error)
-
-        return render_template('error.html', site=siteinfo, ga=ga, 
-                               error=str(error), description=error.description)
-
-    @app.errorhandler(500)
-    def internal_server_error(error=""):
-        current_app.logger.exception(error)
-
-        return render_template('error.html', site=siteinfo, ga=ga, 
-                               error=str(error), description=error.description)
-
     @app.errorhandler(413)
-    def upload_too_large(error=""):
-        current_app.logger.exception(error)
-        return render_template('error.html', site=siteinfo, ga=ga, 
-                               error=str(error), description=error.description)
+    @app.errorhandler(500)
+    def generic_error_handler(e):    
+        current_app.logger.info(e)
+        
+        if (request.is_xhr):
+            return jsonify_response(ReturnStructure(success=False, msg=str(e)), 
+                                    status_code=e.code,
+                                    status=str(e))        
+        else:
+            return render_template(["%s.html" % e.code, 'error.html'], 
+                                   site=siteinfo, 
+                                   ga=ga, 
+                                   error=str(e), 
+                                   description=e.description)
 
     if app.config['DEBUG'] is False:
         @app.errorhandler(Exception)

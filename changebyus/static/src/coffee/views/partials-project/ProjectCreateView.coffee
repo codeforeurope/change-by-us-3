@@ -28,8 +28,10 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 					type: $form.attr('method')
 					url: $form.attr('action')
 					dataType: "json" 
-					contentType: "application/json; charset=utf-8"
-					beforeSend: =>  
+					#contentType: "application/json; charset=utf-8"
+					contentType: "multipart/form-data; charset=utf-8"
+					#beforeSend: =>  
+					beforeSubmit: =>  
 						if $form.valid()
 							$zip = $('input[name="zip"]')
 
@@ -57,13 +59,15 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 						else
 							# $form.resetForm()
 							 
+				###
 				$form.submit ->
 					json_str = JSON.stringify($form.serializeJSON())
 					options.data = json_str
 					console.log 'options.data',options.data
 					$.ajax options
 					false
-
+				###
+				$form.ajaxForm options
 
 				# location autocomplete
 				$projectLocation = $("#project_location")

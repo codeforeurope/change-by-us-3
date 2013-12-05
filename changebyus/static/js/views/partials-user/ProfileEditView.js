@@ -49,7 +49,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         type: $form.attr('method'),
         url: $form.attr('action'),
         dataType: "json",
-        contentType: "application/json; charset=utf-8",
+        contentType: "multipart/form-data; charset=utf-8",
         beforeSubmit: function(arr_, form_, options_) {
           var i, showEmail;
           if ($form.valid()) {
@@ -87,20 +87,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           }
         }
       };
-      $form.submit(function() {
-        var json_str, obj;
-        obj = $form.serializeJSON();
-        if (obj.public_email === "on") {
-          obj.public_email = true;
-        } else {
-          obj.public_email = false;
-        }
-        json_str = JSON.stringify(obj);
-        options.data = json_str;
-        console.log('options.data', options.data);
-        $.ajax(options);
-        return false;
-      });
+      /*
+      				$form.submit ->
+      					obj = $form.serializeJSON()
+      					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
+      					json_str = JSON.stringify(obj)
+      					options.data = json_str
+      					console.log 'options.data',options.data
+      					$.ajax options
+      					false
+      */
+
+      $form.ajaxForm(options);
       $projectLocation = $("#location");
       $projectLocation.typeahead({
         template: '<div class="zip">{{ name }}</div>',

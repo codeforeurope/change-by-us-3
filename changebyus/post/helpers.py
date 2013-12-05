@@ -35,8 +35,8 @@ def _get_project_post_stream(project_id=None, private_data=False):
 
     if private_data:
         # force a created_at sort, especially important for imported data
-        posts = ProjectPost.objects(project=project).order_by('-created_at',
-                                    parent_id = None)
+        posts = ProjectPost.objects(project=project,
+                                    parent_id = None).order_by('-created_at')
     else:
         posts = ProjectPost.objects(project=project,
                                     parent_id = None,

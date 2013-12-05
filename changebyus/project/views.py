@@ -13,7 +13,7 @@ from ..stripe.api import _get_account_balance_percentage, _update_goal_descripti
 from .decorators import project_exists
 
 project_view = Blueprint('project_view', __name__, url_prefix='/project')
-
+ 
 
 """
 ==============
@@ -62,7 +62,7 @@ def project_view_id(project_id):
 
     # get the private_data if they are a member
     # TODO limit the number of posts that are returned here
-    posts = _get_project_post_stream(id=project.id,
+    posts = _get_project_post_stream(project_id=project.id,
                                      private_data=involved)
 
     data = { 'project' : project.as_dict(),

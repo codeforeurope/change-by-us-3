@@ -1,23 +1,22 @@
-/**** affects all sizes from 0 to 767px **/
+/**** affects all sizes from 0 to 479px **/
 
-@media only screen and (max-width: 767px) {
-	body.debug{background: red;}
+@media only screen and (max-width: 479px) {
+	body.debug{background: green;}
 
-	.nav.user{
-		width: 100px;
-		span{display: none;}
+	.header-image {
+		.overlay-text {
+			left: 5%;
+			width: 95%;
+		}
 	}
 
-	.nav-pills>li {
-		font-size: 14px; 
-	} 
-
-	.nav-pills{
-		&.pull-right{float: left;}
+	.project-square{
+		width: 96%;
+		margin: 10px 2% !important;
 	}
 
-	.header-links {
-		padding: 0; 
+	.reply-right{ 
+		width: 65%;
 	}
 
 	.created-by, .supported-by{
@@ -26,112 +25,6 @@
 		&:after{
 			clear: both;
 		}
-	}
-
-	.profile-nav-menu{
-		display: none;
-	}  
-
-	.header-image{
-		height: 400px;
-		.overlay-text{
-			top: 55px;
-			left: 10%;
-			width: 90%;
-
-			.btn-large{
-				margin-top: 46px;
-				padding: 20px 40px;
-				font-size: 28px;
-			}
-
-			h1{
-				font-size: 40px;
-			}
-
-		}
-	}
-
-	.form-right{
-		margin-top: 40px;
-	}
-
-	.form-right, .form-left{
-		float: none;
-		width: 100%;
-	}
-	
-	.form-left{
-		.input-xxlarge{width: 100%;}
-	}
-
-	.password-title, .notify-wrapper, .notify-row{
-		width: 100%;
-	}
-
-	.form-footer{
-		text-align: center;
-		.pull-left, .pull-right{float: none;}
-		.pull-right{margin-top: 16px;}
-	}
-
-	select[name=category]{
-		width: 100%;
-	}
-
-	.project-square{
-		margin: 10px 2%;
-	}
-
-	.project-description {
-		//height: 100px;
-	}
-
-	.login, .signup {
-		.content-wrapper {
-			.centered {
-
-			}
-		}
-
-		h1{padding: 30px;}
-
-		input[type="submit"], input[type="button"]{
-			width: 100%;
-			margin: auto;
-		}
-
-		input[type="submit"]{
-			margin-bottom: 16px;
-		}
-	}
-
-	.justified-btns{
-		.btn{
-			margin: auto;
-			width: 100%;
-			&:first-child{
-				margin-bottom: 16px;
-			}
-		}
-	}
-
-	.search-box, .discover-header-right{
-		float: none;
-		width: 100%;
-	}
-
-	.discover-header-right{
-		margin-top: 16px;
-		margin-left: 0;
-		height: auto;
-	}
-
-	.homepage-tools{
-		width: 100%;
-		margin-right: 0;
-		margin-bottom: 48px;
-		text-align: center;
 	}
 
 

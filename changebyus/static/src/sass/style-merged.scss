@@ -445,7 +445,7 @@ a {
 
 .container-narrow {
   margin: 0 auto;
-  max-width: 1018px;
+  max-width: 1024px;
   /*border: 1px dotted $black;*/
 }
 
@@ -2780,7 +2780,7 @@ a.fileupload-exists{color: $white;}
 
 .body-container {
   margin: 0 auto; 
-  max-width: 1018px; 
+  max-width: 1024px; 
   width: 100%;
 }
 
@@ -2856,6 +2856,7 @@ html, body, #page-wrapper{
 @import "discover";
 @import "homepage";
 @import "responsive_desktop";
+@import "responsive_tablet_landscape";
 @import "responsive_tablet_portrait";
 @import "responsive_mobile_landscape";
 @import "responsive_mobile_portrait";

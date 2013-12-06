@@ -1,19 +1,6 @@
-/**** affects all sizes from 0 to 479px **/
+/**** affects all sizes from 0 to 219px **/
 
-@media only screen and (max-width: 479px) {
-	body.debug{background: green;}
-
-	.header-image {
-		.overlay-text {
-			left: 5%;
-			width: 95%;
-		}
-	}
-
-	.project-square{
-		width: 96%;
-		margin: 10px 2% !important;
-	}
+@media only screen and (max-width: 219px) {
 
 
 }

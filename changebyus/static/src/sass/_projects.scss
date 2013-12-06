@@ -94,11 +94,6 @@
   }
 }
 
-.user-info {
-    width: 600px; 
-    border: 1px solid #000;
-}
-
 .project-dashboard-image {
   text-align: center;
   width: 100%;
@@ -284,10 +279,8 @@ h2.admin-title{
 }
 
 .update-content{
-  //float: right;
   float: left;
-  //width: 880px;
-  width: 840px;
+  width: 85%;
 
   input[type=button]{background-color: $graySupport;}
   input[type=submit]{
@@ -342,7 +335,7 @@ h2.admin-title{
 
 .reply-right{
   margin-top: 12px;
-  width: 686px;
+  width: 85%;
 }
 
 .project-member{

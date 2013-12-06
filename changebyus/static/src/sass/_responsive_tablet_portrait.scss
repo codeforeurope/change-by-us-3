@@ -4,12 +4,16 @@
 
 @media only screen and (max-width: 959px) {
 	body.debug{background: blue;}
-
-	//.main-content{padding: 0 20px;}
+ 
 
 	.feature-image{display: none;}
 
 	.project-header{margin-top: 0;}
+
+	.dashboard-header{ 
+		padding: 0 20px; 
+		.btn.btn-large{padding: 20px;}
+	}
 
 	.tabs-pane, .owner-tabs-pane{ 
 		height: auto;
@@ -55,6 +59,14 @@
 
 	.project-square .hover-btn {
 		width: 100%;
+	}
+
+	.project-description {
+		height: 100px;
+	}
+
+	.footer-nav, .form-footer{
+		padding: 0 36px;
 	}
 
 } 

@@ -38,9 +38,9 @@
 
 .project-square {
   @include box-skin; 
-  padding: 10px;
-  height: 525px;
-  width: 328px;
+  padding: 10px 10px 50px;
+  min-height: 400px;
+  //width: 328px;
   float: left;
   margin-right: 16px;
   margin-bottom: 22px;
@@ -73,9 +73,9 @@
 
   .hover-btn{
     text-align: center;
-    width: 328px;
-    top: 10px;
-    left: 10px;
+    width: 100%;
+    top: 0;
+    left: 0;
     @include transition-duration(.3s);
   }
 
@@ -101,13 +101,13 @@
 
 .project-dashboard-image {
   text-align: center;
-  width: 306px;
-  height: 306px;
+  width: 100%;
   img{ 
     width: 100%; 
-    position: absolute;
-    top: 0;
-    left: 0;
+    height: auto;
+    //position: absolute;
+    //top: 0;
+    //left: 0;
   } 
 }
 

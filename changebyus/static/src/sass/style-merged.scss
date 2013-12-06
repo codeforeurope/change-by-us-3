@@ -123,6 +123,7 @@ input {
     cursor: pointer;
     -webkit-appearance: button;
   }
+  box-sizing:border-box;
 }
 
 label, select, button {

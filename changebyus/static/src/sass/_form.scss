@@ -48,7 +48,7 @@
 
 .sub-text{color: $graySubtext;} 
 
-.profile-image,.project-image{
+.profile-image, .project-image{
 	margin-bottom: 30px;
 	width: 240px;
 }
@@ -62,12 +62,29 @@
 	span{ margin-left: 10px; } 
 }
 
+.notify-row, .password-title{
+	width: 85%;
+	label{
+		margin-top: 0; 
+		float: left;
+	}
+}
+
+.notify-wrapper{
+	margin-top: 30px; 
+}
+
 .password-title{
-	width: 490px;
 	margin-top: 30px; 
 	text-align: right;
+}
 
-	label{float: left;}
+.notify-row{
+	div{
+		float: left;
+		width: 10%; 
+		&:first-child{width: 80%;}
+	}
 }
 
 .public-visibility{

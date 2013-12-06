@@ -20,6 +20,10 @@
 		display: none;
 	}
 
+	.form-right{
+		margin-top: 40px;
+	}
+
 	.form-right, .form-left{
 		float: none;
 		width: 100%;
@@ -29,17 +33,56 @@
 		.input-xxlarge{width: 100%;}
 	}
 
+	.password-title, .notify-wrapper, .notify-row{
+		width: 100%;
+	}
+
+	.form-footer{
+		text-align: center;
+		.pull-left, .pull-right{float: none;}
+		.pull-right{margin-top: 16px;}
+	}
+
 	select[name=category]{
 		width: 100%;
 	}
 
-	.form-right{
-		margin-top: 40px;
+	.project-square{
+		margin: 10px 2%;
 	}
 
-	.project-square{
-		width: 96%;
-		margin: auto 2% !important;
+	.project-description {
+		//height: 100px;
 	}
+
+	.login, .signup {
+		.content-wrapper {
+			.centered {
+
+			}
+		}
+
+		h1{padding: 30px;}
+
+		input[type="submit"], input[type="button"]{
+			width: 100%;
+			margin: auto;
+		}
+
+		input[type="submit"]{
+			margin-bottom: 16px;
+		}
+	}
+
+	.justified-btns{
+		.btn{
+			margin: auto;
+			width: 100%;
+			&:first-child{
+				margin-bottom: 16px;
+			}
+		}
+	}
+
 
 }

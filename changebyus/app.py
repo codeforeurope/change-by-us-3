@@ -29,7 +29,7 @@ from flask_oauth import OAuth
 
 from .post import post_api
 from .project import project_view, project_api, resource_api
-from .facebook import facebook_view
+from .facebook.facebook import facebook_view
 from .twitter import twitter_view
 from .stream import stream_view, stream_api
 from .user import user_api

@@ -18,60 +18,49 @@ import yaml
 import os
 import inspect
 
-facebook_view = Blueprint('facebook_view', __name__, url_prefix='/social/facebook')
 
 """
-===============
-Facebook Tools
-===============
-A set of tools for interacting with facebook, built ontop of flask-oauth
---------------------------------------------------------------------------
+.. module:: facebook
 
-Flask-Oauth is used to do the hard stuff, and then we just wrap the facebook
-api's to allow us to gain access to a users account and then post information.
+    :synopsis: Wraps communication with Facebook using Flask-OAuth
 
-This module expects there to be facebook related fields in the User model
+    Flask-Oauth is used to do the hard stuff, and then we just wrap the facebook
+    api's to allow us to gain access to a users account and then post information.
+
+    This module expects there to be facebook related fields in the User model
     facebook_id = db.IntField()
     facebook_token = db.StringField(max_length=400)
 
-What would be better is finding a way to dynamically add this information to 
-the model if it doesn't exist, but who knows.
 """
+
+
+facebook_view = Blueprint('facebook_view', __name__, url_prefix='/social/facebook')
 
 oauth = OAuth()
 
-# some magic that let's us get the local config file
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/facebook.yml'))
-
-# TODO probably should move this into the config file
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=settings['CONSUMER_KEY'],
-    consumer_secret=settings['CONSUMER_SECRET'],
+    consumer_key=current_app.settings['FACEBOOK_CONSUMER_KEY'],
+    consumer_secret=current_app.settings['FACEBOOK_CONSUMER_SECRET'],
     request_token_params={'scope': 'email,publish_actions'}
 )
-
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
     """
-    ABOUT
         Routine utilized by flask-oauth that will pull a facebook token
         out of the user session, or if the user is authenticated it will
         look for a facebook token in their user record and store it in the
         session
-    METHOD
-        Native Python
-    INPUT
-        None
-    OUTPUT
-        session['facebook_oauth_token'] set with the facebook_token, if available
-    PRECONDITIONS
-        None
+
+        Args:
+            None
+
+        Returns:
+            session facebook_token if available
     """
     if session.get('facebook_oauth_token') is None:
         if g.user.is_authenticated():
@@ -85,18 +74,15 @@ def get_facebook_oauth_token():
 @facebook_view.route('/login')
 def facebook_login():
     """
-    ABOUT
         View to set up the facebook login callback.  If a user calls
-        this routine without a CBU account, it will wind up creating
+        this routine without an account, it will wind up creating
         an account for them at callback time.
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        Redirects user to facebook oauth process
-    PRECONDITIONS
-        None
+
+        Args:
+            None
+
+        Return:
+            Redirects user to facebook oauth process
     """
 
     # clear out any old facebook data
@@ -144,22 +130,17 @@ def facebook_link():
         _external=True))
 
 
+
 @facebook_view.route('/revoke')
 @login_required
 def facebook_revoke():
     """
-    ABOUT
         Revoke the application permissiosn on facebook.
         This is very much for debugging and shouldn't be exposed
         to users without a very good reason
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        "OK", "FAIL"
-    PRECONDITIONS
-        User logged in
+
+        Returns:
+            "OK", "FAIL"
     """
 
     result = facebook.delete('/me/permissions')
@@ -177,20 +158,10 @@ def facebook_revoke():
 @facebook_view.route('/disconnect')
 @login_required
 def facebook_disconnect():
-    """
-    ABOUT
-        Removes a facebook linkage from a users account
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        Redirect to the dashboard
-    PRECONDITIONS
-        User logged in
-    TODO
-        This routine should be a POST since it changes states.
-        This is, overall, a badly thought out method
+    """Removes a facebook linkage from a users account
+
+        Returns:
+            Redirect to the dashboard
     """
     infoStr = "Disconnecting user {0} from facebook".format(g.user.id)
     current_app.logger.info(infoStr)
@@ -211,23 +182,17 @@ def facebook_disconnect():
 @facebook.authorized_handler
 def facebook_authorized(resp):
     """
-    ABOUT
         Callback url for facebook.  Facebook redirects to this url after
         the user allows or denies permission for our application.
 
         The same callback is hit if the user is linking or signing in,
         so we do some logic based on the user having an account with the
         facebook_id, and proceed accordingly
-    METHOD
-        Get
-    INPUT
-        oauth facebook access_token
-    OUTPUT
-        Redirects the user to their dashboard if account was created or logged in,
-        Redirects the user to the homepage if they didn't give us permission
-        Redirects the user to an error page if their email address is already in use
-    PRECONDITIONS
-        None
+
+        Returns:
+            Redirects the user to their dashboard if account was created or logged in,
+            Redirects the user to the homepage if they didn't give us permission
+            Redirects the user to an error page if their email address is already in use
     """
     if resp is None:
         userStr = 'Unauthenticated'
@@ -331,18 +296,20 @@ def _post_user_facebook_feed(link=None,
                              name=None, 
                              caption=None, 
                              description=None):
-    """
-    ABOUT
-        Publishes a post to the current logged in users facebook account
-    METHOD
-        Native Python
-    INPUT
-        link url, picture url, name, caption, description.  All are optional
-        but at some point facebook will kick back error if you don't provide enough info
-    OUTPUT
-        True, post_id or False, error_code
-    PRECONDITIONS
-        There is a currently logged in user who has a linked facebook account
+    """Publishes a post to the current logged in users facebook account
+
+        Arguments:
+            link: link post is associated with
+            picture: picture (url) that post is associated with
+            name: post name
+            caption: post caption
+            description: post description
+
+        Returns:
+            (True, post_id) or (False, error_code)
+
+        Preconditions:
+            There is a currently logged in user who has a linked facebook account
     """
 
     if g.user.is_anonymous():
@@ -386,17 +353,14 @@ def _post_user_facebook_feed(link=None,
 
 def _get_fb_user_name_and_thumbnail():
     """
-    ABOUT
         Retrieves the user_name and thumbnail url for the logged in user,
         assuming they have a facebook account
-    METHOD
-        Native Python
-    INPUT
-        None
-    OUTPUT
-        (True, full_name, url) or (False, '', '')
-    PRECONDITIONS
-        Global user is logged in, and has a facebook account
+
+        Returns:
+            True, full_name, url) or (False, '', '')
+
+        Preconditions:
+            Global user is logged in, and has a facebook account
     """
 
     facebook_id = g.user.facebook_id

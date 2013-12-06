@@ -40,14 +40,10 @@ from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
 
-
 """
-===========
-Project Api
-===========
+.. module:: project/api
 
-Projects are the heart of the CBU website.  Projects incorporate funding, members,
-images, etc.
+    :synopsis: Projects include members and funding
 
 """
 
@@ -69,22 +65,19 @@ def api_get_geopoint():
 
 @project_api.route('/search', methods = ['POST', 'GET'])
 def api_search_projects():
-    """
-    ABOUT
-        search projects and/or resources
-    METHOD
-        GET
-    INPUT
-        s = text to search
-        loc = location to search
-        d = radius from location (assumes miles)
-        cat = category to search
-        type = 'project' or 'resource' (searches both if omitted)
-    OUTPUT
-        ReturnStructure response with outcome results.
-    PRECONDITIONS
-        None
+    """Search projects and/or resources
+
+        Args:
+            s = text to search
+            loc = location to search
+            d = radius from location (assumes miles)
+            cat = category to search
+            type = 'project' or 'resource' (searches both if omitted)
+
+        Returns:
+            list of search results
     """    
+
     text = request.args.get('s')
     geo_dist = request.args.get('d')
     lat = request.args.get('lat')
@@ -155,17 +148,16 @@ class CreateProjectForm(Form):
 @project_api.route('/create', methods = ['POST'])
 @login_required
 def api_create_project():
-    """
-    ABOUT
-        Create a project.
-    METHOD
-        Post
-    INPUT
-        Name, Description, Location, photo (as file)
-    OUTPUT
-        ReturnStructure response with outcome results.
-    PRECONDITIONS
-        User is logged in
+    """Creates a project
+        
+        Args:
+            Name: Name of the project
+            Description: Description of the project
+            Location: Location of the project
+            Photo: Image file to associate with the project
+
+        Returns:
+            Project if successfully created
     """
 
     form = CreateProjectForm(as_multidict(request.json))
@@ -181,17 +173,13 @@ def api_create_project():
 @project_api.route('/slug/<project_slug>')
 @project_exists
 def api_get_project_slug(project_slug):
-    """
-    ABOUT
-        Gets information on a given project via slug name
-    METHOD
-        GET
-    INPUT
-        project id
-    OUTPUT
-        ReturnStructure response with outcome results.
-    PRECONDITIONS
-        None
+    """Get project by the slug name
+
+        Args:
+            project_slug: project slug id to look up
+
+        Returns:
+            Project if it exists
     """
     p = Project.objects(slug = project_slug)
 
@@ -206,17 +194,13 @@ def api_get_project_slug(project_slug):
 @project_api.route('/<project_id>')
 @project_exists
 def api_get_project(project_id):
-    """
-    ABOUT
-        Gets information on a given project
-    METHOD
-        GET
-    INPUT
-        project id
-    OUTPUT
-        ReturnStructure response with outcome results.
-    PRECONDITIONS
-        None
+    """Get project by project_id
+
+        Args:
+            project_id: project id to look up
+
+        Returns:
+            Project if it exists
     """
     p = Project.objects.with_id(project_id)
 
@@ -241,17 +225,19 @@ class EditProjectForm(Form):
 @project_exists
 @project_organizer
 def api_edit_project():
-    """
-    ABOUT
-        Edit an existing project
-    METHOD
-        Post
-    INPUT
-        project_id (required), name, description, location, photo
-    OUTPUT
-        Json representation of the modified project.
-    PRECONDITIONS
-        User is logged in and owns the project
+    """Edit an existing project
+ 
+        All arguments except project_id are optional
+
+        Args:
+            project_id: id of the project to edit
+            name: New name of the project
+            description: New description of the project
+            location: New location of the project
+            photo: New image file to associate with the project
+    
+        Returns:
+            Resultant project structure
     """
 
     form = EditProjectForm(as_multidict(request.json))
@@ -265,21 +251,15 @@ def api_edit_project():
 
 
 @project_api.route('/<project_id>/users')
-# return a list of users given a project
-# @login_required
 @project_exists
 def api_view_project_users(project_id):
-    """
-    ABOUT
-        Get a list of users who belong to a given project
-    METHOD
-        Get
-    INPUT
-        project_id
-    OUTPUT
-        Json list of user objects
-    PRECONDITIONS
-        User is logged in
+    """Get a list of users who belong to a given project
+
+        Args:
+            project_id: id of the project
+   
+        Returns:
+            list users and their roles
     """
 
     users = _get_users_for_project(project_id)
@@ -293,104 +273,62 @@ def api_view_project_users(project_id):
     return jsonify_response( ReturnStructure( data = users ))
 
 
+
 @project_api.route('/user/<user_id>/ownedprojects')
 @login_required
 def api_owned_projects(user_id):
-    """
-    ABOUT
-        Get a list of projects owned by a given user
-    METHOD
-        Get
-    INPUT
-        user_id
-    OUTPUT
-        Json list of project objects
-    PRECONDITIONS
-        User is logged in
+    """Get a list of projects owned by a given user
+    
+        Args:
+            user_id: id of the user
+
+        Returns:
+            list of project dict objects
     """
     projects = _get_user_owned_projects(user_id)
 
     return jsonify_response( ReturnStructure( data = projects ) )
 
 
-@project_api.route('/user/<user_id>/joinedprojects')
+
+@project_api.route('/user/<user_id>/joined-projects')
 @login_required
-# TODO should we restrict this further than login required?
 def api_joined_projects(user_id):
-    """
-    ABOUT
-        Get a list of projects a user has joined
-    METHOD
-        Get
-    INPUT
-        user_id
-    OUTPUT
-        Json list of project objects
-    PRECONDITIONS
-        User is logged in
+    """Get a list of projects a user has joined
+
+        Args:
+            user_id: the user id of the user
+
+        Returns:
+            list of project dictionaries
     """
 
-    # TODO fix this
     pList = _get_user_joined_projects(user_id)
 
     return jsonify_response( ReturnStructure( data = pList ) )
 
 
 
-@project_api.route('/<project_id>/users_and_common_projects')
-# return a list of users given a project and projects in common
+@project_api.route('/<project_id>/users-and-common-projects')
 @login_required
 @project_exists
 def api_view_project_users_common_projects(project_id):
     """
-    ABOUT
         Get a list of users in a project and the projects they have in common
         with the currently logged in user
-        list of [user, projects]
-    METHOD
-        Get
-    INPUT
-        project_id
-    OUTPUT
-        Json list of users and their common projects
-    PRECONDITIONS
-        User is logged in
+    
+        Args:
+            project_id: project id to query for common users/projects within
+
+        Returns:
+            list of [user, projects], showing the user and the projects you have
+            in common with them
     """
+
     return_list = _get_project_users_and_common_projects(project_id=project_id, 
                                                          user_id=g.user.id)
 
     return jsonify_response( ReturnStructure( data = return_list ) )
-
-
-@project_api.route('/list')
-def api_get_projects():
-    """
-    ABOUT
-        Simple list of projects, optionally sorted and limited
-    METHOD
-        Get
-    INPUT
-        limit, sort, order
-    OUTPUT
-        Json list of projects.  
-    PRECONDITIONS
-        None
-    """
-    limit = int(request.args.get('limit', 100))
-    sort = request.args.get('sort')
-    order = request.args.get('order', 'asc')
-    is_resource = bool(request.args.get('is_resource', False))
-
-    if (sort):
-        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        projects = Project.objects(resource=is_resource).order_by(sort_order)
-    else:
-        projects = Project.objects(resource=is_resource)
-
-    projects = projects[0:limit]
-    projects_list = db_list_to_dict_list(projects)
-
-    return jsonify_response( ReturnStructure( data = projects_list ) )
 
 
 class JoinProjectForm(Form):
@@ -401,17 +339,13 @@ class JoinProjectForm(Form):
 @login_required
 @project_exists
 def api_join_project():
-    """
-    ABOUT
-        Allows a user to join a project
-    METHOD
-        Post
-    INPUT
-        project_id
-    OUTPUT
-        ReturnStructure response with results
-    PRECONDITIONS
-        User is logged in
+    """Allows logged in user to join a project
+
+        Args:
+            project_id: the id of the project to join
+
+        Returns:
+            True if join successful
     """
 
     form = JoinProjectForm(as_multidict(request.json))
@@ -446,24 +380,24 @@ def api_join_project():
     return jsonify_response( ReturnStructure( success = True) )
 
 
+
 class RemoveMemberForm(Form):
     project_id = TextField("project_id", validators=[Required()])
     user_id = TextField("user_id", validators=[Required()])    
 
-@project_api.route('/remove_member', methods = ['POST'])
+@project_api.route('/remove-member', methods = ['POST'])
 @login_required
 @project_exists
 @project_organizer
 def remove_project_user():
-    """
-    ABOUT
-        Allows an organizer to remove a member from a project
-    METHOD
-        Post
-    INPUT
-        project id, user id
-    PRECONDITIONS
-        User is logged in, user is an organizer of the project
+    """Allows an organizer/owner to remove a member from a project
+
+        Args:
+            project_id: project to remove the member from
+            user_id: the user id of the member to remove
+
+        Returns:
+            True if removal correct
     """    
 
     form = RemoveMemberForm(as_multidict(request.json))
@@ -490,15 +424,13 @@ class LeaveProjectForm(Form):
 @login_required
 @project_exists
 def api_leave_project():
-    """
-    ABOUT
-        Allows a user to leave a project
-    METHOD
-        Post
-    INPUT
-        project id 
-    PRECONDITIONS
-        User is logged in, user is a member of the project.
+    """Allows a user to leave a project
+    
+        Args:
+            project_id: id of project currently logged in user wants to leave 
+
+        Returns:
+            True if user left project
     """
 
     form = LeaveProjectForm(as_multidict(request.json))

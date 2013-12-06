@@ -10,7 +10,7 @@ from flask import g, request, current_app
 """
 .. module:: post/decorators
 
-   :synopsis: Set of decorators that help with post requests
+    :synopsis: Set of decorators that help with post requests
 
 """
 

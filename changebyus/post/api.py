@@ -44,7 +44,7 @@ post_api = Blueprint('post_api', __name__, url_prefix='/api/post')
 """
 .. module:: post/api
 
-   :synopsis: Posts exist on a per-project basis, with multiple posts per project possible.
+    :synopsis: Posts exist on a per-project basis, with multiple posts per project possible.
 
     Posts can be public or private, and can have a link to social platforms, ie
     a twitter_post_id and a facebook_post_id, however the actual social posting

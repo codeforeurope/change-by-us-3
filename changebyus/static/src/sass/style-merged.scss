@@ -451,7 +451,7 @@ a {
 
 p {
   margin-bottom: 5px;
-  margin: 0 0 10px;
+  //margin: 0 0 10px;
 }
 
 small {
@@ -2826,10 +2826,7 @@ a.fileupload-exists{color: $white;}
 }
 
 .header-links {
-  padding-right: 20px;
-  padding-left: 20px;
-  padding-bottom: 20px;
-  text-decoration: bold;
+  padding: 0 20px 20px; 
 }
 
 .main-content{

@@ -4,9 +4,20 @@
 
 @media only screen and (max-width: 959px) {
 	body.debug{background: blue;}
- 
+
+	.nav-pills>li { 
+		padding-right: 16px;
+	} 
 
 	.feature-image{display: none;}
+
+	.header-image{
+		.overlay-text{
+			h1{
+				font-size: 70px;
+			}
+		}
+	}
 
 	.project-header{margin-top: 0;}
 
@@ -14,6 +25,11 @@
 		padding: 0 20px; 
 		.btn.btn-large{padding: 20px;}
 	}
+
+	.homepage-tools-wrapper{
+		padding: 0 2%;
+	}
+
 
 	.tabs-pane, .owner-tabs-pane{ 
 		height: auto;
@@ -67,6 +83,14 @@
 
 	.footer-nav, .form-footer{
 		padding: 0 36px;
+	}
+
+	.banner-search{
+		padding: 0 2%;
+	}
+
+	.discover-header-right{ 
+		.btn-large{ font-size: 22px; }
 	}
 
 } 

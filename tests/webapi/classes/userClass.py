@@ -63,7 +63,7 @@ class UserClass():
         resp = client.POST('/api/project/join', data = json.dumps(join), content_type="application/json")
         client.assertTrue( resp['success'] )
 
-        resp = client.GET( '/api/project/user/{0}/joinedprojects'.format(self.user_id) )
+        resp = client.GET( '/api/project/user/{0}/joined-projects'.format(self.user_id) )
         
         joined = False
         for project in resp['data']:

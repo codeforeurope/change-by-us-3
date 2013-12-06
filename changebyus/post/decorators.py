@@ -10,7 +10,7 @@ from flask import g, request, current_app
 """
 .. module:: post/decorators
 
-   :synopsis: Set of decorators that help with post requests
+    :synopsis: Set of decorators that help with post requests
 
 """
 
@@ -147,7 +147,7 @@ def post_exists(f):
             errStr = "post_id can not be blank."
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
-   
+
         try:
             post = ProjectPost.objects.with_id(post_id)
             if post is None:

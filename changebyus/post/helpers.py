@@ -18,7 +18,7 @@ from ..post.activity import update_project_activity
 """
 .. module:: post/helpers
 
-   :synopsis: Set of helper functions that handle project posts
+    :synopsis: Set of helper functions that handle project posts
 
 """
 
@@ -28,6 +28,7 @@ def _get_project_post_stream(project_id=None, private_data=False):
     Args:
         project_id: the id of the project
         private_date: boolean dictating whether or not we should return private posts
+    
     Returns:
         A list of dicts of posts
     """

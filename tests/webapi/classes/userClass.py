@@ -75,7 +75,7 @@ class UserClass():
     def followResource(self, client, resource_id):
 
         join = { 'project_id' : resource_id }
-        resp = client.POST('/api/resource/follow', data = json.dumps(join), content_type="application/json")
+        resp = client.POST('/api/project/join', data = json.dumps(join), content_type="application/json")
         #print "RESPONSE FOR JOIN RESOURCE IS ", resp
         client.assertTrue( resp['success'] )
 

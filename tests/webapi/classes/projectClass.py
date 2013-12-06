@@ -72,6 +72,6 @@ class ProjectClass():
                  'user_id' : user_id,
                  'user_role' : roll }
 
-        resp = client.POST('/api/project/change_user_role', data = json.dumps(role), content_type="application/json")
+        resp = client.POST('/api/project/change-user-role', data = json.dumps(role), content_type="application/json")
 
         client.assertTrue( resp['success'] )

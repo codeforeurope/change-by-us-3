@@ -143,7 +143,7 @@ class CreateProjectForm(Form):
     lat = HiddenField("lat")
     lon = HiddenField("lon")
     photo = FileField("photo")
-
+    resource = TextField("resource")
 
 @project_api.route('/create', methods = ['POST'])
 @login_required
@@ -154,13 +154,17 @@ def api_create_project():
             Name: Name of the project
             Description: Description of the project
             Location: Location of the project
+            location:
+            lat:
+            lon:
             Photo: Image file to associate with the project
+            resource: 
 
         Returns:
             Project if successfully created
     """
 
-    form = CreateProjectForm(as_multidict(request.json))
+    form = CreateProjectForm(request.form or as_multidict(request.json))
 
     if not form.validate():
         errStr = "Request contained errors."
@@ -240,7 +244,7 @@ def api_edit_project():
             Resultant project structure
     """
 
-    form = EditProjectForm(as_multidict(request.json))
+    form = EditProjectForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -274,7 +278,7 @@ def api_view_project_users(project_id):
 
 
 
-@project_api.route('/user/<user_id>/ownedprojects')
+@project_api.route('/user/<user_id>/owned-projects')
 @login_required
 def api_owned_projects(user_id):
     """Get a list of projects owned by a given user
@@ -331,11 +335,41 @@ def api_view_project_users_common_projects(project_id):
     return jsonify_response( ReturnStructure( data = return_list ) )
 
 
+@project_api.route('/list')
+def api_get_projects():
+    """Returns a simple list of projects, optionally sorted and limited
+   
+        Args:
+            limit: limit of number of projects to return
+            sort: sort parameter
+            order: order by parameter
+
+        Returns:
+            list of project dictionaries
+
+    """
+    limit = int(request.args.get('limit', 100))
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+    is_resource = bool(request.args.get('is_resource', False))
+
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        projects = Project.objects(resource=is_resource, active=True).order_by(sort_order)
+    else:
+        projects = Project.objects(resource=is_resource, active=True)
+
+    projects = projects[0:limit]
+    projects_list = db_list_to_dict_list(projects)
+
+    return jsonify_response( ReturnStructure( data = projects_list ) )
+
+
+
 class JoinProjectForm(Form):
     project_id = TextField("project_id", validators=[Required()])
 
 @project_api.route('/join', methods = ['POST'])
-# TODO add membership required decorator
 @login_required
 @project_exists
 def api_join_project():
@@ -348,7 +382,7 @@ def api_join_project():
             True if join successful
     """
 
-    form = JoinProjectForm(as_multidict(request.json))
+    form = JoinProjectForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -400,7 +434,7 @@ def remove_project_user():
             True if removal correct
     """    
 
-    form = RemoveMemberForm(as_multidict(request.json))
+    form = RemoveMemberForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -415,6 +449,7 @@ def remove_project_user():
     current_app.logger.info(infoStr)
 
     return _leave_project(project_id=project_id, user_id=user_id)
+
 
 
 class LeaveProjectForm(Form):
@@ -433,7 +468,7 @@ def api_leave_project():
             True if user left project
     """
 
-    form = LeaveProjectForm(as_multidict(request.json))
+    form = LeaveProjectForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -444,28 +479,28 @@ def api_leave_project():
     return _leave_project(project_id=project_id, user_id=g.user.id)
 
 
-@project_api.route('/am_i_a_member/<project_id>')
+
+@project_api.route('/<project_id>/user/<user_id>')
 @project_exists
 @login_required
-def api_is_user_member(project_id):
+def api_query_user_roll(project_id, user_id):
+    """Query the role(s) a user plays in a given project
+    
+        Args:
+            project_id: id of the project in question
+            user_id: user id of the user in question
 
-    if _is_member(project_id, g.user.id):
-        return jsonify_response( ReturnStructure( data = {'member' : True } ))
-    else:
-        return jsonify_response( ReturnStructure( data = {'member' : False } ))
+        Returns:
+            Dict containing role type and True/False indicating their level of involvement
+    """
 
+    member = _is_member(project_id, user_id)
+    owner = _is_owner(project_id, user_id)
+    organizer = _is_organizer(project_id, user_id)
 
-@project_api.route('/am_i_an_organizer/<project_id>')
-@project_exists
-@login_required
-def api_is_user_organizer(project_id):
-
-    if _is_organizer(project_id, g.user.id):
-        return jsonify_response( ReturnStructure( data = {'organizer' : True } ))
-    else:
-        return jsonify_response( ReturnStructure( data = {'organizer' : False } ))
-
-
+    return jsonify_response( ReturnStructure( data = { 'member' : member,
+                                                       'owner' : owner,
+                                                       'organizer' : organizer } ))
 
 
 class ChangeUserRoleForm(Form):
@@ -473,27 +508,24 @@ class ChangeUserRoleForm(Form):
     user_id = TextField("user_id", validators=[Required()])
     user_role = TextField("user_role", validators=[Required()])
 
-@project_api.route('/change_user_role', methods = ['POST'])
+@project_api.route('/change-user-role', methods = ['POST'])
 @login_required
 @project_exists
 @project_organizer
 def api_change_user_role():
-    """
-    ABOUT
-        Allows a organizer of project to change another project members role
-    METHOD
-        Post
-    INPUT
-        project_id
-        user_id
-        user_role
-    OUTPUT
-        ReturnStructure response with results
-    PRECONDITIONS
-        User is logged in, user is an organizer of the project.
+    """Allows a organizer/owner of project to change another project members role
+
+        Args:
+            project_id: project id to change user role in
+            user_id: id of the user whose role will be changed
+            user_role: role type to give to the user.  'owner', 'organizer', 'member'
+
+        Returns:
+            True if role is successfully changed.
+
     """
 
-    form = ChangeUserRoleForm(as_multidict(request.json))
+    form = ChangeUserRoleForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 

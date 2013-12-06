@@ -134,8 +134,8 @@ def post_exists(f):
     Returns:
         Method or error code
     """
-   @wraps(f)
-   def decorated_function(*args, **kwargs):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
         
         if(request.json):
             post_id = request.json.get('post_id')
@@ -147,7 +147,7 @@ def post_exists(f):
             errStr = "post_id can not be blank."
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
-   
+
         try:
             post = ProjectPost.objects.with_id(post_id)
             if post is None:
@@ -166,7 +166,7 @@ def post_exists(f):
 
         return f(*args, **kwargs)
 
-   return decorated_function
+    return decorated_function
 
 
 

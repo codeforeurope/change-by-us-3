@@ -163,7 +163,7 @@ def api_add_project_post(post_type):
         Logged in user is an owner/organizer/member of the project.
     """
 
-    form = CreateProjectPostForm(as_multidict(request.json))
+    form = CreateProjectPostForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -218,7 +218,7 @@ def api_edit_post():
         The logged in user has edit permission on the post
     """
 
-    form = EditProjectPostForm(as_multidict(request.json))
+    form = EditProjectPostForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -268,7 +268,7 @@ def api_delete_post():
         User has permission to delete the post
     """
 
-    form = DeleteProjectPostForm(as_multidict(request.json))
+    form = DeleteProjectPostForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 

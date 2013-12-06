@@ -70,7 +70,7 @@ def api_create_user():
         errStr = "You can not create an account when logged in." 
         return jsonify_response( ReturnStructure(msg = errStr, success = False) )
 
-    form = CreateUserForm(as_multidict(request.json))
+    form = CreateUserForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -194,7 +194,7 @@ def api_edit_user():
         API key exists in the config file
     """
 
-    form = EditUserForm(as_multidict(request.json))
+    form = EditUserForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 

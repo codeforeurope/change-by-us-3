@@ -68,7 +68,6 @@ DEFAULT_BLUEPRINTS = (
     post_api,
     project_view, 
     project_api,
-    resource_api,
     facebook_view,
     twitter_view,
     stripe_view,

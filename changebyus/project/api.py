@@ -87,7 +87,7 @@ def api_search_projects():
     
     geo_center = [lon, lat]
     
-    addl_filters = {}
+    addl_filters = {'active':True}
     
     if (cat):
         addl_filters.update({"category": cat})

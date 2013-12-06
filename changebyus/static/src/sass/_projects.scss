@@ -38,9 +38,9 @@
 
 .project-square {
   @include box-skin; 
-  padding: 10px;
-  height: 525px;
-  width: 328px;
+  padding: 10px 10px 50px;
+  min-height: 400px;
+  //width: 328px;
   float: left;
   margin-right: 16px;
   margin-bottom: 22px;
@@ -73,9 +73,9 @@
 
   .hover-btn{
     text-align: center;
-    width: 328px;
-    top: 10px;
-    left: 10px;
+    width: 100%;
+    top: 0;
+    left: 0;
     @include transition-duration(.3s);
   }
 
@@ -94,20 +94,15 @@
   }
 }
 
-.user-info {
-    width: 600px; 
-    border: 1px solid #000;
-}
-
 .project-dashboard-image {
   text-align: center;
-  width: 306px;
-  height: 306px;
+  width: 100%;
   img{ 
     width: 100%; 
-    position: absolute;
-    top: 0;
-    left: 0;
+    height: auto;
+    //position: absolute;
+    //top: 0;
+    //left: 0;
   } 
 }
 
@@ -284,10 +279,8 @@ h2.admin-title{
 }
 
 .update-content{
-  //float: right;
   float: left;
-  //width: 880px;
-  width: 840px;
+  width: 85%;
 
   input[type=button]{background-color: $graySupport;}
   input[type=submit]{
@@ -342,7 +335,7 @@ h2.admin-title{
 
 .reply-right{
   margin-top: 12px;
-  width: 686px;
+  width: 85%;
 }
 
 .project-member{

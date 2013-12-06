@@ -23,7 +23,8 @@
   
   .content-wrapper {
     .centered {
-      width: 500px;
+      width: 100%;
+      max-width: 500px;
       margin: 20px auto; 
       >span{
         font-size: 14px;
@@ -52,12 +53,12 @@
   .btn-info{ width: 47%; }
      
   input[type="submit"]{
-    width: 65% !important;
+    width: 65%; //!important
     margin-right: 4%;
   }
   
   input[type="button"]{
-    width: 30% !important;
+    width: 30%; //!important
     margin-right: 0;
   }
 }

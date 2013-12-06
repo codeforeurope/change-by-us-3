@@ -19,9 +19,8 @@
   .overlay-text{ 
     position: absolute;
     top: 175px;
-    left: 200px;
-    width: 1015px;
-    height: 225px; 
+    left: 19%;
+    width: 81%;
 
     h1{ 
       display: inline-block;
@@ -30,9 +29,10 @@
       font-weight: normal;
       font-size: 85px;
       line-height: 1.25;
-      padding: 0 15px; 
+      padding-bottom: 8px;
       margin-bottom: 0;
       background-color: rgba(0,0,0,.45); // layer fill content
+      white-space: nowrap;
     }
   }
 
@@ -46,9 +46,9 @@
 
 .homepage-block-info {
   margin-top: 20px; 
-  padding-top: 40px;
+  padding: 40px 0;
   background-color: $secondaryColor;
-  height: 765px;
+  height: auto;
    
   h2 {
     font-size: 60px;
@@ -66,20 +66,24 @@
 }
 
 .homepage-tools-wrapper{
-  width:1018px;
+  max-width:1024px;
+  width: 100%;
   margin: 110px auto auto;
   color: $white;
 }
 
 .homepage-tools{
   float: left;
-  width: 33%;
+  width: 32%;
+  margin-right: 2%;
+
+  &:last-child{  margin-right: 0; }
 
   h4{ @include font-styling("asap", 22px, $white, "normal", "bold" ); }
 
   p{
     @include font-styling("asap", 22px, $white);
-    width:95%;
+    //width:95%;
   }
 }
 
@@ -141,7 +145,8 @@
 }
 
 .icons-wrapper{
-  width: 675px;
+  width: 100%;
+  max-width: 675px;
   margin: 60px auto 0;
   padding-bottom: 20px;
   @include bebas;

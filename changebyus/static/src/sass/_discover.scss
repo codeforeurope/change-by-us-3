@@ -1,13 +1,17 @@
 /********************************************************  
  DISCOVER 
  ********************************************************/
-.search-forms {
-  float: left;
-  height: 94px;
-  z-index: 1;
+.search-inputs{
+  margin-bottom: 12px;
+
+  >div{
+    float: left;
+    height: 94px;
+    z-index: 1;
+  }
   
   input {
-    width: 304px;
+    width: 100%;
     margin-right: 10px;
     background-repeat: no-repeat;
     box-sizing: border-box;
@@ -26,18 +30,27 @@
     }
   }
 
+  .search-forms{
+    width: 42%;
+    margin-right: 3%;
+    .twitter-typeahead{width: 100%;}
+  }
+
+  .go{
+    width: 10%;
+  }
+
   .btn {
     margin-top: 37px;
-    padding: 20px 19px;
+    padding: 20px 0;
+    width: 100%;
   } 
 }
-
-.search-inputs{margin-bottom: 12px;}
 
 .search-catagories{
   display: none;
   margin-top: -15px;
-  width: 304px;
+  width: 100%;
   @include box-skin;
 
   li{
@@ -99,20 +112,20 @@
 
 .banner-search {
   width: 100%;
+  margin-top: 15px;
   margin-bottom: 20px;
   
   h3{text-align: left;}
 }
-
-//
+ 
 .discover-header-right, .dashboard-header-right{
   float: right;
 }
 
 .discover-header-right{
-   width: 230px;
+   width: 23%;
    height: 200px;
-   margin-left: 15px;
+   margin-left: 2%;
   .btn-large {
     width: 100%;
     line-height: 20px;
@@ -133,9 +146,9 @@
 
 
 .search-box {
-  margin-top: 15px;
+  float: left;
   border: 1px solid #dcdcdc;
-  width: 760px;
+  width: 75%;
   height: auto;
   background-color: $white;
   border-radius: 4px;

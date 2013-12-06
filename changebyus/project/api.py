@@ -94,7 +94,7 @@ def api_search_projects():
     
     geo_center = [lon, lat]
     
-    addl_filters = {}
+    addl_filters = {'active':True}
     
     if (cat):
         addl_filters.update({"category": cat})
@@ -383,9 +383,9 @@ def api_get_projects():
 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        projects = Project.objects(resource=is_resource).order_by(sort_order)
+        projects = Project.objects(resource=is_resource, active=True).order_by(sort_order)
     else:
-        projects = Project.objects(resource=is_resource)
+        projects = Project.objects(resource=is_resource, active=True)
 
     projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)

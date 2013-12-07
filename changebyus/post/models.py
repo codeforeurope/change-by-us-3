@@ -12,23 +12,19 @@ from ..helpers.mongotools import db_list_to_dict_list
 from ..project.models import Project
 from ..user.models import User
 
+
 """
-================
-Posts Model File
-================
+.. module:: post/models
 
-This is a MongoDB models file that contains models for Posts.
-For the most part it should be pretty straight forward.  The max_length
-of fields are chosen rather arbitrarily, so they can be adjusted as needed,
-but keep in mind screen formatting considerations.
+    :synopsis: This is a MongoDB models file that contains models for Posts.
 
-All models have a as_dict routine that helps us format and hide data
-when appropriate.
+    For the most part it should be pretty straight forward.  The max_length
+    of fields are chosen rather arbitrarily, so they can be adjusted as needed,
+    but keep in mind screen formatting considerations.
 """
 
 class SocialMediaObject(db.EmbeddedDocument):
     """
-    ABOUT
         This helps us track if the post was coppied to a social
         platform such as Twitter or Facebook by storing the appropriate ID.
         The actual posting occurs in external modules
@@ -39,13 +35,9 @@ class SocialMediaObject(db.EmbeddedDocument):
 
 class ProjectPost(db.Document, EntityMixin):
     """
-    ABOUT
         This is the core model of this Blueprint.  These are posts for a given project.
         The name ProjectPost shows how this module is posssibly over-dependent on the
         Project blueprint.
-    TODO
-        Evaluate the dependency on the Project model and perhaps restructure to make
-        this blueprint more flexible.
     """
     project = db.ReferenceField(Project)
     user = db.ReferenceField(User)

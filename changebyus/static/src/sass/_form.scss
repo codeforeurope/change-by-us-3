@@ -105,8 +105,14 @@
 	}
 }
 
+.twitter-typeahead{width: 100%;}
+
 select[name=category]{
 	width: 85%;
+}
+
+textarea{
+	box-sizing: border-box;
 }
 
 label[for=website]{

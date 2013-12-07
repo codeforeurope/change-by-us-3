@@ -7,23 +7,68 @@
 		.overlay-text {
 			left: 5%;
 			width: 95%;
+			h1 {font-size: 28px;}
 		}
 	}
 
+	.header-image{
+		height: 340px;
+	}
+
+ 
 	.project-square{
 		width: 96%;
-		margin: 10px 2% !important;
+		margin: 10px 2%;
+	} 
+	.project-preview:nth-child(2n+2){
+		.project-square {margin-left: 2%;}
+	}
+	.project-preview:nth-child(3n+3){
+		.project-square {margin-left: 2%;}
 	}
 
 	.reply-right{ 
 		width: 65%;
 	}
 
+	.content {
+		h2 {
+			font-size: 42px;
+		}
+	}
+
+	.icons-wrapper {
+		margin: 32px auto 0;
+	}
+
 	.created-by, .supported-by{
-		margin-top: 12px;
-		float: none;
-		&:after{
-			clear: both;
+		padding: 0 2%;
+		width: 100%; 
+		text-align: left;
+
+		div{
+			&:first-child{
+				width: 100%;
+				margin-bottom: 6px;
+				&:after{ clear: both; }
+			}
+			&:last-child{
+				&:after{ clear: both; }
+			}
+		}
+	}
+
+	.create-by{
+		margin-bottom: 24px;  
+	}
+
+	.footer-btns{
+		.btn.btn-xlarge{
+			width: 96%;
+			margin: 0 2%;
+			&:first-child{
+				margin-bottom: 16px;
+			}
 		}
 	}
 

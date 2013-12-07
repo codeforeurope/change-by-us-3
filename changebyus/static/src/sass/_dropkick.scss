@@ -14,7 +14,7 @@
 
 // One container to bind them...
 .dk_container {
-  width: 480px;
+  width: 85%;
   font-size: 12px;
   font-weight: bold;
   margin-bottom: 18px;
@@ -195,6 +195,7 @@
 /* Hides only dropkick <select> instances */
 .dk_container select {
   position: absolute;
+  left: -99999em;
   top: -99999em;
   visibility: hidden;
 }

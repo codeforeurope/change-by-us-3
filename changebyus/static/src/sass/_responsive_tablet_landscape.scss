@@ -22,8 +22,6 @@
 		}
 	}
 
-	
-
 	.project-header{margin-top: 0;}
 
 	.dashboard-header{ 
@@ -42,7 +40,6 @@
 			bottom: 0;
 		}
 	}
-
 
 	.tabs-pane, .owner-tabs-pane{ 
 		height: auto;
@@ -73,8 +70,18 @@
 		.profile-image{display: none;}
 	}
 
+	.create-project{
+		h1, p{
+			padding: 0 2%;
+		}
+	}
+
+	.content-wrapper {
+		padding: 2%;
+	}
+
 	.project-preview:nth-child(3n+3){
-		.project-square {margin: 16px 2%;}
+		.project-square {margin: 10px 2%;}
 	}
 
 	.project-preview:nth-child(2n+2){

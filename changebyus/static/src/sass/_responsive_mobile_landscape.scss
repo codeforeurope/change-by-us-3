@@ -12,14 +12,6 @@
 		font-size: 14px; 
 	} 
 
-	/*
-	.logged-in{
-		.nav-pills{ 
-			&.pull-right{float: left;}
-		}
-	}
-	*/
-
 	.nav-pills{ 
 		&.pull-right{display: none;}
 
@@ -29,7 +21,7 @@
 		display: block;
 	}
 	
-	.resp-append{display: none;}
+	.resp-append,.resp-append-last{display: none;}
 
 	.header-links {
 		padding: 0; 
@@ -45,9 +37,16 @@
 		}
 	}
 
+	.user-avatar{
+		width: 70px;
+	}
+
 	.user-info { 
 		width: 100%;
 		padding: 0 2%;
+	}
+	.signup,.login{
+		margin-top: 24px; 
 	}
 
 	.header-image{
@@ -65,7 +64,43 @@
 				font-size: 40px;
 			}
 		}
-	} 
+	}
+
+	.dashboard-header{
+		padding:0;
+		.btn.btn-large{
+			width: 100%;
+		}
+	}
+
+	.dashboard-header-right{
+		width: 100%;
+	}
+
+	.project-member {
+		.mail-icon{float: right;}
+		.member-title{
+			width: 75%;
+			&:after{
+				clear: both;
+			}
+		}
+		.member-description{
+			margin-top: 16px;
+			height: auto;
+		}
+		.member-roles{margin-top: 16px;}
+		.member-description,.member-roles{
+			width: 100%;
+		}
+	}
+
+	.discussion {
+		.date{
+			float: none; 
+			margin:0 0 12px; 
+		}
+	}
 
 	.content, .homepage-block-info{
 		h2 {
@@ -91,7 +126,7 @@
 	}
 
 	.form-right{
-		margin-top: 40px;
+		margin-top: 30px;
 	}
 
 	.form-right, .form-left{
@@ -119,9 +154,7 @@
 		width: 100%;
 	}
 
-	.project-square{
-		margin: 10px 2%;
-	}
+	
 
 	.project-description {
 		//height: 100px;
@@ -159,6 +192,22 @@
 	.search-box, .discover-header-right{
 		float: none;
 		width: 100%;
+	}
+
+	.search-box{
+		p{ margin-top: 22px; }
+	}
+
+	.search-inputs{ 
+		.search-forms {
+			width: 80%;
+			&:first-child{
+				z-index: 2;
+			}
+		}
+		.go{
+			width: 17%;
+		}
 	}
 
 	.discover-header-right{

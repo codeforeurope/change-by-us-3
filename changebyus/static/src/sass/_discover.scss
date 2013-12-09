@@ -163,7 +163,11 @@
   .title {
     margin-top: 10px;
     margin-bottom: 20px;
-    font-size: 40px;
+    h2{
+      margin-top: 22px;
+      font-weight: normal;
+      font-size: 40px;
+    }
   }
 
   .search-filters{

@@ -40,10 +40,8 @@
   @include box-skin; 
   padding: 10px 10px 50px;
   min-height: 400px;
-  //width: 328px;
   float: left;
-  margin-right: 16px;
-  margin-bottom: 22px;
+  margin: auto auto 22px;
 
   &:hover{ 
     .hover-overlay{ 
@@ -274,8 +272,11 @@ h2.admin-title{
 
 .user-avatar{
   float: left;
-  width: 70px;
-  margin-right: 20px;
+  min-width: 70px;
+  width: percentage(70px/1018px);
+  margin-right: percentage(20px/1018px);
+
+  img{max-width: none;}
 }
 
 .update-content{
@@ -329,7 +330,7 @@ h2.admin-title{
 .post-reply-form{
   .input-xxlarge{
     height: 32px;
-    width: 568px;
+    width: percentage(568px/1018px);
   }
 }
 
@@ -341,21 +342,26 @@ h2.admin-title{
 .project-member{
   .mail-icon{ 
     float: left; 
-    width: 60px;
-  
-    img{ margin-top: 20px; }
+    width: percentage(60px/1018px);
+
+    img{ 
+      max-width: none;
+      min-width: 20px;
+      margin-top: 20px; 
+    }
   }
   
   .member-title{  
     float: left;  
     margin-top: 15px; 
-    width: 175px;
+    width: percentage(175px/1018px);
     padding-right: 15px;
   }
   
   .member-description{ 
     float: left;  
-    width: 505px;
+    width: percentage(505px/1018px);
+
     height: 80px;
     display: table;
 
@@ -368,7 +374,7 @@ h2.admin-title{
   .member-roles{ 
     float: left;
     margin-top: 25px;
-    width: 120px; 
+    width: percentage(120px/1018px);
   }
   .aka{ @include font-styling("asap", 15px, $gray53); }
   .grey{ @include font-styling("asap", 15px, $gray53); }
@@ -376,7 +382,7 @@ h2.admin-title{
 
 .admin{
   .project-member{
-    .member-description{ width: 475px; }
+    .member-description{ width: percentage(475px/1018px); }
     .dk_container{width: 100%;}
    
     select{width: 100%;}
@@ -396,7 +402,7 @@ h2.admin-title{
 .share-toggle-wrapper{
   float: left;
   height: 25px;
-  width: 205px;
+  width: percentage(205px/1018px);
   z-index: 1;
   top:-7px;
   left: 5px;

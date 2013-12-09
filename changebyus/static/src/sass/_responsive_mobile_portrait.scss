@@ -3,6 +3,10 @@
 @media only screen and (max-width: 480px) {
 	body.debug{background: green;}
 
+	.dashboard-tabs{
+		li{float: none;}
+	}
+
 	.header-image {
 		.overlay-text {
 			left: 5%;
@@ -15,24 +19,24 @@
 		height: 340px;
 	}
 
- 
-	.project-square{
-		width: 96%;
-		margin: 10px 2%;
-	} 
-	.project-preview:nth-child(2n+2){
-		.project-square {margin-left: 2%;}
-	}
-	.project-preview:nth-child(3n+3){
-		.project-square {margin-left: 2%;}
-	}
-
 	.reply-right{ 
 		width: 65%;
 	}
 
 	.icons-wrapper {
 		margin: 32px auto 0;
+	}
+
+	.project-square{
+		margin: 10px 0;
+		width: 100%;
+	}
+
+	.project-preview:nth-child(2n+2){
+		.project-square {margin-right: 0;}
+	}
+	.project-preview:nth-child(3n+3){
+		.project-square {margin-right: 0;}
 	}
 
 	.created-by, .supported-by{
@@ -56,7 +60,16 @@
 		margin-bottom: 24px;  
 	}
 
-	
+	.create-project{
+		h1{font-size: 40px;}
+	}
 
+	.admin {
+		h2 {
+			font-size: 22px;
+			line-height: 40px;
+		}
+	}
+ 
 
 }

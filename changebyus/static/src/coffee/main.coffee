@@ -197,5 +197,7 @@ require ["jquery",
 				label: '', 
 				prependTo:'#responsive-menu'
 
-			$clone = $('.resp-append')
+			$clone     = $('.resp-append')
+			$cloneLast = $('.resp-append-last')
 			$clone.clone().appendTo $('.slicknav_nav')
+			$cloneLast.clone().appendTo $('.slicknav_nav')

@@ -35,7 +35,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					change: (value_, label_) =>
 						$.ajax(
 							type: "POST"
-							url: "/api/project/change_user_role"
+							url: "/api/project/change-user-role"
 							data: { project_id:@projectID, user_id:@model.id, user_role:value_}
 						).done (response_)=>
 							if (response_.msg.toLowerCase() == "ok")

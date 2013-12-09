@@ -39,7 +39,7 @@ require.config({
 
 require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Slicknav) {
   return $(document).ready(function() {
-    var $clone, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
+    var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
       parent: "#frame"
     };
@@ -207,6 +207,8 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
       prependTo: '#responsive-menu'
     });
     $clone = $('.resp-append');
-    return $clone.clone().appendTo($('.slicknav_nav'));
+    $cloneLast = $('.resp-append-last');
+    $clone.clone().appendTo($('.slicknav_nav'));
+    return $cloneLast.clone().appendTo($('.slicknav_nav'));
   });
 });

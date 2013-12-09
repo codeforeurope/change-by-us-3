@@ -4,105 +4,71 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-import os
-import yaml
-import inspect
-import bson
-import socket
-
-from logging.handlers import SMTPHandler
-from logging.handlers import RotatingFileHandler
-import logging
-
-from flask_mail import Mail
-
-from flask import Flask, request, render_template, current_app, g, jsonify
-
-from flask.ext.security import Security, MongoEngineUserDatastore, login_required
-from flask.ext.principal import identity_loaded, Identity, Permission, RoleNeed, UserNeed
-from flask.ext.login import LoginManager, current_user
-from flaskext.csrf import csrf
+from flask import request, render_template, current_app, g
 from flask.ext.cdn import CDN
-#from flaskext.uploads import UploadSet, configure_uploads, IMAGES
-
-from flask_oauth import OAuth
-
-from .post import post_api
-from .project import project_view, project_api, resource_api
-from .facebook.facebook import facebook_view
-from .twitter import twitter_view
-from .stream import stream_view, stream_api
-from .user import user_api
-from .frontend import frontend_view, frontend_api
-
-from .helpers.flasktools import jsonify_response, ReturnStructure
-
-from .helpers.encryption import assemble_key
+from flask.ext.login import LoginManager, current_user
+from flask.ext.principal import (identity_loaded, Identity, Permission, RoleNeed, 
+    UserNeed)
+from flask.ext.security import (Security, MongoEngineUserDatastore, 
+    login_required)
+from flask_mail import Mail
+from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
+from logging.handlers import RotatingFileHandler, SMTPHandler
 from .extensions import db, login_manager
-
 from .helpers.configtools import get_shared_config, Flask
+from .helpers.encryption import assemble_key
+import logging
+import socket
+import yaml
 
-from .stripe import stripe_view
-
-import changebyus
 # needed for our own context
+import changebyus
+
 
 """
-========
-CBU App
-========
 
-An effort was made to create CBU in a modular fashion using flask
-blueprints whenever possible.  Flask-bone was used as a major influence
-for the structure of this system.
+.. module:: cbu/app
 
-Quite a few of the blueprints rely on routines found in the helpers.py
-file, which should be kept in mind if ever pulling those modules into
-different applications.
+    :synopsis: The main application factory for CBU
+
+    An effort was made to create CBU in a modular fashion using flask
+    blueprints whenever possible.  Flask-bone was used as a major influence
+    for the structure of this system.
+
+    Quite a few of the blueprints rely on routines found in the helpers.py
+    file, which should be kept in mind if ever pulling those modules into
+    different applications.
 """
 
 # for import *
 __all__ = ['create_app']
 
-DEFAULT_BLUEPRINTS = (
-    frontend_view,
-    frontend_api,
-    post_api,
-    project_view, 
-    project_api,
-    facebook_view,
-    twitter_view,
-    stripe_view,
-    stream_view,
-    stream_api,
-    user_api,
-)
-
 def create_app(app_name=None, blueprints=None):
-    """
-    ABOUT
-        Flask app entry point.  This is called at application
-        initialization. 
+    """Create the flask application
+    
+    Flask app entry point.  This is called at application
+    initialization. 
     """
 
     if app_name is None:
         app_name = __name__
-    if blueprints is None:
-        blueprints = DEFAULT_BLUEPRINTS
 
     app = Flask(app_name)
     configure_app(app)
+    
+    # Configure all the core functionality that's common to everything
     configure_logging(app)
     configure_database(app)
-    configure_hook(app)
-    configure_blueprints(app, blueprints)
     configure_mail(app)
     configure_security(app)
     configure_csrf(app)
     configure_error_handlers(app)
+    configure_encryption(app)
+    
+    # Load the blueprints last since they need certain application contexts 
+    configure_blueprints(app, blueprints)
     #configure_media_uploads(app)
     configure_rackspace_assets(app)
-    configure_encryption(app)
 
     if app.config['DEBUG'] == True:
         app.debug = True
@@ -111,23 +77,21 @@ def create_app(app_name=None, blueprints=None):
 
 
 def configure_database(app):
-    """
-    ABOUT
-        Configure the app database given the db object we import
-        from our extensions file
+    """Initialize database
+    
+    Configure the app database given the db object we import
+    from our extensions file
     """
     db.init_app(app)
     app.db = db
 
 
 def configure_logging(app):
-    """
-    ABOUT
-        Sets up our logging style, file rotations, etc.
-    TODO
-        Think of a clever way to pull in requests that occured
-        around the same time some logging happened, to avoid any manual
-        comparison between a web log file and this log file
+    """Setup file logging and rotation
+    
+    Think of a clever way to pull in requests that occured
+    around the same time some logging happened, to avoid any manual
+    comparison between a web log file and this log file
     """
 
     megabyte = 1048576
@@ -185,51 +149,64 @@ def configure_logging(app):
 
 
 def configure_app(app):
-    """
-    ABOUT
-        This routine loads configuration files
+    """Load application configs into app.settings
     """
     app.config.from_yaml( get_shared_config(changebyus, 'config/config.yml') )
     app.settings = yaml.load( file(get_shared_config(changebyus, 'config/config.yml')) )
 
 
-def configure_hook(app):
-    """
-    ABOUT
-        Hook that is called before all requests, left in for good measure
-    """
-    @app.before_request
-    def before_request():
-        pass
-
-
 def configure_blueprints(app, blueprints):
+    """Register each blueprint
     """
-    ABOUT
-        Registers each blueprint
-    """
-    for blueprint in blueprints:
-        app.register_blueprint(blueprint)
-
+    # Load application's functionalities, many of which require
+    #    the app context so that they can reference the main app.settings
+    with app.app_context():
+        from .post import post_api, post_discussion_api, post_update_api
+        from .project import project_view, project_api, resource_api
+        from .facebook import facebook_view
+        from .twitter import twitter_view
+        from .stripe import stripe_view
+        from .stream import stream_view, stream_api
+        from .user.api import user_api
+        from .frontend import frontend_view, frontend_api
+        
+        BLUEPRINTS = (
+            frontend_view,
+            frontend_api,
+            post_api,
+            post_discussion_api,
+            post_update_api,
+            project_view, 
+            project_api,
+            resource_api,
+            facebook_view,
+            twitter_view,
+            stripe_view,
+            stream_view,
+            stream_api,
+            user_api,
+        )
+    
+        for blueprint in (blueprints or BLUEPRINTS):
+            app.register_blueprint(blueprint)
 
 def configure_mail(app):
-    """
-    ABOUT
-        Configures our mail client, mostly needed for Flask-Security
+    """Set up mail subsystem (mostly for flask-security)
     """
     app.mail = Mail(app)
 
 def configure_csrf(app):
-    # enable CSRF
+    """Set up CSRF for the application
+    """
+    from flask.ext.csrf import csrf
+    
     if app.config.get('CSRF_ENABLED'):
         csrf(app)
 
 
 # Setup Flask-Security
 def configure_security(app):
-    """
-    ABOUT
-        Configures Flask-Security with our app
+    """Configures Flask-Security with our app
     """
     from .user.models import Role, User
 
@@ -248,21 +225,21 @@ def configure_security(app):
 
     @app.before_request
     def before_request():
-        """
-        ABOUT
-            This was inserted when we started to see errors from
-            g.user.is_anonymous() for non-registered users, this seemed
-            to fix that
+        """Establish the current-user prior to the request context
+        
+        This was inserted when we started to see errors from
+        g.user.is_anonymous() for non-registered users, this seemed
+        to fix that
         """
         g.user = current_user
 
 
 def configure_media_uploads(app=None):
-    """
-    ABOUT
-        This configures the uploading and hosting of our image
-        files.  UploadSet is pretty flexible, but we don't do
-        a whole lot to customize this.
+    """Configure media uploads
+    
+    This configures the uploading and hosting of our image
+    files.  UploadSet is pretty flexible, but we don't do
+    a whole lot to customize this.
     """
 
     # this is for flask-uploads which is no longer used
@@ -282,11 +259,11 @@ def configure_rackspace_assets(app=None):
     
 
 def configure_encryption(app=None):
-    """
-    ABOUT
-        For encryption and decryption of social tokens and third party
-        app tokens, we use a combination of a local and remote key to
-        encrypt/decrypt the data.
+    """Set up encryption keys
+    
+    For encryption and decryption of social tokens and third party
+    app tokens, we use a combination of a local and remote key to
+    encrypt/decrypt the data.
     """
     key = assemble_key(app.config.get('ENCRYPTION').get('LOCAL_KEY'),
                        app.config.get('ENCRYPTION').get('REMOTE_KEY_URL'))
@@ -338,5 +315,4 @@ def configure_error_handlers(app=None):
             current_app.logger.exception(error)
     
             return render_template('error.html', error="Sorry, there was a server error.")
-
 

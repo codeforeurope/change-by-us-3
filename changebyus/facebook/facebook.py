@@ -38,32 +38,16 @@ facebook_view = Blueprint('facebook_view', __name__, url_prefix='/social/faceboo
 
 oauth = OAuth()
 
-# some magic that let's us get the local config file
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/facebook.yml'))
-
 # TODO probably should move this into the config file
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=settings['CONSUMER_KEY'],
-    consumer_secret=settings['CONSUMER_SECRET'],
+    consumer_key=current_app.settings.get('FACEBOOK').get('CONSUMER_KEY'),
+    consumer_secret=current_app.settings.get('FACEBOOK').get('CONSUMER_SECRET'),
     request_token_params={'scope': 'email,publish_actions'}
 )
-
-"""
-facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=current_app.settings['FACEBOOK_CONSUMER_KEY'],
-    consumer_secret=current_app.settings['FACEBOOK_CONSUMER_SECRET'],
-    request_token_params={'scope': 'email,publish_actions'}
-)
-"""
 
 @facebook.tokengetter
 def get_facebook_oauth_token():

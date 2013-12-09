@@ -12,15 +12,24 @@
 		font-size: 14px; 
 	} 
 
+	/*
 	.logged-in{
 		.nav-pills{ 
 			&.pull-right{float: left;}
 		}
 	}
+	*/
 
 	.nav-pills{ 
-		&.pull-right{float: right;}
+		&.pull-right{display: none;}
+
 	}
+
+	.slicknav_menu{
+		display: block;
+	}
+	
+	.resp-append{display: none;}
 
 	.header-links {
 		padding: 0; 

@@ -12,6 +12,7 @@ require.config
 		"serializeObject": "ext/jquery/jquery.serializeObject.min"
 		"serializeJSON": "ext/jquery/jquery.serializeJSON.min"
 		"dropkick": "ext/jquery/jquery.dropkick-min"
+		"slicknav": "ext/jquery/jquery.slicknav.min"
 		"hogan": "ext/hogan/hogan-2.0.0.amd"
 		"wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
 		"autocomp": "ext/bootstrap/typeahead.min"
@@ -45,7 +46,8 @@ require ["jquery",
 		 "user-view", 
 		 "dashboard-view", 
 		 "stream-view",
-		 "create-view"], 
+		 "create-view",
+		 "slicknav"], 
 	($, 
 	 Backbone, 
 	 CBUMainView, 
@@ -57,7 +59,8 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
-	 ProjectCreateView) ->
+	 ProjectCreateView
+	 Slicknav) ->
 		$(document).ready ->
 			config = parent: "#frame" 
 
@@ -187,6 +190,12 @@ require ["jquery",
 			$window.scroll(positionFooter).resize(positionFooter)
 
 			window.onPageElementsLoad = ->
-				console.log 'onPageElementsLoad'
 				positionFooter()
 			### END STICKY FOOTER ### 
+
+			$('.nav.nav-pills.pull-right').slicknav
+				label: '', 
+				prependTo:'#responsive-menu'
+
+			$clone = $('.resp-append')
+			$clone.clone().appendTo $('.slicknav_nav')

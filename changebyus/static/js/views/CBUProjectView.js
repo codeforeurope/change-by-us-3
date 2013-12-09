@@ -34,26 +34,25 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var id,
-        _this = this;
-      id = this.model.get("id");
-      return $.ajax({
-        type: "GET",
-        url: "/api/project/am_i_a_member/" + id
-      }).done(function(response) {
-        var e;
-        try {
-          if (response.data.member) {
-            _this.isMember = true;
-          }
-        } catch (_error) {
-          e = _error;
-          console.log(e);
-        }
-        _this.viewData = _this.model.attributes;
-        _this.viewData.isMember = _this.isMember;
-        return _this.addSubViews();
-      });
+      /*
+      				id = @model.get("id")
+      				$.ajax(
+      					type: "GET"
+      					url: "/api/project/am_i_a_member/"+id
+      				).done (response)=> 
+      					try 
+      						if response.data.member
+      							@isMember=true 
+      
+      					catch e then console.log e
+      
+      					@viewData = @model.attributes
+      					@viewData.isMember = @isMember
+      
+      					@addSubViews()
+      */
+
+      return this.addSubViews();
     },
     addSubViews: function() {
       var _this = this;

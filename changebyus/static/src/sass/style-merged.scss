@@ -7,9 +7,8 @@
 @import "variables";
 @import "mixins-and-functions";
 
-  
 /*!
- * Bootstrap v2.3.1
+ * Bootstrap v2.3.1 
  *
  * Copyright 2012 Twitter, Inc
  * Licensed under the Apache License v2.0
@@ -30,7 +29,7 @@
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
   display: block;
 }
-
+ 
 audio, canvas, video {
   display: inline-block;
   *display: inline;
@@ -2024,6 +2023,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
   height: 76px; 
   width: 100%;
   background-color: $primaryColor;
+  z-index: 2;
   li{font-size: 22px;}
 }
 
@@ -2855,8 +2855,9 @@ html, body, #page-wrapper{
 @import "admin";
 @import "discover";
 @import "homepage";
+@import "slicknav";
 @import "responsive_desktop";
-@import "responsive_tablet_landscape";
+//@import "responsive_tablet_landscape";
 @import "responsive_tablet_portrait";
 @import "responsive_mobile_landscape";
 @import "responsive_mobile_portrait";

@@ -54,6 +54,8 @@ define ["underscore",
 			onTemplateLoad:->
 				# determine if user is a member of the project
 				# if not, display the join button
+				
+				###
 				id = @model.get("id")
 				$.ajax(
 					type: "GET"
@@ -69,6 +71,9 @@ define ["underscore",
 					@viewData.isMember = @isMember
 
 					@addSubViews()
+				###
+
+				@addSubViews()
 
 			addSubViews: ->  
 				@$header = $("<div class='project-header'/>")

@@ -5,6 +5,10 @@
 @media only screen and (max-width: 1024px) {
 	body.debug{background: blue;}
 
+	.topnav{
+		.body-container{padding: 0;}
+	}
+
 	.nav-pills>li { 
 		padding-right: 16px;
 	} 
@@ -41,20 +45,31 @@
 		}
 	}
 
+	.body-container{
+		padding: 0 2%;
+	}
+
+	
 	.tabs-pane, .owner-tabs-pane{ 
-		height: auto;
 		position: relative;
 		bottom: auto;
+		margin: 0;
+		padding: 0;
+		height: auto;
 		background: transparent;
-		
+
+		ul{margin: 0;}
+
 		li{ 
 			display: list-item !important;
 			margin: auto; 
-			padding: 0 0 0 30px;
-			border-top: 1px solid $grayBorder;
+			padding: 0;
+			border-bottom: 1px solid $grayBorder;
 			&.active{background: transparent;}
 		}
-		
+
+		li.active a{ display: inline; }
+
 		a{
 			font-size: 18px;
 			text-shadow: none;
@@ -62,12 +77,18 @@
 			@include font-styling("asap", 22px, $black, "normal", "bold");
 		}
 
-		.view-project{
-			margin-left: 30px;
-			display: block;
-		}
-
 		.profile-image{display: none;}
+	}
+
+	.view-project{ display: none; }
+
+	.project-section-header{
+		height: auto;
+		>.pull-left{float: none;}
+		.team-members{
+			float: none;
+			ul{float: none;}
+		}
 	}
 
 	.create-project{

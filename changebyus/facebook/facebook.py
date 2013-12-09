@@ -4,20 +4,14 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from flask import Blueprint, render_template, redirect, url_for, g
-from flask import current_app, request
+from flask import current_app, request, session
 from flask.ext.login import login_required, current_user, login_user
 
-from ..user.api import User
+from ..user.models import User
 from ..user.helpers import _create_user, _add_facebook, _is_email_in_use
 from ..helpers.stringtools import string_generator
 
-from flask import current_app, session
 from flask_oauth import OAuth
-
-import yaml
-import os
-import inspect
-
 
 """
 .. module:: facebook

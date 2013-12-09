@@ -115,3 +115,11 @@ ENCRYPTION:
     REMOTE_KEY_URL: {{ ENCRYPTION_REMOTE_KEY_URL }}
     # example: '53535999333'
     IV: '{{ ENCRYPTION_IV }}'
+
+# Social services OAuth configuration
+FACEBOOK:
+    #  localtunnel.com
+    CONSUMER_KEY: '{{ FACEBOOK_CONSUMER_KEY }}'
+    CONSUMER_SECRET: '{{ FACEBOOK_CONSUMER_SECRET }}'
+
+    

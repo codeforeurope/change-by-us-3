@@ -1,6 +1,7 @@
-/**** affects all sizes from 0 to 655px **/
-
-@media only screen and (max-width: 655px) {
+/**** affects all sizes from 0 to 760px **/
+ 
+//@media only screen and (max-width: 655px) {
+@media only screen and (max-width: 760px) {
 	body.debug{background: red;}
 
 	.nav.user{
@@ -45,9 +46,12 @@
 		width: 100%;
 		padding: 0 2%;
 	}
-	.signup,.login{
+	.signup,
+	.login{
 		margin-top: 24px; 
 	}
+
+	.feature-image{display: none;}
 
 	.header-image{
 		height: 400px;
@@ -79,21 +83,36 @@
 
 	.project-member {
 		.mail-icon{float: right;}
+		
 		.member-title{
 			width: 75%;
 			&:after{
 				clear: both;
 			}
 		}
+		
 		.member-description{
 			margin-top: 16px;
 			height: auto;
 		}
+		
 		.member-roles{margin-top: 16px;}
+
 		.member-description,
 		.member-roles{
 			width: 100%;
 		}
+	}
+
+	.project-discussions,
+	.project-fundraising,
+	.project-calendar,
+	.project-members{
+		.content-left{
+			width: 100%;
+			a{width: 100%;}
+		}
+		.content-right{display: none;}
 	}
 
 	.discussion {
@@ -131,7 +150,8 @@
 		margin-top: 30px;
 	}
 
-	.form-right, .form-left{
+	.form-right, 
+	.form-left{
 		float: none;
 		width: 100%;
 	}
@@ -150,7 +170,9 @@
 
 	.form-footer{
 		text-align: center;
-		.pull-left, .pull-right{float: none;}
+		.pull-left, 
+		.pull-right{float: none;}
+
 		.pull-right{margin-top: 16px;}
 	}
 
@@ -158,13 +180,12 @@
 		width: 100%;
 	}
 
-	
-
 	.project-description {
 		//height: 100px;
 	}
 
-	.login, .signup {
+	.login, 
+	.signup {
 		.content-wrapper {
 			.centered {
 
@@ -173,7 +194,8 @@
 
 		h1{padding: 30px;}
 
-		input[type="submit"], input[type="button"]{
+		input[type="submit"], 
+		input[type="button"]{
 			width: 100%;
 			margin: auto;
 		}

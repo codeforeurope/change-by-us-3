@@ -46,7 +46,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					success: (response) =>
 						console.log 'signup',response
 						$form.find("input, textarea").removeAttr("disabled")
-						if response.msg.toLowerCase() is "ok"
+						#if response.msg.toLowerCase() is "ok"
+						if response.success
 							window.location.href = "/"
 						else
 							$feedback.addClass("alert").addClass("alert-danger").html response.msg
@@ -63,6 +64,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				$socialForm     = $socialSignup.find("form") 
 				$socialSubmit   = $socialSignup.find("input[type='submit']")
 				$socialFeedback = $socialSignup.find(".login-feedback")
+				console.log $socialFeedback
+				$socialSignup.hide()
 
 				socialOptions =
 					type: $socialForm.attr('method')
@@ -74,18 +77,21 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						$socialFeedback.removeClass("alert").html ""
 
 					success: (response) =>
-						console.log 'signup',response
+						console.log 'signup',response,$socialFeedback 
 						$socialForm.find("input, textarea").removeAttr("disabled")
-						if response.msg.toLowerCase() is "ok"
+						#if response.msg.toLowerCase() is "ok"
+						if response.success is "ok"
 							window.location.href = "/"
 						else
 							$socialFeedback.addClass("alert").html response.msg
 
 				$socialForm.submit ->
-					json_str = JSON.stringify($socialForm.serializeJSON())
-					options.data = json_str
-					console.log 'options.data',options.data
-					$.ajax options
+					obj = $socialForm.serializeJSON()
+					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
+					json_str = JSON.stringify(obj)
+					socialOptions.data = json_str
+					console.log 'socialOptions.data',socialOptions.data
+					$.ajax socialOptions
 					false
 
 			toggleSubView:->

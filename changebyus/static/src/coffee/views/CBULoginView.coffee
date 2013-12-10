@@ -43,7 +43,8 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 					success: (response) =>
 						$form.find("input, textarea").removeAttr("disabled")
 
-						if response.msg.toLowerCase() is "ok"
+						#if response.msg.toLowerCase() is "ok" 
+						if response.success
 							window.location.href = "/"
 						else
 							$feedback.addClass("alert").addClass("alert-danger").html response.msg

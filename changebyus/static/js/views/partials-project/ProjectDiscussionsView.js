@@ -17,6 +17,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
           return onPageElementsLoad();
         });
       } else {
+        this.collection.on('remove', function(obj_) {
+          _this.addAll();
+          return _this.deleteDiscussion(obj_.id);
+        });
         return this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
           return _this.loadDayTemplate();
         });
@@ -56,9 +60,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       projectDiscussionListItemView = new ProjectDiscussionListItemView(config);
       projectDiscussionListItemView.on('click', function() {
         return _this.trigger('discussionClick', config);
-      });
-      projectDiscussionListItemView.on('delete', function() {
-        return _this.deleteDiscussion(config.model.get("id"));
       });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();

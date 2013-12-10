@@ -9,7 +9,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     initialize: function(options_) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options_);
-      console.log('loadModel', this.model);
       return this.model.fetch({
         success: function() {
           return _this.loadUser();

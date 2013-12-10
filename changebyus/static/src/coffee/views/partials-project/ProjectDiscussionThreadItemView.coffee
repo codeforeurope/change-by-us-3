@@ -24,7 +24,6 @@ define ["underscore",
 
 			initialize: (options_) ->
 				AbstractView::initialize.call(@, options_)
-				console.log 'loadModel',@model
 				@model.fetch
 					success: =>@loadUser()
 

@@ -25,5 +25,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 			onTemplateLoad:->
 				@$el.find('.user-avatar, .description').click =>
 					@trigger "click", @model
-				@$el.find('.delete').click =>
-					@trigger "delete", @model  
+				
+				@$el.find('.delete-x').click =>
+					@model.collection.remove @model

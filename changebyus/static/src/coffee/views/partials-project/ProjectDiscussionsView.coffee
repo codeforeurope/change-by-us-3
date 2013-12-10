@@ -29,6 +29,11 @@ define ["underscore",
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
 						{}, => onPageElementsLoad()
 				else
+					@collection.on('remove', (obj_)=> 
+						@addAll()
+						@deleteDiscussion(obj_.id)
+					)
+
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => @loadDayTemplate()
 
@@ -58,10 +63,10 @@ define ["underscore",
 
 				config = {model:model_}
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
+				
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
-				projectDiscussionListItemView.on 'delete', => 
-					@deleteDiscussion config.model.get("id")
+
 				@$ul.append projectDiscussionListItemView.$el
 
 				onPageElementsLoad()

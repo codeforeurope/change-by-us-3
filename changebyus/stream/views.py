@@ -17,11 +17,10 @@ from ..facebook.facebook import _get_fb_user_name_and_thumbnail
 stream_view = Blueprint('stream_view', __name__, url_prefix='/stream')
 
 """
-=============
-Stream views
-=============
+.. module:: stream/views
 
-List of views that allow a user to see project posts for a given group of scenarios
+	List of views that allow a user to see project posts for a given group of 
+	scenarios
 """
 
 @stream_view.route('/')

@@ -3,6 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
+
 from flask import Blueprint, request, render_template, redirect, current_app, url_for, request, g
 import os
 
@@ -29,12 +30,10 @@ user_api = Blueprint('user_api', __name__, url_prefix='/api/user')
 
 
 """
-=========
-User API
-=========
+.. module: user/api
 
-Users and projects are the core components of CBU.  This user api lets
-other modules create/modify/edit user information through various routines.
+    Users and projects are the core components of CBU.  This user api lets
+    other modules create/modify/edit user information through various routines.
 """
 
 class CreateUserForm(Form):
@@ -53,17 +52,23 @@ class CreateUserForm(Form):
 
 @user_api.route('/create', methods = ['POST'])
 def api_create_user():
-    """
-    ABOUT
-        Method to update users record via Post
-    METHOD
-        Post
-    INPUT
-        email, password, display_name, first_name, last_name
-    OUTPUT
-        Direct user to dashboard if account created or signup if issue
-    PRECONDITIONS
-        User record doesn't already exist, current viewer is not logged in
+    """Method to create a user account
+
+        Args:
+            email: email for user account
+            password: password for user account
+            display_name: users display name
+            first_name: users first name
+            last_name: users last name
+            bio: short bio of user
+            website: user website
+            location: location of user
+            lat: lat of user location
+            lon: lon of user location
+
+        Returns:
+            Logs in user and returns the user data structure
+
     """
 
     if not g.user.is_anonymous():
@@ -127,23 +132,16 @@ def api_create_user():
     return jsonify_response( ReturnStructure( data = u.as_dict() ))
 
 
-@user_api.route('/<id>')    
+@user_api.route('/<user_id>')    
 # @login_required # not sure if this is needed
-def api_get_user(id):
-    """
-    ABOUT
-        Routine to get a json user object for a given user
-    METHOD
-        Get
-    INPUT
-        id
-    OUTPUT
-        Json user record
-    PRECONDITIONS
-        The user exists
+def api_get_user(user_id):
+    """Routine to retrieve a user record
+  
+        Returns:
+            User record if user found
     """
 
-    u = User.objects.with_id(id)
+    u = User.objects.with_id(user_id)
      
     if u is None:
         ret = ReturnStructure( msg = "User not found.",
@@ -181,17 +179,25 @@ class EditUserForm(Form):
 @user_api.route('/edit', methods = ['POST'])
 @login_required
 def api_edit_user():
-    """
-    ABOUT
-        Routine to edit a user record
-    METHOD
-        POST
-    INPUT
-        OPTIONAL: photo, email, public_email, password, display_name, first_name, last_name
-    OUTPUT
-        User record upon success
-    PRECONDITIONS
-        API key exists in the config file
+    """Routine to edit a user record
+
+        Args:
+            email: email for user account
+            public_email: bool to determine if email is public
+            password: password for user account
+            display_name: users display name
+            first_name: users first name
+            last_name: users last name
+            bio: short bio of user
+            website: user website
+            location: location of user
+            lat: lat of user location
+            lon: lon of user location   
+            photo: user image         
+
+        Returns:
+            New user record if successful
+
     """
 
     form = EditUserForm(request.form or as_multidict(request.json))
@@ -285,16 +291,10 @@ def api_edit_user():
 @user_api.route('/socialstatus', methods = ['GET'])
 @login_required
 def api_get_user_social_status():
-    """
-    ABOUT
-        Gets the currently logged in users social connection status
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        Dict of { 'facebook' : true/false,
-                  'twitter': true/false }
+    """Method to query the social connectivity of the currently logged in user
+
+        Returns:
+            A dict containing True/False entries for the different supported social networks
     """
 
     user = User.objects.with_id(g.user.id)
@@ -306,14 +306,10 @@ def api_get_user_social_status():
 
 @user_api.route('/socialinfo', methods = ['GET'])
 def api_get_user_social_info():
-    """
-    ABOUT
-        Gets the currently logged in users social info
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
+    """Method to query a users social information such as twitter and facebook name
+
+        Returns:
+            Current users name/image for various social platforms (if connected to those platforms)
          
     """
 

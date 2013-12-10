@@ -20,11 +20,9 @@ from ..helpers.flasktools import ReturnStructure, jsonify_response, as_multidict
 frontend_api = Blueprint('frontend_api', __name__)
 
 """
-==============
-Frontend Api
-==============
+.. module:: frontend/api
 
-This api has very base level methods such as /login and /logout
+    This api has very base level methods such as /login and /logout
 """
 
 
@@ -34,6 +32,15 @@ class LoginForm(Form):
 
 @frontend_api.route('/login', methods = ['POST'])
 def user_login():
+    """Logs in a user
+
+        Args:
+            email: login email
+            password: login password
+
+        Returns:
+            Logs in user and returns True, or returns False
+    """
 
     form = LoginForm(request.form or as_multidict(request.json))
     if not form.validate():
@@ -58,11 +65,9 @@ def user_login():
 
 @frontend_api.route('/logout')
 def user_logout():
-    """
-    ABOUT
-        In retrospect there is probably a native flask-security url that does this...
-    TODO
-        Check if this can be retired easily
+    """Logs out a user
+
+        Note: There is probably a native flask routine for this, making this redundant.
     """
     logout_user();
 

@@ -15,37 +15,28 @@ from ..helpers.flasktools import gen_blank_ok
 frontend_view = Blueprint('frontend_view', __name__)
 
 """
-==============
-Frontend Views
-==============
+.. module:: frontend/views
 
-This views file holds the main landing urls that have no /prefix,
-such as the home page.
+    This views file holds the main landing urls that have no /prefix,
+    such as the home page.
 """
 
 @frontend_view.route('/')
 def home():
-    """
-    ABOUT
-        The homepage
+    """Returns home page
     """
     return _return_index()
 
 @frontend_view.route('/signup')
 def signup_view():
-    """
-    ABOUT
-        This allows users to signup to our system and usually people are dropped
-        here if they can't login, or if their modal based signeup process fails.
-    TODO
-        In the future we could better integrate this with the flask-security registration
-        process, but due to our integration of social network account creation
-        (sign up through twitter, sign up through facebook) we did this our own way
+    """Renders the signup template
     """
     return render_template('index.html')
 
 @frontend_view.route('/login')
 def login_view():
+    """Renders login template
+    """
     return render_template('index.html');
 
 @frontend_view.route('/discover')

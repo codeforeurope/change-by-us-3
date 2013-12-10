@@ -45,9 +45,6 @@ the model if it doesn't exist, but who knows.
 
 oauth = OAuth()
 
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/twitter.yml'))
-
 POST_URI = '/1.1/statuses/update.json'
 
 # Use Twitter as example remote application
@@ -65,8 +62,8 @@ twitter = oauth.remote_app('twitter',
     # user interface on the twitter side.
     authorize_url='https://api.twitter.com/oauth/authorize',
     # the consumer keys from the twitter application registry.
-    consumer_key=settings['CONSUMER_KEY'],
-    consumer_secret=settings['CONSUMER_SECRET'],
+    consumer_key=current_app.settings.get('TWITTER').get('CONSUMER_KEY'),
+    consumer_secret=current_app.settings.get('TWITTER').get('CONSUMER_SECRET'),
 )
 
 

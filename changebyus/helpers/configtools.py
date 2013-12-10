@@ -1,12 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
+
 from flask import Flask as BaseFlask, Config as BaseConfig
 
 import os
 import yaml
 
 class Config(BaseConfig):
-    """
-    ABOUT
-        Flask config enhanced with a `from_yaml` method.
+    """Flask config enhanced with a `from_yaml` method.
     """
     def from_yaml(self, fn):
 
@@ -31,7 +35,6 @@ class Config(BaseConfig):
 
 class Flask(BaseFlask):
     """
-    ABOUT
         Extended version of `Flask` that implements custom config 
         class and adds `register_middleware` method
     """
@@ -44,15 +47,15 @@ class Flask(BaseFlask):
 
     def register_middleware(self, middleware_class):
         """Register a WSGI middleware on the application
-        :param middleware_class: A WSGI middleware implementation
+        
+        Args:
+            middleware_class: A WSGI middleware implementation
         """
         self.wsgi_app = middleware_class(self.wsgi_app)
 
 
 def get_shared_config(root_app, config_path):
-    """
-    ABOUT
-        Gets an absolute path for the shared config
+    """Gets an absolute path for the shared config
     """
 
     d = os.path.abspath(os.path.dirname(root_app.__file__))
@@ -61,9 +64,7 @@ def get_shared_config(root_app, config_path):
 
 
 def get_config(prefix=None, app=None):
-    """
-    ABOUT
-        Takes the yml file and turns it into a dictionary
+    """Takes the yml file and turns it into a dictionary
     """
     rv = {}
     app = app or current_app
@@ -77,9 +78,7 @@ def get_config(prefix=None, app=None):
     
 
 def get_path_from_config(key, app=None):
-    """
-    ABOUT
-        Needs to be documented
+    """Needs to be documented
     """
     app = app or current_app
     val = app.config[key]

@@ -98,17 +98,11 @@ def facebook_login():
 @login_required
 def facebook_link():
     """
-    ABOUT
-        view to set up the facebook link callback, linking a facebook
-        account to an existing user
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        Redirects user to facebook oauth process
-    PRECONDITIONS
-        None
+        View to set up the facebook link callback, linking a 
+        facebook account to an existing user
+    
+        Returns: 
+            redirect to facebook oauth page
     """
 
     # clear out any old facebook data

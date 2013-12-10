@@ -72,7 +72,8 @@ define ["underscore",
 
 					@addSubViews()
 				###
-
+				
+				@viewData = @model.attributes
 				@addSubViews()
 
 			addSubViews: ->  

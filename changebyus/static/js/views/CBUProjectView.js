@@ -52,6 +52,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       					@addSubViews()
       */
 
+      this.viewData = this.model.attributes;
       return this.addSubViews();
     },
     addSubViews: function() {

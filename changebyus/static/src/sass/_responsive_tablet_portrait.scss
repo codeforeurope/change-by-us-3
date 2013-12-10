@@ -29,7 +29,7 @@
 	.project-header{margin-top: 0;}
 
 	.dashboard-header{ 
-		padding: 0 20px; 
+		//padding: 0 20px; 
 		.btn.btn-large{padding: 20px;}
 	}
 
@@ -47,6 +47,10 @@
 
 	.body-container{
 		padding: 0 2%;
+	}
+
+	.admin{
+		.user-avatar{display: none;}
 	}
 
 	

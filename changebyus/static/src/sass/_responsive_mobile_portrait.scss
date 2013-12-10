@@ -55,9 +55,9 @@
 			}
 		}
 	}
-
+ 
 	.create-by{
-		margin-bottom: 24px;  
+		margin-bottom: 24px;
 	}
 
 	.create-project{
@@ -68,6 +68,13 @@
 		h2 {
 			font-size: 22px;
 			line-height: 40px;
+		}
+		.content-wrapper{
+			>.pull-left{
+				width: 100%;
+				padding-top: 8px;
+				overflow: hidden;
+			}
 		}
 	}
  

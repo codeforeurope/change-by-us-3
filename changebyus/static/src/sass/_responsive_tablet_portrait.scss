@@ -32,13 +32,8 @@
 
 	.project-header{margin-top: 0;}
 
-	.dashboard-header{ 
-		//padding: 0 20px; 
+	.dashboard-header{  
 		.btn.btn-large{padding: 20px;}
-	}
-
-	.homepage-tools-wrapper{
-		//padding: 0 2%;
 	}
 
 	.user-header {
@@ -74,10 +69,13 @@
 			margin: auto; 
 			padding: 0;
 			border-bottom: 1px solid $grayBorder;
-			&.active{background: transparent;}
+			
+			&.active{
+				display: none !important;
+				background-color: rgba(0,0,0,0.1);
+				a{display: inline;}
+			}
 		}
-
-		li.active a{ display: inline; }
 
 		a{
 			font-size: 18px;
@@ -154,4 +152,31 @@
 		.btn-large{ font-size: 22px; }
 	}
 
-} 
+	.modal, 
+	.success-modal, 
+	.embed-modal, 
+	.create-modal{ 
+		height: 100%;
+		width: 100%;
+		top:0;
+		left: 0;
+		margin-top: 0;
+		margin-left: 0;
+
+		@include transition-property(none);
+
+		.modal-innerwrapper{
+			width: 100%;
+			margin: 0;
+			padding: 0 2%;
+		}
+	}
+	
+	.modal-links{
+		width: 100%;
+		.btn:first-child{margin-bottom: 5px;}
+		a{
+			width: 100%;
+		}
+	}
+}

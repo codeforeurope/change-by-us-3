@@ -1468,6 +1468,7 @@ legend + .control-group {
     background-repeat: no-repeat;
     width: 20px;
     height: 20px; 
+    z-index: 1; 
     
     &:hover{@include opacity(1);}
 }

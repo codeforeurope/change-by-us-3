@@ -22,12 +22,13 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $dropkick, $form, $projectLocation, $submit, options,
+      var $dropkick, $feedback, $form, $projectLocation, $submit, options,
         _this = this;
       $('.fileupload').fileupload({
         uploadtype: 'image'
       });
       $dropkick = $('#project-category').dropkick();
+      $feedback = $("#feedback");
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
       options = {
@@ -61,11 +62,15 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           $form.find("input, textarea").removeAttr("disabled");
           if (res.success) {
             $form.resetForm();
-            return modal = new ProjectCreateModalView({
+            modal = new ProjectCreateModalView({
               viewData: res
             });
+            return $feedback.hide();
           } else {
-
+            $("html, body").animate({
+              scrollTop: 0
+            }, "slow");
+            return $feedback.show().html(res.msg);
           }
         }
       };

@@ -34,9 +34,9 @@
             </div>
             <div class="profile-nav-menu">
               <ul>
-                <li><a href="/stream/dashboard">Dashboard</a></li>
-                <li><a href="/stream/dashboard#profile">Profile</a></li>
-                <li><a href="/logout">Sign Out</a></li> 
+                <li class="resp-append"><a href="/stream/dashboard">Dashboard</a></li>
+                <li class="resp-append"><a href="/stream/dashboard#profile">Profile</a></li>
+                <li class="resp-append-last"><a href="/logout">Sign Out</a></li> 
               </ul>
             </div> 
         </div>
@@ -48,25 +48,26 @@
           </ul>
 
           {% else %}
+             <ul class="nav nav-pills pull-left">
+                <li>
+                  <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
+                </li>
+                 <li class="resp-append">
+                  <a href="/create">Create a Project</a>
+                </li>
+                <li class="resp-append">
+                  <a href="/discover">Discover Projects</a>
+                </li>
+             </ul>
 
-           <ul class="nav nav-pills pull-left">
-              <li>
-                <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
-              </li>
-               <li>
-                <a href="/create">Create a Project</a>
-              </li>
-              <li>
-                <a href="/discover">Discover Projects</a>
-              </li>
-           </ul>
-
-           <ul class="nav nav-pills pull-right">    
-            <li><a href="/signup" class="header-links">Sign Up</a></li>
-            <li><a href="/login" class="header-links">Log In</a></li>
-          </ul>
+             <ul class="nav nav-pills pull-right">    
+              <li><a href="/signup" class="header-links">Sign Up</a></li>
+              <li><a href="/login" class="header-links">Log In</a></li>
+            </ul>
 
           {% endif %}
+
+          <div id="responsive-menu"></div>
 
         <!-- end masthead-->
       </div>
@@ -85,9 +86,9 @@
         </div>
         <div class="pull-right">
           <ul>
-            <li><a href="/policies">Policies</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li class="resp-append"><a href="/policies">Policies</a></li>
+            <li class="resp-append"><a href="/about">About</a></li>
+            <li class="resp-append"><a href="/contact">Contact</a></li>
           </ul>
         </div>
       </div>

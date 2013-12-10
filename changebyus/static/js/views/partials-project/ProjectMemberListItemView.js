@@ -40,7 +40,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         change: function(value_, label_) {
           return $.ajax({
             type: "POST",
-            url: "/api/project/change_user_role",
+            url: "/api/project/change-user-role",
             data: {
               project_id: _this.projectID,
               user_id: _this.model.id,

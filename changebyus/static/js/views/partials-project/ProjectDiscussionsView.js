@@ -17,6 +17,11 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
           return onPageElementsLoad();
         });
       } else {
+        this.collection.on('remove', function(obj_) {
+          _this.addAll();
+          console.log('obj_', obj_);
+          return _this.deleteDiscussion(obj_.id);
+        });
         return this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
           return _this.loadDayTemplate();
         });
@@ -57,21 +62,25 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       projectDiscussionListItemView.on('click', function() {
         return _this.trigger('discussionClick', config);
       });
-      projectDiscussionListItemView.on('delete', function() {
-        return _this.deleteDiscussion(config.model.get("id"));
-      });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();
     },
     deleteDiscussion: function(id_) {
-      var _this = this;
+      var $feedback,
+        _this = this;
+      $feedback = $("#discussions-feedback");
       return $.ajax({
         type: "POST",
         url: "/api/post/delete",
         data: {
           post_id: id_
         }
-      }).done(function(response) {
+      }).done(function(res_) {
+        if (res_.success) {
+          $feedback.hide();
+        } else {
+          $feedback.show().html(res_.msg);
+        }
         return console.log('deleteDiscussion', response);
       });
     }

@@ -1,7 +1,83 @@
-/**** affects all sizes from 0 to 219px **/
+/**** affects all sizes from 0 to 480px **/
 
-@media only screen and (max-width: 219px) {
-	body.debug{background: orange;}
+@media only screen and (max-width: 480px) {
+	body.debug{background: green;}
 
-	
+	.dashboard-tabs{
+		li{float: none;}
+	}
+
+	.header-image {
+		.overlay-text {
+			left: 5%;
+			width: 95%;
+			h1 {font-size: 28px;}
+		}
+	}
+
+	.header-image{
+		height: 340px;
+	}
+
+	.reply-right{ 
+		width: 65%;
+	}
+
+	.icons-wrapper {
+		margin: 32px auto 0;
+	}
+
+	.project-square{
+		margin: 10px 0;
+		width: 100%;
+	}
+
+	.project-preview:nth-child(2n+2){
+		.project-square {margin-right: 0;}
+	}
+	.project-preview:nth-child(3n+3){
+		.project-square {margin-right: 0;}
+	}
+
+	.created-by, .supported-by{
+		padding: 0 2%;
+		width: 100%; 
+		text-align: left;
+
+		div{
+			&:first-child{
+				width: 100%;
+				margin-bottom: 6px;
+				&:after{ clear: both; }
+			}
+			&:last-child{
+				&:after{ clear: both; }
+			}
+		}
+	}
+ 
+	.create-by{
+		margin-bottom: 24px;
+	}
+
+	.create-project{
+		h1{font-size: 40px;}
+	}
+
+	.admin {
+		h2 {
+			font-size: 22px;
+			line-height: 40px;
+		}
+	}
+
+	.search-toggles,
+	.pill-toggle{
+		width: 100%;
+	}
+	#sort-by-pr{
+		margin-bottom: 12px;
+	}
+ 
+
 }

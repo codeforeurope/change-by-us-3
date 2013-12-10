@@ -16,7 +16,7 @@ from .models import User
 from .helpers import _create_user
 from ..helpers.stringtools import bool_strings
 
-from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, 
+from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, BooleanField,
                             SubmitField, Required, ValidationError, 
                             PasswordField, HiddenField)
 
@@ -164,7 +164,7 @@ def api_get_user(user_id):
 class EditUserForm(Form):
 
     email = TextField("email")
-    public_email = TextField("public_email")
+    public_email = BooleanField("public_email")
     password = PasswordField("password")
     display_name = TextField("display_name")
     first_name = TextField("first_name")

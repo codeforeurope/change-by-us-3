@@ -25,7 +25,8 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
 					contentType: "application/json; charset=utf-8"
 					success: (response) ->
 						console.log response
-						if response.msg.toLowerCase() is "ok" then window.location.reload()
+						#if response.msg.toLowerCase() is "ok" then window.location.reload()
+						if response.success then window.location.reload()
 
 				$form.submit -> 
 					obj = $form.serializeJSON()

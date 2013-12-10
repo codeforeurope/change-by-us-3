@@ -20,6 +20,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				$('.fileupload').fileupload({uploadtype: 'image'})
 
 				$dropkick = $('#project-category').dropkick()
+				$feedback = $("#feedback")
 
 				# ajax the form
 				$submit = $("input[type=submit]")
@@ -55,10 +56,12 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 						if res.success
 							$form.resetForm()
 							modal = new ProjectCreateModalView({viewData:res})
+							$feedback.hide()
 							#window.location = "/project/"+res.data.id+"/admin"
 						else
-							# $form.resetForm()
-							 
+							$("html, body").animate({ scrollTop: 0 }, "slow")
+							$feedback.show().html(res.msg)
+							
 				###
 				$form.submit ->
 					json_str = JSON.stringify($form.serializeJSON())

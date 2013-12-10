@@ -29,6 +29,12 @@ define ["underscore",
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
 						{}, => onPageElementsLoad()
 				else
+					@collection.on('remove', (obj_)=> 
+						@addAll()
+						console.log 'obj_',obj_
+						@deleteDiscussion(obj_.id)
+					)
+
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => @loadDayTemplate()
 
@@ -58,19 +64,25 @@ define ["underscore",
 
 				config = {model:model_}
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
+				
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
-				projectDiscussionListItemView.on 'delete', => 
-					@deleteDiscussion config.model.get("id")
+
 				@$ul.append projectDiscussionListItemView.$el
 
 				onPageElementsLoad()
 
 
 			deleteDiscussion:(id_)->
+				$feedback = $("#discussions-feedback")
 				$.ajax(
 					type: "POST"
 					url: "/api/post/delete"
 					data: { post_id:id_ }
-				).done (response)=> 
+				).done (res_)=> 
+					if res_.success
+						$feedback.hide()
+					else
+						$feedback.show().html(res_.msg)
+
 					console.log 'deleteDiscussion',response

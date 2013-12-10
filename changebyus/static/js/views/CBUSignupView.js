@@ -50,7 +50,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         success: function(response) {
           console.log('signup', response);
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.msg.toLowerCase() === "ok") {
+          if (response.success) {
             return window.location.href = "/";
           } else {
             return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
@@ -69,6 +69,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
       $socialFeedback = $socialSignup.find(".login-feedback");
+      console.log($socialFeedback);
+      $socialSignup.hide();
       socialOptions = {
         type: $socialForm.attr('method'),
         url: $socialForm.attr('action'),
@@ -79,9 +81,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           return $socialFeedback.removeClass("alert").html("");
         },
         success: function(response) {
-          console.log('signup', response);
+          console.log('signup', response, $socialFeedback);
           $socialForm.find("input, textarea").removeAttr("disabled");
-          if (response.msg.toLowerCase() === "ok") {
+          if (response.success === "ok") {
             return window.location.href = "/";
           } else {
             return $socialFeedback.addClass("alert").html(response.msg);
@@ -89,11 +91,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         }
       };
       return $socialForm.submit(function() {
-        var json_str;
-        json_str = JSON.stringify($socialForm.serializeJSON());
-        options.data = json_str;
-        console.log('options.data', options.data);
-        $.ajax(options);
+        var json_str, obj;
+        obj = $socialForm.serializeJSON();
+        if (obj.public_email === "on") {
+          obj.public_email = true;
+        } else {
+          obj.public_email = false;
+        }
+        json_str = JSON.stringify(obj);
+        socialOptions.data = json_str;
+        console.log('socialOptions.data', socialOptions.data);
+        $.ajax(socialOptions);
         return false;
       });
     },

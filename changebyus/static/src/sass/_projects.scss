@@ -40,10 +40,8 @@
   @include box-skin; 
   padding: 10px 10px 50px;
   min-height: 400px;
-  //width: 328px;
   float: left;
-  margin-right: 16px;
-  margin-bottom: 22px;
+  margin: auto auto 22px;
 
   &:hover{ 
     .hover-overlay{ 
@@ -161,16 +159,31 @@
     @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
   }
 
-  .circle{ background: $defaultGray;}
+  .circle{ 
+    background: $defaultGray;
+
+    &:before{
+      content: "";
+      display: block;
+      padding-top: 100%;
+    }
+    
+    .content{
+      position:  absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+  }
 
   .preview{
     position: absolute;
     top:70px;
-    left: 30px;
-    width: 249px;
-    height: 249px;
+    left: percentage(30px/1018px);
+    width: percentage(249px/1018px);
     border: 4px solid #fff;  
-    @include background-clip(padding-box);  
+    @include background-clip(padding-box);
   }
 
   .project-location{
@@ -181,13 +194,14 @@
 
   .project-footer{
     position: absolute;
-    left: 310px;
+    left: percentage(310px/1018px); 
     top: 257px;
-    width: 620px;
+    width: percentage(620px/1018px);
   }
 
   .overlay-title {
-    left: 310px;
+    left: percentage(310px/1018px); 
+    width: percentage(708px/1018px); 
     top: 100px;
     padding: 0;
     margin: 0;
@@ -197,11 +211,11 @@
   .overlay-description {
     position: absolute; 
     top: 160px; 
-    left: 310px;
-    width: 650px;
+    left: percentage(310px/1018px); 
+    width: percentage(650px/1018px); 
     line-height: 24px;
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
     @include font-styling("merriweather", 18px, $white );
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
   }
 
   &.slim{ 
@@ -274,8 +288,11 @@ h2.admin-title{
 
 .user-avatar{
   float: left;
-  width: 70px;
-  margin-right: 20px;
+  min-width: 70px;
+  width: percentage(70px/1018px);
+  margin-right: percentage(20px/1018px);
+
+  // img{max-width: none;}
 }
 
 .update-content{
@@ -329,7 +346,7 @@ h2.admin-title{
 .post-reply-form{
   .input-xxlarge{
     height: 32px;
-    width: 568px;
+    width: percentage(568px/1018px);
   }
 }
 
@@ -341,21 +358,25 @@ h2.admin-title{
 .project-member{
   .mail-icon{ 
     float: left; 
-    width: 60px;
-  
-    img{ margin-top: 20px; }
+    width: percentage(60px/1018px);
+
+    img{ 
+      max-width: none;
+      min-width: 20px;
+      margin-top: 20px; 
+    }
   }
   
   .member-title{  
     float: left;  
     margin-top: 15px; 
-    width: 175px;
+    width: percentage(175px/1018px);
     padding-right: 15px;
   }
   
   .member-description{ 
     float: left;  
-    width: 505px;
+    width: percentage(505px/1018px);
     height: 80px;
     display: table;
 
@@ -368,19 +389,25 @@ h2.admin-title{
   .member-roles{ 
     float: left;
     margin-top: 25px;
-    width: 120px; 
+    width: percentage(120px/1018px);
   }
   .aka{ @include font-styling("asap", 15px, $gray53); }
   .grey{ @include font-styling("asap", 15px, $gray53); }
 }
 
-.admin{
-  .project-member{
-    .member-description{ width: 475px; }
-    .dk_container{width: 100%;}
-   
-    select{width: 100%;}
+
+.project-member{
+  .member-description{ 
+    width: percentage(475px/1018px); 
+    padding-right: 15px;
   }
+  .dk_container{width: 100%;}
+ 
+  select{width: 100%;}
+}
+
+.admin{
+  .alert{margin-top: 20px;}
 }
 
 /******************************
@@ -435,6 +462,7 @@ h2.admin-title{
 
   .description{
     float: left;
+    width: 670px;
     
     h5{
       margin-bottom: 0;
@@ -442,7 +470,11 @@ h2.admin-title{
     }
     
     span{
+      @include ellipsis;
       @include font-styling("merriweather", 14px, $gray20);
+      >*{
+        @include ellipsis;
+      }
     }
   }
   
@@ -465,9 +497,6 @@ h2.admin-title{
 }
 
 .fundraising-left{
-  float: left;
-  width: 66%;
-   
   span{
     font-weight: bold;
     color:$primaryColor;

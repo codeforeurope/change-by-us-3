@@ -32,6 +32,7 @@ define ["underscore",
 			updatesBTN: null
 			membersBTN: null
 			calendarBTN: null
+			memberData: null
 			$header:null
 
 			initialize: (options) ->
@@ -54,21 +55,24 @@ define ["underscore",
 			onTemplateLoad:->
 				# determine if user is a member of the project
 				# if not, display the join button
-				id = @model.get("id")
-				$.ajax(
-					type: "GET"
-					url: "/api/project/am_i_a_member/"+id
-				).done (response)=> 
-					try 
-						if response.data.member
-							@isMember=true 
+				
+				@viewData = @model.attributes
 
-					catch e then console.log e
-
-					@viewData = @model.attributes
-					@viewData.isMember = @isMember
-
+				if window.userID is ""
+					@viewData.isMember = false
 					@addSubViews()
+				else
+					id = @model.get("id")
+					$.ajax(
+						type: "GET"
+						url: "/api/project/#{id}/user/#{window.userID}"
+					).done (response)=> 
+						
+						#if response.msg.toLowerCase() is "ok"
+						if response.success
+							@memberData = response.data  
+							@viewData.isMember = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+							@addSubViews()
 
 			addSubViews: ->  
 				@$header = $("<div class='project-header'/>")
@@ -121,16 +125,20 @@ define ["underscore",
 
 				$join  = $(".project-footer .btn")
 				$join.click (e) =>
-					e.preventDefault()
-					if @isMember then return
-					$.ajax(
-						type: "POST"
-						url: "/api/project/join"
-						data: { project_id:id }
-					).done (response)=>
-						if response.msg.toLowerCase() is "ok"
-							@isMember = true
-							$join.html('Joined!').css('background-color','#e6e6e6')
+					if window.userID is ""
+						window.location = "/login"
+					else
+						e.preventDefault()
+						if @isMember then return
+						$.ajax(
+							type: "POST"
+							url: "/api/project/join"
+							data: { project_id:id }
+						).done (response)=>
+							#if response.msg.toLowerCase() is "ok"
+							if response.success
+								@isMember = true
+								$join.html('Joined!').css('background-color','#e6e6e6')
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

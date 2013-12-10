@@ -12,6 +12,7 @@ require.config({
     "serializeObject": "ext/jquery/jquery.serializeObject.min",
     "serializeJSON": "ext/jquery/jquery.serializeJSON.min",
     "dropkick": "ext/jquery/jquery.dropkick-min",
+    "slicknav": "ext/jquery/jquery.slicknav.min",
     "hogan": "ext/hogan/hogan-2.0.0.amd",
     "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg",
     "autocomp": "ext/bootstrap/typeahead.min",
@@ -36,9 +37,9 @@ require.config({
   }
 });
 
-require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView) {
+require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Slicknav) {
   return $(document).ready(function() {
-    var $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
+    var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
       parent: "#frame"
     };
@@ -196,11 +197,18 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
     };
     positionFooter();
     $window.scroll(positionFooter).resize(positionFooter);
-    return window.onPageElementsLoad = function() {
-      console.log('onPageElementsLoad');
+    window.onPageElementsLoad = function() {
       return positionFooter();
     };
     /* END STICKY FOOTER*/
 
+    $('.nav.nav-pills.pull-right').slicknav({
+      label: '',
+      prependTo: '#responsive-menu'
+    });
+    $clone = $('.resp-append');
+    $cloneLast = $('.resp-append-last');
+    $clone.clone().appendTo($('.slicknav_nav'));
+    return $cloneLast.clone().appendTo($('.slicknav_nav'));
   });
 });

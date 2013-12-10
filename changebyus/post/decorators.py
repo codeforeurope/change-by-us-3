@@ -42,14 +42,14 @@ def post_delete_permission(f):
             project = Project.objects.with_id(post.project)
 
             if post is None:
-                errStr = "post {0} does not exist.".format(project_id)
+                errStr = "post {0} does not exist.".format(post_id)
                 return jsonify_response( ReturnStructure( success = False,
                                                           msg = errStr ))
         
         except Exception as e:
-            infoStr = "Exception looking up post of id {0}".format(project_id)
+            infoStr = "Exception looking up post of id {0}".format(post_id)
             current_app.logger.info(infoStr)
-            errStr = "post {0} does not exist.".format(project_id)
+            errStr = "post {0} does not exist.".format(post_id)
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
 

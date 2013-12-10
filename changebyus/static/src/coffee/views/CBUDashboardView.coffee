@@ -78,11 +78,11 @@ define ["underscore",
 						@manageBTN.addClass "active"
 
 			loadProjects:-> 
-				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joinedprojects"})
+				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joined-projects"})
 				@joinedProjects.on "reset", @addJoined, @
 				@joinedProjects.fetch reset: true
 
-				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/ownedprojects"})
+				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/owned-projects"})
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
 

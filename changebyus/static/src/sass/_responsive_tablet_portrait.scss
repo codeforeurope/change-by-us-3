@@ -1,156 +1,186 @@
-/**** affects all sizes from 0 to 655px **/
+/**** affects all sizes from 0 to 1024px **/
 
-@media only screen and (max-width: 655px) {
-	body.debug{background: red;}
+@import "variables";
 
-	.nav.user{
-		width: 100px;
-		span{display: none;}
+@media only screen and (max-width: 1024px) {
+	body.debug{background: blue;}
+
+	.topnav{
+		.body-container{padding: 0;}
 	}
 
-	.nav-pills>li {
-		font-size: 14px; 
+	.nav-pills>li { 
+		padding-right: 16px;
 	} 
 
-	.nav-pills{
-		&.pull-right{float: left;}
-	}
-
-	.header-links {
-		padding: 0; 
-	}
-
-	.profile-nav-menu{
-		display: none;
-	}
-
-	.user-header {
-		.user-avatar{
-			display: none;
+	.feature-image{
+		.project-footer{
+			top: 300px;
 		}
-	}
-
-	.user-info { 
-		width: 100%;
-		padding: 0 2%;
 	}
 
 	.header-image{
-		height: 400px;
 		.overlay-text{
-			top: 55px;
-			left: 10%;
-			width: 90%;
-
-			.btn-large{
-				margin-top: 46px;
-				padding: 20px 40px;
-				font-size: 28px;
-			}
-
+			margin: auto;
+			left: 3%;
+			width: 94%;
 			h1{
-				font-size: 40px;
+				font-size: 70px;
 			}
 		}
 	}
 
-	.form-right{
-		margin-top: 40px;
+	.project-header{margin-top: 0;}
+
+	.dashboard-header{  
+		.btn.btn-large{padding: 20px;}
 	}
 
-	.form-right, .form-left{
-		float: none;
-		width: 100%;
+	.user-header {
+		.edit{
+			top: auto;
+			right: 2%;
+			bottom: 0;
+		}
 	}
 
-	.dk_container {width: 100%;}
+
+	.body-container{
+		padding: 0 2%;
+	}
+
+	.admin{
+		//.user-avatar{display: none;}
+	}
+
 	
-	.form-left{
-		.input-xxlarge{width: 100%;}
+	.tabs-pane, .owner-tabs-pane{ 
+		position: relative; 
+		bottom: auto;
+		margin: 0;
+		padding: 0;
+		height: auto;
+		background: transparent;
+
+		ul{margin: 0;}
+
+		li{ 
+			display: list-item !important;
+			margin: auto; 
+			padding: 0;
+			border-bottom: 1px solid $grayBorder;
+			
+			&.active{
+				//display: none !important;
+				background-color: rgba(0,0,0,0.1);
+				a{display: inline;}
+			}
+		}
+
+		a{
+			font-size: 18px;
+			text-shadow: none;
+			line-height: 58px;
+			@include font-styling("asap", 22px, $black, "normal", "bold");
+		}
+
+		.profile-image{display: none;}
 	}
 
-	.password-title, .notify-wrapper, .notify-row{
+	.view-project{ display: none; }
+
+	.project-section-header{
+		height: auto;
+		>.pull-left{float: none;}
+		.team-members{
+			float: none;
+			ul{float: none;}
+		}
+	}
+
+	.member-popup{
+		left: 0;
+	}
+
+	.create-project{
+		h1, p{
+			//padding: 0 2%; 
+		}
+	}
+
+	.content-wrapper {
+		padding: 2%;
+		ul.bordered-item>li {
+			padding: 10px;
+		}
+	}
+
+	.project-square { 
+		width: 49%;
+		margin: 0 2% 16px 0;
+	}
+
+	.project-preview:nth-child(3n+3){
+		.project-square {margin-right: 2%;}
+	}
+
+	.project-preview:nth-child(2n+2){
+		.project-square {margin-right: 0;}
+	}
+
+	.project-dashboard-image{
 		width: 100%;
 	}
 
-	.form-footer{
-		text-align: center;
-		.pull-left, .pull-right{float: none;}
-		.pull-right{margin-top: 16px;}
-	}
-
-	select[name=category]{
+	.project-square .hover-btn {
 		width: 100%;
-	}
-
-	.project-square{
-		margin: 10px 2%;
 	}
 
 	.project-description {
-		//height: 100px;
+		height: 100px;
 	}
 
-	.login, .signup {
-		.content-wrapper {
-			.centered {
-
-			}
-		}
-
-		h1{padding: 30px;}
-
-		input[type="submit"], input[type="button"]{
-			width: 100%;
-			margin: auto;
-		}
-
-		input[type="submit"]{
-			margin-bottom: 16px;
-		}
+	.footer-nav, .form-footer{
+		//padding: 0 2%;
 	}
 
-	.justified-btns{
-		.btn{
-			margin: auto;
-			width: 100%;
-			&:first-child{
-				margin-bottom: 16px;
-			}
-		}
+	.banner-search{
+		//padding: 0 2%;
 	}
 
-	.search-box, .discover-header-right{
-		float: none;
+	.discover-header-right{ 
+		.btn-large{ font-size: 22px; }
+	}
+	
+	.discussion{ 
+		.description{ width:55%; }
+	}
+
+	.modal, 
+	.success-modal, 
+	.embed-modal, 
+	.create-modal{ 
+		height: 100%;
 		width: 100%;
-	}
-
-	.discover-header-right{
-		margin-top: 16px;
+		top:0;
+		left: 0;
+		margin-top: 0;
 		margin-left: 0;
-		height: auto;
-	}
 
-	.homepage-tools{
-		width: 100%;
-		margin-right: 0;
-		margin-bottom: 48px;
-		text-align: center;
-	}
+		@include transition-property(none);
 
-	.update-content {
-		width: 75%;
-	}
-
-	.reply-right{ 
-	  width: 70%;
-	}
-
-	.stream-wrapper{
-		.content-wrapper {
-			padding: 3%;
+		.modal-innerwrapper{
+			width: 100%;
+			margin: 0;
+			padding: 0 2%;
 		}
 	}
-
-
+	
+	.modal-links{
+		width: 100%;
+		.btn:first-child{margin-bottom: 5px;}
+		a{
+			width: 100%;
+		}
+	}
 }

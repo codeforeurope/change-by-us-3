@@ -9,6 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     updatesBTN: null,
     membersBTN: null,
     calendarBTN: null,
+    memberData: null,
     $header: null,
     initialize: function(options) {
       var _this = this;
@@ -36,24 +37,23 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     onTemplateLoad: function() {
       var id,
         _this = this;
-      id = this.model.get("id");
-      return $.ajax({
-        type: "GET",
-        url: "/api/project/am_i_a_member/" + id
-      }).done(function(response) {
-        var e;
-        try {
-          if (response.data.member) {
-            _this.isMember = true;
+      this.viewData = this.model.attributes;
+      if (window.userID === "") {
+        this.viewData.isMember = false;
+        return this.addSubViews();
+      } else {
+        id = this.model.get("id");
+        return $.ajax({
+          type: "GET",
+          url: "/api/project/" + id + "/user/" + window.userID
+        }).done(function(response) {
+          if (response.success) {
+            _this.memberData = response.data;
+            _this.viewData.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            return _this.addSubViews();
           }
-        } catch (_error) {
-          e = _error;
-          console.log(e);
-        }
-        _this.viewData = _this.model.attributes;
-        _this.viewData.isMember = _this.isMember;
-        return _this.addSubViews();
-      });
+        });
+      }
     },
     addSubViews: function() {
       var _this = this;
@@ -130,22 +130,26 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       id = this.model.get("id");
       $join = $(".project-footer .btn");
       return $join.click(function(e) {
-        e.preventDefault();
-        if (_this.isMember) {
-          return;
+        if (window.userID === "") {
+          return window.location = "/login";
+        } else {
+          e.preventDefault();
+          if (_this.isMember) {
+            return;
+          }
+          return $.ajax({
+            type: "POST",
+            url: "/api/project/join",
+            data: {
+              project_id: id
+            }
+          }).done(function(response) {
+            if (response.success) {
+              _this.isMember = true;
+              return $join.html('Joined!').css('background-color', '#e6e6e6');
+            }
+          });
         }
-        return $.ajax({
-          type: "POST",
-          url: "/api/project/join",
-          data: {
-            project_id: id
-          }
-        }).done(function(response) {
-          if (response.msg.toLowerCase() === "ok") {
-            _this.isMember = true;
-            return $join.html('Joined!').css('background-color', '#e6e6e6');
-          }
-        });
       });
     },
     toggleSubView: function() {

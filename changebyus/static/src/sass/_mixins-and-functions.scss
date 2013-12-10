@@ -66,6 +66,13 @@
 	font-weight: bold;
 }
 
+@mixin ellipsis{
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: block;
+}
+
 /****************************************
  * SKIN
  ***************************************/

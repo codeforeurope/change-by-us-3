@@ -38,8 +38,14 @@
 		}
 	}
 
+	.admin{
+		.user-avatar{
+			display: none;
+		}
+	}
+
 	.user-avatar{
-		width: 70px;
+		//width: 70px;
 	}
 
 	.user-info { 
@@ -135,6 +141,7 @@
 	}
 
 	.discussion {
+		.description{ width: 92%; }
 		.date{
 			float: none; 
 			margin:0 0 12px; 

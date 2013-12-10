@@ -31,6 +31,7 @@ define ["underscore",
 				else
 					@collection.on('remove', (obj_)=> 
 						@addAll()
+						console.log 'obj_',obj_
 						@deleteDiscussion(obj_.id)
 					)
 
@@ -73,9 +74,15 @@ define ["underscore",
 
 
 			deleteDiscussion:(id_)->
+				$feedback = $("#discussions-feedback")
 				$.ajax(
 					type: "POST"
 					url: "/api/post/delete"
 					data: { post_id:id_ }
-				).done (response)=> 
+				).done (res_)=> 
+					if res_.success
+						$feedback.hide()
+					else
+						$feedback.show().html(res_.msg)
+
 					console.log 'deleteDiscussion',response

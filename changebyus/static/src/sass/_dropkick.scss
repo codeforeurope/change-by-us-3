@@ -29,7 +29,7 @@
     text-decoration: none;
   }
   *{box-sizing: border-box;}
-}
+}  
 
 // Opens the dropdown and holds the menu label
 .dk_toggle {
@@ -46,7 +46,7 @@
   -o-transition: border-color .5s;
   transition: border-color .5s;
   position: relative;
-  width: 100%;
+  width: 100% !important;
   &:hover {
     border-color: #8c8c8c;
   }

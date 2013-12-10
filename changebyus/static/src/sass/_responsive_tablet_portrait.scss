@@ -50,7 +50,7 @@
 	}
 
 	.admin{
-		.user-avatar{display: none;}
+		//.user-avatar{display: none;}
 	}
 
 	
@@ -150,6 +150,10 @@
 
 	.discover-header-right{ 
 		.btn-large{ font-size: 22px; }
+	}
+	
+	.discussion{ 
+		.description{ width:55%; }
 	}
 
 	.modal, 

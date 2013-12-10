@@ -292,7 +292,7 @@ h2.admin-title{
   width: percentage(70px/1018px);
   margin-right: percentage(20px/1018px);
 
-  img{max-width: none;}
+  // img{max-width: none;}
 }
 
 .update-content{
@@ -395,13 +395,19 @@ h2.admin-title{
   .grey{ @include font-styling("asap", 15px, $gray53); }
 }
 
-.admin{
-  .project-member{
-    .member-description{ width: percentage(475px/1018px); }
-    .dk_container{width: 100%;}
-   
-    select{width: 100%;}
+
+.project-member{
+  .member-description{ 
+    width: percentage(475px/1018px); 
+    padding-right: 15px;
   }
+  .dk_container{width: 100%;}
+ 
+  select{width: 100%;}
+}
+
+.admin{
+  .alert{margin-top: 20px;}
 }
 
 /******************************
@@ -456,6 +462,7 @@ h2.admin-title{
 
   .description{
     float: left;
+    width: 670px;
     
     h5{
       margin-bottom: 0;
@@ -463,7 +470,11 @@ h2.admin-title{
     }
     
     span{
+      @include ellipsis;
       @include font-styling("merriweather", 14px, $gray20);
+      >*{
+        @include ellipsis;
+      }
     }
   }
   

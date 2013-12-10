@@ -46,7 +46,7 @@
 		width: 100%;
 		padding: 0 2%;
 	}
-	
+
 	.signup,
 	.login{
 		margin-top: 24px; 
@@ -83,7 +83,10 @@
 	}
 
 	.project-member {
-		.mail-icon{float: right;}
+		.mail-icon{
+			float: right;
+			width: 30px;
+		}
 		
 		.member-title{
 			width: 75%;
@@ -105,15 +108,30 @@
 		}
 	}
 
-	.project-discussions,
-	.project-fundraising,
-	.project-calendar,
-	.project-members{
+	.admin{
 		.content-left{
 			width: 100%;
 			a{width: 100%;}
 		}
 		.content-right{display: none;}
+
+		.content-wrapper{
+			>.pull-left{
+				width: 100%;
+				padding-top: 8px;
+				overflow: hidden;
+			}
+		}
+	}
+
+	.btn-group+.btn-group {
+		margin-left: 0;
+	}
+
+	.btn-group{
+		float: left;
+		white-space: normal;
+		>.btn {float: left;}
 	}
 
 	.discussion {

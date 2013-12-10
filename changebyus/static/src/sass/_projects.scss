@@ -194,13 +194,14 @@
 
   .project-footer{
     position: absolute;
-    left: percentage(310px/1018px);//310px;
+    left: percentage(310px/1018px); 
     top: 257px;
     width: percentage(620px/1018px);
   }
 
   .overlay-title {
-    left: percentage(310px/1018px);//310px;
+    left: percentage(310px/1018px); 
+    width: percentage(708px/1018px); 
     top: 100px;
     padding: 0;
     margin: 0;
@@ -210,11 +211,11 @@
   .overlay-description {
     position: absolute; 
     top: 160px; 
-    left: percentage(310px/1018px);//310px;
-    width: percentage(650px/1018px);//310px;
+    left: percentage(310px/1018px); 
+    width: percentage(650px/1018px); 
     line-height: 24px;
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
     @include font-styling("merriweather", 18px, $white );
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
   }
 
   &.slim{ 
@@ -376,7 +377,6 @@ h2.admin-title{
   .member-description{ 
     float: left;  
     width: percentage(505px/1018px);
-
     height: 80px;
     display: table;
 
@@ -486,9 +486,6 @@ h2.admin-title{
 }
 
 .fundraising-left{
-  float: left;
-  width: 66%;
-   
   span{
     font-weight: bold;
     color:$primaryColor;

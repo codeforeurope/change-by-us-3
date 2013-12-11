@@ -16,7 +16,12 @@
             <%= data.description %>
         </p>
         <div class="project-footer">
-            <a href="#" class="btn btn-large btn-secondary invisible pull-right">Join Project</a>
+            
+            <% var classes = "btn btn-large btn-secondary pull-right" %>
+            <% if(data.isMember){  classes += " invisible" }%>
+
+            <a href="#" class="<%= classes %>">Join Project</a>
+
             <div class="project-location">
                 Brooklyn, NY
                 <br>

@@ -76,20 +76,19 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       }
     },
     loadProjects: function() {
-      this.joinedProjects = new ProjectListCollection({
-        url: "/api/project/user/" + this.model.id + "/joined-projects"
-      });
+      this.joinedProjects = new ProjectListCollection();
+      this.joinedProjects.url = "/api/project/user/" + this.model.id + "/joined-projects";
       this.joinedProjects.on("reset", this.addJoined, this);
       this.joinedProjects.fetch({
         reset: true
       });
-      this.ownedProjects = new ProjectListCollection({
-        url: "/api/project/user/" + this.model.id + "/owned-projects"
-      });
+      this.ownedProjects = new ProjectListCollection();
+      this.ownedProjects.url = "/api/project/user/" + this.model.id + "/owned-projects";
       this.ownedProjects.on("reset", this.addOwned, this);
-      return this.ownedProjects.fetch({
+      this.ownedProjects.fetch({
         reset: true
       });
+      return console.log('@joinedProjects', this.joinedProjects, '@ownedProjects', this.ownedProjects);
     },
     addJoined: function() {
       var _this = this;

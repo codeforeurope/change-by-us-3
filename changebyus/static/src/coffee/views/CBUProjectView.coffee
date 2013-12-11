@@ -59,22 +59,21 @@ define ["underscore",
 				@viewData = @model.attributes
 
 				if window.userID is ""
-					@viewData.isMember = false
+					@isMember = false
 					@addSubViews()
 				else
 					id = @model.get("id")
 					$.ajax(
 						type: "GET"
 						url: "/api/project/#{id}/user/#{window.userID}"
-					).done (response)=> 
-						
-						#if response.msg.toLowerCase() is "ok"
+					).done (response)=>  
 						if response.success
-							@memberData = response.data  
-							@viewData.isMember = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+							@memberData = response.data
+							@isMember = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+							@viewData.isMember = @isMember
 							@addSubViews()
 
-			addSubViews: ->  
+			addSubViews: ->   
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
 					{data:@viewData}, => @onHeaderLoaded()
@@ -83,8 +82,6 @@ define ["underscore",
 				id = @model.get("id")
 				config = {id:id}
 
-				if @isMember is false then @$header.find('.invisible').removeClass('invisible')
- 
 				@$el.prepend @$header
 				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
@@ -133,7 +130,7 @@ define ["underscore",
 						$.ajax(
 							type: "POST"
 							url: "/api/project/join"
-							data: JSON.stringify({project_id:id})
+							data: {project_id:id}
 						).done (response)=>
 							#if response.msg.toLowerCase() is "ok"
 							if response.success

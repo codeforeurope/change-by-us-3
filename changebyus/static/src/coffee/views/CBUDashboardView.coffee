@@ -78,13 +78,17 @@ define ["underscore",
 						@manageBTN.addClass "active"
 
 			loadProjects:-> 
-				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joined-projects"})
+				@joinedProjects = new ProjectListCollection()
+				@joinedProjects.url = "/api/project/user/#{@model.id}/joined-projects"
 				@joinedProjects.on "reset", @addJoined, @
 				@joinedProjects.fetch reset: true
 
-				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/owned-projects"})
+				@ownedProjects = new ProjectListCollection()
+				@ownedProjects.url = "/api/project/user/#{@model.id}/owned-projects"
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
+
+				console.log '@joinedProjects',@joinedProjects,'@ownedProjects',@ownedProjects
 
 			addJoined:->
 				$('a[href=#follow]').append " (#{@joinedProjects.length})"

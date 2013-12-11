@@ -2,7 +2,8 @@
  
 //@media only screen and (max-width: 655px) {
 @media only screen and (max-width: 760px) {
-	body.debug{background: red;}
+	//body.debug{background: red;}
+	body{background: red;}
 
 	.nav.user{
 		width: 100px;
@@ -55,7 +56,7 @@
 
 	.signup,
 	.login{
-		margin-top: 24px; 
+		//margin-top: 24px; 
 	}
 
 	.feature-image{display: none;}
@@ -77,6 +78,22 @@
 		}
 	}
 
+	.content, .homepage-block-info {
+		h2{padding-top: 0px;}
+	}
+
+	.homepage-block-info{
+		padding: 28px 0;
+	}
+
+	.homepage-tool-icon{
+		margin: 0 auto 48px;
+	}
+
+	.homepage-tools {
+		margin-bottom: 64px;
+	}
+
 	.dashboard-header{
 		padding:0;
 		.btn.btn-large{
@@ -90,8 +107,8 @@
 
 	.project-member {
 		.mail-icon{
-			float: right;
 			width: 30px;
+			margin-right: 15px;
 		}
 		
 		.member-title{
@@ -128,6 +145,12 @@
 				overflow: hidden;
 			}
 		}
+	}
+
+	.delete-x{
+		margin-top: 0;
+		top: 0;
+		right: 0;
 	}
 
 	.btn-group+.btn-group {
@@ -180,13 +203,13 @@
 	.form-left{
 		float: none;
 		width: 100%;
+		.input-xxlarge{width: 100%;}
 	}
 
 	.dk_container {width: 100%;}
 	
-	.form-left{
-		.input-xxlarge{width: 100%;}
-	}
+	.input-xxlarge{width: 100%;}
+
 
 	.password-title,
 	.notify-wrapper,
@@ -209,6 +232,8 @@
 	.project-description {
 		//height: 100px;
 	}
+
+	.topnav{height: 90px;}
 
 	.login, 
 	.signup {
@@ -277,11 +302,11 @@
 	}
 
 	.update-content {
-		width: 75%;
+		width: 100%; 
 	}
 
 	.reply-right{ 
-		width: 70%;
+		width: 80%;
 	}
 
 	.stream-wrapper{

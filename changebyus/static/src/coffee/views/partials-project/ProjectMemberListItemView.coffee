@@ -18,7 +18,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@render()
 
 			events: 
-				"click .delete-x": "deleteItem",
+				"click .delete-x": "deleteItem"
 
 			render: ->
 				@$el = $(@el)
@@ -44,7 +44,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			deleteItem:->
 				$.ajax(
 					type: "POST"
-					url: "/api/project/remove_member"
+					url: "/api/project/remove-member"
 					data: { project_id:@projectID, user_id:@model.id}
 				).done (response_)=>
 					if (response_.msg.toLowerCase() == "ok")

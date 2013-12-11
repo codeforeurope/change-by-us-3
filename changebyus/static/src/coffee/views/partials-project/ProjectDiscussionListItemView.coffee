@@ -12,6 +12,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@user.fetch
 					success: =>@render()
 
+			events: 
+				"click .description": "viewDescription",
+				"click .user-avatar": "viewDescription",
+				"click .delete-x": "delete" 
+
 			render: -> 
 				m =  moment(@model.get("created_at")).format("MMMM D hh:mm a")
 				@model.set("format_date", m)
@@ -22,9 +27,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@$el.template @templateDir + "/templates/partials-project/project-discussion-list-item.html",
 					{data: @viewData}, => @onTemplateLoad()
 
-			onTemplateLoad:->
-				@$el.find('.user-avatar, .description').click =>
-					@trigger "click", @model
-				
-				@$el.find('.delete-x').click =>
-					@model.collection.remove @model
+			viewDescription: ->
+				@trigger "click", @model
+
+			delete:->
+				@model.collection.remove @model

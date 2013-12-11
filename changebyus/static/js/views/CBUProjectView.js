@@ -39,7 +39,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this = this;
       this.viewData = this.model.attributes;
       if (window.userID === "") {
-        this.viewData.isMember = false;
+        this.isMember = false;
         return this.addSubViews();
       } else {
         id = this.model.get("id");
@@ -49,7 +49,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }).done(function(response) {
           if (response.success) {
             _this.memberData = response.data;
-            _this.viewData.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.viewData.isMember = _this.isMember;
             return _this.addSubViews();
           }
         });
@@ -70,9 +71,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       config = {
         id: id
       };
-      if (this.isMember === false) {
-        this.$header.find('.invisible').removeClass('invisible');
-      }
       this.$el.prepend(this.$header);
       this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);

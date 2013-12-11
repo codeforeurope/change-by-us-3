@@ -7,21 +7,23 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       this.$el = $(this.parent);
       this.templateLoaded = true;
-      return console.log('ProjectDiscussionsView', this.collection, this);
+      return console.log('ProjectDiscussionsView', this);
+    },
+    onCollectionLoad: function() {
+      var _this = this;
+      ProjectSubView.prototype.onCollectionLoad.call(this);
+      return this.collection.on('remove', function(obj_) {
+        _this.addAll();
+        return _this.deleteDiscussion(obj_.id);
+      });
     },
     addAll: function() {
       var _this = this;
-      console.log('ProjectDiscussionsView addAll', this.collection);
       if (this.collection.models.length === 0) {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {
           return onPageElementsLoad();
         });
       } else {
-        this.collection.on('remove', function(obj_) {
-          _this.addAll();
-          console.log('obj_', obj_);
-          return _this.deleteDiscussion(obj_.id);
-        });
         return this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
           return _this.loadDayTemplate();
         });
@@ -81,7 +83,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         } else {
           $feedback.show().html(res_.msg);
         }
-        return console.log('deleteDiscussion', response);
+        return console.log('deleteDiscussion', res_);
       });
     }
   });

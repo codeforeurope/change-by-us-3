@@ -37,7 +37,6 @@ def post_delete_permission(f):
             errStr = "post_id can not be blank."
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
-   
         try:
             post = ProjectPost.objects.with_id(post_id)
             project = post.project
@@ -52,6 +51,7 @@ def post_delete_permission(f):
             current_app.logger.info(infoStr)
             current_app.logger.exception(e)
             errStr = "post {0} does not exist.".format(post_id)
+            current_app.logger.exception(e)
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
 

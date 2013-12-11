@@ -1,7 +1,8 @@
 /**** affects all sizes from 0 to 480px **/
 
 @media only screen and (max-width: 480px) {
-	body.debug{background: green;}
+	//body.debug{background: green;}
+	body{background: green;}
 
 	.dashboard-tabs{
 		li{float: none;}
@@ -19,8 +20,17 @@
 		height: 340px;
 	}
 
+	.post-reply-form{
+		.user-avatar{display: none;}
+		input[type=submit] {
+			width: auto;
+			padding: 10px 16px;
+		}
+	}
+
 	.reply-right{ 
-		width: 65%;
+		width: 100%;
+		.input-xxlarge{width: 100%;}
 	}
 
 	.icons-wrapper {
@@ -55,7 +65,18 @@
 			}
 		}
 	}
- 
+
+	.notify-row{
+		margin-bottom: 12px;
+		div{
+			width: 15%;
+			&:first-child {
+				width: 70%;
+			}
+		}
+			
+	}
+
 	.create-by{
 		margin-bottom: 24px;
 	}
@@ -75,6 +96,7 @@
 	.pill-toggle{
 		width: 100%;
 	}
+
 	#sort-by-pr{
 		margin-bottom: 12px;
 	}

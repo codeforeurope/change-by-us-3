@@ -16,6 +16,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       });
     },
+    events: {
+      "click .description": "viewDescription",
+      "click .user-avatar": "viewDescription",
+      "click .delete-x": "delete"
+    },
     render: function() {
       var m,
         _this = this;
@@ -30,14 +35,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         return _this.onTemplateLoad();
       });
     },
-    onTemplateLoad: function() {
-      var _this = this;
-      this.$el.find('.user-avatar, .description').click(function() {
-        return _this.trigger("click", _this.model);
-      });
-      return this.$el.find('.delete-x').click(function() {
-        return _this.model.collection.remove(_this.model);
-      });
+    viewDescription: function() {
+      return this.trigger("click", this.model);
+    },
+    "delete": function() {
+      return this.model.collection.remove(this.model);
     }
   });
 });

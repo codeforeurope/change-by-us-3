@@ -277,7 +277,7 @@ def api_delete_post():
 
     post_id = form.post_id.data
 
-    post = ProjectPosts.objects.with_id( post_id )
+    post = ProjectPost.objects.with_id( post_id )
     # Should we mark it as invalid not just delete it?
     post.delete()
 

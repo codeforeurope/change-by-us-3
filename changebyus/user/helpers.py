@@ -15,6 +15,9 @@ def _get_user_slug_url( user_name=None, user_id = None ):
 def _is_email_in_use(email=None):
     """Simple helper routine to verify if a user has the email address in use already
 
+        Args:
+            email: the email in question
+
         Returns:
             True/False
     """
@@ -24,6 +27,28 @@ def _is_email_in_use(email=None):
     user = User.objects(email=email)
     if user.count() > 0:
         return True
+
+    return False
+
+def _is_display_name_in_use(display_name=None):
+    """Simple helper routine that verifies if a display_name is used or not.
+
+        Args:
+            display_name: the display_name in question
+
+        Returns:
+            True/False
+    """
+
+    if display_name is None:
+        return False
+
+    user = User.objects(display_name=display_name)
+    if user.count() > 0:
+        return True
+
+    return False
+
 
 
 def _create_user(email=None, 

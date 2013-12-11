@@ -122,7 +122,7 @@ def api_create_user():
                      geo_location=geo_location)
 
     if u is None:
-        errStr += "Sorry, user creation failed.  Was a password included"
+        errStr += "Sorry, user creation failed."
         return jsonify_response( ReturnStructure(msg = errStr, success = False) )
 
     login_user(u)
@@ -208,7 +208,9 @@ def api_edit_user():
 
     u = User.objects.with_id(g.user.id)
 
-    u.public_email = form.public_email.data
+    u.public_email = form.public_email.raw_data[0]
+    errStr = "Public email of {0} got converted to {1}".format(form.public_email.raw_data, u.public_email)
+    current_app.logger.error(errStr)
 
     email = form.email.data
     password = form.password.data

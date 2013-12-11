@@ -2,6 +2,7 @@
 
 from functools import wraps
 from .models import ProjectPost
+from ..project.models import Project
 from ..project.decorators import _is_owner, _is_organizer, _is_member
 
 from ..helpers.flasktools import *
@@ -39,7 +40,7 @@ def post_delete_permission(f):
    
         try:
             post = ProjectPost.objects.with_id(post_id)
-            project = Project.objects.with_id(post.project)
+            project = post.project
 
             if post is None:
                 errStr = "post {0} does not exist.".format(post_id)
@@ -49,6 +50,7 @@ def post_delete_permission(f):
         except Exception as e:
             infoStr = "Exception looking up post of id {0}".format(post_id)
             current_app.logger.info(infoStr)
+            current_app.logger.exception(e)
             errStr = "post {0} does not exist.".format(post_id)
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
@@ -96,7 +98,7 @@ def post_edit_permission(f):
    
         try:
             post = ProjectPost.objects.with_id(post_id)
-            project = Project.objects.with_id(post.project)
+            project = post.project
 
             if post is None:
                 errStr = "post {0} does not exist.".format(project_id)

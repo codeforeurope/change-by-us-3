@@ -11,7 +11,6 @@ from flask.ext.login import login_required, current_user, logout_user, login_use
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, PasswordField, 
                            SubmitField, Required, ValidationError)
 
-
 from ..user.models import User
 from ..user.helpers import ( _get_user_by_email, _verify_user_password )
 from ..project.api import api_get_projects
@@ -30,6 +29,7 @@ class LoginForm(Form):
     email = TextField("email", validators=[Required()])
     password = PasswordField("password", validators=[Required()])
 
+
 @frontend_api.route('/login', methods = ['POST'])
 def user_login():
     """Logs in a user
@@ -41,7 +41,6 @@ def user_login():
         Returns:
             Logs in user and returns True, or returns False
     """
-
     form = LoginForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request container errors."
@@ -60,7 +59,6 @@ def user_login():
     login_user(user)
     
     return jsonify_response( ReturnStructure( ) )
-
 
 
 @frontend_api.route('/logout')

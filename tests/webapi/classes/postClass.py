@@ -70,3 +70,14 @@ class PostClass():
         else:
             client.assertFalse( resp['success'] )
 
+
+    def deletePost(self,
+                   client,
+                   post_id=None,
+                   expected=True):
+
+        delete = { 'post_id' : post_id }
+    
+        resp = client.POST('/api/post/delete', data = json.dumps(delete), content_type="application/json")
+
+        client.assertTrue( resp['success'] == expected )

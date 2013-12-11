@@ -47,4 +47,5 @@ class UserTests(BaseTestCase):
 
         self.GET('/logout')
         resp = self.GET('/api/user/{0}'.format(self.user.user_id))
+
         self.assertTrue( resp['data']['email'] == None )

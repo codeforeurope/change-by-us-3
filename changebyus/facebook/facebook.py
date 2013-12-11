@@ -8,7 +8,7 @@ from flask import current_app, request, session
 from flask.ext.login import login_required, current_user, login_user
 
 from ..user.models import User
-from ..user.helpers import _create_user, _add_facebook, _is_email_in_use
+from ..user.helpers import _create_user, _add_facebook, _is_email_in_use, _is_display_name_in_use
 from ..helpers.stringtools import string_generator
 
 from flask_oauth import OAuth
@@ -248,14 +248,33 @@ def facebook_authorized(resp):
         # not fantastic..
 
         if _is_email_in_use(email):
-            errStr = "User tried to link facebook with email {0} but email already used.".format(email)
+            infoStr = "User tried to link facebook with email {0} but email already used.".format(email)
+            current_app.logger.info(infoStr)
             return render_template('error.html', error = "Sorry, the email {0} is already in use.".format(email))
 
-        u = _create_user(email=email,
-                         password=password,
-                         display_name=full_name,
-                         first_name=first_name,
-                         last_name=last_name)
+        # check that the display_name is not already used.
+        display_name = full_name
+
+        in_use = _is_display_name_in_use(display_name)
+        sanity = 0
+        while in_use and sanity < 5:
+            display_name += string_generator(1)
+            in_use = _is_display_name_in_use(display_name)
+            sanity += 1
+
+        u = None
+        if sanity < 5:
+            u = _create_user(email=email,
+                             password=password,
+                             display_name=full_name,
+                             first_name=first_name,
+                             last_name=last_name)
+
+        if u is None:
+            errStr = "Erorr creating an account for the facebook display_name {0}.".format(display_name)
+            current_app.logger.error(errStr)
+            return render_template('error.html', error="Sorry, an error occured while creating your account.")
+
 
         _add_facebook(user_id=u.id,
                       facebook_id=facebook_id,

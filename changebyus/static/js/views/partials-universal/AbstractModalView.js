@@ -6,12 +6,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
+    events: {
+      "click .close-x": "fadeOut"
+    },
     onTemplateLoad: function() {
-      var _this = this;
       $('#page-wrapper').addClass('blur');
-      this.$el.find(".close-x").click(function() {
-        return _this.fadeOut();
-      });
       return delay(10, function() {
         return $('.scaled-fade').removeClass('scaled-fade');
       });

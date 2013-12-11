@@ -79,27 +79,35 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       this.joinedProjects = new ProjectListCollection();
       this.joinedProjects.url = "/api/project/user/" + this.model.id + "/joined-projects";
       this.joinedProjects.on("reset", this.addJoined, this);
+      this.joinedProjects.on("remove", this.updateCount, this);
+      this.joinedProjects.on("change", this.updateCount, this);
       this.joinedProjects.fetch({
         reset: true
       });
       this.ownedProjects = new ProjectListCollection();
       this.ownedProjects.url = "/api/project/user/" + this.model.id + "/owned-projects";
       this.ownedProjects.on("reset", this.addOwned, this);
+      this.ownedProjects.on("remove", this.updateCount, this);
+      this.ownedProjects.on("change", this.updateCount, this);
       this.ownedProjects.fetch({
         reset: true
       });
       return console.log('@joinedProjects', this.joinedProjects, '@ownedProjects', this.ownedProjects);
     },
+    updateCount: function() {
+      $('a[href=#follow]').html("Follow (" + this.joinedProjects.length + ")");
+      return $('a[href=#manage]').html("Manage (" + this.ownedProjects.length + ")");
+    },
     addJoined: function() {
       var _this = this;
-      $('a[href=#follow]').append(" (" + this.joinedProjects.length + ")");
+      this.updateCount();
       return this.joinedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.followView.find("ul"), false, true);
       });
     },
     addOwned: function() {
       var _this = this;
-      $('a[href=#manage]').append(" (" + this.ownedProjects.length + ")");
+      this.updateCount();
       return this.ownedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.manageView.find("ul"), true, false);
       });

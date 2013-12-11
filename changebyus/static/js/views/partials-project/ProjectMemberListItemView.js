@@ -58,7 +58,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       var _this = this;
       return $.ajax({
         type: "POST",
-        url: "/api/project/remove_member",
+        url: "/api/project/remove-member",
         data: {
           project_id: this.projectID,
           user_id: this.model.id

@@ -8,6 +8,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				AbstractView::initialize.call @, options
 				@render()
 
+			events: 
+				"click input[value=Cancel]": "cancel"
+
 			render: -> 
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-project/project-new-discussion.html",
@@ -19,8 +22,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					form.resetForm()
 					window.location = "/project/"+@model.id+"/admin#discussion/"+response_.data.id
 
-				delay 100, =>	
-					@$el.find('input[value=Cancel]').click =>
-						$("#discussion-editor").html('')
-						@$el.find('form').resetForm()
-						window.location.hash = '#discussions'
+			cancel:->
+				@$el.find('input[value=Cancel]').click =>
+					$("#discussion-editor").html('')
+					@$el.find('form').resetForm()
+					window.location.hash = '#discussions'

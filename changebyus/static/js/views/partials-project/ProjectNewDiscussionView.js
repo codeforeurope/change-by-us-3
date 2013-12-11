@@ -6,6 +6,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
+    events: {
+      "click input[value=Cancel]": "cancel"
+    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -21,16 +24,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       form = new ProjectWysiwygFormView({
         parent: "#discussion-form"
       });
-      form.success = function(response_) {
+      return form.success = function(response_) {
         form.resetForm();
         return window.location = "/project/" + _this.model.id + "/admin#discussion/" + response_.data.id;
       };
-      return delay(100, function() {
-        return _this.$el.find('input[value=Cancel]').click(function() {
-          $("#discussion-editor").html('');
-          _this.$el.find('form').resetForm();
-          return window.location.hash = '#discussions';
-        });
+    },
+    cancel: function() {
+      var _this = this;
+      return this.$el.find('input[value=Cancel]').click(function() {
+        $("#discussion-editor").html('');
+        _this.$el.find('form').resetForm();
+        return window.location.hash = '#discussions';
       });
     }
   });

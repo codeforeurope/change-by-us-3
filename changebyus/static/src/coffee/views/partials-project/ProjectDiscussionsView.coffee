@@ -20,21 +20,20 @@ define ["underscore",
 			render: ->  
 				@$el = $(@parent)
 				@templateLoaded = true
-				console.log 'ProjectDiscussionsView',@collection,@
+				console.log 'ProjectDiscussionsView',@
 
-			addAll: ->
-				console.log 'ProjectDiscussionsView addAll',@collection
+			onCollectionLoad:-> 
+				ProjectSubView::onCollectionLoad.call(@)
+
+				@collection.on 'remove', (obj_)=> 
+					@addAll()
+					@deleteDiscussion(obj_.id)
 				
+			addAll: ->
 				if @collection.models.length is 0
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
 						{}, => onPageElementsLoad()
 				else
-					@collection.on('remove', (obj_)=> 
-						@addAll()
-						console.log 'obj_',obj_
-						@deleteDiscussion(obj_.id)
-					)
-
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => @loadDayTemplate()
 
@@ -64,7 +63,6 @@ define ["underscore",
 
 				config = {model:model_}
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
-				
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
 
@@ -85,4 +83,4 @@ define ["underscore",
 					else
 						$feedback.show().html(res_.msg)
 
-					console.log 'deleteDiscussion',response
+					console.log 'deleteDiscussion',res_

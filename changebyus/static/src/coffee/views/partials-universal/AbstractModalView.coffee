@@ -8,9 +8,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				AbstractView::initialize.call @, options
 				@render()
 
+			events: 
+				"click .close-x": "fadeOut"
+
 			onTemplateLoad:-> 
 				$('#page-wrapper').addClass('blur')
-				@$el.find(".close-x").click => @fadeOut()
+				# temp off @$el.find(".close-x").click => @fadeOut()
 				delay 10, -> $('.scaled-fade').removeClass('scaled-fade')
 
 			fadeOut:->

@@ -15,6 +15,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@isFollowed = options.isFollowed || @isFollowed
 				@render()
 
+			events: 
+				"click .close-x": "close"
+
 			render: ->
 				viewData            = @model.attributes
 				viewData.isProject  = @isProject
@@ -24,7 +27,22 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 				@$el = $("<li class='project-preview'/>")
 				@$el.template @templateDir+"/templates/partials-universal/project-resource.html", 
-					{data: viewData}, => #console.log ''
+					{data: viewData}, => @onTemplateLoad()
 
 			onFetch:(r)-> 
-				$(@parent).append @render() 
+				$(@parent).append @render()
+
+			# onTemplateLoad
+			close:->
+				closeX = @$el.find('.close-x')
+				closeX.hide()
+				$.ajax(
+					type: "POST"
+					url: "/api/project/leave"
+					data: {project_id:@model.id}
+				).done (response)=>
+					if response.success
+						@model.collection.remove @model
+						@$el.remove() 
+					else
+						closeX.show()

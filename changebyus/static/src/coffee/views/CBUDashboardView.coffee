@@ -81,21 +81,29 @@ define ["underscore",
 				@joinedProjects = new ProjectListCollection()
 				@joinedProjects.url = "/api/project/user/#{@model.id}/joined-projects"
 				@joinedProjects.on "reset", @addJoined, @
+				@joinedProjects.on "remove", @updateCount, @
+				@joinedProjects.on "change", @updateCount, @
 				@joinedProjects.fetch reset: true
 
 				@ownedProjects = new ProjectListCollection()
 				@ownedProjects.url = "/api/project/user/#{@model.id}/owned-projects"
 				@ownedProjects.on "reset", @addOwned, @
+				@ownedProjects.on "remove", @updateCount, @
+				@ownedProjects.on "change", @updateCount, @
 				@ownedProjects.fetch reset: true
 
 				console.log '@joinedProjects',@joinedProjects,'@ownedProjects',@ownedProjects
 
+			updateCount:->
+				$('a[href=#follow]').html "Follow (#{@joinedProjects.length})"
+				$('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
+
 			addJoined:->
-				$('a[href=#follow]').append " (#{@joinedProjects.length})"
+				@updateCount()
 				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
 
 			addOwned:->
-				$('a[href=#manage]').append " (#{@ownedProjects.length})"
+				@updateCount()
 				@ownedProjects.each (projectModel) => @addOne(projectModel, @manageView.find("ul"), true, false)
 
 			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->

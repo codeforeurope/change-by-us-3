@@ -59,7 +59,10 @@
 
 .public-email{
 	*{float: left;}
-	span{ margin-left: 10px; } 
+	span{ 
+		margin-left: 10px;
+		width: 90%;
+	} 
 }
 
 .notify-row, .password-title{

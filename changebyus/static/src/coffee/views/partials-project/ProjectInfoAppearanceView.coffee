@@ -28,7 +28,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				# ajax the form
 				$submit   = $("input[type=submit]")
 				$form     = @$el.find("form")
-				$feedback = $("#feedback")
+				$feedback = $("#info-feedback")
 				options   =
 					type: $form.attr('method')
 					url: $form.attr('action')
@@ -60,7 +60,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 						$form.find("input, textarea").removeAttr("disabled")
 
 						if res.success
-							$("html, body").animate({ scrollTop: 0 }, "slow")
+							$("html, body").animate({ scrollTop: $feedback.offset().top }, "slow")
 							$feedback.addClass('alert-success').removeClass('alert-error')
 						else
 							$feedback.removeClass('alert-success').addClass('alert-error')

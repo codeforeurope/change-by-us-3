@@ -345,8 +345,13 @@ h2.admin-title{
 
 .post-reply-form{
   .input-xxlarge{
-    height: 32px;
-    width: percentage(568px/1018px);
+    height: 41px; 
+    width: 80%; 
+  }
+  input[type=submit] {
+    margin-left: 3%;
+    width: 17%;
+    padding: 10px 0;
   }
 }
 

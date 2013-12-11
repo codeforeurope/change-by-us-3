@@ -140,9 +140,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           return $.ajax({
             type: "POST",
             url: "/api/project/join",
-            data: {
+            data: JSON.stringify({
               project_id: id
-            }
+            })
           }).done(function(response) {
             if (response.success) {
               _this.isMember = true;

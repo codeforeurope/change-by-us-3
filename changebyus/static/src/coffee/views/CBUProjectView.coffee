@@ -133,7 +133,7 @@ define ["underscore",
 						$.ajax(
 							type: "POST"
 							url: "/api/project/join"
-							data: { project_id:id }
+							data: JSON.stringify({project_id:id})
 						).done (response)=>
 							#if response.msg.toLowerCase() is "ok"
 							if response.success

@@ -46,7 +46,7 @@
 
 .homepage-block-info {
   margin-top: 20px; 
-  padding: 40px 0;
+  padding: 55px 0;
   background-color: $secondaryColor;
   height: auto;
    
@@ -68,20 +68,24 @@
 .homepage-tools-wrapper{
   max-width:1024px;
   width: 100%;
-  margin: 110px auto auto;
+  margin: 110px auto 36px;
   color: $white;
 }
 
 .homepage-tools{
   float: left;
-  width: 32%;
-  margin-right: 2%;
+  width: 33%;
+  padding-right: 4%;
 
   &:last-child{  margin-right: 0; }
 
-  h4{ @include font-styling("asap", 22px, $white, "normal", "bold" ); }
+  h4{ 
+    @include font-styling("asap", 22px, $white, "normal", "bold" ); 
+  }
 
   p{
+    margin-top: 15px;
+  line-height: 1.2;
     @include font-styling("asap", 22px, $white);
     //width:95%;
   }
@@ -90,7 +94,7 @@
 .homepage-tool-icon{
   width: 215px;
   height: 165px;
-  margin:0 auto 32px;
+  margin:0 auto 86px;
   background-repeat: no-repeat;
   background-position: center center;
 }

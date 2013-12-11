@@ -25,15 +25,15 @@
 
                     <form method="post" name="signup" class="form-signup" action="/api/user/create">
                         <label>FULL NAME</label>
-                        <input type="text" class="input-block-level top" name="first_name" id="signup-first-name" placeholder="First name">
-                        <input type="text" class="input-block-level bottom" name="last_name" id="signup-last-name" placeholder="Last name">
+                        <input type="text" class="input-block-level top" name="first_name" id="signup-first-name" placeholder="First name" required>
+                        <input type="text" class="input-block-level bottom" name="last_name" id="signup-last-name" placeholder="Last name" required>
 
                         <label>CREATE A USERNAME</label>
-                        <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username">
+                        <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username" required>
 
                         <label>LOGIN INFORMATION</label>
-                        <input type="email" class="input-block-level top" name="email" id="signup-email" placeholder="Email address">
-                        <input type="password" class="input-block-level bottom" name="password" id="signup-password" placeholder="Password">
+                        <input type="email" class="input-block-level top" name="email" id="signup-email" placeholder="Email address" required>
+                        <input type="password" class="input-block-level bottom" name="password" id="signup-password" placeholder="Password" required>
 
                         <input type="submit" class="btn btn-xlarge btn-secondary" value="Submit">
                         <input type="button" class="btn btn-xlarge btn-tertiary" value="Cancel">
@@ -58,11 +58,11 @@
                     <form method="post" name="social-signup" class="form-signup" action="/api/user/edit">
 
                         <label>CREATE A USERNAME</label>
-                        <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username">
+                        <input type="text" class="input-block-level" name="display_name" id="signup-display-name" placeholder="Username" required>
 
                         <label>LOGIN INFORMATION</label>
-                        <input type="email" class="input-block-level top" name="email" id="signup-email" placeholder="Email address">
-                        <input type="password" class="input-block-level bottom" name="password" id="signup-password" placeholder="Password">
+                        <input type="email" class="input-block-level top" name="email" id="signup-email" placeholder="Email address" required>
+                        <input type="password" class="input-block-level bottom" name="password" id="signup-password" placeholder="Password" required>
                         <input type="hidden" name="id" value="0">
 
                         <input type="submit" class="btn btn-xlarge btn-secondary" value="Submit">

@@ -34,7 +34,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       $dropkick = $('#project-category').dropkick();
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
-      $feedback = $("#feedback");
+      $feedback = $("#info-feedback");
       options = {
         type: $form.attr('method'),
         url: $form.attr('action'),
@@ -68,7 +68,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           $form.find("input, textarea").removeAttr("disabled");
           if (res.success) {
             $("html, body").animate({
-              scrollTop: 0
+              scrollTop: $feedback.offset().top
             }, "slow");
             return $feedback.addClass('alert-success').removeClass('alert-error');
           } else {

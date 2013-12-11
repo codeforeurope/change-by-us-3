@@ -3,7 +3,8 @@
 @import "variables";
 
 @media only screen and (max-width: 1024px) {
-	body.debug{background: blue;}
+	//body.debug{background: blue;}
+	body{background: blue;}
 
 	.topnav{
 		.body-container{padding: 0;}
@@ -44,7 +45,6 @@
 		}
 	}
 
-
 	.body-container{
 		padding: 0 2%;
 	}
@@ -52,7 +52,6 @@
 	.admin{
 		//.user-avatar{display: none;}
 	}
-
 	
 	.tabs-pane, .owner-tabs-pane{ 
 		position: relative; 
@@ -115,6 +114,18 @@
 		}
 	}
 
+	.homepage-block-info{
+		padding: 55px 2%;
+	}
+
+	.homepage-tools {
+		h4{
+			white-space: nowrap;
+			font-size: 20px;
+		}
+		p{font-size: 20px;}
+	}
+
 	.project-square { 
 		width: 49%;
 		margin: 0 2% 16px 0;
@@ -138,6 +149,12 @@
 
 	.project-description {
 		height: 100px;
+	}
+
+	.public-email{
+		span{
+			
+		}
 	}
 
 	.footer-nav, .form-footer{
@@ -181,6 +198,13 @@
 		.btn:first-child{margin-bottom: 5px;}
 		a{
 			width: 100%;
+		}
+	}
+
+	.modal-btns{
+		width: 100%;
+		.btn.btn-large{
+			padding: 20px 35px;
 		}
 	}
 }

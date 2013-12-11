@@ -53,13 +53,6 @@
   letter-spacing: .1em;
 }
 
-.hidden { display: none; }
-
-.unhidden {
-  text-align: center;
-  display: block;
-}
-
 .blur{ 
   @include filter(blur(2px)); 
 }

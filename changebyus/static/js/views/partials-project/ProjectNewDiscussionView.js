@@ -21,10 +21,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       form = new ProjectWysiwygFormView({
         parent: "#discussion-form"
       });
-      return form.success = function(response_) {
+      form.success = function(response_) {
         form.resetForm();
         return window.location = "/project/" + _this.model.id + "/admin#discussion/" + response_.data.id;
       };
+      return delay(100, function() {
+        return _this.$el.find('input[value=Cancel]').click(function() {
+          $("#discussion-editor").html('');
+          _this.$el.find('form').resetForm();
+          return window.location.hash = '#discussions';
+        });
+      });
     }
   });
 });

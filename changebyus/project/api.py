@@ -533,10 +533,10 @@ def api_change_user_role():
 
     project_id = form.project_id.data
     user_id = form.user_id.data
-    role = form.user_role.data
+    role = form.user_role.data.upper()
 
     if role not in ACTIVE_ROLES:
-        errStr = "role_name was not one of {0}".ACTIVE_ROLES
+        errStr = "role_name was not one of {0} "+", ".join(ACTIVE_ROLES)
         return jsonify_response( ReturnStructure( success = False,
                                                   msg = errStr ) )
 

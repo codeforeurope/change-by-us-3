@@ -30,12 +30,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       };
     },
     cancel: function() {
-      var _this = this;
-      return this.$el.find('input[value=Cancel]').click(function() {
-        $("#discussion-editor").html('');
-        _this.$el.find('form').resetForm();
-        return window.location.hash = '#discussions';
-      });
+      $("#discussion-editor").html('');
+      this.$el.find('form').resetForm();
+      return window.location.hash = '#discussions';
     }
   });
 });

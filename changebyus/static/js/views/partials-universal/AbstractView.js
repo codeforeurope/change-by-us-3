@@ -19,8 +19,12 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       this.trigger('ON_TEMPLATE_LOAD');
       this.templateLoaded = true;
       if (this.delayedCollectionLoad) {
-        return this.loadData();
+        this.loadData();
       }
+      return this.delegateEvents();
+    },
+    changeHash: function(e) {
+      return window.location.hash = $(e.currentTarget).attr("href").substring(1);
     },
     show: function() {
       return this.$el.show();

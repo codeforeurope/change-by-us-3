@@ -19,6 +19,9 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         }
       });
     },
+    events: {
+      "click a[href^='#']": "changeHash"
+    },
     render: function() {
       var _this = this;
       this.$el.template(this.templateDir + "/templates/dashboard.html", {
@@ -42,9 +45,6 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         return _this.toggleSubView();
       });
       this.toggleSubView();
-      $("a[href^='#']").click(function(e) {
-        return window.location.hash = $(this).attr("href").substring(1);
-      });
       return profileEditView = new ProfileEditView({
         model: this.userModel,
         parent: this.profileView

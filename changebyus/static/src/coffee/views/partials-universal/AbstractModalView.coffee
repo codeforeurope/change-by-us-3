@@ -12,8 +12,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				"click .close-x": "fadeOut"
 
 			onTemplateLoad:-> 
-				$('#page-wrapper').addClass('blur')
-				# temp off @$el.find(".close-x").click => @fadeOut()
+				$('#page-wrapper').addClass('blur') 
 				delay 10, -> $('.scaled-fade').removeClass('scaled-fade')
 
 			fadeOut:->

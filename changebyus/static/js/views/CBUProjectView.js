@@ -25,9 +25,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }
       });
     },
+    events: {
+      "click .flag-project a": "flagProject",
+      "click .project-footer .btn": "joinProject",
+      "click  a[href^='#']": "changeHash"
+    },
     render: function() {
       var _this = this;
-      console.log('CBUProjectView', this.model);
       this.$el = $("<div class='project-container'/>");
       this.$el.template(this.templateDir + "/templates/project.html", {}, function() {
         return _this.onTemplateLoad();
@@ -67,6 +71,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onHeaderLoaded: function() {
       var config, id;
+      console.log('@model', this.model);
       id = this.model.get("id");
       config = {
         id: id
@@ -103,52 +108,47 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return _this.toggleSubView();
       });
       this.toggleSubView();
-      $("a[href^='#']").click(function(e) {
-        return window.location.hash = $(this).attr("href").substring(1);
-      });
-      return this.btnListeners();
+      return this.delegateEvents();
     },
-    btnListeners: function() {
+    flagProject: function(e) {
+      var $this, url,
+        _this = this;
+      e.preventDefault();
+      $this = $(e.currentTarget);
+      $this.parent().css('opacity', 0.25);
+      url = $this.attr('href');
+      return $.ajax({
+        type: "POST",
+        url: url
+      }).done(function(response_) {
+        return console.log(response_);
+      });
+    },
+    joinProject: function(e) {
       var $join, id,
         _this = this;
-      $('.flag-project a').click(function(e) {
-        var $this, url,
-          _this = this;
+      if (this.isMember) {
+        return;
+      }
+      if (window.userID === "") {
+        return window.location = "/login";
+      } else {
+        id = this.model.get("id");
+        $join = $(".project-footer .btn");
         e.preventDefault();
-        $this = $(this);
-        $this.parent().css('opacity', 0.25);
-        url = $this.attr('href');
         return $.ajax({
           type: "POST",
-          url: url
-        }).done(function(response_) {
-          return console.log(response_);
-        });
-      });
-      id = this.model.get("id");
-      $join = $(".project-footer .btn");
-      return $join.click(function(e) {
-        if (window.userID === "") {
-          return window.location = "/login";
-        } else {
-          e.preventDefault();
-          if (_this.isMember) {
-            return;
+          url: "/api/project/join",
+          data: {
+            project_id: id
           }
-          return $.ajax({
-            type: "POST",
-            url: "/api/project/join",
-            data: {
-              project_id: id
-            }
-          }).done(function(response) {
-            if (response.success) {
-              _this.isMember = true;
-              return $join.html('Joined!').css('background-color', '#e6e6e6');
-            }
-          });
-        }
-      });
+        }).done(function(response) {
+          if (response.success) {
+            _this.isMember = true;
+            return $join.html('Joined!').css('background-color', '#e6e6e6');
+          }
+        });
+      }
     },
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;

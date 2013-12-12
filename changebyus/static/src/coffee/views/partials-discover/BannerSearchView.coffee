@@ -11,6 +11,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				AbstractView::initialize.call @, options
 				@render()
 
+			events:
+				"click .search-catagories li":"categoriesClick"
+				"click .pill-selection":"pillSelection"
+				"click .search-inputs .btn":"sendForm"
+
 			render: -> 
 				@$el = $(".banner-search")
 				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
@@ -46,12 +51,14 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				$dropkick = $('#search-range').dropkick()
 
-				$('.search-catagories li').click ->
-					$searchInput.val $(this).html()
+				onPageElementsLoad()
+
+				categoriesClick:(e)->
+					$searchInput.val $(e.currentTarget).html()
 					$searchCatagories.hide()
 
-				$('.pill-selection').click ->
-					$this = $(this)
+				pillSelection:(e)->
+					$this = $(e.currentTarget)
 					$this.toggleClass('active')
 					$this.siblings().toggleClass('active')
 
@@ -64,10 +71,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 							@sortByPopularDistance = 'Popular'
 						when 'Distance'
 							@sortByPopularDistance = 'Distance'
-
-				$('.search-inputs .btn').click => @sendForm()
-
-				onPageElementsLoad()
 
 			sendForm:->
 				$("#projects-list").html("")

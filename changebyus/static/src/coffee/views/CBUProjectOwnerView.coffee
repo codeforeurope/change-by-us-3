@@ -39,52 +39,52 @@ define ["underscore",
 				CBUProjectView::initialize.call @, options
 				console.log 'CBUProjectOwnerView',@
 
+			events:
+				"click a[href^='#']":"changeHash"
+
 			render: -> 
 				@$el = $("<div class='project-container'/>")
 				@$el.template @templateDir+"/templates/project-owner.html", 
-					{}, => @addSubViews()
-				$(@parent).append @$el
+					{}, => @onTemplateLoad()
+				$(@parent).append @$el 
+				
+			onTemplateLoad: -> 
+				@$header = $("<div class='project-header'/>")
+				@$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
+					{data:@model.attributes}, =>@addSubViews()
+						
+			addSubViews:->
+				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:true, view:"admin"} 
 
-			addSubViews: ->
-				console.log 'addSubViews',@model.attributes
-				$header = $("<div class='project-header'/>")
-				$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
-					{data:@model.attributes}, =>
-						
-						config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:true, view:"admin"} 
+				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
+				projectMembersCollection     = new ProjectMembersCollection(config)
+				projectUpdatesCollection     = new ProjectUpdatesCollection(config)
+				
+				@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
+				@projectDiscussionView     = new ProjectDiscussionView()
+				@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
+				@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
+				@projectFundraisingView    = new ProjectFundraisingView(config) 
+				@projectCalenderView       = new ProjectCalenderView(config) 
+				@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
+				@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
-						projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
-						projectMembersCollection     = new ProjectMembersCollection(config)
-						projectUpdatesCollection     = new ProjectUpdatesCollection(config)
-						
-						@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
-						@projectDiscussionView     = new ProjectDiscussionView()
-						@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
-						@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
-						@projectFundraisingView    = new ProjectFundraisingView(config) 
-						@projectCalenderView       = new ProjectCalenderView(config) 
-						@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
-						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
+				@projectDiscussionsView.on 'discussionClick', (arg_)=> 
+					window.location.hash = "discussion/"+arg_.model.id
+				
+				@discussionBTN  = $("a[href='#discussions']")
+				@updatesBTN     = $("a[href='#updates']")
+				@fundraisingBTN = $("a[href='#fundraising']") 
+				@calendarBTN    = $("a[href='#calendar']")
+				@membersBTN     = $("a[href='#members']")
+				@infoBTN        = $("a[href='#info']")
+				
+				$(window).bind "hashchange", (e) => @toggleSubView()
+				@toggleSubView() 
 
-						@projectDiscussionsView.on 'discussionClick', (arg_)=>
-							console.log 'projectDiscussionsView arg_',arg_ 
-							window.location.hash = "discussion/"+arg_.model.id
-						
-						@discussionBTN  = $("a[href='#discussions']")
-						@updatesBTN     = $("a[href='#updates']")
-						@fundraisingBTN = $("a[href='#fundraising']") 
-						@calendarBTN    = $("a[href='#calendar']")
-						@membersBTN     = $("a[href='#members']")
-						@infoBTN        = $("a[href='#info']")
-						
-						$(window).bind "hashchange", (e) => @toggleSubView()
-						@toggleSubView()
-						
-						# temp hack because somewhere this event default is prevented
-						$("a[href^='#']").click (e) -> 
-							window.location.hash = $(this).attr("href").substring(1)
-
-				@$el.prepend $header
+				@delegateEvents()
+							
+				@$el.prepend @$header
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

@@ -3,7 +3,8 @@ define ["underscore", "backbone", "model/ProjectDiscussionCommentModel"],
 		ProjectDiscussionCommentsCollection = Backbone.Collection.extend
 			model: ProjectDiscussionCommentModel
 			
-			url: "/api/project/" + window.projectID + "/discussion_comments"
+			url: ->
+				"/api/project/#{window.projectID}/discussion_comments"
 			
 			parse: (response) ->
 				response.data

@@ -18,14 +18,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       });
       return $(this.parent).append(this.$el);
     },
+    events: {
+      "click .btn-info": "infoClick"
+    },
+    infoClick: function(e) {
+      var url;
+      e.preventDefault();
+      url = $(e.currentTarget).attr("href");
+      return popWindow(url);
+    },
     addListeners: function() {
       var _this = this;
-      $(".btn-info").click(function(e) {
-        var url;
-        e.preventDefault();
-        url = $(this).attr("href");
-        return popWindow(url);
-      });
       $(window).bind("hashchange", function(e) {
         return _this.toggleSubView();
       });

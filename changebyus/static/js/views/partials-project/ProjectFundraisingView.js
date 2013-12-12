@@ -8,6 +8,10 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       this.name = options.name || this.name;
       return this.render();
     },
+    events: {
+      "click .btn-large": "linkStripe",
+      "click #does-it-work": "slideToggle"
+    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -24,27 +28,25 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       }
     },
     getStarted: function() {
-      var $how,
-        _this = this;
-      $how = $('.fundraising-left .content-wrapper');
-      $how.slideToggle(1);
-      $('#does-it-work').click(function(e) {
-        return $how.slideToggle();
+      this.$how = $('.fundraising-left .content-wrapper');
+      return this.$how.slideToggle(1);
+    },
+    linkStripe: function(e) {
+      var _this = this;
+      e.preventDefault();
+      return $.ajax({
+        type: "POST",
+        url: "/stripe/link",
+        data: {
+          project_id: this.id,
+          project_name: this.name
+        }
+      }).done(function(response_) {
+        return popWindow(response_);
       });
-      return $('.btn-large').click(function(e) {
-        e.preventDefault();
-        console.log('ProjectFundraisingView ');
-        return $.ajax({
-          type: "POST",
-          url: "/stripe/link",
-          data: {
-            project_id: _this.id,
-            project_name: _this.name
-          }
-        }).done(function(response_) {
-          return popWindow(response_);
-        });
-      });
+    },
+    slideToggle: function() {
+      return this.$how.slideToggle();
     }
   });
 });

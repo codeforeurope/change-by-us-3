@@ -3,7 +3,8 @@ define ["underscore", "backbone", "model/ProjectModel"],
 		ProjectListCollection = Backbone.Collection.extend
 			model: ProjectModel
 			
-			url: "/api/project/list?limit=6&sort=activity&order=desc"
+			url: ->
+				"/api/project/list?limit=6&sort=activity&order=desc"
 			
 			parse: (response) ->
 				response.data 

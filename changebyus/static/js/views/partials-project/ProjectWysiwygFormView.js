@@ -71,8 +71,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function(response_) {
-          _this.success(response_);
-          return console.log(response_);
+          return _this.success(response_);
         }
       };
       this.$updateForm.submit(function() {

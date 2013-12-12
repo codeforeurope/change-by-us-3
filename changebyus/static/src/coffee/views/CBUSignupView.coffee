@@ -1,13 +1,11 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
-	(_, Backbone, $, temp, AbstractView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "serializeJSON"], 
+	(_, Backbone, $, temp, AbstractView, serialize) ->
 		CBUSignupView = AbstractView.extend
 
 			socialInfo:null
 
 			initialize: (options) ->
-				@templateDir = options.templateDir or @templateDir
-				@parent = options.parent or @parent
-				@viewData = options.viewData or @viewData
+				AbstractView::initialize.call @, options
 				@render()
 
 			render: -> 
@@ -37,41 +35,64 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				$feedback = $signup.find(".login-feedback")
 
 				options =
-					beforeSubmit: =>
-						console.log 'beforeSubmit'
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: => 
 						$form.find("input, textarea").attr("disabled", "disabled")
 						$feedback.removeClass("alert").removeClass("alert-danger").html ""
 
 					success: (response) =>
 						console.log 'signup',response
 						$form.find("input, textarea").removeAttr("disabled")
-						if response.msg.toLowerCase() is "ok"
+						#if response.msg.toLowerCase() is "ok"
+						if response.success
 							window.location.href = "/"
 						else
 							$feedback.addClass("alert").addClass("alert-danger").html response.msg
-
-				$form.ajaxForm options
+ 
+				$form.submit -> 
+					json_str = JSON.stringify($form.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
 
 				# social signup --------------------------------------------------
 				$socialSignup   = $(".social-signup")
 				$socialForm     = $socialSignup.find("form") 
 				$socialSubmit   = $socialSignup.find("input[type='submit']")
 				$socialFeedback = $socialSignup.find(".login-feedback")
+				console.log $socialFeedback
+				$socialSignup.hide()
 
-				options =
-					beforeSubmit: =>
-						console.log 'beforeSubmit'
+				socialOptions =
+					type: $socialForm.attr('method')
+					url: $socialForm.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+					beforeSend: => 
 						$socialForm.find("input, textarea").attr("disabled", "disabled")
 						$socialFeedback.removeClass("alert").html ""
 
 					success: (response) =>
-						console.log 'signup',response
+						console.log 'signup',response,$socialFeedback 
 						$socialForm.find("input, textarea").removeAttr("disabled")
-						if response.msg.toLowerCase() is "ok"
+						#if response.msg.toLowerCase() is "ok"
+						if response.success is "ok"
 							window.location.href = "/"
 						else
 							$socialFeedback.addClass("alert").html response.msg
-				$socialForm.ajaxForm options
+
+				$socialForm.submit ->
+					obj = $socialForm.serializeJSON()
+					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
+					json_str = JSON.stringify(obj)
+					socialOptions.data = json_str
+					console.log 'socialOptions.data',socialOptions.data
+					$.ajax socialOptions
+					false
 
 			toggleSubView:->
 				view = window.location.hash.substring(1)

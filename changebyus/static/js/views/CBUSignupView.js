@@ -1,11 +1,9 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "serializeJSON"], function(_, Backbone, $, temp, AbstractView, serialize) {
   var CBUSignupView;
   return CBUSignupView = AbstractView.extend({
     socialInfo: null,
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {
@@ -34,50 +32,78 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.toggleSubView();
     },
     ajaxForm: function() {
-      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options,
+      var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options, socialOptions,
         _this = this;
       $signup = $(".init-signup");
       $form = $signup.find("form");
       $submit = $signup.find("input[type='submit']");
       $feedback = $signup.find(".login-feedback");
       options = {
-        beforeSubmit: function() {
-          console.log('beforeSubmit');
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           $form.find("input, textarea").attr("disabled", "disabled");
           return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
         success: function(response) {
           console.log('signup', response);
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.msg.toLowerCase() === "ok") {
+          if (response.success) {
             return window.location.href = "/";
           } else {
             return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
           }
         }
       };
-      $form.ajaxForm(options);
+      $form.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($form.serializeJSON());
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
       $socialSignup = $(".social-signup");
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
       $socialFeedback = $socialSignup.find(".login-feedback");
-      options = {
-        beforeSubmit: function() {
-          console.log('beforeSubmit');
+      console.log($socialFeedback);
+      $socialSignup.hide();
+      socialOptions = {
+        type: $socialForm.attr('method'),
+        url: $socialForm.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           $socialForm.find("input, textarea").attr("disabled", "disabled");
           return $socialFeedback.removeClass("alert").html("");
         },
         success: function(response) {
-          console.log('signup', response);
+          console.log('signup', response, $socialFeedback);
           $socialForm.find("input, textarea").removeAttr("disabled");
-          if (response.msg.toLowerCase() === "ok") {
+          if (response.success === "ok") {
             return window.location.href = "/";
           } else {
             return $socialFeedback.addClass("alert").html(response.msg);
           }
         }
       };
-      return $socialForm.ajaxForm(options);
+      return $socialForm.submit(function() {
+        var json_str, obj;
+        obj = $socialForm.serializeJSON();
+        if (obj.public_email === "on") {
+          obj.public_email = true;
+        } else {
+          obj.public_email = false;
+        }
+        json_str = JSON.stringify(obj);
+        socialOptions.data = json_str;
+        console.log('socialOptions.data', socialOptions.data);
+        $.ajax(socialOptions);
+        return false;
+      });
     },
     toggleSubView: function() {
       var view;

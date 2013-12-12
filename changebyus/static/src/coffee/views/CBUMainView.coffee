@@ -21,9 +21,7 @@ define ["underscore",
 		CBUMainView = AbstractView.extend
 
 			initialize: (options) ->
-				@templateDir        = options.templateDir or @templateDir
-				@parent             = options.parent or @parent
-				@viewData           = options.viewData or @viewData
+				AbstractView::initialize.call @, options
 				@collection         = options.collection or new ProjectListCollection()
 				@resourceCollection = options.resourceCollection or new ResourceListCollection()
 				@render()
@@ -43,19 +41,6 @@ define ["underscore",
 
 				@resourceCollection.on "reset", @addAllResources, @
 				@resourceCollection.fetch reset: true
-				
-				@ajaxForm()
-
-			ajaxForm: ->
-				# AJAXIFY THE SIGNUP FORM
-				$signup = $("form[name=signup]")
-				$signup.ajaxForm (response) ->
-					console.log response
-				
-				# AJAXIFY THE SIGNIN FORM
-				$signin = $("form[name=signin]")
-				$signin.ajaxForm (response) ->
-					console.log response
 
 			addAll: ->  
 				@collection.each (projectModel) => 

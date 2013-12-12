@@ -11,7 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     render: function() {
       var _this = this;
-      this.$el = $("<div class='banner-search'/>");
+      this.$el = $(".banner-search");
       this.$el.template(this.templateDir + "/templates/partials-discover/banner-search.html", {
         data: this.viewData
       }, function() {

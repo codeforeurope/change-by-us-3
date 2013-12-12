@@ -1,3 +1,5 @@
+@import 'compass/css3/filter';
+
 .clearfix {
   *zoom: 1;
 
@@ -30,9 +32,7 @@
   overflow: visible;
 }
 
-.pull-right {
-  float: right;
-}
+.pull-right { float: right;}
 
 .pull-left { float: left; }
 
@@ -53,25 +53,19 @@
   letter-spacing: .1em;
 }
 
-.hidden { display: none; }
-
-.unhidden {
-  text-align: center;
-  display: block;
+.blur{ 
+  @include filter(blur(2px)); 
 }
 
-span.highlight{
-  @include highlight;
-}
+span.highlight{ @include highlight; }
 
 .circle{
   @include border-radius(1000px, 1000px);
+  background-position: center center;
   overflow: hidden;
 }
 
-a.highlight{
-  @include highlight; 
-}
+a.highlight{ @include highlight; }
 
 a.ul{ 
   color: $graySubtext;

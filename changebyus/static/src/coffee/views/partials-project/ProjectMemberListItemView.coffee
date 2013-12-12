@@ -6,8 +6,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			view:"public"
 			projectID:0
 
-			initialize: (options_) ->
-				console.log 'initialize initialize initialize initialize'
+			initialize: (options_) -> 
 				AbstractView::initialize.call @, options_ 
 
 				@view          = options_.view || @view
@@ -19,7 +18,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@render()
 
 			events: 
-				"click .delete-x": "deleteItem",
+				"click .delete-x": "deleteItem"
 
 			render: ->
 				@$el = $(@el)
@@ -36,7 +35,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					change: (value_, label_) =>
 						$.ajax(
 							type: "POST"
-							url: "/api/project/change_user_role"
+							url: "/api/project/change-user-role"
 							data: { project_id:@projectID, user_id:@model.id, user_role:value_}
 						).done (response_)=>
 							if (response_.msg.toLowerCase() == "ok")
@@ -45,7 +44,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			deleteItem:->
 				$.ajax(
 					type: "POST"
-					url: "/api/project/remove_member"
+					url: "/api/project/remove-member"
 					data: { project_id:@projectID, user_id:@model.id}
 				).done (response_)=>
 					if (response_.msg.toLowerCase() == "ok")

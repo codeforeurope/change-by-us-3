@@ -1,7 +1,20 @@
+# -*- coding: utf-8 -*-
+"""
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
+
+"""
+.. module:: imagetools
+
+    :synopsis: A set of tools for manipulating images and generating resized images
+
+"""
+
 import os
 from PIL import Image, ImageOps, ImageDraw, ImageFilter
 from flask import current_app
-
+from flask.ext.cdn_rackspace import upload_rackspace_image
 
 class NamedImage():
     def __init__(self, name=None, image=None, extension=None ):
@@ -19,8 +32,15 @@ class ImageManipulator():
 
 
 def generate_ellipse_png( filepath, size, blurs = 0 ):
-    """
+    """Creates a png image that has an eliptical alpha border
 
+        Args:
+            filepath: local path to the image
+            size: a list representing the size, such as [100,100]
+            blurs: the number of blur filters we should apply to the image
+
+        Returns:
+            A NamedImage class with the photo information
     """
 
     try:
@@ -53,17 +73,15 @@ def generate_ellipse_png( filepath, size, blurs = 0 ):
 
 
 def generate_thumbnail( filepath, size, blurs = 0 ):
-    """
-    ABOUT
-        Routine that will take a full sized image path and generate
-        an x,y sized thumbnail with the naming convention 
-        name_thumb.extension
-    INPUT
-        Path to an image, any standard extension
-    OUTPUT
-        File path for an image of 1020,320 pixels
-    TODO
-        Make the image output size a parameter
+    """Creates a resized image of the original image
+
+        Args:
+            filepath: local path to the image
+            size: a list representing the size, such as [100,100]
+            blurs: the number of blur filters we should apply to the image
+
+        Returns:
+            A NamedImage class with the photo information
     """
 
     # note if you change these guys you need to change templates and the project model
@@ -96,10 +114,51 @@ def generate_thumbnail( filepath, size, blurs = 0 ):
         return None
 
 
-def generate_blurred_bg():
-    # LV TODO
-    pass
+def upload_image(photo, manipulators):
+    """
+        Routine that will take a photo and a list of photo manipulators,
+        run the image through the various image manipulators, and upload those
+        images to our cloud container.
 
-def generate_circled_crop():
-    # LV TODO
-    pass
+        Args:
+            photo: file path to the original file
+            manipulators: a list of ImageManipulators to run the image through
+
+        Returns:
+            The base name of the image
+
+    """
+
+
+    file_name = None
+
+    if len(photo.filename) > 3:
+
+        try:
+            result = upload_rackspace_image( photo )
+
+            if result.success:
+                file_name = result.name
+                file_path = result.path
+                image_url = result.url
+
+                for manipulator in manipulators:
+
+                    manip_image = manipulator.converter(file_path)
+                    base, extension = os.path.splitext(file_name)
+                    manip_image_name = manipulator.prefix + '.' + base + manipulator.extension
+
+                    if not upload_rackspace_image( manip_image.image, 
+                                                   manip_image_name).success:
+
+                        return None
+            else:
+                return None
+
+        except Exception as e:
+            current_app.logger.exception(e)
+            return None
+
+        file_name = result.name
+
+    return file_name

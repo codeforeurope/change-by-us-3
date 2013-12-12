@@ -1,10 +1,6 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view"], function(_, Backbone, $, temp, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], function(_, Backbone, $, temp, AbstractModalView) {
   var ProjectCreateModalView;
-  return ProjectCreateModalView = AbstractView.extend({
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
-      return this.render();
-    },
+  return ProjectCreateModalView = AbstractModalView.extend({
     render: function() {
       var _this = this;
       this.$el = $("<div class='modal-fullscreen dark'/>");
@@ -14,13 +10,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
-    },
-    onTemplateLoad: function() {
-      var _this = this;
-      console.log('close', this.$el.find(".close-x"));
-      return this.$el.find(".close-x").click(function() {
-        return _this.$el.remove();
-      });
     }
   });
 });

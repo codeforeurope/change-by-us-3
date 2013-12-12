@@ -9,7 +9,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     initialize: function(options_) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options_);
-      console.log('loadModel', this.model);
       return this.model.fetch({
         success: function() {
           return _this.loadUser();
@@ -19,7 +18,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     loadUser: function() {
       var _this = this;
       this.user = new UserModel({
-        id: this.model.attributes.user.id
+        id: this.model.get("user").id
       });
       return this.user.fetch({
         success: function() {
@@ -31,12 +30,10 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       var m,
         _this = this;
       m = moment(this.model.get('created_at')).format("MMMM D hh:mm a");
-      this.model.set({
-        'created_at': m
-      });
+      this.model.set('created_at', m);
       this.viewData = this.model.attributes;
-      this.viewData.image_url_round_small = this.user.attributes.image_url_round_small;
-      this.viewData.display_name = this.user.attributes.display_name;
+      this.viewData.image_url_round_small = this.user.get("image_url_round_small");
+      this.viewData.display_name = this.user.get("display_name");
       return $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
         data: this.viewData
       }, function() {

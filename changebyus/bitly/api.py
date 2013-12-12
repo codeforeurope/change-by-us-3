@@ -12,39 +12,27 @@ import inspect
 import requests
 import urllib
 
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/bitly.yml'))
-
 bitly_api = Blueprint('bitly_api', __name__, url_prefix='/api/bitly')
 
 BASE_URL = 'https://api-ssl.bitly.com'
 
 """
-=========================
-Bit.ly Webservice Wrapper
-=========================
+.. module:: bitly.api
 
-This is a webservice that will send large urls to bitly and return the 
-shortened url.  The use case is rather obvious.
+    :synopsis: Will use bit.ly to generate shortened urls
 """
 
 def _get_bitly_url(original_url):
-    """
-    ABOUT
-        Converts a long url into a bit.ly url
-    METHOD
-        Get
-    INPUT
-        Url
-    OUTPUT
-        bit.ly url OR ''
-    PRECONDITIONS
-        API key exists in the config file
+    """Converts a long url into a bit.ly url
+        Args:
+            original_url: url to be shortened.
+        Returns:
+            bit.ly shortened url
     """
 
     params = {
-        'login' : settings['LOGIN'],
-        'apiKey' : settings['API_KEY'],
+        'login' : current_app.settings.get('BITLY').get('LOGIN'),
+        'apiKey' : current_app.settings.get('BITLY').get('API_KEY'),
         'longUrl' : original_url
     }
 

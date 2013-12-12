@@ -8,7 +8,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.user = new UserModel({
-        id: this.model.attributes.user.id
+        id: this.model.get("user").id
       });
       return this.user.fetch({
         success: function() {
@@ -16,11 +16,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       });
     },
+    events: {
+      "click .description": "viewDescription",
+      "click .user-avatar": "viewDescription",
+      "click .delete-x": "delete"
+    },
     render: function() {
-      var _this = this;
-      this.model.attributes.format_date = moment(this.model.attributes.created_at).format("MMMM D hh:mm a");
-      this.viewData.image_url_round_small = this.user.attributes.image_url_round_small;
-      this.viewData.display_name = this.user.attributes.display_name;
+      var m,
+        _this = this;
+      m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
+      this.model.set("format_date", m);
+      this.viewData.image_url_round_small = this.user.get("image_url_round_small");
+      this.viewData.display_name = this.user.get("display_name");
       this.$el = $(this.el);
       return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion-list-item.html", {
         data: this.viewData
@@ -28,14 +35,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         return _this.onTemplateLoad();
       });
     },
-    onTemplateLoad: function() {
-      var _this = this;
-      this.$el.find('.user-avatar, .description').click(function() {
-        return _this.trigger("click", _this.model);
-      });
-      return this.$el.find('.delete').click(function() {
-        return _this.trigger("delete", _this.model);
-      });
+    viewDescription: function() {
+      return this.trigger("click", this.model);
+    },
+    "delete": function() {
+      return this.model.collection.remove(this.model);
     }
   });
 });

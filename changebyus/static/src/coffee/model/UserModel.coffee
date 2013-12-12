@@ -22,7 +22,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
 			public_email: false
 			first_name: ""
 			display_name: ""
-			roles: []
+			roles: ["MEMBER"]
 			created_at: "2000-01-01 00:00:00.000000"
 
 		parse:(resp_)->

@@ -21,18 +21,16 @@ from flask.ext.cdn import url_for
 import os
 
 """
-=================
-User Model File
-=================
+.. module:: user/models
 
-This is a mongoDB models file that contains models for Users.
-This is very straight forward.  The only small catch is that we
-have some social keys in these models, which the social tools are 
-dependent on
+    :synopsis: The user model file
 
 """
 
-
+"""
+    List of image manipulators that will be used to generate image
+    files out of a users thumbnail image
+"""
 user_images = [
     ImageManipulator(dict_name = "image_url_round_small",
                      converter = lambda x: generate_ellipse_png(x, [70, 70]),
@@ -50,8 +48,13 @@ user_images = [
 def gen_image_urls(image_url):
 
     """
-    Helper that will take a root image name, and given our image manipulators
-    assign names
+        Helper that will take a root image name, and given our image manipulators
+        and preferred remote storage container will generate image names and urls
+
+        Args:
+            Base image name
+        Returns:
+            a dict of multiple {image_name : image_url}
     """
 
     images = {}
@@ -193,10 +196,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     # we override the as_dict to handle the email logic
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
         resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
- 
-        #if not self['public_email']:
-        #    resp['email'] = None
- 
+  
         image_urls = gen_image_urls(self.image_name)
 
         for image, url in image_urls.iteritems():

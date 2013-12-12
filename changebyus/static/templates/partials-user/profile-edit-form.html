@@ -1,5 +1,5 @@
 <div id="feedback" class="feedback alert hide"></div>
-<form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/user/edit">
+<form method="post" enctype="multipart/form-data" class="form-project" name="createproject" action="/api/user/edit">
     <div class="content-wrapper clearfix">
         
         <div class="form-left">
@@ -40,7 +40,6 @@
                 <span  class="sub-text">Display this email address so other members can contact me</span>
             </div>
             
-            <!---->
             <br>
             <div class="password-title clearfix">
                 <label for="password">PASSWORD</label>
@@ -52,15 +51,15 @@
             <label for="website">WEBSITE</label> <span class="sub-text">(Optional)</span>
             <input type="text" name="website" id="website" placeholder="http://mypersonalsite.com" class="input-xxlarge" value="<%= data.website %>">
              <br>
-            <div class="notify-wrapper">
-                <div class="notify-row">
+            <div class="notify-wrapper clearfix">
+                <div class="notify-row clearfix">
                     <div>
                         <label>NOTIFY WHEN...</label>
                     </div>
                     <div>CBU</div>
                     <div>Email</div>
                 </div>
-                <div class="notify-row">
+                <div class="notify-row clearfix">
                     <div>Someone joins my project</div>
                     <div>
                         <input type="radio" name="joins_my_project" value="false">
@@ -69,7 +68,7 @@
                         <input type="radio" name="joins_my_project" value="true" checked>
                     </div>
                 </div>
-                <div class="notify-row">
+                <div class="notify-row clearfix">
                     <div>Someone responds to a discussion thread</div>
                     <div>
                         <input type="radio" name="responds_to_a_discussion" value="false">
@@ -78,7 +77,7 @@
                         <input type="radio" name="responds_to_a_discussion" value="true" checked>
                     </div>
                 </div>
-                <div class="notify-row">
+                <div class="notify-row clearfix">
                     <div>Someone comments on my post</div>
                     <div>
                         <input type="radio" name="responds_to_my_comment" value="false">
@@ -99,7 +98,7 @@
 
                 <div class="fileupload fileupload-new" data-provides="fileupload">
                     <div>
-                        <span class="btn btn-file btn-primary">
+                        <span class="btn btn-file btn-medium btn-primary">
                             <span class="fileupload-exists">Edit Thumbnail</span>
                             <span class="fileupload-new">Upload</span>
                             <input id="project_image" name="photo" type="file">
@@ -111,9 +110,9 @@
                             <div class="load-preview" style="background-image:url(<%= data.image_url_round_medium %>)"></div>
                         <% } %>
                     </div>
-                    <a class="btn btn-file btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                    <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
                 </div>
-                <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+                <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div> 
             <div class="social-btns">
                 <label>Social</label>
@@ -146,7 +145,7 @@
             <input type="hidden" name="lon" value="<%= data.lon %>">
         </div>
         <div class="pull-right">
-            <span class="sub-text">Member since</span> * <a href="/delete">Delete Account</a>
+            <span class="sub-text">Member since</span> * <a href="/delete" class="warning">Delete Account</a>
         </div>
     </div>
 

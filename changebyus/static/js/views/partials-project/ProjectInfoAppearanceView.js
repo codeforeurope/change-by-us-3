@@ -34,8 +34,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       $dropkick = $('#project-category').dropkick();
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
-      $feedback = $("#feedback");
+      $feedback = $("#info-feedback");
       options = {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "multipart/form-data; charset=utf-8",
         beforeSubmit: function() {
           var $zip;
           if ($form.valid()) {
@@ -64,7 +68,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           $form.find("input, textarea").removeAttr("disabled");
           if (res.success) {
             $("html, body").animate({
-              scrollTop: 0
+              scrollTop: $feedback.offset().top
             }, "slow");
             return $feedback.addClass('alert-success').removeClass('alert-error');
           } else {
@@ -72,6 +76,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           }
         }
       };
+      /*
+      				$form.submit ->
+      					options.data = json_str
+      					$.ajax options
+      					false
+      */
+
       $form.ajaxForm(options);
       $projectLocation = $("#project_location");
       $projectLocation.typeahead({
@@ -105,7 +116,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         $('input[name="lon"]').val(_this.location.lon);
         return console.log(datum);
       });
-      return $('input:radio').screwDefaultButtons({
+      return this.$el.find('input:radio').screwDefaultButtons({
         image: 'url("/static/img/icon-lock.png")',
         width: 60,
         height: 25

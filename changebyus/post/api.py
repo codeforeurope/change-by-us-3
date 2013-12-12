@@ -3,6 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
+
 from flask import Blueprint, request, render_template, redirect
 from flask import url_for, g, current_app
 
@@ -30,35 +31,39 @@ from ..project.helpers import ( _get_user_involved_projects, _get_project_users_
 from ..project.decorators import ( project_exists, project_member, 
                                    _is_organizer as _is_project_organizer )
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure
+from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 
 from ..stripe.api import _get_account_balance_percentage
 from ..twitter.twitter import _get_user_name_and_thumbnail
 from ..facebook.facebook import _get_fb_user_name_and_thumbnail
 
 from .helpers import _create_project_post
-from .helpers import _get_posts_for_project
 
 post_api = Blueprint('post_api', __name__, url_prefix='/api/post')
 
 
 """
-=========
-Post Api
-=========
+.. module:: post/api
 
-Posts exist on a per-project basis, with multiple posts per project possible.
-Posts can be public or private, and can have a link to social platforms, ie
-a twitter_post_id and a facebook_post_id, however the actual social posting
-is handled by other modules
+    :synopsis: Posts exist on a per-project basis, with multiple posts per project possible.
+
+    Posts can be public or private, and can have a link to social platforms, ie
+    a twitter_post_id and a facebook_post_id, however the actual social posting
+    is handled by other modules.
 """
 
 @post_api.route('/<post_id>')
 @post_exists
 def api_get_post(post_id):
+    """Get data for root post and all child response posts.
+
+    Args:
+        post_id: the id of the requested post
+        limit: Maxinum number of responses to return
+    Returns:
+        A dict of the root post and all responses
     """
-    Get data for root post and all child response posts.
-    """
+
     limit = int(request.args.get('limit', 500))
     
     root_post = ProjectPost.objects.with_id(post_id)
@@ -69,131 +74,54 @@ def api_get_post(post_id):
     data['responses'] = db_list_to_dict_list(responses)
     
     return jsonify_response(ReturnStructure(data = data))
-    
 
-# @post_discussion_api.route('/project/<project_id>/<post_type>')
-# @post_discussion_api.route('/project/<project_id>/<post_type>/<number_posts>')
-# #@login_required
-# @project_exists
-# #@project_member
-# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
-#     public = (post_type == 'update')
-#     
-#     posts = ProjectPost.objects( parent_id = None, 
-#                                  project = project_id,
-#                                  public = public )[0:number_posts]
-# 
-#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
-# 
-# 
-# @post_discussion_api.route('/<post_type>/<post_id>')
-# #@login_required
-# @project_exists
-# #@project_member
-# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
-#     public = (post_type == 'update')
-#     
-#     posts = ProjectPost.objects( parent_id = None, 
-#                                  project = project_id,
-#                                  public = public )[0:number_posts]
-# 
-#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
-#         
-# 
-# @post_discussion_api.route('/project/<project_id>/post/<post_type>/create')
-# @login_required
-# @project_exists
-# @project_member
-# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
-#     public = (post_type == 'update')
-#     
-#     posts = ProjectPost.objects( parent_id = None, 
-#                                  project = project_id,
-#                                  public = public )[0:number_posts]
-# 
-#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
-#     
-# 
-# @post_discussion_api.route('/project/<project_id>/post/<post_type>')
-# @post_discussion_api.route('/project/<project_id>/post/<post_type>/<number_posts>')
-# #@login_required
-# @project_exists
-# #@project_member
-# def api_get_project_discussions_fixed(project_id, post_type, number_posts=10):
-#     public = (post_type == 'update')
-#     
-#     posts = ProjectPost.objects( parent_id = None, 
-#                                  project = project_id,
-#                                  public = public )[0:number_posts]
-# 
-#     return jsonify_response( ReturnStructure( data = db_list_to_dict_list(posts) ) )    
-    
 
-@post_api.route('/project/<project_id>/listposts')
+@post_api.route('/project/<project_id>/<post_type>')
 @project_exists
-def api_get_project_posts_fixed(project_id):
-    """
-    ABOUT
-        Given a project id, return a fixed number of posts for that project that 
-        are visible to the user.  Visibility depends on membership
-    METHOD
-        Get
-    INPUT
-        project_id
-    OUTPUT
-        List of posts and all responses to that post
-    PRECONDITIONS
-        User is logged in
-    TODO
-        Add filtering for the user, ie max number of posts, search by string, etc
+def api_get_project_posts(project_id, post_type):
+    """Method to view a list of posts for a given project.
+
+    Given a project id and post type **[discussions, updates, posts]**, returns a list of
+    posts for the project.  **'discussions'** returns only private posts.  **'updates'** returns
+    public posts.  **'posts'** returns both private and public.
+    
+    Args:
+        project_id: the id of the selected project
+        post_type: [discussions, updates, posts] a single selected post type
+        limit: Maxinum number of posts to return
+
+    Returns:
+        Al list of dicts of all requested posts
     """
 
-    # 10 posts
-    if g.user.is_anonymous():
+    limit = int(request.args.get('limit', 500))
+ 
+    if post_type == 'discussions':
+        private_posts = True
+
+    elif post_type == 'updates':
         private_posts = False
-    else:
-        private_posts = _is_project_organizer( project_id, g.user.id )
 
-    posts = _get_posts_for_project( project_id = project_id,
-                                    private_posts = private_posts,
-                                    max_posts = 10 )
+    else:
+        if g.user.is_anonymous():
+            private_posts = False
+        else:
+            private_posts = _is_project_organizer( project_id, g.user.id )
+
+    if private_posts:
+        posts = ProjectPost.objects( project = project_id,
+                                     public = False,
+                                     parent_id = None )[0:limit]
+
+    else:
+        posts = ProjectPost.objects( project = project_id,
+                                     public = True,
+                                     parent_id = None )[0:limit]
+
 
     ret_posts = db_list_to_dict_list( posts )
 
     return jsonify_response( ReturnStructure( data = ret_posts ) )
-
-
-
-@post_api.route('/project/<project_id>/listposts/<number_posts>')
-@project_exists
-def api_get_project_posts(project_id, number_posts):
-    """
-    ABOUT
-        Given a project id, return the posts for that project that are visible to the user.
-        Visibility depends on membership
-    METHOD
-        Get
-    INPUT
-        project_id, number_posts
-    OUTPUT
-        List of posts and all responses to that post
-    PRECONDITIONS
-        User is logged in
-    TODO
-        Add filtering for the user, ie max number of posts, search by string, etc
-    """
-    
-
-    if g.user.is_anonymous() :
-        private_posts = False
-    else:
-        private_posts = _is_project_organizer( project_id, g.user.id )
-
-    posts = _get_posts_for_project( project_id = project_id,
-                                    private_posts = private_posts,
-                                    max_posts = number_posts )
-
-    return jsonify_response( ReturnStructure( data = posts ) )
 
 
 class CreateProjectPostForm(Form):
@@ -205,45 +133,54 @@ class CreateProjectPostForm(Form):
     visibility     = TextField("visibility")
 
 
-@post_api.route('/add_post', methods = ['POST'])
+@post_api.route('/add/<post_type>', methods = ['POST'])
 @login_required
 @project_exists
 @project_member
-def api_add_project_post():
-    """
-    ABOUT
-        Method to add a post to a give project
-    METHOD
-        Post
-    INPUT
-        title - REQUIRED, 
-        description - REQUIRED, 
-        project_id - REQUIRED,
-        social_sharing ['facebook', 'twitter'] - LIST, optional, 
-        
-        visibility 'public' or 'private'.  If not supplied defaults to private or
-          if this is a response_to post, defaults to the response_to post visibility.
-          Also only organizers can amke private posts.
+def api_add_project_post(post_type):
+    """Method for adding posts to a given project
 
-        response_to_id - original post ID,
-    OUTPUT
-        Results
-    PRECONDITIONS
-        User is logged in, user is a member or owner of the project
+    Posts added to projects are either public or private.  Additionally,
+    if the post is a public post, it can be shared on social services such as
+    twitter and facebook.  For the CBU project we support post types of
+    **[post, update, discussion]**.  **updates** are public and **discussions**
+    are private, so they simply provide a means for making our apis more readable.
+    **post** is public or private, but public by default.
+
+
+    Args:
+        post_type: 'posts', 'update', or 'discussion'
+        title: post title
+        description: post description
+        project_id: the id of the project we are adding a post to
+        social_sharing: "['facebook', 'twitter']" - LIST, optional
+        visibility: 'public' or 'private'.  This is overidden if the post_type is 'update' or 'discussion'.  'public' by default.
+        response_to_id: the existing post this is a response to
+
+    Returns:
+        A dict representing the post object if successful.
+
+    Preconditions:
+        Logged in user is an owner/organizer/member of the project.
     """
 
-    form = CreateProjectPostForm()
+    form = CreateProjectPostForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    title          = request.form.get('title')
-    description    = request.form.get('description')
-    social_sharing = request.form.getlist('share_to')
-    project_id     = request.form.get('project_id')
-    response_to_id = request.form.get('response_to_id')
-    visibility     = request.form.get('visibility')
+    title          = form.title.data
+    description    = form.description.data
+    social_sharing = form.social_sharing.data
+    project_id     = form.project_id.data
+    response_to_id = form.response_to_id.data if form.response_to_id.data != '' else None
+    visibility     = form.visibility.data if form.visibility.data != '' else None
+
+    if post_type == 'update':
+        visibility = 'public'
+    elif post_type == 'discussion':
+        visibility = 'private'
 
     return _create_project_post(title = title,
                                 description = description,
@@ -251,7 +188,6 @@ def api_add_project_post():
                                 project_id = project_id,
                                 response_to_id = response_to_id,
                                 visibility = visibility)
-
 
 
 class EditProjectPostForm(Form):
@@ -265,32 +201,34 @@ class EditProjectPostForm(Form):
 @post_exists
 @post_edit_permission
 def api_edit_post():
-    """
-    ABOUT
-        Allow for the editing of an existing post
-    METHOD
-        Post
-    INPUT
-        post_id, title, description
-    OUTPUT
-        Json structure representing the modified post
-    PRECONDITIONS
-        User is logged in, user is the owner of the post or owner of the group
-    TODO
-        Allow updating of related events, images, and most importantly update
-        social posts.
+    """Method for editing a post.
+
+    .. note::
+       Changes will not be propogated to social media.  Ie we will not edit 
+       exisitng social media posts related to this post.
+
+    Args:
+        post_id: the id of the post to be edited
+        title: the new title
+        description: the new description
+
+    Returns:
+        A dict representing the edited project post, if successful.
+
+    Preconditions:
+        The logged in user has edit permission on the post
     """
 
-    form = EditProjectPostForm()
+    form = EditProjectPostForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
 
-    post_id = request.form.get('post_id')
-    description = request.form.get('description')
-    title = request.form.get('title')
+    post_id = form.post_id.data
+    description = form.description.data
+    title = form.title.data
 
     post = ProjectPost.objects.with_id(post_id)
 
@@ -315,16 +253,32 @@ class DeleteProjectPostForm(Form):
 @post_exists
 @post_delete_permission
 def api_delete_post():
+    """Method to delete an existing post.
 
-    form = DeleteProjectPostForm()
+    .. note::
+       Changes will not be propogated to social media.  Ie we will not delete 
+       exisitng social media posts related to this post.
+
+    Args:
+        post_id: the id of the post to be edited
+
+    Returns:
+        True or False depending on success
+
+    Preconditions:
+        User has permission to delete the post
+    """
+
+    form = DeleteProjectPostForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    post_id = requests.form.get('post_id')
+    post_id = form.post_id.data
 
-    post = ProjectPosts.objects.with_id( post_id )
+    post = ProjectPost.objects.with_id( post_id )
+    # Should we mark it as invalid not just delete it?
     post.delete()
 
     infoStr = "User {0} deleted post {1}".format(g.user.id, post_id)
@@ -336,7 +290,10 @@ def api_delete_post():
 @post_api.route('/imageupload', methods = ['POST'])
 @login_required
 def api_upload_image(): 
-    
+    """In progress method for uploading images
+
+    """
+
     if 'photo' not in request.files:
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = "photo not provided" ) )

@@ -19,9 +19,8 @@
   .overlay-text{ 
     position: absolute;
     top: 175px;
-    left: 200px;
-    width: 1015px;
-    height: 225px; 
+    left: 19%;
+    width: 81%;
 
     h1{ 
       display: inline-block;
@@ -30,9 +29,10 @@
       font-weight: normal;
       font-size: 85px;
       line-height: 1.25;
-      padding: 0 15px; 
+      padding-bottom: 8px;
       margin-bottom: 0;
       background-color: rgba(0,0,0,.45); // layer fill content
+      white-space: nowrap;
     }
   }
 
@@ -46,9 +46,9 @@
 
 .homepage-block-info {
   margin-top: 20px; 
-  padding-top: 40px;
+  padding: 55px 0;
   background-color: $secondaryColor;
-  height: 765px;
+  height: auto;
    
   h2 {
     font-size: 60px;
@@ -66,27 +66,35 @@
 }
 
 .homepage-tools-wrapper{
-  width:1018px;
-  margin: 110px auto auto;
+  max-width:1024px;
+  width: 100%;
+  margin: 110px auto 36px;
   color: $white;
 }
 
 .homepage-tools{
   float: left;
   width: 33%;
+  padding-right: 4%;
 
-  h4{ @include font-styling("asap", 22px, $white, "normal", "bold" ); }
+  &:last-child{  margin-right: 0; }
+
+  h4{ 
+    @include font-styling("asap", 22px, $white, "normal", "bold" ); 
+  }
 
   p{
+    margin-top: 15px;
+  line-height: 1.2;
     @include font-styling("asap", 22px, $white);
-    width:95%;
+    //width:95%;
   }
 }
 
 .homepage-tool-icon{
   width: 215px;
   height: 165px;
-  margin:0 auto 32px;
+  margin:0 auto 86px;
   background-repeat: no-repeat;
   background-position: center center;
 }
@@ -127,7 +135,7 @@
 }
 
 .btn {
-  @include font-styling("asap", 22px, $white, "normal", "regular" );
+  @include font-styling("asap", 24px, $white, "normal", "regular" );
   white-space: nowrap; 
 
   &.btn-xlarge{
@@ -141,7 +149,8 @@
 }
 
 .icons-wrapper{
-  width: 675px;
+  width: 100%;
+  max-width: 680px;
   margin: 60px auto 0;
   padding-bottom: 20px;
   @include bebas;

@@ -15,41 +15,32 @@ from .models import Project, ProjectPost, SocialMediaObject
 
 from ..post.activity import update_project_activity
 
+"""
+.. module:: post/helpers
 
-def _get_posts_for_project(project_id = None, 
-                           private_posts = False, 
-                           max_posts = 10):
+    :synopsis: Set of helper functions that handle project posts
 
-    if private_posts:
-        posts = ProjectPost.objects( project = project_id )[0:max_posts]
-    else:
-        posts = ProjectPost.objects( project = project_id,
-                                     public = True )[0:max_posts]
+"""
 
-    return posts
+def _get_project_post_stream(project_id=None, private_data=False):
+    """Gets a list of posts for a given project
 
-
-def _get_project_post_stream(id=None, private_data=False):
+    Args:
+        project_id: the id of the project
+        private_date: boolean dictating whether or not we should return private posts
+    
+    Returns:
+        A list of dicts of posts
     """
-    ABOUT
-        Get a list of all the posts for a given project.  Either include
-        or don't include the private posts
-    METHOD
-        Get
-    INPUT
-        project id, private_data boolean
-    OUTPUT
-        Python Dict list of project posts
-    PRECONDITIONS
-        None
-    """
-    project = Project.objects.with_id(id)
+    project = Project.objects.with_id(project_id)
 
     if private_data:
         # force a created_at sort, especially important for imported data
-        posts = ProjectPost.objects(project=project).order_by('-created_at')
+        posts = ProjectPost.objects(project=project,
+                                    parent_id = None).order_by('-created_at')
     else:
         posts = ProjectPost.objects(project=project,
+                                    parent_id = None,
                                     public=True).order_by('-created_at')
 
     return db_list_to_dict_list(posts)
@@ -65,32 +56,35 @@ def _create_project_post(title = None,
                          response_to_id = None,
                          visibility = None):
 
+    """Creates a project post
 
-    """
-    RULES
-    Only organizers can create updates
-    Members can respond to updates
+    Args:
+        title: title of post
+        description: description of post
+        social_sharing: list with either 'facebook', 'twitter', or both
+        project_id: the id of the project post is appended to
+        response_to_id: the id of the post this is a response to
+        visibility: 'public' or 'private'
 
-    Only organizers can create discussions
-    Only orgnizers can respond to discussions
+    Rules:
+        Only organizers can create updates
+        Members can respond to updates
+        Only organizers can create discussions
+        Only orgnizers can respond to discussions
 
+    Returns:
+        A dict representing the post if successful
     """
 
 
     # a little validation
-    errStr = ''
     if not (visibility is None or visibility.lower() in ['public', 'private']):
-        errStr += "Visibility must be public or private.  "
-    if not (social_sharing is None or social_sharing.lower() in ['facebook', 'twitter']):
-        errStr += "Social Sharing must be blank or facebook / twitter."
-
-    if len(errStr) > 0:
+        errStr = "Visibility must be public or private.  "
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
     project = Project.objects().with_id(project_id)
     user = User.objects.with_id(g.user.id)
-
 
     # verify the user has permission for the post.
     # - we have logic where you need to be an organizer to make a public post,
@@ -101,7 +95,7 @@ def _create_project_post(title = None,
     is_response_post = response_to_id is not None
     is_organizer = _is_project_organizer(project, user.id)
     is_private_post = True if visibility is None else visibility.lower() == 'private'
-    is_social_post = social_sharing is not None
+    is_social_post = 'facebook' in social_sharing or 'twitter' in social_sharing
 
     permission = False
 
@@ -115,7 +109,7 @@ def _create_project_post(title = None,
         permission = False
 
     if not permission:
-        errMsg = "User does not have permission for this type of post."
+        errStr = "User does not have permission for this type of post."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
@@ -154,11 +148,12 @@ def _create_project_post(title = None,
         if pp.is_new():
             pp.save()
 
+        # TODO convert this to slug
         project_url = url_for('project_view.project_view_id', id=id, _external=True)
 
         # do social posts as necessary
         fb_post = None
-        if 'facebook' in social_sharing.lower():
+        if 'facebook' in social_sharing:
 
             # socialMediaObject is an optional embedded field
             if pp.social_object == None:
@@ -173,7 +168,7 @@ def _create_project_post(title = None,
 
 
         twitter_tweet = None
-        if 'twitter' in social_sharing.lower():
+        if 'twitter' in social_sharing:
 
             # socialMediaObject is an optional embedded field
             if pp.social_object == None:

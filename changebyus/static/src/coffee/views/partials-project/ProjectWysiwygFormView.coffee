@@ -60,22 +60,26 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo "#alerts"
 				 
 				$editor = $(@editorID)
-				console.log '$editor',$editor,@editorID
+				@$updateForm = @$el.find("form")
 				options =
-					beforeSubmit: (arr_, form_, options_) =>
-						@beforeSubmit(arr_, form_, options_)
-						for i of arr_
-							console.log "obj.name", arr_[i].name, arr_[i],$editor
-							if arr_[i].name is "description"
-								arr_[i].value = escape($editor.html())
-								console.log 'des',arr_[i].value
+					type: @$updateForm.attr('method')
+					url: @$updateForm.attr('action')
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+
 					success: (response_) =>
 						@success(response_)
 						console.log response_
-				@$updateForm = @$el.find("form")
-				@$updateForm.ajaxForm options 
 
-				console.log "$updateForm",@$updateForm
+				
+				@$updateForm.submit => 
+					obj = @$updateForm.serializeJSON()
+					obj.description = escape($editor.html())
+					#unless obj.response_to_id then obj.response_to_id = "0"
+					json_str = JSON.stringify(obj)
+					options.data = json_str
+					$.ajax options
+					false
 
 				$("a[title]").tooltip container: "body"
 

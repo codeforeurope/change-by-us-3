@@ -5,7 +5,7 @@ from .models import Project, Roles, UserProjectLink, ACTIVE_ROLES
 from ..helpers.flasktools import *
 from .helpers import _get_user_roles_for_project
 
-from flask import g, request, current_app
+from flask import g, request, current_app, abort
 
 # TODO add site owner
 
@@ -43,37 +43,23 @@ def _check_for_roles(project, user_id, roles_list):
 def project_exists(f):
    @wraps(f)
    def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
-        project_slug = request.form.get('project_slug') or request.view_args.get('project_slug')
+        if(request.json):
+            project_id = request.json.get('project_id')
+            project_slug = request.json.get('project_slug')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
+            project_slug = request.form.get('project_slug') or request.view_args.get('project_slug')
 
-        errStr = ''
         if project_id is None and project_slug is None:
-            errStr = "project_id and project_slug can not be blank."
-            return jsonify_response( ReturnStructure( success = False,
-                                                      msg = errStr ))
+            abort(400)
    
-        try:
-            if project_id:
-                project = Project.objects.with_id(project_id)
+        if project_id:
+            project = Project.objects(id=project_id, active=True)
+        else:
+            project = Project.objects(slug=project_slug, active=True)
 
-            else:
-                project = Project.objects(slug = project_slug)
-
-            if project is None or len(project) == 0:
-                errStr = "Project {0}, {1} does not exist.".format(project_id,
-                                                                   project_slug)
-                return jsonify_response( ReturnStructure( success = False,
-                                                          msg = errStr ))
-        
-        except Exception as e:
-            infoStr = "Exception looking up project of id {0} or slug {1}".format(project_id,
-                                                                                  project_slug)
-            current_app.logger.info(infoStr)
-            
-            errStr = "Project id {0} slug {1} does not exist.".format(project_id, project_slug)
-            return jsonify_response( ReturnStructure( success = False,
-                                                      msg = errStr ))
-
+        if project is None or len(project) == 0:
+            abort(404)
 
         return f(*args, **kwargs)
 
@@ -83,7 +69,10 @@ def project_exists(f):
 def project_member(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        if(request.json):
+            project_id = request.json.get('project_id')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         if _is_member(project_id, g.user.id):
             return f(*args, **kwargs)
@@ -97,7 +86,10 @@ def project_member(f):
 def project_ownership(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        if(request.json):
+            project_id = request.json.get('project_id')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         project = Project.objects.with_id(project_id)
         if _is_owner(project, g.user.id):
@@ -113,7 +105,10 @@ def project_ownership(f):
 def project_organizer(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        project_id = request.form.get('project_id') or request.view_args.get('project_id')
+        if(request.json):
+            project_id = request.json.get('project_id')
+        else:
+            project_id = request.form.get('project_id') or request.view_args.get('project_id')
 
         project = Project.objects.with_id(project_id)
 

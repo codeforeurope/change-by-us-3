@@ -1,10 +1,13 @@
 @import "mixins-and-functions";
 @import "variables";
 
+p{line-height: 1.7;}
+
 h4{
 	@include bebas;
 	font-size: 18px;
 	font-weight: normal;
 	line-height: 20px;
-	color: #333333;
+	color: $gray53;
+	margin-bottom: -8px;
 }

@@ -2,9 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
   var CBUMainView;
   return CBUMainView = AbstractView.extend({
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();
       this.resourceCollection = options.resourceCollection || new ResourceListCollection();
       return this.render();
@@ -28,20 +26,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
         reset: true
       });
       this.resourceCollection.on("reset", this.addAllResources, this);
-      this.resourceCollection.fetch({
+      return this.resourceCollection.fetch({
         reset: true
-      });
-      return this.ajaxForm();
-    },
-    ajaxForm: function() {
-      var $signin, $signup;
-      $signup = $("form[name=signup]");
-      $signup.ajaxForm(function(response) {
-        return console.log(response);
-      });
-      $signin = $("form[name=signin]");
-      return $signin.ajaxForm(function(response) {
-        return console.log(response);
       });
     },
     addAll: function() {

@@ -4,24 +4,30 @@
              <div class="side-tab">Resource</div>
         <% } %>
     <% } %>
-    <% if(data.isProject){ %>
-        <% if(data.isOwned){ %>
-                <div class="hover-overlay">
-                   <a href="/project/<%= data.id %>/admin" class="btn btn-primary">Manage</a>
-                </div>
-        <% } %>
-        <% if(data.isFollowed){ %>
-                <div class="hover-overlay">
-                   <a href="/project/<%= data.id %>" class="btn btn-primary">View</a>
-                   <div class="close-x"></div>
-                </div>
-        <% } %>
-    <% } %>
-
-    <div class="project-icon">
-        <a href="/project/<%= data.id %>"> <img src="<%= data.image_url_small_square %>" alt="Project Icon"> </a>
+     
+    <div class="project-dashboard-image">
+        <img src="<%= data.image_url_small_square %>" alt="Project Icon">
     </div> 
     <div class="project-name"><%= data.name %></div>
     <div class="project-description"><%= data.description %></div>
     <div class="project-category"><a href="/discover"><%= data.category %></a> </div>
+    
+    <% if(data.isProject){ %>
+        <div class="hover-overlay"></div>
+        <div class="hover-btn">
+            <% if(data.isOwned){ %> 
+                <a href="/project/<%= data.id %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
+            <% } %>
+            <% if(data.isFollowed){ %> 
+                <a href="/project/<%= data.id %>" class="btn btn-medium btn-primary btn-3d">View</a>
+                <div class="close-x"></div>
+            <% } %>
+        </div> 
+    <% }else{ %>
+        <a href="/project/<%= data.id %>">
+            <div class="hover-overlay"></div>
+        </a>
+    <% } %>
+
+    
 </div>

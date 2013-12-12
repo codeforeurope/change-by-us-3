@@ -47,14 +47,14 @@ define ["underscore",
 			onSuccess:-> 
 				@$ul.html('')
 				@$form.html('')
-
+				console.log 'onSuccess',@model
 				@addDiscussion @model
-				for response in @model.attributes.responses
+				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@projectWysiwygFormView = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.attributes.id, slim:true, userAvatar:userAvatar})
+				@projectWysiwygFormView = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
 				@projectWysiwygFormView.success = ->
 					window.location.reload()
 

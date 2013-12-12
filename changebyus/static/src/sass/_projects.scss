@@ -32,26 +32,23 @@
 .projects {
   padding: none;
   margin: none;
-}
-
-.project-preview:nth-child(3n+3){
-  .project-square {margin-right: 0;}
+  
+  h4{margin-bottom:10px;}
 }
 
 .project-square {
-  @include box-skin;
-  padding: 10px;
-  height: 525px;
-  width: 328px;
+  @include box-skin; 
+  padding: 10px 10px 50px;
+  min-height: 400px;
   float: left;
-  margin-right: 16px;
-  margin-bottom: 16px;
+  margin: auto auto 22px;
 
-  &:hover{
+  &:hover{ 
     .hover-overlay{ 
-      display: block;
+      visibility: visible;
       @include opacity(1);
     }
+    .hover-btn{ @include opacity(1); }
   }
 
   .side-tab{
@@ -66,33 +63,45 @@
     @include border-bottom-right-radius(4px);
   }
 
-  .hover-overlay{
-    text-align: center; 
-    background-color: rgba(255,255,255,0.5);
-    width:100%;
-    height: 100%;
-    position: absolute; 
-    top:0;
-    left: 0;
-    z-index: 2;
+  .hover-btn, .hover-overlay{
+    position: absolute;
     @include opacity(0);
     @include transition-property(opacity);
+  }
+
+  .hover-btn{
+    text-align: center;
+    width: 100%;
+    top: 0;
+    left: 0;
+    @include transition-duration(.3s);
+  }
+
+  .hover-overlay{ 
+    background-color: rgba(255,255,255,0.5);
+    width: 100%;
+    height: 100%;
+    top:0;
+    left: 0; 
     @include transition-duration(.1s);
   }
 
-  .btn{ 
-    padding: 15px 20px;
-    margin-top:150px; 
+  .btn, .btn-3d:hover{ 
+    margin-top: 150px;
+    font-size: 18px;
   }
 }
 
-.user-info {
-    width: 600px; 
-    border: 1px solid #000;
-}
-
-.project-icon {
-  img{width: 100%; } 
+.project-dashboard-image {
+  text-align: center;
+  width: 100%;
+  img{ 
+    width: 100%; 
+    height: auto;
+    //position: absolute;
+    //top: 0;
+    //left: 0;
+  } 
 }
 
 .project-name {
@@ -150,16 +159,31 @@
     @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
   }
 
-  .circle{ background: $defaultGray;}
+  .circle{ 
+    background: $defaultGray;
+
+    &:before{
+      content: "";
+      display: block;
+      padding-top: 100%;
+    }
+    
+    .content{
+      position:  absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+  }
 
   .preview{
     position: absolute;
     top:70px;
-    left: 30px;
-    width: 249px;
-    height: 249px;
+    left: percentage(30px/1018px);
+    width: percentage(249px/1018px);
     border: 4px solid #fff;  
-    @include background-clip(padding-box);  
+    @include background-clip(padding-box);
   }
 
   .project-location{
@@ -170,14 +194,14 @@
 
   .project-footer{
     position: absolute;
-    left: 310px;
+    left: percentage(310px/1018px); 
     top: 257px;
-    width: 620px;
+    width: percentage(620px/1018px);
   }
 
   .overlay-title {
-    left: 310px;
-    width: 100%;
+    left: percentage(310px/1018px); 
+    width: percentage(708px/1018px); 
     top: 100px;
     padding: 0;
     margin: 0;
@@ -187,11 +211,11 @@
   .overlay-description {
     position: absolute; 
     top: 160px; 
-    left: 310px;
-    width: 650px;
+    left: percentage(310px/1018px); 
+    width: percentage(650px/1018px); 
     line-height: 24px;
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
     @include font-styling("merriweather", 18px, $white );
+    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
   }
 
   &.slim{ 
@@ -264,17 +288,20 @@ h2.admin-title{
 
 .user-avatar{
   float: left;
-  width: 70px;
-  margin-right: 20px;
+  min-width: 70px;
+  width: percentage(70px/1018px);
+  margin-right: percentage(20px/1018px);
+
+  // img{max-width: none;}
 }
 
 .update-content{
-  float: right;
-  width: 880px;
+  float: left;
+  width: 85%;
 
   input[type=button]{background-color: $graySupport;}
   input[type=submit]{
-    background-color: $secondaryColor;
+    //background-color: $secondaryColor;
     margin-left: 16px;
   }
     
@@ -286,10 +313,16 @@ h2.admin-title{
 
 .post-title, .reply-title{
   color: $gray20;
+  margin-bottom: 10px;
+  font-weight: bold;
 }
+ 
 
 .post-content, .reply-content{
   @include font-styling("merriweather", 14px, $gray20);
+  p{
+    @include font-styling("merriweather", 14px, $gray20);
+  }
 }
 
 .post-footer, .reply-date{ 
@@ -312,34 +345,43 @@ h2.admin-title{
 
 .post-reply-form{
   .input-xxlarge{
-    height: 32px;
-    width: 568px;
+    height: 41px; 
+    width: 80%; 
+  }
+  input[type=submit] {
+    margin-left: 3%;
+    width: 17%;
+    padding: 10px 0;
   }
 }
 
 .reply-right{
   margin-top: 12px;
-  width: 686px;
+  width: 85%;
 }
 
 .project-member{
   .mail-icon{ 
     float: left; 
-    width: 60px;
-  
-    img{ margin-top: 20px; }
+    width: percentage(60px/1018px);
+
+    img{ 
+      max-width: none;
+      min-width: 20px;
+      margin-top: 20px; 
+    }
   }
   
   .member-title{  
     float: left;  
     margin-top: 15px; 
-    width: 175px;
+    width: percentage(175px/1018px);
     padding-right: 15px;
   }
   
   .member-description{ 
     float: left;  
-    width: 505px;
+    width: percentage(505px/1018px);
     height: 80px;
     display: table;
 
@@ -352,19 +394,25 @@ h2.admin-title{
   .member-roles{ 
     float: left;
     margin-top: 25px;
-    width: 120px; 
+    width: percentage(120px/1018px);
   }
-  .aka{ @include font-styling("asap", 15px, $gray80, "italic"); }
-  .grey{ @include font-styling("asap", 15px, $gray80); }
+  .aka{ @include font-styling("asap", 15px, $gray53); }
+  .grey{ @include font-styling("asap", 15px, $gray53); }
+}
+
+
+.project-member{
+  .member-description{ 
+    width: percentage(475px/1018px); 
+    padding-right: 15px;
+  }
+  .dk_container{width: 100%;}
+ 
+  select{width: 100%;}
 }
 
 .admin{
-  .project-member{
-    .member-description{ width: 475px; }
-    .dk_container{width: 100%;}
-   
-    select{width: 100%;}
-  }
+  .alert{margin-top: 20px;}
 }
 
 /******************************
@@ -419,6 +467,7 @@ h2.admin-title{
 
   .description{
     float: left;
+    width: 670px;
     
     h5{
       margin-bottom: 0;
@@ -426,7 +475,11 @@ h2.admin-title{
     }
     
     span{
+      @include ellipsis;
       @include font-styling("merriweather", 14px, $gray20);
+      >*{
+        @include ellipsis;
+      }
     }
   }
   
@@ -449,9 +502,6 @@ h2.admin-title{
 }
 
 .fundraising-left{
-  float: left;
-  width: 66%;
-   
   span{
     font-weight: bold;
     color:$primaryColor;
@@ -466,22 +516,6 @@ h2.admin-title{
   text-align: center;
 }
 
-.project-update-form{
-  padding: 30px;
-  @include box-skin;
-  .btn-medium{
-    float: right;
-  }
-}
-
-
-.body-container { position: relative; }
-
-.btn-large{
-  font-weight: bold;
-  padding: 20px 22px;
-}
-
 .tabs-pane, .owner-tabs-pane{
   position: absolute;
   bottom: 0;
@@ -494,8 +528,8 @@ h2.admin-title{
     height: 100%;
     display: inline-block;
     list-style-type: none;
-    padding: 0 10px;
-    margin: 0 18px; 
+    padding: 0 1%; 
+    margin: 0 1%; 
   }  
   a{
     line-height: 58px;
@@ -506,6 +540,10 @@ h2.admin-title{
 
 .owner-tabs-pane{
   li.active{background-color: rgba(0,0,0,.75);}
+  
+  .view-project{
+    display: none;
+  }
 }
 
 .tabs-pane{
@@ -534,6 +572,8 @@ h2.admin-title{
     margin-left: 15px;
     &:first-child{ margin-left: 0;}
   }
+
+  h4{margin-bottom:10px;}
 }
 .member-avatar{
   width: 70px;  
@@ -565,7 +605,7 @@ h2.admin-title{
   top:58px;
   @include opacity(0);
   @include box-skin;
-  @include transition-property(opacity, top);
+  @include transition-property(all);
   @include transition-duration(.1s);
 }
 
@@ -605,6 +645,50 @@ h2.admin-title{
   line-height: 40px;
   background-repeat: no-repeat;
   background-position: left center;
+}
+
+.project-name-corner{
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  display: inline-block;
+  width: auto;
+  padding: 8px;
+  @include box-border;
+  @include border-bottom-left-radius(4px);
+  color: $gray53;
+  font-size: 14px;
+}
+
+.stream-wrapper{
+  .content-wrapper{overflow: hidden;}
+}
+
+.create-project{
+  h1{
+    font-size: 52px;
+    font-weight: normal;
+  }
+}
+
+.form-project{
+  p{
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .dk_toggle{
+    padding: 16px;
+  }
+  .dk_label{
+    font-size: 18px;
+    font-weight: normal;
+  }
+  .dk_options a{
+    font-size: 18px;
+    font-weight: normal;
+    padding: 16px;
+  }
 }
 
 input[type="text"].input-slim{

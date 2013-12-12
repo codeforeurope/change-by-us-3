@@ -1,17 +1,20 @@
 <div class="body-container">
-    <form method="post" enctype=multipart/form-data class="form-project" name="createproject" action="/api/project/create">
+    <form method="post" enctype="multipart/form-data" class="form-project" name="createproject" action="/api/project/create">
 
         <h1>Create a Project</h1>
-        <span>
+        <p>
             It's quick and easy, and you'll be up and running in no time.
             <br>
             <a href="">
                 <span class="highlight">Learn more</span>
-            </a>about creating a project, or
+            </a>
+            about creating a project, or
             <a href="">
                 <span class="highlight">join up with other projects</span>
             </a>that might be similar to yours.
-        </span>
+        </p>
+
+        <div id="feedback" class="alert alert-error hide"></div> 
 
         <div class="content-wrapper create clearfix">
 
@@ -46,16 +49,16 @@
                         <label>Project Thumbnail</label>
                         <div class="fileupload fileupload-new" data-provides="fileupload">
                             <div>
-                                <span class="btn btn-file btn-primary"> 
+                                <span class="btn btn-file btn-medium btn-primary"> 
                                     <span class="fileupload-exists">Edit Thumbnail</span>
                                     <span class="fileupload-new">Upload</span>
                                     <input id="project_image" name="photo" type="file">
                                 </span>  
                             </div> 
                             <div class="fileupload-preview thumbnail circle"></div> 
-                            <a class="btn btn-file btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                            <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
                         </div>
-                        <span>Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+                        <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
                     </div>
                 </div>
             </div>

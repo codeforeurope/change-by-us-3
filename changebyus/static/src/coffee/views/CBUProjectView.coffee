@@ -32,6 +32,7 @@ define ["underscore",
 			updatesBTN: null
 			membersBTN: null
 			calendarBTN: null
+			memberData: null
 			$header:null
 
 			initialize: (options) ->
@@ -54,23 +55,25 @@ define ["underscore",
 			onTemplateLoad:->
 				# determine if user is a member of the project
 				# if not, display the join button
-				id = @model.get("id")
-				$.ajax(
-					type: "GET"
-					url: "/api/project/am_i_a_member/"+id
-				).done (response)=> 
-					try 
-						if response.data.member
-							@isMember=true 
+				
+				@viewData = @model.attributes
 
-					catch e then console.log e
-
-					@viewData = @model.attributes
-					@viewData.isMember = @isMember
-
+				if window.userID is ""
+					@isMember = false
 					@addSubViews()
+				else
+					id = @model.get("id")
+					$.ajax(
+						type: "GET"
+						url: "/api/project/#{id}/user/#{window.userID}"
+					).done (response)=>  
+						if response.success
+							@memberData = response.data
+							@isMember = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+							@viewData.isMember = @isMember
+							@addSubViews()
 
-			addSubViews: ->  
+			addSubViews: ->   
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
 					{data:@viewData}, => @onHeaderLoaded()
@@ -79,20 +82,16 @@ define ["underscore",
 				id = @model.get("id")
 				config = {id:id}
 
-				if @isMember is false then @$header.find('.invisible').removeClass('invisible')
-
-				console.log '@$header',@$header,@isMember
 				@$el.prepend @$header
 				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
 
-			onCollectionLoad:-> 
-				console.log "onCollectionLoad"
-				@projectUpdatesView   = new ProjectUpdatesView({collection: @projectUpdatesCollection, members: @projectMembersCollection, isMember:@isMember})
-				@projectMembersView   = new ProjectMembersView({collection: @projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-				@projectCalenderView  = new ProjectCalenderView({model: @model, isMember:@isMember, isOwner:@isOwner})
+			onCollectionLoad:->  
+				@projectUpdatesView   = new ProjectUpdatesView({collection:@projectUpdatesCollection, members:@projectMembersCollection, isMember:@isMember})
+				@projectMembersView   = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
+				@projectCalenderView  = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
 				
 				@updatesBTN  = $("a[href='#updates']").parent()
 				@membersBTN  = $("a[href='#members']").parent()
@@ -123,16 +122,20 @@ define ["underscore",
 
 				$join  = $(".project-footer .btn")
 				$join.click (e) =>
-					e.preventDefault()
-					if @isMember then return
-					$.ajax(
-						type: "POST"
-						url: "/api/project/join"
-						data: { project_id:id }
-					).done (response)=>
-						if response.msg.toLowerCase() is "ok"
-							@isMember = true
-							$join.html('Joined!').css('background-color','#e6e6e6')
+					if window.userID is ""
+						window.location = "/login"
+					else
+						e.preventDefault()
+						if @isMember then return
+						$.ajax(
+							type: "POST"
+							url: "/api/project/join"
+							data: {project_id:id}
+						).done (response)=>
+							#if response.msg.toLowerCase() is "ok"
+							if response.success
+								@isMember = true
+								$join.html('Joined!').css('background-color','#e6e6e6')
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

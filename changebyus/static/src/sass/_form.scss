@@ -7,6 +7,8 @@
 	
 	label{ margin-top: 30px; }
 	>label:first-child{margin-top: 0;}
+
+	.input-xxlarge{width: 85%;}
 }
 
 .form-right {
@@ -16,6 +18,7 @@
 
 .form-footer{
 	margin-bottom: 48px;
+	.pull-right{ font-size: 14px; }
 }
 
 .tt-dropdown-menu {
@@ -45,7 +48,7 @@
 
 .sub-text{color: $graySubtext;} 
 
-.profile-image,.project-image{
+.profile-image, .project-image{
 	margin-bottom: 30px;
 	width: 240px;
 }
@@ -56,15 +59,35 @@
 
 .public-email{
 	*{float: left;}
-	span{ margin-left: 10px; } 
+	span{ 
+		margin-left: 10px;
+		width: 90%;
+	} 
+}
+
+.notify-row, .password-title{
+	width: 85%;
+	label{
+		margin-top: 0; 
+		float: left;
+	}
+}
+
+.notify-wrapper{
+	margin-top: 30px; 
 }
 
 .password-title{
-	width: 490px;
 	margin-top: 30px; 
 	text-align: right;
+}
 
-	label{float: left;}
+.notify-row{
+	div{
+		float: left;
+		width: 10%; 
+		&:first-child{width: 80%;}
+	}
 }
 
 .public-visibility{
@@ -77,8 +100,22 @@
 	span{line-height: 1.5;}
 }
 
+.warning{
+	color: red;
+	text-decoration: underline;
+	&:hover{
+		text-decoration: underline;
+	}
+}
+
+.twitter-typeahead{width: 100%;}
+
 select[name=category]{
-	width: 480px;
+	width: 85%;
+}
+
+textarea{
+	box-sizing: border-box;
 }
 
 label[for=website]{

@@ -12,7 +12,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@render()
 
 			render: -> 
-				@$el = $("<div class='banner-search'/>")
+				@$el = $(".banner-search")
 				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
 					data: @viewData, => 
 						@sendForm()

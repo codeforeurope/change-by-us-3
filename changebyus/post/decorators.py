@@ -2,38 +2,56 @@
 
 from functools import wraps
 from .models import ProjectPost
+from ..project.models import Project
 from ..project.decorators import _is_owner, _is_organizer, _is_member
 
 from ..helpers.flasktools import *
 from flask import g, request, current_app
 
+"""
+.. module:: post/decorators
+
+    :synopsis: Set of decorators that help with post requests
+
+"""
+
 def post_delete_permission(f):
+    """Decorator that checks for user permission to delete a post
+
+    Args: 
+        post_id
+    Returns:
+        Method or error code
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
 
         # TODO see if user is site admin
-
-        post_id = request.form.get('post_id') or request.view_args.get('post_id')
+        if(request.json):
+            post_id = request.json.get('post_id')
+        else:
+            post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:
             errStr = "post_id can not be blank."
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
-   
         try:
             post = ProjectPost.objects.with_id(post_id)
-            project = Project.objects.with_id(post.project)
+            project = post.project
 
             if post is None:
-                errStr = "post {0} does not exist.".format(project_id)
+                errStr = "post {0} does not exist.".format(post_id)
                 return jsonify_response( ReturnStructure( success = False,
                                                           msg = errStr ))
         
         except Exception as e:
-            infoStr = "Exception looking up post of id {0}".format(project_id)
+            infoStr = "Exception looking up post of id {0}".format(post_id)
             current_app.logger.info(infoStr)
-            errStr = "post {0} does not exist.".format(project_id)
+            current_app.logger.exception(e)
+            errStr = "post {0} does not exist.".format(post_id)
+            current_app.logger.exception(e)
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
 
@@ -55,12 +73,22 @@ def post_delete_permission(f):
 
 
 def post_edit_permission(f):
+    """Decorator that checks for user permission to edit a post
+
+    Args: 
+        post_id
+    Returns:
+        Method or error code
+    """
     @wraps(f)
     def decorated_function(*args, **kwargs):
 
         # TODO see if user is site admin
 
-        post_id = request.form.get('post_id') or request.view_args.get('post_id')
+        if(request.json):
+            post_id = request.json.get('post_id')
+        else:
+            post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:
@@ -70,7 +98,7 @@ def post_edit_permission(f):
    
         try:
             post = ProjectPost.objects.with_id(post_id)
-            project = Project.objects.with_id(post.project)
+            project = post.project
 
             if post is None:
                 errStr = "post {0} does not exist.".format(project_id)
@@ -101,16 +129,27 @@ def post_edit_permission(f):
 
 
 def post_exists(f):
-   @wraps(f)
-   def decorated_function(*args, **kwargs):
-        post_id = request.form.get('post_id') or request.view_args.get('post_id')
+    """Decorator that checks to ensure a post exists
+
+    Args: 
+        post_id
+    Returns:
+        Method or error code
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        
+        if(request.json):
+            post_id = request.json.get('post_id')
+        else:
+            post_id = request.form.get('post_id') or request.view_args.get('post_id')
 
         errStr = ''
         if post_id is None:
             errStr = "post_id can not be blank."
             return jsonify_response( ReturnStructure( success = False,
                                                       msg = errStr ))
-   
+
         try:
             post = ProjectPost.objects.with_id(post_id)
             if post is None:
@@ -129,7 +168,7 @@ def post_exists(f):
 
         return f(*args, **kwargs)
 
-   return decorated_function
+    return decorated_function
 
 
 

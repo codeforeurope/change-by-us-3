@@ -16,14 +16,20 @@ define ["underscore",
 			parent: "#project-discussions"
 			$ul:null
 			currentData:""
-
+ 
 			render: ->  
 				@$el = $(@parent)
 				@templateLoaded = true
+				console.log 'ProjectDiscussionsView',@
 
-			addAll: ->
-				console.log 'ProjectDiscussionsView addAll',@collection
+			onCollectionLoad:-> 
+				ProjectSubView::onCollectionLoad.call(@)
+
+				@collection.on 'remove', (obj_)=> 
+					@addAll()
+					@deleteDiscussion(obj_.id)
 				
+			addAll: ->
 				if @collection.models.length is 0
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
 						{}, => onPageElementsLoad()
@@ -37,7 +43,7 @@ define ["underscore",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
-							m = moment(model_.attributes.updated_at).format("MMMM D")
+							m = moment(model_.get("updated_at")).format("MMMM D")
 							@newDay(m)
 
 						@isDataLoaded = true
@@ -45,31 +51,36 @@ define ["underscore",
 						ProjectSubView::addAll.call(@) 
 
 			newDay:(date_)->
-				@currentData = date_
+				@currentDate = date_
 				@$currentDay = @$day.clone()
 				@$el.append @$currentDay
 				@$currentDay.find('h4').html(date_)
 				@$ul = @$currentDay.find('.bordered-item') 
 
 			addOne:(model_)->
-				m = moment(model_.attributes.updated_at).format("MMMM D")
-				if @currentData isnt m then @newDay(m)
+				m = moment(model_.get("updated_at")).format("MMMM D")
+				if @currentDate isnt m then @newDay(m)
 
 				config = {model:model_}
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
 				projectDiscussionListItemView.on 'click', =>
 					@trigger 'discussionClick', config
-				projectDiscussionListItemView.on 'delete', => 
-					@deleteDiscussion config.model.attributes.id
+
 				@$ul.append projectDiscussionListItemView.$el
 
 				onPageElementsLoad()
 
 
 			deleteDiscussion:(id_)->
+				$feedback = $("#discussions-feedback")
 				$.ajax(
 					type: "POST"
 					url: "/api/post/delete"
 					data: { post_id:id_ }
-				).done (response)=> 
-					console.log 'deleteDiscussion',response
+				).done (res_)=> 
+					if res_.success
+						$feedback.hide()
+					else
+						$feedback.show().html(res_.msg)
+
+					console.log 'deleteDiscussion',res_

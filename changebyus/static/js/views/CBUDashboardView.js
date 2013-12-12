@@ -6,11 +6,10 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       lat: 0,
       lon: 0
     },
+    className: "body-container",
     initialize: function(options) {
       var _this = this;
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       this.userModel = new UserModel({
         id: this.model.id
       });
@@ -22,7 +21,6 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     render: function() {
       var _this = this;
-      console.log('@userModel', this.userModel);
       this.$el.template(this.templateDir + "/templates/dashboard.html", {
         data: this.userModel.attributes
       }, function() {
@@ -47,11 +45,10 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       $("a[href^='#']").click(function(e) {
         return window.location.hash = $(this).attr("href").substring(1);
       });
-      profileEditView = new ProfileEditView({
+      return profileEditView = new ProfileEditView({
         model: this.userModel,
         parent: this.profileView
       });
-      return console.log('@model', this.model);
     },
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
@@ -79,29 +76,38 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       }
     },
     loadProjects: function() {
-      this.joinedProjects = new ProjectListCollection({
-        url: "/api/project/user/" + this.model.id + "/joinedprojects"
-      });
+      this.joinedProjects = new ProjectListCollection();
+      this.joinedProjects.url = "/api/project/user/" + this.model.id + "/joined-projects";
       this.joinedProjects.on("reset", this.addJoined, this);
+      this.joinedProjects.on("remove", this.updateCount, this);
+      this.joinedProjects.on("change", this.updateCount, this);
       this.joinedProjects.fetch({
         reset: true
       });
-      this.ownedProjects = new ProjectListCollection({
-        url: "/api/project/user/" + this.model.id + "/ownedprojects"
-      });
+      this.ownedProjects = new ProjectListCollection();
+      this.ownedProjects.url = "/api/project/user/" + this.model.id + "/owned-projects";
       this.ownedProjects.on("reset", this.addOwned, this);
-      return this.ownedProjects.fetch({
+      this.ownedProjects.on("remove", this.updateCount, this);
+      this.ownedProjects.on("change", this.updateCount, this);
+      this.ownedProjects.fetch({
         reset: true
       });
+      return console.log('@joinedProjects', this.joinedProjects, '@ownedProjects', this.ownedProjects);
+    },
+    updateCount: function() {
+      $('a[href=#follow]').html("Follow (" + this.joinedProjects.length + ")");
+      return $('a[href=#manage]').html("Manage (" + this.ownedProjects.length + ")");
     },
     addJoined: function() {
       var _this = this;
+      this.updateCount();
       return this.joinedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.followView.find("ul"), false, true);
       });
     },
     addOwned: function() {
       var _this = this;
+      this.updateCount();
       return this.ownedProjects.each(function(projectModel) {
         return _this.addOne(projectModel, _this.manageView.find("ul"), true, false);
       });
@@ -121,7 +127,11 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         isProject: true,
         isResource: false
       });
-      return this.$el.find(parent_).append(view.$el);
+      this.$el.find(parent_).append(view.$el);
+      return delay(100, function() {
+        buttonize3D();
+        return positionFooter();
+      });
     }
   });
 });

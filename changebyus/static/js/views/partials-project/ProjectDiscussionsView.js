@@ -6,11 +6,19 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     currentData: "",
     render: function() {
       this.$el = $(this.parent);
-      return this.templateLoaded = true;
+      this.templateLoaded = true;
+      return console.log('ProjectDiscussionsView', this);
+    },
+    onCollectionLoad: function() {
+      var _this = this;
+      ProjectSubView.prototype.onCollectionLoad.call(this);
+      return this.collection.on('remove', function(obj_) {
+        _this.addAll();
+        return _this.deleteDiscussion(obj_.id);
+      });
     },
     addAll: function() {
       var _this = this;
-      console.log('ProjectDiscussionsView addAll', this.collection);
       if (this.collection.models.length === 0) {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {
           return onPageElementsLoad();
@@ -28,7 +36,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.attributes.updated_at).format("MMMM D");
+          m = moment(model_.get("updated_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -36,7 +44,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     newDay: function(date_) {
-      this.currentData = date_;
+      this.currentDate = date_;
       this.$currentDay = this.$day.clone();
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
@@ -45,8 +53,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addOne: function(model_) {
       var config, m, projectDiscussionListItemView,
         _this = this;
-      m = moment(model_.attributes.updated_at).format("MMMM D");
-      if (this.currentData !== m) {
+      m = moment(model_.get("updated_at")).format("MMMM D");
+      if (this.currentDate !== m) {
         this.newDay(m);
       }
       config = {
@@ -56,22 +64,26 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       projectDiscussionListItemView.on('click', function() {
         return _this.trigger('discussionClick', config);
       });
-      projectDiscussionListItemView.on('delete', function() {
-        return _this.deleteDiscussion(config.model.attributes.id);
-      });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();
     },
     deleteDiscussion: function(id_) {
-      var _this = this;
+      var $feedback,
+        _this = this;
+      $feedback = $("#discussions-feedback");
       return $.ajax({
         type: "POST",
         url: "/api/post/delete",
         data: {
           post_id: id_
         }
-      }).done(function(response) {
-        return console.log('deleteDiscussion', response);
+      }).done(function(res_) {
+        if (res_.success) {
+          $feedback.hide();
+        } else {
+          $feedback.show().html(res_.msg);
+        }
+        return console.log('deleteDiscussion', res_);
       });
     }
   });

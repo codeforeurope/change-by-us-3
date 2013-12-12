@@ -19,21 +19,15 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				if (@model.id is window.userID) then $('.edit').removeClass('invisible')
-				@ajaxForm()
+				if (@model.id is window.userID) then $('.edit').removeClass('invisible') 
 				@loadProjects()
 
-			ajaxForm: ->
-				$signin = $("form[name=signin]")
-				$signin.ajaxForm (response) ->
-					console.log response
-
 			loadProjects:->
-				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joinedprojects"})
+				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joined-projects"})
 				@joinedProjects.on "reset", @addJoined, @
 				@joinedProjects.fetch reset: true
 
-				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/ownedprojects"})
+				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/owned-projects"})
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
 				

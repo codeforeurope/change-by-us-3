@@ -13,6 +13,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.isFollowed = options.isFollowed || this.isFollowed;
       return this.render();
     },
+    events: {
+      "click .close-x": "close"
+    },
     render: function() {
       var viewData,
         _this = this;
@@ -24,10 +27,32 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.$el = $("<li class='project-preview'/>");
       return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
         data: viewData
-      }, function() {});
+      }, function() {
+        return _this.onTemplateLoad();
+      });
     },
     onFetch: function(r) {
       return $(this.parent).append(this.render());
+    },
+    close: function() {
+      var closeX,
+        _this = this;
+      closeX = this.$el.find('.close-x');
+      closeX.hide();
+      return $.ajax({
+        type: "POST",
+        url: "/api/project/leave",
+        data: {
+          project_id: this.model.id
+        }
+      }).done(function(response) {
+        if (response.success) {
+          _this.model.collection.remove(_this.model);
+          return _this.$el.remove();
+        } else {
+          return closeX.show();
+        }
+      });
     }
   });
 });

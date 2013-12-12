@@ -67,14 +67,8 @@ define ["underscore",
 						@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
 						@projectDiscussionsView.on 'discussionClick', (arg_)=>
-							console.log 'projectDiscussionsView arg_',arg_
-							# @projectDiscussionView.updateDiscussion(arg_.model)
+							console.log 'projectDiscussionsView arg_',arg_ 
 							window.location.hash = "discussion/"+arg_.model.id
-
-						###
-						@projectDiscussionsView.on 'deleteDiscussion', (arg_)=>
-							console.log 'deleteDiscussion arg_',arg_ 
-						###
 						
 						@discussionBTN  = $("a[href='#discussions']")
 						@updatesBTN     = $("a[href='#updates']")
@@ -100,7 +94,6 @@ define ["underscore",
 
 				for btn in [@discussionBTN, @updatesBTN, @fundraisingBTN, @calendarBTN, @membersBTN, @infoBTN]
 					btn.removeClass "active"
-				console.log 'view --- ', (view.indexOf("discussion/")>-1), view
 
 				if view.indexOf("discussion/") > -1
 					id = view.split('/')[1]
@@ -129,6 +122,5 @@ define ["underscore",
 						@projectInfoAppearanceView.show()
 						@infoBTN.addClass "active"
 					else
-						# "discussions" 
 						@projectDiscussionsView.show()
 						@discussionBTN.addClass "active" 

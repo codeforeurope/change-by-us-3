@@ -14,19 +14,25 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 					data: @viewData, => 
 						onPageElementsLoad()
 						@ajaxForm()
-
 				$(@parent).append @$el
 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
 
 				$dropkick = $('#project-category').dropkick()
+				$feedback = $("#feedback")
 
 				# ajax the form
 				$submit = $("input[type=submit]")
 				$form = @$el.find("form")
 				options =
-					beforeSubmit: => 
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					#contentType: "application/json; charset=utf-8"
+					contentType: "multipart/form-data; charset=utf-8"
+					#beforeSend: =>  
+					beforeSubmit: =>  
 						if $form.valid()
 							$zip = $('input[name="zip"]')
 
@@ -45,15 +51,25 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 
 					success: (res) -> 
 						console.log 'res',res
-						$form.find("input, textarea").remove("disabled")
+						$form.find("input, textarea").removeAttr("disabled")
 						
 						if res.success
 							$form.resetForm()
 							modal = new ProjectCreateModalView({viewData:res})
+							$feedback.hide()
 							#window.location = "/project/"+res.data.id+"/admin"
 						else
-							# $form.resetForm()
+							$("html, body").animate({ scrollTop: 0 }, "slow")
+							$feedback.show().html(res.msg)
 							
+				###
+				$form.submit ->
+					json_str = JSON.stringify($form.serializeJSON())
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
+				###
 				$form.ajaxForm options
 
 				# location autocomplete

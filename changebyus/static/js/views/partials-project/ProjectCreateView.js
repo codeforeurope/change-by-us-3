@@ -22,15 +22,20 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $dropkick, $form, $projectLocation, $submit, options,
+      var $dropkick, $feedback, $form, $projectLocation, $submit, options,
         _this = this;
       $('.fileupload').fileupload({
         uploadtype: 'image'
       });
       $dropkick = $('#project-category').dropkick();
+      $feedback = $("#feedback");
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
       options = {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "multipart/form-data; charset=utf-8",
         beforeSubmit: function() {
           var $zip;
           if ($form.valid()) {
@@ -54,17 +59,30 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
         success: function(res) {
           var modal;
           console.log('res', res);
-          $form.find("input, textarea").remove("disabled");
+          $form.find("input, textarea").removeAttr("disabled");
           if (res.success) {
             $form.resetForm();
-            return modal = new ProjectCreateModalView({
+            modal = new ProjectCreateModalView({
               viewData: res
             });
+            return $feedback.hide();
           } else {
-
+            $("html, body").animate({
+              scrollTop: 0
+            }, "slow");
+            return $feedback.show().html(res.msg);
           }
         }
       };
+      /*
+      				$form.submit ->
+      					json_str = JSON.stringify($form.serializeJSON())
+      					options.data = json_str
+      					console.log 'options.data',options.data
+      					$.ajax options
+      					false
+      */
+
       $form.ajaxForm(options);
       $projectLocation = $("#project_location");
       return $projectLocation.typeahead({

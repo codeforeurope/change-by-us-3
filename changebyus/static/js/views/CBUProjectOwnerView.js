@@ -52,11 +52,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
           console.log('projectDiscussionsView arg_', arg_);
           return window.location.hash = "discussion/" + arg_.model.id;
         });
-        /*
-        						@projectDiscussionsView.on 'deleteDiscussion', (arg_)=>
-        							console.log 'deleteDiscussion arg_',arg_
-        */
-
         _this.discussionBTN = $("a[href='#discussions']");
         _this.updatesBTN = $("a[href='#updates']");
         _this.fundraisingBTN = $("a[href='#fundraising']");
@@ -86,7 +81,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         btn = _ref1[_j];
         btn.removeClass("active");
       }
-      console.log('view --- ', view.indexOf("discussion/") > -1, view);
       if (view.indexOf("discussion/") > -1) {
         id = view.split('/')[1];
         this.projectDiscussionView.updateDiscussion(id);

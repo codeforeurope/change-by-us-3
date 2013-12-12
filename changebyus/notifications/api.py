@@ -60,6 +60,7 @@ def _notify_project_join( project_id=None, user_name=None ):
 
     """
 
+    pass
 
     emails = Set()
 
@@ -119,6 +120,10 @@ def _notify_post( post_id=None):
     """
     Notify the original poster and all poster responders that there's been
     another response
+
+    """
+
+    pass
 
     """
 
@@ -306,7 +311,7 @@ def _notify_post( post_id=None):
             current_app.mail.send(msg)
 
 
-
+    """
 
 
 

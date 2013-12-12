@@ -1,4 +1,4 @@
-<form method="post" enctype=multipart/form-data class="form-project clearfix" name="new-discussion" action="/api/post/add_discussion">
+<form method="post" enctype="multipart/form-data" class="form-project clearfix" name="new-discussion" action="/api/post/add/discussion">
 
     <div>
 
@@ -7,7 +7,7 @@
 
         <div id="discussion-editor" class="wsyiwyg-editor"></div>
 
-        <div class="btn-toolbar" data-role="editor-toolbar" data-target="#discussion-editor">
+        <div class="btn-toolbar clearfix" data-role="editor-toolbar" data-target="#discussion-editor">
             <div class="btn-group">
                 <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -78,16 +78,12 @@
         </div>
 
         <input type="hidden" name="project_id" value="<%= data.project_id %>">
-
         <input type="hidden" id="description" name="description" value="">
-        <!-- 
-         <textarea rows="8" name="description" maxlength="600" id="description" placeholder="Description" class="input-xxlarge"></textarea>
-        
-        <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>" > 
-        -->
-
     </div>
 
-    <input type="submit" class="btn btn-medium" value="Share">
+    <div class="tr">
+        <input type="submit" class="btn btn-medium btn-secondary" value="Post">
+        <input type="button" class="btn btn-medium btn-tertiary" value="Cancel">
+    </div>
 
 </form>

@@ -15,31 +15,30 @@ from ..helpers.mongotools import db_list_to_dict_list
 stream_api = Blueprint('stream_api', __name__, url_prefix='/api/stream')
 
 """
-============
-Stream API
-============
+.. module: stream/api
 
-An API that will help provide posts related to projects
+    :synopsis: An API that will help provide posts related to projects
+
 """
 
 def _get_user_stream(user_id, project_id=None, max_posts=100):
     """
-    ABOUT
         Retrieves a list of posts for given project id or all the
         projects a user is a member of.
-    METHOD
-        Native Python
-    INPUT
-        user_id, project_id (optional), max_posts (default 100)
-    OUTPUT
-        list of dictionaries of post objects, sorted by their created_at
-        timestamp
-    PRECONDITIONS
-        None
-    TODO:
-        This should check to only show public or private posts to a user
-        depending on their involvement in the specified project.  This is only
-        an issue when we specify project_id = 
+
+        Args:
+            user_id: id of the user the returned stream belongs to.
+            project_id: list of projects to compile stream around.  If blank
+                then all projects the user is involved in will be used.
+            max_posts: the maxinum number of posts to return.
+
+        Returns:
+            list of dictionaries of top level post objects, sorted by 
+            their created_at timestamp
+
+        Todo:
+            Need to only provide public or private posts based on user 
+            project involvement.
     """
     if project_id is None or len(project_id) == 0:
         projects= _get_user_involved_projects(user_id)
@@ -72,17 +71,11 @@ def _get_user_stream(user_id, project_id=None, max_posts=100):
 @login_required
 def api_stream():
     """
-    ABOUT
         View to return a jsonified list of posts for a user, based on the
         projects they are joined to
-    METHOD
-        Get
-    INPUT
-        None
-    OUTPUT
-        Jsonified list of project posts, for projects the user is involved with
-    PRECONDITIONS
-        API key exists in the config file
+    
+        Args: None
+        Returns: Jsonified list of project posts, for projects the user is involved with
     """
     streamList = _get_user_stream(g.user.id)
     return jsonify_response(ReturnStructure(data=streamList))

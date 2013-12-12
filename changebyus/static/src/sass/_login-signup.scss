@@ -1,12 +1,12 @@
 .login, .signup {
   text-align: center;
-  
+    
   h1 {
     font-size: 60px;
     font-weight: bold;
     text-align: center;
     padding-top: 25px;
-    padding-bottom: 30px;
+    padding-bottom: 6px;
   }
  
   h2 {
@@ -14,6 +14,7 @@
     line-height: 16px;
     text-align: center;
     font-weight: lighter;
+    margin-top: 14px;
   }
   
   p {
@@ -21,18 +22,32 @@
     font-size: 16px;
   }
   
+  input[type="submit"]{
+    width: 65%; //!important
+    margin-right: 4%;
+  }
+  
+  input[type="button"]{
+    width: 30%; //!important
+    margin-right: 0;
+  }
+
+  label{text-align: left;}
+
   .content-wrapper {
     .centered {
-      width: 500px;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      margin-left: 250px;
-     
-      span{
+      width: 100%;
+      max-width: 500px;
+      margin: 20px auto; 
+      >span{
         font-size: 14px;
-        color: $gray80;
-       
-        a{color: $gray80;}
+        color: $gray37;
+        margin-top: 24px;
+        display: block;
+        a{ 
+          color: $gray37;
+          text-decoration: underline;
+        }
       }
     }
   }
@@ -50,17 +65,22 @@
    }
 
   .btn-info{ width: 47%; }
-     
-  input[type="submit"]{
-    width: 65% !important;
-    margin-right: 4%;
-  }
-  
-  input[type="button"]{
-    width: 30% !important;
-    margin-right: 0;
-  }
 }
+
+/*
+#signup-display-name{margin-bottom: 24px;}
+#signup-email{
+  margin-bottom: 0;
+  @include border-bottom-left-radius(0);
+  @include border-bottom-right-radius(0);
+}
+#signup-password{
+  border-top: none;
+  @include border-top-left-radius(0);
+  @include border-top-right-radius(0);
+}
+*/
+.social-avatar{min-height: 108px;}
 
 .facebook-avatar{
   width: 100%;
@@ -102,30 +122,40 @@
   
   span {
     color: $black;
+    font-size: 20px;
     background-color: $white;
-    padding: 0 15px;
+    padding: 0 30px;
   }
 }
 
 .login-signup-footer{
   color: $black;
-  a{color: $black;}
+  a{
+    color: $black;
+    font-weight: bold;
+  }
 }
 
-.init-signup{
-    a:first-child{margin-right: 5%;}
+.justified-btns{
+  margin-top: 28px;
+  .btn:first-child{ margin-right: 5%; }
+  &.social{
+    .btn{
+      padding: 20px 0;
+      &:first-child{ 
+        margin-right: 1px;
+        width: 43%; 
+      }
+      &:last-child{ width: 55%; }
+    }
+  }
 }
 
-
-.form-signin, .init-signup{
+.form-signin, .init-signup, .social-signup{
   max-width: 600px;
   padding-bottom:29px;
   background-color: $white;
   border: 0px solid #e5e5e5; 
-
-  .btn-info{
-    &:first-child{margin-right: 5%;}
-  }
 
   .form-signin-heading, .checkbox {
     margin-bottom: 50px;
@@ -138,7 +168,7 @@
       max-width: 500px;
       font-size: 16px;
       height: auto;
-      margin-bottom: 15px;
+      margin-bottom: 24px;
       padding: 7px 9px;
       
       &.top{ 

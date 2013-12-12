@@ -5,7 +5,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     view: "public",
     projectID: 0,
     initialize: function(options_) {
-      console.log('initialize initialize initialize initialize');
       AbstractView.prototype.initialize.call(this, options_);
       this.view = options_.view || this.view;
       this.projectID = options_.projectID || this.projectID;
@@ -41,7 +40,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         change: function(value_, label_) {
           return $.ajax({
             type: "POST",
-            url: "/api/project/change_user_role",
+            url: "/api/project/change-user-role",
             data: {
               project_id: _this.projectID,
               user_id: _this.model.id,
@@ -59,7 +58,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       var _this = this;
       return $.ajax({
         type: "POST",
-        url: "/api/project/remove_member",
+        url: "/api/project/remove-member",
         data: {
           project_id: this.projectID,
           user_id: this.model.id

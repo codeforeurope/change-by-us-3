@@ -13,6 +13,9 @@ from .api import _capture_event_details, _get_account_balance_percentage
 from .models import StripeAccount, StripeDonation, StripeLink
 from ..user.models import User
 
+from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
+                           SubmitField, Required, ValidationError, FieldList)
+
 from flask import current_app, session
 
 import yaml
@@ -26,24 +29,19 @@ import stripe
 stripe_view = Blueprint('stripe_view', __name__, url_prefix='/stripe')
 
 """
-=========================
-Stripe Views
-=========================
+.. modules:: stripe/views
 
-Url visible stripe routines.  For more details on how we do stripe
-read the introduction in the api file.
+    Url visible stripe routines.  For more details on how we do stripe
+    read the introduction in the api file.
 
-In this file we deal with the Stripe OAuth, which is 2.0 not 1.0.
-For that reason we don't rely on the Flask-OAuth, which appears to 
-be much more geared towards OAuth 1.0
+    In this file we deal with the Stripe OAuth, which is 2.0 not 1.0.
+    For that reason we don't rely on the Flask-OAuth, which appears to 
+    be much more geared towards OAuth 1.0
 
-This file is more or less independent, but in some functions we 
-import information on Projects, since Stripe accounts and Projects
-are pretty closely linked in CBU.
+    This file is more or less independent, but in some functions we 
+    import information on Projects, since Stripe accounts and Projects
+    are pretty closely linked in CBU.
 """
-
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/stripe.yml'))
 
 # TODO move to config?
 SITE = 'https://connect.stripe.com'
@@ -51,33 +49,40 @@ AUTHORIZE_URI = '/oauth/authorize'
 TOKEN_URI = '/oauth/token'
 
 
+class LinkStripeForm(Form):
+    project_id     = TextField("project_id", validators=[Required()])
+
 @stripe_view.route('/link', methods=['POST'])
 @login_required
 def stripe_link():
-    """
-    ABOUT
-        Routine to link a stripe account to a project
-    METHOD
-        POST
-    INPUT
-        project_id, project_name
-    OUTPUT: 
-        Redirects user to the Stripe oauth url
-    PRECONDITIONS: 
-        User is logged in, logged in user owns the project in question
+    """Routine to link a stripe account to a project
+
+    Args:
+        project_id: the id of the project to link to 
+
+    Returns:
+        url to be used for setting up the stripe account
+
     """
 
     # from ..project.api import _check_user_owns_project
-    from ..project.helpers import _check_user_owns_project
+    from ..project.helpers import _check_user_owns_project, _get_project_name
 
-    project_id = request.form['project_id']
-    project_name = request.form['project_name']
+    form = LinkStripeForm(request.form or as_multidict(request.json))
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    project_id = form.project_id.data
 
     if not _check_user_owns_project(user_id=g.user.id,
                                     project_id=project_id):
         warnStr = "User {0} tried to link stripe account to project {1} without being owner".format(g.user.id, project_id)
         current_app.logger.warning(warnStr)
         abort(401)
+
+    project_name = _get_project_name(project_id)
 
     # store this information in the session so we have it upon oauth callback
     session['stripe_project_id'] = project_id
@@ -99,7 +104,7 @@ def stripe_link():
     params = {
              'response_type': 'code',
              'scope': 'read_write',
-             'client_id': settings['CLIENT_ID'],
+             'client_id': current_app.settings.get('STRIPE').get('CLIENT_ID'),
              'stripe_user[url]': project_url,
              'stripe_user[email]': email,
              'stripe_user[business_type]': biz_type,
@@ -114,44 +119,53 @@ def stripe_link():
     #return redirect(url)
 
 
-@stripe_view.route(settings['HOOK_URL'], methods=['GET', 'POST'])
+
+class StripeWebhookForm(Form):
+    event_id    = TextField("event_id", validators=[Required()])
+    livemode    = TextField("livemode", validators=[Required()])
+    event_type  = TextField("event_type", validators=[Required()])
+    user_id     = TextField("user_id", validators=[Required()])
+
+@stripe_view.route(current_app.settings.get('STRIPE').get('HOOK_URL'), methods=['GET', 'POST'])
 def stripe_hook():
     """
-    ABOUT
         Provides a callback url for Stripe to hit when there is account activity
         information available.  We use a URL based on the settings to allow
         each app to customize their URL, security through obscurity.
         
         Read the Api documentation on _capture_event_details for more details
         on how webhooks fit into this blueprint.
-    METHOD
-        GET, POST
-    INPUT
-        id, livemode, type, user_id
-    OUTPUT
-        blank 200 response to keep Stripe happy
-    PRECONDITIONS
-        Stripe account has the given URL set as a webhook.  This is not automatic,
-        you need to manually configure that within Stripe.com account management
-    TODO
-        Check if this is a GET or a POST routine from Stripe
+
+        Args: 
+            event_id: the id of the stripe event 
+            livemode: whether or not this is a live or test trade
+            event_type: the type of event this was
+            user_id: the stripe user id that this event is linked to
+
+        Returns:
+            blank 200 response
     """
 
-    event_id = request.json['id']
-    livemode = request.json['livemode']
-    event_type = request.json['type']
-    user_id = request.json['user_id']
+    form = StripeWebhookForm(request.form or as_multidict(request.json))
+    if not form.validate():
+        return gen_blank_ok()
+
+
+    event_id = form.event_id.data
+    livemode = form.livemode.data
+    event_type = form.event_type.data
+    user_id = form.user_id.data
 
     # If we use webhooks, we can really trust our data, but it's slower to get here
     # if we don't use webhooks, the user experience is a bit better.
     # in an ideal world we would use both, one for ui feeback one to verify.
-    if settings['USE_WEBHOOKS']:
+    if current_app.settings.get('STRIPE').get('USE_WEBHOOKS'):
         current_app.logger.debug("Received stripe hook: {0}".format(request.json))
     else:
         current_app.logger.debug("Received BUT IGNORING stripe hook: {0}".format(request.json))        
 
     # Do we act on or thwo away test data?
-    if settings['SKIP_TESTS'] and livemode == False:
+    if current_app.settings.get('STRIPE').get('SKIP_TESTS') and livemode == False:
         # TODO log it
         return gen_blank_ok()
 
@@ -162,29 +176,24 @@ def stripe_hook():
         # TODO log this
         return gen_blank_ok()
 
-    if settings['USE_WEBHOOKS']:
+    if current_app.settings.get('STRIPE').get('USE_WEBHOOKS'):
         _capture_event_details(event_id=event_id, stripe_user_id=user_id)
 
     return gen_blank_ok()
+
 
 
 @stripe_view.route('/authorized')
 @login_required
 def stripe_authorized():
     """
-    ABOUT
         OAuth 2.0 callback from Stripe that authorizes a user and links their
         stripe account with their project
-    METHOD
-        Get
-    INPUT
-        oauth code, from stripe
-    OUTPUT
-        rendered edit_fundraising template if successful
-    PRECONDITIONS
-        User is logged in, user owns the project in question,
-        the project information has been temporarily stored in the user session.
-        ie the /link url was hit first
+
+        Args:
+            code: oauth code from Stripe
+        Returns:
+            rendered edit_fundraising template if successful, error template otherwise
     """
 
     from ..project.api import _link_stripe_to_project
@@ -210,9 +219,9 @@ def stripe_authorized():
 
     code   = request.args.get('code')
     data   = {
-             'client_secret': settings['API_SECRET'],
+             'client_secret': current_app.settings.get('STRIPE').get('API_SECRET'),
              'grant_type': 'authorization_code',
-             'client_id': settings['CLIENT_ID'],
+             'client_id': current_app.settings.get('STRIPE').get('CLIENT_ID'),
              'code': code
            }
 
@@ -288,55 +297,87 @@ def stripe_authorized():
     return redirect(url_for('project_view.edit_stripe', project_id = project_id, account_id = account.id))
 
 
+
+
+class StripeReviewForm(Form):
+    stripe_id   = TextField("stripe_id", validators=[Required()])
+    goal        = TextField("goal", validators=[Required()])
+    description = TextField("description", validators=[Required()])
+
 @stripe_view.route('/review', methods = ['POST'])
 @login_required
 def stripe_review_info():
+    """View to let a user view, edit, and confirm the stripe account information
+    
+        Args:
+            stripe_id: 
+            goal:
+            description:
+        
+        Returns:
+            Rendered fundraising review template
     """
-    ABOUT
-        View to let a user view, edit, and confirm the stripe account information
-    METHOD
-        POST
-    INPUT
-        stripe account id, funding_goal, description
-    OUTPUT
-        Rendered fundraising reveiew html
-    PRECONDITIONS
-        User is logged in
-    """
-    account_id = request.form['id']
-    funding_goal = request.form['goal']
-    description = request.form['description']
+
+    form = StripeReviewForm(request.form or as_multidict(request.json))
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
+
+    account_id = form.stripe_id.data
+    funding_goal = form.goal.data
+    description = form.description.data
     balance, percentage = _get_account_balance_percentage(account_id)
 
     #TODO return API for checking current stripe funding status
     return render_template('fundraise_review.html', funding = funding_goal, description = description, balance = balance, percentage = percentage)
 
 
+
+
+class StripeChargeForm(Form):
+    access_token    = TextField("stripe_id", validators=[Required()])
+    project_id      = TextField("goal", validators=[Required()])
+    email           = TextField("description", validators=[Required()])
+    stripeToken     = TextField("description", validators=[Required()])
+    stripe_id       = TextField("description", validators=[Required()])
+
 @stripe_view.route('/charge', methods=['POST'])
 def charge():
-    """
-    ABOUT
-        Post submission for charging to Stripe
-    METHOD
-        Post
-    INPUT
-        stripe access_token, project_id, email, stripeToken, stripe_id
+    """Post submission for charging to Stripe
+
+        Args:
+            access_token: stripe account access token
+            project_id: project id related to the stripe charge
+            email: email of the donator
+            stripe_token: token representing the stripe card (UNSURE)
+            stripe_id: id of the stripe account associated with the project
+
+        Returns:
+            ...
+
     OUTPUT
         View showing how much was charged,
         StripeDonation database entry is created for charge
     """
 
-    # stripe works in pennies
-    amount = int(float(request.form['amount'])*100)
+    form = StripeChargeForm(request.form or as_multidict(request.json))
+    if not form.validate():
+        errStr = "Request contained errors."
+        return jsonify_response( ReturnStructure( success = False, 
+                                                  msg = errStr ) )
 
-    token = request.form['access_token']
+    # stripe works in pennies
+    amount = int(float(form.amount.data)*100)
+
+    token = form.access_token.data
 
     stripe.api_key = token
-    project_id = request.form['project_id']
+    project_id = form.project_id.data
 
     customer = stripe.Customer.create(
-        email=request.form['email'],
-        card=request.form['stripeToken']
+        email=form.email.data,
+        card=form.stripe_token.data
     )
 
     charge = stripe.Charge.create(
@@ -346,7 +387,7 @@ def charge():
         description='Flask Charge'
     )
      
-    if settings['USE_WEBHOOKS']:
+    if current_app.settings.get('STRIPE').get('USE_WEBHOOKS'):
         # this lets us associate a charge to an email address and user when processing
         # via webhooks (callbacks)
 
@@ -373,7 +414,7 @@ def charge():
             amount = 0
 
         else:
-            stripe_account = StripeAccount.objects.with_id(request.form['stripe_id'])
+            stripe_account = StripeAccount.objects.with_id(form.stripe_id.data)
 
             if stripe_account == None:
                 errStr = "Error locating stripe account for donation.  Stripe Account id {0}".format(stripe_user_id)
@@ -386,7 +427,7 @@ def charge():
                 # complete the record keeping of the donation
 
                 sd = StripeDonation(amount=float(charge_dict['amount'])/100,
-                                    email=request.form['email'],
+                                    email=form.email.data,
                                     account=stripe_account)
 
                 if charge_dict['card']['name']:

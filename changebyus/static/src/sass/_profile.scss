@@ -1,13 +1,9 @@
 @import "mixins-and-functions";
 @import "compass/css3/text-shadow";
 
-.user {
-    
-}
-
 .user-header {
     margin-top: 50px;
-    width: 1000px; 
+    width: 100%; 
 
     .edit{
         position: absolute;
@@ -16,16 +12,19 @@
     }
     
     .user-avatar{
-        margin: 25px;
-        width: auto;
+        margin: 2%;
+        width: 25%;
+        
+        img{max-width: 100%;}
     }
 }
 
 .user-info {
     float: left; 
     font-size: 20px;
-    border: none; 
+    //border: 1px solid #000;
     margin: 35px 0 10px;
+    width: 71%;
 
     em{ color: $gray59; }
     a{ color: $black; }

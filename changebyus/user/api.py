@@ -3,6 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
+
 from flask import Blueprint, request, render_template, redirect, current_app, url_for, request, g
 import os
 
@@ -15,11 +16,11 @@ from .models import User
 from .helpers import _create_user
 from ..helpers.stringtools import bool_strings
 
-from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, 
+from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, BooleanField,
                             SubmitField, Required, ValidationError, 
                             PasswordField, HiddenField)
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure
+from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 from ..helpers.mongotools import db_list_to_dict_list 
 
 from ..twitter.twitter import _get_user_name_and_thumbnail
@@ -29,12 +30,10 @@ user_api = Blueprint('user_api', __name__, url_prefix='/api/user')
 
 
 """
-=========
-User API
-=========
+.. module: user/api
 
-Users and projects are the core components of CBU.  This user api lets
-other modules create/modify/edit user information through various routines.
+    Users and projects are the core components of CBU.  This user api lets
+    other modules create/modify/edit user information through various routines.
 """
 
 class CreateUserForm(Form):
@@ -53,39 +52,45 @@ class CreateUserForm(Form):
 
 @user_api.route('/create', methods = ['POST'])
 def api_create_user():
-    """
-    ABOUT
-        Method to update users record via Post
-    METHOD
-        Post
-    INPUT
-        email, password, display_name, first_name, last_name
-    OUTPUT
-        Direct user to dashboard if account created or signup if issue
-    PRECONDITIONS
-        User record doesn't already exist, current viewer is not logged in
+    """Method to create a user account
+
+        Args:
+            email: email for user account
+            password: password for user account
+            display_name: users display name
+            first_name: users first name
+            last_name: users last name
+            bio: short bio of user
+            website: user website
+            location: location of user
+            lat: lat of user location
+            lon: lon of user location
+
+        Returns:
+            Logs in user and returns the user data structure
+
     """
 
     if not g.user.is_anonymous():
         errStr = "You can not create an account when logged in." 
         return jsonify_response( ReturnStructure(msg = errStr, success = False) )
 
-    form = CreateUserForm()
+    form = CreateUserForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = errStr ) )
 
-    email = request.form.get('email')
-    password = request.form.get('password')
-    display_name = request.form.get('display_name')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    bio = request.form.get('bio')
-    website = request.form.get('website')
-    location = request.form.get('location')
-    lat = request.form.get("lat")
-    lon = request.form.get("lon")
+    email = form.email.data
+    password = form.password.data
+    display_name = form.display_name.data
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    bio = form.bio.data
+    website = form.website.data
+    location = form.location.data
+    lat = form.lat.data
+    lon = form.lon.data
     
     if (lat and lon):
         geo_location = [float(lon), float(lat)]
@@ -116,6 +121,10 @@ def api_create_user():
                      location=location,
                      geo_location=geo_location)
 
+    if u is None:
+        errStr += "Sorry, user creation failed."
+        return jsonify_response( ReturnStructure(msg = errStr, success = False) )
+
     login_user(u)
 
     # if the user signed up from a page of importance, such as a project page
@@ -123,23 +132,16 @@ def api_create_user():
     return jsonify_response( ReturnStructure( data = u.as_dict() ))
 
 
-@user_api.route('/<id>')    
+@user_api.route('/<user_id>')    
 # @login_required # not sure if this is needed
-def api_get_user(id):
-    """
-    ABOUT
-        Routine to get a json user object for a given user
-    METHOD
-        Get
-    INPUT
-        id
-    OUTPUT
-        Json user record
-    PRECONDITIONS
-        The user exists
+def api_get_user(user_id):
+    """Routine to retrieve a user record
+  
+        Returns:
+            User record if user found
     """
 
-    u = User.objects.with_id(id)
+    u = User.objects.with_id(user_id)
      
     if u is None:
         ret = ReturnStructure( msg = "User not found.",
@@ -151,15 +153,10 @@ def api_get_user(id):
     ret = ReturnStructure( data = u.as_dict() )
 
     # Remove email from visibility
-    if g.user.is_anonymous():
+    if g.user.is_anonymous() or current_user.id != u.id:
         if not u.public_email:
             if ret.data.has_key('email'):
-                del ret.data['email']
-    else: 
-        if current_user.id != u.id:
-            if not u.public_email:
-                if ret.data.has_key('email'):
-                    del ret.data['email']
+                ret.data['email'] = None
         
     return jsonify_response( ret )
 
@@ -167,7 +164,7 @@ def api_get_user(id):
 class EditUserForm(Form):
 
     email = TextField("email")
-    public_email = TextField("public_email")
+    public_email = BooleanField("public_email")
     password = PasswordField("password")
     display_name = TextField("display_name")
     first_name = TextField("first_name")
@@ -182,20 +179,28 @@ class EditUserForm(Form):
 @user_api.route('/edit', methods = ['POST'])
 @login_required
 def api_edit_user():
-    """
-    ABOUT
-        Routine to edit a user record
-    METHOD
-        POST
-    INPUT
-        OPTIONAL: photo, email, public_email, password, display_name, first_name, last_name
-    OUTPUT
-        User record upon success
-    PRECONDITIONS
-        API key exists in the config file
+    """Routine to edit a user record
+
+        Args:
+            email: email for user account
+            public_email: bool to determine if email is public
+            password: password for user account
+            display_name: users display name
+            first_name: users first name
+            last_name: users last name
+            bio: short bio of user
+            website: user website
+            location: location of user
+            lat: lat of user location
+            lon: lon of user location   
+            photo: user image         
+
+        Returns:
+            New user record if successful
+
     """
 
-    form = EditUserForm()
+    form = EditUserForm(request.form or as_multidict(request.json))
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -203,20 +208,20 @@ def api_edit_user():
 
     u = User.objects.with_id(g.user.id)
 
-    public_email = request.form.get('public_email')
-    if public_email:
-        u.public_email = request.form.get('public_email').lower() in bool_strings
+    u.public_email = form.public_email.raw_data[0]
+    errStr = "Public email of {0} got converted to {1}".format(form.public_email.raw_data, u.public_email)
+    current_app.logger.error(errStr)
 
-    email = request.form.get('email')
-    password = request.form.get('password')
-    display_name = request.form.get('display_name')
-    first_name = request.form.get('first_name')
-    last_name = request.form.get('last_name')
-    bio = request.form.get('bio')
-    website = request.form.get('website')
-    location = request.form.get('location')
-    lat = request.form.get("lat")
-    lon = request.form.get("lon")
+    email = form.email.data
+    password = form.password.data
+    display_name = form.display_name.data
+    first_name = form.first_name.data
+    last_name = form.last_name.data
+    bio = form.bio.data
+    website = form.website.data
+    location = form.location.data
+    lat = form.lat.data
+    lon = form.lon.data
     
     if email: u.email = email
     if password: u.password = password
@@ -281,7 +286,6 @@ def api_edit_user():
 
     u.save()
 
-
     # defaults to success and 'OK'
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )
 
@@ -289,16 +293,10 @@ def api_edit_user():
 @user_api.route('/socialstatus', methods = ['GET'])
 @login_required
 def api_get_user_social_status():
-    """
-    ABOUT
-        Gets the currently logged in users social connection status
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        Dict of { 'facebook' : true/false,
-                  'twitter': true/false }
+    """Method to query the social connectivity of the currently logged in user
+
+        Returns:
+            A dict containing True/False entries for the different supported social networks
     """
 
     user = User.objects.with_id(g.user.id)
@@ -310,14 +308,10 @@ def api_get_user_social_status():
 
 @user_api.route('/socialinfo', methods = ['GET'])
 def api_get_user_social_info():
-    """
-    ABOUT
-        Gets the currently logged in users social info
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
+    """Method to query a users social information such as twitter and facebook name
+
+        Returns:
+            Current users name/image for various social platforms (if connected to those platforms)
          
     """
 

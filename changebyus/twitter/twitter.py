@@ -8,7 +8,7 @@ from flask import current_app, request
 from flask.ext.login import login_required, current_user, login_user
 
 from ..user.models import User
-from ..user.helpers import _create_user, _add_twitter
+from ..user.helpers import _create_user, _add_twitter, _is_display_name_in_use
 from ..helpers.stringtools import string_generator
 
 from flask import current_app, session
@@ -45,9 +45,6 @@ the model if it doesn't exist, but who knows.
 
 oauth = OAuth()
 
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/twitter.yml'))
-
 POST_URI = '/1.1/statuses/update.json'
 
 # Use Twitter as example remote application
@@ -65,8 +62,8 @@ twitter = oauth.remote_app('twitter',
     # user interface on the twitter side.
     authorize_url='https://api.twitter.com/oauth/authorize',
     # the consumer keys from the twitter application registry.
-    consumer_key=settings['CONSUMER_KEY'],
-    consumer_secret=settings['CONSUMER_SECRET'],
+    consumer_key=current_app.settings.get('TWITTER').get('CONSUMER_KEY'),
+    consumer_secret=current_app.settings.get('TWITTER').get('CONSUMER_SECRET'),
 )
 
 
@@ -285,18 +282,29 @@ def twitter_authorized(resp):
         password = string_generator(10)
 
 
-        # TODO figure out a better way to handle situations
-        # where a social user has a display_name or email that is
-        # already in use.  As long as they log in through
-        # the same social media each time it's not a huge deal, but it's
-        # not fantastic..
+        # check that the display_name is not already used.
+        display_name = screen_name
+        
+        in_use = _is_display_name_in_use(display_name)
+        sanity = 0
+        while in_use and sanity < 5:
+            display_name += string_generator(1)
+            in_use = _is_display_name_in_use(display_name)
+            sanity += 1
 
-        # TODO let user adjust account
-        u = _create_user(email=None,
-                         password=password,
-                         display_name=screen_name,
-                         first_name=first_name,
-                         last_name=last_name)
+        u = None
+        if sanity < 5:
+            u = _create_user(email=None,
+                             password=password,
+                             display_name=display_name,
+                             first_name=first_name,
+                             last_name=last_name)
+
+        # if the twitter account fails it's most likely something to do w/ the display_name
+        if u is None:
+            errStr = "Erorr creating an account for the twitter display_name {0}.".format(display_name)
+            current_app.logger.error(errStr)
+            return render_template('error.html', error="Sorry, an error occured while creating your account.")
 
         _add_twitter(user_id=u.id,
                      twitter_id=twitter_id,

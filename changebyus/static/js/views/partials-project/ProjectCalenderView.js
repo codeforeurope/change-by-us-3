@@ -34,9 +34,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.$el.find(".preload").remove();
       return $('#embed-calendar').click(function(e) {
         e.preventDefault();
-        return _this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
+        _this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
           model: _this.model
         });
+        return console.log(_this.projectEmbedCalendarModalView);
       });
     }
   });

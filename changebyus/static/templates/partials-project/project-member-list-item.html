@@ -24,7 +24,7 @@
     <div class="member-roles grey">
         <% if (data.view == "admin"){ %>  
             <% console.log('data',data) %>
-            <% if (data.roles == "OWNER"){ %>
+            <% if (data.roles == "OWNER" || data.roles == "Owner"){ %>
             Project Owner
             <% }else{ %>
                 <select name="category" id="<%= data.sid %>">

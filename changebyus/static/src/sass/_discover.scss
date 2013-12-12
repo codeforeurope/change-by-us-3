@@ -1,29 +1,56 @@
 /********************************************************  
  DISCOVER 
  ********************************************************/
-.search-projects {
-  width: 290px;
-  margin-right: 10px;
-  z-index: 1;
-  /*float: left;*/
-}
+.search-inputs{
+  margin-bottom: 12px;
 
-.search-forms {
-  float: left;
-  height: 94px;
-  z-index: 1;
+  >div{
+    float: left;
+    height: 94px;
+    z-index: 1;
+  }
+  
+  input {
+    width: 100%;
+    margin-right: 10px;
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+    z-index: 1;
+    padding: 29px 10px;
+
+    &.category{
+      padding-left: 36px;
+      background-image: url('../img/icon_search.jpg');
+      background-position: 10px center;
+    }
+
+    &.zip{
+      background-image: url('../img/location-marker.jpg');
+      background-position: 95% center;
+    }
+  }
+
+  .search-forms{
+    width: 42%;
+    margin-right: 3%;
+    
+  }
+
+  .go{
+    width: 10%;
+  }
+
   .btn {
     margin-top: 37px;
-    padding: 20px; 
-    font-size: 24px; 
-    border-radius: 4px;
-  }
+    padding: 20px 0;
+    width: 100%;
+  } 
 }
 
 .search-catagories{
   display: none;
   margin-top: -15px;
-  width: 290px;
+  width: 100%;
   @include box-skin;
 
   li{
@@ -47,12 +74,14 @@
 .filter-within{
   float: left;
   
-  select{width: 100px !important;}
+  select{width: 120px;}
   
   .dk_container {
     float: left;
     width: 120px;
+    margin-bottom:0;
   }
+  .dk_toggle{padding: 13px;}
 }
 
 
@@ -83,29 +112,27 @@
 
 .banner-search {
   width: 100%;
+  margin-top: 15px;
   margin-bottom: 20px;
   
   h3{text-align: left;}
 }
-
+ 
 .discover-header-right, .dashboard-header-right{
-  margin-left: 15px;
-  width: 230px;
   float: right;
-
-  .btn {
-    width: 100%;
-    height: auto;
-    line-height: 20px;
-    margin: auto;
-    padding: 20px; 
-    font-size: 24px;
-    border-radius: 4px;
-  }
 }
 
 .discover-header-right{
-  height: 200px;
+   width: 23%;
+   height: 200px;
+   margin-left: 2%;
+  .btn-large {
+    width: 100%;
+    line-height: 20px;
+    margin: auto;
+    padding: 20px 0;
+  }
+  
   .cities{
     @include box-skin;
     margin-top: 10px;
@@ -119,9 +146,9 @@
 
 
 .search-box {
-  margin-top: 15px;
+  float: left;
   border: 1px solid #dcdcdc;
-  width: 730px;
+  width: 75%;
   height: auto;
   background-color: $white;
   border-radius: 4px;
@@ -136,10 +163,17 @@
   .title {
     margin-top: 10px;
     margin-bottom: 20px;
-    font-size: 40px;
+    h2{
+      margin-top: 22px;
+      font-weight: normal;
+      font-size: 40px;
+    }
   }
 
-  .search-filters{ border-top: 1px solid $grayBorder; }
+  .search-filters{
+    border-top: 1px solid $grayBorder; 
+    padding-bottom: 16px;
+  }
 }
 
 .search-box-geo {

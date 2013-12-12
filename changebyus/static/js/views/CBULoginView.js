@@ -2,9 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
   var CBUDLoginView;
   return CBUDLoginView = AbstractView.extend({
     initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+      AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
     render: function() {
@@ -28,14 +26,17 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       });
     },
     ajaxForm: function() {
-      var $feedback, $form, $login, $submit, options,
+      var $feedback, $form, $submit, options,
         _this = this;
       $submit = $("input[type='submit']");
       $form = $("form");
-      $login = $("form[name='signin']");
       $feedback = $(".login-feedback");
       options = {
-        beforeSubmit: function() {
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
           if ($form.valid()) {
             $form.find("input, textarea").attr("disabled", "disabled");
             $feedback.removeClass("alert").removeClass("alert-danger").html("");
@@ -46,14 +47,21 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
         },
         success: function(response) {
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.msg.toLowerCase() === "ok") {
+          if (response.success) {
             return window.location.href = "/";
           } else {
             return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
           }
         }
       };
-      return $login.ajaxForm(options);
+      return $form.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($form.serializeJSON());
+        options.data = json_str;
+        console.log('options.data', options.data);
+        $.ajax(options);
+        return false;
+      });
     }
   });
 });

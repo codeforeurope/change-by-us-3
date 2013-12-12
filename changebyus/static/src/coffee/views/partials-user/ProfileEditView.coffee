@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
-	(_, Backbone, $, temp, AbstractView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "serializeObject"], 
+	(_, Backbone, $, temp, AbstractView, serializeObject) ->
 		ProfileEditView = AbstractView.extend
 
 			initialize: (options) ->
@@ -34,12 +34,16 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				$('.fileupload').fileupload({uploadtype: 'image'})
 
 				# ajax the form
-				$submit = @$el.find("input[type=submit]")
-				$form = @$el.find("form")
+				$submit   = @$el.find("input[type=submit]")
+				$form     = @$el.find("form")
 				$feedback = $("#feedback")
-				options =
-					beforeSubmit:(arr_, form_, options_)-> 
-						console.log 'arr_',arr_ 
+				options   =
+					type: $form.attr('method')
+					url: $form.attr('action')
+					dataType: "json" 
+					#contentType: "application/json; charset=utf-8"
+					contentType: "multipart/form-data; charset=utf-8"
+					beforeSubmit:(arr_, form_, options_)->  
 						if $form.valid()
 							showEmail = true
 							for i of arr_ 
@@ -65,9 +69,19 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 							$feedback.addClass('.alert-success').removeClass('.alert-error')
 						else
 							$feedback.removeClass('.alert-success').addClass('.alert-error')
-				$form.ajaxForm options
 
-				console.log '$form',$form
+				###
+				$form.submit ->
+					obj = $form.serializeJSON()
+					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
+					json_str = JSON.stringify(obj)
+					options.data = json_str
+					console.log 'options.data',options.data
+					$.ajax options
+					false
+				###
+
+				$form.ajaxForm options
 
 				# location autocomplete
 				$projectLocation = $("#location")
@@ -92,6 +106,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						console.log(datum)
 				)
 
+				# style buttons
 				$('input:radio, input:checkbox').screwDefaultButtons
 					image: 'url("/static/img/black-check.png")'
 					width: 18

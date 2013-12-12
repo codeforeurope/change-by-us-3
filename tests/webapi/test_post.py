@@ -38,6 +38,7 @@ class PostTests(BaseTestCase):
         self.owner_post = PostClass()
         self.member_post = PostClass()
         self.response_post = PostClass()
+        self.delete_post = PostClass()
 
     def test_posts(self):
         self.owner.createUser(self)
@@ -146,4 +147,13 @@ class PostTests(BaseTestCase):
         self.assertTrue( updates['success'] )
 
         self.assertTrue( success )
+
+        # test post delete
+        self.owner.login(self)
+        self.delete_post.createUpdate( self, 
+                                       self.project.project_id )
+        self.delete_post.deletePost(self,
+                                    self.delete_post.update_id)
+
+
 

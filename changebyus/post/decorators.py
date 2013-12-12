@@ -2,6 +2,7 @@
 
 from functools import wraps
 from .models import ProjectPost
+from ..project.models import Project
 from ..project.decorators import _is_owner, _is_organizer, _is_member
 
 from ..helpers.flasktools import *
@@ -48,6 +49,7 @@ def post_delete_permission(f):
         except Exception as e:
             infoStr = "Exception looking up post of id {0}".format(post_id)
             current_app.logger.info(infoStr)
+            current_app.logger.exception(e)
             errStr = "post {0} does not exist.".format(post_id)
             current_app.logger.exception(e)
             return jsonify_response( ReturnStructure( success = False,

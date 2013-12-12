@@ -1,3 +1,16 @@
+# -*- coding: utf-8 -*-
+"""
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
+
+"""
+.. module:: imagetools
+
+    :synopsis: A set of tools for manipulating images and generating resized images
+
+"""
+
 import os
 from PIL import Image, ImageOps, ImageDraw, ImageFilter
 from flask import current_app
@@ -19,8 +32,15 @@ class ImageManipulator():
 
 
 def generate_ellipse_png( filepath, size, blurs = 0 ):
-    """
+    """Creates a png image that has an eliptical alpha border
 
+        Args:
+            filepath: local path to the image
+            size: a list representing the size, such as [100,100]
+            blurs: the number of blur filters we should apply to the image
+
+        Returns:
+            A NamedImage class with the photo information
     """
 
     try:
@@ -53,17 +73,15 @@ def generate_ellipse_png( filepath, size, blurs = 0 ):
 
 
 def generate_thumbnail( filepath, size, blurs = 0 ):
-    """
-    ABOUT
-        Routine that will take a full sized image path and generate
-        an x,y sized thumbnail with the naming convention 
-        name_thumb.extension
-    INPUT
-        Path to an image, any standard extension
-    OUTPUT
-        File path for an image of 1020,320 pixels
-    TODO
-        Make the image output size a parameter
+    """Creates a resized image of the original image
+
+        Args:
+            filepath: local path to the image
+            size: a list representing the size, such as [100,100]
+            blurs: the number of blur filters we should apply to the image
+
+        Returns:
+            A NamedImage class with the photo information
     """
 
     # note if you change these guys you need to change templates and the project model
@@ -97,6 +115,20 @@ def generate_thumbnail( filepath, size, blurs = 0 ):
 
 
 def upload_image(photo, manipulators):
+    """
+        Routine that will take a photo and a list of photo manipulators,
+        run the image through the various image manipulators, and upload those
+        images to our cloud container.
+
+        Args:
+            photo: file path to the original file
+            manipulators: a list of ImageManipulators to run the image through
+
+        Returns:
+            The base name of the image
+
+    """
+
 
     file_name = None
 

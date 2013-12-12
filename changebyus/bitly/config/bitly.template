@@ -1,6 +1,0 @@
-# bitly is used to shorten urls when we post to social media
-# you need an account login/api here
-
-LOGIN: {{ LOGIN }}
-API_KEY: {{ API_KEY }}
-

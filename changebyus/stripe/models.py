@@ -12,14 +12,14 @@ from mongoengine import signals
 
 
 """
-==============
-Stripe Models
-==============
+.. module:: stripe/models
 
-In CBU, a Stripe model is both a fundraising drive, and an account
-connection to Stripe that is associated with that fundraising drive.
-Therefore each account will have a current_amount and goal, along with
-information on the stripe credentials.
+    :synopsis: a collection of models used to associate a stripe account with a user
+
+    In CBU, a Stripe model is both a fundraising drive, and an account
+    connection to Stripe that is associated with that fundraising drive.
+    Therefore each account will have a current_amount and goal, along with
+    information on the stripe credentials.
 """
 
 class StripeAccount(db.Document, EntityMixin):

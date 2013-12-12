@@ -6,11 +6,6 @@ import yaml
 
 from flask import current_app
 
-
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/geonames.yml'))
-
-
 def get_geopoint(s, exact=False):
     """
     Accept a geoname or postalcode and return a 'name' and lat/lon.
@@ -21,15 +16,15 @@ def get_geopoint(s, exact=False):
     if (is_postal):
         varname = 'postalcode' if exact else 'postalcode_startsWith'
         dataname = 'postalCodes'
-        url = settings['POSTALCODE_SEARCH_URL']
+        url = current_app.settings.get('GEONAMES').get('POSTALCODE_SEARCH_URL')
     else:
         varname = 'name_equals' if exact else 'name_startsWith'
         dataname = 'geonames'
-        url = settings['SEARCH_URL']
+        url = current_app.settings.get('GEONAMES').get('SEARCH_URL')
         
-    params = {'country': settings['COUNTRY'],
-              'maxRows': settings['MAXROWS'],
-              'username': settings['USERNAME'],
+    params = {'country': current_app.settings.get('GEONAMES').get('COUNTRY'),
+              'maxRows': current_app.settings.get('GEONAMES').get('MAXROWS'),
+              'username': current_app.settings.get('GEONAMES').get('USERNAME'),
               varname: s}
               
     r = requests.get(url, params = params)

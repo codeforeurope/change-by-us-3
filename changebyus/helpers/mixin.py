@@ -18,13 +18,12 @@ import datetime
 
 
 """
-====================
-Common Model Objects
-====================
+.. module:: mixin
 
-Timestamps and other auto-content to be mixed in with a MongoDB object, 
-and the pre_save routine that will populate them
+    :synopsis: Common Model Objects
 
+    Timestamps and other auto-content to be mixed in with a MongoDB object, 
+    and the pre_save routine that will populate them
 """
 
 class EntityMixin(object):
@@ -72,15 +71,16 @@ class LocationEnabledEntityMixin(object):
 def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwargs):
     """Take a Mongo (or other) object and return a JSON
      
-    :param obj: object to encode
-    :param exclude_nulls: if a value is None, don't include it in the return set
-    :param recursive: Descend into the referenced documents and return those objects.
-        Keep in mind that recursive can be problematic since there's no depth!
-    :param depth: recursion-depth. If 0, this is unlimited!
+        Args:
+            obj: object to encode
+            exclude_nulls: if a value is None, don't include it in the return set
+            recursive: Descend into the referenced documents and return those objects.
+                Keep in mind that recursive can be problematic since there's no depth!
+            depth: recursion-depth. If 0, this is unlimited!
     
-    kwargs:
-        current_depth: for internal recursion
-        use_derefs: whether to use deref_only and deref_exclude properties to filter dereferenced values
+        KWargs:
+            current_depth: for internal recursion
+            use_derefs: whether to use deref_only and deref_exclude properties to filter dereferenced values
     """
     if (  kwargs.get('current_depth') is not None and
           kwargs.get('current_depth') > 0 and

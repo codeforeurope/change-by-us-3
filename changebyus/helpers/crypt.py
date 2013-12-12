@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 """
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
+
+"""
     Helpers for handling some common encryption functions    
 """
+
 from .encryption import aes_encrypt, aes_decrypt
 from flask import current_app
 

@@ -16,9 +16,6 @@ import os
 import inspect
 import requests
 
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/stripe.yml'))
-
 stripe_api = Blueprint('stripe_api', __name__, url_prefix='/api/stripe')
 
 # TODO move to config?
@@ -26,36 +23,31 @@ SITE = 'https://api.stripe.com'
 EVENT_URI = '/v1/events'
 
 """
-==========================
-Stripe Webservice Wrapper
-==========================
+.. module:: stripe/api
+    
 
-Stripe is a payment system that has a nice developer integration.
-This blueprint works on the stripe connect API, which allows 
-us to code CBU for stripe, and then the different projects can
-link their stripe accounts into our master account, allowing them
-to receive money while we get access to basic deposit information 
-and can keep track of donation amounts.
+    Stripe is a payment system that has a nice developer integration.
+    This blueprint works on the stripe connect API, which allows 
+    us to code CBU for stripe, and then the different projects can
+    link their stripe accounts into our master account, allowing them
+    to receive money while we get access to basic deposit information 
+    and can keep track of donation amounts.
 
-This module lets users link/unlink stripe accounts from a Project,
-but it will always keep historical records.  These records should
-also be available in the flask accounts just in case.
+    This module lets users link/unlink stripe accounts from a Project,
+    but it will always keep historical records.  These records should
+    also be available in the flask accounts just in case.
 """
 
 def _update_goal_description(stripe_id=None,
                              goal=None,
                              description=None):
-    """
-    ABOUT
-        Updates basic information on a stripe account
-    METHOD
-        Native Python
-    INPUT
-        stripe_id (database_id), goal ($$$), description
-    OUTPUT: 
-        True,False
-    PRECONDITIONS: 
-        stripe account exists in db
+    """Updates basic information on a stripe account
+        Args:
+            stripe_id: database id of the stripe account 
+            goal: financial goal of the stripe drive ( ie 500 )
+            description: description of the stripe drive
+        Returns:
+            True or False
     """
     
     account = StripeAccount.objects.with_id(stripe_id)
@@ -71,18 +63,14 @@ def _update_goal_description(stripe_id=None,
 
 def _get_account_balance_percentage(stripe_account_id=None):
     """
-    ABOUT
         Helper routine that returns the dollar ammount
         of a stripe account (a drive), and what percentage of the
         total goal has been reached
-    METHOD
-        Native Python
-    INPUT
-        stripe_id (database_id)
-    OUTPUT: 
-        current_ammount, percentage
-    PRECONDITIONS: 
-        API key exists in the config file
+   
+        Args:
+            database id of the stripe account
+        Returns:
+            (current_amount, current_percentage) ie (450, 90)
     """
     account = StripeAccount.objects.with_id(stripe_account_id)
 
@@ -101,36 +89,35 @@ def _get_account_balance_percentage(stripe_account_id=None):
 
 def _capture_event_details(event_id=None, stripe_user_id=None):
     """
-    ABOUT
-        In short, this routine contacts stripe and gets details on a given
+
+        This routine contacts stripe and gets details on a given
         event, and then saves the new charge to the stripe account.
-        More detailed explanation below.
 
-        Stripe works on the idea of webhooks.  The master account
-        can receive a webhook any time something happens on the master
-        account or one of the linked up sub-accounts.  Our initial approach
-        was to wait for a webhook, and then call this routine with the event_id
-        and the stripe_user_id.  We would then contact stripe's webservice
-        and get information on the transaction.
+        NOTE: Stripe works on the idea of webhooks.  The master account
+            can receive a webhook any time something happens on the master
+            account or one of the linked up sub-accounts.  Our initial approach
+            was to wait for a webhook, and then call this routine with the event_id
+            and the stripe_user_id.  We would then contact stripe's webservice
+            and get information on the transaction.
 
-        The benefit of that approach was mainly security.  Not that we
-        actually handle the transactions, but if we always contacted stripe
-        for details of a transaction we knew it was authentic.  The problem
-        became that webhooks had a long enough delay (a few seconds), that users
-        wouldn't see their transactions immediately.  Additionally there was
-        a delay in a webhook propogating to a newly linked account, so a user
-        would set up their stripe account, test it, and not see the transaction
-        come through.  For that reason we moved more towards collecting
-        information directly from the stripe transaction, but with that
-        said this routine still works just fine.
-    METHOD
-        Native Python
-    INPUT
-        event_id, and stripe_user_id
-    OUTPUT: 
-        True, False
-    PRECONDITIONS: 
-        stripe_user_id belongs to a stripe account in our database
+            The benefit of that approach was mainly security.  Not that we
+            actually handle the transactions, but if we always contacted stripe
+            for details of a transaction we knew it was authentic.  The problem
+            became that webhooks had a long enough delay (a few seconds), that users
+            wouldn't see their transactions immediately.  Additionally there was
+            a delay in a webhook propogating to a newly linked account, so a user
+            would set up their stripe account, test it, and not see the transaction
+            come through.  For that reason we moved more towards collecting
+            information directly from the stripe transaction, but with that
+            said this routine still works just fine.
+    
+        Args:
+            event_id: the id of the stripe event that occured
+            stripe_user_id: the stripe user id of the stripe account in our database
+        Returns:
+            True if the donation was saved and the stripe account balanced updated.  
+            False otherwise
+
     """
     accounts = StripeAccount.objects(stripe_user_id=stripe_user_id)
     if accounts.count() == 0:

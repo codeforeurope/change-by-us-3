@@ -55,6 +55,7 @@ class UserClass():
                  'password' : self.pw}
 
         resp = client.POST('/login', data = json.dumps(login), content_type="application/json")
+        #resp = client.POST('/login', data = login)
         client.assertTrue( resp['success'] )
 
     def joinProject(self, client, project_id):

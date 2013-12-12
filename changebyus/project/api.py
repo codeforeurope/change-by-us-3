@@ -27,9 +27,6 @@ from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_p
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
                           project_member, project_ownership, project_organizer )
 
-from ..stripe.models import StripeAccount
-from ..stripe.api import _get_account_balance_percentage
-
 from ..user.models import User
 
 from ..notifications.api import _notify_project_join

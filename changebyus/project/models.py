@@ -23,16 +23,17 @@ import os
 
 
 """
-===================
-Project Model File
-===================
+.. module: project/models
 
-This is a mongoDB models file that contains models for Projects.
-For the most part it is pretty straight forward.  
+    :synopsis: The project model file
 
 """
 
 
+"""
+    List of image manipulators that will be used to generate image
+    files out of a project thumbnail image
+"""
 project_images = [ 
     
     ImageManipulator(dict_name = "image_url_large_rect",
@@ -62,8 +63,13 @@ project_images = [
 def gen_image_urls(image_url):
 
     """
-    Helper that will take a root image name, and given our image manipulators
-    assign names
+        Helper that will take a root image name, and given our image manipulators
+        and preferred remote storage container will generate image names and urls
+
+        Args:
+            Base image name
+        Returns:
+            a dict of multiple {image_name : image_url}
     """
 
     images = {}

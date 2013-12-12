@@ -1,8 +1,0 @@
-# You need to create a twitter application so users can sign in through twitter and
-# post to twitter through cbu. Take those credentials and put them here.
-
-# the twitter app will need to have read and write permission
-
-CONSUMER_KEY: {{ CONSUMER_KEY }}
-CONSUMER_SECRET: {{ CONSUMER_SECRET }}
-

@@ -21,18 +21,16 @@ from flask.ext.cdn import url_for
 import os
 
 """
-=================
-User Model File
-=================
+.. module:: user/models
 
-This is a mongoDB models file that contains models for Users.
-This is very straight forward.  The only small catch is that we
-have some social keys in these models, which the social tools are 
-dependent on
+    :synopsis: The user model file
 
 """
 
-
+"""
+    List of image manipulators that will be used to generate image
+    files out of a users thumbnail image
+"""
 user_images = [
     ImageManipulator(dict_name = "image_url_round_small",
                      converter = lambda x: generate_ellipse_png(x, [70, 70]),
@@ -50,8 +48,13 @@ user_images = [
 def gen_image_urls(image_url):
 
     """
-    Helper that will take a root image name, and given our image manipulators
-    assign names
+        Helper that will take a root image name, and given our image manipulators
+        and preferred remote storage container will generate image names and urls
+
+        Args:
+            Base image name
+        Returns:
+            a dict of multiple {image_name : image_url}
     """
 
     images = {}

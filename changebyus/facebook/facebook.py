@@ -4,20 +4,14 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from flask import Blueprint, render_template, redirect, url_for, g
-from flask import current_app, request
+from flask import current_app, request, session
 from flask.ext.login import login_required, current_user, login_user
 
-from ..user.api import User
-from ..user.helpers import _create_user, _add_facebook, _is_email_in_use
+from ..user.models import User
+from ..user.helpers import _create_user, _add_facebook, _is_email_in_use, _is_display_name_in_use
 from ..helpers.stringtools import string_generator
 
-from flask import current_app, session
 from flask_oauth import OAuth
-
-import yaml
-import os
-import inspect
-
 
 """
 .. module:: facebook
@@ -38,32 +32,16 @@ facebook_view = Blueprint('facebook_view', __name__, url_prefix='/social/faceboo
 
 oauth = OAuth()
 
-# some magic that let's us get the local config file
-root_directory = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-settings = yaml.load(file(root_directory + '/config/facebook.yml'))
-
 # TODO probably should move this into the config file
 facebook = oauth.remote_app('facebook',
     base_url='https://graph.facebook.com/',
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=settings['CONSUMER_KEY'],
-    consumer_secret=settings['CONSUMER_SECRET'],
+    consumer_key=current_app.settings.get('FACEBOOK').get('CONSUMER_KEY'),
+    consumer_secret=current_app.settings.get('FACEBOOK').get('CONSUMER_SECRET'),
     request_token_params={'scope': 'email,publish_actions'}
 )
-
-"""
-facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=current_app.settings['FACEBOOK_CONSUMER_KEY'],
-    consumer_secret=current_app.settings['FACEBOOK_CONSUMER_SECRET'],
-    request_token_params={'scope': 'email,publish_actions'}
-)
-"""
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
@@ -120,17 +98,11 @@ def facebook_login():
 @login_required
 def facebook_link():
     """
-    ABOUT
-        view to set up the facebook link callback, linking a facebook
-        account to an existing user
-    METHOD
-        GET
-    INPUT
-        None
-    OUTPUT
-        Redirects user to facebook oauth process
-    PRECONDITIONS
-        None
+        View to set up the facebook link callback, linking a 
+        facebook account to an existing user
+    
+        Returns: 
+            redirect to facebook oauth page
     """
 
     # clear out any old facebook data
@@ -276,14 +248,33 @@ def facebook_authorized(resp):
         # not fantastic..
 
         if _is_email_in_use(email):
-            errStr = "User tried to link facebook with email {0} but email already used.".format(email)
+            infoStr = "User tried to link facebook with email {0} but email already used.".format(email)
+            current_app.logger.info(infoStr)
             return render_template('error.html', error = "Sorry, the email {0} is already in use.".format(email))
 
-        u = _create_user(email=email,
-                         password=password,
-                         display_name=full_name,
-                         first_name=first_name,
-                         last_name=last_name)
+        # check that the display_name is not already used.
+        display_name = full_name
+
+        in_use = _is_display_name_in_use(display_name)
+        sanity = 0
+        while in_use and sanity < 5:
+            display_name += string_generator(1)
+            in_use = _is_display_name_in_use(display_name)
+            sanity += 1
+
+        u = None
+        if sanity < 5:
+            u = _create_user(email=email,
+                             password=password,
+                             display_name=full_name,
+                             first_name=first_name,
+                             last_name=last_name)
+
+        if u is None:
+            errStr = "Erorr creating an account for the facebook display_name {0}.".format(display_name)
+            current_app.logger.error(errStr)
+            return render_template('error.html', error="Sorry, an error occured while creating your account.")
+
 
         _add_facebook(user_id=u.id,
                       facebook_id=facebook_id,

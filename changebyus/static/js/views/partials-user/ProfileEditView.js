@@ -3,7 +3,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
   return ProfileEditView = AbstractView.extend({
     initialize: function(options) {
       var _this = this;
-      console.log('ProfileEditView', options);
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       return $.get("/api/user/socialstatus", function(response_) {
@@ -17,6 +16,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return _this.render();
       });
     },
+    events: {
+      "click .social-btns .btn-primary": "socialClick"
+    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -26,13 +28,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return _this.onTemplateLoaded();
       });
     },
+    socialClick: function(e) {
+      var url;
+      e.preventDefault();
+      url = $(e.currentTarget).attr("href");
+      return popWindow(url);
+    },
     onTemplateLoaded: function() {
-      $(".social-btns .btn-primary").click(function(e) {
-        var url;
-        e.preventDefault();
-        url = $(this).attr("href");
-        return popWindow(url);
-      });
       this.ajaxForm();
       return onPageElementsLoad();
     },
@@ -87,17 +89,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           }
         }
       };
-      /*
-      				$form.submit ->
-      					obj = $form.serializeJSON()
-      					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
-      					json_str = JSON.stringify(obj)
-      					options.data = json_str
-      					console.log 'options.data',options.data
-      					$.ajax options
-      					false
-      */
-
       $form.ajaxForm(options);
       $projectLocation = $("#location");
       $projectLocation.typeahead({
@@ -128,8 +119,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         _this.location = datum;
         $('input[name="location"]').val(_this.location.name);
         $('input[name="lat"]').val(_this.location.lat);
-        $('input[name="lon"]').val(_this.location.lon);
-        return console.log(datum);
+        return $('input[name="lon"]').val(_this.location.lon);
       });
       return $('input:radio, input:checkbox').screwDefaultButtons({
         image: 'url("/static/img/black-check.png")',

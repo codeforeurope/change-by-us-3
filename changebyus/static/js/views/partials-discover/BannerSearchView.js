@@ -9,6 +9,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
+    events: {
+      "click .search-catagories li": "categoriesClick",
+      "click .pill-selection": "pillSelection",
+      "click .search-inputs .btn": "sendForm"
+    },
     render: function() {
       var _this = this;
       this.$el = $(".banner-search");
@@ -58,30 +63,29 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         return console.log(datum);
       });
       $dropkick = $('#search-range').dropkick();
-      $('.search-catagories li').click(function() {
-        $searchInput.val($(this).html());
-        return $searchCatagories.hide();
-      });
-      $('.pill-selection').click(function() {
-        var $this;
-        $this = $(this);
-        $this.toggleClass('active');
-        $this.siblings().toggleClass('active');
-        switch ($this.html()) {
-          case 'Projects':
-            return this.byProjectResouces = 'Projects';
-          case 'Resources':
-            return this.byProjectResouces = 'Resources';
-          case 'Popular':
-            return this.sortByPopularDistance = 'Popular';
-          case 'Distance':
-            return this.sortByPopularDistance = 'Distance';
+      onPageElementsLoad();
+      return {
+        categoriesClick: function(e) {
+          $searchInput.val($(e.currentTarget).html());
+          return $searchCatagories.hide();
+        },
+        pillSelection: function(e) {
+          var $this;
+          $this = $(e.currentTarget);
+          $this.toggleClass('active');
+          $this.siblings().toggleClass('active');
+          switch ($this.html()) {
+            case 'Projects':
+              return this.byProjectResouces = 'Projects';
+            case 'Resources':
+              return this.byProjectResouces = 'Resources';
+            case 'Popular':
+              return this.sortByPopularDistance = 'Popular';
+            case 'Distance':
+              return this.sortByPopularDistance = 'Distance';
+          }
         }
-      });
-      $('.search-inputs .btn').click(function() {
-        return _this.sendForm();
-      });
-      return onPageElementsLoad();
+      };
     },
     sendForm: function() {
       var dataObj,

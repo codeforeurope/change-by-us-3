@@ -45,8 +45,12 @@ define ["underscore",
 				@model.fetch 
 					success: =>@render()
 
-			render: -> 
-				console.log 'CBUProjectView',@model
+			events:
+				"click .flag-project a":"flagProject"
+				"click .project-footer .btn":"joinProject"
+				"click  a[href^='#']":"changeHash"
+
+			render: ->  
 				@$el = $("<div class='project-container'/>")
 				@$el.template @templateDir+"/templates/project.html", 
 					{}, => @onTemplateLoad()
@@ -79,6 +83,7 @@ define ["underscore",
 					{data:@viewData}, => @onHeaderLoaded()
 
 			onHeaderLoaded:->
+				console.log '@model',@model
 				id = @model.get("id")
 				config = {id:id}
 
@@ -100,44 +105,40 @@ define ["underscore",
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
 
-				# temp hack because somewhere this event default is prevented
-				$("a[href^='#']").click (e) -> 
-					window.location.hash = $(this).attr("href").substring(1)
+				@delegateEvents()
 
-				@btnListeners() 
+			flagProject:(e)-> 
+				e.preventDefault()
+				$this = $(e.currentTarget)
+				$this.parent().css('opacity', 0.25)
+				url = $this.attr('href')
+				$.ajax(
+					type: "POST"
+					url: url 
+				).done (response_)=>
+					console.log response_
 
-			btnListeners:->
-				$('.flag-project a').click (e)->
+			joinProject:(e)-> 
+				if @isMember then return
+				
+				if window.userID is ""
+					window.location = "/login"
+				else
+					id = @model.get("id")
+					$join  = $(".project-footer .btn")
 					e.preventDefault()
-					$this = $(this)
-					$this.parent().css('opacity', 0.25)
-					url = $this.attr('href')
+					
 					$.ajax(
 						type: "POST"
-						url: url 
-					).done (response_)=>
-						console.log response_
+						url: "/api/project/join"
+						data: {project_id:id}
+					).done (response)=>
+						if response.success
+							@isMember = true
+							$join.html('Joined!').css('background-color','#e6e6e6')
+			
 
-				id = @model.get("id")
-
-				$join  = $(".project-footer .btn")
-				$join.click (e) =>
-					if window.userID is ""
-						window.location = "/login"
-					else
-						e.preventDefault()
-						if @isMember then return
-						$.ajax(
-							type: "POST"
-							url: "/api/project/join"
-							data: {project_id:id}
-						).done (response)=>
-							#if response.msg.toLowerCase() is "ok"
-							if response.success
-								@isMember = true
-								$join.html('Joined!').css('background-color','#e6e6e6')
-
-			toggleSubView: -> 
+			toggleSubView: ->
 				view = window.location.hash.substring(1)
 				
 				for v in [@projectUpdatesView, @projectMembersView, @projectCalenderView]

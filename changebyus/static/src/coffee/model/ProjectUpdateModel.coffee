@@ -12,7 +12,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
 			user: 
 				id: "0"
 				collection: ""
-			public: false,
+			public: false
 			responses: [ ]
 			
 		parse:(resp_)->

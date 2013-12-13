@@ -20,7 +20,12 @@ define ["underscore", "backbone", "jquery", "template"],
 				@trigger 'ON_TEMPLATE_LOAD'
 				@templateLoaded = true
 				if @delayedCollectionLoad then @loadData()
+				@delegateEvents()
 				#override in subview
+
+			changeHash:(e)-> 
+				# hack to override backbone router
+				window.location.hash = $(e.currentTarget).attr("href").substring(1)
 			
 			show: ->
 				@$el.show()

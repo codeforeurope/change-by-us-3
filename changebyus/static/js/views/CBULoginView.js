@@ -5,6 +5,9 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
     },
+    events: {
+      "click .btn-info": "popUp"
+    },
     render: function() {
       var _this = this;
       this.$el = $("<div class='login'/>");
@@ -17,13 +20,11 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       });
       return $(this.parent).append(this.$el);
     },
-    addListeners: function() {
-      return $(".btn-info").click(function(e) {
-        var url;
-        e.preventDefault();
-        url = $(this).attr("href");
-        return popWindow(url);
-      });
+    popUp: function(e) {
+      var url;
+      e.preventDefault();
+      url = $(e.currentTarget).attr("href");
+      return popWindow(url);
     },
     ajaxForm: function() {
       var $feedback, $form, $submit, options,

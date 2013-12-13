@@ -68,9 +68,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					contentType: "application/json; charset=utf-8"
 
 					success: (response_) =>
-						@success(response_)
-						console.log response_
-
+						@success(response_) 
 				
 				@$updateForm.submit => 
 					obj = @$updateForm.serializeJSON()

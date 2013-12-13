@@ -5,68 +5,70 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       CBUProjectView.prototype.initialize.call(this, options);
       return console.log('CBUProjectOwnerView', this);
     },
+    events: {
+      "click a[href^='#']": "changeHash"
+    },
     render: function() {
       var _this = this;
       this.$el = $("<div class='project-container'/>");
       this.$el.template(this.templateDir + "/templates/project-owner.html", {}, function() {
-        return _this.addSubViews();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
     },
-    addSubViews: function() {
-      var $header,
-        _this = this;
-      console.log('addSubViews', this.model.attributes);
-      $header = $("<div class='project-header'/>");
-      $header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
+    onTemplateLoad: function() {
+      var _this = this;
+      this.$header = $("<div class='project-header'/>");
+      return this.$header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
-        var config, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection;
-        config = {
-          id: _this.model.get("id"),
-          name: _this.model.get("name"),
-          model: _this.model,
-          isOwner: true,
-          view: "admin"
-        };
-        projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
-        projectMembersCollection = new ProjectMembersCollection(config);
-        projectUpdatesCollection = new ProjectUpdatesCollection(config);
-        _this.projectDiscussionsView = new ProjectDiscussionsView({
-          collection: projectDiscussionsCollection
-        });
-        _this.projectDiscussionView = new ProjectDiscussionView();
-        _this.projectNewDiscussionView = new ProjectNewDiscussionView(config);
-        _this.projectAddUpdateView = new ProjectAddUpdateView({
-          collection: projectUpdatesCollection
-        });
-        _this.projectFundraisingView = new ProjectFundraisingView(config);
-        _this.projectCalenderView = new ProjectCalenderView(config);
-        _this.projectMembersView = new ProjectMembersView({
-          collection: projectMembersCollection,
-          view: "admin",
-          projectID: _this.model.id
-        });
-        _this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
-        _this.projectDiscussionsView.on('discussionClick', function(arg_) {
-          console.log('projectDiscussionsView arg_', arg_);
-          return window.location.hash = "discussion/" + arg_.model.id;
-        });
-        _this.discussionBTN = $("a[href='#discussions']");
-        _this.updatesBTN = $("a[href='#updates']");
-        _this.fundraisingBTN = $("a[href='#fundraising']");
-        _this.calendarBTN = $("a[href='#calendar']");
-        _this.membersBTN = $("a[href='#members']");
-        _this.infoBTN = $("a[href='#info']");
-        $(window).bind("hashchange", function(e) {
-          return _this.toggleSubView();
-        });
-        _this.toggleSubView();
-        return $("a[href^='#']").click(function(e) {
-          return window.location.hash = $(this).attr("href").substring(1);
-        });
+        return _this.addSubViews();
       });
-      return this.$el.prepend($header);
+    },
+    addSubViews: function() {
+      var config, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection,
+        _this = this;
+      config = {
+        id: this.model.get("id"),
+        name: this.model.get("name"),
+        model: this.model,
+        isOwner: true,
+        view: "admin"
+      };
+      projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
+      projectMembersCollection = new ProjectMembersCollection(config);
+      projectUpdatesCollection = new ProjectUpdatesCollection(config);
+      this.projectDiscussionsView = new ProjectDiscussionsView({
+        collection: projectDiscussionsCollection
+      });
+      this.projectDiscussionView = new ProjectDiscussionView();
+      this.projectNewDiscussionView = new ProjectNewDiscussionView(config);
+      this.projectAddUpdateView = new ProjectAddUpdateView({
+        collection: projectUpdatesCollection
+      });
+      this.projectFundraisingView = new ProjectFundraisingView(config);
+      this.projectCalenderView = new ProjectCalenderView(config);
+      this.projectMembersView = new ProjectMembersView({
+        collection: projectMembersCollection,
+        view: "admin",
+        projectID: this.model.id
+      });
+      this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
+      this.projectDiscussionsView.on('discussionClick', function(arg_) {
+        return window.location.hash = "discussion/" + arg_.model.id;
+      });
+      this.discussionBTN = $("a[href='#discussions']");
+      this.updatesBTN = $("a[href='#updates']");
+      this.fundraisingBTN = $("a[href='#fundraising']");
+      this.calendarBTN = $("a[href='#calendar']");
+      this.membersBTN = $("a[href='#members']");
+      this.infoBTN = $("a[href='#info']");
+      $(window).bind("hashchange", function(e) {
+        return _this.toggleSubView();
+      });
+      this.toggleSubView();
+      this.delegateEvents();
+      return this.$el.prepend(this.$header);
     },
     toggleSubView: function() {
       var btn, id, v, view, _i, _j, _len, _len1, _ref, _ref1;

@@ -21,22 +21,26 @@ define ["underscore",
 
 			parent: "#project-update"
 
+			events: 
+				"click #post-update":"animateUp"
+				"click .share-toggle":"shareToggle"
+
+			shareToggle:->
+				$(".share-toggle").toggleClass("hide")
+
 			render: -> 
-				@$el = $(@parent)
-				console.log 'ProjectAddUpdateView >>> ',@model
+				@$el = $(@parent) 
 				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
 					{data: @viewData}, => @onTemplateLoad()
+
 
 			onTemplateLoad:-> 
 				ProjectSubView::onTemplateLoad.call @
 				
 				@$ul = @$el.find('.updates-container ul')
 				form = new ProjectWysiwygFormView({parent:"#update-form"})
-				form.on 'ON_TEMPLATE_LOAD', => 
-					$("#post-update").click ->
-						$("html, body").animate({ scrollTop: 0 }, "slow")
-
+				form.on 'ON_TEMPLATE_LOAD', =>  
 					$submit = form.$el.find('input[type="submit"]')
 					
 					form.beforeSubmit = (arr_, form_, options_)->  
@@ -44,20 +48,14 @@ define ["underscore",
 
 					form.success = (response_)=>
 						if response_.success
-							@addModal response_.data
-						console.log 'response_',response_
-
-					$shareOptions = $(".share-options")
-					$shareToggle = $(".share-toggle")
-					$shareToggle.click -> $shareOptions.toggleClass("hide")
+							@addModal response_.data 
 
 					@$el.find('input:radio, input:checkbox').screwDefaultButtons
 						image: 'url("/static/img/black-check.png")'
 						width: 18
 						height: 18
 
-			addAll: -> 
-				console.log 'addAlladdAlladdAlladdAlladdAlladdAlladdAlladdAll'
+			addAll: ->  
 				@$day = $('<div />')
 				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
 					{}, =>
@@ -70,8 +68,7 @@ define ["underscore",
 						ProjectSubView::addAll.call(@) 
 						onPageElementsLoad()
 
-			newDay:(date_)->
-				console.log 'newDay',date_
+			newDay:(date_)-> 
 				@currentDate = date_
 				@$currentDay = @$day.clone()
 				@$el.append @$currentDay
@@ -80,11 +77,12 @@ define ["underscore",
 					
 			addOne: (model_) ->
 				m = moment(model_.get("updated_at")).format("MMMM D")
-				if @currentDate isnt m then @newDay(m)
-				console.log "ProjectAddUpdateView addOne model", model_
+				if @currentDate isnt m then @newDay(m) 
 				view = new ProjectUpdateListItemView({model: model_})
 				@$ul.append view.$el 
 
-			addModal:(data_)->
-				console.log "ProjectAddUpdateView addModal model", data_
+			addModal:(data_)-> 
 				@modal = new ProjectUpdateSuccessModalView({model:data_})
+
+			animateUp:->
+				$("html, body").animate({ scrollTop: 0 }, "slow")

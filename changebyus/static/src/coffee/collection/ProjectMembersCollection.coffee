@@ -7,9 +7,8 @@ define ["underscore", "backbone", "model/UserModel", ],
 				@id = options.id
 
 			url: ->
-				"/api/project/" + @id + "/users"
+				"/api/project/#{@id}/users"
 
-			parse: (response) ->
-				#console.log 'ProjectMembersCollection response',response
+			parse: (response) -> 
 				if (response.msg is "OK") then response.data else {}
 

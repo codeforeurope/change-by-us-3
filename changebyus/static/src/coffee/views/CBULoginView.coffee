@@ -6,6 +6,9 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 				AbstractView::initialize.call @, options
 				@render()
 
+			events:
+				"click .btn-info":"popUp"
+
 			render: -> 
 				@$el = $("<div class='login'/>")
 				@$el.template @templateDir + "/templates/login.html",
@@ -16,11 +19,10 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 
 				$(@parent).append @$el
 
-			addListeners: ->
-				$(".btn-info").click (e) ->
-					e.preventDefault()
-					url = $(this).attr("href")
-					popWindow url
+			popUp:(e)->
+				e.preventDefault()
+				url = $(e.currentTarget).attr("href")
+				popWindow url
 
 
 			ajaxForm: -> 

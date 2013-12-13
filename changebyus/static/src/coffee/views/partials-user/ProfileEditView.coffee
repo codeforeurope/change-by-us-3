@@ -3,7 +3,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 		ProfileEditView = AbstractView.extend
 
 			initialize: (options) ->
-				console.log 'ProfileEditView',options
 				AbstractView::initialize.call @, options
 				@viewData = @model.attributes
 
@@ -15,18 +14,21 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						
 					@render()
 
+			events:
+				"click .social-btns .btn-primary":"socialClick"
+
 			render: ->
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-user/profile-edit-form.html", 
 					{data:@viewData}, => @onTemplateLoaded()
 						
 
-			onTemplateLoaded:->
-				$(".social-btns .btn-primary").click (e) ->
-					e.preventDefault()
-					url = $(this).attr("href")
-					popWindow url
+			socialClick:(e)->
+				e.preventDefault()
+				url = $(e.currentTarget).attr("href")
+				popWindow url
 
+			onTemplateLoaded:->
 				@ajaxForm()
 				onPageElementsLoad()
 
@@ -70,17 +72,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						else
 							$feedback.removeClass('.alert-success').addClass('.alert-error')
 
-				###
-				$form.submit ->
-					obj = $form.serializeJSON()
-					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
-					json_str = JSON.stringify(obj)
-					options.data = json_str
-					console.log 'options.data',options.data
-					$.ajax options
-					false
-				###
-
 				$form.ajaxForm options
 
 				# location autocomplete
@@ -103,7 +94,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						$('input[name="location"]').val @location.name
 						$('input[name="lat"]').val @location.lat
 						$('input[name="lon"]').val @location.lon
-						console.log(datum)
 				)
 
 				# style buttons

@@ -15,7 +15,6 @@ define ["underscore", "backbone"], (_, Backbone) ->
 				flags_me: true
 				posts_update_common_project: false
 				posts_update_to_my_project: true
-
 			active: false
 			password: ""
 			id: ""

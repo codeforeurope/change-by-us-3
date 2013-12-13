@@ -18,9 +18,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.viewData.view = options.view || this.view;
       return this.render();
     },
+    events: {
+      "click #embed-calendar": "embedCalendar"
+    },
     render: function() {
       var _this = this;
-      console.log('@viewData <<<<< ', this.viewData);
       this.$el = $("<div class='project'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-calendar.html", {
         data: this.viewData
@@ -30,14 +32,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var _this = this;
-      this.$el.find(".preload").remove();
-      return $('#embed-calendar').click(function(e) {
-        e.preventDefault();
-        _this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
-          model: _this.model
-        });
-        return console.log(_this.projectEmbedCalendarModalView);
+      return this.$el.find(".preload").remove();
+    },
+    embedCalendar: function() {
+      return this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
+        model: this.model
       });
     }
   });

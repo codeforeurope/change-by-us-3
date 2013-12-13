@@ -14,7 +14,7 @@ define ["underscore",
 	 ProjectEmbedCalendarModalView) ->
 
 		ProjectCalenderView = ProjectSubView.extend
-			isOwner:false
+			isOwner: false
 			parent: "#project-calendar"
 			projectEmbedCalendarModalView: null
 			view: "public"
@@ -30,9 +30,11 @@ define ["underscore",
 				@viewData.view    = options.view || @view
 
 				@render()
+
+			events:
+				"click #embed-calendar":"embedCalendar"
 				
-			render: -> 
-				console.log '@viewData <<<<< ',@viewData
+			render: ->  
 				@$el = $("<div class='project'/>")
 				@$el.template @templateDir + "/templates/partials-project/project-calendar.html",
 					{data: @viewData}, => @onTemplateLoad()
@@ -40,9 +42,7 @@ define ["underscore",
 
 			onTemplateLoad:->
 				@$el.find(".preload").remove()
-				$('#embed-calendar').click (e)=>
 
-					e.preventDefault()
-					@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
-					console.log @projectEmbedCalendarModalView
+			embedCalendar:->
+				@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
 

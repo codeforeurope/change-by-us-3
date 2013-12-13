@@ -6,7 +6,6 @@ define ["underscore", "backbone", "model/ProjectUpdateModel", ],
 			url: ->
 				"/api/stream"
 
-			parse: (response) ->
-				#console.log 'ProjectMembersCollection response',response
+			parse: (response) -> 
 				if (response.msg is "OK") then response.data else {}
 

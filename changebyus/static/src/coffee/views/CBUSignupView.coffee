@@ -16,14 +16,17 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						@addListeners()
 						onPageElementsLoad()
 
-				$(@parent).append @$el
+				$(@parent).append @$el 
+
+			events:
+				"click .btn-info":"infoClick"
+
+			infoClick:(e)->
+				e.preventDefault()
+				url = $(e.currentTarget).attr("href")
+				popWindow url
 
 			addListeners: ->
-				$(".btn-info").click (e) ->
-					e.preventDefault()
-					url = $(this).attr("href")
-					popWindow url
-
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
 

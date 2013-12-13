@@ -23,7 +23,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					window.location = "/project/"+@model.id+"/admin#discussion/"+response_.data.id
 
 			cancel:->
-				@$el.find('input[value=Cancel]').click =>
-					$("#discussion-editor").html('')
-					@$el.find('form').resetForm()
-					window.location.hash = '#discussions'
+				$("#discussion-editor").html('')
+				@$el.find('form').resetForm()
+				window.location.hash = '#discussions'

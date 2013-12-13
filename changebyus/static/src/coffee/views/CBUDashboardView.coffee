@@ -32,6 +32,9 @@ define ["underscore",
 				@userModel.fetch 
 					success: =>@render() 
 
+			events:
+				"click a[href^='#']":"changeHash"
+
 			render: ->  
 				@$el.template @templateDir+"/templates/dashboard.html", 
 					{data:@userModel.attributes}, => 
@@ -51,11 +54,8 @@ define ["underscore",
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
 
-				# temp hack because somewhere this event default is prevented
-				$("a[href^='#']").click (e) -> 
-					window.location.hash = $(this).attr("href").substring(1)
-
 				profileEditView = new ProfileEditView({model:@userModel, parent:@profileView})
+
 
 			toggleSubView: -> 
 				view = window.location.hash.substring(1)

@@ -7,7 +7,7 @@ define ["underscore", "backbone", "model/ProjectCalendarModel"],
 				@id = options.id
 			
 			url: ->
-				"/api/project/" + @id + "/calendar"
+				"/api/project/#{@id}/calendar"
 
 			parse: (response) ->
 				if (response.msg is "OK") then response.data else {}

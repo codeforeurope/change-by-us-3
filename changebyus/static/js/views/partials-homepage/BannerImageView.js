@@ -6,10 +6,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.render();
     },
     render: function() {
+      var _this = this;
       this.$el = $("<div class='banner-image'/>");
       this.$el.template(this.templateDir + "/templates/partials-homepage/banner-image.html", {
         data: this.viewData
-      }, function() {});
+      }, function() {
+        return _this.onTemplateLoad();
+      });
       return $(this.parent).append(this.$el);
     }
   });

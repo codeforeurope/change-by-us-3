@@ -1,14 +1,16 @@
 define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, ProjectSubView, UpdateListItemView) {
   var UpdatesView;
   return UpdatesView = ProjectSubView.extend({
-    parent: "#project-update",
     members: null,
     $ul: null,
     currentData: "",
+    isResource: false,
     initialize: function(options) {
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
-      return this.viewData.isMember = options.isMember;
+      this.isResource = options.isResource || this.isResource;
+      this.viewData.isMember = options.isMember;
+      return console.log('@parent', this.parent, this.collection);
     },
     render: function() {
       var _this = this;
@@ -62,16 +64,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       return console.log('addMember >>> ', model_);
     },
     newDay: function(date_) {
-      console.log('newDay', date_);
       this.currentDate = date_;
       this.$currentDay = this.$day.clone();
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
-      return this.$ul = this.$currentDay.find('.bordered-item');
+      this.$ul = this.$currentDay.find('.bordered-item');
+      return console.log('newDay', date_, this.$ul, this.$currentDay);
     },
     addOne: function(model_) {
       var m, view;
-      console.log(model_, this.$ul);
       m = moment(model_.get("updated_at")).format("MMMM D");
       if (this.currentDate !== m) {
         this.newDay(m);
@@ -79,7 +80,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       view = new UpdateListItemView({
         model: model_
       });
-      return this.$ul.append(view.$el);
+      this.$ul.append(view.$el);
+      return console.log('addone', this.$el);
     }
   });
 });

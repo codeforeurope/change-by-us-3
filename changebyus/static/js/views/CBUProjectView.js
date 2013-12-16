@@ -3,6 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
     isMember: false,
+    isResource: false,
     projectCalenderView: null,
     projectMembersView: null,
     updatesView: null,
@@ -32,7 +33,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var className, templateURL,
         _this = this;
-      if (this.model.get("resource")) {
+      this.isResource = this.model.get("resource");
+      if (this.isResource) {
         className = "resource-container";
         templateURL = "/templates/resource.html";
       } else {
@@ -69,7 +71,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     addHeaderView: function() {
       var _this = this;
-      if (this.model.get("resource")) {
+      console.log('isResource', this.isResource);
+      if (this.isResource) {
         this.$header = $("<div class='resource-header'/>");
         return this.$header.template(this.templateDir + "/templates/partials-resource/resource-header.html", {
           data: this.viewData
@@ -93,53 +96,46 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         id: id
       };
       this.$el.prepend(this.$header);
-      if (this.model.get("resource")) {
-        this.updatesCollection = new UpdatesCollection(config);
-        this.updatesCollection.on("reset", this.onUpdatesLoad, this);
-        return this.updatesCollection.fetch({
-          reset: true
-        });
-      } else {
-        this.updatesCollection = new UpdatesCollection(config);
-        this.projectMembersCollection = new ProjectMembersCollection(config);
-        this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
-        return this.projectMembersCollection.fetch({
-          reset: true
-        });
-      }
-    },
-    onUpdatesLoad: function() {
-      this.updatesView = new UpdatesView({
-        collection: this.updatesCollection,
-        members: this.projectMembersCollection,
-        isMember: this.isMember
+      this.updatesCollection = new UpdatesCollection(config);
+      this.projectMembersCollection = new ProjectMembersCollection(config);
+      this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
+      return this.projectMembersCollection.fetch({
+        reset: true
       });
-      return this.delegateEvents();
     },
     onCollectionLoad: function() {
-      var _this = this;
+      var parent,
+        _this = this;
+      parent = this.isResource ? "#resource-updates" : "#project-updates";
       this.updatesView = new UpdatesView({
         collection: this.updatesCollection,
         members: this.projectMembersCollection,
-        isMember: this.isMember
-      });
-      this.projectMembersView = new ProjectMembersView({
-        collection: this.projectMembersCollection,
-        isDataLoaded: true,
-        isMember: this.isMember
-      });
-      this.projectCalenderView = new ProjectCalenderView({
-        model: this.model,
         isMember: this.isMember,
-        isOwner: this.isOwner
+        isResource: this.isResource,
+        parent: parent
       });
-      this.updatesBTN = $("a[href='#updates']").parent();
-      this.membersBTN = $("a[href='#members']").parent();
-      this.calendarBTN = $("a[href='#calendar']").parent();
-      $(window).bind("hashchange", function(e) {
-        return _this.toggleSubView();
-      });
-      this.toggleSubView();
+      console.log('parent', parent);
+      if (this.model.get("resource")) {
+        this.updatesView.show();
+      } else {
+        this.projectMembersView = new ProjectMembersView({
+          collection: this.projectMembersCollection,
+          isDataLoaded: true,
+          isMember: this.isMember
+        });
+        this.projectCalenderView = new ProjectCalenderView({
+          model: this.model,
+          isMember: this.isMember,
+          isOwner: this.isOwner
+        });
+        this.updatesBTN = $("a[href='#updates']").parent();
+        this.membersBTN = $("a[href='#members']").parent();
+        this.calendarBTN = $("a[href='#calendar']").parent();
+        $(window).bind("hashchange", function(e) {
+          return _this.toggleSubView();
+        });
+        this.toggleSubView();
+      }
       return this.delegateEvents();
     },
     flagProject: function(e) {

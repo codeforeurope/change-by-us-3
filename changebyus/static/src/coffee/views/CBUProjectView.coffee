@@ -26,6 +26,7 @@ define ["underscore",
 		CBUProjectView = AbstractView.extend
 			isOwner:false
 			isMember:false
+			isResource:false
 			projectCalenderView: null
 			projectMembersView: null
 			updatesView: null
@@ -50,7 +51,9 @@ define ["underscore",
 				"click  a[href^='#']":"changeHash"
 
 			render: ->
-				if @model.get("resource")
+				@isResource = @model.get("resource")
+
+				if @isResource
 					className = "resource-container"
 					templateURL = "/templates/resource.html"
 				else
@@ -83,7 +86,8 @@ define ["underscore",
 							@addHeaderView()
 
 			addHeaderView: ->
-				if @model.get("resource")
+				console.log 'isResource',@isResource
+				if @isResource
 					@$header = $("<div class='resource-header'/>")
 					@$header.template @templateDir+"/templates/partials-resource/resource-header.html",
 						{data:@viewData}, => @onHeaderLoaded()
@@ -99,31 +103,27 @@ define ["underscore",
 
 				@$el.prepend @$header
 
-				if @model.get("resource")
-					@updatesCollection  = new UpdatesCollection(config)  
-					@updatesCollection.on "reset", @onUpdatesLoad, @
-					@updatesCollection.fetch {reset: true}
-				else
-					@updatesCollection  = new UpdatesCollection(config)  
-					@projectMembersCollection  = new ProjectMembersCollection(config)
-					@projectMembersCollection.on "reset", @onCollectionLoad, @
-					@projectMembersCollection.fetch {reset: true}
-
-			onUpdatesLoad:->
-				@updatesView = new UpdatesView({collection:@updatesCollection, members:@projectMembersCollection, isMember:@isMember})
-				@delegateEvents()
+				@updatesCollection  = new UpdatesCollection(config)  
+				@projectMembersCollection  = new ProjectMembersCollection(config)
+				@projectMembersCollection.on "reset", @onCollectionLoad, @
+				@projectMembersCollection.fetch {reset: true}
 
 			onCollectionLoad:->  
-				@updatesView         = new UpdatesView({collection:@updatesCollection, members:@projectMembersCollection, isMember:@isMember})
-				@projectMembersView  = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-				@projectCalenderView = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
-				
-				@updatesBTN  = $("a[href='#updates']").parent()
-				@membersBTN  = $("a[href='#members']").parent()
-				@calendarBTN = $("a[href='#calendar']").parent()
-				
-				$(window).bind "hashchange", (e) => @toggleSubView()
-				@toggleSubView()
+				parent       = if @isResource then "#resource-updates" else "#project-updates"
+				@updatesView = new UpdatesView({collection:@updatesCollection, members:@projectMembersCollection, isMember:@isMember, isResource:@isResource, parent:parent})
+				console.log 'parent',parent
+				if @model.get("resource")
+					@updatesView.show()
+				else
+					@projectMembersView  = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
+					@projectCalenderView = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
+					
+					@updatesBTN  = $("a[href='#updates']").parent()
+					@membersBTN  = $("a[href='#members']").parent()
+					@calendarBTN = $("a[href='#calendar']").parent()
+					
+					$(window).bind "hashchange", (e) => @toggleSubView()
+					@toggleSubView()
 
 				@delegateEvents()
 

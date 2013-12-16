@@ -46,7 +46,7 @@ def _get_lat_lon_from_location(loc):
 
     return latlon
 
-def _create_project(form, resource = False ):
+def _create_project(form):
 
     name = form.name.data
     description = form.description.data
@@ -55,6 +55,7 @@ def _create_project(form, resource = False ):
     location = form.location.data
     lat = form.lat.data
     lon = form.lon.data
+    resource = form.resource.data
     
     if (lat and lon):
         geo_location = [float(lon), float(lat)]

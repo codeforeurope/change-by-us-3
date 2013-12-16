@@ -43,7 +43,8 @@ def login_view():
 def discover_view():
     return _return_index()
 
-@frontend_view.route('/create')
+@frontend_view.route('/create/project')
+@frontend_view.route('/create/resource')
 @login_required
 def create_project_view():
     return _return_index()

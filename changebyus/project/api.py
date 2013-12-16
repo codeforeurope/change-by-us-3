@@ -140,7 +140,7 @@ class CreateProjectForm(Form):
     lat = HiddenField("lat")
     lon = HiddenField("lon")
     photo = FileField("photo")
-    resource = TextField("resource")
+    resource = HiddenField("resource")
 
 @project_api.route('/create', methods = ['POST'])
 @login_required

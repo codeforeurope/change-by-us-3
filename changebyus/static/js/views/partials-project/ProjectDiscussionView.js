@@ -1,11 +1,11 @@
-define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-project/ProjectWysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, ProjectWysiwygFormView, ProjectDiscussionThreadItemView) {
+define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, WysiwygFormView, ProjectDiscussionThreadItemView) {
   var ProjectDiscussionView;
   return ProjectDiscussionView = ProjectSubView.extend({
     parent: "#project-discussion",
     $ul: null,
     $form: null,
     $threadFormID: '#add-thread-form',
-    projectWysiwygFormView: null,
+    WysiwygFormView: null,
     delayedDataLoad: false,
     render: function() {
       var _this = this;
@@ -55,13 +55,13 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         this.addDiscussion(model);
       }
       userAvatar = $('.profile-nav-header img').attr('src');
-      this.projectWysiwygFormView = new ProjectWysiwygFormView({
+      this.WysiwygFormView = new WysiwygFormView({
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
         userAvatar: userAvatar
       });
-      return this.projectWysiwygFormView.success = function() {
+      return this.WysiwygFormView.success = function() {
         return window.location.reload();
       };
     },

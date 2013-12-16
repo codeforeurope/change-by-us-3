@@ -65,6 +65,7 @@
 .search-filters{
   span{ float: left; }
 }
+
 .search-toggles{
   float: left;
   width: 420px;
@@ -118,7 +119,8 @@
   h3{text-align: left;}
 }
  
-.discover-header-right, .dashboard-header-right{
+.discover-header-right, 
+.dashboard-header-right{
   float: right;
 }
 
@@ -126,6 +128,7 @@
    width: 23%;
    height: 200px;
    margin-left: 2%;
+
   .btn-large {
     width: 100%;
     line-height: 20px;
@@ -163,6 +166,7 @@
   .title {
     margin-top: 10px;
     margin-bottom: 20px;
+    
     h2{
       margin-top: 22px;
       font-weight: normal;

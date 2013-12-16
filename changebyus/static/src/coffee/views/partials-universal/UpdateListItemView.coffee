@@ -4,21 +4,21 @@ define ["underscore",
 		"template", 
 		"moment", 
 		"abstract-view", 
-		"model/ProjectUpdateModel", 
+		"model/UpdateModel", 
 		"model/UserModel",
-		"views/partials-project/ProjectPostReplyView"], 
+		"views/partials-universal/PostReplyView"], 
 	(_, 
 	 Backbone, 
 	 $, 
 	 temp, 
 	 moment, 
 	 AbstractView, 
-	 ProjectUpdateModel, 
+	 UpdateModel, 
 	 UserModel,
-	 ProjectPostReplyView) ->
-		ProjectUpdateListItemView = AbstractView.extend
+	 PostReplyView) ->
+		UpdateListItemView = AbstractView.extend
 			
-			model:ProjectUpdateModel
+			model:UpdateModel
 			isStream:false
 			$repliesHolder: null
 			$postRight: null
@@ -43,7 +43,7 @@ define ["underscore",
 				m = moment(@model.get("created_at")).format("MMMM D hh:mm a")
 				@model.set("format_date", m)
 
-				@$el.template @templateDir+"/templates/partials-project/project-update-list-item.html",
+				@$el.template @templateDir+"/templates/partials-universal/update-list-item.html",
 					{data:@viewData}, => @onTemplateLoad()
 				@
 
@@ -55,14 +55,14 @@ define ["underscore",
 					@$el.append $projectTitle
 
 				@addReplies()
+				@delegateEvents()
 
 			addReplies:-> 
 				console.log 'addReplies',@model
 				self = @ 
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
-				@$postRight     = @$el.find('.update-content')
-				$replyToggle    = @$el.find('.reply-toggle').first()
-				$replyToggle.click ->
+
+				@$el.find('.reply-toggle').first().click ->
 					$(this).find('.reply').toggleClass('hide')
 					self.$repliesHolder.toggleClass('hide')
 
@@ -72,18 +72,18 @@ define ["underscore",
 				viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
 
 				@$replyForm = $('<li class="post-reply-form"/>')
-				@$replyForm.template @templateDir+"/templates/partials-project/project-post-reply-form.html",
+				@$replyForm.template @templateDir+"/templates/partials-universal/post-reply-form.html",
 					{data:viewData}, => @onFormLoaded()
 
 			addReply:(reply_)->
-				projectPostReplyView = new ProjectPostReplyView({model:reply_})
+				postReplyView = new PostReplyView({model:reply_})
 				if $('.post-reply-form').length > 0
-					projectPostReplyView.$el.insertBefore('.post-reply-form')
+					postReplyView.$el.insertBefore('.post-reply-form')
 				else
-					@$repliesHolder.append projectPostReplyView.$el
+					@$repliesHolder.append postReplyView.$el
 
 			onFormLoaded:->
-				@$postRight.append @$repliesHolder
+				@$el.find('.update-content').append @$repliesHolder
 				@$repliesHolder.append @$replyForm
 				
 				$form = @$replyForm.find('form')

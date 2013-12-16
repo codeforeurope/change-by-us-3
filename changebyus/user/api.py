@@ -161,10 +161,13 @@ def api_get_user(user_id):
     return jsonify_response( ret )
 
 
+class BetterBooleanField(BooleanField):
+    false_values = ('false', 'False', '', False)
+
 class EditUserForm(Form):
 
     email = TextField("email")
-    public_email = BooleanField("public_email")
+    public_email = BetterBooleanField("public_email")
     password = PasswordField("password")
     display_name = TextField("display_name")
     first_name = TextField("first_name")
@@ -208,9 +211,10 @@ def api_edit_user():
 
     u = User.objects.with_id(g.user.id)
 
+    from nose.tools import set_trace; set_trace()
+    
+    # we have to access a BooleanFields raw_data when we are not using HTML forms
     u.public_email = form.public_email.raw_data[0]
-    errStr = "Public email of {0} got converted to {1}".format(form.public_email.raw_data, u.public_email)
-    current_app.logger.error(errStr)
 
     email = form.email.data
     password = form.password.data

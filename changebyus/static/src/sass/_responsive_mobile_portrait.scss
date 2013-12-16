@@ -1,9 +1,12 @@
 /**** affects all sizes from 0 to 480px **/
 
 @media only screen and (max-width: 480px) {
-	//body.debug{background: green;}
-	body{background: green;}
+	body.debug{background: green;}
+	//body{background: green;}
 
+	/*******************************************
+	 * Header/Nav
+	 *******************************************/
 	.dashboard-tabs{
 		li{float: none;}
 	}
@@ -37,6 +40,10 @@
 		margin: 32px auto 0;
 	}
 
+	/*******************************************
+	 * Project
+	 *******************************************/
+
 	.project-square{
 		margin: 10px 0;
 		width: 100%;
@@ -65,7 +72,9 @@
 			}
 		}
 	}
-
+	
+	.create-by{ margin-bottom: 24px; }
+	
 	.notify-row{
 		margin-bottom: 12px;
 		div{
@@ -74,13 +83,8 @@
 				width: 70%;
 			}
 		}
-			
 	}
-
-	.create-by{
-		margin-bottom: 24px;
-	}
-
+	
 	.create-project{
 		h1{font-size: 40px;}
 	}

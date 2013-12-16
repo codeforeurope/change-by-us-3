@@ -6,7 +6,11 @@ define(["underscore", "backbone", "model/ProjectModel"], function(_, Backbone, P
       return "/api/project/list?limit=3&sort=created_at&order=desc&";
     },
     parse: function(response) {
-      return response.data;
+      if (response.success) {
+        return response.data;
+      } else {
+        return {};
+      }
     }
   });
 });

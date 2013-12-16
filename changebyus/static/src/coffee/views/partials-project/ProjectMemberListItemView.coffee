@@ -49,6 +49,3 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				).done (response_)=>
 					if (response_.msg.toLowerCase() == "ok")
 						c = @model.collection
-						console.log '@model.collection',c
-						@model.collection.remove @model
-						console.log '@model.collection',c

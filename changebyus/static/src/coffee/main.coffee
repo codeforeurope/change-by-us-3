@@ -184,7 +184,7 @@ require ["jquery",
 							position: "fixed" 
 							bottom: 0
 					else
-						$footer.css position: "relative"
+						$footer.css position: "relative" 
 			
 			positionFooter()
 			$window.scroll(positionFooter).resize(positionFooter)

@@ -1,5 +1,5 @@
 define ["underscore", "backbone"], (_, Backbone) ->
-	ProjectPostReplyModel = Backbone.Model.extend
+	PostReplyModel = Backbone.Model.extend
 		urlRoot: "/api/post"
 		
 		default: 

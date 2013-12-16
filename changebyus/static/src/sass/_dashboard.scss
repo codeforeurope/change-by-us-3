@@ -1,10 +1,13 @@
 .dashboard-header{
 	margin-top: 24px;
+
 	h1{float: left;}
 }
+
 .dashboard-tabs{
 	background: $gray37;
 	margin-top: 24px;
+	margin-bottom: 20px;
 	
 	li{
 		padding: 20px;
@@ -14,9 +17,4 @@
 	a{font-weight: bold;}
 	
 	.active{background: $gray29;}
-	
-}
-
-#manage-projects, #follow-projects{
-	margin-top: 20px;
 }

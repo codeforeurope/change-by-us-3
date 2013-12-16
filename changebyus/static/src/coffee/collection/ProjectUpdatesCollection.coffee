@@ -1,7 +1,7 @@
-define ["underscore", "backbone", "model/ProjectUpdateModel"], 
-	(_, Backbone, ProjectUpdateModel) ->
+define ["underscore", "backbone", "model/UpdateModel"], 
+	(_, Backbone, UpdateModel) ->
 		ProjectUpdatesCollection = Backbone.Collection.extend 
-			model: ProjectUpdateModel
+			model: UpdateModel
 			
 			initialize: (options) ->
 				@id = options.id
@@ -10,5 +10,5 @@ define ["underscore", "backbone", "model/ProjectUpdateModel"],
 				"/api/post/project/#{@id}/list_updates?sort=created_at&order=desc&"
 
 			parse: (response) ->
-				if (response.msg is "OK") then response.data else {}
+				if response.success then response.data else {}
 

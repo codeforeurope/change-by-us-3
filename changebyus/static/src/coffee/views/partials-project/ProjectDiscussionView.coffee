@@ -4,7 +4,7 @@ define ["underscore",
 		"template", 
 		"model/ProjectDiscussionModel", 
 		"views/partials-project/ProjectSubView", 
-		"views/partials-project/ProjectWysiwygFormView", 
+		"views/partials-universal/WysiwygFormView", 
 		"views/partials-project/ProjectDiscussionThreadItemView"], 
 	(_, 
 	 Backbone, 
@@ -12,7 +12,7 @@ define ["underscore",
 	 temp, 
 	 ProjectDiscussionModel, 
 	 ProjectSubView, 
-	 ProjectWysiwygFormView, 
+	 WysiwygFormView, 
 	 ProjectDiscussionThreadItemView) ->
 		ProjectDiscussionView = ProjectSubView.extend
 
@@ -20,7 +20,7 @@ define ["underscore",
 			$ul:null
 			$form:null 
 			$threadFormID:'#add-thread-form'
-			projectWysiwygFormView:null
+			WysiwygFormView:null
 			delayedDataLoad:false
 
 			render: ->
@@ -54,8 +54,8 @@ define ["underscore",
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@projectWysiwygFormView = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
-				@projectWysiwygFormView.success = ->
+				@WysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
+				@WysiwygFormView.success = ->
 					window.location.reload()
 
 

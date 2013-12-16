@@ -1,5 +1,5 @@
 define ["underscore", "backbone"], (_, Backbone) ->
-	ProjectUpdateModel = Backbone.Model.extend
+	UpdateModel = Backbone.Model.extend
 		default:
 			description: ""
 			title: ""
@@ -13,7 +13,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
 				id: "0"
 				collection: ""
 			public: false
-			responses: [ ]
+			responses: [ ] 
 			
 		parse:(resp_)->
 			if resp_.data then resp_.data else resp_

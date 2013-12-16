@@ -1,6 +1,6 @@
 define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], 
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
-		ProjectWysiwygFormView = AbstractView.extend
+		WysiwygFormView = AbstractView.extend
 
 			formName:"project-update" #default ID, but doublecheck that form ID is correct
 			editorID:"#editor" #default ID, but doublecheck that form ID is correct
@@ -14,7 +14,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				@userAvatar = options.userAvatar || @userAvatar
 
 				@render()
-
+ 
 			render: -> 
 				@viewData =
 					project_id: window.projectID

@@ -1,16 +1,19 @@
-define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-project/ProjectCreateModalView", "bootstrap", "autocomp","hogan", "validate", "dropkick"], 
-	(_, Backbone, $, temp, form, AbstractView, ProjectCreateModalView, bootstrap, autocomp, Hogan, valid, dropkick) ->
-		ProjectCreateView = AbstractView.extend
+define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-universal/CreateModalView", "bootstrap", "autocomp","hogan", "validate", "dropkick"], 
+	(_, Backbone, $, temp, form, AbstractView, CreateModalView, bootstrap, autocomp, Hogan, valid, dropkick) ->
+		CreateView = AbstractView.extend
 
 			location:{name: "", lat: 0, lon: 0} 
+			isResource:false
 
 			initialize: (options) ->
-				AbstractView::initialize.call @, options
+				AbstractView::initialize.call @, options 
+				@isResource = options.isResource || @isResource 
 				@render()
 
-			render: ->
+			render: -> 
+				templateURL = if @isResource then "/templates/partials-resource/resource-create-form.html" else  "/templates/partials-project/project-create-form.html"
 				@$el = $("<div class='create-project'/>")
-				@$el.template @templateDir + "/templates/partials-project/project-create-form.html",
+				@$el.template @templateDir+templateURL,
 					data: @viewData, => 
 						onPageElementsLoad()
 						@ajaxForm()
@@ -21,6 +24,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 
 				$dropkick = $('#project-category').dropkick()
 				$feedback = $("#feedback")
+				isResource = @isResource
 
 				# ajax the form
 				$submit = $("input[type=submit]")
@@ -28,10 +32,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				options =
 					type: $form.attr('method')
 					url: $form.attr('action')
-					dataType: "json" 
-					#contentType: "application/json; charset=utf-8"
+					dataType: "json"  
 					contentType: "multipart/form-data; charset=utf-8"
-					#beforeSend: =>  
+	
 					beforeSubmit: =>  
 						if $form.valid()
 							$zip = $('input[name="zip"]')
@@ -49,32 +52,26 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 						else
 							return false
 
-					success: (res) -> 
-						console.log 'res',res
+					success: (res) ->  
 						$form.find("input, textarea").removeAttr("disabled")
 						
 						if res.success
+							config = {}
+							config.viewData = res
+							config.viewData.isResource = isResource
+
 							$form.resetForm()
-							modal = new ProjectCreateModalView({viewData:res})
+							modal = new CreateModalView(config)
 							$feedback.hide()
-							#window.location = "/project/"+res.data.id+"/admin"
 						else
 							$("html, body").animate({ scrollTop: 0 }, "slow")
 							$feedback.show().html(res.msg)
-							
-				###
-				$form.submit ->
-					json_str = JSON.stringify($form.serializeJSON())
-					options.data = json_str
-					console.log 'options.data',options.data
-					$.ajax options
-					false
-				###
+
 				$form.ajaxForm options
 
 				# location autocomplete
-				$projectLocation = $("#project_location")
-				$projectLocation.typeahead(
+				$location = if @isResource then $("#resource_location") else $("#project_location")
+				$location.typeahead(
 					template: '<div class="zip">{{ name }}</div>'
 					engine: Hogan 
 					valueKey: 'name'

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "project-view", "collection/ProjectDiscussionsCollection", "collection/ProjectUpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionView", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectNewDiscussionView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectAddUpdateView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, ProjectUpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionView, ProjectDiscussionsView, ProjectNewDiscussionView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
+define(["underscore", "backbone", "jquery", "template", "project-view", "collection/ProjectDiscussionsCollection", "collection/UpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionView", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectNewDiscussionView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectAddUpdateView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, UpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionView, ProjectDiscussionsView, ProjectNewDiscussionView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
   var CBUProjectOwnerView;
   return CBUProjectOwnerView = CBUProjectView.extend({
     initialize: function(options) {
@@ -26,7 +26,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       });
     },
     addSubViews: function() {
-      var config, projectDiscussionsCollection, projectMembersCollection, projectUpdatesCollection,
+      var config, projectDiscussionsCollection, projectMembersCollection,
         _this = this;
       config = {
         id: this.model.get("id"),
@@ -37,14 +37,14 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       };
       projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
       projectMembersCollection = new ProjectMembersCollection(config);
-      projectUpdatesCollection = new ProjectUpdatesCollection(config);
+      UpdatesCollection = new UpdatesCollection(config);
       this.projectDiscussionsView = new ProjectDiscussionsView({
         collection: projectDiscussionsCollection
       });
       this.projectDiscussionView = new ProjectDiscussionView();
       this.projectNewDiscussionView = new ProjectNewDiscussionView(config);
       this.projectAddUpdateView = new ProjectAddUpdateView({
-        collection: projectUpdatesCollection
+        collection: UpdatesCollection
       });
       this.projectFundraisingView = new ProjectFundraisingView(config);
       this.projectCalenderView = new ProjectCalenderView(config);

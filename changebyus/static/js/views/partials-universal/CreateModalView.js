@@ -4,7 +4,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], 
     render: function() {
       var _this = this;
       this.$el = $("<div class='modal-fullscreen dark'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-create-modal.html", {
+      this.$el.template(this.templateDir + "/templates/partials-universal/create-modal.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

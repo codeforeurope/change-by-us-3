@@ -1,5 +1,5 @@
 <div class="body-container">
-    <div class="feature-image">
+    <div class="feature-image content-wrapper">
 
         <div style="background-image:url(<%= data.image_url_round %>);background-position: center;" class="preview circle">
             <div class="content"></div>
@@ -20,7 +20,7 @@
             <% var classes = "btn btn-large btn-secondary pull-right" %>
             <% if(data.isMember){  classes += " invisible" }%>
 
-            <a href="#" class="<%= classes %>">Join Project</a>
+            <a href="#" class="<%= classes %>">Follow</a>
 
             <div class="project-location">
                 Brooklyn, NY
@@ -28,27 +28,5 @@
                 <a href="http://www.ucf.com">http://www.ucf.com</a>
             </div>
         </div>
-    </div>
-    <div class="tabs-pane">
-        <ul class="tabs">
-            <li>
-                <img src="/static/img/updates_icon.png" alt="Updates">
-                <a href="#updates" data-toggle="tab">
-                    <span>Updates</span>
-                </a>
-            </li>
-            <li>
-                <img src="/static/img/members_icon.png" alt="Members">
-                <a href="#members" data-toggle="tab">
-                    <span>Members</span>
-                </a>
-            </li>
-            <li>
-                <img src="/static/img/cal_icon.png" alt="Calendar">
-                <a href="#calendar" data-toggle="tab">
-                    <span>Calendar</span>
-                </a>
-            </li>
-        </ul>
     </div>
 </div>

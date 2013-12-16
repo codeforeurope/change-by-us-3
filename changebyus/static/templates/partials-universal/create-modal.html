@@ -1,0 +1,31 @@
+<% console.log(data); %>
+<div class="success-modal scaled-fade">
+    <div class="close-x"></div>
+    <div class="modal-innerwrapper">
+        <% if (data.msg.toLowerCase()=="ok" ) { %>
+            <h1>Success!</h1>
+            <p class="modal-feedback">
+                <% if (data.isResource){ %>
+                    Your Resource:<br>
+                <% }else{ %>
+                    Your Project:<br>
+                <% } %>
+                    <%= data.data.name %> has been created.
+                <br>
+            </p>
+            <div class="modal-links">
+                <% if (data.isResource){ %>
+                    <a href="/resource/<%= data.data.id %>" class="btn btn-large btn-secondary">Share Invite Link</a>
+                    <a href="/resource/<%= data.data.id %>" class="btn btn-large btn-tertiary">View Resource</a>
+                <% }else{ %>
+                    <a href="/project/<%= data.data.id %>" class="btn btn-large btn-secondary">Share Invite Link</a>
+                    <a href="/project/<%= data.data.id %>" class="btn btn-large btn-tertiary">View Project</a>
+                <% } %>
+            </div>
+        <% } else { %>
+            <div class="modal-feedback">
+                <%= data.msg %>
+            </div>
+        <% } %>
+    </div>
+</div>

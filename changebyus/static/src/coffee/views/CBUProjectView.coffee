@@ -5,11 +5,11 @@ define ["underscore",
 		"abstract-view", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
-		"views/partials-universal/UpdatesView", 
+		"views/partials-universal/UpdatesView",  
 		"model/ProjectModel", 
 		"collection/ProjectCalendarCollection", 
 		"collection/ProjectMembersCollection", 
-		"collection/ProjectUpdatesCollection"], 
+		"collection/UpdatesCollection"], 
 	(_, 
 	 Backbone, 
 	 $, 
@@ -21,22 +21,22 @@ define ["underscore",
 	 ProjectModel, 
 	 ProjectCalendarCollection, 
 	 ProjectMembersCollection, 
-	 ProjectUpdatesCollection) ->
+	 UpdatesCollection) ->
 	 	
 		CBUProjectView = AbstractView.extend
 			isOwner:false
 			isMember:false
+			isResource:false
 			projectCalenderView: null
 			projectMembersView: null
-			UpdatesView: null
+			updatesView: null
 			updatesBTN: null
 			membersBTN: null
 			calendarBTN: null
 			memberData: null
 			$header:null
 
-			initialize: (options) ->
-				console.log 'CBUProjectView options',options
+			initialize: (options) -> 
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent
 				@model       = new ProjectModel(options.model)
@@ -50,16 +50,24 @@ define ["underscore",
 				"click .project-footer .btn":"joinProject"
 				"click  a[href^='#']":"changeHash"
 
-			render: ->  
-				@$el = $("<div class='project-container'/>")
-				@$el.template @templateDir+"/templates/project.html", 
+			render: ->
+				@isResource = @model.get("resource")
+
+				if @isResource
+					className = "resource-container"
+					templateURL = "/templates/resource.html"
+				else
+					className = "project-container"
+					templateURL = "/templates/project.html"
+
+				@$el = $("<div class='#{className}'/>")
+				@$el.template @templateDir+templateURL, 
 					{}, => @onTemplateLoad()
 				$(@parent).append @$el
 
 			onTemplateLoad:->
 				# determine if user is a member of the project
-				# if not, display the join button
-				
+				# if not, display the join button 
 				@viewData = @model.attributes
 
 				if window.userID is ""
@@ -77,10 +85,16 @@ define ["underscore",
 							@viewData.isMember = @isMember
 							@addHeaderView()
 
-			addHeaderView: ->   
-				@$header = $("<div class='project-header'/>")
-				@$header.template @templateDir+"/templates/partials-project/project-header.html",
-					{data:@viewData}, => @onHeaderLoaded()
+			addHeaderView: ->
+				console.log 'isResource',@isResource
+				if @isResource
+					@$header = $("<div class='resource-header'/>")
+					@$header.template @templateDir+"/templates/partials-resource/resource-header.html",
+						{data:@viewData}, => @onHeaderLoaded()
+				else
+					@$header = $("<div class='project-header'/>")
+					@$header.template @templateDir+"/templates/partials-project/project-header.html",
+						{data:@viewData}, => @onHeaderLoaded()
 
 			onHeaderLoaded:->
 				console.log '@model',@model
@@ -88,22 +102,28 @@ define ["underscore",
 				config = {id:id}
 
 				@$el.prepend @$header
-				@projectUpdatesCollection  = new ProjectUpdatesCollection(config)  
+
+				@updatesCollection  = new UpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
 
 			onCollectionLoad:->  
-				@UpdatesView   = new UpdatesView({collection:@projectUpdatesCollection, members:@projectMembersCollection, isMember:@isMember})
-				@projectMembersView   = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-				@projectCalenderView  = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
-				
-				@updatesBTN  = $("a[href='#updates']").parent()
-				@membersBTN  = $("a[href='#members']").parent()
-				@calendarBTN = $("a[href='#calendar']").parent()
-				
-				$(window).bind "hashchange", (e) => @toggleSubView()
-				@toggleSubView()
+				parent       = if @isResource then "#resource-updates" else "#project-updates"
+				@updatesView = new UpdatesView({collection:@updatesCollection, members:@projectMembersCollection, isMember:@isMember, isResource:@isResource, parent:parent})
+				console.log 'parent',parent
+				if @model.get("resource")
+					@updatesView.show()
+				else
+					@projectMembersView  = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
+					@projectCalenderView = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
+					
+					@updatesBTN  = $("a[href='#updates']").parent()
+					@membersBTN  = $("a[href='#members']").parent()
+					@calendarBTN = $("a[href='#calendar']").parent()
+					
+					$(window).bind "hashchange", (e) => @toggleSubView()
+					@toggleSubView()
 
 				@delegateEvents()
 
@@ -141,7 +161,7 @@ define ["underscore",
 			toggleSubView: ->
 				view = window.location.hash.substring(1)
 				
-				for v in [@UpdatesView, @projectMembersView, @projectCalenderView]
+				for v in [@updatesView, @projectMembersView, @projectCalenderView]
 					v.hide()
 
 				for btn in [@updatesBTN, @membersBTN, @calendarBTN]
@@ -155,5 +175,5 @@ define ["underscore",
 						@projectCalenderView.show()
 						@calendarBTN.addClass "active"
 					else 
-						@UpdatesView.show()
+						@updatesView.show()
 						@updatesBTN.addClass "active"

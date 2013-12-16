@@ -121,7 +121,7 @@
   a{color: #868686;}
 }
 
-.project-container {
+.project-container, .resource-container {
   h2 {
     font-size: 42px;
     font-weight: normal;  
@@ -135,6 +135,10 @@
 
 .project-header{
   margin-top: 12px;
+}
+
+.resource-header{
+  .feature-image{ height: 400px; }
 }
 
 .project-section-header{
@@ -674,7 +678,7 @@ h2.admin-title{
   }
 }
 
-.form-project{
+.form-edit-create{
   p{
     font-size: 18px;
     line-height: 1.5;

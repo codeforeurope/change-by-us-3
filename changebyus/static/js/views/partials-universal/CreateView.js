@@ -6,14 +6,18 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       lat: 0,
       lon: 0
     },
+    isResource: false,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
+      this.isResource = options.isResource || this.isResource;
       return this.render();
     },
     render: function() {
-      var _this = this;
+      var templateURL,
+        _this = this;
+      templateURL = this.isResource ? "/templates/partials-resource/resource-create-form.html" : "/templates/partials-project/project-create-form.html";
       this.$el = $("<div class='create-project'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-create-form.html", {
+      this.$el.template(this.templateDir + templateURL, {
         data: this.viewData
       }, function() {
         onPageElementsLoad();
@@ -22,13 +26,14 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       return $(this.parent).append(this.$el);
     },
     ajaxForm: function() {
-      var $dropkick, $feedback, $form, $projectLocation, $submit, options,
+      var $dropkick, $feedback, $form, $location, $submit, isResource, options,
         _this = this;
       $('.fileupload').fileupload({
         uploadtype: 'image'
       });
       $dropkick = $('#project-category').dropkick();
       $feedback = $("#feedback");
+      isResource = this.isResource;
       $submit = $("input[type=submit]");
       $form = this.$el.find("form");
       options = {
@@ -57,14 +62,14 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           }
         },
         success: function(res) {
-          var modal;
-          console.log('res', res);
+          var config, modal;
           $form.find("input, textarea").removeAttr("disabled");
           if (res.success) {
+            config = {};
+            config.viewData = res;
+            config.viewData.isResource = isResource;
             $form.resetForm();
-            modal = new CreateModalView({
-              viewData: res
-            });
+            modal = new CreateModalView(config);
             return $feedback.hide();
           } else {
             $("html, body").animate({
@@ -74,18 +79,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
           }
         }
       };
-      /*
-      				$form.submit ->
-      					json_str = JSON.stringify($form.serializeJSON())
-      					options.data = json_str
-      					console.log 'options.data',options.data
-      					$.ajax options
-      					false
-      */
-
       $form.ajaxForm(options);
-      $projectLocation = $("#project_location");
-      return $projectLocation.typeahead({
+      $location = this.isResource ? $("#resource_location") : $("#project_location");
+      return $location.typeahead({
         template: '<div class="zip">{{ name }}</div>',
         engine: Hogan,
         valueKey: 'name',

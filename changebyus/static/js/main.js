@@ -26,7 +26,7 @@ require.config({
     "project-owner-view": "views/CBUProjectOwnerView",
     "login-view": "views/CBULoginView",
     "signup-view": "views/CBUSignupView",
-    "create-view": "views/partials-project/ProjectCreateView",
+    "create-view": "views/partials-universal/CreateView",
     "abstract-view": "views/partials-universal/AbstractView",
     "abstract-modal-view": "views/partials-universal/AbstractModalView",
     "project-sub-view": "views/partials-project/ProjectSubView",
@@ -37,7 +37,7 @@ require.config({
   }
 });
 
-require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, ProjectCreateView, Slicknav) {
+require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, Slicknav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
@@ -50,7 +50,8 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         "user/:id": "user",
         "discover": "discover",
         "stream/dashboard": "dashboard",
-        "create": "create",
+        "create/project": "createProject",
+        "create/resource": "createResource",
         "login": "login",
         "signup": "signup",
         "project": "project",
@@ -89,8 +90,13 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         };
         return window.CBUAppView = new CBUDashboardView(config);
       },
-      create: function() {
-        return window.CBUAppView = new ProjectCreateView(config);
+      createProject: function() {
+        config.isResource = false;
+        return window.CBUAppView = new CreateView(config);
+      },
+      createResource: function() {
+        config.isResource = true;
+        return window.CBUAppView = new CreateView(config);
       },
       login: function() {
         return window.CBUAppView = new CBULoginView(config);

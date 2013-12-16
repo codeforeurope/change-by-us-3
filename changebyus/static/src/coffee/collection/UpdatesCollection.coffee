@@ -1,6 +1,6 @@
 define ["underscore", "backbone", "model/UpdateModel"], 
 	(_, Backbone, UpdateModel) ->
-		ProjectUpdatesCollection = Backbone.Collection.extend 
+		UpdatesCollection = Backbone.Collection.extend 
 			model: UpdateModel
 			
 			initialize: (options) ->

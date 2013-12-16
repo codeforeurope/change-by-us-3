@@ -29,7 +29,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       length = 0;
       this.members.each(function(model) {
         if (length++ < 4) {
-          return _this.addMemeber(model);
+          return _this.addMember(model);
         }
       });
       if (length <= 4) {
@@ -48,7 +48,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return onPageElementsLoad();
       });
     },
-    addMemeber: function(model_) {
+    addMember: function(model_) {
       var $member,
         _this = this;
       if (model_.get("roles").length === 0) {
@@ -59,7 +59,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         data: model_.attributes
       }, function() {});
       this.$members.append($member);
-      return console.log('addMemeber >>> ', model_);
+      return console.log('addMember >>> ', model_);
     },
     newDay: function(date_) {
       console.log('newDay', date_);

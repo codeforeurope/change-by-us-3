@@ -25,7 +25,7 @@ define ["underscore",
 
 			render: ->  
 				@$el = $(@parent)
-				@$el.template @templateDir+"/templates/partials-project/project-updates.html",
+				@$el.template @templateDir+"/templates/partials-universal/updates.html",
 					{data: @viewData}, =>@onTemplateLoad()  
 
 			onTemplateLoad:->
@@ -36,11 +36,11 @@ define ["underscore",
 				@$members = @$el.find(".team-members ul")
 				length = 0
 				@members.each (model) => 
-					if (length++ < 4) then @addMemeber model
+					if (length++ < 4) then @addMember model
 				if length <= 4 then $('.team-members .pull-right').remove()
 
 				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
@@ -51,13 +51,13 @@ define ["underscore",
 						ProjectSubView::addAll.call(@) 
 						onPageElementsLoad()
 
-			addMemeber: (model_) -> 
+			addMember: (model_) -> 
 				if model_.get("roles").length is 0 then model_.set("roles", ["Owner"]) # temp fix
 				$member = $('<li/>')
-				$member.template @templateDir+"/templates/partials-project/project-member-avatar.html",
+				$member.template @templateDir+"/templates/partials-universal/member-avatar.html",
 					{data: model_.attributes}, =>  
 				@$members.append $member
-				console.log 'addMemeber >>> ',model_
+				console.log 'addMember >>> ',model_
 
 			newDay:(date_)->
 				console.log 'newDay',date_

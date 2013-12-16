@@ -4,7 +4,7 @@ define ["underscore",
 		"template", 
 		"project-view", 
 		"collection/ProjectDiscussionsCollection", 
-		"collection/ProjectUpdatesCollection", 
+		"collection/UpdatesCollection", 
 		"collection/ProjectCalendarCollection", 
 		"collection/ProjectMembersCollection", 
 		"views/partials-project/ProjectDiscussionView", 
@@ -21,7 +21,7 @@ define ["underscore",
 	 temp, 
 	 CBUProjectView, 
 	 ProjectDiscussionsCollection, 
-	 ProjectUpdatesCollection, 
+	 UpdatesCollection, 
 	 ProjectCalendarCollection, 
 	 ProjectMembersCollection, 
 	 ProjectDiscussionView, 
@@ -58,12 +58,12 @@ define ["underscore",
 
 				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 				projectMembersCollection     = new ProjectMembersCollection(config)
-				projectUpdatesCollection     = new ProjectUpdatesCollection(config)
+				UpdatesCollection     = new UpdatesCollection(config)
 				
 				@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
 				@projectDiscussionView     = new ProjectDiscussionView()
 				@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
-				@projectAddUpdateView      = new ProjectAddUpdateView({collection: projectUpdatesCollection})
+				@projectAddUpdateView      = new ProjectAddUpdateView({collection: UpdatesCollection})
 				@projectFundraisingView    = new ProjectFundraisingView(config) 
 				@projectCalenderView       = new ProjectCalenderView(config) 
 				@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})

@@ -26,7 +26,7 @@ require.config
 		"project-owner-view": "views/CBUProjectOwnerView"
 		"login-view": "views/CBULoginView"
 		"signup-view": "views/CBUSignupView"
-		"create-view": "views/partials-project/ProjectCreateView"
+		"create-view": "views/partials-universal/CreateView"
 		"abstract-view": "views/partials-universal/AbstractView"
 		"abstract-modal-view": "views/partials-universal/AbstractModalView"
 		"project-sub-view": "views/partials-project/ProjectSubView"
@@ -35,7 +35,7 @@ require.config
 		"dashboard-view": "views/CBUDashboardView"
 		"stream-view": "views/CBUStreamView"
 
-require ["jquery", 
+require ["jquery",  
 		"backbone", 
 		 "main-view", 
 		 "discover-view",  
@@ -59,7 +59,7 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
-	 ProjectCreateView
+	 CreateView
 	 Slicknav) ->
 		$(document).ready ->
 			config = parent: "#frame" 
@@ -71,7 +71,8 @@ require ["jquery",
 					"user/:id": "user"
 					"discover": "discover"
 					"stream/dashboard": "dashboard"
-					"create": "create"
+					"create/project": "createProject"
+					"create/resource": "createResource"
 					"login": "login"
 					"signup": "signup"
 					"project": "project" 
@@ -101,8 +102,13 @@ require ["jquery",
 					config.model = {id:window.userID}
 					window.CBUAppView = new CBUDashboardView(config) 
 
-				create: ->
-					window.CBUAppView = new ProjectCreateView(config)
+				createProject: ->
+					config.isResource = false
+					window.CBUAppView = new CreateView(config)
+
+				createResource: ->
+					config.isResource = true
+					window.CBUAppView = new CreateView(config)
 
 				login: ->
 					window.CBUAppView = new CBULoginView(config)

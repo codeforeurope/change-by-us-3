@@ -13,7 +13,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-updates.html", {
+      return this.$el.template(this.templateDir + "/templates/partials-universal/updates.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -29,14 +29,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       length = 0;
       this.members.each(function(model) {
         if (length++ < 4) {
-          return _this.addMemeber(model);
+          return _this.addMember(model);
         }
       });
       if (length <= 4) {
         $('.team-members .pull-right').remove();
       }
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-project/project-entries-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
@@ -48,18 +48,18 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return onPageElementsLoad();
       });
     },
-    addMemeber: function(model_) {
+    addMember: function(model_) {
       var $member,
         _this = this;
       if (model_.get("roles").length === 0) {
         model_.set("roles", ["Owner"]);
       }
       $member = $('<li/>');
-      $member.template(this.templateDir + "/templates/partials-project/project-member-avatar.html", {
+      $member.template(this.templateDir + "/templates/partials-universal/member-avatar.html", {
         data: model_.attributes
       }, function() {});
       this.$members.append($member);
-      return console.log('addMemeber >>> ', model_);
+      return console.log('addMember >>> ', model_);
     },
     newDay: function(date_) {
       console.log('newDay', date_);

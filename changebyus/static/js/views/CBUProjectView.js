@@ -1,11 +1,11 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-universal/UpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, UpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) {
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
     isMember: false,
     projectCalenderView: null,
     projectMembersView: null,
-    projectUpdatesView: null,
+    UpdatesView: null,
     updatesBTN: null,
     membersBTN: null,
     calendarBTN: null,
@@ -44,7 +44,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.viewData = this.model.attributes;
       if (window.userID === "") {
         this.isMember = false;
-        return this.addSubViews();
+        return this.addHeaderView();
       } else {
         id = this.model.get("id");
         return $.ajax({
@@ -55,12 +55,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             _this.memberData = response.data;
             _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
             _this.viewData.isMember = _this.isMember;
-            return _this.addSubViews();
+            return _this.addHeaderView();
           }
         });
       }
     },
-    addSubViews: function() {
+    addHeaderView: function() {
       var _this = this;
       this.$header = $("<div class='project-header'/>");
       return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
@@ -86,7 +86,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onCollectionLoad: function() {
       var _this = this;
-      this.projectUpdatesView = new ProjectUpdatesView({
+      this.UpdatesView = new UpdatesView({
         collection: this.projectUpdatesCollection,
         members: this.projectMembersCollection,
         isMember: this.isMember
@@ -153,7 +153,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
       view = window.location.hash.substring(1);
-      _ref = [this.projectUpdatesView, this.projectMembersView, this.projectCalenderView];
+      _ref = [this.UpdatesView, this.projectMembersView, this.projectCalenderView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];
         v.hide();
@@ -171,7 +171,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           this.projectCalenderView.show();
           return this.calendarBTN.addClass("active");
         default:
-          this.projectUpdatesView.show();
+          this.UpdatesView.show();
           return this.updatesBTN.addClass("active");
       }
     }

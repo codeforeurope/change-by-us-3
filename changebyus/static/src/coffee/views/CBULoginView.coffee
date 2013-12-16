@@ -13,8 +13,7 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 				@$el = $("<div class='login'/>")
 				@$el.template @templateDir + "/templates/login.html",
 					data: @viewData, =>
-						@ajaxForm()
-						@addListeners()
+						@ajaxForm() 
 						onPageElementsLoad()
 
 				$(@parent).append @$el

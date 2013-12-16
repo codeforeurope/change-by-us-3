@@ -1,7 +1,7 @@
-define(["underscore", "backbone", "model/ProjectUpdateModel"], function(_, Backbone, ProjectUpdateModel) {
+define(["underscore", "backbone", "model/UpdateModel"], function(_, Backbone, UpdateModel) {
   var ProjectUpdatesCollection;
   return ProjectUpdatesCollection = Backbone.Collection.extend({
-    model: ProjectUpdateModel,
+    model: UpdateModel,
     initialize: function(options) {
       return this.id = options.id;
     },

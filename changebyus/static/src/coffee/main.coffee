@@ -72,7 +72,7 @@ require ["jquery",
 					"discover": "discover"
 					"stream/dashboard": "dashboard"
 					"create": "create"
-					"login": "login"
+					"signin": "login"
 					"signup": "signup"
 					"project": "project" 
 					"stream": "stream" 

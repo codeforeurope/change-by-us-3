@@ -4,7 +4,7 @@ define ["underscore",
 		"template", 
 		"moment", 
 		"abstract-view", 
-		"model/ProjectUpdateModel", 
+		"model/UpdateModel", 
 		"model/UserModel"], 
 	(_, 
 	 Backbone, 
@@ -12,11 +12,11 @@ define ["underscore",
 	 temp, 
 	 moment, 
 	 AbstractView, 
-	 ProjectUpdateModel, 
+	 UpdateModel, 
 	 UserModel) ->
 		UserStreamItemView = AbstractView.extend
 			
-			model:ProjectUpdateModel
+			model:UpdateModel
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options

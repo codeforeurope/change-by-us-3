@@ -29,13 +29,16 @@
     line-height: 1.188em;
     float: left;
   }
+
   .slicknav_icon {
     float: left;
     margin: 0.188em 0 0 0.438em;
   }
+
   .slicknav_no-text {
     margin: 0;
   }
+  
   .slicknav_icon-bar {
     display: block;
     width: 1.125em;
@@ -153,28 +156,6 @@
     padding-left: 2%;
     border-top: 1px solid $primaryHoverColor;
   }
-  /*
-  .slicknav_item {
-    a {
-      padding: 0;
-      margin: 0;
-    }
-    &:hover {
-      -webkit-border-radius: 6px;
-      -moz-border-radius: 6px;
-      border-radius: 6px;
-      background: #ccc;
-      color: #fff;
-    }
-  }
-  a:hover {
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    background: #ccc;
-    color: #222;
-  }
-  */
   .slicknav_txtnode {
     margin-left: 15px;
   }

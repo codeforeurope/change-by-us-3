@@ -48,6 +48,8 @@
 
 .affix { position: fixed; }
 
+.highlight{ @include highlight; }
+
 .emphasis {
   font-size: 16px;
   letter-spacing: .1em;
@@ -57,15 +59,11 @@
   @include filter(blur(2px)); 
 }
 
-span.highlight{ @include highlight; }
-
 .circle{
   @include border-radius(1000px, 1000px);
   background-position: center center;
   overflow: hidden;
 }
-
-a.highlight{ @include highlight; }
 
 a.ul{ 
   color: $graySubtext;

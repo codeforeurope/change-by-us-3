@@ -1,7 +1,7 @@
-define ["underscore", "backbone", "model/ProjectUpdateModel"], 
-	(_, Backbone, ProjectUpdateModel) ->
+define ["underscore", "backbone", "model/UpdateModel"], 
+	(_, Backbone, UpdateModel) ->
 		ProjectUpdatesCollection = Backbone.Collection.extend 
-			model: ProjectUpdateModel
+			model: UpdateModel
 			
 			initialize: (options) ->
 				@id = options.id

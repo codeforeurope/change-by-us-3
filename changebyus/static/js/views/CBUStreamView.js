@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-project/ProjectUpdateListItemView"], function(_, Backbone, $, temp, AbstractView, StreamCollection, ProjectUpdateListItemView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, AbstractView, StreamCollection, UpdateListItemView) {
   var CBUStreamView;
   return CBUStreamView = AbstractView.extend({
     initialize: function(options_) {
@@ -62,7 +62,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       if (this.currentDate !== m) {
         this.newDay(m);
       }
-      view = new ProjectUpdateListItemView({
+      view = new UpdateListItemView({
         model: model_,
         isStream: true
       });

@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-project/ProjectUpdateListItemView"], 
-	(_, Backbone, $, temp, AbstractView, StreamCollection, ProjectUpdateListItemView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-universal/UpdateListItemView"], 
+	(_, Backbone, $, temp, AbstractView, StreamCollection, UpdateListItemView) ->
 		CBUStreamView = AbstractView.extend
 
 			initialize: (options_) ->
@@ -51,5 +51,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				m = moment(model_.get("updated_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m)
 
-				view = new ProjectUpdateListItemView({model: model_, isStream:true})
+				view = new UpdateListItemView({model: model_, isStream:true})
 				@$projects.append view.$el 

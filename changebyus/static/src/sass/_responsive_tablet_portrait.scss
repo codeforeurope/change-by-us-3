@@ -47,12 +47,8 @@
 
 	.body-container{
 		padding: 0 2%;
-	}
+	} 
 
-	.admin{
-		//.user-avatar{display: none;}
-	}
-	
 	.tabs-pane, .owner-tabs-pane{ 
 		position: relative; 
 		bottom: auto;
@@ -101,12 +97,6 @@
 		left: 0;
 	}
 
-	.create-project{
-		h1, p{
-			//padding: 0 2%; 
-		}
-	}
-
 	.content-wrapper {
 		padding: 2%;
 		ul.bordered-item>li {
@@ -149,20 +139,6 @@
 
 	.project-description {
 		height: 100px;
-	}
-
-	.public-email{
-		span{
-			
-		}
-	}
-
-	.footer-nav, .form-footer{
-		//padding: 0 2%;
-	}
-
-	.banner-search{
-		//padding: 0 2%;
 	}
 
 	.discover-header-right{ 

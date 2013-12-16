@@ -11,6 +11,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     events: {
       "click .search-catagories li": "categoriesClick",
+      "focus #search-input": function() {
+        return $('.search-catagories').show();
+      },
       "click .pill-selection": "pillSelection",
       "click .search-inputs .btn": "sendForm"
     },
@@ -26,15 +29,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var $dropkick, $searchCatagories, $searchInput, $searchNear,
+      var $dropkick,
         _this = this;
-      $searchCatagories = $('.search-catagories');
-      $searchInput = $('#search-input');
-      $searchInput.focus(function() {
-        return $searchCatagories.show();
-      });
-      $searchNear = $('#search-near');
-      $searchNear.typeahead({
+      $('#search-near').typeahead({
         template: '<div class="zip">{{ name }}</div>',
         engine: Hogan,
         valueKey: 'name',
@@ -63,29 +60,28 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         return console.log(datum);
       });
       $dropkick = $('#search-range').dropkick();
-      onPageElementsLoad();
-      return {
-        categoriesClick: function(e) {
-          $searchInput.val($(e.currentTarget).html());
-          return $searchCatagories.hide();
-        },
-        pillSelection: function(e) {
-          var $this;
-          $this = $(e.currentTarget);
-          $this.toggleClass('active');
-          $this.siblings().toggleClass('active');
-          switch ($this.html()) {
-            case 'Projects':
-              return this.byProjectResouces = 'Projects';
-            case 'Resources':
-              return this.byProjectResouces = 'Resources';
-            case 'Popular':
-              return this.sortByPopularDistance = 'Popular';
-            case 'Distance':
-              return this.sortByPopularDistance = 'Distance';
-          }
-        }
-      };
+      this.delegateEvents();
+      return onPageElementsLoad();
+    },
+    categoriesClick: function(e) {
+      $('#search-input').val($(e.currentTarget).html());
+      return $('.search-catagories').hide();
+    },
+    pillSelection: function(e) {
+      var $this;
+      $this = $(e.currentTarget);
+      $this.toggleClass('active');
+      $this.siblings().toggleClass('active');
+      switch ($this.html()) {
+        case 'Projects':
+          return this.byProjectResouces = 'Projects';
+        case 'Resources':
+          return this.byProjectResouces = 'Resources';
+        case 'Popular':
+          return this.sortByPopularDistance = 'Popular';
+        case 'Distance':
+          return this.sortByPopularDistance = 'Distance';
+      }
     },
     sendForm: function() {
       var dataObj,

@@ -85,9 +85,8 @@
 
   p{
     margin-top: 15px;
-  line-height: 1.2;
+    line-height: 1.2;
     @include font-styling("asap", 22px, $white);
-    //width:95%;
   }
 }
 
@@ -112,7 +111,6 @@
 .homepage-footer {
   width: 100%; 
   background-color: #737373;
-  //height: 340px; 
   margin-top: 50px;
   text-align: center;
 
@@ -128,8 +126,11 @@
 .logged-in{
   .homepage-footer {
     padding-top: 50px;
+    
     h2{display: none;}
+    
     a[href='/signup']{display: none;}
+    
     a[href='/discover']{ background-color:$primaryColor;}
   }
 }
@@ -160,7 +161,8 @@
   .btn:last-child{margin-right: 0;}
 }
 
-.created-by,.supported-by{
+.created-by,
+.supported-by{
   color: $graySupport;
   text-transform: uppercase;
   float: left;
@@ -173,24 +175,31 @@
 }
 .created-by{ margin-right: 65px; }
 
-.logo-lp,.logo-ceo,.logo-kf,.logo-rh{
+.logo-lp,
+.logo-ceo,
+.logo-kf,
+.logo-rh{
   background-repeat: no-repeat;
 }
+
 .logo-lp{
   width: 52px;
   height: 25px;
   background-image:url(/static/img/logo-lp.png);
 }
+
 .logo-ceo{
   width: 80px;
   height: 22px;
   background-image:url(/static/img/logo-ceo.png);
 }
+
 .logo-kf{
   width: 177px;
   height: 24px;
   background-image:url(/static/img/logo-kf.png);
 }
+
 .logo-rh{
   width: 114px;
   height: 32px;
@@ -209,9 +218,7 @@
     margin-left: 24px;
   }
   
-  a{
-    line-height: 60px;
-  }
+  a{ line-height: 60px; }
 
   &.index{margin-top: 0; }
 }

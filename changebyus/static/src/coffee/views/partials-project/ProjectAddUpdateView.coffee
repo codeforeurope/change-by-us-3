@@ -4,8 +4,8 @@ define ["underscore",
 		"template", 
 		"abstract-view", 
 		"views/partials-project/ProjectSubView",
-		"views/partials-project/ProjectWysiwygFormView",
-		"views/partials-project/ProjectUpdateListItemView",
+		"views/partials-universal/WysiwygFormView",
+		"views/partials-universal/UpdateListItemView",
 		"views/partials-project/ProjectUpdateSuccessModalView"],
 	(_, 
 	 Backbone, 
@@ -13,8 +13,8 @@ define ["underscore",
 	 temp, 
 	 AbstractView, 
 	 ProjectSubView, 
-	 ProjectWysiwygFormView, 
-	 ProjectUpdateListItemView, 
+	 WysiwygFormView, 
+	 UpdateListItemView, 
 	 ProjectUpdateSuccessModalView) ->
 
 		ProjectAddUpdateView = ProjectSubView.extend
@@ -39,7 +39,7 @@ define ["underscore",
 				ProjectSubView::onTemplateLoad.call @
 				
 				@$ul = @$el.find('.updates-container ul')
-				form = new ProjectWysiwygFormView({parent:"#update-form"})
+				form = new WysiwygFormView({parent:"#update-form"})
 				form.on 'ON_TEMPLATE_LOAD', =>  
 					$submit = form.$el.find('input[type="submit"]')
 					
@@ -78,7 +78,7 @@ define ["underscore",
 			addOne: (model_) ->
 				m = moment(model_.get("updated_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m) 
-				view = new ProjectUpdateListItemView({model: model_})
+				view = new UpdateListItemView({model: model_})
 				@$ul.append view.$el 
 
 			addModal:(data_)-> 

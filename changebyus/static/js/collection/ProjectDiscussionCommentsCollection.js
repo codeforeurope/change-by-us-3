@@ -6,7 +6,11 @@ define(["underscore", "backbone", "model/ProjectDiscussionCommentModel"], functi
       return "/api/project/" + window.projectID + "/discussion_comments";
     },
     parse: function(response) {
-      return response.data;
+      if (response.success) {
+        return response.data;
+      } else {
+        return {};
+      }
     }
   });
 });

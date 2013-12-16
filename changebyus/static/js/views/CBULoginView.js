@@ -15,7 +15,6 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
         data: this.viewData
       }, function() {
         _this.ajaxForm();
-        _this.addListeners();
         return onPageElementsLoad();
       });
       return $(this.parent).append(this.$el);

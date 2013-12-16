@@ -1,3 +1,5 @@
+@import "compass/css3/box-shadow";
+
 /*******************************************
  * Modal
  *******************************************/
@@ -84,11 +86,9 @@
   background-color: #f5f5f5;
   border-top: 1px solid #ddd;
   @include border-radius(0 0 6px 6px);
+  @include box-shadow($white 0 1px 0  inset);
   *zoom: 1;
-  -webkit-box-shadow: inset 0 1px 0 $white;
-  -moz-box-shadow: inset 0 1px 0 $white;
-  box-shadow: inset 0 1px 0 $white;
-  
+
   &:before {
     display: table;
     line-height: 0;
@@ -114,7 +114,9 @@
   &.dark{ background-color: rgba(0,0,0,.5); }
 }
 
-.success-modal, .embed-modal, .create-modal{ 
+.success-modal, 
+.embed-modal, 
+.create-modal{ 
   @extend .modal;
   
   h1{
@@ -131,6 +133,7 @@
 
 .embed-modal{
   p{text-align: left;}
+  
   h1{margin-bottom: 6px;}
 }
 
@@ -142,6 +145,7 @@
   }
 
   span{font-size: 24px;}
+  
   .btn-xlarge{width: 100% !important;}
 } 
 

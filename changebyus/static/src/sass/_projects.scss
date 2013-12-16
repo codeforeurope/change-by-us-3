@@ -5,8 +5,6 @@
 @import "compass/css3/background-clip";
 @import "compass/css3/transform";
 
-/* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
-
 /*** HEADER *****/
 .header-icon{ 
   position: absolute;
@@ -98,9 +96,6 @@
   img{ 
     width: 100%; 
     height: auto;
-    //position: absolute;
-    //top: 0;
-    //left: 0;
   } 
 }
 
@@ -229,8 +224,6 @@
   }
 }
 
-.tabs{ }
-
 .content-header{ margin-top: 24px; }
 
 .content-wrapper {
@@ -262,7 +255,11 @@ h2.admin-title{
   margin: 0 0 16px;
 }
 
-.content-left, .content-right, .post-right, .reply-left, .reply-right{
+.content-left,
+.content-right,
+.post-right,
+.reply-left,
+.reply-right{
   float: left;  
 }
 
@@ -291,8 +288,6 @@ h2.admin-title{
   min-width: 70px;
   width: percentage(70px/1018px);
   margin-right: percentage(20px/1018px);
-
-  // img{max-width: none;}
 }
 
 .update-content{
@@ -300,8 +295,8 @@ h2.admin-title{
   width: 85%;
 
   input[type=button]{background-color: $graySupport;}
-  input[type=submit]{
-    //background-color: $secondaryColor;
+  
+  input[type=submit]{ 
     margin-left: 16px;
   }
     
@@ -311,21 +306,25 @@ h2.admin-title{
   }
 }
 
-.post-title, .reply-title{
+.post-title,
+.reply-title{
   color: $gray20;
   margin-bottom: 10px;
   font-weight: bold;
 }
  
 
-.post-content, .reply-content{
+.post-content,
+.reply-content{
   @include font-styling("merriweather", 14px, $gray20);
+  
   p{
     @include font-styling("merriweather", 14px, $gray20);
   }
 }
 
-.post-footer, .reply-date{ 
+.post-footer,
+.reply-date{ 
   margin-top: 10px;
   @include font-styling("asap", 14px, $gray53);
 }
@@ -449,7 +448,8 @@ h2.admin-title{
   padding: 5px 5px 0;
   @include box-skin;
   
-  .styledRadio, .styledCheckbox{float: left;}
+  .styledRadio, 
+  .styledCheckbox{float: left;}
   
   label{ 
     height: 15px; 
@@ -524,13 +524,15 @@ h2.admin-title{
   width: 100%;
 
   ul{margin-left: 30px;}
+
   li{
     height: 100%;
     display: inline-block;
     list-style-type: none;
     padding: 0 1%; 
     margin: 0 1%; 
-  }  
+  }
+
   a{
     line-height: 58px;
     @include font-styling("asap", 22px, $white, "normal", "bold");
@@ -548,6 +550,7 @@ h2.admin-title{
 
 .tabs-pane{
   img{vertical-align:initial;}
+
   li{
     a{ vertical-align: text-bottom; }
     &.active {
@@ -680,10 +683,12 @@ h2.admin-title{
   .dk_toggle{
     padding: 16px;
   }
+
   .dk_label{
     font-size: 18px;
     font-weight: normal;
   }
+
   .dk_options a{
     font-size: 18px;
     font-weight: normal;
@@ -697,5 +702,3 @@ input[type="text"].input-slim{
 }
 
 iframe{ width: 100%; }
-
- 

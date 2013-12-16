@@ -1,12 +1,12 @@
-define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/ProjectPostReplyModel","model/UserModel"],
-	(_, Backbone, $, temp, moment, AbstractView, ProjectPostReplyModel,UserModel) ->
-		ProjectPostReplyView = AbstractView.extend
+define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/PostReplyModel","model/UserModel"],
+	(_, Backbone, $, temp, moment, AbstractView, PostReplyModel, UserModel) ->
+		PostReplyView = AbstractView.extend
 
 			tagName: "li"
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
-				@model = new ProjectPostReplyModel(options.model)
+				@model = new PostReplyModel(options.model)
 				@fetch()
 			
 			onFetch:->
@@ -21,6 +21,6 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 				@viewData.format_date           = moment(@model.get("created_at")).format("MMMM D hh:mm a")
 
 				$reply = $("<div class='post-reply clearfix'/>")
-				$reply.template @templateDir+"/templates/partials-project/project-post-reply-view.html", 
+				$reply.template @templateDir+"/templates/partials-universal/post-reply-view.html", 
 					{data:@viewData}, => @onTemplateLoad()
 				$(@el).append $reply

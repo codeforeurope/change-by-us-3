@@ -9,7 +9,7 @@ define(["underscore", "backbone", "model/ProjectCalendarModel"], function(_, Bac
       return "/api/project/" + this.id + "/calendar";
     },
     parse: function(response) {
-      if (response.msg === "OK") {
+      if (response.success) {
         return response.data;
       } else {
         return {};

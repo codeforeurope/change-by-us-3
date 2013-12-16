@@ -2,36 +2,31 @@
  
 //@media only screen and (max-width: 655px) {
 @media only screen and (max-width: 760px) {
-	//body.debug{background: red;}
-	body{background: red;}
+	body.debug{background: red;}
+	//body{background: red;}
 
+	/*******************************************
+	 * Header/Nav
+	 *******************************************/
 	.nav.user{
 		width: 100px;
 		span{display: none;}
 	}
 
-	.nav-pills>li {
-		font-size: 14px; 
-	} 
+	.nav-pills>li { font-size: 14px; } 
 
 	.nav-pills{ 
 		&.pull-right{display: none;}
 	}
 
-	.slicknav_menu{
-		display: block;
-	}
+	.slicknav_menu{ display: block; }
 	
 	.resp-append,
 	.resp-append-last{display: none;}
 
-	.header-links {
-		padding: 0; 
-	}
+	.header-links { padding: 0; }
 
-	.profile-nav-menu{
-		display: none;
-	}
+	.profile-nav-menu{ display: none; }
 
 	.user-header {
 		.user-avatar{
@@ -45,20 +40,11 @@
 		}
 	}
 
-	.user-avatar{
-		//width: 70px;
-	}
-
 	.user-info { 
 		width: 100%;
 		padding: 0 2%;
 	}
-
-	.signup,
-	.login{
-		//margin-top: 24px; 
-	}
-
+ 
 	.feature-image{display: none;}
 
 	.header-image{
@@ -78,22 +64,57 @@
 		}
 	}
 
-	.content, .homepage-block-info {
+	.topnav{height: 90px;}
+
+	/*******************************************
+	 * Homepage
+	 *******************************************/
+
+	.content, 
+	.homepage-block-info {
 		h2{padding-top: 0px;}
 	}
 
+	.homepage-block-info{ padding: 28px 0; }
+
+	.homepage-tool-icon{ margin: 0 auto 48px; }
+
+	.homepage-tools { margin-bottom: 64px; }
+
+	.content,
 	.homepage-block-info{
-		padding: 28px 0;
+		h2 {
+			font-size: 36px;
+			padding: 15px;
+		}
 	}
 
-	.homepage-tool-icon{
-		margin: 0 auto 48px;
+	.homepage-block-info{
+		h2, h3 {
+			width: 75%;
+			margin-right: auto;
+			margin-left: auto;
+		}
 	}
 
-	.homepage-tools {
-		margin-bottom: 64px;
+	.homepage-tools{ 
+		width: 100%;
+		margin-right: 0;
+		margin-bottom: 48px;
+		text-align: center;
+
+		p{
+			line-height: 1.4;
+			width: 75%;
+			margin: 14px auto auto;
+		}
 	}
 
+
+	/*******************************************
+	 * Dashboard / Discover
+	 *******************************************/
+	
 	.dashboard-header{
 		padding:0;
 		.btn.btn-large{
@@ -104,6 +125,17 @@
 	.dashboard-header-right{
 		width: 100%;
 	}
+
+	.discover-header-right{
+		margin-top: 16px;
+		margin-left: 0;
+		height: auto;
+	}
+
+
+	/*******************************************
+	 * Project
+	 *******************************************/
 
 	.project-member {
 		.mail-icon{
@@ -171,29 +203,10 @@
 		}
 	}
 
-	.content,
-	.homepage-block-info{
-		h2 {
-			font-size: 36px;
-			padding: 15px;
-		}
-	}
 
-	.homepage-block-info{
-		h2, h3 {
-			width: 75%;
-			margin-right: auto;
-			margin-left: auto;
-		}
-	}
-
-	.homepage-tools{ 
-		p{
-			line-height: 1.4;
-			width: 75%;
-			margin: 14px auto auto;
-		}
-	}
+	/*******************************************
+	 * Forms
+	 *******************************************/
 
 	.form-right{
 		margin-top: 30px;
@@ -228,12 +241,6 @@
 	select[name=category]{
 		width: 100%;
 	}
-
-	.project-description {
-		//height: 100px;
-	}
-
-	.topnav{height: 90px;}
 
 	.login, 
 	.signup {
@@ -287,20 +294,7 @@
 			width: 17%;
 		}
 	}
-
-	.discover-header-right{
-		margin-top: 16px;
-		margin-left: 0;
-		height: auto;
-	}
-
-	.homepage-tools{
-		width: 100%;
-		margin-right: 0;
-		margin-bottom: 48px;
-		text-align: center;
-	}
-
+	
 	.update-content {
 		width: 100%; 
 	}
@@ -314,6 +308,10 @@
 			padding: 3%;
 		}
 	}
+
+	/*******************************************
+	 * Footer
+	 *******************************************/
 
 	.footer-btns{
 		.btn.btn-xlarge{

@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectWysiwygFormView"],
-	(_, Backbone, $, temp, AbstractView, ProjectWysiwygFormView) ->
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-universal/WysiwygFormView"],
+	(_, Backbone, $, temp, AbstractView, WysiwygFormView) ->
 		ProjectNewDiscussionView = AbstractView.extend
 
 			parent: "#project-new-discussion"
@@ -17,7 +17,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					{data: @viewData}, => @onTemplateLoad()
 
 			onTemplateLoad:->
-				form = new ProjectWysiwygFormView({parent:"#discussion-form"})
+				form = new WysiwygFormView({parent:"#discussion-form"})
 				form.success = (response_) =>
 					form.resetForm()
 					window.location = "/project/"+@model.id+"/admin#discussion/"+response_.data.id

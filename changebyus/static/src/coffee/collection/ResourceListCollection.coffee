@@ -7,4 +7,4 @@ define ["underscore", "backbone", "model/ProjectModel"],
 				"/api/project/list?limit=3&sort=created_at&order=desc&"
 			
 			parse: (response) ->
-				response.data 
+				if response.success then response.data else {}

@@ -13,6 +13,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 			events:
 				"click .search-catagories li":"categoriesClick"
+				"focus #search-input":"showInput"
 				"click .pill-selection":"pillSelection"
 				"click .search-inputs .btn":"sendForm"
 
@@ -25,13 +26,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				$searchCatagories = $('.search-catagories')
-				$searchInput      = $('#search-input')
-				$searchInput.focus ->
-					$searchCatagories.show()
-
-				$searchNear = $('#search-near')
-				$searchNear.typeahead(
+				$('#search-near').typeahead(
 					template: '<div class="zip">{{ name }}</div>'
 					engine: Hogan 
 					valueKey: 'name'
@@ -45,32 +40,35 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon}
 							zips
 				).bind('typeahead:selected', (obj, datum) =>
-						@locationObj = datum
-						console.log(datum)
+					@locationObj = datum
+					console.log(datum)
 				)
 
 				$dropkick = $('#search-range').dropkick()
-
+				@delegateEvents()
 				onPageElementsLoad()
 
-				categoriesClick:(e)->
-					$searchInput.val $(e.currentTarget).html()
-					$searchCatagories.hide()
+			categoriesClick:(e)->
+				$('#search-input').val $(e.currentTarget).html()
+				$('.search-catagories').hide()
 
-				pillSelection:(e)->
-					$this = $(e.currentTarget)
-					$this.toggleClass('active')
-					$this.siblings().toggleClass('active')
+			pillSelection:(e)->
+				$this = $(e.currentTarget)
+				$this.toggleClass('active')
+				$this.siblings().toggleClass('active')
 
-					switch $this.html()
-						when 'Projects'
-							@byProjectResouces = 'Projects'
-						when 'Resources'
-							@byProjectResouces = 'Resources'
-						when 'Popular'
-							@sortByPopularDistance = 'Popular'
-						when 'Distance'
-							@sortByPopularDistance = 'Distance'
+				switch $this.html()
+					when 'Projects'
+						@byProjectResouces = 'Projects'
+					when 'Resources'
+						@byProjectResouces = 'Resources'
+					when 'Popular'
+						@sortByPopularDistance = 'Popular'
+					when 'Distance'
+						@sortByPopularDistance = 'Distance'
+
+			showInput:->
+				$('.search-catagories').show()
 
 			sendForm:->
 				$("#projects-list").html("")

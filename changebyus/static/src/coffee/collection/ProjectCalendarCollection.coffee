@@ -10,4 +10,4 @@ define ["underscore", "backbone", "model/ProjectCalendarModel"],
 				"/api/project/#{@id}/calendar"
 
 			parse: (response) ->
-				if (response.msg is "OK") then response.data else {}
+				if response.success then response.data else {}

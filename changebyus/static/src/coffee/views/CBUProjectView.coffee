@@ -5,7 +5,7 @@ define ["underscore",
 		"abstract-view", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
-		"views/partials-project/ProjectUpdatesView", 
+		"views/partials-universal/UpdatesView", 
 		"model/ProjectModel", 
 		"collection/ProjectCalendarCollection", 
 		"collection/ProjectMembersCollection", 
@@ -17,7 +17,7 @@ define ["underscore",
 	 AbstractView, 
 	 ProjectCalenderView,
 	 ProjectMembersView, 
-	 ProjectUpdatesView, 
+	 UpdatesView, 
 	 ProjectModel, 
 	 ProjectCalendarCollection, 
 	 ProjectMembersCollection, 
@@ -28,7 +28,7 @@ define ["underscore",
 			isMember:false
 			projectCalenderView: null
 			projectMembersView: null
-			projectUpdatesView: null
+			UpdatesView: null
 			updatesBTN: null
 			membersBTN: null
 			calendarBTN: null
@@ -64,7 +64,7 @@ define ["underscore",
 
 				if window.userID is ""
 					@isMember = false
-					@addSubViews()
+					@addHeaderView()
 				else
 					id = @model.get("id")
 					$.ajax(
@@ -75,9 +75,9 @@ define ["underscore",
 							@memberData = response.data
 							@isMember = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
 							@viewData.isMember = @isMember
-							@addSubViews()
+							@addHeaderView()
 
-			addSubViews: ->   
+			addHeaderView: ->   
 				@$header = $("<div class='project-header'/>")
 				@$header.template @templateDir+"/templates/partials-project/project-header.html",
 					{data:@viewData}, => @onHeaderLoaded()
@@ -94,7 +94,7 @@ define ["underscore",
 				@projectMembersCollection.fetch {reset: true}
 
 			onCollectionLoad:->  
-				@projectUpdatesView   = new ProjectUpdatesView({collection:@projectUpdatesCollection, members:@projectMembersCollection, isMember:@isMember})
+				@UpdatesView   = new UpdatesView({collection:@projectUpdatesCollection, members:@projectMembersCollection, isMember:@isMember})
 				@projectMembersView   = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
 				@projectCalenderView  = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
 				
@@ -141,7 +141,7 @@ define ["underscore",
 			toggleSubView: ->
 				view = window.location.hash.substring(1)
 				
-				for v in [@projectUpdatesView, @projectMembersView, @projectCalenderView]
+				for v in [@UpdatesView, @projectMembersView, @projectCalenderView]
 					v.hide()
 
 				for btn in [@updatesBTN, @membersBTN, @calendarBTN]
@@ -155,5 +155,5 @@ define ["underscore",
 						@projectCalenderView.show()
 						@calendarBTN.addClass "active"
 					else 
-						@projectUpdatesView.show()
+						@UpdatesView.show()
 						@updatesBTN.addClass "active"

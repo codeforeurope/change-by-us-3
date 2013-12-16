@@ -9,7 +9,7 @@ define(["underscore", "backbone", "model/UserModel"], function(_, Backbone, User
       return "/api/project/" + this.id + "/users";
     },
     parse: function(response) {
-      if (response.msg === "OK") {
+      if (response.success) {
         return response.data;
       } else {
         return {};

@@ -7,5 +7,5 @@ define ["underscore", "backbone", "model/UpdateModel", ],
 				"/api/stream"
 
 			parse: (response) -> 
-				if (response.msg is "OK") then response.data else {}
+				if response.success then response.data else {}
 

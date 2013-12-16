@@ -9,7 +9,7 @@ define(["underscore", "backbone", "model/UpdateModel"], function(_, Backbone, Up
       return "/api/post/project/" + this.id + "/list_updates?sort=created_at&order=desc&";
     },
     parse: function(response) {
-      if (response.msg === "OK") {
+      if (response.success) {
         return response.data;
       } else {
         return {};

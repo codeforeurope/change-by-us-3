@@ -7,4 +7,4 @@ define ["underscore", "backbone", "model/ProjectDiscussionModel"],
 				"/api/post/project/#{window.projectID}/list_discussions?sort=created_at&order=desc&"
 			
 			parse: (response) ->
-				response.data
+				if response.success then response.data else {}

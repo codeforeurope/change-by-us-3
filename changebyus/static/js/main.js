@@ -51,7 +51,7 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         "discover": "discover",
         "stream/dashboard": "dashboard",
         "create": "create",
-        "signin": "login",
+        "login": "login",
         "signup": "signup",
         "project": "project",
         "stream": "stream",

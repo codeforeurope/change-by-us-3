@@ -11,9 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     events: {
       "click .search-catagories li": "categoriesClick",
-      "focus #search-input": function() {
-        return $('.search-catagories').show();
-      },
+      "focus #search-input": "showInput",
       "click .pill-selection": "pillSelection",
       "click .search-inputs .btn": "sendForm"
     },
@@ -82,6 +80,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         case 'Distance':
           return this.sortByPopularDistance = 'Distance';
       }
+    },
+    showInput: function() {
+      return $('.search-catagories').show();
     },
     sendForm: function() {
       var dataObj,

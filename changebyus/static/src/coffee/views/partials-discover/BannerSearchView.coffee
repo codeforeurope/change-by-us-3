@@ -13,7 +13,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 			events:
 				"click .search-catagories li":"categoriesClick"
-				"focus #search-input":->$('.search-catagories').show()
+				"focus #search-input":"showInput"
 				"click .pill-selection":"pillSelection"
 				"click .search-inputs .btn":"sendForm"
 
@@ -66,6 +66,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 						@sortByPopularDistance = 'Popular'
 					when 'Distance'
 						@sortByPopularDistance = 'Distance'
+
+			showInput:->
+				$('.search-catagories').show()
 
 			sendForm:->
 				$("#projects-list").html("")

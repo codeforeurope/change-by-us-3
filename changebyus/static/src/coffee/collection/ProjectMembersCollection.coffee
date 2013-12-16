@@ -10,5 +10,5 @@ define ["underscore", "backbone", "model/UserModel", ],
 				"/api/project/#{@id}/users"
 
 			parse: (response) -> 
-				if (response.msg is "OK") then response.data else {}
+				if response.success then response.data else {}
 

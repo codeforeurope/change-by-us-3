@@ -66,10 +66,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       }).done(function(response_) {
         var c;
         if (response_.msg.toLowerCase() === "ok") {
-          c = _this.model.collection;
-          console.log('@model.collection', c);
-          _this.model.collection.remove(_this.model);
-          return console.log('@model.collection', c);
+          return c = _this.model.collection;
         }
       });
     }

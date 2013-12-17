@@ -91,7 +91,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.get("updated_at")).format("MMMM D");
+          m = moment(model_.get("created_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -108,7 +108,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     addOne: function(model_) {
       var config, m, projectDiscussionListItemView,
         _this = this;
-      m = moment(model_.get("updated_at")).format("MMMM D");
+      m = moment(model_.get("created_at")).format("MMMM D");
       if (this.currentDate !== m) {
         this.newDay(m);
       }

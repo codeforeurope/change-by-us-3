@@ -44,7 +44,7 @@ define ["underscore",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
-							m = moment(model_.get("updated_at")).format("MMMM D")
+							m = moment(model_.get("created_at")).format("MMMM D")
 							@newDay(m)
 
 						@isDataLoaded = true
@@ -69,7 +69,7 @@ define ["underscore",
 					
 			addOne: (model_) ->
 				console.log model_, @$ul
-				m = moment(model_.get("updated_at")).format("MMMM D")
+				m = moment(model_.get("created_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m)
 
 				view = new UpdateListItemView({model: model_})

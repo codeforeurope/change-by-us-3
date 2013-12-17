@@ -3,7 +3,7 @@ define(["underscore", "backbone", "model/ProjectDiscussionModel"], function(_, B
   return ProjectDiscussionsCollection = Backbone.Collection.extend({
     model: ProjectDiscussionModel,
     url: function() {
-      return "/api/post/project/" + window.projectID + "/list_discussions?sort=created_at&order=desc&";
+      return "/api/post/project/" + window.projectID + "/discussions?sort=created_at&order=desc&";
     },
     parse: function(response) {
       if (response.success) {

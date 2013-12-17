@@ -41,7 +41,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.get("updated_at")).format("MMMM D");
+          m = moment(model_.get("created_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -70,7 +70,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     addOne: function(model_) {
       var m, view;
-      m = moment(model_.get("updated_at")).format("MMMM D");
+      m = moment(model_.get("created_at")).format("MMMM D");
       if (this.currentDate !== m) {
         this.newDay(m);
       }

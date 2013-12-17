@@ -100,20 +100,15 @@ def api_get_project_posts(project_id, post_type):
  
     if post_type == 'discussions':
         private_posts = True
-
     elif post_type == 'updates':
         private_posts = False
-
     else:
         if g.user.is_anonymous():
             private_posts = False
         else:
             private_posts = _is_project_organizer( project_id, g.user.id )
 
-    if private_posts:
-        isPublic = False 
-    else:
-        isPublic = True 
+    isPublic = (private_posts is False)
 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
@@ -155,7 +150,7 @@ def api_add_project_post(post_type):
 
 
     Args:
-        post_type: 'posts', 'update', or 'discussion'
+        post_type: 'posts', 'updates', or 'discussions'
         title: post title
         description: post description
         project_id: the id of the project we are adding a post to

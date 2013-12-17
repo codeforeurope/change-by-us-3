@@ -29,7 +29,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
-							m = moment(model_.get("updated_at")).format("MMMM D")
+							m = moment(model_.get("created_at")).format("MMMM D")
 							@newDay(m)
 						
 						if @collection.models.length is 0 then @noResults() 
@@ -48,7 +48,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 					
 			addOne: (model_) ->
 				console.log model_, @$ul
-				m = moment(model_.get("updated_at")).format("MMMM D")
+				m = moment(model_.get("created_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m)
 
 				view = new UpdateListItemView({model: model_, isStream:true})

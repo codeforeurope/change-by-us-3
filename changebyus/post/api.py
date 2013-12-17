@@ -95,6 +95,8 @@ def api_get_project_posts(project_id, post_type):
     """
 
     limit = int(request.args.get('limit', 500))
+    sort  = request.args.get('sort')
+    order = request.args.get('order', 'asc')
  
     if post_type == 'discussions':
         private_posts = True
@@ -109,15 +111,19 @@ def api_get_project_posts(project_id, post_type):
             private_posts = _is_project_organizer( project_id, g.user.id )
 
     if private_posts:
-        posts = ProjectPost.objects( project = project_id,
-                                     public = False,
-                                     parent_id = None )[0:limit]
+        isPublic = False 
+    else:
+        isPublic = True 
 
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        posts = ProjectPost.objects( project = project_id,
+                                     public = isPublic,
+                                     parent_id = None )[0:limit].order_by(sort_order)
     else:
         posts = ProjectPost.objects( project = project_id,
-                                     public = True,
+                                     public = isPublic,
                                      parent_id = None )[0:limit]
-
 
     ret_posts = db_list_to_dict_list( posts )
 

@@ -117,7 +117,10 @@
 		}
 	}
 
-	.project-header{margin-top: 0;}
+	.project-header,
+	.city-header{
+		margin-top: 0;
+	}
 
 	.project-square { 
 		width: 49%;

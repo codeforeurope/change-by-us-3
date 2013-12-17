@@ -5,8 +5,8 @@ define ["underscore", "backbone"], (_, Backbone) ->
 		defaults:
 			name:"New York City"
 			quote:"I believe in New Yorkers"
-			avatar:"http://lorempixel.com/255/255"
-			background:"http://lorempixel.com/1020/430"
+			image_url_round:"http://lorempixel.com/255/255"
+			image_url_large_rect:"http://lorempixel.com/1020/430"
 			website:"http://google.com"
 
 		parse:(resp_)->
@@ -14,7 +14,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
 			{
 				name:"New York City"
 				quote:"I believe in New Yorkers"
-				avatar:"http://lorempixel.com/255/255"
-				background:"http://lorempixel.com/1020/430"
+				image_url_round:"http://lorempixel.com/255/255"
+				image_url_large_rect:"http://lorempixel.com/1020/430"
 				website:"http://google.com"
 			}

@@ -121,7 +121,9 @@
   a{color: #868686;}
 }
 
-.project-container, .resource-container {
+.city-container, 
+.project-container, 
+.resource-container {
   h2 {
     font-size: 42px;
     font-weight: normal;  
@@ -133,7 +135,8 @@
   }
 }
 
-.project-header{
+.project-header, 
+.city-header{
   margin-top: 12px;
 }
 

@@ -53,6 +53,14 @@ def create_project_view():
 def user_view(user_id): 
     return _return_index()
 
+@frontend_view.route('/resource/<resource_id>')
+def resource_view(resource_id): 
+    return _return_index()
+
+@frontend_view.route('/city/<city_id>')
+def city_view(city_id): 
+    return _return_index()
+
 @frontend_view.route('/social_redirect/<url>')
 def social_redirect_view(url=None): 
     return render_template('social_redirect.html', url = url)

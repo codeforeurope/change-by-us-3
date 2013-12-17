@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-universal/UpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, UpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-universal/UpdatesView", "views/partials-universal/WysiwygFormView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, UpdatesView, WysiwygFormView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
@@ -70,23 +70,22 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
     },
     addHeaderView: function() {
-      var _this = this;
-      console.log('isResource', this.isResource);
+      var className, templateURL,
+        _this = this;
       if (this.isResource) {
-        this.$header = $("<div class='resource-header'/>");
-        return this.$header.template(this.templateDir + "/templates/partials-resource/resource-header.html", {
-          data: this.viewData
-        }, function() {
-          return _this.onHeaderLoaded();
-        });
+        className = "resource-header";
+        templateURL = "/templates/partials-resource/resource-header.html";
       } else {
-        this.$header = $("<div class='project-header'/>");
-        return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
-          data: this.viewData
-        }, function() {
-          return _this.onHeaderLoaded();
-        });
+        className = "project-header";
+        templateURL = "/templates/partials-project/project-header.html";
       }
+      this.$header = $("<div class='" + className + "'/>");
+      this.$header.template(this.templateDir + templateURL, {
+        data: this.viewData
+      }, function() {
+        return _this.onHeaderLoaded();
+      });
+      return this.$el.prepend(this.$header);
     },
     onHeaderLoaded: function() {
       var config, id;
@@ -95,7 +94,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       config = {
         id: id
       };
-      this.$el.prepend(this.$header);
       this.updatesCollection = new UpdatesCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);
       this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
@@ -114,9 +112,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         isResource: this.isResource,
         parent: parent
       });
-      console.log('parent', parent);
-      if (this.model.get("resource")) {
+      if (this.isResource) {
         this.updatesView.show();
+        this.updatesView.on('ON_TEMPLATE_LOAD', function() {
+          return _this.wysiwygFormView = new WysiwygFormView({
+            parent: "#add-resource-update",
+            id: _this.model.get("id"),
+            slim: true
+          });
+        });
+        console.log('wysiwygFormView', this.wysiwygFormView);
       } else {
         this.projectMembersView = new ProjectMembersView({
           collection: this.projectMembersCollection,
@@ -171,9 +176,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             project_id: id
           }
         }).done(function(response) {
+          var feedback;
           if (response.success) {
+            feedback = _this.isResource ? 'Following!' : 'Joined!';
             _this.isMember = true;
-            return $join.html('Joined!').css('background-color', '#e6e6e6');
+            return $join.html(feedback).css('background-color', '#e6e6e6');
           }
         });
       }

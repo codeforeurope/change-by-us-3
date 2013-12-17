@@ -20,19 +20,17 @@ define ["underscore",
 
 			initialize: (options) -> 
 				ProjectSubView::initialize.call(@, options)
-				@members           = options.members || @members
-				@isResource        = options.isResource || @isResource
-				@viewData.isMember = options.isMember
-				
-				console.log '@parent', @parent, @collection
+				@members             = options.members || @members
+				@viewData.isResource = options.isResource
+				@viewData.isMember   = options.isMember
 
 			render: ->  
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-universal/updates.html",
-					{data: @viewData}, =>@onTemplateLoad()  
+					{data: @viewData}, =>@onTemplateLoad()   
 
 			onTemplateLoad:->
-				ProjectSubView::onTemplateLoad.call @
+				ProjectSubView::onTemplateLoad.call @ 
 
 			addAll: ->  
 				# members
@@ -59,23 +57,18 @@ define ["underscore",
 				$member = $('<li/>')
 				$member.template @templateDir+"/templates/partials-universal/member-avatar.html",
 					{data: model_.attributes}, =>  
-				@$members.append $member
-				console.log 'addMember >>> ',model_
+				@$members.append $member 
 
 			newDay:(date_)-> 
 				@currentDate = date_
 				@$currentDay = @$day.clone()
 				@$el.append @$currentDay
 				@$currentDay.find('h4').html(date_)
-				@$ul = @$currentDay.find('.bordered-item') 
-				console.log 'newDay',date_,@$ul,@$currentDay
+				@$ul = @$currentDay.find('.bordered-item')  
 					
-			addOne: (model_) ->
-				
+			addOne: (model_) -> 
 				m = moment(model_.get("updated_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m)
 
 				view = new UpdateListItemView({model: model_})
-				@$ul.append view.$el 
-
-				console.log 'addone',@$el
+				@$ul.append view.$el

@@ -19,8 +19,8 @@ define ["underscore",
 			parent: "#project-discussion"
 			$ul:null
 			$form:null 
-			$threadFormID:'#add-thread-form'
-			WysiwygFormView:null
+			$threadFormID:"#add-thread-form"
+			wysiwygFormView:null
 			delayedDataLoad:false
 
 			render: ->
@@ -47,15 +47,15 @@ define ["underscore",
 			onSuccess:-> 
 				@$ul.html('')
 				@$form.html('')
-				console.log 'onSuccess',@model
+ 
 				@addDiscussion @model
 				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@WysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
-				@WysiwygFormView.success = ->
+				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
+				@wysiwygFormView.success = ->
 					window.location.reload()
 
 

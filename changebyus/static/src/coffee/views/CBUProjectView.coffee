@@ -5,7 +5,8 @@ define ["underscore",
 		"abstract-view", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
-		"views/partials-universal/UpdatesView",  
+		"views/partials-universal/UpdatesView",
+		"views/partials-universal/WysiwygFormView",
 		"model/ProjectModel", 
 		"collection/ProjectCalendarCollection", 
 		"collection/ProjectMembersCollection", 
@@ -18,6 +19,7 @@ define ["underscore",
 	 ProjectCalenderView,
 	 ProjectMembersView, 
 	 UpdatesView, 
+	 WysiwygFormView, 
 	 ProjectModel, 
 	 ProjectCalendarCollection, 
 	 ProjectMembersCollection, 
@@ -86,22 +88,23 @@ define ["underscore",
 							@addHeaderView()
 
 			addHeaderView: ->
-				console.log 'isResource',@isResource
+
 				if @isResource
-					@$header = $("<div class='resource-header'/>")
-					@$header.template @templateDir+"/templates/partials-resource/resource-header.html",
-						{data:@viewData}, => @onHeaderLoaded()
+					className = "resource-header"
+					templateURL = "/templates/partials-resource/resource-header.html"
 				else
-					@$header = $("<div class='project-header'/>")
-					@$header.template @templateDir+"/templates/partials-project/project-header.html",
-						{data:@viewData}, => @onHeaderLoaded()
+					className = "project-header"
+					templateURL = "/templates/partials-project/project-header.html"
+
+				@$header = $("<div class='#{className}'/>")
+				@$header.template @templateDir+templateURL, 
+					{data:@viewData}, => @onHeaderLoaded()
+				@$el.prepend @$header
 
 			onHeaderLoaded:->
 				console.log '@model',@model
 				id = @model.get("id")
 				config = {id:id}
-
-				@$el.prepend @$header
 
 				@updatesCollection  = new UpdatesCollection(config)  
 				@projectMembersCollection  = new ProjectMembersCollection(config)
@@ -111,9 +114,12 @@ define ["underscore",
 			onCollectionLoad:->  
 				parent       = if @isResource then "#resource-updates" else "#project-updates"
 				@updatesView = new UpdatesView({collection:@updatesCollection, members:@projectMembersCollection, isMember:@isMember, isResource:@isResource, parent:parent})
-				console.log 'parent',parent
-				if @model.get("resource")
+
+				if @isResource
 					@updatesView.show()
+					@updatesView.on 'ON_TEMPLATE_LOAD', =>
+						@wysiwygFormView = new WysiwygFormView({parent:"#add-resource-update", id:@model.get("id"), slim:true})
+					console.log 'wysiwygFormView',@wysiwygFormView
 				else
 					@projectMembersView  = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
 					@projectCalenderView = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
@@ -154,8 +160,9 @@ define ["underscore",
 						data: {project_id:id}
 					).done (response)=>
 						if response.success
+							feedback = if @isResource then 'Following!' else'Joined!'
 							@isMember = true
-							$join.html('Joined!').css('background-color','#e6e6e6')
+							$join.html(feedback).css('background-color','#e6e6e6')
 			
 
 			toggleSubView: ->

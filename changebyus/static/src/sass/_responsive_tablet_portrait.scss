@@ -106,12 +106,14 @@
 	/*******************************************
 	 * Project
 	 *******************************************/
-	 .project-section-header{
+	 .project-resource-section-header{
 		height: auto;
-		>.pull-left{float: none;}
-		.team-members{
-			float: none;
-			ul{float: none;}
+		.project-container{
+			>.pull-left{float: none;}
+			.team-members{
+				float: none;
+				ul{float: none;}
+			}
 		}
 	}
 
@@ -143,6 +145,23 @@
 	}
 
 	.view-project{ display: none; }
+
+	/*******************************************
+	 * Resource
+	 *******************************************/
+
+	#add-resource-update {
+		width: 100%;
+		margin-right: 0;
+	}
+
+	.resource-container {
+		.team-members {
+			width: 100%;
+			ul{float: left;}
+		}
+		.popup-arrow {left: 13%;}
+	}
 	
 	/*******************************************
 	 * DISCOVER / DISCUSSION

@@ -8,9 +8,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     initialize: function(options) {
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
-      this.isResource = options.isResource || this.isResource;
-      this.viewData.isMember = options.isMember;
-      return console.log('@parent', this.parent, this.collection);
+      this.viewData.isResource = options.isResource;
+      return this.viewData.isMember = options.isMember;
     },
     render: function() {
       var _this = this;
@@ -60,16 +59,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       $member.template(this.templateDir + "/templates/partials-universal/member-avatar.html", {
         data: model_.attributes
       }, function() {});
-      this.$members.append($member);
-      return console.log('addMember >>> ', model_);
+      return this.$members.append($member);
     },
     newDay: function(date_) {
       this.currentDate = date_;
       this.$currentDay = this.$day.clone();
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
-      this.$ul = this.$currentDay.find('.bordered-item');
-      return console.log('newDay', date_, this.$ul, this.$currentDay);
+      return this.$ul = this.$currentDay.find('.bordered-item');
     },
     addOne: function(model_) {
       var m, view;
@@ -80,8 +77,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       view = new UpdateListItemView({
         model: model_
       });
-      this.$ul.append(view.$el);
-      return console.log('addone', this.$el);
+      return this.$ul.append(view.$el);
     }
   });
 });

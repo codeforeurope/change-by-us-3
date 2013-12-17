@@ -15,6 +15,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     render: function() {
       var url,
         _this = this;
+      console.log('render render render render');
       this.viewData = {
         project_id: window.projectID,
         response_to_id: this.id,
@@ -27,6 +28,11 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         this.editorID = "#editor";
         this.formName = "project-update";
         this.$el = $("<div class='update-wrapper thin-pad clearfix'/>");
+      } else if (this.parent === "#add-resource-update") {
+        url = "/templates/partials-resource/resource-add-update-form.html";
+        this.editorID = "#add-update";
+        this.formName = "resource-update";
+        this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else if (this.parent === "#add-thread-form") {
         url = "/templates/partials-project/project-new-thread-form.html";
         this.editorID = "#new-thread-editor";
@@ -43,7 +49,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       }, function() {
         return _this.onTemplateLoad();
       });
-      return $(this.parent).append(this.$el);
+      $(this.parent).append(this.$el);
+      return console.log('@templateDir+url', this.templateDir + url, this.$el, $(this.parent));
     },
     onTemplateLoad: function() {
       this.trigger('ON_TEMPLATE_LOAD');

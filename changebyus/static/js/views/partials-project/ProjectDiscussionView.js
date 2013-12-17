@@ -4,8 +4,8 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     parent: "#project-discussion",
     $ul: null,
     $form: null,
-    $threadFormID: '#add-thread-form',
-    WysiwygFormView: null,
+    $threadFormID: "#add-thread-form",
+    wysiwygFormView: null,
     delayedDataLoad: false,
     render: function() {
       var _this = this;
@@ -44,7 +44,6 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       var model, response, userAvatar, _i, _len, _ref;
       this.$ul.html('');
       this.$form.html('');
-      console.log('onSuccess', this.model);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -55,13 +54,13 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         this.addDiscussion(model);
       }
       userAvatar = $('.profile-nav-header img').attr('src');
-      this.WysiwygFormView = new WysiwygFormView({
+      this.wysiwygFormView = new WysiwygFormView({
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
         userAvatar: userAvatar
       });
-      return this.WysiwygFormView.success = function() {
+      return this.wysiwygFormView.success = function() {
         return window.location.reload();
       };
     },

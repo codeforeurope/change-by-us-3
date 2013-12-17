@@ -58,6 +58,7 @@ define ["underscore",
 				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
 				@wysiwygFormView.success = (e)=>
 					if e.success
+						$("#new-thread-editor").html("")
 						model = new ProjectDiscussionModel(e.data)
 						@addDiscussion model
 

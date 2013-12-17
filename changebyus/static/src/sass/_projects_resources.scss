@@ -504,8 +504,10 @@ h2.admin-title{
 }
 
 .discussion{ 
-
+  .user-avatar{cursor: pointer;}
+  
   .description{
+    cursor: pointer;
     float: left;
     width: 670px;
     
@@ -707,39 +709,3 @@ h2.admin-title{
 .stream-wrapper{
   .content-wrapper{overflow: hidden;}
 }
-
-.create-project{
-  h1{
-    font-size: 52px;
-    font-weight: normal;
-  }
-}
-
-.form-edit-create{
-  p{
-    font-size: 18px;
-    line-height: 1.5;
-  }
-
-  .dk_toggle{
-    padding: 16px;
-  }
-
-  .dk_label{
-    font-size: 18px;
-    font-weight: normal;
-  }
-
-  .dk_options a{
-    font-size: 18px;
-    font-weight: normal;
-    padding: 16px;
-  }
-}
-
-input[type="text"].input-slim{
-  width: 50%;
-  height: auto;
-}
-
-iframe{ width: 100%; }

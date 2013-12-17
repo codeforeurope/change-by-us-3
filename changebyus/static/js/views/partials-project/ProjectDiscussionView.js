@@ -64,6 +64,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
       return this.wysiwygFormView.success = function(e) {
         if (e.success) {
+          $("#new-thread-editor").html("");
           model = new ProjectDiscussionModel(e.data);
           return _this.addDiscussion(model);
         }

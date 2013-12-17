@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectWysiwygFormView"], function(_, Backbone, $, temp, AbstractView, ProjectWysiwygFormView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-universal/WysiwygFormView"], function(_, Backbone, $, temp, AbstractView, WysiwygFormView) {
   var ProjectNewDiscussionView;
   return ProjectNewDiscussionView = AbstractView.extend({
     parent: "#project-new-discussion",
@@ -21,7 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     onTemplateLoad: function() {
       var form,
         _this = this;
-      form = new ProjectWysiwygFormView({
+      form = new WysiwygFormView({
         parent: "#discussion-form"
       });
       return form.success = function(response_) {

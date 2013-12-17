@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-project/ProjectWysiwygFormView", "views/partials-project/ProjectUpdateListItemView", "views/partials-project/ProjectUpdateSuccessModalView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectWysiwygFormView, ProjectUpdateListItemView, ProjectUpdateSuccessModalView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-universal/UpdateListItemView", "views/partials-project/ProjectUpdateSuccessModalView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, WysiwygFormView, UpdateListItemView, ProjectUpdateSuccessModalView) {
   var ProjectAddUpdateView;
   return ProjectAddUpdateView = ProjectSubView.extend({
     parent: "#project-update",
@@ -24,7 +24,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$ul = this.$el.find('.updates-container ul');
-      form = new ProjectWysiwygFormView({
+      form = new WysiwygFormView({
         parent: "#update-form"
       });
       return form.on('ON_TEMPLATE_LOAD', function() {
@@ -48,11 +48,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     addAll: function() {
       var _this = this;
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-project/project-entries-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
-          m = moment(model_.get("updated_at")).format("MMMM D");
+          m = moment(model_.get("created_at")).format("MMMM D");
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
@@ -69,11 +69,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     addOne: function(model_) {
       var m, view;
-      m = moment(model_.get("updated_at")).format("MMMM D");
+      m = moment(model_.get("created_at")).format("MMMM D");
       if (this.currentDate !== m) {
         this.newDay(m);
       }
-      view = new ProjectUpdateListItemView({
+      view = new UpdateListItemView({
         model: model_
       });
       return this.$ul.append(view.$el);

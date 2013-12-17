@@ -13,8 +13,7 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 				@$el = $("<div class='login'/>")
 				@$el.template @templateDir + "/templates/login.html",
 					data: @viewData, =>
-						@ajaxForm()
-						@addListeners()
+						@ajaxForm() 
 						onPageElementsLoad()
 
 				$(@parent).append @$el
@@ -45,7 +44,7 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 					success: (response) =>
 						$form.find("input, textarea").removeAttr("disabled")
 
-						#if response.msg.toLowerCase() is "ok" 
+						#if response.success 
 						if response.success
 							window.location.href = "/"
 						else

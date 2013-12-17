@@ -1,11 +1,12 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-universal/UpdatesView", "views/partials-universal/WysiwygFormView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, UpdatesView, WysiwygFormView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
     isMember: false,
+    isResource: false,
     projectCalenderView: null,
     projectMembersView: null,
-    projectUpdatesView: null,
+    updatesView: null,
     updatesBTN: null,
     membersBTN: null,
     calendarBTN: null,
@@ -13,7 +14,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     $header: null,
     initialize: function(options) {
       var _this = this;
-      console.log('CBUProjectView options', options);
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.model = new ProjectModel(options.model);
@@ -31,9 +31,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       "click  a[href^='#']": "changeHash"
     },
     render: function() {
-      var _this = this;
-      this.$el = $("<div class='project-container'/>");
-      this.$el.template(this.templateDir + "/templates/project.html", {}, function() {
+      var className, templateURL,
+        _this = this;
+      this.isResource = this.model.get("resource");
+      if (this.isResource) {
+        className = "resource-container";
+        templateURL = "/templates/resource.html";
+      } else {
+        className = "project-container";
+        templateURL = "/templates/project.html";
+      }
+      this.$el = $("<div class='" + className + "'/>");
+      this.$el.template(this.templateDir + templateURL, {}, function() {
         return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
@@ -44,7 +53,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.viewData = this.model.attributes;
       if (window.userID === "") {
         this.isMember = false;
-        return this.addSubViews();
+        return this.addHeaderView();
       } else {
         id = this.model.get("id");
         return $.ajax({
@@ -55,19 +64,28 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             _this.memberData = response.data;
             _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
             _this.viewData.isMember = _this.isMember;
-            return _this.addSubViews();
+            return _this.addHeaderView();
           }
         });
       }
     },
-    addSubViews: function() {
-      var _this = this;
-      this.$header = $("<div class='project-header'/>");
-      return this.$header.template(this.templateDir + "/templates/partials-project/project-header.html", {
+    addHeaderView: function() {
+      var className, templateURL,
+        _this = this;
+      if (this.isResource) {
+        className = "resource-header";
+        templateURL = "/templates/partials-resource/resource-header.html";
+      } else {
+        className = "project-header";
+        templateURL = "/templates/partials-project/project-header.html";
+      }
+      this.$header = $("<div class='" + className + "'/>");
+      this.$header.template(this.templateDir + templateURL, {
         data: this.viewData
       }, function() {
         return _this.onHeaderLoaded();
       });
+      return this.$el.prepend(this.$header);
     },
     onHeaderLoaded: function() {
       var config, id;
@@ -76,8 +94,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       config = {
         id: id
       };
-      this.$el.prepend(this.$header);
-      this.projectUpdatesCollection = new ProjectUpdatesCollection(config);
+      this.updatesCollection = new UpdatesCollection(config);
       this.projectMembersCollection = new ProjectMembersCollection(config);
       this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
       return this.projectMembersCollection.fetch({
@@ -85,29 +102,48 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onCollectionLoad: function() {
-      var _this = this;
-      this.projectUpdatesView = new ProjectUpdatesView({
-        collection: this.projectUpdatesCollection,
+      var parent,
+        _this = this;
+      parent = this.isResource ? "#resource-updates" : "#project-updates";
+      this.updatesView = new UpdatesView({
+        collection: this.updatesCollection,
         members: this.projectMembersCollection,
-        isMember: this.isMember
-      });
-      this.projectMembersView = new ProjectMembersView({
-        collection: this.projectMembersCollection,
-        isDataLoaded: true,
-        isMember: this.isMember
-      });
-      this.projectCalenderView = new ProjectCalenderView({
-        model: this.model,
         isMember: this.isMember,
-        isOwner: this.isOwner
+        isResource: this.isResource,
+        parent: parent
       });
-      this.updatesBTN = $("a[href='#updates']").parent();
-      this.membersBTN = $("a[href='#members']").parent();
-      this.calendarBTN = $("a[href='#calendar']").parent();
-      $(window).bind("hashchange", function(e) {
-        return _this.toggleSubView();
-      });
-      this.toggleSubView();
+      if (this.isResource) {
+        this.updatesView.show();
+        this.updatesView.on('ON_TEMPLATE_LOAD', function() {
+          var userAvatar;
+          userAvatar = $('.profile-nav-header img').attr('src');
+          return _this.wysiwygFormView = new WysiwygFormView({
+            parent: "#add-resource-update",
+            id: _this.model.get("id"),
+            slim: true,
+            userAvatar: userAvatar
+          });
+        });
+        console.log('wysiwygFormView', this.wysiwygFormView);
+      } else {
+        this.projectMembersView = new ProjectMembersView({
+          collection: this.projectMembersCollection,
+          isDataLoaded: true,
+          isMember: this.isMember
+        });
+        this.projectCalenderView = new ProjectCalenderView({
+          model: this.model,
+          isMember: this.isMember,
+          isOwner: this.isOwner
+        });
+        this.updatesBTN = $("a[href='#updates']").parent();
+        this.membersBTN = $("a[href='#members']").parent();
+        this.calendarBTN = $("a[href='#calendar']").parent();
+        $(window).bind("hashchange", function(e) {
+          return _this.toggleSubView();
+        });
+        this.toggleSubView();
+      }
       return this.delegateEvents();
     },
     flagProject: function(e) {
@@ -143,9 +179,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             project_id: id
           }
         }).done(function(response) {
+          var feedback;
           if (response.success) {
+            feedback = _this.isResource ? 'Following!' : 'Joined!';
             _this.isMember = true;
-            return $join.html('Joined!').css('background-color', '#e6e6e6');
+            return $join.html(feedback).css('background-color', '#e6e6e6');
           }
         });
       }
@@ -153,7 +191,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
       view = window.location.hash.substring(1);
-      _ref = [this.projectUpdatesView, this.projectMembersView, this.projectCalenderView];
+      _ref = [this.updatesView, this.projectMembersView, this.projectCalenderView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];
         v.hide();
@@ -171,7 +209,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           this.projectCalenderView.show();
           return this.calendarBTN.addClass("active");
         default:
-          this.projectUpdatesView.show();
+          this.updatesView.show();
           return this.updatesBTN.addClass("active");
       }
     }

@@ -95,29 +95,30 @@ def api_get_project_posts(project_id, post_type):
     """
 
     limit = int(request.args.get('limit', 500))
+    sort  = request.args.get('sort')
+    order = request.args.get('order', 'asc')
  
     if post_type == 'discussions':
         private_posts = True
-
     elif post_type == 'updates':
         private_posts = False
-
     else:
         if g.user.is_anonymous():
             private_posts = False
         else:
             private_posts = _is_project_organizer( project_id, g.user.id )
 
-    if private_posts:
-        posts = ProjectPost.objects( project = project_id,
-                                     public = False,
-                                     parent_id = None )[0:limit]
+    isPublic = (private_posts is False)
 
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        posts = ProjectPost.objects( project = project_id,
+                                     public = isPublic,
+                                     parent_id = None )[0:limit].order_by(sort_order)
     else:
         posts = ProjectPost.objects( project = project_id,
-                                     public = True,
+                                     public = isPublic,
                                      parent_id = None )[0:limit]
-
 
     ret_posts = db_list_to_dict_list( posts )
 
@@ -149,7 +150,7 @@ def api_add_project_post(post_type):
 
 
     Args:
-        post_type: 'posts', 'update', or 'discussion'
+        post_type: 'posts', 'updates', or 'discussions'
         title: post title
         description: post description
         project_id: the id of the project we are adding a post to

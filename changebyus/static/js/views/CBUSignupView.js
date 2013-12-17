@@ -86,7 +86,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         success: function(response) {
           console.log('signup', response, $socialFeedback);
           $socialForm.find("input, textarea").removeAttr("disabled");
-          if (response.success === "ok") {
+          if (response.success) {
             return window.location.href = "/";
           } else {
             return $socialFeedback.addClass("alert").html(response.msg);

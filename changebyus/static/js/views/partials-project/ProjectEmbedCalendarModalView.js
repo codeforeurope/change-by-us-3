@@ -26,7 +26,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function(response) {
-          console.log(response);
           if (response.success) {
             return window.location.reload();
           }

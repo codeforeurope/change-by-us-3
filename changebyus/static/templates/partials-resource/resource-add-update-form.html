@@ -1,0 +1,77 @@
+<% if (data.userAvatar){ %>
+<div class="user-avatar">
+    <img src="<%= data.userAvatar %>" class="circle" alt="User Avatar">
+</div>
+<% } %>
+<div class="update-content">
+    <form method="post" enctype="multipart/form-data" class="form-edit-create clearfix" name="resource-update" action="/api/post/add/discussion">
+        <div id="add-update" class="wsyiwyg-editor slim"></div>
+
+        <div class="btn-toolbar pull-left" data-role="editor-toolbar" data-target="new-thread-editor">
+            <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Font Size"><i class="icon-text-height"></i>&nbsp;<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a data-edit="fontSize 5">
+                            <font size="5">Huge</font>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-edit="fontSize 3">
+                            <font size="3">Normal</font>
+                        </a>
+                    </li>
+                    <li>
+                        <a data-edit="fontSize 1">
+                            <font size="1">Small</font>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <a class="btn" data-edit="bold" title="" data-original-title="Bold (Ctrl/Cmd+B)"><i class="icon-bold"></i></a>
+                <a class="btn" data-edit="italic" title="" data-original-title="Italic (Ctrl/Cmd+I)"><i class="icon-italic"></i></a>
+                <a class="btn" data-edit="strikethrough" title="" data-original-title="Strikethrough"><i class="icon-strikethrough"></i></a>
+                <a class="btn" data-edit="underline" title="" data-original-title="Underline (Ctrl/Cmd+U)"><i class="icon-underline"></i></a>
+            </div>
+            <div class="btn-group">
+                <a class="btn dropdown-toggle" data-toggle="dropdown" title="" data-original-title="Hyperlink">
+                    <i class="icon-link"></i>
+                </a>
+                <div class="dropdown-menu input-append">
+                    <input class="span2" placeholder="URL" type="text" data-edit="createLink">
+                    <button class="btn btn-medium btn-primary" type="button">Add</button>
+                </div>
+                <a class="btn" data-edit="unlink" title="" data-original-title="Remove Hyperlink">
+                    <i class="icon-cut"></i>
+                </a>
+            </div>
+
+            <div class="btn-group">
+                <a class="btn" title="" id="pictureBtn" data-original-title="Insert picture (or just drag &amp; drop)"><i class="icon-picture"></i></a>
+                <input type="file" data-role="magic-overlay" data-target="#pictureBtn" data-edit="insertImage" style="opacity: 0; position: absolute; top: 0px; left: 0px; width: 36px; height: 30px;">
+                <div class="dropdown-menu input-append">
+                    <input class="span2" placeholder="Embed Code" type="text" data-edit="InsertHTML">
+                    <button class="btn btn-medium btn-primary" type="button">Add</button>
+                </div>
+                <a class="btn dropdown-toggle" data-toggle="dropdown" title="" id="videoBtn" data-original-title="Insert video embed code">
+                    <i class="icon-film"></i>
+                </a>
+            </div>
+            <div class="btn-group">
+                <a class="btn" data-edit="undo" title="" data-original-title="Undo (Ctrl/Cmd+Z)"><i class="icon-undo"></i></a>
+                <a class="btn" data-edit="redo" title="" data-original-title="Redo (Ctrl/Cmd+Y)"><i class="icon-repeat"></i></a>
+            </div>
+            <input type="text" data-edit="inserttext" id="voiceBtn" x-webkit-speech="" style="position: absolute; top: 280px; left: 1227.5px;">
+        </div>
+
+        <input type="hidden" name="project_id" value="<%= data.project_id %>">
+        <input type="hidden" id="title" name="title" value="Reply to <%= data.title %>">
+        <input type="hidden" id="description" name="description" value="Description to <%= data.response_to_id %>">
+        <input type="hidden" name="response_to_id" value="<%= data.response_to_id %>">
+        <div class="tr">
+            <input type="submit" class="btn btn-medium btn-secondary" value="Post">
+            <input type="button" class="btn btn-medium btn-tertiary" value="Cancel">
+        </div>
+    </form>
+</div>

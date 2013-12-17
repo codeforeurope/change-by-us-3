@@ -1,9 +1,7 @@
 define ["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection", "abstract-view"], 
 	(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection, AbstractView) ->
 		CBUDiscoverView = AbstractView.extend
- 
-			bannerSearchView: null 
-				
+
 			initialize: (options) ->
 				# this is added later
 				AbstractView::initialize.call @, options

@@ -43,13 +43,22 @@ def login_view():
 def discover_view():
     return _return_index()
 
-@frontend_view.route('/create')
+@frontend_view.route('/create/project')
+@frontend_view.route('/create/resource')
 @login_required
 def create_project_view():
     return _return_index()
 
 @frontend_view.route('/user/<user_id>')
 def user_view(user_id): 
+    return _return_index()
+
+@frontend_view.route('/resource/<resource_id>')
+def resource_view(resource_id): 
+    return _return_index()
+
+@frontend_view.route('/city/<city_id>')
+def city_view(city_id): 
     return _return_index()
 
 @frontend_view.route('/social_redirect/<url>')

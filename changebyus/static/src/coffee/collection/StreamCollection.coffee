@@ -1,11 +1,11 @@
-define ["underscore", "backbone", "model/ProjectUpdateModel", ], 
-	(_, Backbone, ProjectUpdateModel) ->
+define ["underscore", "backbone", "model/UpdateModel", ], 
+	(_, Backbone, UpdateModel) ->
 		StreamCollection = Backbone.Collection.extend 
-			model: ProjectUpdateModel
+			model: UpdateModel
 
 			url: ->
 				"/api/stream"
 
 			parse: (response) -> 
-				if (response.msg is "OK") then response.data else {}
+				if response.success then response.data else {}
 

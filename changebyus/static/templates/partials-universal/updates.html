@@ -1,0 +1,49 @@
+<div class="project-resource-section-header updates clearfix">
+    
+    <% if (data.isResource){ %> 
+        <div id="add-resource-update" class="pull-left">
+            <h4>ADD POST</h4>
+        </div>
+    <% }else{ %>
+        <div class="pull-left">
+            <h2>Updates</h2>
+        </div>
+    <% } %>
+    
+
+    <div class="team-members">
+        <div class="clearfix">
+            <div class="pull-left">
+                <% if (data.isResource){ %>
+                    <h4>CONTACT</h4>
+                <% }else{ %>
+                    <h4>TEAM</h4>
+                <% } %>
+            </div>
+            <div class="pull-right">
+                <a href="#members">See All</a>
+            </div>
+        </div>
+        <ul></ul>
+    </div>
+
+</div>
+ 
+<div class="updates-container">
+    <div class="preload content-wrapper">
+        <h2>
+            <em>Loading...</em>
+        </h2>
+    </div>
+    <div class="no-results content-wrapper hide">
+        <h3>
+            <em>Nothing here yet.</em>
+        </h3> 
+        <% if (data.isMember){ %>
+        <span>
+            Why don't you <a href="/project/<%= window.projectID %>/admin#updates" class="highlight">add your first post</a>?
+        </span>
+        <% } %>
+    </div>
+</div>
+

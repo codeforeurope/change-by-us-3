@@ -65,7 +65,8 @@
 	} 
 }
 
-.notify-row, .password-title{
+.notify-row, 
+.password-title{
 	width: 85%;
 	label{
 		margin-top: 0; 
@@ -109,6 +110,60 @@
 }
 
 .twitter-typeahead{width: 100%;}
+
+
+.create-project{
+  h1{
+    font-size: 52px;
+    font-weight: normal;
+  }
+}
+
+.form-edit-create{
+  p{
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  .dk_toggle{
+    padding: 16px;
+  }
+
+  .dk_label{
+    font-size: 18px;
+    font-weight: normal;
+  }
+
+  .dk_options a{
+    font-size: 18px;
+    font-weight: normal;
+    padding: 16px;
+  }
+
+  .dropdown-menu.input-append{
+    width: 350px;
+    height: auto;
+    padding: 5px;
+    white-space: normal;
+    .span2{
+      width: 100%;
+    }
+    .btn{
+      float: right;
+      margin-top: 5px;
+      background-color: $primaryColor;
+      color: $white !important;
+      @include border-radius(4px);
+    }
+  }
+}
+
+input[type="text"].input-slim{
+  width: 50%;
+  height: auto;
+}
+
+iframe{ width: 100%; }
 
 select[name=category]{
 	width: 85%;

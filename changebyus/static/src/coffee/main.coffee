@@ -22,11 +22,12 @@ require.config
 		"validate": "ext/jquery/jquery.validate.min"
 		"main-view": "views/CBUMainView"
 		"discover-view": "views/CBUDiscoverView"
+		"city-view": "views/CBUCityView"
 		"project-view": "views/CBUProjectView"
 		"project-owner-view": "views/CBUProjectOwnerView"
 		"login-view": "views/CBULoginView"
 		"signup-view": "views/CBUSignupView"
-		"create-view": "views/partials-project/ProjectCreateView"
+		"create-view": "views/partials-universal/CreateView"
 		"abstract-view": "views/partials-universal/AbstractView"
 		"abstract-modal-view": "views/partials-universal/AbstractModalView"
 		"project-sub-view": "views/partials-project/ProjectSubView"
@@ -35,10 +36,11 @@ require.config
 		"dashboard-view": "views/CBUDashboardView"
 		"stream-view": "views/CBUStreamView"
 
-require ["jquery", 
+require ["jquery",  
 		"backbone", 
 		 "main-view", 
 		 "discover-view",  
+		 "city-view", 
 		 "project-view", 
 		 "project-owner-view", 
 		 "login-view", 
@@ -49,9 +51,10 @@ require ["jquery",
 		 "create-view",
 		 "slicknav"], 
 	($, 
-	 Backbone, 
-	 CBUMainView, 
-	 CBUDiscoverView,  
+	 Backbone,
+	 CBUMainView,
+	 CBUDiscoverView,
+	 CBUCityView,
 	 CBUProjectView, 
 	 CBUProjectOwnerView, 
 	 CBULoginView, 
@@ -59,19 +62,22 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
-	 ProjectCreateView
+	 CreateView
 	 Slicknav) ->
 		$(document).ready ->
-			config = parent: "#frame" 
+			config = {parent:".main-content"}
 
 			CBURouter = Backbone.Router.extend
 				routes:
 					"project/:id": "project"
 					"project/:id/admin": "projectAdmin"
+					"resource/:id": "resource"
+					"city/:id": "city"
 					"user/:id": "user"
 					"discover": "discover"
 					"stream/dashboard": "dashboard"
-					"create": "create"
+					"create/project": "createProject"
+					"create/resource": "createResource"
 					"login": "login"
 					"signup": "signup"
 					"project": "project" 
@@ -90,6 +96,14 @@ require ["jquery",
 					config.isOwner = isOwner
 					window.CBUAppView = if (isOwner) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
 
+				resource: (id_) ->
+					config.model = {id:id_}
+					window.CBUAppView =  new CBUProjectView(config)
+
+				city: (id_) -> 
+					config.model = {id:id_}
+					window.CBUAppView =  new CBUCityView(config)
+
 				user: (id_) ->
 					config.model = {id:id_}
 					window.CBUAppView = new CBUUserView(config)
@@ -101,8 +115,13 @@ require ["jquery",
 					config.model = {id:window.userID}
 					window.CBUAppView = new CBUDashboardView(config) 
 
-				create: ->
-					window.CBUAppView = new ProjectCreateView(config)
+				createProject: ->
+					config.isResource = false
+					window.CBUAppView = new CreateView(config)
+
+				createResource: ->
+					config.isResource = true
+					window.CBUAppView = new CreateView(config)
 
 				login: ->
 					window.CBUAppView = new CBULoginView(config)
@@ -184,7 +203,7 @@ require ["jquery",
 							position: "fixed" 
 							bottom: 0
 					else
-						$footer.css position: "relative"
+						$footer.css position: "relative" 
 			
 			positionFooter()
 			$window.scroll(positionFooter).resize(positionFooter)

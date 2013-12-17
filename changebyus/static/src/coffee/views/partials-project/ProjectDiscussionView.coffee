@@ -4,7 +4,7 @@ define ["underscore",
 		"template", 
 		"model/ProjectDiscussionModel", 
 		"views/partials-project/ProjectSubView", 
-		"views/partials-project/ProjectWysiwygFormView", 
+		"views/partials-universal/WysiwygFormView", 
 		"views/partials-project/ProjectDiscussionThreadItemView"], 
 	(_, 
 	 Backbone, 
@@ -12,18 +12,19 @@ define ["underscore",
 	 temp, 
 	 ProjectDiscussionModel, 
 	 ProjectSubView, 
-	 ProjectWysiwygFormView, 
+	 WysiwygFormView, 
 	 ProjectDiscussionThreadItemView) ->
 		ProjectDiscussionView = ProjectSubView.extend
 
 			parent: "#project-discussion"
 			$ul:null
 			$form:null 
-			$threadFormID:'#add-thread-form'
-			projectWysiwygFormView:null
+			$threadFormID:"#add-thread-form"
+			wysiwygFormView:null
 			delayedDataLoad:false
 
 			render: ->
+				console.log 'pdv >>>>>>>> ',@
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-project/project-discussion.html",
 					{data: @viewData}, => @onTemplateLoad()
@@ -47,19 +48,21 @@ define ["underscore",
 			onSuccess:-> 
 				@$ul.html('')
 				@$form.html('')
-				console.log 'onSuccess',@model
+
 				@addDiscussion @model
 				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@projectWysiwygFormView = new ProjectWysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
-				@projectWysiwygFormView.success = ->
-					window.location.reload()
+				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
+				@wysiwygFormView.success = (e)=>
+					if e.success
+						$("#new-thread-editor").html("")
+						model = new ProjectDiscussionModel(e.data)
+						@addDiscussion model
 
 
-			addDiscussion:(model_)->   
-				config = {parent:@$ul, model:model_}
-				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config)
+			addDiscussion:(model_)->
+				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})
 				@$ul.append projectDiscussionThreadItemView.$el

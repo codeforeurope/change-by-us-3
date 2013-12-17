@@ -3,7 +3,7 @@
         <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avatar">
     </div>
     <div class="reply-right">
-        <form method="post" enctype="multipart/form-data" class="form-project" name="project-update" action="/api/post/add/discussion">
+        <form method="post" enctype="multipart/form-data" class="form-edit-create" name="project-update" action="/api/post/add/discussion">
             <input type="text" maxlength="30" name="description" placeholder="Reply" class="input-xxlarge pull-left">
             <input type="submit" class="btn btn-medium btn-primary pull-right" value="Reply">
             <input type="hidden" name="title" value="title">

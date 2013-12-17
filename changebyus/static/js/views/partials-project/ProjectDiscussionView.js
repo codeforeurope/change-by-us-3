@@ -1,14 +1,15 @@
-define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-project/ProjectWysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, ProjectWysiwygFormView, ProjectDiscussionThreadItemView) {
+define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, WysiwygFormView, ProjectDiscussionThreadItemView) {
   var ProjectDiscussionView;
   return ProjectDiscussionView = ProjectSubView.extend({
     parent: "#project-discussion",
     $ul: null,
     $form: null,
-    $threadFormID: '#add-thread-form',
-    projectWysiwygFormView: null,
+    $threadFormID: "#add-thread-form",
+    wysiwygFormView: null,
     delayedDataLoad: false,
     render: function() {
       var _this = this;
+      console.log('pdv >>>>>>>> ', this);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion.html", {
         data: this.viewData
@@ -41,10 +42,10 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
     },
     onSuccess: function() {
-      var model, response, userAvatar, _i, _len, _ref;
+      var model, response, userAvatar, _i, _len, _ref,
+        _this = this;
       this.$ul.html('');
       this.$form.html('');
-      console.log('onSuccess', this.model);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -55,23 +56,25 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         this.addDiscussion(model);
       }
       userAvatar = $('.profile-nav-header img').attr('src');
-      this.projectWysiwygFormView = new ProjectWysiwygFormView({
+      this.wysiwygFormView = new WysiwygFormView({
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
         userAvatar: userAvatar
       });
-      return this.projectWysiwygFormView.success = function() {
-        return window.location.reload();
+      return this.wysiwygFormView.success = function(e) {
+        if (e.success) {
+          $("#new-thread-editor").html("");
+          model = new ProjectDiscussionModel(e.data);
+          return _this.addDiscussion(model);
+        }
       };
     },
     addDiscussion: function(model_) {
-      var config, projectDiscussionThreadItemView;
-      config = {
-        parent: this.$ul,
+      var projectDiscussionThreadItemView;
+      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({
         model: model_
-      };
-      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config);
+      });
       return this.$ul.append(projectDiscussionThreadItemView.$el);
     }
   });

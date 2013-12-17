@@ -39,11 +39,11 @@ define ["underscore",
 
 			loadDayTemplate:->
 				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
-							m = moment(model_.get("updated_at")).format("MMMM D")
+							m = moment(model_.get("created_at")).format("MMMM D")
 							@newDay(m)
 
 						@isDataLoaded = true
@@ -58,7 +58,7 @@ define ["underscore",
 				@$ul = @$currentDay.find('.bordered-item') 
 
 			addOne:(model_)->
-				m = moment(model_.get("updated_at")).format("MMMM D")
+				m = moment(model_.get("created_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m)
 
 				config = {model:model_}
@@ -70,6 +70,9 @@ define ["underscore",
 
 				onPageElementsLoad()
 
+			show:->
+				ProjectSubView::show.call(@)
+				@loadData()
 
 			deleteDiscussion:(id_)->
 				$feedback = $("#discussions-feedback")

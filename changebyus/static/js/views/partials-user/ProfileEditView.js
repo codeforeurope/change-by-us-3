@@ -57,6 +57,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           if ($form.valid()) {
             showEmail = true;
             for (i in arr_) {
+              console.log(arr_[i]);
               if (arr_[i].name === "public_email") {
                 showEmail = false;
                 break;

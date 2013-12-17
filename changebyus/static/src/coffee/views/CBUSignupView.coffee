@@ -49,7 +49,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					success: (response) =>
 						console.log 'signup',response
 						$form.find("input, textarea").removeAttr("disabled")
-						#if response.msg.toLowerCase() is "ok"
+						#if response.success
 						if response.success
 							window.location.href = "/"
 						else
@@ -82,8 +82,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					success: (response) =>
 						console.log 'signup',response,$socialFeedback 
 						$socialForm.find("input, textarea").removeAttr("disabled")
-						#if response.msg.toLowerCase() is "ok"
-						if response.success is "ok"
+						#if response.success
+						if response.success
 							window.location.href = "/"
 						else
 							$socialFeedback.addClass("alert").html response.msg

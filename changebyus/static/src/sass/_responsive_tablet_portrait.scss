@@ -3,8 +3,12 @@
 @import "variables";
 
 @media only screen and (max-width: 1024px) {
-	//body.debug{background: blue;}
-	body{background: blue;}
+	body.debug{background: blue;}
+	//body{background: blue;}
+
+	/*******************************************
+	 * Header/Nav
+	 *******************************************/
 
 	.topnav{
 		.body-container{padding: 0;}
@@ -31,12 +35,6 @@
 		}
 	}
 
-	.project-header{margin-top: 0;}
-
-	.dashboard-header{  
-		.btn.btn-large{padding: 20px;}
-	}
-
 	.user-header {
 		.edit{
 			top: auto;
@@ -45,14 +43,8 @@
 		}
 	}
 
-	.body-container{
-		padding: 0 2%;
-	}
+	.body-container{ padding: 0 2%; } 
 
-	.admin{
-		//.user-avatar{display: none;}
-	}
-	
 	.tabs-pane, .owner-tabs-pane{ 
 		position: relative; 
 		bottom: auto;
@@ -84,28 +76,9 @@
 		}
 
 		.profile-image{display: none;}
-	}
-
-	.view-project{ display: none; }
-
-	.project-section-header{
-		height: auto;
-		>.pull-left{float: none;}
-		.team-members{
-			float: none;
-			ul{float: none;}
-		}
-	}
-
-	.member-popup{
-		left: 0;
-	}
-
-	.create-project{
-		h1, p{
-			//padding: 0 2%; 
-		}
-	}
+	} 
+	
+	.member-popup{ left: 0; }
 
 	.content-wrapper {
 		padding: 2%;
@@ -113,6 +86,10 @@
 			padding: 10px;
 		}
 	}
+
+	/*******************************************
+	 * Homepage
+	 *******************************************/
 
 	.homepage-block-info{
 		padding: 55px 2%;
@@ -124,6 +101,25 @@
 			font-size: 20px;
 		}
 		p{font-size: 20px;}
+	}
+
+	/*******************************************
+	 * Project
+	 *******************************************/
+	 .project-resource-section-header{
+		height: auto;
+		.project-container{
+			>.pull-left{float: none;}
+			.team-members{
+				float: none;
+				ul{float: none;}
+			}
+		}
+	}
+
+	.project-header,
+	.city-header{
+		margin-top: 0;
 	}
 
 	.project-square { 
@@ -151,19 +147,28 @@
 		height: 100px;
 	}
 
-	.public-email{
-		span{
-			
+	.view-project{ display: none; }
+
+	/*******************************************
+	 * Resource
+	 *******************************************/
+
+	#add-resource-update {
+		width: 100%;
+		margin-right: 0;
+	}
+
+	.resource-container {
+		.team-members {
+			width: 100%;
+			ul{float: left;}
 		}
+		.popup-arrow {left: 13%;}
 	}
-
-	.footer-nav, .form-footer{
-		//padding: 0 2%;
-	}
-
-	.banner-search{
-		//padding: 0 2%;
-	}
+	
+	/*******************************************
+	 * DISCOVER / DISCUSSION
+	 *******************************************/
 
 	.discover-header-right{ 
 		.btn-large{ font-size: 22px; }
@@ -173,6 +178,13 @@
 		.description{ width:55%; }
 	}
 
+	.dashboard-header{  
+		.btn.btn-large{padding: 20px;}
+	}
+
+	/*******************************************
+	 * Modal
+	 *******************************************/
 	.modal, 
 	.success-modal, 
 	.embed-modal, 

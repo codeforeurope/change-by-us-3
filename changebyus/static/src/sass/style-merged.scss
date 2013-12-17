@@ -27,7 +27,7 @@
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
-  display: block;
+  display: block; 
 }
  
 audio, canvas, video {
@@ -1264,13 +1264,7 @@ legend + .control-group {
   border: 1px solid rgba(0, 0, 0, 0.2);
   *border-right-width: 2px;
   *border-bottom-width: 2px;
-}
 
-.custom {
-  width: 200px !important;
-}
-
-.dropdown-menu {
   &.pull-right {
     right: 0;
     left: auto;
@@ -1298,6 +1292,11 @@ legend + .control-group {
       background-color: $primaryColor;
     }
   }
+}
+
+
+.custom {
+  width: 200px !important;
 }
 
 .dropdown-submenu {
@@ -2844,8 +2843,8 @@ html, body, #page-wrapper{
 /***************************************
  OVERRIDERS OR HELPERS
  ***************************************/
-
-@import "projects";
+ 
+@import "projects_resources";
 @import "modal";
 @import "helpers";
 @import "form";
@@ -2859,9 +2858,7 @@ html, body, #page-wrapper{
 @import "admin";
 @import "discover";
 @import "homepage";
-@import "slicknav";
-@import "responsive_desktop";
-//@import "responsive_tablet_landscape";
+@import "slicknav"; 
 @import "responsive_tablet_portrait";
 @import "responsive_mobile_landscape";
 @import "responsive_mobile_portrait";

@@ -1,7 +1,7 @@
-define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/ProjectUpdateModel", "model/UserModel", "views/partials-project/ProjectPostReplyView"], function(_, Backbone, $, temp, moment, AbstractView, ProjectUpdateModel, UserModel, ProjectPostReplyView) {
+define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view", "model/UpdateModel", "model/UserModel", "views/partials-universal/PostReplyView"], function(_, Backbone, $, temp, moment, AbstractView, UpdateModel, UserModel, PostReplyView) {
   var UserStreamItemView;
   return UserStreamItemView = AbstractView.extend({
-    model: ProjectUpdateModel,
+    model: UpdateModel,
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);

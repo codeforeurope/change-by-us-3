@@ -1,6 +1,6 @@
 define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "prettify", "wysiwyg", "hotkeys", "abstract-view"], 
 	(_, Backbone, $, bootstrap, temp, form, prettify, wysiwyg, hotkeys, AbstractView) ->
-		ProjectWysiwygFormView = AbstractView.extend
+		WysiwygFormView = AbstractView.extend
 
 			formName:"project-update" #default ID, but doublecheck that form ID is correct
 			editorID:"#editor" #default ID, but doublecheck that form ID is correct
@@ -14,8 +14,9 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				@userAvatar = options.userAvatar || @userAvatar
 
 				@render()
-
+ 
 			render: -> 
+				console.log 'render render render render'
 				@viewData =
 					project_id: window.projectID
 					response_to_id: @id 
@@ -28,6 +29,11 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					@editorID =  "#editor"
 					@formName = "project-update"
 					@$el = $("<div class='update-wrapper thin-pad clearfix'/>")
+				else if @parent is "#add-resource-update"
+					url = "/templates/partials-resource/resource-add-update-form.html" 
+					@editorID =  "#add-update"
+					@formName = "resource-update"
+					@$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 				else if @parent is "#add-thread-form"
 					url = "/templates/partials-project/project-new-thread-form.html" 
 					@editorID =  "#new-thread-editor"
@@ -39,10 +45,11 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					@formName = "new-thread"
 					@$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 
-				
 				@$el.template @templateDir+url,
 					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
+
+				console.log '@templateDir+url',@templateDir+url, @$el, $(@parent)
 
 			onTemplateLoad:->
 				@trigger 'ON_TEMPLATE_LOAD'

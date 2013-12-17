@@ -5,8 +5,6 @@
 @import "compass/css3/background-clip";
 @import "compass/css3/transform";
 
-/* sudo sass --compass --sourcemap --watch static/src/sass:static/css */
-
 /*** HEADER *****/
 .header-icon{ 
   position: absolute;
@@ -42,6 +40,8 @@
   min-height: 400px;
   float: left;
   margin: auto auto 22px;
+  width: 32%;
+  margin-right: 2%;
 
   &:hover{ 
     .hover-overlay{ 
@@ -92,15 +92,16 @@
   }
 }
 
+.project-preview:nth-child(3n+3){
+    .project-square {margin-right: 0;}
+}
+
 .project-dashboard-image {
   text-align: center;
   width: 100%;
   img{ 
     width: 100%; 
     height: auto;
-    //position: absolute;
-    //top: 0;
-    //left: 0;
   } 
 }
 
@@ -126,7 +127,9 @@
   a{color: #868686;}
 }
 
-.project-container {
+.city-container, 
+.project-container, 
+.resource-container {
   h2 {
     font-size: 42px;
     font-weight: normal;  
@@ -138,11 +141,16 @@
   }
 }
 
-.project-header{
+.project-header, 
+.city-header{
   margin-top: 12px;
 }
 
-.project-section-header{
+.resource-header{
+  .feature-image{ height: 400px; }
+}
+
+.project-resource-section-header{
   height: 120px;
   z-index: 1;
   
@@ -153,7 +161,7 @@
   width: 100%;
   height: 430px;
   position: relative;
-
+ 
   h1{
     @include font-styling("asap", 48px, $white, "normal", "bold");
     @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
@@ -229,7 +237,32 @@
   }
 }
 
-.tabs{ }
+/*****************************
+ * Resources
+ *****************************/
+
+.resource-container{
+  .feature-image { 
+    h1, .overlay-description, .project-location{ 
+      color: $black;
+      @include text-shadow(none);
+    }
+  }
+
+  .project-resource-section-header { height: auto; }
+
+  .team-members{ 
+    width: 15%; 
+    li{margin-left: 10px;}
+  }
+
+  .content-wrapper.thin-pad{ padding-top: 40px; }
+}
+
+#add-resource-update{
+    width: 83%;
+    margin-right: 2%;
+}
 
 .content-header{ margin-top: 24px; }
 
@@ -262,7 +295,11 @@ h2.admin-title{
   margin: 0 0 16px;
 }
 
-.content-left, .content-right, .post-right, .reply-left, .reply-right{
+.content-left,
+.content-right,
+.post-right,
+.reply-left,
+.reply-right{
   float: left;  
 }
 
@@ -291,8 +328,6 @@ h2.admin-title{
   min-width: 70px;
   width: percentage(70px/1018px);
   margin-right: percentage(20px/1018px);
-
-  // img{max-width: none;}
 }
 
 .update-content{
@@ -300,8 +335,8 @@ h2.admin-title{
   width: 85%;
 
   input[type=button]{background-color: $graySupport;}
-  input[type=submit]{
-    //background-color: $secondaryColor;
+  
+  input[type=submit]{ 
     margin-left: 16px;
   }
     
@@ -311,21 +346,25 @@ h2.admin-title{
   }
 }
 
-.post-title, .reply-title{
+.post-title,
+.reply-title{
   color: $gray20;
   margin-bottom: 10px;
   font-weight: bold;
 }
  
 
-.post-content, .reply-content{
+.post-content,
+.reply-content{
   @include font-styling("merriweather", 14px, $gray20);
+  
   p{
     @include font-styling("merriweather", 14px, $gray20);
   }
 }
 
-.post-footer, .reply-date{ 
+.post-footer,
+.reply-date{ 
   margin-top: 10px;
   @include font-styling("asap", 14px, $gray53);
 }
@@ -449,7 +488,8 @@ h2.admin-title{
   padding: 5px 5px 0;
   @include box-skin;
   
-  .styledRadio, .styledCheckbox{float: left;}
+  .styledRadio, 
+  .styledCheckbox{float: left;}
   
   label{ 
     height: 15px; 
@@ -464,8 +504,10 @@ h2.admin-title{
 }
 
 .discussion{ 
-
+  .user-avatar{cursor: pointer;}
+  
   .description{
+    cursor: pointer;
     float: left;
     width: 670px;
     
@@ -524,13 +566,15 @@ h2.admin-title{
   width: 100%;
 
   ul{margin-left: 30px;}
+
   li{
     height: 100%;
     display: inline-block;
     list-style-type: none;
     padding: 0 1%; 
     margin: 0 1%; 
-  }  
+  }
+
   a{
     line-height: 58px;
     @include font-styling("asap", 22px, $white, "normal", "bold");
@@ -548,6 +592,7 @@ h2.admin-title{
 
 .tabs-pane{
   img{vertical-align:initial;}
+
   li{
     a{ vertical-align: text-bottom; }
     &.active {
@@ -603,6 +648,7 @@ h2.admin-title{
   width: 200px;
   left: -110px;
   top:58px;
+  z-index: 1;
   @include opacity(0);
   @include box-skin;
   @include transition-property(all);
@@ -633,7 +679,7 @@ h2.admin-title{
   border-right: none;
   width: 15px;
   height: 15px;
-  top: -7px;
+  top: -8px;
   left: 69%;
 }
 
@@ -663,39 +709,3 @@ h2.admin-title{
 .stream-wrapper{
   .content-wrapper{overflow: hidden;}
 }
-
-.create-project{
-  h1{
-    font-size: 52px;
-    font-weight: normal;
-  }
-}
-
-.form-project{
-  p{
-    font-size: 18px;
-    line-height: 1.5;
-  }
-
-  .dk_toggle{
-    padding: 16px;
-  }
-  .dk_label{
-    font-size: 18px;
-    font-weight: normal;
-  }
-  .dk_options a{
-    font-size: 18px;
-    font-weight: normal;
-    padding: 16px;
-  }
-}
-
-input[type="text"].input-slim{
-  width: 50%;
-  height: auto;
-}
-
-iframe{ width: 100%; }
-
- 

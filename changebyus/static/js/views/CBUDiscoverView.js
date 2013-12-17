@@ -1,7 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection", "abstract-view"], function(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection, AbstractView) {
   var CBUDiscoverView;
   return CBUDiscoverView = AbstractView.extend({
-    bannerSearchView: null,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();

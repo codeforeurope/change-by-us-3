@@ -17,10 +17,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       }
     },
     loadData: function() {
-      this.collection.on("reset", this.onCollectionLoad, this);
-      return this.collection.fetch({
-        reset: true
-      });
+      if (this.collection) {
+        this.collection.on("reset", this.onCollectionLoad, this);
+        return this.collection.fetch({
+          reset: true
+        });
+      }
     },
     noResults: function() {
       return this.$el.find('.no-results').show();

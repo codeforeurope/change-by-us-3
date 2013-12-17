@@ -40,6 +40,8 @@
   min-height: 400px;
   float: left;
   margin: auto auto 22px;
+  width: 32%;
+  margin-right: 2%;
 
   &:hover{ 
     .hover-overlay{ 
@@ -88,6 +90,10 @@
     margin-top: 150px;
     font-size: 18px;
   }
+}
+
+.project-preview:nth-child(3n+3){
+    .project-square {margin-right: 0;}
 }
 
 .project-dashboard-image {

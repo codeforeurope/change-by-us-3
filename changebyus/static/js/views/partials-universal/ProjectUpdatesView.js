@@ -36,7 +36,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         $('.team-members .pull-right').remove();
       }
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-project/project-entries-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];

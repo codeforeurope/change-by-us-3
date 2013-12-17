@@ -32,7 +32,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     loadDayTemplate: function() {
       var _this = this;
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-project/project-entries-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
         var m, model_;
         if (_this.collection.length > 0) {
           model_ = _this.collection.models[0];
@@ -66,6 +66,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();
+    },
+    show: function() {
+      ProjectSubView.prototype.show.call(this);
+      return this.loadData();
     },
     deleteDiscussion: function(id_) {
       var $feedback,

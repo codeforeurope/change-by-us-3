@@ -27,7 +27,7 @@
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
-  display: block;
+  display: block; 
 }
  
 audio, canvas, video {
@@ -2859,8 +2859,7 @@ html, body, #page-wrapper{
 @import "admin";
 @import "discover";
 @import "homepage";
-@import "slicknav";
-@import "responsive_desktop";
+@import "slicknav"; 
 @import "responsive_tablet_portrait";
 @import "responsive_mobile_landscape";
 @import "responsive_mobile_portrait";

@@ -18,8 +18,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@delayedCollectionLoad = true
 
 			loadData: ->
-				@collection.on "reset", @onCollectionLoad, @
-				@collection.fetch {reset: true}
+				if @collection
+					@collection.on "reset", @onCollectionLoad, @
+					@collection.fetch {reset: true}
 
 			# override in subview
 			noResults:->

@@ -39,7 +39,7 @@ define ["underscore",
 
 			loadDayTemplate:->
 				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]
@@ -70,6 +70,9 @@ define ["underscore",
 
 				onPageElementsLoad()
 
+			show:->
+				ProjectSubView::show.call(@)
+				@loadData()
 
 			deleteDiscussion:(id_)->
 				$feedback = $("#discussions-feedback")

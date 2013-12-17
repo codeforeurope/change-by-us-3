@@ -40,7 +40,7 @@ define ["underscore",
 				if length <= 4 then $('.team-members .pull-right').remove()
 
 				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-project/project-entries-day-wrapper.html",
+				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
 					{}, =>
 						if @collection.length > 0
 							model_ = @collection.models[0]

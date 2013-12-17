@@ -9,6 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     delayedDataLoad: false,
     render: function() {
       var _this = this;
+      console.log('pdv >>>>>>>> ', this);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion.html", {
         data: this.viewData
@@ -41,7 +42,8 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
     },
     onSuccess: function() {
-      var model, response, userAvatar, _i, _len, _ref;
+      var model, response, userAvatar, _i, _len, _ref,
+        _this = this;
       this.$ul.html('');
       this.$form.html('');
       this.addDiscussion(this.model);
@@ -60,17 +62,18 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         slim: true,
         userAvatar: userAvatar
       });
-      return this.wysiwygFormView.success = function() {
-        return window.location.reload();
+      return this.wysiwygFormView.success = function(e) {
+        if (e.success) {
+          model = new ProjectDiscussionModel(e.data);
+          return _this.addDiscussion(model);
+        }
       };
     },
     addDiscussion: function(model_) {
-      var config, projectDiscussionThreadItemView;
-      config = {
-        parent: this.$ul,
+      var projectDiscussionThreadItemView;
+      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({
         model: model_
-      };
-      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView(config);
+      });
       return this.$ul.append(projectDiscussionThreadItemView.$el);
     }
   });

@@ -76,9 +76,11 @@ define ["underscore",
 					{data:viewData}, => @onFormLoaded()
 
 			addReply:(reply_)->
+				console.log 'reply_',reply_
 				postReplyView = new PostReplyView({model:reply_})
-				if $('.post-reply-form').length > 0
-					postReplyView.$el.insertBefore('.post-reply-form')
+				replyForm = @$el.find('.post-reply-form')
+				if replyForm.length > 0
+					postReplyView.$el.insertBefore replyForm
 				else
 					@$repliesHolder.append postReplyView.$el
 
@@ -93,8 +95,7 @@ define ["underscore",
 					url: $form.attr('action')
 					dataType: "json" 
 					contentType: "application/json; charset=utf-8"
-					success: (response_) =>
-						console.log response_
+					success: (response_) => 
 						$form.find('form').resetForm()
 						@addReply response_.data
 

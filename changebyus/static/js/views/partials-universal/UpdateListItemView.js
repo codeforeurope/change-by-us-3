@@ -72,12 +72,14 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       });
     },
     addReply: function(reply_) {
-      var postReplyView;
+      var postReplyView, replyForm;
+      console.log('reply_', reply_);
       postReplyView = new PostReplyView({
         model: reply_
       });
-      if ($('.post-reply-form').length > 0) {
-        return postReplyView.$el.insertBefore('.post-reply-form');
+      replyForm = this.$el.find('.post-reply-form');
+      if (replyForm.length > 0) {
+        return postReplyView.$el.insertBefore(replyForm);
       } else {
         return this.$repliesHolder.append(postReplyView.$el);
       }
@@ -94,7 +96,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         dataType: "json",
         contentType: "application/json; charset=utf-8",
         success: function(response_) {
-          console.log(response_);
           $form.find('form').resetForm();
           return _this.addReply(response_.data);
         }

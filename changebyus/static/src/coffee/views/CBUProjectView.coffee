@@ -118,7 +118,8 @@ define ["underscore",
 				if @isResource
 					@updatesView.show()
 					@updatesView.on 'ON_TEMPLATE_LOAD', =>
-						@wysiwygFormView = new WysiwygFormView({parent:"#add-resource-update", id:@model.get("id"), slim:true})
+						userAvatar = $('.profile-nav-header img').attr('src')
+						@wysiwygFormView = new WysiwygFormView({parent:"#add-resource-update", id:@model.get("id"), slim:true, userAvatar:userAvatar})
 					console.log 'wysiwygFormView',@wysiwygFormView
 				else
 					@projectMembersView  = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})

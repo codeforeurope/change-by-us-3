@@ -115,10 +115,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       if (this.isResource) {
         this.updatesView.show();
         this.updatesView.on('ON_TEMPLATE_LOAD', function() {
+          var userAvatar;
+          userAvatar = $('.profile-nav-header img').attr('src');
           return _this.wysiwygFormView = new WysiwygFormView({
             parent: "#add-resource-update",
             id: _this.model.get("id"),
-            slim: true
+            slim: true,
+            userAvatar: userAvatar
           });
         });
         console.log('wysiwygFormView', this.wysiwygFormView);

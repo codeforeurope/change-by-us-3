@@ -240,14 +240,14 @@
     }
   }
 
-  .project-resource-section-header {
-    //height: 180px;
-    height: auto;
+  .project-resource-section-header { height: auto; }
+
+  .team-members{ 
+    width: 15%; 
+    li{margin-left: 10px;}
   }
 
-  .team-members{
-    width: 15%;
-  }
+  .content-wrapper.thin-pad{ padding-top: 40px; }
 }
 
 #add-resource-update{

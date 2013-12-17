@@ -22,6 +22,7 @@ require.config
 		"validate": "ext/jquery/jquery.validate.min"
 		"main-view": "views/CBUMainView"
 		"discover-view": "views/CBUDiscoverView"
+		"city-view": "views/CBUCityView"
 		"project-view": "views/CBUProjectView"
 		"project-owner-view": "views/CBUProjectOwnerView"
 		"login-view": "views/CBULoginView"
@@ -39,6 +40,7 @@ require ["jquery",
 		"backbone", 
 		 "main-view", 
 		 "discover-view",  
+		 "city-view", 
 		 "project-view", 
 		 "project-owner-view", 
 		 "login-view", 
@@ -49,9 +51,10 @@ require ["jquery",
 		 "create-view",
 		 "slicknav"], 
 	($, 
-	 Backbone, 
-	 CBUMainView, 
-	 CBUDiscoverView,  
+	 Backbone,
+	 CBUMainView,
+	 CBUDiscoverView,
+	 CBUCityView,
 	 CBUProjectView, 
 	 CBUProjectOwnerView, 
 	 CBULoginView, 
@@ -62,12 +65,14 @@ require ["jquery",
 	 CreateView
 	 Slicknav) ->
 		$(document).ready ->
-			config = parent: "#frame" 
+			config = {parent:".main-content"}
 
 			CBURouter = Backbone.Router.extend
 				routes:
 					"project/:id": "project"
 					"project/:id/admin": "projectAdmin"
+					"resource/:id": "resource"
+					"city/:id": "city"
 					"user/:id": "user"
 					"discover": "discover"
 					"stream/dashboard": "dashboard"
@@ -90,6 +95,14 @@ require ["jquery",
 					config.model = {id:id_}
 					config.isOwner = isOwner
 					window.CBUAppView = if (isOwner) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
+
+				resource: (id_) ->
+					config.model = {id:id_}
+					window.CBUAppView =  new CBUProjectView(config)
+
+				city: (id_) -> 
+					config.model = {id:id_}
+					window.CBUAppView =  new CBUCityView(config)
 
 				user: (id_) ->
 					config.model = {id:id_}

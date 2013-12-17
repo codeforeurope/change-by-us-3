@@ -22,6 +22,7 @@ require.config({
     "validate": "ext/jquery/jquery.validate.min",
     "main-view": "views/CBUMainView",
     "discover-view": "views/CBUDiscoverView",
+    "city-view": "views/CBUCityView",
     "project-view": "views/CBUProjectView",
     "project-owner-view": "views/CBUProjectOwnerView",
     "login-view": "views/CBULoginView",
@@ -37,16 +38,18 @@ require.config({
   }
 });
 
-require(["jquery", "backbone", "main-view", "discover-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, Slicknav) {
+require(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, Slicknav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
-      parent: "#frame"
+      parent: ".main-content"
     };
     CBURouter = Backbone.Router.extend({
       routes: {
         "project/:id": "project",
         "project/:id/admin": "projectAdmin",
+        "resource/:id": "resource",
+        "city/:id": "city",
         "user/:id": "user",
         "discover": "discover",
         "stream/dashboard": "dashboard",
@@ -74,6 +77,18 @@ require(["jquery", "backbone", "main-view", "discover-view", "project-view", "pr
         };
         config.isOwner = isOwner;
         return window.CBUAppView = isOwner ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
+      },
+      resource: function(id_) {
+        config.model = {
+          id: id_
+        };
+        return window.CBUAppView = new CBUProjectView(config);
+      },
+      city: function(id_) {
+        config.model = {
+          id: id_
+        };
+        return window.CBUAppView = new CBUCityView(config);
       },
       user: function(id_) {
         config.model = {

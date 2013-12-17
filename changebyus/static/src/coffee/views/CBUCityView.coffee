@@ -3,6 +3,7 @@ define ["underscore",
 		"jquery", 
 		"template", 
 		"abstract-view", 
+		"resource-project-view",
 		"model/CityModel", 
 		"collection/CityProjectCollection", 
 		"collection/CityResourceCollection" ], 
@@ -11,6 +12,7 @@ define ["underscore",
 	 $, 
 	 temp, 
 	 AbstractView, 
+	 ResourceProjectPreviewView,
 	 CityModel, 
 	 CityProjectCollection, 
 	 CityResourceCollection) ->
@@ -18,13 +20,19 @@ define ["underscore",
 		CBUCityView = AbstractView.extend
 			
 			$header:null
+			collection:null
 
-			initialize: (options) -> 
+			initialize: (options) ->
+				AbstractView::initialize.call @, options
+				
 				@model       = new CityModel(options.model)
 				@collection  = options.collection or @collection
 				
+				###
 				@model.fetch 
 					success: =>@render()
+				###
+				@render()
 
 			events:
 				"click .change-city a":"changeCity" 
@@ -36,6 +44,8 @@ define ["underscore",
 				@$el.template @templateDir+"/templates/city.html", 
 					@viewData, => @onTemplateLoad()
 				$(@parent).append @$el
+				console.log @parent, @$el
+
 
 			onTemplateLoad:->
 				@projectsView = @$el.find('#featured-projects')

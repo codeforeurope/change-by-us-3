@@ -4,7 +4,8 @@ define ["underscore", "backbone", "model/ProjectModel"],
 			model: ProjectModel
 			
 			url: ->
-				"/api/city"
+				"/api/project/list?limit=6&sort=activity&order=desc"
+				#"/api/city"
 			
 			parse: (response) ->
 				response.data

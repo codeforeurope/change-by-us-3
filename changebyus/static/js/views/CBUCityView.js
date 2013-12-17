@@ -1,16 +1,18 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/CityModel", "collection/CityProjectCollection", "collection/CityResourceCollection"], function(_, Backbone, $, temp, AbstractView, CityModel, CityProjectCollection, CityResourceCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "resource-project-view", "model/CityModel", "collection/CityProjectCollection", "collection/CityResourceCollection"], function(_, Backbone, $, temp, AbstractView, ResourceProjectPreviewView, CityModel, CityProjectCollection, CityResourceCollection) {
   var CBUCityView;
   return CBUCityView = AbstractView.extend({
     $header: null,
+    collection: null,
     initialize: function(options) {
-      var _this = this;
+      AbstractView.prototype.initialize.call(this, options);
       this.model = new CityModel(options.model);
       this.collection = options.collection || this.collection;
-      return this.model.fetch({
-        success: function() {
-          return _this.render();
-        }
-      });
+      /*
+      				@model.fetch 
+      					success: =>@render()
+      */
+
+      return this.render();
     },
     events: {
       "click .change-city a": "changeCity"
@@ -22,7 +24,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       this.$el.template(this.templateDir + "/templates/city.html", this.viewData, function() {
         return _this.onTemplateLoad();
       });
-      return $(this.parent).append(this.$el);
+      $(this.parent).append(this.$el);
+      return console.log(this.parent, this.$el);
     },
     onTemplateLoad: function() {
       var _this = this;

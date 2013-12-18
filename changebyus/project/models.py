@@ -64,7 +64,12 @@ def gen_image_urls(image_url):
 
     """
         Helper that will take a root image name, and given our image manipulators
-        and preferred remote storage container will generate image names and urls
+        and preferred remote storage container will generate image names and urls.
+
+        Example: happycat.jpg will have the imges 
+        250.250.happycat.png
+        300.300.happycat.jpg
+        etc
 
         Args:
             Base image name

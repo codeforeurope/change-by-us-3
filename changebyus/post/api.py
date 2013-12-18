@@ -12,7 +12,7 @@ from flask.ext.cdn_rackspace import upload_rackspace_image
 from flask.ext.login import login_required, current_user
 
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
-                           SubmitField, Required, ValidationError, FieldList)
+                           SubmitField, Required, ValidationError)
 
 from .models import ProjectPost, Project, User, SocialMediaObject
 from .decorators import post_delete_permission, post_edit_permission, post_exists 
@@ -125,13 +125,14 @@ def api_get_project_posts(project_id, post_type):
     return jsonify_response( ReturnStructure( data = ret_posts ) )
 
 
+
 class CreateProjectPostForm(Form):
-    title          = TextField("title", validators=[Required()])
-    description    = TextAreaField("description", validators=[Required()])
-    social_sharing = FieldList( TextField("social_sharing"), min_entries=0 )
-    project_id     = TextField("project_id", validators=[Required()])
-    response_to_id = TextField("response_to_id")
-    visibility     = TextField("visibility")
+    title           = TextField("title", validators=[Required()])
+    description     = TextAreaField("description", validators=[Required()])
+    social_sharing  = TextField('social_sharing')
+    project_id      = TextField("project_id", validators=[Required()])
+    response_to_id  = TextField("response_to_id")
+    visibility      = TextField("visibility")
 
 
 @post_api.route('/add/<post_type>', methods = ['POST'])
@@ -177,7 +178,7 @@ def api_add_project_post(post_type):
     project_id     = form.project_id.data
     response_to_id = form.response_to_id.data if form.response_to_id.data != '' else None
     visibility     = form.visibility.data if form.visibility.data != '' else None
-
+    print 'social_sharing',social_sharing
     if post_type == 'update':
         visibility = 'public'
     elif post_type == 'discussion':

@@ -15,7 +15,6 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     render: function() {
       var url,
         _this = this;
-      console.log('render render render render');
       this.viewData = {
         project_id: window.projectID,
         response_to_id: this.id,
@@ -85,6 +84,13 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         var json_str, obj;
         obj = _this.$updateForm.serializeJSON();
         obj.description = escape($editor.html());
+        /*
+        					obj.social_sharing = [
+        						{name:'social_sharing', value:'twitter'},
+        						{name:'social_sharing', value:'facebook'}
+        					]
+        */
+
         json_str = JSON.stringify(obj);
         options.data = json_str;
         $.ajax(options);

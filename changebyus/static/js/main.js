@@ -66,6 +66,7 @@ require(["jquery", "backbone", "main-view", "discover-view", "city-view", "proje
         config.model = {
           id: id_
         };
+        config.isResource = false;
         config.isOwner = userID === projectOwnerID;
         return window.CBUAppView = new CBUProjectView(config);
       },
@@ -82,6 +83,7 @@ require(["jquery", "backbone", "main-view", "discover-view", "city-view", "proje
         config.model = {
           id: id_
         };
+        config.isResource = true;
         return window.CBUAppView = new CBUProjectView(config);
       },
       city: function(id_) {

@@ -19,6 +19,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.model = new ProjectModel(options.model);
       this.collection = options.collection || this.collection;
       this.isOwner = options.isOwner || this.isOwner;
+      this.isResource = options.isResource || this.isResource;
       return this.model.fetch({
         success: function() {
           return _this.render();
@@ -33,7 +34,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var className, templateURL,
         _this = this;
-      this.isResource = this.model.get("resource");
       if (this.isResource) {
         className = "resource-container";
         templateURL = "/templates/resource.html";

@@ -1,14 +1,14 @@
 <div class="member-avatar">
-    <div class="circle">
-        <a href="/user/<%= data.id %>">
+    <a href="/user/<%= data.id %>">
+        <div class="circle">        
             <img src="<%= data.image_url_round_small %>" alt="User Avatar">
-        </a>
-    </div>
+        </div>
+     </a>
     <div class="member-popup">
         <div class="hover-padding"></div>
         <div class="popup-arrow"></div>
         <div class="mail-icon">
-            <% if (data.public_email){ %>
+            <% if (data.public_email && data.email != ""){ %>
             <a href="mailto:<% data.email %>">
                 <img src="/static/img/mail_icon.png" alt="Email">
             </a>

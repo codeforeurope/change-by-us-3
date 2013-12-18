@@ -87,6 +87,7 @@ require ["jquery",
 
 				project: (id_) ->
 					config.model = {id:id_} 
+					config.isResource = false
 					config.isOwner = (userID is projectOwnerID)
 					window.CBUAppView =  new CBUProjectView(config)
 
@@ -98,6 +99,7 @@ require ["jquery",
 
 				resource: (id_) ->
 					config.model = {id:id_}
+					config.isResource = true
 					window.CBUAppView =  new CBUProjectView(config)
 
 				city: (id_) -> 

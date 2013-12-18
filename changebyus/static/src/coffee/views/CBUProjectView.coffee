@@ -44,6 +44,7 @@ define ["underscore",
 				@model       = new ProjectModel(options.model)
 				@collection  = options.collection or @collection
 				@isOwner     = options.isOwner || @isOwner
+				@isResource  = options.isResource || @isResource
 				@model.fetch 
 					success: =>@render()
 
@@ -53,7 +54,7 @@ define ["underscore",
 				"click  a[href^='#']":"changeHash"
 
 			render: ->
-				@isResource = @model.get("resource")
+				# @isResource = @model.get("resource")
 
 				if @isResource
 					className = "resource-container"

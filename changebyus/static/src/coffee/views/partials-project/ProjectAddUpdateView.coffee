@@ -24,9 +24,27 @@ define ["underscore",
 			events: 
 				"click #post-update":"animateUp"
 				"click .share-toggle":"shareToggle"
+				"click .share-options .styledCheckbox":"shareOption"
 
 			shareToggle:->
-				$(".share-toggle").toggleClass("hide")
+				$(".share-options").toggleClass("hide")
+
+			shareOption:(e)->
+				$input  = $(e.currentTarget).find('input')
+				id      = $input.attr('id')
+				checked = ($input.is(':checked'))
+
+				$projectPage = $("input[name='social_sharing[0]']")
+				$twitter     = $("input[name='social_sharing[1]']")
+				$facebook    = $("input[name='social_sharing[2]']")
+
+				switch id
+					when 'project-page'
+						if checked then $projectPage.val('project-page') else $projectPage.val('')
+					when 'twitter'
+						if checked then $twitter.val('twitter') else $twitter.val('')
+					when 'facebook'
+						if checked then $facebook.val('facebook') else $facebook.val('')
 
 			render: -> 
 				@$el = $(@parent) 

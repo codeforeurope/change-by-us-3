@@ -5,6 +5,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     sortByPopularDistance: 'Popular',
     locationObj: null,
     ajax: null,
+    initSend: true,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       return this.render();
@@ -12,6 +13,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     events: {
       "click .search-catagories li": "categoriesClick",
       "focus #search-input": "showInput",
+      "click #modify": "toggleVisibility",
       "click .pill-selection": "pillSelection",
       "click .search-inputs .btn": "sendForm"
     },
@@ -58,6 +60,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         return console.log(datum);
       });
       $dropkick = $('#search-range').dropkick();
+      this.$resultsModify = $('.results-modify');
       this.delegateEvents();
       return onPageElementsLoad();
     },
@@ -84,9 +87,23 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     showInput: function() {
       return $('.search-catagories').show();
     },
-    sendForm: function() {
+    toggleVisibility: function(e) {
+      var onClick;
+      onClick = false;
+      if (e) {
+        e.preventDefault();
+        onClick = true;
+      }
+      this.$resultsModify.toggle(!onClick);
+      $('.search-toggles').toggle(onClick);
+      return $('.filter-within').toggle(onClick);
+    },
+    sendForm: function(e) {
       var dataObj,
         _this = this;
+      if (e) {
+        e.preventDefault();
+      }
       $("#projects-list").html("");
       dataObj = {
         s: $("#search-input").val(),
@@ -105,7 +122,12 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         data: dataObj
       }).done(function(response_) {
         var k, size, v, _ref;
-        if (response_.msg.toLowerCase() === "ok") {
+        if (response_.success) {
+          if (_this.initSend === false) {
+            _this.toggleVisibility();
+            _this.$resultsModify.find('input').val(_this.locationObj.name);
+          }
+          _this.initSend = false;
           size = 0;
           _ref = response_.data;
           for (k in _ref) {

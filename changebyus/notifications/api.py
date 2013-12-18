@@ -19,9 +19,7 @@ from sets import Set
 
 from ..user.models import User, UserNotifications
 from ..project.models import Project, UserProjectLink
-from ..project.helpers import ( _get_project_organizers, _get_project_members,
-                                _get_project_slug_url )
-from ..user.helpers import _get_user_slug_url
+from ..project.helpers import ( _get_project_organizers, _get_project_members)
 
 notifications_api = Blueprint('notificiations_api', __name__, url_prefix='/api/notifications')
 

@@ -13,6 +13,8 @@ from .helpers import _user_involved_in_project
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
 from .decorators import project_exists
 
+from mongoengine.errors import ValidationError
+
 project_view = Blueprint('project_view', __name__, url_prefix='/project')
  
 
@@ -52,9 +54,15 @@ def project_view_id(project_id):
 
     from ..post.helpers import _get_project_post_stream
     
-    project = Project.objects.with_id(project_id)
-    if project is None:
-        abort(404)
+    try:
+        project = Project.objects.with_id(project_id)
+        project.count()
+    except ValidationError as e:
+        # we passed the decorator so let this error drop through
+        project = Project.objects(slug=project_id).first()
+        # overwrite the slug with the project_id
+        project_id = project.id
+
 
     if g.user.is_anonymous():
         involved = False

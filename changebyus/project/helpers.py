@@ -17,14 +17,6 @@ import requests
 import simplejson as json
 import os
 
-
-def _get_project_slug_url(project_id = None):
-    """
-    Given a project_id get the slug url for the project or resource
-    """
-
-    return "**** ONCE FRONTEND IN PLACE YOU REALLY SHOULD FIX THIS BUDDY TODO LV TODO"
-
 ## DEPRECATED
 def _get_lat_lon_from_location(loc):
     """

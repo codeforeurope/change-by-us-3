@@ -211,8 +211,6 @@ def api_edit_user():
 
     u = User.objects.with_id(g.user.id)
 
-    from nose.tools import set_trace; set_trace()
-    
     # we have to access a BooleanFields raw_data when we are not using HTML forms
     u.public_email = form.public_email.raw_data[0]
 

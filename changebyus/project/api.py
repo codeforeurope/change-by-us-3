@@ -33,6 +33,8 @@ from ..notifications.api import _notify_project_join
 
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
+from mongoengine.errors import ValidationError
+
 from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
@@ -198,14 +200,21 @@ def api_get_project(project_id):
     """Get project by project_id
 
         Args:
-            project_id: project id to look up
+            project_id: project id or slug to look up
 
         Returns:
             Project if it exists
     """
-    p = Project.objects.with_id(project_id)
+    try:
+        project = Project.objects.with_id(project_id)
+        project.count()
+    except ValidationError as e:
+        # we passed the decorator so let this error drop through
+        project = Project.objects(slug=project_id).first()
+        # overwrite the slug with the project_id
+        project_id = project.id
 
-    return jsonify_response( ReturnStructure( data = p.as_dict() ))
+    return jsonify_response( ReturnStructure( data = project.as_dict() ))
 
 
 class EditProjectForm(Form):

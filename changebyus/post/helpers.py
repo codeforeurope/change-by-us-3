@@ -149,7 +149,7 @@ def _create_project_post(title = None,
             pp.save()
 
         # TODO convert this to slug
-        project_url = url_for('project_view.project_view_id', id=id, _external=True)
+        project_url = url_for('project_view.project_view_id', project_id=project.slug, _external=True)
 
         # do social posts as necessary
         fb_post = None

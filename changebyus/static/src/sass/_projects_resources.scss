@@ -161,6 +161,7 @@
   width: 100%;
   height: 430px;
   position: relative;
+  background-size: cover;
  
   h1{
     @include font-styling("asap", 48px, $white, "normal", "bold");

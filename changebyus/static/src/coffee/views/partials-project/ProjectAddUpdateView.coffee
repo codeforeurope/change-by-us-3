@@ -30,10 +30,21 @@ define ["underscore",
 				$(".share-options").toggleClass("hide")
 
 			shareOption:(e)->
+				###
 				$input  = $(e.currentTarget).find('input')
 				id      = $input.attr('id')
 				checked = ($input.is(':checked'))
+				###
+				checked = []
+				$.each $('.share-options input'), ->
+					$this = $(this)
+					id = $this.attr('id')
+					if ($this.is(':checked')) then checked.push id
+						 
+				$('#social_sharing').val checked.join()
+				console.log 'checked.joined()',checked.join()
 
+				###
 				$projectPage = $("input[name='social_sharing[0]']")
 				$twitter     = $("input[name='social_sharing[1]']")
 				$facebook    = $("input[name='social_sharing[2]']")
@@ -45,6 +56,7 @@ define ["underscore",
 						if checked then $twitter.val('twitter') else $twitter.val('')
 					when 'facebook'
 						if checked then $facebook.val('facebook') else $facebook.val('')
+				###
 
 			render: -> 
 				@$el = $(@parent) 

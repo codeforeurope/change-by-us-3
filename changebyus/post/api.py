@@ -178,7 +178,7 @@ def api_add_project_post(post_type):
     project_id     = form.project_id.data
     response_to_id = form.response_to_id.data if form.response_to_id.data != '' else None
     visibility     = form.visibility.data if form.visibility.data != '' else None
-
+    print 'social_sharing',social_sharing
     if post_type == 'update':
         visibility = 'public'
     elif post_type == 'discussion':

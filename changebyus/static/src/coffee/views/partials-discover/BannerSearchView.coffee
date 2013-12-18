@@ -6,6 +6,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			sortByPopularDistance:'Popular'
 			locationObj:null
 			ajax:null
+			initSend:true
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
@@ -14,6 +15,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			events:
 				"click .search-catagories li":"categoriesClick"
 				"focus #search-input":"showInput"
+				"click #modify":"toggleVisibility"
 				"click .pill-selection":"pillSelection"
 				"click .search-inputs .btn":"sendForm"
 
@@ -45,6 +47,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				)
 
 				$dropkick = $('#search-range').dropkick()
+				@$resultsModify = $('.results-modify')
 				@delegateEvents()
 				onPageElementsLoad()
 
@@ -70,7 +73,19 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			showInput:->
 				$('.search-catagories').show()
 
-			sendForm:->
+			toggleVisibility:(e)->
+				onClick = false
+				if e 
+					e.preventDefault()
+					onClick = true
+
+				@$resultsModify.toggle(!onClick)
+				$('.search-toggles').toggle(onClick)
+				$('.filter-within').toggle(onClick)
+
+			sendForm:(e)->
+				if e then e.preventDefault()
+				
 				$("#projects-list").html("")
 
 				dataObj = {
@@ -88,7 +103,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 					url: "/api/project/search"
 					data: dataObj
 				).done (response_)=>
-					if response_.msg.toLowerCase() is "ok"
+					if response_.success 
+						if @initSend is false
+							@toggleVisibility()
+							@$resultsModify.find('input').val( @locationObj.name )
+						@initSend = false
+
 						size=0
 						for k,v of response_.data
 							@addProject v._id

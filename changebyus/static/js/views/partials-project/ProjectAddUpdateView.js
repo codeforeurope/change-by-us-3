@@ -4,10 +4,42 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     parent: "#project-update",
     events: {
       "click #post-update": "animateUp",
-      "click .share-toggle": "shareToggle"
+      "click .share-toggle": "shareToggle",
+      "click .share-options .styledCheckbox": "shareOption"
     },
     shareToggle: function() {
-      return $(".share-toggle").toggleClass("hide");
+      return $(".share-options").toggleClass("hide");
+    },
+    shareOption: function(e) {
+      var $facebook, $input, $projectPage, $twitter, checked, id;
+      $input = $(e.currentTarget).find('input');
+      id = $input.attr('id');
+      checked = $input.is(':checked');
+      $projectPage = $("input[name='social_sharing[0]']");
+      $twitter = $("input[name='social_sharing[1]']");
+      $facebook = $("input[name='social_sharing[2]']");
+      switch (id) {
+        case 'project-page':
+          if (checked) {
+            return $projectPage.val('project-page');
+          } else {
+            return $projectPage.val('');
+          }
+          break;
+        case 'twitter':
+          if (checked) {
+            return $twitter.val('twitter');
+          } else {
+            return $twitter.val('');
+          }
+          break;
+        case 'facebook':
+          if (checked) {
+            return $facebook.val('facebook');
+          } else {
+            return $facebook.val('');
+          }
+      }
     },
     render: function() {
       var _this = this;

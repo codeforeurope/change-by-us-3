@@ -33,7 +33,6 @@
   .search-forms{
     width: 42%;
     margin-right: 3%;
-    
   }
 
   .go{
@@ -45,6 +44,14 @@
     padding: 20px 0;
     width: 100%;
   } 
+}
+
+.results-modify{
+    width: 224px;
+    a{
+      margin: 10px 0;
+      font-size: 14px;
+    }
 }
 
 .search-catagories{

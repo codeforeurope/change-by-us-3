@@ -15,8 +15,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 				@render()
  
-			render: -> 
-				console.log 'render render render render'
+			render: ->  
 				@viewData =
 					project_id: window.projectID
 					response_to_id: @id 
@@ -80,7 +79,12 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				@$updateForm.submit => 
 					obj = @$updateForm.serializeJSON()
 					obj.description = escape($editor.html())
-					#unless obj.response_to_id then obj.response_to_id = "0"
+					###
+					obj.social_sharing = [
+						{name:'social_sharing', value:'twitter'},
+						{name:'social_sharing', value:'facebook'}
+					]
+					###
 					json_str = JSON.stringify(obj)
 					options.data = json_str
 					$.ajax options

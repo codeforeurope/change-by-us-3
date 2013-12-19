@@ -20,8 +20,6 @@ define ["underscore",
 		ProjectAddUpdateView = ProjectSubView.extend
 
 			parent: "#project-update"
-			facebook: false
-			twitter: false
 
 			events: 
 				"click #post-update":"animateUp"
@@ -46,10 +44,9 @@ define ["underscore",
 
 			getSocialStatus:->
 				# check to see if social accounts are linked and hide the share options if they aren't
-				$.get "/api/user/socialstatus", (response_)=>
+				$.get "/api/user/socialinfo", (response_)=>
 					try
-						@facebook = response_.data.facebook
-						@twitter  = response_.data.twitter
+						@socialInfo = response_.data
 					catch e
 						
 					@render()
@@ -93,11 +90,12 @@ define ["underscore",
 						width: 18
 						height: 18
 
-					unless @facebook
+					console.log '@socialInfo',@socialInfo
+					if @socialInfo.fb_name is ""
 						$("#facebook").parent().hide()
 						$("label[for=facebook]").hide()
 
-					unless @twitter
+					if @socialInfo.twitter_name is ""
 						$("#twitter").parent().hide()
 						$("label[for=twitter]").hide()
 
@@ -129,8 +127,11 @@ define ["underscore",
 				view = new UpdateListItemView({model: model_})
 				@$ul.append view.$el 
 
-			addModal:(data_)-> 
-				@modal = new ProjectUpdateSuccessModalView({model:data_})
+			addModal:(data_)->
+				console.log 'addModal @viewData',@viewData, @model, @
+				data_.twitter_name = @socialInfo.twitter_name
+				data_.slug         = @model.get("slug")
+				modal             = new ProjectUpdateSuccessModalView({model:data_})
 
 			animateUp:->
 				$("html, body").animate({ scrollTop: 0 }, "slow")

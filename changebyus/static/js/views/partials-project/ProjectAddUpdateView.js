@@ -2,8 +2,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   var ProjectAddUpdateView;
   return ProjectAddUpdateView = ProjectSubView.extend({
     parent: "#project-update",
-    facebook: false,
-    twitter: false,
     events: {
       "click #post-update": "animateUp",
       "click .share-toggle": "shareToggle",
@@ -31,11 +29,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     getSocialStatus: function() {
       var _this = this;
-      return $.get("/api/user/socialstatus", function(response_) {
+      return $.get("/api/user/socialinfo", function(response_) {
         var e;
         try {
-          _this.facebook = response_.data.facebook;
-          _this.twitter = response_.data.twitter;
+          _this.socialInfo = response_.data;
         } catch (_error) {
           e = _error;
         }
@@ -88,11 +85,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           width: 18,
           height: 18
         });
-        if (!_this.facebook) {
+        console.log('@socialInfo', _this.socialInfo);
+        if (_this.socialInfo.fb_name === "") {
           $("#facebook").parent().hide();
           $("label[for=facebook]").hide();
         }
-        if (!_this.twitter) {
+        if (_this.socialInfo.twitter_name === "") {
           $("#twitter").parent().hide();
           $("label[for=twitter]").hide();
         }
@@ -133,7 +131,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$ul.append(view.$el);
     },
     addModal: function(data_) {
-      return this.modal = new ProjectUpdateSuccessModalView({
+      var modal;
+      console.log('addModal @viewData', this.viewData, this.model, this);
+      data_.twitter_name = this.socialInfo.twitter_name;
+      data_.slug = this.model.get("slug");
+      return modal = new ProjectUpdateSuccessModalView({
         model: data_
       });
     },

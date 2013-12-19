@@ -44,7 +44,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
       this.projectDiscussionView = new ProjectDiscussionView();
       this.projectNewDiscussionView = new ProjectNewDiscussionView(config);
       this.projectAddUpdateView = new ProjectAddUpdateView({
-        collection: updatesCollection
+        collection: updatesCollection,
+        model: this.model
       });
       this.projectFundraisingView = new ProjectFundraisingView(config);
       this.projectCalenderView = new ProjectCalenderView(config);

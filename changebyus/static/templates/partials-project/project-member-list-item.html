@@ -28,7 +28,7 @@
         <% if (data.view == "admin"){ %>  
             <% console.log('data',data) %>
             <% if (data.roles == "OWNER" || data.roles == "Owner"){ %>
-            Project Owner
+                Project Owner
             <% }else{ %>
                 <select name="category" id="<%= data.sid %>">
                 <% _.each(["Organizer", "Member"], function(i) { %>
@@ -52,7 +52,7 @@
             <%= data.roles %>
         <% } %>
     </div>
-    <% if (data.view == "admin"){ %>  
+    <% if (data.view == "admin" && (data.roles != "OWNER" || data.roles != "Owner") ){ %>  
         <div class="delete-x"></div>
     <% } %>
 </div>

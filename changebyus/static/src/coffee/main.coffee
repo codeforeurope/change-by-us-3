@@ -36,7 +36,17 @@ require.config
 		"dashboard-view": "views/CBUDashboardView"
 		"stream-view": "views/CBUStreamView"
 
-require ["jquery",  
+	shim:
+		"slicknav":["jquery"]
+		"dropkick":["jquery"]
+		"bootstrap-fileupload":["jquery", "bootstrap"]
+		"autocomp":["jquery", "bootstrap"]
+		"hotkeys":["jquery"]
+		"form":["jquery"]
+		"template":["jquery"]
+		"validate":["jquery"]
+
+define ["jquery",  
 		"backbone", 
 		 "main-view", 
 		 "discover-view",  

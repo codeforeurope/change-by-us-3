@@ -26,9 +26,6 @@ define ["underscore",
 				"click .share-toggle":"shareToggle"
 				"click .share-options .styledCheckbox":"shareOption"
 
-			initialize: (options) -> 
-				AbstractView::initialize.call(@, options)
-				@getSocialStatus()
 
 			shareToggle:->
 				$(".share-options").toggleClass("hide")
@@ -42,25 +39,25 @@ define ["underscore",
 						 
 				$('#social_sharing').val checked.join()
 
-			getSocialStatus:->
-				# check to see if social accounts are linked and hide the share options if they aren't
-				$.get "/api/user/socialinfo", (response_)=>
-					try
-						@socialInfo = response_.data
-					catch e
-						
-					@render()
-
 			render: -> 
 				@$el = $(@parent) 
 				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
 					{data: @viewData}, => @onTemplateLoad()
 
-			onTemplateLoad:-> 
-				ProjectSubView::onTemplateLoad.call @ 
-
+			onTemplateLoad:->
+				ProjectSubView::onTemplateLoad.call @
 				@$ul = @$el.find('.updates-container ul')
+
+				# check to see if social accounts are linked and hide the share options if they aren't
+				$.get "/api/user/socialinfo", (response_)=>
+					try
+						@socialInfo = response_.data
+					catch e
+						
+					@addForm()
+
+			addForm:->
 				form = new WysiwygFormView({parent:"#update-form"})
 				form.on 'ON_TEMPLATE_LOAD', =>  
 					$feedback = $("#feedback").hide()
@@ -90,7 +87,6 @@ define ["underscore",
 						width: 18
 						height: 18
 
-					console.log '@socialInfo',@socialInfo
 					if @socialInfo.fb_name is ""
 						$("#facebook").parent().hide()
 						$("label[for=facebook]").hide()
@@ -127,11 +123,10 @@ define ["underscore",
 				view = new UpdateListItemView({model: model_})
 				@$ul.append view.$el 
 
-			addModal:(data_)->
-				console.log 'addModal @viewData',@viewData, @model, @
+			addModal:(data_)-> 
 				data_.twitter_name = @socialInfo.twitter_name
 				data_.slug         = @model.get("slug")
-				modal             = new ProjectUpdateSuccessModalView({model:data_})
+				modal              = new ProjectUpdateSuccessModalView({model:data_})
 
 			animateUp:->
 				$("html, body").animate({ scrollTop: 0 }, "slow")

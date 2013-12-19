@@ -35,10 +35,20 @@ require.config({
     "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
     "stream-view": "views/CBUStreamView"
+  },
+  shim: {
+    "slicknav": ["jquery"],
+    "dropkick": ["jquery"],
+    "bootstrap-fileupload": ["jquery", "bootstrap"],
+    "autocomp": ["jquery", "bootstrap"],
+    "hotkeys": ["jquery"],
+    "form": ["jquery"],
+    "template": ["jquery"],
+    "validate": ["jquery"]
   }
 });
 
-require(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, SlickNav) {
+define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, SlickNav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {

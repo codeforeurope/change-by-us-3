@@ -7,10 +7,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       "click .share-toggle": "shareToggle",
       "click .share-options .styledCheckbox": "shareOption"
     },
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
-      return this.getSocialStatus();
-    },
     shareToggle: function() {
       return $(".share-options").toggleClass("hide");
     },
@@ -27,18 +23,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       return $('#social_sharing').val(checked.join());
     },
-    getSocialStatus: function() {
-      var _this = this;
-      return $.get("/api/user/socialinfo", function(response_) {
-        var e;
-        try {
-          _this.socialInfo = response_.data;
-        } catch (_error) {
-          e = _error;
-        }
-        return _this.render();
-      });
-    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -50,10 +34,22 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onTemplateLoad: function() {
-      var form,
-        _this = this;
+      var _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$ul = this.$el.find('.updates-container ul');
+      return $.get("/api/user/socialinfo", function(response_) {
+        var e;
+        try {
+          _this.socialInfo = response_.data;
+        } catch (_error) {
+          e = _error;
+        }
+        return _this.addForm();
+      });
+    },
+    addForm: function() {
+      var form,
+        _this = this;
       form = new WysiwygFormView({
         parent: "#update-form"
       });
@@ -85,7 +81,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           width: 18,
           height: 18
         });
-        console.log('@socialInfo', _this.socialInfo);
         if (_this.socialInfo.fb_name === "") {
           $("#facebook").parent().hide();
           $("label[for=facebook]").hide();
@@ -132,7 +127,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     addModal: function(data_) {
       var modal;
-      console.log('addModal @viewData', this.viewData, this.model, this);
       data_.twitter_name = this.socialInfo.twitter_name;
       data_.slug = this.model.get("slug");
       return modal = new ProjectUpdateSuccessModalView({

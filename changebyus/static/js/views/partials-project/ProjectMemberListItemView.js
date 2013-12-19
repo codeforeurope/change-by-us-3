@@ -55,14 +55,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       });
     },
     deleteItem: function() {
-      var _this = this;
+      var dataObj,
+        _this = this;
+      dataObj = {
+        project_id: this.projectID,
+        user_id: this.model.id
+      };
       return $.ajax({
         type: "POST",
         url: "/api/project/remove-member",
-        data: {
-          project_id: this.projectID,
-          user_id: this.model.id
-        }
+        data: JSON.stringify(dataObj),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
         var c;
         if (response_.msg.toLowerCase() === "ok") {

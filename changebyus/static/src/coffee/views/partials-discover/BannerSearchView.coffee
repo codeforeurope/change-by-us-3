@@ -101,7 +101,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@ajax = $.ajax(
 					type: "POST"
 					url: "/api/project/search"
-					data: dataObj
+					data: JSON.stringify(dataObj)
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
 				).done (response_)=>
 					if response_.success 
 						if @initSend is false

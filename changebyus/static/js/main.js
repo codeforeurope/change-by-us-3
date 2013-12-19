@@ -39,12 +39,16 @@ require.config({
   shim: {
     "slicknav": ["jquery"],
     "dropkick": ["jquery"],
+    "button": ["jquery"],
     "bootstrap-fileupload": ["jquery", "bootstrap"],
     "autocomp": ["jquery", "bootstrap"],
+    "wysiwyg": ["jquery", "bootstrap"],
     "hotkeys": ["jquery"],
     "form": ["jquery"],
     "template": ["jquery"],
-    "validate": ["jquery"]
+    "validate": ["jquery"],
+    "serializeObject": ["jquery"],
+    "serializeJSON": ["jquery"]
   }
 });
 

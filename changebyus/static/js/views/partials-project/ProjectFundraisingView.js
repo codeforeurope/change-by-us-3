@@ -32,15 +32,19 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return this.$how.slideToggle(1);
     },
     linkStripe: function(e) {
-      var _this = this;
+      var dataObj,
+        _this = this;
       e.preventDefault();
+      dataObj = {
+        project_id: this.id,
+        project_name: this.name
+      };
       return $.ajax({
         type: "POST",
         url: "/stripe/link",
-        data: {
-          project_id: this.id,
-          project_name: this.name
-        }
+        data: JSON.stringify(dataObj),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
         return popWindow(response_);
       });

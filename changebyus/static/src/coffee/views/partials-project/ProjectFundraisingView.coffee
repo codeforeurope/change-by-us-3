@@ -30,10 +30,13 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 			linkStripe:(e)->
 				e.preventDefault() 
 				# post to API, get URL and pass to popupWindow function
+				dataObj = { project_id:@id, project_name:@name }
 				$.ajax(
 					type: "POST"
-					url: "/stripe/link"
-					data: { project_id:@id, project_name:@name }
+					url: "/stripe/link" 
+					data: JSON.stringify(dataObj) 
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
 				).done (response_)=>
 					popWindow response_
 

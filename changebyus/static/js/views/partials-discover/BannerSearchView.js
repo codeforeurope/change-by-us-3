@@ -119,7 +119,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       return this.ajax = $.ajax({
         type: "POST",
         url: "/api/project/search",
-        data: dataObj
+        data: JSON.stringify(dataObj),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
         var k, size, v, _ref;
         if (response_.success) {

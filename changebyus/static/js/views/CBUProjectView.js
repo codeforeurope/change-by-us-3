@@ -89,7 +89,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onHeaderLoaded: function() {
       var config, id;
-      console.log('@model', this.model);
       id = this.model.get("id");
       config = {
         id: id

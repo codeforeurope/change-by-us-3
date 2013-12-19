@@ -88,8 +88,7 @@ define ["underscore",
 							@viewData.isMember = @isMember
 							@addHeaderView()
 
-			addHeaderView: ->
-
+			addHeaderView: -> 
 				if @isResource
 					className = "resource-header"
 					templateURL = "/templates/partials-resource/resource-header.html"
@@ -103,7 +102,6 @@ define ["underscore",
 				@$el.prepend @$header
 
 			onHeaderLoaded:->
-				console.log '@model',@model
 				id = @model.get("id")
 				config = {id:id}
 

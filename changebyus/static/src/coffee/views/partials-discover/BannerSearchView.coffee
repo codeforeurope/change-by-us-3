@@ -111,6 +111,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 						size=0
 						for k,v of response_.data
+							console.log "search v ",v
 							@addProject v._id
 							size++
 						$('h4').html(size+" Projects")

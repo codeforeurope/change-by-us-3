@@ -132,6 +132,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           _ref = response_.data;
           for (k in _ref) {
             v = _ref[k];
+            console.log("search v ", v);
             _this.addProject(v._id);
             size++;
           }

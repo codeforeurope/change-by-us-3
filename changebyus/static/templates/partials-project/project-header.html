@@ -23,9 +23,11 @@
             <a href="#" class="<%= classes %>">Join Project</a>
 
             <div class="project-location">
-                Brooklyn, NY
+                <%= data.location %>
                 <br>
-                <a href="http://www.ucf.com">http://www.ucf.com</a>
+                <% if (data.website){ %>
+                <a href="<%= data.website %>" target="_blank"><%= data.website %></a>
+                <% } %>
             </div>
         </div>
     </div>

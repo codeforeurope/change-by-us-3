@@ -95,7 +95,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $form.ajaxForm(options);
       $projectLocation = $("#location");
       $projectLocation.typeahead({
-        template: '<div class="zip">{{ name }}</div>',
+        template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
         name: 'zip',
@@ -111,7 +111,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                 zips.push({
                   'name': loc.name,
                   'lat': loc.lat,
-                  'lon': loc.lon
+                  'lon': loc.lon,
+                  'zip': loc.zip
                 });
               }
             }

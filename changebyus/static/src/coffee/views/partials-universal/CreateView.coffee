@@ -72,7 +72,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				# location autocomplete
 				$location = if @isResource then $("#resource_location") else $("#project_location")
 				$location.typeahead(
-					template: '<div class="zip">{{ name }}</div>'
+					template: '<div class="zip">{{ name }} {{ zip }}</div>'
 					engine: Hogan 
 					valueKey: 'name'
 					name: 'zip'
@@ -82,7 +82,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							zips = []
 							if resp.msg.toLowerCase() is "ok" and resp.data.length > 0
 								for loc in resp.data
-									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon}
+									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon, 'zip':loc.zip}
 							zips
 				).bind('typeahead:selected', (obj, datum) =>
 						@location = datum

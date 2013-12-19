@@ -82,7 +82,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       $form.ajaxForm(options);
       $location = this.isResource ? $("#resource_location") : $("#project_location");
       return $location.typeahead({
-        template: '<div class="zip">{{ name }}</div>',
+        template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
         name: 'zip',
@@ -98,7 +98,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
                 zips.push({
                   'name': loc.name,
                   'lat': loc.lat,
-                  'lon': loc.lon
+                  'lon': loc.lon,
+                  'zip': loc.zip
                 });
               }
             }

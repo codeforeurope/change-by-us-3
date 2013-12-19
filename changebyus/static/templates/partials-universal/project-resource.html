@@ -1,3 +1,7 @@
+<% 
+    var type = "project";
+    if(data.resource){ type = "resource"; }
+%>
 <div class="project-square" id="<%= data.slug %>">
     <% if(data.isResource){ %>
         <% if(data.isOwned || data.isFollowed){ %>
@@ -6,7 +10,7 @@
     <% } %>
      
     <div class="project-dashboard-image">
-        <img src="<%= data.image_url_small_square %>" alt="Project Icon">
+        <img src="<%= data.image_url_small_square %>" alt="Icon">
     </div> 
     <div class="project-name"><%= data.name %></div>
     <div class="project-description"><%= data.description %></div>
@@ -16,15 +20,15 @@
         <div class="hover-overlay"></div>
         <div class="hover-btn">
             <% if(data.isOwned){ %> 
-                <a href="/project/<%= data.slug %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
+                <a href="/<%= type %>/<%= data.slug %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
             <% } %>
             <% if(data.isFollowed){ %> 
-                <a href="/project/<%= data.slug %>" class="btn btn-medium btn-primary btn-3d">View</a>
+                <a href="/<%= type %>/<%= data.slug %>" class="btn btn-medium btn-primary btn-3d">View</a>
                 <div class="close-x"></div>
             <% } %>
         </div> 
     <% }else{ %>
-        <a href="/project/<%= data.slug %>">
+        <a href="/<%= type %>/<%= data.slug %>">
             <div class="hover-overlay"></div>
         </a>
     <% } %>

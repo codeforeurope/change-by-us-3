@@ -2,9 +2,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 	(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) ->
 		BannerSearchView = AbstractView.extend
 
-			byProjectResouces:'Projects'
-			sortByPopularDistance:'Popular'
-			locationObj:null
+			byProjectResources:'projects'
+			sortByPopularDistance:'popular'
+			locationObj:{lat:0, lon:0, name:""}
+			category:""
 			ajax:null
 			initSend:true
 
@@ -15,6 +16,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			events:
 				"click .search-catagories li":"categoriesClick"
 				"focus #search-input":"showInput"
+				"keypress #search-input":"onInputEnter"
 				"click #modify":"toggleVisibility"
 				"click .pill-selection":"pillSelection"
 				"click .search-inputs .btn":"sendForm"
@@ -23,13 +25,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@$el = $(".banner-search")
 				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
 					data: @viewData, => 
-						@sendForm()
 						@onTemplateLoad()
 				$(@parent).append @$el
 
 			onTemplateLoad:->
 				$('#search-near').typeahead(
-					template: '<div class="zip">{{ name }}</div>'
+					template: '<div class="zip">{{ name }} {{ zip }}</div>'
 					engine: Hogan 
 					valueKey: 'name'
 					name: 'zip'
@@ -39,20 +40,35 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 							zips = []
 							if resp.msg.toLowerCase() is "ok" and resp.data.length > 0
 								for loc in resp.data
-									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon}
+									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon, 'zip':loc.zip}
 							zips
 				).bind('typeahead:selected', (obj, datum) =>
-					@locationObj = datum
-					console.log(datum)
+					@locationObj = datum 
 				)
 
 				$dropkick = $('#search-range').dropkick()
 				@$resultsModify = $('.results-modify')
+				
 				@delegateEvents()
 				onPageElementsLoad()
+				@autoGetGeoLocation()
+
+			autoGetGeoLocation:->
+				if navigator.geolocation
+					navigator.geolocation.getCurrentPosition (loc)=>
+						@handleGetCurrentPosition(loc)
+					, @sendForm
+				else
+					@sendForm()
+
+			handleGetCurrentPosition:(loc)->
+				@locationObj.lat = loc.coords.latitude
+				@locationObj.lon = loc.coords.longitude
+				@sendForm()
 
 			categoriesClick:(e)->
-				$('#search-input').val $(e.currentTarget).html()
+				@category = $(e.currentTarget).html()
+				$('#search-input').val @category
 				$('.search-catagories').hide()
 
 			pillSelection:(e)->
@@ -62,16 +78,18 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				switch $this.html()
 					when 'Projects'
-						@byProjectResouces = 'Projects'
+						@byProjectResources = 'projects'
 					when 'Resources'
-						@byProjectResouces = 'Resources'
+						@byProjectResources = 'resources'
 					when 'Popular'
-						@sortByPopularDistance = 'Popular'
+						@sortByPopularDistance = 'popular'
 					when 'Distance'
-						@sortByPopularDistance = 'Distance'
+						@sortByPopularDistance = 'distance'
 
 			showInput:->
+				@category = ""
 				$('.search-catagories').show()
+				
 
 			toggleVisibility:(e)->
 				onClick = false
@@ -83,18 +101,24 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				$('.search-toggles').toggle(onClick)
 				$('.filter-within').toggle(onClick)
 
+			onInputEnter:(e) ->
+				if e.which is 13
+					@sendForm()
+
 			sendForm:(e)->
 				if e then e.preventDefault()
 				
+				$('.search-catagories').hide()
 				$("#projects-list").html("")
 
 				dataObj = {
-					s: $("#search-input").val()
-					loc: $("#search-near").val()
+					s: if @category is "" then $("#search-input").val() else ""
+					cat: @category
+					loc: @locationObj.name
 					d: $("select[name='range']").val()
-					type: @byProjectResouces
-					sort: @sortByPopularDistance
-					cat:  $("#search-input").val()
+					type: @byProjectResources  
+					lat: @locationObj.lat
+					lon: @locationObj.lon
 				}
 
 				if @ajax then @ajax.abort()
@@ -107,13 +131,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				).done (response_)=>
 					if response_.success 
 						if @initSend is false
-							@toggleVisibility()
-							@$resultsModify.find('input').val( @locationObj.name )
+							if @locationObj.name isnt "" then @toggleVisibility()
+							@$resultsModify.find('input').val @locationObj.name
 						@initSend = false
 
 						size=0
 						for k,v of response_.data
-							console.log "search v ",v
 							@addProject v._id
 							size++
 						$('h4').html(size+" Projects")

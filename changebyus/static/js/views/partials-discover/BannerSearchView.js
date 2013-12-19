@@ -1,9 +1,14 @@
 define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
-    byProjectResouces: 'Projects',
-    sortByPopularDistance: 'Popular',
-    locationObj: null,
+    byProjectResources: 'projects',
+    sortByPopularDistance: 'popular',
+    locationObj: {
+      lat: 0,
+      lon: 0,
+      name: ""
+    },
+    category: "",
     ajax: null,
     initSend: true,
     initialize: function(options) {
@@ -13,6 +18,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     events: {
       "click .search-catagories li": "categoriesClick",
       "focus #search-input": "showInput",
+      "keypress #search-input": "onInputEnter",
       "click #modify": "toggleVisibility",
       "click .pill-selection": "pillSelection",
       "click .search-inputs .btn": "sendForm"
@@ -23,7 +29,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.$el.template(this.templateDir + "/templates/partials-discover/banner-search.html", {
         data: this.viewData
       }, function() {
-        _this.sendForm();
         return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
@@ -32,7 +37,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       var $dropkick,
         _this = this;
       $('#search-near').typeahead({
-        template: '<div class="zip">{{ name }}</div>',
+        template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
         name: 'zip',
@@ -48,7 +53,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 zips.push({
                   'name': loc.name,
                   'lat': loc.lat,
-                  'lon': loc.lon
+                  'lon': loc.lon,
+                  'zip': loc.zip
                 });
               }
             }
@@ -56,16 +62,32 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           }
         }
       }).bind('typeahead:selected', function(obj, datum) {
-        _this.locationObj = datum;
-        return console.log(datum);
+        return _this.locationObj = datum;
       });
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
       this.delegateEvents();
-      return onPageElementsLoad();
+      onPageElementsLoad();
+      return this.autoGetGeoLocation();
+    },
+    autoGetGeoLocation: function() {
+      var _this = this;
+      if (navigator.geolocation) {
+        return navigator.geolocation.getCurrentPosition(function(loc) {
+          return _this.handleGetCurrentPosition(loc);
+        }, this.sendForm);
+      } else {
+        return this.sendForm();
+      }
+    },
+    handleGetCurrentPosition: function(loc) {
+      this.locationObj.lat = loc.coords.latitude;
+      this.locationObj.lon = loc.coords.longitude;
+      return this.sendForm();
     },
     categoriesClick: function(e) {
-      $('#search-input').val($(e.currentTarget).html());
+      this.category = $(e.currentTarget).html();
+      $('#search-input').val(this.category);
       return $('.search-catagories').hide();
     },
     pillSelection: function(e) {
@@ -75,16 +97,17 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $this.siblings().toggleClass('active');
       switch ($this.html()) {
         case 'Projects':
-          return this.byProjectResouces = 'Projects';
+          return this.byProjectResources = 'projects';
         case 'Resources':
-          return this.byProjectResouces = 'Resources';
+          return this.byProjectResources = 'resources';
         case 'Popular':
-          return this.sortByPopularDistance = 'Popular';
+          return this.sortByPopularDistance = 'popular';
         case 'Distance':
-          return this.sortByPopularDistance = 'Distance';
+          return this.sortByPopularDistance = 'distance';
       }
     },
     showInput: function() {
+      this.category = "";
       return $('.search-catagories').show();
     },
     toggleVisibility: function(e) {
@@ -98,20 +121,27 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $('.search-toggles').toggle(onClick);
       return $('.filter-within').toggle(onClick);
     },
+    onInputEnter: function(e) {
+      if (e.which === 13) {
+        return this.sendForm();
+      }
+    },
     sendForm: function(e) {
       var dataObj,
         _this = this;
       if (e) {
         e.preventDefault();
       }
+      $('.search-catagories').hide();
       $("#projects-list").html("");
       dataObj = {
-        s: $("#search-input").val(),
-        loc: $("#search-near").val(),
+        s: this.category === "" ? $("#search-input").val() : "",
+        cat: this.category,
+        loc: this.locationObj.name,
         d: $("select[name='range']").val(),
-        type: this.byProjectResouces,
-        sort: this.sortByPopularDistance,
-        cat: $("#search-input").val()
+        type: this.byProjectResources,
+        lat: this.locationObj.lat,
+        lon: this.locationObj.lon
       };
       if (this.ajax) {
         this.ajax.abort();
@@ -126,7 +156,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         var k, size, v, _ref;
         if (response_.success) {
           if (_this.initSend === false) {
-            _this.toggleVisibility();
+            if (_this.locationObj.name !== "") {
+              _this.toggleVisibility();
+            }
             _this.$resultsModify.find('input').val(_this.locationObj.name);
           }
           _this.initSend = false;
@@ -134,7 +166,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           _ref = response_.data;
           for (k in _ref) {
             v = _ref[k];
-            console.log("search v ", v);
             _this.addProject(v._id);
             size++;
           }

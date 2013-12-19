@@ -207,7 +207,7 @@ def api_get_project(project_id):
     """
     try:
         project = Project.objects.with_id(project_id)
-        project.count()
+        # project.count()
     except ValidationError as e:
         # we passed the decorator so let this error drop through
         project = Project.objects(slug=project_id).first()

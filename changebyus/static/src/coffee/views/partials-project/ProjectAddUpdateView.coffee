@@ -20,21 +20,22 @@ define ["underscore",
 		ProjectAddUpdateView = ProjectSubView.extend
 
 			parent: "#project-update"
+			facebook: false
+			twitter: false
 
 			events: 
 				"click #post-update":"animateUp"
 				"click .share-toggle":"shareToggle"
 				"click .share-options .styledCheckbox":"shareOption"
 
+			initialize: (options) -> 
+				AbstractView::initialize.call(@, options)
+				@getSocialStatus()
+
 			shareToggle:->
 				$(".share-options").toggleClass("hide")
 
 			shareOption:(e)->
-				###
-				$input  = $(e.currentTarget).find('input')
-				id      = $input.attr('id')
-				checked = ($input.is(':checked'))
-				###
 				checked = []
 				$.each $('.share-options input'), ->
 					$this = $(this)
@@ -42,21 +43,16 @@ define ["underscore",
 					if ($this.is(':checked')) then checked.push id
 						 
 				$('#social_sharing').val checked.join()
-				console.log 'checked.joined()',checked.join()
 
-				###
-				$projectPage = $("input[name='social_sharing[0]']")
-				$twitter     = $("input[name='social_sharing[1]']")
-				$facebook    = $("input[name='social_sharing[2]']")
-
-				switch id
-					when 'project-page'
-						if checked then $projectPage.val('project-page') else $projectPage.val('')
-					when 'twitter'
-						if checked then $twitter.val('twitter') else $twitter.val('')
-					when 'facebook'
-						if checked then $facebook.val('facebook') else $facebook.val('')
-				###
+			getSocialStatus:->
+				# check to see if social accounts are linked and hide the share options if they aren't
+				$.get "/api/user/socialstatus", (response_)=>
+					try
+						@facebook = response_.data.facebook
+						@twitter  = response_.data.twitter
+					catch e
+						
+					@render()
 
 			render: -> 
 				@$el = $(@parent) 
@@ -64,26 +60,48 @@ define ["underscore",
 				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
 					{data: @viewData}, => @onTemplateLoad()
 
-
 			onTemplateLoad:-> 
-				ProjectSubView::onTemplateLoad.call @
-				
+				ProjectSubView::onTemplateLoad.call @ 
+
 				@$ul = @$el.find('.updates-container ul')
 				form = new WysiwygFormView({parent:"#update-form"})
 				form.on 'ON_TEMPLATE_LOAD', =>  
+					$feedback = $("#feedback").hide()
 					$submit = form.$el.find('input[type="submit"]')
+					$inputs = $submit.find("input, textarea")
 					
-					form.beforeSubmit = (arr_, form_, options_)->  
-						$submit.find("input, textarea").attr("disabled", "disabled")
+					form.beforeSubmit = (arr_, form_, options_)->
+						console.log 'beforeSubmit', $feedback
+						$feedback.hide()
+						$inputs.attr("disabled", "disabled")
 
 					form.success = (response_)=>
+						console.log 'success response_',response_
 						if response_.success
-							@addModal response_.data 
+							@addModal response_.data
+
+						form.resetForm()
+						$("#editor").html("")
+						$inputs.removeAttr("disabled")
+
+					form.error = (error_)=>
+						$feedback.show()
+						console.log 'error response_',error_
 
 					@$el.find('input:radio, input:checkbox').screwDefaultButtons
 						image: 'url("/static/img/black-check.png")'
 						width: 18
 						height: 18
+
+					unless @facebook
+						$("#facebook").parent().hide()
+						$("label[for=facebook]").hide()
+
+					unless @twitter
+						$("#twitter").parent().hide()
+						$("label[for=twitter]").hide()
+
+					@delegateEvents()
 
 			addAll: ->  
 				@$day = $('<div />')

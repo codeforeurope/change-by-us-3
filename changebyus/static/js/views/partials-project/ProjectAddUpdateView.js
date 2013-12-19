@@ -2,21 +2,21 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   var ProjectAddUpdateView;
   return ProjectAddUpdateView = ProjectSubView.extend({
     parent: "#project-update",
+    facebook: false,
+    twitter: false,
     events: {
       "click #post-update": "animateUp",
       "click .share-toggle": "shareToggle",
       "click .share-options .styledCheckbox": "shareOption"
     },
+    initialize: function(options) {
+      AbstractView.prototype.initialize.call(this, options);
+      return this.getSocialStatus();
+    },
     shareToggle: function() {
       return $(".share-options").toggleClass("hide");
     },
     shareOption: function(e) {
-      /*
-      				$input  = $(e.currentTarget).find('input')
-      				id      = $input.attr('id')
-      				checked = ($input.is(':checked'))
-      */
-
       var checked;
       checked = [];
       $.each($('.share-options input'), function() {
@@ -27,22 +27,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           return checked.push(id);
         }
       });
-      $('#social_sharing').val(checked.join());
-      return console.log('checked.joined()', checked.join());
-      /*
-      				$projectPage = $("input[name='social_sharing[0]']")
-      				$twitter     = $("input[name='social_sharing[1]']")
-      				$facebook    = $("input[name='social_sharing[2]']")
-      
-      				switch id
-      					when 'project-page'
-      						if checked then $projectPage.val('project-page') else $projectPage.val('')
-      					when 'twitter'
-      						if checked then $twitter.val('twitter') else $twitter.val('')
-      					when 'facebook'
-      						if checked then $facebook.val('facebook') else $facebook.val('')
-      */
-
+      return $('#social_sharing').val(checked.join());
+    },
+    getSocialStatus: function() {
+      var _this = this;
+      return $.get("/api/user/socialstatus", function(response_) {
+        var e;
+        try {
+          _this.facebook = response_.data.facebook;
+          _this.twitter = response_.data.twitter;
+        } catch (_error) {
+          e = _error;
+        }
+        return _this.render();
+      });
     },
     render: function() {
       var _this = this;
@@ -63,21 +61,42 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         parent: "#update-form"
       });
       return form.on('ON_TEMPLATE_LOAD', function() {
-        var $submit;
+        var $feedback, $inputs, $submit;
+        $feedback = $("#feedback").hide();
         $submit = form.$el.find('input[type="submit"]');
+        $inputs = $submit.find("input, textarea");
         form.beforeSubmit = function(arr_, form_, options_) {
-          return $submit.find("input, textarea").attr("disabled", "disabled");
+          console.log('beforeSubmit', $feedback);
+          $feedback.hide();
+          return $inputs.attr("disabled", "disabled");
         };
         form.success = function(response_) {
+          console.log('success response_', response_);
           if (response_.success) {
-            return _this.addModal(response_.data);
+            _this.addModal(response_.data);
           }
+          form.resetForm();
+          $("#editor").html("");
+          return $inputs.removeAttr("disabled");
         };
-        return _this.$el.find('input:radio, input:checkbox').screwDefaultButtons({
+        form.error = function(error_) {
+          $feedback.show();
+          return console.log('error response_', error_);
+        };
+        _this.$el.find('input:radio, input:checkbox').screwDefaultButtons({
           image: 'url("/static/img/black-check.png")',
           width: 18,
           height: 18
         });
+        if (!_this.facebook) {
+          $("#facebook").parent().hide();
+          $("label[for=facebook]").hide();
+        }
+        if (!_this.twitter) {
+          $("#twitter").parent().hide();
+          $("label[for=twitter]").hide();
+        }
+        return _this.delegateEvents();
       });
     },
     addAll: function() {

@@ -17,7 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       });
     },
     events: {
-      "click .social-btns .btn-primary": "socialClick"
+      "click .social-btns a": "socialClick"
     },
     render: function() {
       var _this = this;
@@ -36,10 +36,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     },
     onTemplateLoaded: function() {
       this.ajaxForm();
-      return onPageElementsLoad();
+      onPageElementsLoad();
+      return this.delegateEvents();
     },
     ajaxForm: function() {
-      var $feedback, $form, $projectLocation, $submit, options,
+      var $feedback, $form, $inputs, $projectLocation, $submit, options,
         _this = this;
       $('.fileupload').fileupload({
         uploadtype: 'image'
@@ -47,6 +48,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $submit = this.$el.find("input[type=submit]");
       $form = this.$el.find("form");
       $feedback = $("#feedback");
+      $inputs = $form.find("input, textarea");
       options = {
         type: $form.attr('method'),
         url: $form.attr('action'),
@@ -69,7 +71,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                 value: false
               });
             }
-            $form.find("input, textarea").attr("disabled", "disabled");
+            $inputs.attr("disabled", "disabled");
             return true;
           } else {
             return false;
@@ -79,7 +81,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           var msg;
           msg = res.msg.toLowerCase() === "ok" ? "Updated Successfully" : res.msg;
           $feedback.show().html(msg);
-          $form.find("input, textarea").removeAttr("disabled");
+          $inputs.removeAttr("disabled");
           if (res.success) {
             $("html, body").animate({
               scrollTop: 0

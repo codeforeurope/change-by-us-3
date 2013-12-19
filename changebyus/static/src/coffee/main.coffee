@@ -62,8 +62,8 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
-	 CreateView
-	 Slicknav) ->
+	 CreateView,
+	 SlickNav) ->
 		$(document).ready ->
 			config = {parent:".main-content"}
 

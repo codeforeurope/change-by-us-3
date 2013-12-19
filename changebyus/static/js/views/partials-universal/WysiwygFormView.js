@@ -76,21 +76,20 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         url: this.$updateForm.attr('action'),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
+        beforeSubmit: function(arr_, form_, options_) {
+          return this.beforeSubmit(arr_, form_, options_);
+        },
         success: function(response_) {
           return _this.success(response_);
+        },
+        error: function(response_) {
+          return _this.error(response_);
         }
       };
       this.$updateForm.submit(function() {
         var json_str, obj;
         obj = _this.$updateForm.serializeJSON();
         obj.description = escape($editor.html());
-        /*
-        					obj.social_sharing = [
-        						{name:'social_sharing', value:'twitter'},
-        						{name:'social_sharing', value:'facebook'}
-        					]
-        */
-
         json_str = JSON.stringify(obj);
         options.data = json_str;
         $.ajax(options);
@@ -132,6 +131,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     },
     beforeSubmit: function(arr_, form_, options_) {},
     success: function(response_) {},
+    error: function(response_) {},
     resetForm: function() {
       return this.$updateForm.resetForm();
     }

@@ -15,7 +15,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					@render()
 
 			events:
-				"click .social-btns .btn-primary":"socialClick"
+				"click .social-btns a":"socialClick"
 
 			render: ->
 				@$el = $(@parent)
@@ -31,6 +31,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 			onTemplateLoaded:->
 				@ajaxForm()
 				onPageElementsLoad()
+				@delegateEvents()
 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
@@ -39,6 +40,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				$submit   = @$el.find("input[type=submit]")
 				$form     = @$el.find("form")
 				$feedback = $("#feedback")
+				$inputs   = $form.find("input, textarea")
 				options   =
 					type: $form.attr('method')
 					url: $form.attr('action')
@@ -56,7 +58,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
 							if showEmail then arr_.push({name:"public_email",value:false})
 
-							$form.find("input, textarea").attr("disabled", "disabled")
+							$inputs.attr("disabled", "disabled")
 							return true
 						else
 							return false
@@ -65,7 +67,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						msg = if res.msg.toLowerCase() is "ok" then "Updated Successfully" else res.msg
 						$feedback.show().html(msg)
 
-						$form.find("input, textarea").removeAttr("disabled")
+						$inputs.removeAttr("disabled")
 
 						if res.success
 							$("html, body").animate({ scrollTop: 0 }, "slow")

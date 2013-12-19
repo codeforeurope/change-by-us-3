@@ -23,7 +23,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
 
-				$dropkick = $('#project-category').dropkick()
+				$dropkick = $('#project-category').dropkick() 
 
 				# ajax the form
 				$submit   = $("input[type=submit]")

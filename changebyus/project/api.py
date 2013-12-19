@@ -77,25 +77,28 @@ def api_search_projects():
             list of search results
     """    
 
-    text = request.args.get('s')
-    geo_dist = request.args.get('d')
-    lat = request.args.get('lat')
-    lon = request.args.get('lon')
-    cat = request.args.get('cat')
-    search_type = request.args.get('type')
+    text = request.json.get('s')
+    geo_dist = request.json.get('d')
+    lat = request.json.get('lat')
+    lon = request.json.get('lon')
+    cat = request.json.get('cat')
+    search_type = request.json.get('type')
     
     geo_center = [lon, lat]
     
     addl_filters = {'active':True}
+
+    if (lat is 0 and lon is 0):
+        geo_dist = 25000
     
-    if (cat):
+    if (cat != ""):
         addl_filters.update({"category": cat})
     
     if (search_type == 'resource'):
         addl_filters.update({"resource": True})
     if (search_type == 'project'):
         addl_filters.update({"resource": False})
-    
+
     search_data = search(db = _get_db(),
                          collection = "project", 
                          text = text, 

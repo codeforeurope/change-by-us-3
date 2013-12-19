@@ -41,10 +41,11 @@ def get_geopoint(s, exact=False):
             current_app.logger.error("Error on %s: %s" % (r.url, json_data['status']))
         else:
             for x in json.loads(r.text)[dataname]:
-                data.append({'name': "%s, %s, %s" % (x['placeName'], x['adminCode1'], x['postalCode']) if is_postal \
-                                                     else "%s, %s" % (x['name'], x['adminCode1']),
+
+                data.append({'name': "%s, %s" % (x['placeName'], x['adminCode1']) if is_postal \
+                    else "%s, %s" % (x['name'], x['adminCode1']),
+                             'zip': "%s" % x['postalCode'] if is_postal else "",
                              'lat': x['lat'],
                              'lon': x['lng']})
-                     
     return data
     

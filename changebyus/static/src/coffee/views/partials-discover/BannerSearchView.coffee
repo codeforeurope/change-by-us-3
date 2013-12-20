@@ -64,6 +64,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			handleGetCurrentPosition:(loc)->
 				@locationObj.lat = loc.coords.latitude
 				@locationObj.lon = loc.coords.longitude
+
+				console.log 'handleGetCurrentPosition:(loc)', loc
+				url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
+				$.get url, (resp) ->
+					if resp.success then $("#search-near").val resp.data[0].name
+
 				@sendForm()
 
 			categoriesClick:(e)->

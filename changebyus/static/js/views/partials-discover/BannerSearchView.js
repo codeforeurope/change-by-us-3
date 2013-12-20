@@ -81,8 +81,16 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
     },
     handleGetCurrentPosition: function(loc) {
+      var url;
       this.locationObj.lat = loc.coords.latitude;
       this.locationObj.lon = loc.coords.longitude;
+      console.log('handleGetCurrentPosition:(loc)', loc);
+      url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
+      $.get(url, function(resp) {
+        if (resp.success) {
+          return $("#search-near").val(resp.data[0].name);
+        }
+      });
       return this.sendForm();
     },
     categoriesClick: function(e) {

@@ -11,7 +11,7 @@ from flask.ext.login import login_required, current_user, login_user
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError)
 
-from ..geonames import get_geopoint
+from ..geonames import get_geopoint, get_geoname
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 from ..helpers.mongotools import db_list_to_dict_list
@@ -56,6 +56,19 @@ def api_get_geopoint():
     s = request.args.get('s')
     
     data = get_geopoint(s)
+    
+    return jsonify_response(ReturnStructure(data = data))
+
+
+@project_api.route('/geoname')
+def api_get_geoname():
+    """
+    returns a list of names and lat/lon
+    """
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+    
+    data = get_geoname(lat, lon)
     
     return jsonify_response(ReturnStructure(data = data))
 

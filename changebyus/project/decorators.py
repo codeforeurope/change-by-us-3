@@ -14,8 +14,8 @@ from flask import g, request, current_app, abort
 def _is_owner(project, user_id):
     if not isinstance(project, Project):
         project = Project.objects.with_id(project)
-
-    return project.owner.id == user_id
+ 
+    return (str(project.owner.id) == str(user_id))
 
 def _is_member(project, user_id):
     if _is_owner(project, user_id): 

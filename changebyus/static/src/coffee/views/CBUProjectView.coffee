@@ -136,6 +136,7 @@ define ["underscore",
 													isDataLoaded:true,
 													isMember:@isMember
 													isOwnerOrganizer:@isOwnerOrganizer,
+													model:@model,
 													isOwner:@isOwner
 													
 					

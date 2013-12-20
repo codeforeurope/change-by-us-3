@@ -133,6 +133,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           isDataLoaded: true,
           isMember: this.isMember,
           isOwnerOrganizer: this.isOwnerOrganizer,
+          model: this.model,
           isOwner: this.isOwner
         });
         this.projectCalenderView = new ProjectCalenderView({

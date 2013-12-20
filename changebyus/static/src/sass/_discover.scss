@@ -187,6 +187,8 @@
   .search-filters{
     border-top: 1px solid $grayBorder; 
     padding-bottom: 16px;
+
+    input[type="search"] { margin-bottom: 0; }
   }
 }
 

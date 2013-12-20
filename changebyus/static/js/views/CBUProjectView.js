@@ -48,22 +48,24 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
+      this.viewData = this.model.attributes;
+      return this.getMemberStatus();
+    },
+    getMemberStatus: function() {
       var id,
         _this = this;
-      this.viewData = this.model.attributes;
       if (window.userID === "") {
         this.isMember = false;
         return this.addHeaderView();
       } else {
         id = this.model.get("id");
-        return $.ajax({
-          type: "GET",
-          url: "/api/project/" + id + "/user/" + window.userID
-        }).done(function(response) {
-          if (response.success) {
-            _this.memberData = response.data;
+        return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
+          if (res_.success) {
+            _this.memberData = res_.data;
             _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
             _this.viewData.isMember = _this.isMember;
+            _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
             return _this.addHeaderView();
           }
         });
@@ -108,6 +110,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         collection: this.updatesCollection,
         members: this.projectMembersCollection,
         isMember: this.isMember,
+        isOwnerOrganizer: this.isOwnerOrganizer,
         isResource: this.isResource,
         parent: parent
       });
@@ -128,11 +131,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         this.projectMembersView = new ProjectMembersView({
           collection: this.projectMembersCollection,
           isDataLoaded: true,
-          isMember: this.isMember
+          isMember: this.isMember,
+          isOwnerOrganizer: this.isOwnerOrganizer,
+          isOwner: this.isOwner
         });
         this.projectCalenderView = new ProjectCalenderView({
           model: this.model,
           isMember: this.isMember,
+          isOwnerOrganizer: this.isOwnerOrganizer,
           isOwner: this.isOwner
         });
         this.updatesBTN = $("a[href='#updates']").parent();
@@ -152,11 +158,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       $this = $(e.currentTarget);
       $this.parent().css('opacity', 0.25);
       url = $this.attr('href');
-      return $.ajax({
-        type: "POST",
-        url: url
-      }).done(function(response_) {
-        return console.log(response_);
+      return $.post(url, function(res_) {
+        return console.log(res_);
       });
     },
     joinProject: function(e) {
@@ -165,21 +168,21 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       if (this.isMember) {
         return;
       }
+      e.preventDefault();
       if (window.userID === "") {
         return window.location = "/login";
       } else {
         id = this.model.get("id");
         $join = $(".project-footer .btn");
-        e.preventDefault();
         return $.ajax({
           type: "POST",
           url: "/api/project/join",
           data: {
             project_id: id
           }
-        }).done(function(response) {
+        }).done(function(res_) {
           var feedback;
-          if (response.success) {
+          if (res_.success) {
             feedback = _this.isResource ? 'Following!' : 'Joined!';
             _this.isMember = true;
             return $join.html(feedback).css('background-color', '#e6e6e6');

@@ -85,13 +85,14 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return window.CBUAppView = new CBUProjectView(config);
       },
       projectAdmin: function(id_) {
-        var isOwner;
-        isOwner = userID === projectOwnerID;
-        config.model = {
-          id: id_
-        };
-        config.isOwner = isOwner;
-        return window.CBUAppView = isOwner ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
+        if (userID) {
+          config.model = {
+            id: id_
+          };
+          return window.CBUAppView = new CBUProjectOwnerView(config);
+        } else {
+          return window.location.href = "/login";
+        }
       },
       resource: function(id_) {
         config.model = {

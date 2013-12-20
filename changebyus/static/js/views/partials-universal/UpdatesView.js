@@ -9,7 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
       this.viewData.isResource = options.isResource;
-      return this.viewData.isMember = options.isMember;
+      return this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
     },
     render: function() {
       var _this = this;

@@ -1,12 +1,38 @@
-define(["underscore", "backbone", "jquery", "template", "project-view", "collection/ProjectDiscussionsCollection", "collection/UpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionView", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectNewDiscussionView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectAddUpdateView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectDiscussionsCollection, UpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionView, ProjectDiscussionsView, ProjectNewDiscussionView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
+define(["underscore", "backbone", "jquery", "template", "project-view", "model/ProjectModel", "collection/ProjectDiscussionsCollection", "collection/UpdatesCollection", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "views/partials-project/ProjectDiscussionView", "views/partials-project/ProjectDiscussionsView", "views/partials-project/ProjectNewDiscussionView", "views/partials-project/ProjectFundraisingView", "views/partials-project/ProjectAddUpdateView", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectInfoAppearanceView"], function(_, Backbone, $, temp, CBUProjectView, ProjectModel, ProjectDiscussionsCollection, UpdatesCollection, ProjectCalendarCollection, ProjectMembersCollection, ProjectDiscussionView, ProjectDiscussionsView, ProjectNewDiscussionView, ProjectFundraisingView, ProjectAddUpdateView, ProjectCalenderView, ProjectMembersView, ProjectInfoAppearanceView) {
   var CBUProjectOwnerView;
   return CBUProjectOwnerView = CBUProjectView.extend({
     initialize: function(options) {
-      CBUProjectView.prototype.initialize.call(this, options);
-      return console.log('CBUProjectOwnerView', this);
+      var _this = this;
+      this.templateDir = options.templateDir || this.templateDir;
+      this.parent = options.parent || this.parent;
+      this.model = new ProjectModel(options.model);
+      this.collection = options.collection || this.collection;
+      this.isOwner = options.isOwner || this.isOwner;
+      this.isResource = options.isResource || this.isResource;
+      return this.model.fetch({
+        success: function() {
+          return _this.getMemberStatus();
+        }
+      });
     },
     events: {
       "click a[href^='#']": "changeHash"
+    },
+    getMemberStatus: function() {
+      var id,
+        _this = this;
+      id = this.model.get("id");
+      return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
+        if (res_.success) {
+          console.log('res_', res_, _this.model);
+          _this.memberData = res_.data;
+          if (_this.memberData.organizer || _this.memberData.owner) {
+            return _this.render();
+          } else {
+            return window.location.href = "/project/" + _this.model.get("slug");
+          }
+        }
+      });
     },
     render: function() {
       var _this = this;
@@ -32,7 +58,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "collect
         id: this.model.get("id"),
         name: this.model.get("name"),
         model: this.model,
-        isOwner: true,
+        isOwner: this.memberData.owner,
         view: "admin"
       };
       projectDiscussionsCollection = new ProjectDiscussionsCollection(config);

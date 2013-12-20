@@ -3,6 +3,7 @@ define ["underscore",
 		"jquery", 
 		"template", 
 		"project-view", 
+		"model/ProjectModel", 
 		"collection/ProjectDiscussionsCollection", 
 		"collection/UpdatesCollection", 
 		"collection/ProjectCalendarCollection", 
@@ -20,6 +21,7 @@ define ["underscore",
 	 $, 
 	 temp, 
 	 CBUProjectView, 
+	 ProjectModel,
 	 ProjectDiscussionsCollection, 
 	 UpdatesCollection, 
 	 ProjectCalendarCollection, 
@@ -36,11 +38,26 @@ define ["underscore",
 		CBUProjectOwnerView = CBUProjectView.extend
 
 			initialize: (options) -> 
-				CBUProjectView::initialize.call @, options
-				console.log 'CBUProjectOwnerView',@
+				@templateDir = options.templateDir or @templateDir
+				@parent      = options.parent or @parent
+				@model       = new ProjectModel(options.model)
+				@collection  = options.collection or @collection
+				@isOwner     = options.isOwner || @isOwner
+				@isResource  = options.isResource || @isResource
+				@model.fetch 
+					success: =>@getMemberStatus()
 
 			events:
 				"click a[href^='#']":"changeHash"
+
+			getMemberStatus:->
+				id = @model.get("id")
+				$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
+					if res_.success
+						console.log 'res_',res_, @model
+						@memberData = res_.data
+
+						if (@memberData.organizer || @memberData.owner) then @render() else (window.location.href = "/project/"+@model.get("slug"))
 
 			render: -> 
 				@$el = $("<div class='project-container'/>")
@@ -54,7 +71,7 @@ define ["underscore",
 					{data:@model.attributes}, =>@addSubViews()
 						
 			addSubViews:->
-				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:true, view:"admin"} 
+				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:@memberData.owner, view:"admin"} 
 
 				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 				projectMembersCollection     = new ProjectMembersCollection(config)

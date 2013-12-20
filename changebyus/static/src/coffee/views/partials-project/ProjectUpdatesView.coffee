@@ -20,8 +20,8 @@ define ["underscore",
 
 			initialize: (options) -> 
 				ProjectSubView::initialize.call(@, options)
-				@members           = options.members || @members
-				@viewData.isMember = options.isMember
+				@members                   = options.members || @members
+				@viewData.isOwnerOrganizer = options.isOwnerOrganizer
 
 			render: ->  
 				@$el = $(@parent)

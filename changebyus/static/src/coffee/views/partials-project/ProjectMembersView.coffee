@@ -23,7 +23,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			render: ->
 				console.log 'rr',@
 				@$el = $(@parent)
-				@viewData = @model.attributes
+				@viewData = if @model then @model.attributes else {}
 				@viewData.isOwnerOrganizer = @isOwnerOrganizer
 				templateURL = if (@view is "public") then "/templates/partials-project/project-members.html" else "/templates/partials-project/project-members-admin.html"
 				@$el.template @templateDir+templateURL, 

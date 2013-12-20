@@ -146,10 +146,12 @@
   .cities{
     @include box-skin;
     margin-top: 10px;
+    min-height: 230px;
+    padding-top: 3px;
     
     li{
-      padding: 10px;
-      &:last-child{border-top: 1px solid $grayBorder;  }
+      padding: 4px 10px;
+      /* &:last-child{border-top: 1px solid $grayBorder;  } */
       a{color: inherit;}
     }
   }

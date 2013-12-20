@@ -24,7 +24,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         _this = this;
       console.log('rr', this);
       this.$el = $(this.parent);
-      this.viewData = this.model.attributes;
+      this.viewData = this.model ? this.model.attributes : {};
       this.viewData.isOwnerOrganizer = this.isOwnerOrganizer;
       templateURL = this.view === "public" ? "/templates/partials-project/project-members.html" : "/templates/partials-project/project-members-admin.html";
       return this.$el.template(this.templateDir + templateURL, {

@@ -1,0 +1,76 @@
+{
+	"cities":{
+		"philadelphia":{
+			"name":"Philadelphia, PA",
+			"quote":"I believe in Philadelphia, PA",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":39.95,
+			"lon":-75.17
+		},
+		"sanjose":{
+			"name":"San Jose, CA",
+			"quote":"I believe in San Jose, CA",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":37.33,
+			"lon":-121.90
+		},
+		"akron":{
+			"name":"Akron, OH",
+			"quote":"I believe in Akron, OH",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":41.07,
+			"lon":-81.51
+		},
+		"charlotte":{
+			"name":"Charlotte, NC",
+			"quote":"I believe in Charlotte, NC",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":35.22,
+			"lon":-80.84
+		},
+		"detroit":{
+			"name":"Detroit, MI",
+			"quote":"I believe in Detroit, MI",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":42.33,
+			"lon":-83.04
+		},
+		"macon":{
+			"name":"Macon, GA",
+			"quote":"I believe in Macon, GA",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":32.83,
+			"lon":-83.65
+		},
+		"miami":{
+			"name":"Miami, FL",
+			"quote":"I believe in Miami, FL",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":25.78,
+			"lon":-80.22
+		},
+		"stpaul":{
+			"name":"St. Paul, MN",
+			"quote":"I believe in St. Paul, MN",
+			"image_url_round":"http://lorempixel.com/255/255",
+			"image_url_large_rect":"http://lorempixel.com/1020/430",
+			"website":"http://google.com",
+			"lat":44.94,
+			"lon":-93.08
+		}
+	}
+}

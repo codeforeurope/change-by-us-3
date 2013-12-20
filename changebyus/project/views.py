@@ -26,9 +26,8 @@ Project Views
 Web facing views for interacting with projects.
 
 """
-
-@project_view.route('/<project_id>')
 @project_view.route('/<project_id>/admin')
+@project_view.route('/<project_id>')
 @project_exists
 def project_view_id(project_id):
     """

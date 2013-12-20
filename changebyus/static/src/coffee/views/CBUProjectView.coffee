@@ -87,6 +87,8 @@ define ["underscore",
 							@viewData.isOwnerOrganizer = @isOwnerOrganizer
 							@addHeaderView()
 
+						console.log @isMember,@isOwnerOrganizer 
+
 			addHeaderView: -> 
 				if @isResource
 					className   = "resource-header"
@@ -112,6 +114,7 @@ define ["underscore",
 			onCollectionLoad:->  
 				parent       = if @isResource then "#resource-updates" else "#project-updates"
 				@updatesView = new UpdatesView
+										model:@model,
 										collection:@updatesCollection, 
 										members:@projectMembersCollection, 
 										isMember:@isMember, 
@@ -132,14 +135,13 @@ define ["underscore",
 					console.log 'wysiwygFormView',@wysiwygFormView
 				else
 					@projectMembersView  = new ProjectMembersView
+													model:@model,
 													collection:@projectMembersCollection,
 													isDataLoaded:true,
 													isMember:@isMember
 													isOwnerOrganizer:@isOwnerOrganizer,
-													model:@model,
 													isOwner:@isOwner
 													
-					
 					@projectCalenderView = new ProjectCalenderView
 													model:@model, 
 													isMember:@isMember,

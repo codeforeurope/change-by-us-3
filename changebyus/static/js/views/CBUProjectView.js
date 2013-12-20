@@ -66,8 +66,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
             _this.viewData.isMember = _this.isMember;
             _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
-            return _this.addHeaderView();
+            _this.addHeaderView();
           }
+          return console.log(_this.isMember, _this.isOwnerOrganizer);
         });
       }
     },
@@ -107,6 +108,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this = this;
       parent = this.isResource ? "#resource-updates" : "#project-updates";
       this.updatesView = new UpdatesView({
+        model: this.model,
         collection: this.updatesCollection,
         members: this.projectMembersCollection,
         isMember: this.isMember,
@@ -129,11 +131,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         console.log('wysiwygFormView', this.wysiwygFormView);
       } else {
         this.projectMembersView = new ProjectMembersView({
+          model: this.model,
           collection: this.projectMembersCollection,
           isDataLoaded: true,
           isMember: this.isMember,
           isOwnerOrganizer: this.isOwnerOrganizer,
-          model: this.model,
           isOwner: this.isOwner
         });
         this.projectCalenderView = new ProjectCalenderView({

@@ -41,9 +41,10 @@
         </h3> 
         <% if (data.isOwnerOrganizer){ %>
         <span>
-            Why don't you <a href="/project/<%= window.projectID %>/admin#updates" class="highlight">add your first post</a>?
+            Why don't you <a href="/project/<%= data.slug %>/admin#updates" class="highlight">add your first post</a>?
         </span>
         <% } %>
     </div>
 </div>
 
+<% console.log(data) %>

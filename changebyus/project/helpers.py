@@ -10,7 +10,7 @@ from ..helpers.imagetools import generate_thumbnail, upload_image
 from ..helpers.stringtools import slugify
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
-
+ 
 from ..wordlist import filter_model
 
 import requests
@@ -215,6 +215,11 @@ def _user_involved_in_project( project_id = None,
     current_app.logger.warn(warnStr)
     return False
 
+
+def _get_project_name( project_id = None ):
+    project = Project.objects.with_id(project_id)
+
+    return project.name
 
 def _get_users_for_project( project_id = None ):
     """

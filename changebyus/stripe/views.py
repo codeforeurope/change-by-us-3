@@ -7,7 +7,7 @@ from flask import Blueprint, render_template, redirect, url_for, g
 from flask import current_app, request, session, abort
 from flask.ext.login import login_required, current_user, login_user
 
-from ..helpers.flasktools import gen_blank_ok
+from ..helpers.flasktools import gen_blank_ok, jsonify_response, ReturnStructure, as_multidict
 
 from .api import _capture_event_details, _get_account_balance_percentage
 from .models import StripeAccount, StripeDonation, StripeLink
@@ -65,7 +65,7 @@ def stripe_link():
 
     """
 
-    # from ..project.api import _check_user_owns_project
+    # from ..project.api import _check_user_owns_project 
     from ..project.helpers import _check_user_owns_project, _get_project_name
 
     form = LinkStripeForm(request.form or as_multidict(request.json))

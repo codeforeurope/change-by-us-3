@@ -13,6 +13,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     initSend: true,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
+      this.showResources = window.location.hash.substring(1) === "resources";
       return this.render();
     },
     events: {
@@ -64,6 +65,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }).bind('typeahead:selected', function(obj, datum) {
         return _this.locationObj = datum;
       });
+      if (this.showResources) {
+        $('#sort-by-pr .pill-selection').last().trigger('click');
+      }
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
       this.delegateEvents();

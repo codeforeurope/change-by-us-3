@@ -11,6 +11,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
+				@showResources = (window.location.hash.substring(1) is "resources")
 				@render()
 
 			events:
@@ -45,6 +46,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				).bind('typeahead:selected', (obj, datum) =>
 					@locationObj = datum 
 				)
+
+				# deeplink resource select
+				if @showResources then $('#sort-by-pr .pill-selection').last().trigger('click')
 
 				$dropkick = $('#search-range').dropkick()
 				@$resultsModify = $('.results-modify')

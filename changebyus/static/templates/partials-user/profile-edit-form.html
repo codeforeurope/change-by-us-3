@@ -1,3 +1,4 @@
+<% console.log(data) %>
 <div id="feedback" class="feedback alert hide"></div>
 <form method="post" enctype="multipart/form-data" class="form-edit-create" name="createproject" action="/api/user/edit">
     <div class="content-wrapper clearfix">
@@ -47,7 +48,7 @@
             <input type="password" name="password" id="password" placeholder="" class="input-xxlarge" value="<%= data.password %>">
              <br>
             <label for="website">WEBSITE</label> <span class="sub-text">(Optional)</span>
-            <input type="text" name="website" id="website" placeholder="http://mypersonalsite.com" class="input-xxlarge" value="<%= data.website %>">
+            <input type="url" name="website" id="website" placeholder="http://mypersonalsite.com" class="input-xxlarge" value="<%= data.website %>">
              <br>
             <div class="notify-wrapper clearfix">
                 <div class="notify-row clearfix">

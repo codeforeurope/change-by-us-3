@@ -49,15 +49,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					contentType: "multipart/form-data; charset=utf-8"
 					beforeSubmit:(arr_, form_, options_)->  
 						if $form.valid()
-							showEmail = true
-							for i of arr_ 
-								console.log arr_[i]
-								if arr_[i].name is "public_email"
-									showEmail = false
-									break
-
-							if showEmail then arr_.push({name:"public_email",value:false})
-
 							$inputs.attr("disabled", "disabled")
 							return true
 						else

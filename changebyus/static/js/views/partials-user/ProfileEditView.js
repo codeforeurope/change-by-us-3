@@ -55,22 +55,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         dataType: "json",
         contentType: "multipart/form-data; charset=utf-8",
         beforeSubmit: function(arr_, form_, options_) {
-          var i, showEmail;
           if ($form.valid()) {
-            showEmail = true;
-            for (i in arr_) {
-              console.log(arr_[i]);
-              if (arr_[i].name === "public_email") {
-                showEmail = false;
-                break;
-              }
-            }
-            if (showEmail) {
-              arr_.push({
-                name: "public_email",
-                value: false
-              });
-            }
             $inputs.attr("disabled", "disabled");
             return true;
           } else {

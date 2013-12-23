@@ -8,6 +8,7 @@ from flask import (Blueprint, render_template, redirect,
 
 from flask.ext.login import login_required, current_user, login_user
 
+from flask.ext.wtf.html5 import URLField
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError)
 
@@ -153,6 +154,7 @@ class CreateProjectForm(Form):
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
     category = TextField("category")
+    website = URLField("website")
     gcal_code = TextField("gcal_code")
     location = HiddenField("location")
     lat = HiddenField("lat")
@@ -238,6 +240,7 @@ class EditProjectForm(Form):
     project_id = TextField("project_id")
     name = TextField("title",)
     description = TextAreaField("description")
+    website = URLField("website")
     category = TextField("category")
     gcal_code = TextField("gcal_code")
     location = HiddenField("location")

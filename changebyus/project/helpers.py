@@ -43,6 +43,7 @@ def _create_project(form):
     name = form.name.data
     description = form.description.data
     category = form.category.data
+    website = form.website.data
     gcal_code = form.gcal_code.data
     location = form.location.data
     lat = form.lat.data
@@ -68,6 +69,7 @@ def _create_project(form):
     p = Project( name = name, 
                  description = description, 
                  category = category,
+                 website = website,
                  gcal_code = gcal_code,
                  location = location,
                  geo_location = geo_location,
@@ -120,6 +122,7 @@ def _edit_project(form):
     name = form.name.data
     description = form.description.data
     category = form.category.data
+    website = form.website.data
     gcal_code = form.gcal_code.data
     location = form.location.data
     lat = form.lat.data
@@ -137,6 +140,7 @@ def _edit_project(form):
     if name: p.name = name
     if description: p.description = description
     if category: p.category = category
+    if website: p.website = website
     if gcal_code: p.gcal_code = gcal_code
     
     if (lat and lon):

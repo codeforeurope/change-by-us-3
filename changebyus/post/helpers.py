@@ -8,6 +8,9 @@ from ..helpers.mongotools import db_list_to_dict_list
 from ..helpers.flasktools import ReturnStructure, jsonify_response
 from ..project.decorators import _is_organizer as _is_project_organizer
 from ..notifications.api import _notify_post
+from ..facebook.facebook import _post_user_facebook_feed
+from ..bitly.api import _get_bitly_url
+from ..twitter.twitter import _post_user_twitter_update
 
 from flask.ext.cdn import url_for
 
@@ -149,7 +152,7 @@ def _create_project_post(title = None,
             pp.save()
 
         # TODO convert this to slug
-        project_url = url_for('project_view.project_view_id', id=id, _external=True)
+        project_url = url_for('project_view.project_view_id', project_id=project.slug, _external=True)
 
         # do social posts as necessary
         fb_post = None

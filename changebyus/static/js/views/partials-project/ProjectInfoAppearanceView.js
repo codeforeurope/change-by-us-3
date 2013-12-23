@@ -86,7 +86,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       $form.ajaxForm(options);
       $projectLocation = $("#project_location");
       $projectLocation.typeahead({
-        template: '<div class="zip">{{ name }}</div>',
+        template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
         name: 'zip',
@@ -102,7 +102,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
                 zips.push({
                   'name': loc.name,
                   'lat': loc.lat,
-                  'lon': loc.lon
+                  'lon': loc.lon,
+                  'zip': loc.zip
                 });
               }
             }

@@ -36,7 +36,21 @@ require.config
 		"dashboard-view": "views/CBUDashboardView"
 		"stream-view": "views/CBUStreamView"
 
-require ["jquery",  
+	shim:
+		"slicknav":["jquery"]
+		"dropkick":["jquery"]
+		"button":["jquery"]
+		"bootstrap-fileupload":["jquery", "bootstrap"]
+		"autocomp":["jquery", "bootstrap"]
+		"wysiwyg":["jquery", "bootstrap"]
+		"hotkeys":["jquery"]
+		"form":["jquery"]
+		"template":["jquery"]
+		"validate":["jquery"]
+		"serializeObject":["jquery"]
+		"serializeJSON":["jquery"]
+
+define ["jquery",  
 		"backbone", 
 		 "main-view", 
 		 "discover-view",  
@@ -62,8 +76,8 @@ require ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
-	 CreateView
-	 Slicknav) ->
+	 CreateView,
+	 SlickNav) ->
 		$(document).ready ->
 			config = {parent:".main-content"}
 
@@ -92,10 +106,11 @@ require ["jquery",
 					window.CBUAppView =  new CBUProjectView(config)
 
 				projectAdmin: (id_) ->
-					isOwner = (userID is projectOwnerID)
-					config.model = {id:id_}
-					config.isOwner = isOwner
-					window.CBUAppView = if (isOwner) then (new CBUProjectOwnerView(config)) else (new CBUProjectView(config))
+					if userID
+						config.model = {id:id_}
+						window.CBUAppView = new CBUProjectOwnerView(config)
+					else
+						window.location.href = "/login"
 
 				resource: (id_) ->
 					config.model = {id:id_}

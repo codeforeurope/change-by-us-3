@@ -24,7 +24,7 @@
             <input type="text" maxlength="30" name="zip" id="project_location" placeholder="Project Location" class="input-xxlarge" value="<%= data.location %>" required>
 
             <label for="description">Website</label>
-            <input type="text" maxlength="30" name="website" id="website" placeholder="Website" class="input-xxlarge" value="<%= data.website %>">
+            <input type="url" maxlength="30" name="website" id="website" placeholder="Website" class="input-xxlarge" value="<%= data.website %>">
 
             <div class="public-visibility">
                 <label for="name">Project Visibility</label>
@@ -56,6 +56,7 @@
                 </div>
                 <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div>
+            <!--
             <div class="social-btns">
                 <label>Social</label>
                 <div class="twitter">
@@ -67,6 +68,7 @@
                     <a href="#" class="btn btn-medium btn-primary">Disconnect</a>
                 </div>
             </div>
+            -->
         </div>
     </div>
     <div class="form-footer clearfix">

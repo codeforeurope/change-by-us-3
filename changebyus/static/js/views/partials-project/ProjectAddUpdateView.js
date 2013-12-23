@@ -11,12 +11,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $(".share-options").toggleClass("hide");
     },
     shareOption: function(e) {
-      /*
-      				$input  = $(e.currentTarget).find('input')
-      				id      = $input.attr('id')
-      				checked = ($input.is(':checked'))
-      */
-
       var checked;
       checked = [];
       $.each($('.share-options input'), function() {
@@ -27,22 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           return checked.push(id);
         }
       });
-      $('#social_sharing').val(checked.join());
-      return console.log('checked.joined()', checked.join());
-      /*
-      				$projectPage = $("input[name='social_sharing[0]']")
-      				$twitter     = $("input[name='social_sharing[1]']")
-      				$facebook    = $("input[name='social_sharing[2]']")
-      
-      				switch id
-      					when 'project-page'
-      						if checked then $projectPage.val('project-page') else $projectPage.val('')
-      					when 'twitter'
-      						if checked then $twitter.val('twitter') else $twitter.val('')
-      					when 'facebook'
-      						if checked then $facebook.val('facebook') else $facebook.val('')
-      */
-
+      return $('#social_sharing').val(checked.join());
     },
     render: function() {
       var _this = this;
@@ -55,29 +34,62 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onTemplateLoad: function() {
-      var form,
-        _this = this;
+      var _this = this;
       ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$ul = this.$el.find('.updates-container ul');
+      return $.get("/api/user/socialinfo", function(response_) {
+        var e;
+        try {
+          _this.socialInfo = response_.data;
+        } catch (_error) {
+          e = _error;
+        }
+        return _this.addForm();
+      });
+    },
+    addForm: function() {
+      var form,
+        _this = this;
       form = new WysiwygFormView({
         parent: "#update-form"
       });
       return form.on('ON_TEMPLATE_LOAD', function() {
-        var $submit;
+        var $feedback, $inputs, $submit;
+        $feedback = $("#feedback").hide();
         $submit = form.$el.find('input[type="submit"]');
+        $inputs = $submit.find("input, textarea");
         form.beforeSubmit = function(arr_, form_, options_) {
-          return $submit.find("input, textarea").attr("disabled", "disabled");
+          console.log('beforeSubmit', $feedback);
+          $feedback.hide();
+          return $inputs.attr("disabled", "disabled");
         };
         form.success = function(response_) {
+          console.log('success response_', response_);
           if (response_.success) {
-            return _this.addModal(response_.data);
+            _this.addModal(response_.data);
           }
+          form.resetForm();
+          $("#editor").html("");
+          return $inputs.removeAttr("disabled");
         };
-        return _this.$el.find('input:radio, input:checkbox').screwDefaultButtons({
+        form.error = function(error_) {
+          $feedback.show();
+          return console.log('error response_', error_);
+        };
+        _this.$el.find('input:radio, input:checkbox').screwDefaultButtons({
           image: 'url("/static/img/black-check.png")',
           width: 18,
           height: 18
         });
+        if (_this.socialInfo.fb_name === "") {
+          $("#facebook").parent().hide();
+          $("label[for=facebook]").hide();
+        }
+        if (_this.socialInfo.twitter_name === "") {
+          $("#twitter").parent().hide();
+          $("label[for=twitter]").hide();
+        }
+        return _this.delegateEvents();
       });
     },
     addAll: function() {
@@ -114,7 +126,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.$ul.append(view.$el);
     },
     addModal: function(data_) {
-      return this.modal = new ProjectUpdateSuccessModalView({
+      var modal;
+      data_.twitter_name = this.socialInfo.twitter_name;
+      data_.slug = this.model.get("slug");
+      return modal = new ProjectUpdateSuccessModalView({
         model: data_
       });
     },

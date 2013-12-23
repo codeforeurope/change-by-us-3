@@ -8,19 +8,26 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			$teamList: null
 			$memberList: null
 			projectID:0
+			isOwnerOrganizer:false
 			view:"public"
 
 			initialize: (options) ->
-				@isDataLoaded = options.isDataLoaded || @isDataLoaded
-				@view         = options.view || @view
-				@projectID    = options.projectID || @projectID
+				@isDataLoaded     = options.isDataLoaded || @isDataLoaded
+				@view             = options.view || @view
+				@projectID        = options.projectID || @projectID
+				@model            = options.model || @model
+				@isOwnerOrganizer = options.isOwnerOrganizer || @isOwnerOrganizer
+
 				ProjectSubView::initialize.call(@, options) 
 
 			render: ->
+				console.log 'rr',@
 				@$el = $(@parent)
+				@viewData = if @model then @model.attributes else {}
+				@viewData.isOwnerOrganizer = @isOwnerOrganizer
 				templateURL = if (@view is "public") then "/templates/partials-project/project-members.html" else "/templates/partials-project/project-members-admin.html"
 				@$el.template @templateDir+templateURL, 
-					{}, => @onTemplateLoad()
+					{data:@viewData}, => @onTemplateLoad() 
 
 			onTemplateLoad:->  
 				ProjectSubView::onTemplateLoad.call @
@@ -35,7 +42,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			onCollectionLoad:->
 				ProjectSubView::onCollectionLoad.call(@)
 
-				@collection.on('change', =>@addAll())
+				@collection.on('change', =>@addAll()) 
 				@collection.on('remove', =>@addAll())
 
 			# override in subview
@@ -45,13 +52,14 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				console.log '@collection addAll',@collection
 				@collection.each (model) =>
 					roles = model.get("roles")
-					console.log 'roles',roles
-					if roles.length is 0 then model.set("roles", ["Owner"]) 
-
-					if ("MEMBER" in roles) or ("Member" in roles)
-						@members.push model
+					 
+					if roles.length is 0 
+						model.set("roles", ["Owner"]) 
 					else
-						@team.push model
+						if ("MEMBER" in roles) or ("Member" in roles)
+							@members.push model
+						else
+							@team.push model
 
 				@$teamList.html('')
 				@$memberList.html('')
@@ -67,11 +75,17 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				else
 					@$memberList.parent().parent().show()
 					@$memberList.parent().parent().find('h4').html(@members.length+' Members')
+				
+				console.log('team >>>>>>>>>> ',@team, @members)
+				
+				if (@team.length is 0) and (@members.length is 0)
+					$('.no-results').show()
 
-				@addTeam(model) for model in @team
-				@addMember(model) for model in @members
+				else
+					@addTeam(model) for model in @team
+					@addMember(model) for model in @members
+					ProjectSubView::addAll.call(@)
 
-				ProjectSubView::addAll.call(@) 
 				@isDataLoaded = true
 
 			addTeam: (model_) -> 

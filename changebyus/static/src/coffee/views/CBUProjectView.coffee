@@ -54,13 +54,11 @@ define ["underscore",
 				"click  a[href^='#']":"changeHash"
 
 			render: ->
-				# @isResource = @model.get("resource")
-
 				if @isResource
-					className = "resource-container"
+					className   = "resource-container"
 					templateURL = "/templates/resource.html"
 				else
-					className = "project-container"
+					className   = "project-container"
 					templateURL = "/templates/project.html"
 
 				@$el = $("<div class='#{className}'/>")
@@ -72,29 +70,31 @@ define ["underscore",
 				# determine if user is a member of the project
 				# if not, display the join button 
 				@viewData = @model.attributes
+				@getMemberStatus()
 
+			getMemberStatus:->
 				if window.userID is ""
 					@isMember = false
 					@addHeaderView()
 				else
 					id = @model.get("id")
-					$.ajax(
-						type: "GET"
-						url: "/api/project/#{id}/user/#{window.userID}"
-					).done (response)=>  
-						if response.success
-							@memberData = response.data
-							@isMember = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
-							@viewData.isMember = @isMember
+					$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
+						if res_.success
+							@memberData                = res_.data
+							@isMember                  = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+							@isOwnerOrganizer          = if true in [@memberData.organizer, @memberData.owner] then true else false
+							@viewData.isMember         = @isMember
+							@viewData.isOwnerOrganizer = @isOwnerOrganizer
 							@addHeaderView()
 
-			addHeaderView: ->
+						console.log @isMember,@isOwnerOrganizer 
 
+			addHeaderView: -> 
 				if @isResource
-					className = "resource-header"
+					className   = "resource-header"
 					templateURL = "/templates/partials-resource/resource-header.html"
 				else
-					className = "project-header"
+					className   = "project-header"
 					templateURL = "/templates/partials-project/project-header.html"
 
 				@$header = $("<div class='#{className}'/>")
@@ -103,28 +103,50 @@ define ["underscore",
 				@$el.prepend @$header
 
 			onHeaderLoaded:->
-				console.log '@model',@model
 				id = @model.get("id")
 				config = {id:id}
-
-				@updatesCollection  = new UpdatesCollection(config)  
-				@projectMembersCollection  = new ProjectMembersCollection(config)
+				
+				@updatesCollection        = new UpdatesCollection(config)  
+				@projectMembersCollection = new ProjectMembersCollection(config)
 				@projectMembersCollection.on "reset", @onCollectionLoad, @
 				@projectMembersCollection.fetch {reset: true}
 
 			onCollectionLoad:->  
 				parent       = if @isResource then "#resource-updates" else "#project-updates"
-				@updatesView = new UpdatesView({collection:@updatesCollection, members:@projectMembersCollection, isMember:@isMember, isResource:@isResource, parent:parent})
+				@updatesView = new UpdatesView
+										model:@model,
+										collection:@updatesCollection, 
+										members:@projectMembersCollection, 
+										isMember:@isMember, 
+										isOwnerOrganizer:@isOwnerOrganizer, 
+										isResource:@isResource, 
+										parent:parent
 
 				if @isResource
 					@updatesView.show()
 					@updatesView.on 'ON_TEMPLATE_LOAD', =>
 						userAvatar = $('.profile-nav-header img').attr('src')
-						@wysiwygFormView = new WysiwygFormView({parent:"#add-resource-update", id:@model.get("id"), slim:true, userAvatar:userAvatar})
+						@wysiwygFormView = new WysiwygFormView
+													parent:"#add-resource-update", 
+													id:@model.get("id"), 
+													slim:true, 
+													userAvatar:userAvatar
+
 					console.log 'wysiwygFormView',@wysiwygFormView
 				else
-					@projectMembersView  = new ProjectMembersView({collection:@projectMembersCollection, isDataLoaded:true, isMember:@isMember})
-					@projectCalenderView = new ProjectCalenderView({model:@model, isMember:@isMember, isOwner:@isOwner})
+					@projectMembersView  = new ProjectMembersView
+													model:@model,
+													collection:@projectMembersCollection,
+													isDataLoaded:true,
+													isMember:@isMember
+													isOwnerOrganizer:@isOwnerOrganizer,
+													isOwner:@isOwner
+													
+					@projectCalenderView = new ProjectCalenderView
+													model:@model, 
+													isMember:@isMember,
+													isOwnerOrganizer:@isOwnerOrganizer,
+													isOwner:@isOwner
 					
 					@updatesBTN  = $("a[href='#updates']").parent()
 					@membersBTN  = $("a[href='#members']").parent()
@@ -140,28 +162,25 @@ define ["underscore",
 				$this = $(e.currentTarget)
 				$this.parent().css('opacity', 0.25)
 				url = $this.attr('href')
-				$.ajax(
-					type: "POST"
-					url: url 
-				).done (response_)=>
-					console.log response_
+				$.post url, (res_)=>
+					console.log res_
 
 			joinProject:(e)-> 
 				if @isMember then return
-				
+				e.preventDefault()
+
 				if window.userID is ""
 					window.location = "/login"
 				else
-					id = @model.get("id")
-					$join  = $(".project-footer .btn")
-					e.preventDefault()
-					
+					id    = @model.get("id")
+					$join = $(".project-footer .btn")
+
 					$.ajax(
 						type: "POST"
 						url: "/api/project/join"
 						data: {project_id:id}
-					).done (response)=>
-						if response.success
+					).done (res_)=>
+						if res_.success
 							feedback = if @isResource then 'Following!' else'Joined!'
 							@isMember = true
 							$join.html(feedback).css('background-color','#e6e6e6')

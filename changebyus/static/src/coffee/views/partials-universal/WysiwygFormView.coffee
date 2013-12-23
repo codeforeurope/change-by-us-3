@@ -73,18 +73,18 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					dataType: "json" 
 					contentType: "application/json; charset=utf-8"
 
+					beforeSubmit:(arr_, form_, options_)->
+						@beforeSubmit(arr_, form_, options_)
+
 					success: (response_) =>
 						@success(response_) 
+
+					error: (response_) =>
+						@error(response_) 
 				
 				@$updateForm.submit => 
 					obj = @$updateForm.serializeJSON()
 					obj.description = escape($editor.html())
-					###
-					obj.social_sharing = [
-						{name:'social_sharing', value:'twitter'},
-						{name:'social_sharing', value:'facebook'}
-					]
-					###
 					json_str = JSON.stringify(obj)
 					options.data = json_str
 					$.ajax options
@@ -124,6 +124,9 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				# hook for beforeSubmit
 
 			success: (response_) ->
+				# hook for beforeSubmit
+
+			error: (response_) ->
 				# hook for beforeSubmit
 
 			resetForm:->

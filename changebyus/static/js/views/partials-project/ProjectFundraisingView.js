@@ -9,7 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return this.render();
     },
     events: {
-      "click .btn-large": "linkStripe",
+      "click #get-started": "linkStripe",
       "click #does-it-work": "slideToggle"
     },
     render: function() {
@@ -19,11 +19,13 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
         return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-goals.html", {
           data: this.viewData
         }, function() {
-          return _this.onTemplateLoad();
+          _this.onTemplateLoad();
+          return _this.delegateEvents();
         });
       } else {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {
-          return _this.getStarted();
+          _this.getStarted();
+          return _this.delegateEvents();
         });
       }
     },
@@ -32,16 +34,21 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       return this.$how.slideToggle(1);
     },
     linkStripe: function(e) {
-      var _this = this;
+      var dataObj,
+        _this = this;
       e.preventDefault();
+      dataObj = {
+        project_id: this.id,
+        project_name: this.name
+      };
       return $.ajax({
         type: "POST",
         url: "/stripe/link",
-        data: {
-          project_id: this.id,
-          project_name: this.name
-        }
+        data: JSON.stringify(dataObj),
+        dataType: "text",
+        contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
+        console.log(response_);
         return popWindow(response_);
       });
     },

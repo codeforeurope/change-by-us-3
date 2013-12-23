@@ -5,6 +5,8 @@ from .models import Project, Roles, UserProjectLink, ACTIVE_ROLES
 from ..helpers.flasktools import *
 from .helpers import _get_user_roles_for_project
 
+from mongoengine.errors import ValidationError
+
 from flask import g, request, current_app, abort
 
 # TODO add site owner
@@ -12,8 +14,8 @@ from flask import g, request, current_app, abort
 def _is_owner(project, user_id):
     if not isinstance(project, Project):
         project = Project.objects.with_id(project)
-
-    return project.owner.id == user_id
+ 
+    return (str(project.owner.id) == str(user_id))
 
 def _is_member(project, user_id):
     if _is_owner(project, user_id): 
@@ -45,20 +47,27 @@ def project_exists(f):
    def decorated_function(*args, **kwargs):
         if(request.json):
             project_id = request.json.get('project_id')
-            project_slug = request.json.get('project_slug')
         else:
             project_id = request.form.get('project_id') or request.view_args.get('project_id')
-            project_slug = request.form.get('project_slug') or request.view_args.get('project_slug')
 
-        if project_id is None and project_slug is None:
+        if project_id is None:
             abort(400)
-   
-        if project_id:
-            project = Project.objects(id=project_id, active=True)
-        else:
-            project = Project.objects(slug=project_slug, active=True)
 
-        if project is None or len(project) == 0:
+        try:
+            project = Project.objects(id=project_id, active=True)
+            # count forces execution of query
+            project.count()
+
+        except ValidationError as e:
+            try:
+                project = Project.objects(slug=project_id, active=True)
+                # count forces execution of query
+                project.count()
+
+            except ValidationError as e:
+                project = None
+
+        if project is None or project.count() == 0:
             abort(404)
 
         return f(*args, **kwargs)

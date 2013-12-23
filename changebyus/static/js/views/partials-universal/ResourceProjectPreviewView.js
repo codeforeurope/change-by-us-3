@@ -35,16 +35,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return $(this.parent).append(this.render());
     },
     close: function() {
-      var closeX,
+      var closeX, dataObj,
         _this = this;
       closeX = this.$el.find('.close-x');
       closeX.hide();
+      dataObj = {
+        project_id: this.model.id
+      };
       return $.ajax({
         type: "POST",
         url: "/api/project/leave",
-        data: {
-          project_id: this.model.id
-        }
+        data: JSON.stringify(dataObj),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8"
       }).done(function(response) {
         if (response.success) {
           _this.model.collection.remove(_this.model);

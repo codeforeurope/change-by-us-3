@@ -14,7 +14,7 @@
             </a>that might be similar to yours.
         </p>
 
-        <div id="feedback" class="alert alert-error hide"></div> 
+        <div id="feedback" class="alert alert-error hide">An error occured. Ensure you are logged into your Twitter or Facebook account.</div> 
 
         <div class="content-wrapper create clearfix">
 
@@ -41,7 +41,9 @@
 
                     <label for="zip">PROJECT LOCATION</label>
                     <input type="text" name="zip" id="project_location" placeholder="Enter Zip Code of Location" class="input-xxlarge">
-                    <br>
+
+                    <label for="website">WEBSITE</label> <span class="sub-text">(Optional)</span>
+                    <input type="url" name="website" id="website" placeholder="http://mypersonalsite.com" class="input-xxlarge" value="">
                 </div>
 
                 <div class="form-right">
@@ -66,8 +68,7 @@
         <div class="form-footer">
             <input type="hidden" name="location" value="">
             <input type="hidden" name="lat" value="">
-            <input type="hidden" name="lon" value="">
-            <input type="hidden" name="resource" value="false">
+            <input type="hidden" name="lon" value=""> 
             <input type="submit" class="btn btn-large btn-secondary" value="Save">
             <input type="submit" class="btn btn-large btn-tertiary" value="Cancel">
         </div>

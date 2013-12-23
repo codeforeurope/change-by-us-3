@@ -17,7 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       });
     },
     events: {
-      "click .social-btns .btn-primary": "socialClick"
+      "click .social-btns a": "socialClick"
     },
     render: function() {
       var _this = this;
@@ -36,10 +36,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     },
     onTemplateLoaded: function() {
       this.ajaxForm();
-      return onPageElementsLoad();
+      onPageElementsLoad();
+      return this.delegateEvents();
     },
     ajaxForm: function() {
-      var $feedback, $form, $projectLocation, $submit, options,
+      var $feedback, $form, $inputs, $projectLocation, $submit, options,
         _this = this;
       $('.fileupload').fileupload({
         uploadtype: 'image'
@@ -47,29 +48,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $submit = this.$el.find("input[type=submit]");
       $form = this.$el.find("form");
       $feedback = $("#feedback");
+      $inputs = $form.find("input, textarea");
       options = {
         type: $form.attr('method'),
         url: $form.attr('action'),
         dataType: "json",
         contentType: "multipart/form-data; charset=utf-8",
         beforeSubmit: function(arr_, form_, options_) {
-          var i, showEmail;
           if ($form.valid()) {
-            showEmail = true;
-            for (i in arr_) {
-              console.log(arr_[i]);
-              if (arr_[i].name === "public_email") {
-                showEmail = false;
-                break;
-              }
-            }
-            if (showEmail) {
-              arr_.push({
-                name: "public_email",
-                value: false
-              });
-            }
-            $form.find("input, textarea").attr("disabled", "disabled");
+            $inputs.attr("disabled", "disabled");
             return true;
           } else {
             return false;
@@ -79,7 +66,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           var msg;
           msg = res.msg.toLowerCase() === "ok" ? "Updated Successfully" : res.msg;
           $feedback.show().html(msg);
-          $form.find("input, textarea").removeAttr("disabled");
+          $inputs.removeAttr("disabled");
           if (res.success) {
             $("html, body").animate({
               scrollTop: 0
@@ -93,7 +80,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $form.ajaxForm(options);
       $projectLocation = $("#location");
       $projectLocation.typeahead({
-        template: '<div class="zip">{{ name }}</div>',
+        template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
         name: 'zip',
@@ -109,7 +96,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                 zips.push({
                   'name': loc.name,
                   'lat': loc.lat,
-                  'lon': loc.lon
+                  'lon': loc.lon,
+                  'zip': loc.zip
                 });
               }
             }

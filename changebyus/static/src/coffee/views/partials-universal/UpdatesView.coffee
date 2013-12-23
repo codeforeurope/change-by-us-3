@@ -20,11 +20,13 @@ define ["underscore",
 
 			initialize: (options) -> 
 				ProjectSubView::initialize.call(@, options)
-				@members             = options.members || @members
-				@viewData.isResource = options.isResource
-				@viewData.isMember   = options.isMember
+				@members                   = options.members || @members 
+				@viewData.slug             = @model.get('slug')
+				@viewData.isResource       = options.isResource
+				@viewData.isOwnerOrganizer = options.isOwnerOrganizer
 
-			render: ->  
+			render: ->
+				console.log '@viewData',@viewData
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-universal/updates.html",
 					{data: @viewData}, =>@onTemplateLoad()   

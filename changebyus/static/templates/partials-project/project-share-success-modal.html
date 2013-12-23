@@ -1,16 +1,23 @@
+<% console.log('success', data) %>
 <div class="success-modal scaled-fade">
     <div class="close-x"></div>
     <div class="modal-innerwrapper">
         <h1>Success!</h1>
         <span>We posted your update on your project page and social pages</span>
-        <a href="/project/<%= data.project.id %>" class="btn btn-xlarge btn-secondary">View Project Page</a>
+        <a href="/project/<%= data.slug %>" class="btn btn-xlarge btn-secondary">View Project Page</a>
 
-        <div class="line-behind">
-            <span>or</span>
-        </div>
-        <div class="justified-btns social">
-            <a href="http://twitter.com" class="btn btn-large btn-tertiary" target="_blank">View On Twitter</a>
-            <a href="http://facebook.com" class="btn btn-large btn-tertiary" target="_blank">View On Facebook</a>
-        </div>
+        <% if (data.social_object){ %>
+            <div class="line-behind">
+                <span>or</span>
+            </div>
+            <div class="justified-btns social">
+                <% if (data.social_object.twitter_id){ %>
+                    <a href="http://twitter.com/<%= data.twitter_name %>/status/<%= data.social_object.twitter_id %>" class="btn btn-large btn-tertiary" target="_blank">View On Twitter</a>
+                <% } %>
+                <% if (data.social_object.facebook_id){ %>
+                    <a href="http://facebook.com/<%= data.social_object.facebook_id %>" class="btn btn-large btn-tertiary" target="_blank">View On Facebook</a>
+                <% } %>
+            </div>
+        <% } %>
     </div>
 </div> 

@@ -10,20 +10,12 @@ from ..helpers.imagetools import generate_thumbnail, upload_image
 from ..helpers.stringtools import slugify
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
-
+ 
 from ..wordlist import filter_model
 
 import requests
 import simplejson as json
 import os
-
-
-def _get_project_slug_url(project_id = None):
-    """
-    Given a project_id get the slug url for the project or resource
-    """
-
-    return "**** ONCE FRONTEND IN PLACE YOU REALLY SHOULD FIX THIS BUDDY TODO LV TODO"
 
 ## DEPRECATED
 def _get_lat_lon_from_location(loc):
@@ -51,6 +43,7 @@ def _create_project(form):
     name = form.name.data
     description = form.description.data
     category = form.category.data
+    website = form.website.data
     gcal_code = form.gcal_code.data
     location = form.location.data
     lat = form.lat.data
@@ -76,6 +69,7 @@ def _create_project(form):
     p = Project( name = name, 
                  description = description, 
                  category = category,
+                 website = website,
                  gcal_code = gcal_code,
                  location = location,
                  geo_location = geo_location,
@@ -128,6 +122,7 @@ def _edit_project(form):
     name = form.name.data
     description = form.description.data
     category = form.category.data
+    website = form.website.data
     gcal_code = form.gcal_code.data
     location = form.location.data
     lat = form.lat.data
@@ -145,6 +140,7 @@ def _edit_project(form):
     if name: p.name = name
     if description: p.description = description
     if category: p.category = category
+    if website: p.website = website
     if gcal_code: p.gcal_code = gcal_code
     
     if (lat and lon):
@@ -219,6 +215,11 @@ def _user_involved_in_project( project_id = None,
     current_app.logger.warn(warnStr)
     return False
 
+
+def _get_project_name( project_id = None ):
+    project = Project.objects.with_id(project_id)
+
+    return project.name
 
 def _get_users_for_project( project_id = None ):
     """

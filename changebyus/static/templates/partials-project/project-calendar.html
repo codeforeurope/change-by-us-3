@@ -9,7 +9,7 @@
 <div class="content-wrapper no-results clearfix">
     <% if (data.gcal_code){ %> 
         <%= data.gcal_code %> 
-        <% if (data.isOwner){ %> 
+        <% if (data.isOwnerOrganizer){ %> 
             <br>
             <span><a href="#" class="highlight" id="embed-calendar">Embed new calendar</a></span>
         <% } %> 
@@ -30,7 +30,9 @@
             <h3>
                <em>Nothing here yet.</em>
             </h3>
-            <span>Why don't you <a href="#" class="highlight" id="embed-calendar">link your project's google calendar</a>?</span>
+            <% if (data.isOwnerOrganizer){ %> 
+                <span>Why don't you <a href="#" class="highlight" id="embed-calendar">link your project's google calendar</a>?</span>
+             <% } %> 
         <% } %> 
     <% } %> 
 </div>

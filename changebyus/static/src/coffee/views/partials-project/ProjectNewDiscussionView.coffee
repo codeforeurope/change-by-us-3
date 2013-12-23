@@ -20,7 +20,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				form = new WysiwygFormView({parent:"#discussion-form"})
 				form.success = (response_) =>
 					form.resetForm()
-					window.location = "/project/"+@model.id+"/admin#discussion/"+response_.data.id
+					window.location.hash = "discussion/"+response_.data.id
 
 			cancel:->
 				$("#discussion-editor").html('')

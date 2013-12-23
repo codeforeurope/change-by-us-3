@@ -128,12 +128,12 @@
   .homepage-footer {
     padding-top: 50px;
     
-    h2{display: none;}
-    
-    a[href='/signup']{display: none;}
+    h2{display: none;} 
     
     a[href='/discover']{ background-color:$primaryColor;}
   }
+
+  a[href='/signup']{display: none;}
 }
 
 .btn {

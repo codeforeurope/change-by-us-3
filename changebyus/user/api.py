@@ -16,7 +16,8 @@ from .models import User
 from .helpers import _create_user
 from ..helpers.stringtools import bool_strings
 
-from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, BooleanField,
+from flask.ext.wtf.html5 import URLField
+from flask.ext.wtf import ( Form, TextField, TextAreaField, FileField, BooleanField, 
                             SubmitField, Required, ValidationError, 
                             PasswordField, HiddenField)
 
@@ -44,7 +45,7 @@ class CreateUserForm(Form):
     first_name = TextField("first_name", validators=[Required()])
     last_name = TextField("last_name", validators=[Required()])
     bio = TextField()
-    website = TextField()
+    website = URLField()
     location = HiddenField("location")
     lat = HiddenField("lat")
     lon = HiddenField("lon")
@@ -165,9 +166,8 @@ class BetterBooleanField(BooleanField):
     false_values = ('false', 'False', '', False)
 
 class EditUserForm(Form):
-
     email = TextField("email")
-    public_email = BetterBooleanField("public_email")
+    public_email = BooleanField("public_email")
     password = PasswordField("password")
     display_name = TextField("display_name")
     first_name = TextField("first_name")
@@ -211,12 +211,10 @@ def api_edit_user():
 
     u = User.objects.with_id(g.user.id)
 
-    from nose.tools import set_trace; set_trace()
-    
     # we have to access a BooleanFields raw_data when we are not using HTML forms
-    u.public_email = form.public_email.raw_data[0]
 
     email = form.email.data
+    public_email = form.public_email.data
     password = form.password.data
     display_name = form.display_name.data
     first_name = form.first_name.data
@@ -235,6 +233,8 @@ def api_edit_user():
     if bio: u.bio = bio
     if website: u.website = website
     if location: u.location = location
+
+    u.public_email = public_email
     
     if (lat and lon):
         u.geo_location = [float(lon), float(lat)]

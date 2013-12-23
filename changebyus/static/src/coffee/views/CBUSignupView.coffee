@@ -58,7 +58,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				$form.submit -> 
 					json_str = JSON.stringify($form.serializeJSON())
 					options.data = json_str
-					console.log 'options.data',options.data
 					$.ajax options
 					false
 

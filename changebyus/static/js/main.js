@@ -35,10 +35,24 @@ require.config({
     "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
     "stream-view": "views/CBUStreamView"
+  },
+  shim: {
+    "slicknav": ["jquery"],
+    "dropkick": ["jquery"],
+    "button": ["jquery"],
+    "bootstrap-fileupload": ["jquery", "bootstrap"],
+    "autocomp": ["jquery", "bootstrap"],
+    "wysiwyg": ["jquery", "bootstrap"],
+    "hotkeys": ["jquery"],
+    "form": ["jquery"],
+    "template": ["jquery"],
+    "validate": ["jquery"],
+    "serializeObject": ["jquery"],
+    "serializeJSON": ["jquery"]
   }
 });
 
-require(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, Slicknav) {
+define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, SlickNav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
@@ -71,13 +85,14 @@ require(["jquery", "backbone", "main-view", "discover-view", "city-view", "proje
         return window.CBUAppView = new CBUProjectView(config);
       },
       projectAdmin: function(id_) {
-        var isOwner;
-        isOwner = userID === projectOwnerID;
-        config.model = {
-          id: id_
-        };
-        config.isOwner = isOwner;
-        return window.CBUAppView = isOwner ? new CBUProjectOwnerView(config) : new CBUProjectView(config);
+        if (userID) {
+          config.model = {
+            id: id_
+          };
+          return window.CBUAppView = new CBUProjectOwnerView(config);
+        } else {
+          return window.location.href = "/login";
+        }
       },
       resource: function(id_) {
         config.model = {

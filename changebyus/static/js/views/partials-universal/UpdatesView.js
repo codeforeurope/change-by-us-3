@@ -8,11 +8,13 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     initialize: function(options) {
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
+      this.viewData.slug = this.model.get('slug');
       this.viewData.isResource = options.isResource;
-      return this.viewData.isMember = options.isMember;
+      return this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
     },
     render: function() {
       var _this = this;
+      console.log('@viewData', this.viewData);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-universal/updates.html", {
         data: this.viewData

@@ -8,10 +8,11 @@ from flask import (Blueprint, render_template, redirect,
 
 from flask.ext.login import login_required, current_user, login_user
 
+from flask.ext.wtf.html5 import URLField
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError)
 
-from ..geonames import get_geopoint
+from ..geonames import get_geopoint, get_geoname
 
 from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 from ..helpers.mongotools import db_list_to_dict_list
@@ -33,6 +34,8 @@ from ..notifications.api import _notify_project_join
 
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
+from mongoengine.errors import ValidationError
+
 from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
@@ -58,6 +61,19 @@ def api_get_geopoint():
     return jsonify_response(ReturnStructure(data = data))
 
 
+@project_api.route('/geoname')
+def api_get_geoname():
+    """
+    returns a list of names and lat/lon
+    """
+    lat = request.args.get('lat')
+    lon = request.args.get('lon')
+    
+    data = get_geoname(lat, lon)
+    
+    return jsonify_response(ReturnStructure(data = data))
+
+
 ## TODO WTForms for search?
 
 @project_api.route('/search', methods = ['POST', 'GET'])
@@ -75,25 +91,28 @@ def api_search_projects():
             list of search results
     """    
 
-    text = request.args.get('s')
-    geo_dist = request.args.get('d')
-    lat = request.args.get('lat')
-    lon = request.args.get('lon')
-    cat = request.args.get('cat')
-    search_type = request.args.get('type')
+    text = request.json.get('s')
+    geo_dist = request.json.get('d')
+    lat = request.json.get('lat')
+    lon = request.json.get('lon')
+    cat = request.json.get('cat')
+    search_type = request.json.get('type')
     
     geo_center = [lon, lat]
     
     addl_filters = {'active':True}
+
+    if (lat is 0 and lon is 0):
+        geo_dist = 25000
     
-    if (cat):
+    if (cat != ""):
         addl_filters.update({"category": cat})
     
     if (search_type == 'resource'):
         addl_filters.update({"resource": True})
     if (search_type == 'project'):
         addl_filters.update({"resource": False})
-    
+
     search_data = search(db = _get_db(),
                          collection = "project", 
                          text = text, 
@@ -135,6 +154,7 @@ class CreateProjectForm(Form):
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
     category = TextField("category")
+    website = URLField("website")
     gcal_code = TextField("gcal_code")
     location = HiddenField("location")
     lat = HiddenField("lat")
@@ -198,14 +218,21 @@ def api_get_project(project_id):
     """Get project by project_id
 
         Args:
-            project_id: project id to look up
+            project_id: project id or slug to look up
 
         Returns:
             Project if it exists
     """
-    p = Project.objects.with_id(project_id)
+    try:
+        project = Project.objects.with_id(project_id)
+        # project.count()
+    except ValidationError as e:
+        # we passed the decorator so let this error drop through
+        project = Project.objects(slug=project_id).first()
+        # overwrite the slug with the project_id
+        project_id = project.id
 
-    return jsonify_response( ReturnStructure( data = p.as_dict() ))
+    return jsonify_response( ReturnStructure( data = project.as_dict() ))
 
 
 class EditProjectForm(Form):
@@ -213,6 +240,7 @@ class EditProjectForm(Form):
     project_id = TextField("project_id")
     name = TextField("title",)
     description = TextAreaField("description")
+    website = URLField("website")
     category = TextField("category")
     gcal_code = TextField("gcal_code")
     location = HiddenField("location")

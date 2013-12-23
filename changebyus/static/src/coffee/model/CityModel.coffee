@@ -8,6 +8,8 @@ define ["underscore", "backbone"], (_, Backbone) ->
 			image_url_round:"http://lorempixel.com/255/255"
 			image_url_large_rect:"http://lorempixel.com/1020/430"
 			website:"http://google.com"
+			lat:0
+			lon:0
 
 		parse:(resp_)->
 			#if resp_.data then resp_.data else resp_
@@ -17,4 +19,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
 				image_url_round:"http://lorempixel.com/255/255"
 				image_url_large_rect:"http://lorempixel.com/1020/430"
 				website:"http://google.com"
+				lat:0
+				lon:0
 			}
+ 

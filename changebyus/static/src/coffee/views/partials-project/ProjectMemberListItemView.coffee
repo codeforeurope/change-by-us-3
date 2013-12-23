@@ -42,10 +42,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 								@model.set('roles', [value_])
 
 			deleteItem:->
+				dataObj = { project_id:@projectID, user_id:@model.id}
 				$.ajax(
 					type: "POST"
 					url: "/api/project/remove-member"
-					data: { project_id:@projectID, user_id:@model.id}
+					data: JSON.stringify(dataObj) 
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
 				).done (response_)=>
 					if (response_.msg.toLowerCase() == "ok")
 						c = @model.collection

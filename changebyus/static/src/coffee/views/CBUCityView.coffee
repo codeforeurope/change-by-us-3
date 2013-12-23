@@ -4,6 +4,7 @@ define ["underscore",
 		"template", 
 		"abstract-view", 
 		"resource-project-view",
+		"model/ProjectModel",
 		"model/CityModel", 
 		"collection/CityProjectCollection", 
 		"collection/CityResourceCollection" ], 
@@ -13,6 +14,7 @@ define ["underscore",
 	 temp, 
 	 AbstractView, 
 	 ResourceProjectPreviewView,
+	 ProjectModel,
 	 CityModel, 
 	 CityProjectCollection, 
 	 CityResourceCollection) ->
@@ -32,7 +34,14 @@ define ["underscore",
 				@model.fetch 
 					success: =>@render()
 				###
-				@render()
+
+				console.log 'city >>> ', @model
+				$.getJSON "/static/js/config/cities.json", (data)=>
+					id = @model.get('id')
+					obj = data.cities[id]
+					@model = new CityModel(obj) #
+					console.log 'city ', @model, id, data, obj
+					@render()
 
 			events:
 				"click .change-city a":"changeCity" 
@@ -42,10 +51,8 @@ define ["underscore",
 
 				@$el = $("<div class='city-container'/>")
 				@$el.template @templateDir+"/templates/city.html", 
-					@viewData, => @onTemplateLoad()
+					{data:@viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
-				console.log @parent, @$el
-
 
 			onTemplateLoad:->
 				@projectsView = @$el.find('#featured-projects')
@@ -60,22 +67,67 @@ define ["underscore",
 				id = @model.get("id")
 				config = {id:id}
 
-				@cityProjectCollection  = new CityProjectCollection(config)  
-				@cityProjectCollection.on "reset", @onProjectsLoad, @
-				@cityProjectCollection.fetch {reset: true}
-
-				@cityResourceCollection  = new CityResourceCollection(config)
-				@cityResourceCollection.on "reset", @onResourcesLoad, @
-				@cityResourceCollection.fetch {reset: true}
+				@search "project"
+				@search "resource"
 
 				@delegateEvents()
 
-			onProjectsLoad:->  
-				@cityProjectCollection.each (projectModel) => @addOne(projectModel, @projectsView.find("ul" ), false, true)
+			search:(type_)->
+				console.log '@model',@model
+				dataObj = {
+					s: ""
+					cat: ""
+					loc: ""
+					d: "25"
+					type: type_
+					lat: @model.get("lat")
+					lon: @model.get("lon")
+				}
 
-			onResourcesLoad:->  
-				@cityResourceCollection.each (resourceModel) => @addOne(resourceModel, @resourcesView.find("ul" ), false, true)
+				$.ajax(
+					type: "POST"
+					url: "/api/project/search"
+					data: JSON.stringify(dataObj)
+					dataType: "json" 
+					contentType: "application/json; charset=utf-8"
+				).done (response_)=>
+					if response_.success 
+						if type_ is "project"
+							@onProjectsLoad response_.data
+						else
+							@onResourcesLoad response_.data
+					
+			onProjectsLoad:(data_)->
+				count = 0
+				for k,v of data_
+					@addOne v._id, @projectsView.find("ul")
+					count++
 
-			addOne: (model_, parent_) ->
-				view = new ResourceProjectPreviewView model: model_
-				@$el.find(parent_).append view.$el
+				$featuredProjects = $("#featured-projects")
+				$more = $featuredProjects.find('.sub-link')
+
+				if count < 3 then $more.hide()
+				if count is 0
+					$featuredProjects.hide()
+					$('.city-container hr').hide()
+
+
+			onResourcesLoad:(data_)->
+				count = 0
+				for k,v of data_
+					@addOne v._id, @resourcesView.find("ul")
+					count++
+
+				$featuredResources = $("#featured-resources")
+				$more = $featuredResources.find('.sub-link')
+
+				if count < 3 then $more.hide()
+				if count is 0
+					$featuredResources.hide()
+					$('.city-container hr').hide()
+
+
+			addOne: (id_, parent_) -> 
+				projectModel = new ProjectModel id:id_
+				view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
+				view.fetch()

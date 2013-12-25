@@ -24,30 +24,135 @@ from ..project.helpers import ( _get_project_organizers, _get_project_members)
 notifications_api = Blueprint('notificiations_api', __name__, url_prefix='/api/notifications')
 
 
-"""
-=========================
-Bit.ly Webservice Wrapper
-=========================
+class EmailUser:
+    def __init__(self, email, name):
+        self.email = email
+        self.name = name
 
-This is a webservice that will send large urls to bitly and return the 
-shortened url.  The use case is rather obvious.
-"""
+    def __eq__(self, other):
+        if isinstance(other, EmailUser):
+            return self.email == other.email
+
+        return False
+
+NoneEmailUser = EmailUser(None, None)
 
 def _notify_flagged_project(project_id=None):
     """
-        flags_me
+        flags a project, notifies the owner and organizer
     """
 
-    pass
+    project = Project.objects.with_id(project_id)
+
+    # first handle the owner
+    recipients = set()
+    if project.owner.notifications.flags_me:
+        recipients.add(project.owner.email)
+
+    # now handle the organizers
+    organizers = _get_project_organizers(project_id)
+    for organizer in organizers:
+        if organizer['notifications']['flags_me']:
+            recipients.add( EmailUser(organizer['email'], organizer['first_name'] ) )
+
+    emailUsers = list(recipients)
+    _send_flagged_project_email(emailUsers)
+
+
+def _send_flagged_project_email(emailUsers, project):
+    """
+        TODO needs updating
+    """
+
+    for user in emailUsers:
+        if user.email is None:
+            continue
+
+        msg = Message("Your CBU project \"{0}\" was flagged.".format( project.name ),
+                      recipient = user.email)
+
+        msg.body = "Hello {0}\n".format(user.name)
+        msg.body += "Your project got flagged."
+
+        msg.html = "Hello {0}<br>".format(user.name)
+        msg.html += "Your project got flagged."
+        
+        current_app.mail.send(msg)
+    
+
+
 
 def _notify_flagged_user(user_id=None):
     """
-        - break it down based on what can get flagged.  TBD
-
         flags_me
     """
 
-    pass
+    user = User.objects.with_id(user_id)
+
+    if user.notifications.flags_me:
+        email = EmailUser(user.email, user.first_name)
+        _send_flagged_user_email([email])
+
+
+def _send_flagged_user_email(emailUsers):
+
+    """
+        flags_me
+        TODO needs updating
+    """
+
+    for user in emailUsers:
+        if user.email is None:
+            continue
+
+        msg = Message("Your were flagged.",
+                      recipient = user.email)
+
+        msg.body = "Hello {0}\n".format(user.name)
+        msg.body += "You got flagged."
+
+        msg.html = "Hello {0}<br>".formart(user.name)
+        msg.html += "You got flagged."
+        
+        current_app.mail.send(msg)
+
+
+
+
+def _notify_flagged_post( post_id=None ):
+    """
+        flags_me
+        TODO needs updating
+    """
+
+    from ..post.models import ProjectPost
+
+    post = ProjectPost.objects.with_id(post_id)
+    user = post.user
+
+    if user.notifications.flags_me:
+        email = EmailUser(user.email, user.first_name)
+        _send_flagged_post_email([email])
+
+
+def _send_flagged_post_email(emailUsers):
+
+    for user in emailUsers:
+        if user.email is None:
+            continue
+
+        msg = Message("Your post was flagged.",
+                      recipient = user.email)
+
+        msg.body = "Hello {0}\n".format(user.name)
+        msg.body += "Your post got flagged."
+
+        msg.html = "Hello {0}<br>".formart(user.name)
+        msg.html += "Your post got flagged."
+        
+        current_app.mail.send(msg)
+
+
 
 
 def _notify_project_join( project_id=None, user_name=None ):
@@ -55,54 +160,48 @@ def _notify_project_join( project_id=None, user_name=None ):
     Handles:
         joins_my_project
         joins_common_project
-
     """
 
-    pass
-
-    emails = Set()
+    emails = set()
 
     project = Project.objects.with_id( project_id )
-    if project is None:
-        return False
-
-    """
+    
     owner = project.owner
-    if owner.notifications.joins_my_project:
-        emails.add( (owner.email, owner. )
+    if owner.notifications.joins_my_project or owner.notifications.joins_common_project:
+        emails.add( EmailUser(owner.email, owner.first_name ) )
 
     links = UserProjectLink.objects(project = project)
     for link in links:
         if link.user.notifications.joins_common_project:
-            emails.add( user.email, user.first_name )
+            emails.add( EmailUser(user.email, user.first_name ) )
 
-    # clean out the None email
-    emails.add( None )
-    emails.remove( None )
 
-    # TODO send the actual email
+    emailUsers = list(emails)
+    _send_project_join_email(emailUsers, project, user_name)
+
+
+def _send_project_join_email( emailUsers, project, user_name ):
 
     resource = project.resource
-    project_url = _get_project_slug_url( project.id )
-    user_url = _get_user_slug_url( user_name = user_name )
+    project_url = url_for('project_view.project_view_id', project_id=project.slug)
+    # TODO need url for user
+    user_url = "Need url for user inserted"
 
     action = "joined" if resource is False else "followed"
     description = "project" if resource is False else "resource"
 
-    emails_list = list(emails)
+    for user in emailUsers:
+        if user.email is None:
+            continue
 
-    for (email, first_name) in > emails_list:
         msg = Message("{0} {1} your {2} {3}.".format( user_name, action, description, project.name ),
-                      recipients = emails_list)
+                      recipient = user.email)
 
-        msg.body = "Hello {0},\n".format(first_name)
+        msg.body = "Hello {0},\n".format(user.name)
         msg.body += "{0} has {1} your {2} {3}.\n".format( user_name, action, description, project.name )
         msg.body += "View profile : {0}".format(user_url)
 
-        msg.html = "Hello {0},<br>".format(first_name)
-
-
-        
+        msg.html = "Hello {0},<br>".format(first_name)        
         msg.html += "The user {0} has {1} <a href = \"{2}\">CBU {3} {4}.</a><br>".format( user_name, 
                                                                                           action,
                                                                                           url,
@@ -111,45 +210,31 @@ def _notify_project_join( project_id=None, user_name=None ):
         msg.html += "Please visit the project by clicking the link above.<br>"
 
         current_app.mail.send(msg)
-    """
 
 
-def _notify_post( post_id=None):
+
+
+def _notify_post( post_id=None ):
     """
     Notify the original poster and all poster responders that there's been
     another response
 
     """
 
-    pass
-
-    """
-
-    # store emails in sets
-    update_set = Set()
-    discussion_set = Set()
-
     # TODO why does this have to be a local include?
     from ..post.models import ProjectPost
 
     # get the newest post and the parent post
     newest_post = ProjectPost.objects.with_id(post_id)
-    if newest_post is None:
-        return False
 
     if newest_post.parent_id:
         original_post = ProjectPost.objects.with_id(newest_post.parent_id)
     else:
         original_post = newest_post
 
-    if original_post is None:
-        return False
-
-
-    resource = original_post.project.resource
-    url = _get_project_slug_url( original_post.project.id )
-
     # all commentors on update.  Update is public
+    # gather all the people associated with this comment, needed for the
+    # responds_to_my_comment notification flag
     update_commentors = []
     if original_post.public:
         for response in original_post.responses:
@@ -168,73 +253,119 @@ def _notify_post( post_id=None):
     project_organizers = _get_project_organizers( original_post.project.id )
     project_members = _get_project_members( original_post.project.id )
 
+
     if original_post.public:
-        #### UPDATES
+
+        users = _compile_update_notification_users( update_commentors = update_commentors,
+                                                    original_post = original_post,
+                                                    newest_post = newest_post,
+                                                    project = project,
+                                                    project_organizers = project_organizers,
+                                                    project_members = project_members,
+                                                    project_owner = project_owner)
+
+        _send_update_notification_email(emailUsers = users, 
+                                        project = project, 
+                                        post = newest_post)
+
+    else:
+
+        users = _compile_discussion_notification_users( original_post = original_post,
+                                                        newest_post = newest_post,
+                                                        project = project,
+                                                        project_organizers = project_organizers,
+                                                        project_members = project_members,
+                                                        project_owner = project_owner)
+
+        _send_discussion_notification_email(emailUsers = users, 
+                                            project = project,
+                                            post = newest_post)
+
+
+
+    def _compile_update_notification_users(update_commentors=None, 
+                                           original_post=None, 
+                                           newest_post=None,
+                                           project=None, 
+                                           project_organizers=None, 
+                                           project_members=None, 
+                                           project_owner=None):
+
+        # store emails in sets
+        update_set = set()
 
         # response to a update I commented on
         #    responds_to_my_comment
         #    NEEDS: all commentors on update
         for responder in update_commentors:
             if responder.notifications.responds_to_my_comment:
-                update_set.add( responder.email )
+                update_set.add( EmailUser(responder.email, responder.first_name) )
 
 
         # response to an update I created
         #    responds_to_my_update
         #    NEEDS: poster of update
         if original_post.user.notifications.responds_to_my_update:
-            update_set.add( original_post.user.email )
+            update_set.add( EmailUser(original_post.user.email, original_post.user.first_name) )
 
 
         # update to a project I own or organize
         #    posts_update_to_my_project
         #    NEEDS: project owner, project organizers
         if project.owner.notifications.posts_update_to_my_project:
-            update_set.add( project.owner.email )
+            update_set.add( EmailUser(project.owner.email, project.owner.first_name) )
 
         for organizer in project_organizers:
             if organizer['notifications']['posts_update_to_my_project']:
-                update_set.add( organizer['email'] )
+                update_set.add( EmailUser(organizer['email'], organizer['first_name']) )
 
 
         # someone posts an update to a project I'm involved in (owner, member, organizer)
         #    posts_update_common_project
         #    NEEDS: members, owner, organizers
-
         if project.owner.notifications.posts_update_common_project:
-            update_set.add( project.owner.email )
+            update_set.add( EmailUser(project.owner.email, project.owner.full_name) )
 
         for organizer in project_organizers:
             if organizer['notifications']['posts_update_common_project']:
-                update_set.add( organizer['email'] )
+                update_set.add( EmailUser(organizer['email'], organizer['first_name']) )
 
         for member in project_members:
             if member['notifications']['posts_update_common_project']:
-                update_set.add( member['email'] )
+                update_set.add( EmailUser(member['email'], member['first_name']) )
 
 
-        # now clean the data and send the email
-
+        # now clean the data
         # don't notify the poster
-        update_set.add( newest_post.user.email )
-        update_set.remove( newest_post.user.email )
-
-        # remove the None email if it exists
-        update_set.add(None)
-        update_set.remove(None)
+        update_set.add( EmailUser(newest_post.user.email, None) )
+        update_set.remove( EmailUser(newest_post.user.email, None) )
 
         emails = list(update_set)
 
+        return emails
+
+
+
+    def _send_update_notification_email( emailUsers=None,
+                                         project=None, 
+                                         post=None ):
+
+
+        resource = post.project.resource
+        url = url_for('project_view.project_view_id', project_id=project.slug)
+
         description = "resource" if resource else "project"
 
-        if len(emails) > 0:
+        for user in emailUsers:
+            if user.email is None:
+                continue
 
-            msg = Message("User has joined the CBU Project \"{0}\".".format( project.name ),
-                          recipients = emails)
+            msg = Message("Update to the CBU {0} \"{1}\".".format( description, project.name ),
+                          recipient = user.email)
 
             msg.body = "Hello\n"
             msg.body += "Just letting you know that there was an update or response to an "
-            msg.body += "update posted to {0} with the title '{1}'.\n".format( project.name, newest_post.title )
+            msg.body += "update posted to {0} with the title '{1}'.\n".format( project.name, post.title )
             msg.body += "Please view the {0} page at {1}".format( description, url )
 
             msg.html = "Hello<br>"
@@ -246,7 +377,16 @@ def _notify_post( post_id=None):
 
 
 
-    else:
+    def _compile_discussion_notification_users( original_post = None,
+                                                newest_post=None,
+                                                project = None,
+                                                project_organizers = None,
+                                                project_members = None,
+                                                project_owner = None):
+
+        # store emails in sets
+        discussion_set = set()
+
         #### DISCUSSIONS
 
         # someone posts a discussion on a project I own or organize
@@ -261,20 +401,20 @@ def _notify_post( post_id=None):
         if original_post == newest_post:
             # it's a new post
             if project_owner.notifications.posts_discussion:
-                discussion_set.add( project_owner.email )
+                discussion_set.add( EmailUser(project_owner.email, project_owner.first_name) )
         else:
             # it's a response
             if project_owner.notifications.responds_to_a_discussion:
-                discussion_set.add( project_owner.email )
+                discussion_set.add( EmailUser(project_owner.email, project_owner.first_name) )
 
         ## ORGANIZERS
         for organizer in project_organizers:
             if original_post == newest_post:
                 if organizer['notifications']['posts_discussion']:
-                    discussion_set.add( organizer['email'] )
+                    discussion_set.add( EmailUser(organizer['email'], organizer['first_name']) )
             else:
                 if organizer['notifications']['responds_to_a_discussion']:
-                    discussion_set.add( organizer['email'] )
+                    discussion_set.add( EmailUser(organizer['email'], organizer['first_name']) )
 
 
         # now clean the data and send the email
@@ -283,18 +423,23 @@ def _notify_post( post_id=None):
         discussion_set.add( newest_post.user.email )
         discussion_set.remove( newest_post.user.email )
 
-        # remove the None email if it exists
-        discussion_set.add(None)
-        discussion_set.remove(None)
-
         emails = list(discussion_set)
+        return emails
+
+
+
+    def _send_discussion_notification_email(emailUsers = None, 
+                                            project = None,
+                                            post = None):
 
         description = "resource" if resource else "project"
 
-        if len(emails) > 0:
+        for user in emailUsers:
+            if user.email is None:
+                continue
 
             msg = Message("User has joined the CBU Project \"{0}\".".format( project.name ),
-                          recipients = emails)
+                          recipient = user.email)
 
             msg.body = "Hello\n"
             msg.body += "Just letting you know that there was a discussion posted or a response to "
@@ -308,8 +453,6 @@ def _notify_post( post_id=None):
             
             current_app.mail.send(msg)
 
-
-    """
 
 
 

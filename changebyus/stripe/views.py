@@ -65,7 +65,6 @@ def stripe_link():
 
     """
 
-    # from ..project.api import _check_user_owns_project 
     from ..project.helpers import _check_user_owns_project, _get_project_name
 
     form = LinkStripeForm(request.form or as_multidict(request.json))
@@ -196,9 +195,9 @@ def stripe_authorized():
             rendered edit_fundraising template if successful, error template otherwise
     """
 
-    from ..project.api import _link_stripe_to_project
-    from ..project.api import _check_stripe_account_link
-    from ..project.api import _check_user_owns_project
+    from ..project.helpers import _link_stripe_to_project
+    from ..project.helpers import _check_stripe_account_link
+    from ..project.helpers import _check_user_owns_project
     # This is a specific linkage that's per project, so in another
     # project it would import another class
 

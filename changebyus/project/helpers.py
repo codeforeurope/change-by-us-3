@@ -550,6 +550,8 @@ def _check_stripe_account_link(stripe_user_id=None):
     OUTPUT
         False,'' OR True,'project name'
     """
+    from ..stripe.models import StripeAccount
+    
     stripe = StripeAccount.objects(stripe_user_id = stripe_user_id)
     if stripe.count() is 0:
         return False, ""

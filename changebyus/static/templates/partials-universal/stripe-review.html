@@ -1,0 +1,37 @@
+<div class="jumbotron" id="main-container">
+  <h1><strong>Review</strong></h1>
+  <br/>
+</div>
+
+
+<a href="/project/<%= data.project_id %>">
+  <img src="<%= data.image_uri_small %>" style="width: 160px; height: 50px;">
+</a>
+
+
+<div class="span9" style="margin-top:60px; margin-bottom: 60px">
+
+  <p id="header-text">Fundraising Progress for <%= data.name %></p>
+
+  <div class="span4 pull-left">
+
+<br/>
+    <p id="header-text"><strong>$<%= data.balance %>0 [amount donated so far]</strong></p>
+
+    <!-- if a Stripe fundraising account has been set up -->
+    <div class="progress progress-info" style="margin-top: 10px">
+      <div class="bar" style="width: <%= data.percentage %>%"></div>
+    </div> 
+
+    <p>Donated towards our $<%= data.funding %> funding goal</p>
+
+    <br/>
+<a class="btn btn-large" href="/project/<%= data.project_id %>"> Publish to Project</a>
+
+
+  </div>
+    <div class="span5 pull-right">
+    <p id="serif">What your money will go towards:</p>
+    <p id="serif"><%= data.description  %> </p>
+  </div>
+</div>

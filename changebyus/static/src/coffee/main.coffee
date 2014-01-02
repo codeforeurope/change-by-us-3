@@ -34,6 +34,7 @@ require.config
 		"resource-project-view": "views/partials-universal/ResourceProjectPreviewView"
 		"user-view": "views/CBUUserView"
 		"dashboard-view": "views/CBUDashboardView"
+		"stripe-edit": "views/CBUStripeEdit"
 		"stream-view": "views/CBUStreamView"
 
 	shim:
@@ -63,6 +64,7 @@ define ["jquery",
 		 "dashboard-view", 
 		 "stream-view",
 		 "create-view",
+		 "stripe-edit",
 		 "slicknav"], 
 	($, 
 	 Backbone,
@@ -77,6 +79,7 @@ define ["jquery",
 	 CBUDashboardView, 
 	 CBUStreamView,
 	 CreateView,
+	 CBUStripeEdit,
 	 SlickNav) ->
 		$(document).ready ->
 			config = {parent:".main-content"}
@@ -85,6 +88,7 @@ define ["jquery",
 				routes:
 					"project/:id": "project"
 					"project/:id/admin": "projectAdmin"
+					"project/:id/stripe/:sid/edit": "stripeEdit"
 					"resource/:id": "resource"
 					"city/:id": "city"
 					"user/:id": "user"
@@ -111,6 +115,10 @@ define ["jquery",
 						window.CBUAppView = new CBUProjectOwnerView(config)
 					else
 						window.location.href = "/login"
+
+				stripeEdit: (id_, sid_) ->
+					config.model = {id:id_, sid:sid_} 
+					window.CBUAppView =  new CBUStripeEdit(config)
 
 				resource: (id_) ->
 					config.model = {id:id_}

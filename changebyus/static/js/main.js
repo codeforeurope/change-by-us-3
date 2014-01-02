@@ -34,6 +34,7 @@ require.config({
     "resource-project-view": "views/partials-universal/ResourceProjectPreviewView",
     "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
+    "stripe-edit": "views/CBUStripeEdit",
     "stream-view": "views/CBUStreamView"
   },
   shim: {
@@ -52,7 +53,7 @@ require.config({
   }
 });
 
-define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, SlickNav) {
+define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "stripe-edit", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, CBUStripeEdit, SlickNav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
@@ -62,6 +63,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       routes: {
         "project/:id": "project",
         "project/:id/admin": "projectAdmin",
+        "project/:id/stripe/:sid/edit": "stripeEdit",
         "resource/:id": "resource",
         "city/:id": "city",
         "user/:id": "user",
@@ -93,6 +95,13 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         } else {
           return window.location.href = "/login";
         }
+      },
+      stripeEdit: function(id_, sid_) {
+        config.model = {
+          id: id_,
+          sid: sid_
+        };
+        return window.CBUAppView = new CBUStripeEdit(config);
       },
       resource: function(id_) {
         config.model = {

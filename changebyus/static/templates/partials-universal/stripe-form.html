@@ -1,0 +1,27 @@
+<div class="pagination-centered" id="main-container">
+  <h1><strong>Set Up Fundraising</strong></h1>
+  <br/>
+</div>
+
+<h2>Tell us about your fundraising needs!</h2>
+<br/>
+
+<form method="POST" class="form-project" action="/api/project/review">
+
+  <label> For: <%= data.name %></label>
+  <br/>
+  <input type="hidden" name="account_id" value="<%= data.account_id %>"></input>
+  <input type="hidden" name="project_id" value="<%= data.project_id %>"></input>
+
+    <label>Goal: $</label>
+  <input type="text" maxlength="5" name="goal" id="serif" placeholder="$$$" class="input-xxlarge">
+
+  <label> What will the money be used for?</label>
+
+  <textarea rows="8" name="description" maxlength="600" id="serif" placeholder="We want to raise money for..." class="input-xxlarge"></textarea>
+
+  <br/>
+
+  <input type="submit" class="btn btn-large" value="Save and Continue">
+
+</form>

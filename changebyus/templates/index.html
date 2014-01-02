@@ -73,7 +73,11 @@
       </div>
     </div>
 
-    <div class="main-content"></div>
+    <div class="main-content">
+      {% if error %}
+        {{ error }}
+      {% endif %}
+    </div>
 
     {% if index == true %}
     <div class="footer-nav index clearfix">

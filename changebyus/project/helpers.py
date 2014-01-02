@@ -458,14 +458,14 @@ def _link_stripe_to_project(project_id=None,
     if stripe_account is None:
         warnStr = "Tried to link non existent stripe account {0} to project {1}".format(stripe_account_id, 
                                                                                         project_id)
-        current_app.console.warn(warnStr)
+        current_app.logger.warn(warnStr)
         return False
 
     if project.stripe_account is not None:
         warnStr = "Tried to link stripe account {0} to project {1} but project has stripe account {2} already".format(stripe_account_id,
                                                                                                                       project_id,
                                                                                                                       project.stripe_account.stripe_user_id)
-        current_app.console.warn(warnStr)
+        current_app.logger.warn(warnStr)
         return False
 
 

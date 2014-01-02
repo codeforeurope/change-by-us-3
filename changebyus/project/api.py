@@ -32,6 +32,8 @@ from ..user.models import User
 
 from ..notifications.api import _notify_project_join
 
+from ..stripe.api import _get_account_balance_percentage, _update_goal_description
+
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
 from mongoengine.errors import ValidationError
@@ -301,6 +303,46 @@ def api_view_project_users(project_id):
 
     return jsonify_response( ReturnStructure( data = users ))
 
+
+@project_api.route('/review', methods = ['POST'])
+def api_review_info():
+    """
+    ABOUT
+        Renders a template that lets user review and confirm fundraising details
+        such as amount, description, etc
+    METHOD
+        POST
+    INPUT
+        account_id, project_id, goal, description
+    OUTPUT
+        Rendered template for funrasise_review
+    PRECONDITIONS
+        User logged in
+    """
+ 
+    account_id = request.form.get('account_id')
+    project_id = request.form.get('project_id')
+    funding_goal = request.form.get('goal')
+    description = request.form.get('description')
+    project = Project.objects.with_id(project_id)
+
+    
+    _update_goal_description(account_id, funding_goal, description)
+    balance, percentage = _get_account_balance_percentage(account_id)
+
+    
+    if g.user.id != project.owner.id:
+        warnStr = "User {0} tried to review fundraising on project {1}".format(g.user.id, project_id)
+        current_app.logger.warning(warnStr)
+        abort(401)
+    
+    # we want to pass the fundraiser view the small 160x50 image
+    project_dict = project.as_dict()
+    project_image = project_dict['image_url_small_square']
+    
+
+    return jsonify_response( ReturnStructure( data = {'funding':funding_goal, 'project_id':project_id, 'description':description, 'name':project.name, 
+                               'image_url':project_image, 'balance':balance, 'percentage':percentage}) )
 
 
 @project_api.route('/user/<user_id>/owned-projects')

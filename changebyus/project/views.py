@@ -191,47 +191,17 @@ def edit_stripe(project_id=None, account_id=None):
     if g.user.id != project.owner.id:
         warnStr = "User {0} tried to edit fundraising on project {1}".format(g.user.id, project_id)
         current_app.logger.warning(warnStr)
-        abort(401)
+        abort(401) 
 
-    return render_template('fundraise_edit.html', name = project.name, project_id = project_id, account_id=account_id)
+    #return render_template('index.html', name = project.name, project_id = project_id, account_id=account_id)
 
-
-@project_view.route('/review', methods = ['POST'])
-@login_required
-def stripe_review_info():
-    """
-    ABOUT
-        Renders a template that lets user review and confirm fundraising details
-        such as amount, description, etc
-    METHOD
-        POST
-    INPUT
-        account_id, project_id, goal, description
-    OUTPUT
-        Rendered template for funrasise_review
-    PRECONDITIONS
-        User logged in
-    """
-    account_id = request.form['account_id']
-    project_id = request.form['project_id']
-    funding_goal = request.form['goal']
-    description = request.form['description']
-    project = Project.objects.with_id(project_id)
-
-
-    _update_goal_description(account_id, funding_goal, description)
-    balance, percentage = _get_account_balance_percentage(account_id)
-
-    if g.user.id != project.owner.id:
-        warnStr = "User {0} tried to review fundraising on project {1}".format(g.user.id, project_id)
-        current_app.logger.warning(warnStr)
-        abort(401)
-
-    # we want to pass the fundraiser view the small 160x50 image
-    project_dict = project.as_dict()
-    project_image = project_dict['image_url_small']
-    
-    return render_template('fundraise_review.html', funding = funding_goal, project_id=project_id, description = description, name=project.name, 
-                           image_url=project_image, balance = balance, percentage = percentage)
-
-
+    user = User.objects.with_id(g.user.id)
+    udict = user.as_dict()
+        
+    keys_to_include = ['image_url_round_medium', 'image_url_round_small']
+    udata = {x:udict[x] for x in keys_to_include}
+ 
+    return render_template('index.html', project = project, 
+                                           udata = udata,
+                                           index = True, 
+                                           login = False)   

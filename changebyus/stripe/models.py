@@ -54,14 +54,14 @@ class StripeAccount(db.Document, EntityMixin):
         EntityMixin.pre_save(sender, document)
         
         if document.is_new():
-            handle_initial_encryption(document, ENCRYPTED_FIELDS)
+            handle_initial_encryption(document, document.ENCRYPTED_FIELDS)
 
         elif document.__dict__.has_key('_changed_fields'):
-            handle_update_encryption(document, ENCRYPTED_FIELDS)                
+            handle_update_encryption(document, document.ENCRYPTED_FIELDS)                
 
     @classmethod    
     def post_init(cls, sender, document, **kwargs):
-        handle_decryption(document, ENCRYPTED_FIELDS)
+        handle_decryption(document, document.ENCRYPTED_FIELDS)
 
 
 

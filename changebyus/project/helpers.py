@@ -9,6 +9,8 @@ from ..helpers.flasktools import jsonify_response, ReturnStructure
 from ..helpers.imagetools import generate_thumbnail, upload_image
 from ..helpers.stringtools import slugify
 
+from ..stripe.models import StripeAccount
+
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
  
 from ..wordlist import filter_model
@@ -550,8 +552,6 @@ def _check_stripe_account_link(stripe_user_id=None):
     OUTPUT
         False,'' OR True,'project name'
     """
-    from ..stripe.models import StripeAccount
-    
     stripe = StripeAccount.objects(stripe_user_id = stripe_user_id)
     if stripe.count() is 0:
         return False, ""

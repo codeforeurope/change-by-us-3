@@ -234,7 +234,8 @@ def stripe_authorized():
                                                                                                       resp.text)
         current_app.logger.error(errStr)
         errStr = "Sorry, strype returned an error.  Please try again."
-        return render_template('stripe_error.html', error=errStr)
+        #return render_template('stripe_error.html', error=errStr)
+        return render_template('index.html', error=errStr)
 
 
     # Grab access_token (use this as your user's API key)
@@ -255,7 +256,8 @@ def stripe_authorized():
 
     if linked:
         errStr = "Sorry, stripe account [{0}] is already linked to project {1}.".format(stripe_user_id, linked_name)
-        return render_template('stripe_error.html', error=errStr)
+        #return render_template('stripe_error.html', error=errStr)
+        return render_template('index.html', error=errStr)
 
     # TODO throw away non-live tokens?
 

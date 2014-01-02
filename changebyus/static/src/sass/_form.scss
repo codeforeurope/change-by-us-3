@@ -162,6 +162,16 @@
   }
 }
 
+.goal{
+	font-size: 20px;
+	margin-bottom: 17px;
+}
+
+.gray{
+	margin-left: 10px;
+	color: $graySubtext;
+}
+
 input[type="text"].input-slim{
   width: 50%;
   height: auto;

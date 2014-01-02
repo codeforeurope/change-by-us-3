@@ -13,14 +13,16 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       "click #does-it-work": "slideToggle"
     },
     render: function() {
-      var _this = this;
+      var stripeAccount,
+        _this = this;
+      console.log('ProjectFundraisingView', this);
       this.$el = $(this.parent);
-      if (this.started) {
-        return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-goals.html", {
-          data: this.viewData
+      stripeAccount = this.model.get("stripe_account");
+      if (stripeAccount) {
+        return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
+          data: stripeAccount
         }, function() {
-          _this.onTemplateLoad();
-          return _this.delegateEvents();
+          return _this.onTemplateLoad();
         });
       } else {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {

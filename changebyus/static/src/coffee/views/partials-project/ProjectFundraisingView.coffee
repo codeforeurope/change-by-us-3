@@ -14,15 +14,15 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 				"click #get-started":"linkStripe"
 				"click #does-it-work":"slideToggle"
 
-			render: ->  
+			render: ->
+				console.log 'ProjectFundraisingView',@
 				@$el = $(@parent)
-				if @started
-					@$el.template @templateDir + "/templates/partials-project/project-fundraising-goals.html",
-						{data: @viewData}, => 
-							@onTemplateLoad()
-							@delegateEvents()
+				stripeAccount = @model.get("stripe_account")
+				if stripeAccount
+					@$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
+						{data: stripeAccount}, => @onTemplateLoad()
 				else
-					@$el.template @templateDir + "/templates/partials-project/project-fundraising-get-started.html", 
+					@$el.template @templateDir+"/templates/partials-project/project-fundraising-get-started.html", 
 						{}, => 
 							@getStarted()
 							@delegateEvents()

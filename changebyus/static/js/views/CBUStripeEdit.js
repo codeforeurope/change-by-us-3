@@ -27,7 +27,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     render: function() {
       var _this = this;
       this.$el = $("<div class='user'/>");
-      console.log('@user', this.user, '@project', this.project);
       this.$el.template(this.templateDir + "/templates/partials-universal/stripe-form.html", {
         data: {
           account_id: this.user.id,
@@ -52,13 +51,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     onSuccess: function(data_) {
       var _this = this;
-      console.log('onSuccess2');
       this.$el.html("");
       return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
         data: data_
-      }, function() {
-        return console.log('onSuccess');
-      });
+      }, function() {});
     }
   });
 });

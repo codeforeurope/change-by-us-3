@@ -28,22 +28,19 @@ define ["underscore",
 
 				render: ->
 					@$el = $("<div class='user'/>")
-					console.log '@user',@user,'@project',@project
+					# console.log '@user',@user,'@project',@project
 					@$el.template @templateDir + "/templates/partials-universal/stripe-form.html",
 						data: {account_id:@user.id , project_id:@project.id , name:@project.get("name")}, => @onTemplateLoad()
 					$(@parent).append @$el
 
 				onTemplateLoad:->
 					$form = @$el.find('form')
-				
 					options =
-						success: (response_) =>  
+						success: (response_) =>
 							@onSuccess response_.data
-
 					$form.ajaxForm options
 
-				onSuccess:(data_)->
-					console.log 'onSuccess2'
+				onSuccess:(data_)-> 
 					@$el.html("")
 					@$el.template @templateDir + "/templates/partials-universal/stripe-review.html",
-						data: data_,  => console.log('onSuccess')
+						data: data_,  =>

@@ -24,6 +24,7 @@ require.config
 		"discover-view": "views/CBUDiscoverView"
 		"city-view": "views/CBUCityView"
 		"project-view": "views/CBUProjectView"
+		"fundraising": "views/CBUFundraisingView"
 		"project-owner-view": "views/CBUProjectOwnerView"
 		"login-view": "views/CBULoginView"
 		"signup-view": "views/CBUSignupView"
@@ -65,6 +66,7 @@ define ["jquery",
 		 "stream-view",
 		 "create-view",
 		 "stripe-edit",
+		 "fundraising",
 		 "slicknav"], 
 	($, 
 	 Backbone,
@@ -80,6 +82,7 @@ define ["jquery",
 	 CBUStreamView,
 	 CreateView,
 	 CBUStripeEdit,
+	 CBUFundraisingView,
 	 SlickNav) ->
 		$(document).ready ->
 			config = {parent:".main-content"}
@@ -89,6 +92,7 @@ define ["jquery",
 					"project/:id": "project"
 					"project/:id/admin": "projectAdmin"
 					"project/:id/stripe/:sid/edit": "stripeEdit"
+					"project/:id/fundraising": "fundraising"
 					"resource/:id": "resource"
 					"city/:id": "city"
 					"user/:id": "user"
@@ -119,6 +123,10 @@ define ["jquery",
 				stripeEdit: (id_, sid_) ->
 					config.model = {id:id_, sid:sid_} 
 					window.CBUAppView =  new CBUStripeEdit(config)
+
+				fundraising: (id_) ->
+					config.model = {id:id_} 
+					window.CBUAppView =  new CBUFundraisingView(config)
 
 				resource: (id_) ->
 					config.model = {id:id_}

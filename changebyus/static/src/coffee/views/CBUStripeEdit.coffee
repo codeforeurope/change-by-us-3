@@ -27,8 +27,7 @@ define ["underscore",
 						success: =>@render()
 
 				render: ->
-					@$el = $("<div class='user'/>")
-					# console.log '@user',@user,'@project',@project
+					@$el = $("<div class='content-wrapper clearfix'/>") 
 					@$el.template @templateDir + "/templates/partials-universal/stripe-form.html",
 						data: {account_id:@user.id , project_id:@project.id , name:@project.get("name")}, => @onTemplateLoad()
 					$(@parent).append @$el

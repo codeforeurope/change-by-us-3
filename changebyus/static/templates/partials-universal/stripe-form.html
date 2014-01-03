@@ -1,20 +1,20 @@
-<div class="body-container">
-  <div class="admin-header">
-      <h1>Set Up Fundraising for <%= data.name %></h1>
-  </div>
 
-  <form method="POST" class="form-project" action="/api/project/review">
-    <div class="content-wrapper clearfix">
-      
-      <label for="goal">Goal: $</label>
-      <input type="text" maxlength="5" name="goal" placeholder="$$$" class="input-xxlarge">
-
-      <label for="description"> What will the money be used for?</label>
-      <textarea rows="8" maxlength="140" name="description"  placeholder="We want to raise money for..." class="input-xxlarge"></textarea>
-      <br>
-      <input type="hidden" name="account_id" value="<%= data.account_id %>"></input>
-      <input type="hidden" name="project_id" value="<%= data.project_id %>"></input>
-      <input type="submit" class="btn btn-large btn-secondary" value="Save & Continue">
-    </div>
-  </form>
+<div class="admin-header">
+    <h2>Set Up Fundraising for <%= data.name %></h2>
 </div>
+
+
+<div class="content-wrapper clearfix">
+    <form method="POST" class="form-project" action="/api/project/review">
+        <label for="goal">Goal: $</label>
+        <input type="text" maxlength="5" name="goal" placeholder="$$$" class="input-xxlarge" value="<%= data.goal %>">
+
+        <label for="description"> What will the money be used for?</label>
+        <textarea rows="8" maxlength="140" name="description"  placeholder="We want to raise money for..." class="input-xxlarge"><%= data.description  %></textarea>
+        <br>
+        <input type="hidden" name="account_id" value="<%= data.account_id %>"></input>
+        <input type="hidden" name="project_id" value="<%= data.project_id %>"></input>
+        <input type="submit" class="btn btn-large btn-secondary" value="Save & Continue">
+    </form>
+</div>
+

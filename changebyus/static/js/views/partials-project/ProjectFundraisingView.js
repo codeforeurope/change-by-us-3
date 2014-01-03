@@ -31,6 +31,16 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
         });
       }
     },
+    onTemplateLoad: function() {
+      return AbstractView.prototype.onTemplateLoad.call(this);
+      /*
+      				$("#edit-goal").click =>
+      					@$el.html('')
+      					@$el.template @templateDir + "/templates/partials-universal/stripe-form.html",
+      						data: {}, =>
+      */
+
+    },
     getStarted: function() {
       this.$how = $('.fundraising-left .content-wrapper');
       return this.$how.slideToggle(1);

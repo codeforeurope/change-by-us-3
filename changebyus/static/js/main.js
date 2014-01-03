@@ -24,6 +24,7 @@ require.config({
     "discover-view": "views/CBUDiscoverView",
     "city-view": "views/CBUCityView",
     "project-view": "views/CBUProjectView",
+    "fundraising": "views/CBUFundraisingView",
     "project-owner-view": "views/CBUProjectOwnerView",
     "login-view": "views/CBULoginView",
     "signup-view": "views/CBUSignupView",
@@ -53,7 +54,7 @@ require.config({
   }
 });
 
-define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "stripe-edit", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, CBUStripeEdit, SlickNav) {
+define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "stripe-edit", "fundraising", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, CBUStripeEdit, CBUFundraisingView, SlickNav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
@@ -64,6 +65,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         "project/:id": "project",
         "project/:id/admin": "projectAdmin",
         "project/:id/stripe/:sid/edit": "stripeEdit",
+        "project/:id/fundraising": "fundraising",
         "resource/:id": "resource",
         "city/:id": "city",
         "user/:id": "user",
@@ -102,6 +104,12 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
           sid: sid_
         };
         return window.CBUAppView = new CBUStripeEdit(config);
+      },
+      fundraising: function(id_) {
+        config.model = {
+          id: id_
+        };
+        return window.CBUAppView = new CBUFundraisingView(config);
       },
       resource: function(id_) {
         config.model = {

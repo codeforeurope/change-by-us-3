@@ -1,24 +1,13 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "model/ProjectModel"], function(_, Backbone, $, temp, AbstractView, UserModel, ProjectModel) {
-  var CBUStripeEdit;
-  return CBUStripeEdit = AbstractView.extend({
+  var CBUFundraisingView;
+  return CBUFundraisingView = AbstractView.extend({
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
-      this.user = new UserModel({
-        id: this.model.sid
-      });
-      return this.user.fetch({
-        success: function() {
-          return _this.getProject();
-        }
-      });
-    },
-    getProject: function() {
-      var _this = this;
-      this.project = new ProjectModel({
+      this.model = new ProjectModel({
         id: this.model.id
       });
-      return this.project.fetch({
+      return this.model.fetch({
         success: function() {
           return _this.render();
         }
@@ -27,12 +16,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     render: function() {
       var _this = this;
       this.$el = $("<div class='content-wrapper clearfix'/>");
-      this.$el.template(this.templateDir + "/templates/partials-universal/stripe-form.html", {
-        data: {
-          account_id: this.user.id,
-          project_id: this.project.id,
-          name: this.project.get("name")
-        }
+      this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
+        data: this.model.get("stripe_account")
       }, function() {
         return _this.onTemplateLoad();
       });
@@ -48,13 +33,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       };
       return $form.ajaxForm(options);
-    },
-    onSuccess: function(data_) {
-      var _this = this;
-      this.$el.html("");
-      return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
-        data: data_
-      }, function() {});
     }
   });
 });

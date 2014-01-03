@@ -104,7 +104,15 @@ define ["underscore",
 				@$el.prepend @$header
 
 			toggleSubView: -> 
+
 				view = window.location.hash.substring(1)
+				slug = @model.get('slug')
+
+				stripeAccount = @model.get("stripe_account")
+				console.log '@stripeAccount',stripeAccount, view
+				if stripeAccount and view is "fundraising"
+					window.location.href = "/project/#{slug}/fundraising"
+					return
 
 				for v in [@projectDiscussionsView, @projectDiscussionView, @projectNewDiscussionView, @projectAddUpdateView, @projectFundraisingView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
 					v.hide()

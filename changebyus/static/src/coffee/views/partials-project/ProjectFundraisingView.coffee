@@ -27,6 +27,16 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 							@getStarted()
 							@delegateEvents()
 							
+			onTemplateLoad:->
+				AbstractView::onTemplateLoad.call @
+				
+				###
+				$("#edit-goal").click =>
+					@$el.html('')
+					@$el.template @templateDir + "/templates/partials-universal/stripe-form.html",
+						data: {}, =>
+				###
+
 			getStarted:-> 
 				@$how = $('.fundraising-left .content-wrapper')
 				@$how.slideToggle(1)

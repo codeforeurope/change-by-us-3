@@ -98,8 +98,15 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
       return this.$el.prepend(this.$header);
     },
     toggleSubView: function() {
-      var btn, id, v, view, _i, _j, _len, _len1, _ref, _ref1;
+      var btn, id, slug, stripeAccount, v, view, _i, _j, _len, _len1, _ref, _ref1;
       view = window.location.hash.substring(1);
+      slug = this.model.get('slug');
+      stripeAccount = this.model.get("stripe_account");
+      console.log('@stripeAccount', stripeAccount, view);
+      if (stripeAccount && view === "fundraising") {
+        window.location.href = "/project/" + slug + "/fundraising";
+        return;
+      }
       _ref = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];

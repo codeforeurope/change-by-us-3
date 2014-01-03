@@ -6,6 +6,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			sortByPopularDistance:'popular'
 			locationObj:{lat:0, lon:0, name:""}
 			category:""
+			projects:null
 			ajax:null
 			initSend:true
 
@@ -118,8 +119,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			sendForm:(e)->
 				if e then e.preventDefault()
 				
-				$('.search-catagories').hide()
+				$(".search-catagories").hide()
 				$("#projects-list").html("")
+
+				
 
 				dataObj = {
 					s: if @category is "" then $("#search-input").val() else ""
@@ -145,14 +148,32 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 							@$resultsModify.find('input').val @locationObj.name
 						@initSend = false
 
+						@projects = []
 						size=0
 						for k,v of response_.data
-							@addProject v._id
+							@projects.push v._id
+							console.log 'project',k
 							size++
+						
+						@updatePage()
+						@setPages size, $(".projects")
+
 						$('h4').html(size+" Projects")
 						onPageElementsLoad()
 
+			updatePage:->
+				$("#projects-list").html("")
+
+				s = @index*@perPage
+				e = (@index+1)*@perPage-1
+				for i in [s..e]
+					console.log '>>>>>>',i, @projects.length
+					if i < @projects.length
+						@addProject @projects[i]
+
+				$("html, body").animate({ scrollTop: 0 }, "slow")
+
 			addProject:(id_)->
 				projectModel = new ProjectModel({id:id_})
-				view = new ResourceProjectPreviewView({model: projectModel, parent: "#projects-list"})
+				view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list"})
 				view.fetch() 

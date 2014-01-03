@@ -9,6 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       name: ""
     },
     category: "",
+    projects: null,
     ajax: null,
     initSend: true,
     initialize: function(options) {
@@ -144,7 +145,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       if (e) {
         e.preventDefault();
       }
-      $('.search-catagories').hide();
+      $(".search-catagories").hide();
       $("#projects-list").html("");
       dataObj = {
         s: this.category === "" ? $("#search-input").val() : "",
@@ -174,17 +175,36 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
             _this.$resultsModify.find('input').val(_this.locationObj.name);
           }
           _this.initSend = false;
+          _this.projects = [];
           size = 0;
           _ref = response_.data;
           for (k in _ref) {
             v = _ref[k];
-            _this.addProject(v._id);
+            _this.projects.push(v._id);
+            console.log('project', k);
             size++;
           }
+          _this.updatePage();
+          _this.setPages(size, $(".projects"));
           $('h4').html(size + " Projects");
           return onPageElementsLoad();
         }
       });
+    },
+    updatePage: function() {
+      var e, i, s, _i;
+      $("#projects-list").html("");
+      s = this.index * this.perPage;
+      e = (this.index + 1) * this.perPage - 1;
+      for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
+        console.log('>>>>>>', i, this.projects.length);
+        if (i < this.projects.length) {
+          this.addProject(this.projects[i]);
+        }
+      }
+      return $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
     },
     addProject: function(id_) {
       var projectModel, view;

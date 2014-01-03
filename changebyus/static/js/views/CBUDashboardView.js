@@ -154,11 +154,13 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         isProject: true,
         isResource: false
       });
-      this.$el.find(parent_).append(view.$el);
-      return delay(100, function() {
-        buttonize3D();
-        return positionFooter();
-      });
+      return parent_.append(view.$el);
+      /*
+      				delay 100, ->
+      					buttonize3D()
+      					positionFooter()
+      */
+
     }
   });
 });

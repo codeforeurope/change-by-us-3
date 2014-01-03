@@ -136,7 +136,10 @@ define ["underscore",
 					isProject: true
 					isResource: false
 
-				@$el.find(parent_).append view.$el
+				parent_.append view.$el
+				
+				###
 				delay 100, ->
 					buttonize3D()
 					positionFooter()
+				###

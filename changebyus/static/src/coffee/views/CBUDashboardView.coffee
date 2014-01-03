@@ -25,6 +25,7 @@ define ["underscore",
 
 			location:{name: "", lat: 0, lon: 0} 
 			className: "body-container"
+			currentView:""
 
 			initialize: (options) ->  
 				AbstractView::initialize.call @, options
@@ -58,7 +59,7 @@ define ["underscore",
 
 
 			toggleSubView: -> 
-				view = window.location.hash.substring(1)
+				@currentView = window.location.hash.substring(1)
 
 				for v in [@manageView,@profileView,@followView]
 					v.hide()
@@ -66,7 +67,7 @@ define ["underscore",
 				for btn in [@followBTN,@profileBTN,@manageBTN]
 					btn.removeClass "active"
 
-				switch view 
+				switch @currentView 
 					when "follow"
 						@followView.show()
 						@followBTN.addClass "active"
@@ -92,19 +93,40 @@ define ["underscore",
 				@ownedProjects.on "change", @updateCount, @
 				@ownedProjects.fetch reset: true
 
-				console.log '@joinedProjects',@joinedProjects,'@ownedProjects',@ownedProjects
-
 			updateCount:->
 				$('a[href=#follow]').html "Follow (#{@joinedProjects.length})"
 				$('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
 
 			addJoined:->
-				@updateCount()
-				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
+				@updateCount() 
+				@updateProjects(@joinedProjects.models, @followView.find(".projects"))
+				@setPages @joinedProjects.length, @followView
 
 			addOwned:->
-				@updateCount()
-				@ownedProjects.each (projectModel) => @addOne(projectModel, @manageView.find("ul"), true, false)
+				@updateCount() 
+				@updateProjects(@ownedProjects.models, @manageView.find(".projects"))
+				@setPages @ownedProjects.length, @manageView
+
+			updatePage:->
+				if @currentView is "follow"
+					$ul = @followView.find(".projects")
+					$ul.html("")
+					@updateProjects(@joinedProjects.models, $ul)
+				else
+					$ul = @manageView.find(".projects")
+					$ul.html("")
+					@updateProjects(@ownedProjects.models, $ul)
+
+				$("html, body").animate({ scrollTop: 0 }, "slow")
+
+			updateProjects:(results_, parent_)->
+				console.log 'updatePage',results_,parent_
+				s = @index*@perPage
+				e = (@index+1)*@perPage-1
+				for i in [s..e]
+					if i < results_.length
+						projectModel = results_[i]
+						@addOne(projectModel, parent_, false, true)
 
 			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->
 				view = new ResourceProjectPreviewView

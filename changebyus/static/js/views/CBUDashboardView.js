@@ -7,6 +7,7 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       lon: 0
     },
     className: "body-container",
+    currentView: "",
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
@@ -51,8 +52,8 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       });
     },
     toggleSubView: function() {
-      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
-      view = window.location.hash.substring(1);
+      var btn, v, _i, _j, _len, _len1, _ref, _ref1;
+      this.currentView = window.location.hash.substring(1);
       _ref = [this.manageView, this.profileView, this.followView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];
@@ -63,7 +64,7 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         btn = _ref1[_j];
         btn.removeClass("active");
       }
-      switch (view) {
+      switch (this.currentView) {
         case "follow":
           this.followView.show();
           return this.followBTN.addClass("active");
@@ -89,28 +90,54 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       this.ownedProjects.on("reset", this.addOwned, this);
       this.ownedProjects.on("remove", this.updateCount, this);
       this.ownedProjects.on("change", this.updateCount, this);
-      this.ownedProjects.fetch({
+      return this.ownedProjects.fetch({
         reset: true
       });
-      return console.log('@joinedProjects', this.joinedProjects, '@ownedProjects', this.ownedProjects);
     },
     updateCount: function() {
       $('a[href=#follow]').html("Follow (" + this.joinedProjects.length + ")");
       return $('a[href=#manage]').html("Manage (" + this.ownedProjects.length + ")");
     },
     addJoined: function() {
-      var _this = this;
       this.updateCount();
-      return this.joinedProjects.each(function(projectModel) {
-        return _this.addOne(projectModel, _this.followView.find("ul"), false, true);
-      });
+      this.updateProjects(this.joinedProjects.models, this.followView.find(".projects"));
+      return this.setPages(this.joinedProjects.length, this.followView);
     },
     addOwned: function() {
-      var _this = this;
       this.updateCount();
-      return this.ownedProjects.each(function(projectModel) {
-        return _this.addOne(projectModel, _this.manageView.find("ul"), true, false);
-      });
+      this.updateProjects(this.ownedProjects.models, this.manageView.find(".projects"));
+      return this.setPages(this.ownedProjects.length, this.manageView);
+    },
+    updatePage: function() {
+      var $ul;
+      if (this.currentView === "follow") {
+        $ul = this.followView.find(".projects");
+        $ul.html("");
+        this.updateProjects(this.joinedProjects.models, $ul);
+      } else {
+        $ul = this.manageView.find(".projects");
+        $ul.html("");
+        this.updateProjects(this.ownedProjects.models, $ul);
+      }
+      return $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+    },
+    updateProjects: function(results_, parent_) {
+      var e, i, projectModel, s, _i, _results;
+      console.log('updatePage', results_, parent_);
+      s = this.index * this.perPage;
+      e = (this.index + 1) * this.perPage - 1;
+      _results = [];
+      for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
+        if (i < results_.length) {
+          projectModel = results_[i];
+          _results.push(this.addOne(projectModel, parent_, false, true));
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
     },
     addOne: function(projectModel_, parent_, isOwned_, isFollowed_) {
       var view;

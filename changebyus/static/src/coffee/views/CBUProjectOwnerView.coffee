@@ -71,7 +71,7 @@ define ["underscore",
 					{data:@model.attributes}, =>@addSubViews()
 						
 			addSubViews:->
-				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:@memberData.owner, view:"admin"} 
+				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:@memberData.owner, isOrganizer:@memberData.organizer ,view:"admin"} 
 
 				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
 				projectMembersCollection     = new ProjectMembersCollection(config)
@@ -109,8 +109,9 @@ define ["underscore",
 				slug = @model.get('slug')
 
 				stripeAccount = @model.get("stripe_account")
-				console.log '@stripeAccount',stripeAccount, view
+				 
 				if stripeAccount and view is "fundraising"
+					window.location.hash = ""
 					window.location.href = "/project/#{slug}/fundraising"
 					return
 

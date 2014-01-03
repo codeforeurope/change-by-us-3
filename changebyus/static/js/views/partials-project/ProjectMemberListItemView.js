@@ -47,7 +47,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
               user_role: value_
             }
           }).done(function(response_) {
-            if (response_.msg.toLowerCase() === "ok") {
+            if (response_.success) {
               return _this.model.set('roles', [value_]);
             }
           });

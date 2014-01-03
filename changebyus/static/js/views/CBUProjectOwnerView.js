@@ -59,6 +59,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
         name: this.model.get("name"),
         model: this.model,
         isOwner: this.memberData.owner,
+        isOrganizer: this.memberData.organizer,
         view: "admin"
       };
       projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
@@ -102,8 +103,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
       view = window.location.hash.substring(1);
       slug = this.model.get('slug');
       stripeAccount = this.model.get("stripe_account");
-      console.log('@stripeAccount', stripeAccount, view);
       if (stripeAccount && view === "fundraising") {
+        window.location.hash = "";
         window.location.href = "/project/" + slug + "/fundraising";
         return;
       }

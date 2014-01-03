@@ -5,13 +5,19 @@
     </div>
 </div>
 <% } %> 
-
+<% console.log(data) %> 
 <div class="content-wrapper no-results clearfix">
     <% if (data.gcal_code){ %> 
         <%= data.gcal_code %> 
-        <% if (data.isOwnerOrganizer){ %> 
+        <% if (data.isOwner || data.isOrganizer){ %> 
             <br>
-            <span><a href="#" class="highlight" id="embed-calendar">Embed new calendar</a></span>
+            <span class="pull-right">
+                <a href="#" class="warning" id="delete-calendar">Delete calendar</a>
+            </span>
+            <span>
+                <a href="#" class="highlight" id="embed-calendar">Embed new calendar</a>
+            </span>
+            
         <% } %> 
     <% }else{ %> 
         <% if (data.view == "admin"){ %> 
@@ -30,7 +36,7 @@
             <h3>
                <em>Nothing here yet.</em>
             </h3>
-            <% if (data.isOwnerOrganizer){ %> 
+            <% if (data.isOwner || data.isOrganizer){ %> 
                 <span>Why don't you <a href="#" class="highlight" id="embed-calendar">link your project's google calendar</a>?</span>
              <% } %> 
         <% } %> 

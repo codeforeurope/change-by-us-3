@@ -32,7 +32,7 @@ define ["underscore",
 					@render()
 
 				render: ->
-					@$el = $("<div class='body-container'/>") if @$el.html() isnt ""
+					@$el = $("<div class='body-container'/>") if @$el.html() is ""
 					@$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
 						data:@stripe,  =>@onTemplateLoad()
 					$(@parent).append @$el

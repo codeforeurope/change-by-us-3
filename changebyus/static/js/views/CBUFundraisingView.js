@@ -23,7 +23,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     render: function() {
       var _this = this;
-      if (this.$el.html() !== "") {
+      if (this.$el.html() === "") {
         this.$el = $("<div class='body-container'/>");
       }
       this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {

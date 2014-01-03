@@ -2,6 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   var ProjectCalenderView;
   return ProjectCalenderView = ProjectSubView.extend({
     isOwner: false,
+    isOrganizer: false,
     parent: "#project-calendar",
     projectEmbedCalendarModalView: null,
     view: "public",
@@ -13,13 +14,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.parent = options.parent || this.parent;
       if (this.model) {
         this.viewData = this.model.attributes || this.viewData;
+        this.viewData.isOwner = options.isOwner || this.isOwner;
+        this.viewData.isOrganizer = options.isOrganizer || this.isOrganizer;
+        this.viewData.view = options.view || this.view;
       }
-      this.viewData.isOwner = options.isOwner || this.isOwner;
-      this.viewData.view = options.view || this.view;
       return this.render();
     },
     events: {
-      "click #embed-calendar": "embedCalendar"
+      "click #embed-calendar": "embedCalendar",
+      "click #delete-calendar": "deleteCalendar"
     },
     render: function() {
       var _this = this;
@@ -37,6 +40,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     embedCalendar: function() {
       return this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
         model: this.model
+      });
+    },
+    deleteCalendar: function(e) {
+      var url;
+      e.preventDefault();
+      url = "/api/project/" + this.model.id + "/delete_calendar";
+      return $.get(url, function(response_) {
+        if (response_.success) {
+          return window.location.reload();
+        }
       });
     }
   });

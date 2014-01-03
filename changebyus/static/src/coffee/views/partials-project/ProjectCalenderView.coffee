@@ -15,24 +15,27 @@ define ["underscore",
 
 		ProjectCalenderView = ProjectSubView.extend
 			isOwner: false
+			isOrganizer: false
 			parent: "#project-calendar"
 			projectEmbedCalendarModalView: null
 			view: "public"
 			
 			initialize: (options_) ->  
-				options           = options_ or {}
-				@id               = options.id or @id
-				@templateDir      = options.templateDir or @templateDir
-				@parent           = options.parent or @parent 
+				options               = options_ or {}
+				@id                   = options.id or @id
+				@templateDir          = options.templateDir or @templateDir
+				@parent               = options.parent or @parent 
 				if @model
-					@viewData     = @model.attributes || @viewData
-				@viewData.isOwner = options.isOwner || @isOwner
-				@viewData.view    = options.view || @view
+					@viewData             = @model.attributes || @viewData
+					@viewData.isOwner     = options.isOwner || @isOwner
+					@viewData.isOrganizer = options.isOrganizer || @isOrganizer
+					@viewData.view        = options.view || @view
 
 				@render()
 
 			events:
 				"click #embed-calendar":"embedCalendar"
+				"click #delete-calendar":"deleteCalendar"
 				
 			render: ->  
 				@$el = $("<div class='project'/>")
@@ -46,3 +49,9 @@ define ["underscore",
 			embedCalendar:->
 				@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
 
+			deleteCalendar:(e)->
+				e.preventDefault() 
+
+				url = "/api/project/#{@model.id}/delete_calendar"
+				$.get url, (response_) ->
+					if response_.success then window.location.reload() 

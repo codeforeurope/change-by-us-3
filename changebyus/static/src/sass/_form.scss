@@ -106,7 +106,7 @@
 }
 
 .warning{
-	color: red;
+	color: red !important;
 	text-decoration: underline;
 	&:hover{
 		text-decoration: underline;

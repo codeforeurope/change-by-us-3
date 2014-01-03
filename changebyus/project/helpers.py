@@ -117,6 +117,16 @@ def _create_project(form):
 
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
+def _delete_cal(project_id):
+    p = Project.objects.with_id(project_id)
+    p.gcal_code = None
+    p.save()
+
+    infoStr = "Calendar was delete from {0}".format(project_id)
+    current_app.logger.info(infoStr)
+
+    return jsonify_response( ReturnStructure( data = p.as_dict() ))
+
 
 def _edit_project(form):
     
@@ -129,6 +139,8 @@ def _edit_project(form):
     location = form.location.data
     lat = form.lat.data
     lon = form.lon.data
+
+
 
     p = Project.objects.with_id(project_id)
 
@@ -144,7 +156,7 @@ def _edit_project(form):
     if category: p.category = category
     if website: p.website = website
     if gcal_code: p.gcal_code = gcal_code
-    
+
     if (lat and lon):
         p.geo_location = [float(lon), float(lat)]
     

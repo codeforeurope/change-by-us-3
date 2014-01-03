@@ -23,7 +23,7 @@ from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCatego
 
 
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
-                       _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location,
+                       _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location, _delete_cal,
                        _get_user_owned_projects, _leave_project )
 
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
@@ -258,6 +258,32 @@ class EditProjectForm(Form):
     lat = HiddenField("lat")
     lon = HiddenField("lon")
     photo = FileField("photo")    
+
+
+    
+
+
+@project_api.route('/<project_id>/delete_calendar')
+@login_required
+@project_exists
+@project_organizer
+def api_delete_calendar(project_id):
+    """Edit an existing project
+ 
+        All arguments except project_id are optional
+
+        Args:
+            project_id: id of the project to edit
+            name: New name of the project
+            description: New description of the project
+            location: New location of the project
+            photo: New image file to associate with the project
+    
+        Returns:
+            Resultant project structure
+    """
+
+    return _delete_cal(project_id)
 
 
 @project_api.route('/edit', methods = ['POST'])

@@ -21,6 +21,7 @@ from ..mongo_search import search
 
 from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
 
+
 from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
                        _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location,
                        _get_user_owned_projects, _leave_project )
@@ -33,6 +34,7 @@ from ..user.models import User
 from ..notifications.api import _notify_project_join
 
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
+from ..stripe.models import StripeAccount
 
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
@@ -233,6 +235,13 @@ def api_get_project(project_id):
         project = Project.objects(slug=project_id).first()
         # overwrite the slug with the project_id
         project_id = project.id
+
+    if project.stripe_account:
+        stripe_account_id = project.stripe_account.id
+        account = StripeAccount.objects.with_id(stripe_account_id)
+
+        if account is not None:
+            project.stripe_account = account
 
     return jsonify_response( ReturnStructure( data = project.as_dict() ))
 

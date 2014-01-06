@@ -1,3 +1,4 @@
+###
 define ["underscore", 
 		"backbone", 
 		"jquery", 
@@ -32,6 +33,7 @@ define ["underscore",
 				ProjectSubView::onTemplateLoad.call @ 
 
 			addAll: ->  
+				alert 'addAll' 
 				# members
 				@$members = @$el.find(".team-members ul")
 				length = 0
@@ -57,7 +59,7 @@ define ["underscore",
 				$member.template @templateDir+"/templates/partials-project/project-member-avatar.html",
 					{data: model_.attributes}, =>  
 				@$members.append $member
-				console.log 'addMember >>> ',model_
+				console.log 'addMember !!! >>> ',model_
 
 			newDay:(date_)->
 				console.log 'newDay',date_
@@ -74,3 +76,4 @@ define ["underscore",
 
 				view = new UpdateListItemView({model: model_})
 				@$ul.append view.$el 
+###

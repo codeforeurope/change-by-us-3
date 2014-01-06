@@ -1,3 +1,5 @@
+var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
 define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, ProjectSubView, UpdateListItemView) {
   var UpdatesView;
   return UpdatesView = ProjectSubView.extend({
@@ -52,10 +54,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     addMember: function(model_) {
-      var $member,
+      var $member, roles,
         _this = this;
-      if (model_.get("roles").length === 0) {
+      roles = model_.get("roles");
+      if (roles.length === 0) {
         model_.set("roles", ["Owner"]);
+      }
+      if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
+        return;
       }
       $member = $('<li/>');
       $member.template(this.templateDir + "/templates/partials-universal/member-avatar.html", {

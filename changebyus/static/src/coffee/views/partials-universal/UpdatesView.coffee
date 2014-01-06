@@ -54,8 +54,11 @@ define ["underscore",
 						ProjectSubView::addAll.call(@) 
 						onPageElementsLoad()
 
-			addMember: (model_) -> 
-				if model_.get("roles").length is 0 then model_.set("roles", ["Owner"]) # temp fix
+			addMember: (model_) ->
+				roles = model_.get("roles")
+				if roles.length is 0 then model_.set("roles", ["Owner"]) # temp fix
+				if ("MEMBER" in roles) or ("Member" in roles) then return
+				
 				$member = $('<li/>')
 				$member.template @templateDir+"/templates/partials-universal/member-avatar.html",
 					{data: model_.attributes}, =>  

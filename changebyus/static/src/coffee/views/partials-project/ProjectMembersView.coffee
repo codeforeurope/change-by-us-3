@@ -20,6 +20,10 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 				ProjectSubView::initialize.call(@, options) 
 
+			events:
+				"click #alpha":"sortClick" 
+				"click #created":"sortClick" 
+
 			render: ->
 				console.log 'rr',@
 				@$el = $(@parent)
@@ -29,6 +33,10 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$el.template @templateDir+templateURL, 
 					{data:@viewData}, => @onTemplateLoad() 
 
+			sortClick:(e)-> 
+				if ($(e.currentTarget).attr("id") is "alpha") then @addAll("name") else @addAll("created")
+				false
+
 			onTemplateLoad:->  
 				ProjectSubView::onTemplateLoad.call @
 				
@@ -37,7 +45,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 
 				if (@view is "public") and (@collection.length > 0) then @onCollectionLoad()
 
-				onPageElementsLoad()
+				onPageElementsLoad() 
 
 			onCollectionLoad:->
 				ProjectSubView::onCollectionLoad.call(@)
@@ -46,20 +54,34 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@collection.on('remove', =>@addAll())
 
 			# override in subview
-			addAll: -> 
+			addAll: (sortBy="name") -> 
 				@team = []
 				@members = []
-				console.log '@collection addAll',@collection
-				@collection.each (model) =>
+				
+				if sortBy is "name"
+					sortBy = @collection.sortBy (model)->
+						model.get('last_name')
+				else
+					sortBy = @collection.sortBy (model)->
+						model.get('created_at')
+
+				$.each sortBy, (k, model) =>
+					console.log 'alpha model',model.get('last_name'),model
 					roles = model.get("roles")
+					ownerID = @model.get('owner').id
 					 
 					if roles.length is 0 
 						model.set("roles", ["Owner"]) 
+
+					if ("MEMBER" in roles) or ("Member" in roles)
+						@members.push model
 					else
-						if ("MEMBER" in roles) or ("Member" in roles)
-							@members.push model
-						else
+						# don't include the owner when logged in order to display invite for new members
+						if (model.id isnt ownerID)
 							@team.push model
+						else
+							if (window.userID isnt ownerID)
+								@team.push model
 
 				@$teamList.html('')
 				@$memberList.html('')
@@ -87,15 +109,14 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					ProjectSubView::addAll.call(@)
 
 				@isDataLoaded = true
+				@delegateEvents()
 
 			addTeam: (model_) -> 
 				#to do 
-				console.log 'addTeam model_',model_
 				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
 				@$teamList.append view.el
 
 			addMember: (model_) -> 
 				#to do 
-				console.log 'addMember model_',model_
 				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
 				@$memberList.append view.el

@@ -2,6 +2,7 @@ define(["underscore", "backbone", "model/UserModel"], function(_, Backbone, User
   var ProjectMembersCollection;
   return ProjectMembersCollection = Backbone.Collection.extend({
     model: UserModel,
+    order: 'name',
     initialize: function(options) {
       return this.id = options.id;
     },

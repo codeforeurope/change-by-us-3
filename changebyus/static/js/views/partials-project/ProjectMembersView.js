@@ -19,6 +19,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.isOwnerOrganizer = options.isOwnerOrganizer || this.isOwnerOrganizer;
       return ProjectSubView.prototype.initialize.call(this, options);
     },
+    events: {
+      "click #alpha": "sortClick",
+      "click #created": "sortClick"
+    },
     render: function() {
       var templateURL,
         _this = this;
@@ -32,6 +36,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       }, function() {
         return _this.onTemplateLoad();
       });
+    },
+    sortClick: function(e) {
+      if ($(e.currentTarget).attr("id") === "alpha") {
+        this.addAll("name");
+      } else {
+        this.addAll("created");
+      }
+      return false;
     },
     onTemplateLoad: function() {
       ProjectSubView.prototype.onTemplateLoad.call(this);
@@ -52,22 +64,40 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.addAll();
       });
     },
-    addAll: function() {
+    addAll: function(sortBy) {
       var model, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
+      if (sortBy == null) {
+        sortBy = "name";
+      }
       this.team = [];
       this.members = [];
-      console.log('@collection addAll', this.collection);
-      this.collection.each(function(model) {
-        var roles;
+      if (sortBy === "name") {
+        sortBy = this.collection.sortBy(function(model) {
+          return model.get('last_name');
+        });
+      } else {
+        sortBy = this.collection.sortBy(function(model) {
+          return model.get('created_at');
+        });
+      }
+      $.each(sortBy, function(k, model) {
+        var ownerID, roles;
+        console.log('alpha model', model.get('last_name'), model);
         roles = model.get("roles");
+        ownerID = _this.model.get('owner').id;
         if (roles.length === 0) {
-          return model.set("roles", ["Owner"]);
+          model.set("roles", ["Owner"]);
+        }
+        if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
+          return _this.members.push(model);
         } else {
-          if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
-            return _this.members.push(model);
-          } else {
+          if (model.id !== ownerID) {
             return _this.team.push(model);
+          } else {
+            if (window.userID !== ownerID) {
+              return _this.team.push(model);
+            }
           }
         }
       });
@@ -101,11 +131,11 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         }
         ProjectSubView.prototype.addAll.call(this);
       }
-      return this.isDataLoaded = true;
+      this.isDataLoaded = true;
+      return this.delegateEvents();
     },
     addTeam: function(model_) {
       var view;
-      console.log('addTeam model_', model_);
       view = new ProjectMemberListItemView({
         model: model_,
         view: this.view,
@@ -115,7 +145,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     addMember: function(model_) {
       var view;
-      console.log('addMember model_', model_);
       view = new ProjectMemberListItemView({
         model: model_,
         view: this.view,

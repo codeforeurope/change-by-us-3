@@ -2,6 +2,7 @@ define ["underscore", "backbone", "model/UserModel", ],
 	(_, Backbone, UserModel) ->
 		ProjectMembersCollection = Backbone.Collection.extend 
 			model: UserModel
+			order: 'name'
 			
 			initialize: (options) ->
 				@id = options.id
@@ -12,3 +13,4 @@ define ["underscore", "backbone", "model/UserModel", ],
 			parse: (response) -> 
 				if response.success then response.data else {}
 
+			

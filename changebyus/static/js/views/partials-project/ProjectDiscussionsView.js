@@ -6,8 +6,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     currentData: "",
     render: function() {
       this.$el = $(this.parent);
-      this.templateLoaded = true;
-      return console.log('ProjectDiscussionsView', this);
+      return this.templateLoaded = true;
     },
     onCollectionLoad: function() {
       var _this = this;
@@ -40,6 +39,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
           _this.newDay(m);
         }
         _this.isDataLoaded = true;
+        _this.$el.find(".admin-title").html("All Discussions (" + _this.collection.models.length + ")");
         return ProjectSubView.prototype.addAll.call(_this);
       });
     },

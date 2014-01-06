@@ -24,7 +24,6 @@ define ["underscore",
 			delayedDataLoad:false
 
 			render: ->
-				console.log 'pdv >>>>>>>> ',@
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-project/project-discussion.html",
 					{data: @viewData}, => @onTemplateLoad()
@@ -36,7 +35,7 @@ define ["underscore",
 				onPageElementsLoad()
 				if @delayedDataLoad then @onSuccess()
 
-			updateDiscussion:(id_)->
+			updateDiscussion:(id_, @length)->
 				@model = new ProjectDiscussionModel(id:id_)
 				@model.fetch
 					success:=> 
@@ -46,16 +45,18 @@ define ["underscore",
 							@onSuccess()
 			
 			onSuccess:-> 
+				@$el.find(".admin-title").html "All Discussions (#{@length}): #{@model.get("title")}"
+
 				@$ul.html('')
 				@$form.html('')
-
+				console.log ' @model', @model
 				@addDiscussion @model
 				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
+				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar, title:@model.get("title")})
 				@wysiwygFormView.success = (e)=>
 					if e.success
 						$("#new-thread-editor").html("")

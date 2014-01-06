@@ -123,7 +123,7 @@ define ["underscore",
 
 				if view.indexOf("discussion/") > -1
 					id = view.split('/')[1]
-					@projectDiscussionView.updateDiscussion(id)
+					@projectDiscussionView.updateDiscussion(id, @projectDiscussionsView.collection.models.length)
 					@projectDiscussionView.show()
 					@discussionBTN.addClass "active"
 					return

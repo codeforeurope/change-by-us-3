@@ -1,6 +1,7 @@
 <% 
     var type = "project";
     if(data.resource){ type = "resource"; }
+    console.log("data.isOwned",data);
 %>
 <div class="project-square" id="<%= data.slug %>">
     <% if(data.isResource){ %>

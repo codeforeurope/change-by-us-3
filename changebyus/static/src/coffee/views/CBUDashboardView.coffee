@@ -99,34 +99,33 @@ define ["underscore",
 
 			addJoined:->
 				@updateCount() 
-				@updateProjects(@joinedProjects.models, @followView.find(".projects"))
+				@updateProjects(@joinedProjects.models, @followView.find(".projects"), false, true)
 				@setPages @joinedProjects.length, @followView
 
 			addOwned:->
 				@updateCount() 
-				@updateProjects(@ownedProjects.models, @manageView.find(".projects"))
+				@updateProjects(@ownedProjects.models, @manageView.find(".projects"), true, false)
 				@setPages @ownedProjects.length, @manageView
 
 			updatePage:->
 				if @currentView is "follow"
 					$ul = @followView.find(".projects")
 					$ul.html("")
-					@updateProjects(@joinedProjects.models, $ul)
+					@updateProjects(@joinedProjects.models, $ul, false, true)
 				else
 					$ul = @manageView.find(".projects")
 					$ul.html("")
-					@updateProjects(@ownedProjects.models, $ul)
+					@updateProjects(@ownedProjects.models, $ul, true, false)
 
 				$("html, body").animate({ scrollTop: 0 }, "slow")
 
-			updateProjects:(results_, parent_)->
-				console.log 'updatePage',results_,parent_
+			updateProjects:(results_, parent_, isOwned_=false, isFollowed_=false)-> 
 				s = @index*@perPage
 				e = (@index+1)*@perPage-1
 				for i in [s..e]
 					if i < results_.length
 						projectModel = results_[i]
-						@addOne(projectModel, parent_, false, true)
+						@addOne(projectModel, parent_, isOwned_, isFollowed_)
 
 			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->
 				view = new ResourceProjectPreviewView
@@ -137,9 +136,3 @@ define ["underscore",
 					isResource: false
 
 				parent_.append view.$el
-				
-				###
-				delay 100, ->
-					buttonize3D()
-					positionFooter()
-				###

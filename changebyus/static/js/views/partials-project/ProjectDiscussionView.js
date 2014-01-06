@@ -9,7 +9,6 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     delayedDataLoad: false,
     render: function() {
       var _this = this;
-      console.log('pdv >>>>>>>> ', this);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion.html", {
         data: this.viewData
@@ -26,8 +25,9 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         return this.onSuccess();
       }
     },
-    updateDiscussion: function(id_) {
+    updateDiscussion: function(id_, length) {
       var _this = this;
+      this.length = length;
       this.model = new ProjectDiscussionModel({
         id: id_
       });
@@ -44,8 +44,10 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     onSuccess: function() {
       var model, response, userAvatar, _i, _len, _ref,
         _this = this;
+      this.$el.find(".admin-title").html("All Discussions (" + this.length + "): " + (this.model.get("title")));
       this.$ul.html('');
       this.$form.html('');
+      console.log(' @model', this.model);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -60,7 +62,8 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
-        userAvatar: userAvatar
+        userAvatar: userAvatar,
+        title: this.model.get("title")
       });
       return this.wysiwygFormView.success = function(e) {
         if (e.success) {

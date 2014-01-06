@@ -6,12 +6,14 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 			editorID:"#editor" #default ID, but doublecheck that form ID is correct
 			slim:false
 			userAvatar:""
+			title:""
 			$updateForm:null
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@slim       = options.slim || @slim
 				@userAvatar = options.userAvatar || @userAvatar
+				@title      = options.title || @title
 
 				@render()
  
@@ -21,6 +23,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					response_to_id: @id 
 					editorID: @editorID
 					slim: @slim
+					title: @title 
 					userAvatar:@userAvatar
 
 				if @parent is "#update-form"

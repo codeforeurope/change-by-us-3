@@ -16,11 +16,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@viewData.sid  = Math.random().toString(20).substr(2)
 
 				@render()
-
+ 
 			events: 
 				"click .delete-x": "deleteItem"
 
 			render: ->
+				console.log 'ProjectMemberListItemView @viewData',@viewData
 				@$el = $(@el)
 				@$el.template @templateDir+"/templates/partials-project/project-member-list-item.html",
 					{data:@viewData}, => @onTemplateLoad()

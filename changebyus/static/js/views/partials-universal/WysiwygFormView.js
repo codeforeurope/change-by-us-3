@@ -5,11 +5,13 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     editorID: "#editor",
     slim: false,
     userAvatar: "",
+    title: "",
     $updateForm: null,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       this.slim = options.slim || this.slim;
       this.userAvatar = options.userAvatar || this.userAvatar;
+      this.title = options.title || this.title;
       return this.render();
     },
     render: function() {
@@ -20,6 +22,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         response_to_id: this.id,
         editorID: this.editorID,
         slim: this.slim,
+        title: this.title,
         userAvatar: this.userAvatar
       };
       if (this.parent === "#update-form") {

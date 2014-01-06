@@ -100,12 +100,12 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     addJoined: function() {
       this.updateCount();
-      this.updateProjects(this.joinedProjects.models, this.followView.find(".projects"));
+      this.updateProjects(this.joinedProjects.models, this.followView.find(".projects"), false, true);
       return this.setPages(this.joinedProjects.length, this.followView);
     },
     addOwned: function() {
       this.updateCount();
-      this.updateProjects(this.ownedProjects.models, this.manageView.find(".projects"));
+      this.updateProjects(this.ownedProjects.models, this.manageView.find(".projects"), true, false);
       return this.setPages(this.ownedProjects.length, this.manageView);
     },
     updatePage: function() {
@@ -113,26 +113,31 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       if (this.currentView === "follow") {
         $ul = this.followView.find(".projects");
         $ul.html("");
-        this.updateProjects(this.joinedProjects.models, $ul);
+        this.updateProjects(this.joinedProjects.models, $ul, false, true);
       } else {
         $ul = this.manageView.find(".projects");
         $ul.html("");
-        this.updateProjects(this.ownedProjects.models, $ul);
+        this.updateProjects(this.ownedProjects.models, $ul, true, false);
       }
       return $("html, body").animate({
         scrollTop: 0
       }, "slow");
     },
-    updateProjects: function(results_, parent_) {
+    updateProjects: function(results_, parent_, isOwned_, isFollowed_) {
       var e, i, projectModel, s, _i, _results;
-      console.log('updatePage', results_, parent_);
+      if (isOwned_ == null) {
+        isOwned_ = false;
+      }
+      if (isFollowed_ == null) {
+        isFollowed_ = false;
+      }
       s = this.index * this.perPage;
       e = (this.index + 1) * this.perPage - 1;
       _results = [];
       for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
         if (i < results_.length) {
           projectModel = results_[i];
-          _results.push(this.addOne(projectModel, parent_, false, true));
+          _results.push(this.addOne(projectModel, parent_, isOwned_, isFollowed_));
         } else {
           _results.push(void 0);
         }
@@ -155,12 +160,6 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         isResource: false
       });
       return parent_.append(view.$el);
-      /*
-      				delay 100, ->
-      					buttonize3D()
-      					positionFooter()
-      */
-
     }
   });
 });

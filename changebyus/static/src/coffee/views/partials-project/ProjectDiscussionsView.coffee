@@ -16,11 +16,10 @@ define ["underscore",
 			parent: "#project-discussions"
 			$ul:null
 			currentData:""
- 
-			render: ->  
+
+			render: ->
 				@$el = $(@parent)
 				@templateLoaded = true
-				console.log 'ProjectDiscussionsView',@
 
 			onCollectionLoad:-> 
 				ProjectSubView::onCollectionLoad.call(@)
@@ -47,6 +46,8 @@ define ["underscore",
 							@newDay(m)
 
 						@isDataLoaded = true
+
+						@$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
 
 						ProjectSubView::addAll.call(@) 
 

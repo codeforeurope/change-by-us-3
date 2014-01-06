@@ -120,7 +120,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
       }
       if (view.indexOf("discussion/") > -1) {
         id = view.split('/')[1];
-        this.projectDiscussionView.updateDiscussion(id);
+        this.projectDiscussionView.updateDiscussion(id, this.projectDiscussionsView.collection.models.length);
         this.projectDiscussionView.show();
         this.discussionBTN.addClass("active");
         return;

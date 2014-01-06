@@ -36,6 +36,9 @@ define ["underscore",
 				@user.fetch
 					success: =>@render()
 
+			events:
+				"click .reply-toggle:first":"onReplyToggleClick"
+
 			render: ->
 				@viewData.image_url_round_small = @user.get("image_url_round_small")
 				@viewData.display_name          = @user.get("display_name")
@@ -62,10 +65,6 @@ define ["underscore",
 				self = @ 
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 
-				@$el.find('.reply-toggle').first().click ->
-					$(this).find('.reply').toggleClass('hide')
-					self.$repliesHolder.toggleClass('hide')
-
 				@addReply(reply) for reply in @model.get('responses') 
 
 				viewData = @model.attributes
@@ -83,6 +82,10 @@ define ["underscore",
 					postReplyView.$el.insertBefore replyForm
 				else
 					@$repliesHolder.append postReplyView.$el
+
+			onReplyToggleClick:(e)->
+				$(e.currentTarget).find('.reply').toggleClass('hide')
+				self.$repliesHolder.toggleClass('hide')
 
 			onFormLoaded:->
 				@$el.find('.update-content').append @$repliesHolder

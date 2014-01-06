@@ -38,7 +38,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					@$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 				else if @parent is "#add-thread-form"
 					url = "/templates/partials-project/project-new-thread-form.html" 
-					@editorID =  "#new-thread-editor"
+					@editorID =  ".wsyiwyg-editor.slim"
 					@formName = "new-discussion"
 					@$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 				else
@@ -55,8 +55,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 			onTemplateLoad:->
 				@trigger 'ON_TEMPLATE_LOAD'
-				@ajaxForm()
 				onPageElementsLoad()
+				delay 100, =>@ajaxForm()
 
 			ajaxForm: -> 
 				# AJAXIFY THE FORM
@@ -66,9 +66,10 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 						msg = "Unsupported format " + detail 
 					else
 						console.log "error uploading file", reason, detail
-					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo "#alerts"
+					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> #{msg} </div>").prependTo "#alerts"
 				 
 				$editor = $(@editorID)
+				console.log '$editor !!!!!!!!!!!!!!! ',$editor, @$el
 				@$updateForm = @$el.find("form")
 				options =
 					type: @$updateForm.attr('method')
@@ -116,11 +117,12 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 							top: editorOffset.top - 20
 							left: editorOffset.left + $editor.innerWidth() - 75
 				else
-					$("#voiceBtn").hide()
+					$("#voiceBtn").hide() 
 				###
 				$("#voiceBtn").hide()
-
+				
 				$editor.wysiwyg fileUploadError: showErrorAlert
+
 				window.prettyPrint and prettyPrint()
 
 			beforeSubmit:(arr_, form_, options_)->

@@ -22,6 +22,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         }
       });
     },
+    events: {
+      "click .reply-toggle:first": "onReplyToggleClick"
+    },
     render: function() {
       var m,
         _this = this;
@@ -53,10 +56,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       console.log('addReplies', this.model);
       self = this;
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
-      this.$el.find('.reply-toggle').first().click(function() {
-        $(this).find('.reply').toggleClass('hide');
-        return self.$repliesHolder.toggleClass('hide');
-      });
       _ref = this.model.get('responses');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         reply = _ref[_i];
@@ -83,6 +82,10 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       } else {
         return this.$repliesHolder.append(postReplyView.$el);
       }
+    },
+    onReplyToggleClick: function(e) {
+      $(e.currentTarget).find('.reply').toggleClass('hide');
+      return self.$repliesHolder.toggleClass('hide');
     },
     onFormLoaded: function() {
       var $form, options,

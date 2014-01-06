@@ -37,7 +37,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else if (this.parent === "#add-thread-form") {
         url = "/templates/partials-project/project-new-thread-form.html";
-        this.editorID = "#new-thread-editor";
+        this.editorID = ".wsyiwyg-editor.slim";
         this.formName = "new-discussion";
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else {
@@ -55,9 +55,12 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       return console.log('@templateDir+url', this.templateDir + url, this.$el, $(this.parent));
     },
     onTemplateLoad: function() {
+      var _this = this;
       this.trigger('ON_TEMPLATE_LOAD');
-      this.ajaxForm();
-      return onPageElementsLoad();
+      onPageElementsLoad();
+      return delay(100, function() {
+        return _this.ajaxForm();
+      });
     },
     ajaxForm: function() {
       var $editor, options, showErrorAlert,
@@ -73,6 +76,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
       $editor = $(this.editorID);
+      console.log('$editor !!!!!!!!!!!!!!! ', $editor, this.$el);
       this.$updateForm = this.$el.find("form");
       options = {
         type: this.$updateForm.attr('method'),

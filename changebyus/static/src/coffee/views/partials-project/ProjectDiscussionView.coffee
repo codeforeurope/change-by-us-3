@@ -36,9 +36,11 @@ define ["underscore",
 				if @delayedDataLoad then @onSuccess()
 
 			updateDiscussion:(id_, @length)->
+				console.log 'updateDiscussion>>>>'
 				@model = new ProjectDiscussionModel(id:id_)
 				@model.fetch
 					success:=> 
+						console.log '@templateLoaded',@templateLoaded
 						if @templateLoaded is false 
 							@delayedDataLoad = true
 						else
@@ -49,19 +51,23 @@ define ["underscore",
 
 				@$ul.html('')
 				@$form.html('')
-				console.log ' @model', @model
+
 				@addDiscussion @model
+
 				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})
 					@addDiscussion model 
 
 				userAvatar = $('.profile-nav-header img').attr('src')
-				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar, title:@model.get("title")})
+				@wysiwygFormView = new WysiwygFormView({parent:@$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar, title:@model.get("title")})
 				@wysiwygFormView.success = (e)=>
+					console.log 'e.success',e
 					if e.success
 						$("#new-thread-editor").html("")
 						model = new ProjectDiscussionModel(e.data)
 						@addDiscussion model
+
+				console.log '@$wysiwygFormView', @wysiwygFormView, @$threadFormID, $('#new-thread-editor')
 
 
 			addDiscussion:(model_)->

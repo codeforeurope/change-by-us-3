@@ -28,11 +28,13 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     updateDiscussion: function(id_, length) {
       var _this = this;
       this.length = length;
+      console.log('updateDiscussion>>>>');
       this.model = new ProjectDiscussionModel({
         id: id_
       });
       return this.model.fetch({
         success: function() {
+          console.log('@templateLoaded', _this.templateLoaded);
           if (_this.templateLoaded === false) {
             return _this.delayedDataLoad = true;
           } else {
@@ -47,7 +49,6 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       this.$el.find(".admin-title").html("All Discussions (" + this.length + "): " + (this.model.get("title")));
       this.$ul.html('');
       this.$form.html('');
-      console.log(' @model', this.model);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -65,13 +66,15 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         userAvatar: userAvatar,
         title: this.model.get("title")
       });
-      return this.wysiwygFormView.success = function(e) {
+      this.wysiwygFormView.success = function(e) {
+        console.log('e.success', e);
         if (e.success) {
           $("#new-thread-editor").html("");
           model = new ProjectDiscussionModel(e.data);
           return _this.addDiscussion(model);
         }
       };
+      return console.log('@$wysiwygFormView', this.wysiwygFormView, this.$threadFormID, $('#new-thread-editor'));
     },
     addDiscussion: function(model_) {
       var projectDiscussionThreadItemView;

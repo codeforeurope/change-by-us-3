@@ -34,7 +34,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					{data:@viewData}, => @onTemplateLoad() 
 
 			sortClick:(e)-> 
-				if ($(e.currentTarget).attr("id") is "alpha") then @addAll("name") else @addAll("created")
+				#if ($(e.currentTarget).attr("id") is "alpha") then @addAll("alpha") else @addAll("created")
+				@addAll $(e.currentTarget).attr("id")
 				false
 
 			onTemplateLoad:->  
@@ -54,11 +55,20 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@collection.on('remove', =>@addAll())
 
 			# override in subview
-			addAll: (sortBy="name") -> 
+			addAll: (sort_="alpha") -> 
 				@team = []
 				@members = []
-				
-				if sortBy is "name"
+
+				$("#"+sort_)
+					.addClass('sort-deactive')
+					.removeClass('ul')
+					.siblings()
+					.removeClass('sort-deactive')
+					.addClass('ul')
+
+				console.log $("#"+sort_),sort_
+
+				if sort_ is "alpha"
 					sortBy = @collection.sortBy (model)->
 						model.get('last_name')
 				else

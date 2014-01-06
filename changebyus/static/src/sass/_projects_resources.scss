@@ -710,3 +710,10 @@ h2.admin-title{
 .stream-wrapper{
   .content-wrapper{overflow: hidden;}
 }
+
+.sort-deactive{
+  color: $graySubtext;
+  border: 1px solid $grayBorder;
+  padding: 4px; 
+  @include border-radius(2px);
+}

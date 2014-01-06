@@ -38,11 +38,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     sortClick: function(e) {
-      if ($(e.currentTarget).attr("id") === "alpha") {
-        this.addAll("name");
-      } else {
-        this.addAll("created");
-      }
+      this.addAll($(e.currentTarget).attr("id"));
       return false;
     },
     onTemplateLoad: function() {
@@ -64,15 +60,17 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.addAll();
       });
     },
-    addAll: function(sortBy) {
-      var model, _i, _j, _len, _len1, _ref, _ref1,
+    addAll: function(sort_) {
+      var model, sortBy, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
-      if (sortBy == null) {
-        sortBy = "name";
+      if (sort_ == null) {
+        sort_ = "alpha";
       }
       this.team = [];
       this.members = [];
-      if (sortBy === "name") {
+      $("#" + sort_).addClass('sort-deactive').removeClass('ul').siblings().removeClass('sort-deactive').addClass('ul');
+      console.log($("#" + sort_), sort_);
+      if (sort_ === "alpha") {
         sortBy = this.collection.sortBy(function(model) {
           return model.get('last_name');
         });

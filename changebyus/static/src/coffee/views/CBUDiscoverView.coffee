@@ -21,13 +21,13 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 				@collection.fetch reset: true
 
 
-			addOne: (projectModel) ->
-				view = new ResourceProjectPreviewView({model:projectModel})
+			addOne: (projectModel_) ->
+				view = new ResourceProjectPreviewView({model:projectModel_})
 				@$el.find("#project-list").append view.el
 
 			addAll: -> 
-				@collection.each (projectModel) =>
-					@addOne projectModel
+				@collection.each (projectModel_) =>
+					@addOne projectModel_
 
 				if (@collection.length is 0)
 					@$el.template @templateDir + "/templates/partials-discover/no-results.html",

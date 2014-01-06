@@ -9,8 +9,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
-				@isProject  = options.isProject || @isProject
-				@isResource = options.isResource || @isResource
+				@isProject  = options.isProject || @isProject 
 				@isOwned    = options.isOwned || @isOwned
 				@isFollowed = options.isFollowed || @isFollowed
 				@render()
@@ -20,8 +19,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			render: ->
 				viewData            = @model.attributes
-				viewData.isProject  = @isProject
-				viewData.isResource = @isResource
+				viewData.isProject  = @isProject 
 				viewData.isOwned    = @isOwned
 				viewData.isFollowed = @isFollowed
 

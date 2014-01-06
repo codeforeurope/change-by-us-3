@@ -1162,6 +1162,7 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   background-color: #ffffff;
   border-color: #dddddd;
   cursor: not-allowed;
+  @include opacity(.25);
 }
 .pagination-lg > li > a,
 .pagination-lg > li > span {

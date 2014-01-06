@@ -1,13 +1,11 @@
 <% 
     var type = "project";
-    if(data.resource){ type = "resource"; }
-    console.log("data.isOwned",data);
+    if(data.resource){ type = "resource"; } 
 %>
+
 <div class="project-square" id="<%= data.slug %>">
-    <% if(data.isResource){ %>
-        <% if(data.isOwned || data.isFollowed){ %>
-             <div class="side-tab">Resource</div>
-        <% } %>
+    <% if(data.resource && (data.isOwned || data.isFollowed) ){ %>
+        <div class="side-tab">Resource</div>
     <% } %>
      
     <div class="project-dashboard-image">

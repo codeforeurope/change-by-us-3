@@ -60,24 +60,24 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         this.$prevArrow = $("<li class='prev-arrow'><a href='#'>&laquo;</a></li>");
         this.$nextArrow = $("<li class='next-arrow'><a href='#'>&raquo;</a></li>");
         this.$prevArrow.click(function(e) {
-          e.preventDefault();
           if ($(e.currentTarget).hasClass('disabled') === false) {
-            return _this.prevPage();
+            _this.prevPage();
           }
+          return false;
         });
         this.$nextArrow.click(function(e) {
-          e.preventDefault();
           if ($(e.currentTarget).hasClass('disabled') === false) {
-            return _this.nextPage();
+            _this.nextPage();
           }
+          return false;
         });
         this.$pagination.append(this.$prevArrow);
         for (i = _i = 1, _ref = this.pages; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-          $li = $("<li class='page'><a href='#'>" + i + "</a></li>");
+          $li = $("<li class='page'><a href='#' id='page-" + i + "'>" + i + "</a></li>");
           $li.click(function(e) {
-            e.preventDefault();
             i = $(e.currentTarget).find('a').html();
-            return _this.pageClick(i);
+            _this.pageClick(i);
+            return false;
           });
           this.$pagination.append($li);
         }
@@ -106,16 +106,18 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       }
     },
     checkArrows: function() {
+      $('.pagination li').removeClass('disabled');
       if (this.index === this.pages - 1) {
         this.$nextArrow.addClass('disabled');
       } else {
         this.$nextArrow.removeClass('disabled');
       }
       if (this.index === 0) {
-        return this.$prevArrow.addClass('disabled');
+        this.$prevArrow.addClass('disabled');
       } else {
-        return this.$prevArrow.removeClass('disabled');
+        this.$prevArrow.removeClass('disabled');
       }
+      return $("#page-" + (this.index + 1)).parent().addClass('disabled');
     }
   });
 });

@@ -8,7 +8,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       this.isProject = options.isProject || this.isProject;
-      this.isResource = options.isResource || this.isResource;
       this.isOwned = options.isOwned || this.isOwned;
       this.isFollowed = options.isFollowed || this.isFollowed;
       return this.render();
@@ -21,7 +20,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         _this = this;
       viewData = this.model.attributes;
       viewData.isProject = this.isProject;
-      viewData.isResource = this.isResource;
       viewData.isOwned = this.isOwned;
       viewData.isFollowed = this.isFollowed;
       this.$el = $("<li class='project-preview'/>");

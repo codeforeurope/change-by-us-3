@@ -27,17 +27,17 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
         reset: true
       });
     },
-    addOne: function(projectModel) {
+    addOne: function(projectModel_) {
       var view;
       view = new ResourceProjectPreviewView({
-        model: projectModel
+        model: projectModel_
       });
       return this.$el.find("#project-list").append(view.el);
     },
     addAll: function() {
       var _this = this;
-      this.collection.each(function(projectModel) {
-        return _this.addOne(projectModel);
+      this.collection.each(function(projectModel_) {
+        return _this.addOne(projectModel_);
       });
       if (this.collection.length === 0) {
         return this.$el.template(this.templateDir + "/templates/partials-discover/no-results.html", {

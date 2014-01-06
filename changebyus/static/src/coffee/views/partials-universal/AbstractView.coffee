@@ -35,7 +35,7 @@ define ["underscore", "backbone", "jquery", "template"],
 				@$el.show()
 
 			hide: ->
-				@$el.hide()
+				@$el.hide() 
 
 			fetch:->
 				@model.fetch
@@ -56,31 +56,29 @@ define ["underscore", "backbone", "jquery", "template"],
 					@$prevArrow           = $("<li class='prev-arrow'><a href='#'>&laquo;</a></li>")
 					@$nextArrow           = $("<li class='next-arrow'><a href='#'>&raquo;</a></li>")
 
-					@$prevArrow.click (e)=> 
-						e.preventDefault()
+					@$prevArrow.click (e)=>  
 						if $(e.currentTarget).hasClass('disabled') is false then @prevPage()
+						false
 
-					@$nextArrow.click (e)=> 
-						e.preventDefault()
+					@$nextArrow.click (e)=>  
 						if $(e.currentTarget).hasClass('disabled') is false then @nextPage()
-
+						false
 
 					@$pagination.append @$prevArrow
 					for i in [1..@pages]
-						$li = $("<li class='page'><a href='#'>"+i+"</a></li>")
-						$li.click (e)=> 
-							e.preventDefault()
+						$li = $("<li class='page'><a href='#' id='page-#{i}'>#{i}</a></li>")
+						$li.click (e)=>  
 							i = $(e.currentTarget).find('a').html()
 							@pageClick(i)
+							false
 						@$pagination.append $li
 					@$pagination.append @$nextArrow
 
 					@$paginationContainer.append @$pagination
 					$parent.append @$paginationContainer
 
-					@checkArrows()
-
-
+					@checkArrows() 
+ 
 			nextPage:->
 				@index++
 				@checkArrows()
@@ -98,9 +96,13 @@ define ["underscore", "backbone", "jquery", "template"],
 				if @index isnt (i-1) 
 					@index = (i-1) 
 					@checkArrows()
-					@updatePage()
+					@updatePage() 
 
 			checkArrows:->
+				$('.pagination li').removeClass('disabled') 
+
 				if @index is @pages-1 then @$nextArrow.addClass('disabled') else @$nextArrow.removeClass('disabled')
 				if @index is 0 then @$prevArrow.addClass('disabled') else @$prevArrow.removeClass('disabled')
+				
+				$("#page-"+(@index+1)).parent().addClass('disabled')
 

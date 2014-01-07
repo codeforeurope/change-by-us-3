@@ -2,7 +2,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 	(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) ->
 		BannerSearchView = AbstractView.extend
 
-			byProjectResources:'projects'
+			byProjectResources:'project'
 			sortByPopularDistance:'popular'
 			locationObj:{lat:0, lon:0, name:""}
 			category:""
@@ -90,9 +90,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				switch $this.html()
 					when 'Projects'
-						@byProjectResources = 'projects'
+						@byProjectResources = 'project'
 					when 'Resources'
-						@byProjectResources = 'resources'
+						@byProjectResources = 'resource'
 					when 'Popular'
 						@sortByPopularDistance = 'popular'
 					when 'Distance'
@@ -123,8 +123,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				$(".search-catagories").hide()
 				@$projectList.html("")
 
-				
-
 				dataObj = {
 					s: if @category is "" then $("#search-input").val() else ""
 					cat: @category
@@ -153,13 +151,13 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 						size=0
 						for k,v of response_.data
 							@projects.push v._id
-							console.log 'project',k
 							size++
 						
 						@updatePage()
 						@setPages size, $(".projects")
 
-						$('h4').html(size+" Projects")
+						t = if @byProjectResources is 'project' then "Projects" else "Resources"
+						$('.projects h4').html(size+" "+t)
 						onPageElementsLoad()
 
 			updatePage:->
@@ -168,7 +166,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				s = @index*@perPage
 				e = (@index+1)*@perPage-1
 				for i in [s..e]
-					console.log '>>>>>>',i, @projects.length
 					if i < @projects.length
 						@addProject @projects[i]
 

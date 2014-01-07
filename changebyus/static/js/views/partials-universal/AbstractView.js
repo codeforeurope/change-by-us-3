@@ -6,6 +6,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     viewData: {},
     templateLoaded: false,
     delayedCollectionLoad: false,
+    $paginationContainer: null,
     id: 0,
     results: [],
     index: 0,
@@ -52,7 +53,9 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         parent_ = null;
       }
       $parent = parent_ ? parent_ : this.$el;
-      console.log('setPages', $parent);
+      if (this.$paginationContainer) {
+        this.$paginationContainer.remove();
+      }
       if (total > this.perPage) {
         this.pages = Math.ceil(total / this.perPage);
         this.$paginationContainer = $("<div class='center'/>");

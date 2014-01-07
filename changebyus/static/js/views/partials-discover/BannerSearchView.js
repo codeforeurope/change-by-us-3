@@ -1,7 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
-    byProjectResources: 'projects',
+    byProjectResources: 'project',
     sortByPopularDistance: 'popular',
     locationObj: {
       lat: 0,
@@ -111,9 +111,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $this.siblings().toggleClass('active');
       switch ($this.html()) {
         case 'Projects':
-          return this.byProjectResources = 'projects';
+          return this.byProjectResources = 'project';
         case 'Resources':
-          return this.byProjectResources = 'resources';
+          return this.byProjectResources = 'resource';
         case 'Popular':
           return this.sortByPopularDistance = 'popular';
         case 'Distance':
@@ -167,7 +167,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         dataType: "json",
         contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
-        var k, size, v, _ref;
+        var k, size, t, v, _ref;
         if (response_.success) {
           if (_this.initSend === false) {
             if (_this.locationObj.name !== "") {
@@ -182,12 +182,12 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           for (k in _ref) {
             v = _ref[k];
             _this.projects.push(v._id);
-            console.log('project', k);
             size++;
           }
           _this.updatePage();
           _this.setPages(size, $(".projects"));
-          $('h4').html(size + " Projects");
+          t = _this.byProjectResources === 'project' ? "Projects" : "Resources";
+          $('.projects h4').html(size + " " + t);
           return onPageElementsLoad();
         }
       });
@@ -198,7 +198,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       s = this.index * this.perPage;
       e = (this.index + 1) * this.perPage - 1;
       for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
-        console.log('>>>>>>', i, this.projects.length);
         if (i < this.projects.length) {
           this.addProject(this.projects[i]);
         }

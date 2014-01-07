@@ -37,6 +37,7 @@ require.config
 		"dashboard-view": "views/CBUDashboardView"
 		"stripe-edit": "views/CBUStripeEdit"
 		"stream-view": "views/CBUStreamView"
+		"admin-view": "views/CBUAdminView"
 
 	shim:
 		"slicknav":["jquery"]
@@ -64,6 +65,7 @@ define ["jquery",
 		 "user-view", 
 		 "dashboard-view", 
 		 "stream-view",
+		 "admin-view",
 		 "create-view",
 		 "stripe-edit",
 		 "fundraising",
@@ -80,6 +82,7 @@ define ["jquery",
 	 CBUUserView, 
 	 CBUDashboardView, 
 	 CBUStreamView,
+	 CBUAdminView,
 	 CreateView,
 	 CBUStripeEdit,
 	 CBUFundraisingView,
@@ -105,6 +108,7 @@ define ["jquery",
 					"project": "project" 
 					"stream": "stream" 
 					"stream/": "stream" 
+					"admin": "admin" 
 					"": "default"
 
 				project: (id_) ->
@@ -164,6 +168,9 @@ define ["jquery",
 
 				stream:->
 					window.CBUAppView = new CBUStreamView(config)
+
+				admin:->
+					window.CBUAppView = new CBUAdminView(config)
 
 				default: ->
 					# added in dev tool

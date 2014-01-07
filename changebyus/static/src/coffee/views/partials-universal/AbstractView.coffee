@@ -7,6 +7,7 @@ define ["underscore", "backbone", "jquery", "template"],
 			viewData: {}
 			templateLoaded: false
 			delayedCollectionLoad: false
+			$paginationContainer: null
 			id: 0
 			results:[]
 			index:0
@@ -47,7 +48,9 @@ define ["underscore", "backbone", "jquery", "template"],
 
 			setPages:(total, parent_=null)->
 				$parent = if parent_ then parent_ else @$el
-				console.log 'setPages',$parent
+				
+				if @$paginationContainer then @$paginationContainer.remove()
+
 				if total > @perPage
 					@pages = Math.ceil(total/@perPage)
 					

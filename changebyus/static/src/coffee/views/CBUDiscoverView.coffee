@@ -19,14 +19,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 				bannerSearchView = new BannerSearchView({parent:searchParent})
 				@collection.on "reset", @addAll, @
 				@collection.fetch reset: true
-
-
-			addOne: (projectModel_) ->
-				view = new ResourceProjectPreviewView({model:projectModel_})
-				view.render()
-
-				@$el.find("#project-list").append view.el
-
+				
 			addAll: -> 
 				@collection.each (projectModel_) =>
 					@addOne projectModel_
@@ -34,3 +27,10 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 				if (@collection.length is 0)
 					@$el.template @templateDir + "/templates/partials-discover/no-results.html",
 						data: @viewData, =>
+
+			addOne: (projectModel_) ->
+				view = new ResourceProjectPreviewView({model:projectModel_})
+				view.render()
+
+				@$el.find("#project-list").append view.el
+

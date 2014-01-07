@@ -36,7 +36,8 @@ require.config({
     "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
     "stripe-edit": "views/CBUStripeEdit",
-    "stream-view": "views/CBUStreamView"
+    "stream-view": "views/CBUStreamView",
+    "admin-view": "views/CBUAdminView"
   },
   shim: {
     "slicknav": ["jquery"],
@@ -54,7 +55,7 @@ require.config({
   }
 });
 
-define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "stripe-edit", "fundraising", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, CBUStripeEdit, CBUFundraisingView, SlickNav) {
+define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "admin-view", "create-view", "stripe-edit", "fundraising", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CBUAdminView, CreateView, CBUStripeEdit, CBUFundraisingView, SlickNav) {
   return $(document).ready(function() {
     var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
     config = {
@@ -78,6 +79,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         "project": "project",
         "stream": "stream",
         "stream/": "stream",
+        "admin": "admin",
         "": "default"
       },
       project: function(id_) {
@@ -155,6 +157,9 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       },
       stream: function() {
         return window.CBUAppView = new CBUStreamView(config);
+      },
+      admin: function() {
+        return window.CBUAppView = new CBUAdminView(config);
       },
       "default": function() {
         return window.CBUAppView = new CBUMainView(config);

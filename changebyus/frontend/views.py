@@ -28,8 +28,14 @@ def home():
     return _return_index()
 
 @frontend_view.route('/signup')
-def signup_view():
+def admin_view():
     """Renders the signup template
+    """
+    return render_template('index.html')
+
+@frontend_view.route('/admin')
+def signup_view():
+    """Renders the admin template
     """
     return render_template('index.html')
 

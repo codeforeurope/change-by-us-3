@@ -27,14 +27,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
         reset: true
       });
     },
-    addOne: function(projectModel_) {
-      var view;
-      view = new ResourceProjectPreviewView({
-        model: projectModel_
-      });
-      view.render();
-      return this.$el.find("#project-list").append(view.el);
-    },
     addAll: function() {
       var _this = this;
       this.collection.each(function(projectModel_) {
@@ -45,6 +37,14 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
           data: this.viewData
         }, function() {});
       }
+    },
+    addOne: function(projectModel_) {
+      var view;
+      view = new ResourceProjectPreviewView({
+        model: projectModel_
+      });
+      view.render();
+      return this.$el.find("#project-list").append(view.el);
     }
   });
 });

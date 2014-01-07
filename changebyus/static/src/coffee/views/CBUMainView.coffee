@@ -49,6 +49,8 @@ define ["underscore",
 
 			addProject: (projectModel) ->
 				view = new ResourceProjectPreviewView(model: projectModel)
+				view.render()
+				
 				@$el.find("#project-list").append view.$el
 
 			addAllResources: ->

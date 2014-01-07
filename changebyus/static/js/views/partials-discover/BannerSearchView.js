@@ -71,6 +71,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
+      this.$projectList = $("#projects-list");
       this.delegateEvents();
       onPageElementsLoad();
       return this.autoGetGeoLocation();
@@ -146,7 +147,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         e.preventDefault();
       }
       $(".search-catagories").hide();
-      $("#projects-list").html("");
+      this.$projectList.html("");
       dataObj = {
         s: this.category === "" ? $("#search-input").val() : "",
         cat: this.category,
@@ -193,7 +194,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     updatePage: function() {
       var e, i, s, _i;
-      $("#projects-list").html("");
+      this.$projectList.html("");
       s = this.index * this.perPage;
       e = (this.index + 1) * this.perPage - 1;
       for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {

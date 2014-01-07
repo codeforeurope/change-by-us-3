@@ -32,6 +32,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       view = new ResourceProjectPreviewView({
         model: projectModel_
       });
+      view.render();
       return this.$el.find("#project-list").append(view.el);
     },
     addAll: function() {

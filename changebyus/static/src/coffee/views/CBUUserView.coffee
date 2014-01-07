@@ -39,4 +39,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 
 			addOne: (projectModel_, parent_) ->
 				view = new ResourceProjectPreviewView(model: projectModel_)
+				view.render()
+				
 				@$el.find(parent_).append view.$el

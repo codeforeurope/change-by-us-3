@@ -134,5 +134,5 @@ define ["underscore",
 					isFollowed: isFollowed_
 					isProject: true
 					isResource: false
-
-				parent_.append view.$el
+					parent:parent_
+				view.fetch()

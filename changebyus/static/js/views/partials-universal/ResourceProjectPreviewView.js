@@ -9,8 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       AbstractView.prototype.initialize.call(this, options);
       this.isProject = options.isProject || this.isProject;
       this.isOwned = options.isOwned || this.isOwned;
-      this.isFollowed = options.isFollowed || this.isFollowed;
-      return this.render();
+      return this.isFollowed = options.isFollowed || this.isFollowed;
     },
     events: {
       "click .close-x": "close"
@@ -30,13 +29,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       });
     },
     onFetch: function(r) {
+      console.log('onFetch', this.parent);
       return $(this.parent).append(this.render());
     },
     close: function() {
-      var closeX, dataObj,
+      var $closeX, dataObj,
         _this = this;
-      closeX = this.$el.find('.close-x');
-      closeX.hide();
+      $closeX = this.$el.find('.close-x');
+      $closeX.hide();
       dataObj = {
         project_id: this.model.id
       };
@@ -51,7 +51,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
           _this.model.collection.remove(_this.model);
           return _this.$el.remove();
         } else {
-          return closeX.show();
+          return $closeX.show();
         }
       });
     }

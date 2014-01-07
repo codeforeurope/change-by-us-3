@@ -157,9 +157,10 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         isOwned: isOwned_,
         isFollowed: isFollowed_,
         isProject: true,
-        isResource: false
+        isResource: false,
+        parent: parent_
       });
-      return parent_.append(view.$el);
+      return view.fetch();
     }
   });
 });

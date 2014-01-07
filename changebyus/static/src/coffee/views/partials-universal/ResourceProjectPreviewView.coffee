@@ -12,7 +12,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@isProject  = options.isProject || @isProject 
 				@isOwned    = options.isOwned || @isOwned
 				@isFollowed = options.isFollowed || @isFollowed
-				@render()
+				# @render()
 
 			events: 
 				"click .close-x": "close"
@@ -28,12 +28,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					{data: viewData}, => @onTemplateLoad()
 
 			onFetch:(r)-> 
+				console.log 'onFetch', @parent
 				$(@parent).append @render()
 
 			# onTemplateLoad
 			close:->
-				closeX = @$el.find('.close-x')
-				closeX.hide()
+				$closeX = @$el.find('.close-x')
+				$closeX.hide()
 				dataObj = {project_id:@model.id}
 				$.ajax(
 					type: "POST"
@@ -46,4 +47,4 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@model.collection.remove @model
 						@$el.remove() 
 					else
-						closeX.show()
+						$closeX.show()

@@ -50,9 +50,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				# deeplink resource select
 				if @showResources then $('#sort-by-pr .pill-selection').last().trigger('click')
-
-				$dropkick = $('#search-range').dropkick()
+				
+				$dropkick       = $('#search-range').dropkick()
 				@$resultsModify = $('.results-modify')
+				@$projectList   = $("#projects-list")
 				
 				@delegateEvents()
 				onPageElementsLoad()
@@ -120,7 +121,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				if e then e.preventDefault()
 				
 				$(".search-catagories").hide()
-				$("#projects-list").html("")
+				@$projectList.html("")
 
 				
 
@@ -162,7 +163,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 						onPageElementsLoad()
 
 			updatePage:->
-				$("#projects-list").html("")
+				@$projectList.html("")
 
 				s = @index*@perPage
 				e = (@index+1)*@perPage-1
@@ -176,4 +177,4 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			addProject:(id_)->
 				projectModel = new ProjectModel({id:id_})
 				view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list"})
-				view.fetch() 
+				view.fetch()  

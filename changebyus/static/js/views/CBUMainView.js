@@ -42,6 +42,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
       view = new ResourceProjectPreviewView({
         model: projectModel
       });
+      view.render();
       return this.$el.find("#project-list").append(view.$el);
     },
     addAllResources: function() {

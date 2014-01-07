@@ -90,6 +90,29 @@
     margin-top: 150px;
     font-size: 18px;
   }
+
+  .stripe-overlay{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 15px;
+    color: $white;
+    background: rgba(0,0,0,.5);
+    text-align: left;
+
+    .progress{
+      margin: 10px 0;
+      width: 100%;
+      border: 3px solid $white;
+      background: transparent;
+    }
+
+    .progress-bar {
+      background-color: $white;
+    }
+    
+    .goal{margin-bottom:0;}
+  }
 }
 
 .project-preview:nth-child(3n+3){
@@ -630,6 +653,7 @@ h2.admin-title{
   .mail-icon{
     float: right;
     margin-top: 5px;
+    z-index: 1;
   } 
 
   &:hover{

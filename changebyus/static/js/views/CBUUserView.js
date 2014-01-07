@@ -62,6 +62,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       view = new ResourceProjectPreviewView({
         model: projectModel_
       });
+      view.render();
       return this.$el.find(parent_).append(view.$el);
     }
   });

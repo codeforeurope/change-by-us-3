@@ -5,20 +5,24 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			tagName: "li"
 			view:"public"
 			projectID:0
+			isAdmin:false
 
 			initialize: (options_) -> 
 				AbstractView::initialize.call @, options_ 
 
-				@view          = options_.view || @view
-				@projectID     = options_.projectID || @projectID
-				@viewData      = @model.attributes
-				@viewData.view = @view
-				@viewData.sid  = Math.random().toString(20).substr(2)
+				@view             = options_.view || @view
+				@projectID        = options_.projectID || @projectID
+				@viewData         = @model.attributes
+				@viewData.isAdmin = options_.isAdmin || @isAdmin
+				@viewData.view    = @view
+				@viewData.sid     = Math.random().toString(20).substr(2)
 
 				@render()
- 
+
 			events: 
-				"click .delete-x": "deleteItem"
+				"click .delete-x": "removeUser"
+				"click .btn-tertiary": "unflag"
+				"click .btn-warning": "delete"
 
 			render: ->
 				console.log 'ProjectMemberListItemView @viewData',@viewData
@@ -42,7 +46,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 							if (response_.success)
 								@model.set('roles', [value_])
 
-			deleteItem:->
+			removeUser:->
 				dataObj = { project_id:@projectID, user_id:@model.id}
 				$.ajax(
 					type: "POST"
@@ -51,5 +55,20 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					dataType: "json" 
 					contentType: "application/json; charset=utf-8"
 				).done (response_)=>
-					if (response_.msg.toLowerCase() == "ok")
-						c = @model.collection
+					if (response_.success)
+						@model.collection.remove @model
+						@$el.remove() 
+
+			delete:(e)-> 
+				e.preventDefault()
+				$.post "/api/user/#{@model.id}/delete", (res_)=>
+					if res_.success
+						@model.collection.remove @model
+						@$el.remove() 
+
+			unflag:(e)-> 
+				e.preventDefault()
+				$.post "/api/user/#{@model.id}/unflag", (res_)=>
+					if res_.success
+						@model.collection.remove @model
+						@$el.remove() 

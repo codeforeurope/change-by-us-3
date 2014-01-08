@@ -8,6 +8,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 
+				# temp user
+				@flagUser()
+
 				@model = new UserModel(options.model)
 				@model.fetch success: =>
 					@render() 
@@ -30,6 +33,16 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/owned-projects"})
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
+
+			flagUser:(e)-> 
+				#e.preventDefault()
+				#$this = $(e.currentTarget)
+				#$this.parent().css('opacity', 0.25)
+				#url = $this.attr('href')
+				url = "/api/user/#{@model.id}/flag"
+				$.post url, (res_)=>
+					console.log res_
+
 				
 			addJoined:->
 				@joinedProjects.each (projectModel) => @addOne projectModel, "#following-list"

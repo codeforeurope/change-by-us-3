@@ -34,13 +34,32 @@
   h4{margin-bottom:10px;}
 }
 
+.admin-project-square{
+  float: left;
+  margin: auto 2% 22px auto;
+  width: 32%; 
+
+  .project-square {
+    float: none;
+    margin: auto;
+    width: 100%%; 
+  }
+
+  .admin-btns{
+    margin-top: 12px;
+    float: left;
+  }
+
+  .btn-neutral{}
+  .btn-warning{}
+}
+ 
 .project-square {
   padding: 10px 10px 50px;
   min-height: 400px;
   float: left;
-  margin: auto auto 22px;
+  margin: auto 2% 22px auto;
   width: 32%;
-  margin-right: 2%;
   @include box-skin; 
 
   &:hover{ 
@@ -118,6 +137,7 @@
 
 .project-preview:nth-child(3n+3){
     .project-square {margin-right: 0;}
+    .admin-project-square{margin-right: 0;}
 }
 
 .project-dashboard-image {
@@ -462,6 +482,7 @@ h2.admin-title{
   }
   .aka{ @include font-styling("asap", 15px, $gray53); }
   .grey{ @include font-styling("asap", 15px, $gray53); }
+  .admin-btns{ float: right; }
 }
 
 

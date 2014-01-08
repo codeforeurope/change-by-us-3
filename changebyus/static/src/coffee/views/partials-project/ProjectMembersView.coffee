@@ -8,6 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			$teamList: null
 			$memberList: null
 			projectID:0
+			isOwner:false
 			isOwnerOrganizer:false
 			view:"public"
 
@@ -16,6 +17,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@view             = options.view || @view
 				@projectID        = options.projectID || @projectID
 				@model            = options.model || @model
+				@isOwner          = options.isOwner || @isOwner
 				@isOwnerOrganizer = options.isOwnerOrganizer || @isOwnerOrganizer
 
 				ProjectSubView::initialize.call(@, options) 
@@ -34,8 +36,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					{data:@viewData}, => @onTemplateLoad() 
 
 			sortClick:(e)-> 
-				#if ($(e.currentTarget).attr("id") is "alpha") then @addAll("alpha") else @addAll("created")
-				@addAll $(e.currentTarget).attr("id")
+				sort = $(e.currentTarget).attr("id")
+				@addAll sort
 				false
 
 			onTemplateLoad:->  
@@ -75,10 +77,9 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					sortBy = @collection.sortBy (model)->
 						model.get('created_at')
 
-				$.each sortBy, (k, model) =>
-					console.log 'alpha model',model.get('last_name'),model
+				$.each sortBy, (k, model) => 
 					roles = model.get("roles")
-					ownerID = @model.get('owner').id
+					ownerID = if @model then @model.get('owner').id else -1
 					 
 					if roles.length is 0 
 						model.set("roles", ["Owner"]) 
@@ -107,12 +108,9 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				else
 					@$memberList.parent().parent().show()
 					@$memberList.parent().parent().find('h4').html(@members.length+' Members')
-				
-				console.log('team >>>>>>>>>> ',@team, @members)
-				
+
 				if (@team.length is 0) and (@members.length is 0)
 					$('.no-results').show()
-
 				else
 					@addTeam(model) for model in @team
 					@addMember(model) for model in @members
@@ -124,9 +122,9 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			addTeam: (model_) -> 
 				#to do 
 				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
-				@$teamList.append view.el
+				@$teamList.append view.$el
 
 			addMember: (model_) -> 
 				#to do 
 				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
-				@$memberList.append view.el
+				@$memberList.append view.$el

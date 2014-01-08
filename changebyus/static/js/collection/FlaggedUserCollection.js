@@ -1,9 +1,9 @@
 define(["underscore", "backbone", "model/ProjectModel"], function(_, Backbone, ProjectModel) {
-  var FlaggedProjectCollection;
-  return FlaggedProjectCollection = Backbone.Collection.extend({
+  var FlaggedUserCollection;
+  return FlaggedUserCollection = Backbone.Collection.extend({
     model: ProjectModel,
     url: function() {
-      return "/api/project/list?flagged=1&";
+      return "/api/user/list";
     },
     parse: function(response) {
       if (response.success) {

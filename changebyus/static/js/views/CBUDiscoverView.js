@@ -44,7 +44,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
         model: projectModel_
       });
       view.render();
-      return this.$el.find("#project-list").append(view.el);
+      return this.$el.find("#project-list").append(view.$el);
     }
   });
 });

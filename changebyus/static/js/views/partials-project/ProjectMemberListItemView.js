@@ -4,17 +4,21 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     tagName: "li",
     view: "public",
     projectID: 0,
+    isAdmin: false,
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
       this.view = options_.view || this.view;
       this.projectID = options_.projectID || this.projectID;
       this.viewData = this.model.attributes;
+      this.viewData.isAdmin = options_.isAdmin || this.isAdmin;
       this.viewData.view = this.view;
       this.viewData.sid = Math.random().toString(20).substr(2);
       return this.render();
     },
     events: {
-      "click .delete-x": "deleteItem"
+      "click .delete-x": "removeUser",
+      "click .btn-tertiary": "unflag",
+      "click .btn-warning": "delete"
     },
     render: function() {
       var _this = this;
@@ -55,7 +59,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         }
       });
     },
-    deleteItem: function() {
+    removeUser: function() {
       var dataObj,
         _this = this;
       dataObj = {
@@ -69,9 +73,29 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         dataType: "json",
         contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
-        var c;
-        if (response_.msg.toLowerCase() === "ok") {
-          return c = _this.model.collection;
+        if (response_.success) {
+          _this.model.collection.remove(_this.model);
+          return _this.$el.remove();
+        }
+      });
+    },
+    "delete": function(e) {
+      var _this = this;
+      e.preventDefault();
+      return $.post("/api/user/" + this.model.id + "/delete", function(res_) {
+        if (res_.success) {
+          _this.model.collection.remove(_this.model);
+          return _this.$el.remove();
+        }
+      });
+    },
+    unflag: function(e) {
+      var _this = this;
+      e.preventDefault();
+      return $.post("/api/user/" + this.model.id + "/unflag", function(res_) {
+        if (res_.success) {
+          _this.model.collection.remove(_this.model);
+          return _this.$el.remove();
         }
       });
     }

@@ -129,10 +129,12 @@
 
 	.project-preview:nth-child(3n+3){
 		.project-square {margin-right: 2%;}
+		.admin-project-square {margin-right: 2%;}
 	}
 
 	.project-preview:nth-child(2n+2){
 		.project-square {margin-right: 0;}
+		.admin-project-square {margin-right: 0;}
 	}
 
 	.project-dashboard-image{

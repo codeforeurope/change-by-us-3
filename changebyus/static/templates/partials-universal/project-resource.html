@@ -3,43 +3,55 @@
     if(data.resource){ type = "resource"; } 
 %>
 
-<div class="project-square" id="<%= data.slug %>">
-    <% if(data.resource && (data.isOwned || data.isFollowed) ){ %>
-        <div class="side-tab">Resource</div>
-    <% } %>
-     
-    <div class="project-dashboard-image">
-        <img src="<%= data.image_url_small_square %>" alt="Icon">
+<% if(data.isAdmin){ %>
+<div class="admin-project-square">
+<% } %>
 
-        <% if (data.stripe_account){ 
-            var percentage = (data.stripe_account.current_amount/data.stripe_account.goal)*100 %>
-            <div class="stripe-overlay">
-                <div class="progress progress-info" style="margin-top: 10px"> 
-                    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= percentage %>;"></div>
-                </div> 
-                <div class="goal">$<%= data.stripe_account.current_amount %> Donated towards $<%= data.stripe_account.goal %></div>
-            </div>
+    <div class="project-square" id="<%= data.slug %>">
+        <% if(data.resource && (data.isOwned || data.isFollowed) ){ %>
+            <div class="side-tab">Resource</div>
         <% } %>
-    </div> 
-    <div class="project-name"><%= data.name %></div>
-    <div class="project-description"><%= data.description %></div>
-    <div class="project-category"><a href="/discover"><%= data.category %></a> </div>
-    
-    <% if(data.isProject){ %>
-        <div class="hover-overlay"></div>
-        <div class="hover-btn">
-            <% if(data.isOwned){ %> 
-                <a href="/<%= type %>/<%= data.slug %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
-            <% } %>
-            <% if(data.isFollowed){ %> 
-                <a href="/<%= type %>/<%= data.slug %>" class="btn btn-medium btn-primary btn-3d">View</a>
-                <div class="close-x"></div>
+         
+        <div class="project-dashboard-image">
+            <img src="<%= data.image_url_small_square %>" alt="Icon">
+
+            <% if (data.stripe_account){ 
+                var percentage = (data.stripe_account.current_amount/data.stripe_account.goal)*100 %>
+                <div class="stripe-overlay">
+                    <div class="progress progress-info" style="margin-top: 10px"> 
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= percentage %>;"></div>
+                    </div> 
+                    <div class="goal">$<%= data.stripe_account.current_amount %> Donated towards $<%= data.stripe_account.goal %></div>
+                </div>
             <% } %>
         </div> 
-    <% }else{ %>
-        <a href="/<%= type %>/<%= data.slug %>">
+        <div class="project-name"><%= data.name %></div>
+        <div class="project-description"><%= data.description %></div>
+        <div class="project-category"><a href="/discover"><%= data.category %></a> </div>
+        
+        <% if(data.isProject){ %>
             <div class="hover-overlay"></div>
-        </a>
-    <% } %>
+            <div class="hover-btn">
+                <% if(data.isOwned){ %> 
+                    <a href="/<%= type %>/<%= data.slug %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
+                <% } %>
+                <% if(data.isFollowed){ %> 
+                    <a href="/<%= type %>/<%= data.slug %>" class="btn btn-medium btn-primary btn-3d">View</a>
+                    <div class="close-x"></div>
+                <% } %>
+            </div> 
+        <% }else{ %>
+            <a href="/<%= type %>/<%= data.slug %>">
+                <div class="hover-overlay"></div>
+            </a>
+        <% } %>
+    </div>
+
+<% if(data.isAdmin){ %>
+    <div class="admin-btns">
+        <a href="#" class="btn btn-medium btn-tertiary">Unflag</a>
+        <a href="#" class="btn btn-medium btn-warning">Delete</a>
+    </div>
 </div>
+<% } %>
 

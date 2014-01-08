@@ -36,44 +36,44 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     onTemplateLoad: function() {
       var profileEditView,
         _this = this;
-      this.manageView = $('#manage-projects');
-      this.followView = $('#follow-projects');
-      this.profileView = $('#edit-profile');
-      this.manageBTN = $("a[href='#manage']").parent();
-      this.followBTN = $("a[href='#follow']").parent();
-      this.profileBTN = $("a[href='#profile']").parent();
+      this.$manageView = $('#manage-projects');
+      this.$followView = $('#follow-projects');
+      this.$profileView = $('#edit-profile');
+      this.$manageBTN = $("a[href='#manage']").parent();
+      this.$followBTN = $("a[href='#follow']").parent();
+      this.$profileBTN = $("a[href='#profile']").parent();
       $(window).bind("hashchange", function(e) {
         return _this.toggleSubView();
       });
       this.toggleSubView();
       return profileEditView = new ProfileEditView({
         model: this.userModel,
-        parent: this.profileView
+        parent: this.$profileView
       });
     },
     toggleSubView: function() {
       var btn, v, _i, _j, _len, _len1, _ref, _ref1;
       this.currentView = window.location.hash.substring(1);
-      _ref = [this.manageView, this.profileView, this.followView];
+      _ref = [this.$manageView, this.$profileView, this.$followView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];
         v.hide();
       }
-      _ref1 = [this.followBTN, this.profileBTN, this.manageBTN];
+      _ref1 = [this.$followBTN, this.$profileBTN, this.$manageBTN];
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         btn = _ref1[_j];
         btn.removeClass("active");
       }
       switch (this.currentView) {
         case "follow":
-          this.followView.show();
-          return this.followBTN.addClass("active");
+          this.$followView.show();
+          return this.$followBTN.addClass("active");
         case "profile":
-          this.profileView.show();
-          return this.profileBTN.addClass("active");
+          this.$profileView.show();
+          return this.$profileBTN.addClass("active");
         default:
-          this.manageView.show();
-          return this.manageBTN.addClass("active");
+          this.$manageView.show();
+          return this.$manageBTN.addClass("active");
       }
     },
     loadProjects: function() {
@@ -100,22 +100,22 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     addJoined: function() {
       this.updateCount();
-      this.updateProjects(this.joinedProjects.models, this.followView.find(".projects"), false, true);
-      return this.setPages(this.joinedProjects.length, this.followView);
+      this.updateProjects(this.joinedProjects.models, this.$followView.find(".projects"), false, true);
+      return this.setPages(this.joinedProjects.length, this.$followView);
     },
     addOwned: function() {
       this.updateCount();
-      this.updateProjects(this.ownedProjects.models, this.manageView.find(".projects"), true, false);
-      return this.setPages(this.ownedProjects.length, this.manageView);
+      this.updateProjects(this.ownedProjects.models, this.$manageView.find(".projects"), true, false);
+      return this.setPages(this.ownedProjects.length, this.$manageView);
     },
     updatePage: function() {
       var $ul;
       if (this.currentView === "follow") {
-        $ul = this.followView.find(".projects");
+        $ul = this.$followView.find(".projects");
         $ul.html("");
         this.updateProjects(this.joinedProjects.models, $ul, false, true);
       } else {
-        $ul = this.manageView.find(".projects");
+        $ul = this.$manageView.find(".projects");
         $ul.html("");
         this.updateProjects(this.ownedProjects.models, $ul, true, false);
       }

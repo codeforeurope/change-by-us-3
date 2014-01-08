@@ -58,7 +58,17 @@
             <%= newRoles.join() %>
         <% } %>
     </div>
-    <% if (data.view == "admin" && (data.roles != "OWNER" || data.roles != "Owner") ){ %>  
+    
+    <% if(data.isAdmin){ %>
+        <div class="admin-btns">
+            <a href="#" class="btn btn-medium btn-tertiary">Unflag</a>
+            <a href="#" class="btn btn-medium btn-warning">Delete</a>
+        </div>
+    <% } %>
+
+    <% if (data.view == "admin" && data.roles[0] != "OWNER" && data.roles[0] != "Owner"){ %>  
         <div class="delete-x"></div>
     <% } %>
 </div>
+
+<% console.log('data.roles',data.roles) %>  

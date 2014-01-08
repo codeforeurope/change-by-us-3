@@ -9,6 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     $teamList: null,
     $memberList: null,
     projectID: 0,
+    isOwner: false,
     isOwnerOrganizer: false,
     view: "public",
     initialize: function(options) {
@@ -16,6 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.view = options.view || this.view;
       this.projectID = options.projectID || this.projectID;
       this.model = options.model || this.model;
+      this.isOwner = options.isOwner || this.isOwner;
       this.isOwnerOrganizer = options.isOwnerOrganizer || this.isOwnerOrganizer;
       return ProjectSubView.prototype.initialize.call(this, options);
     },
@@ -38,7 +40,9 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     sortClick: function(e) {
-      this.addAll($(e.currentTarget).attr("id"));
+      var sort;
+      sort = $(e.currentTarget).attr("id");
+      this.addAll(sort);
       return false;
     },
     onTemplateLoad: function() {
@@ -81,9 +85,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       }
       $.each(sortBy, function(k, model) {
         var ownerID, roles;
-        console.log('alpha model', model.get('last_name'), model);
         roles = model.get("roles");
-        ownerID = _this.model.get('owner').id;
+        ownerID = _this.model ? _this.model.get('owner').id : -1;
         if (roles.length === 0) {
           model.set("roles", ["Owner"]);
         }
@@ -113,7 +116,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$memberList.parent().parent().show();
         this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
-      console.log('team >>>>>>>>>> ', this.team, this.members);
       if ((this.team.length === 0) && (this.members.length === 0)) {
         $('.no-results').show();
       } else {
@@ -139,7 +141,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         view: this.view,
         projectID: this.projectID
       });
-      return this.$teamList.append(view.el);
+      return this.$teamList.append(view.$el);
     },
     addMember: function(model_) {
       var view;
@@ -148,7 +150,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         view: this.view,
         projectID: this.projectID
       });
-      return this.$memberList.append(view.el);
+      return this.$memberList.append(view.$el);
     }
   });
 });

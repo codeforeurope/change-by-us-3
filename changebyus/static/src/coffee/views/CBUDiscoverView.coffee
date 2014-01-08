@@ -32,5 +32,5 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-discover
 				view = new ResourceProjectPreviewView({model:projectModel_})
 				view.render()
 
-				@$el.find("#project-list").append view.el
+				@$el.find("#project-list").append view.$el
 

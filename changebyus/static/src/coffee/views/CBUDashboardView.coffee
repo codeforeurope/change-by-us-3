@@ -44,39 +44,39 @@ define ["underscore",
 				$(@parent).append @$el
 
 			onTemplateLoad: ->
-				@manageView   = $('#manage-projects')
-				@followView   = $('#follow-projects')
-				@profileView  = $('#edit-profile')
+				@$manageView   = $('#manage-projects')
+				@$followView   = $('#follow-projects')
+				@$profileView  = $('#edit-profile')
 				
-				@manageBTN  = $("a[href='#manage']").parent()
-				@followBTN  = $("a[href='#follow']").parent()
-				@profileBTN = $("a[href='#profile']").parent()
+				@$manageBTN  = $("a[href='#manage']").parent()
+				@$followBTN  = $("a[href='#follow']").parent()
+				@$profileBTN = $("a[href='#profile']").parent()
 
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
 
-				profileEditView = new ProfileEditView({model:@userModel, parent:@profileView})
+				profileEditView = new ProfileEditView({model:@userModel, parent:@$profileView})
 
 
 			toggleSubView: -> 
 				@currentView = window.location.hash.substring(1)
 
-				for v in [@manageView,@profileView,@followView]
+				for v in [@$manageView,@$profileView,@$followView]
 					v.hide()
 
-				for btn in [@followBTN,@profileBTN,@manageBTN]
+				for btn in [@$followBTN,@$profileBTN,@$manageBTN]
 					btn.removeClass "active"
 
 				switch @currentView 
 					when "follow"
-						@followView.show()
-						@followBTN.addClass "active"
+						@$followView.show()
+						@$followBTN.addClass "active"
 					when "profile"
-						@profileView.show()
-						@profileBTN.addClass "active"
+						@$profileView.show()
+						@$profileBTN.addClass "active"
 					else 
-						@manageView.show()
-						@manageBTN.addClass "active"
+						@$manageView.show()
+						@$manageBTN.addClass "active"
 
 			loadProjects:-> 
 				@joinedProjects = new ProjectListCollection()
@@ -99,21 +99,21 @@ define ["underscore",
 
 			addJoined:->
 				@updateCount() 
-				@updateProjects(@joinedProjects.models, @followView.find(".projects"), false, true)
-				@setPages @joinedProjects.length, @followView
+				@updateProjects(@joinedProjects.models, @$followView.find(".projects"), false, true)
+				@setPages @joinedProjects.length, @$followView
 
 			addOwned:->
 				@updateCount() 
-				@updateProjects(@ownedProjects.models, @manageView.find(".projects"), true, false)
-				@setPages @ownedProjects.length, @manageView
+				@updateProjects(@ownedProjects.models, @$manageView.find(".projects"), true, false)
+				@setPages @ownedProjects.length, @$manageView
 
 			updatePage:->
 				if @currentView is "follow"
-					$ul = @followView.find(".projects")
+					$ul = @$followView.find(".projects")
 					$ul.html("")
 					@updateProjects(@joinedProjects.models, $ul, false, true)
 				else
-					$ul = @manageView.find(".projects")
+					$ul = @$manageView.find(".projects")
 					$ul.html("")
 					@updateProjects(@ownedProjects.models, $ul, true, false)
 

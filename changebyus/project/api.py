@@ -453,19 +453,24 @@ def api_get_projects():
     limit = int(request.args.get('limit', 100))
     sort = request.args.get('sort')
     order = request.args.get('order', 'asc')
-    is_resource = bool(request.args.get('is_resource', False))
+    
+    # using raw query here so that most list queries aren't needlessly 
+    # using flags__gt=-1 or something
+    query = {"active":True}
+    query['resource'] = bool(request.args.get('is_resource', False))
+    if bool(request.args.get('flagged', False)):
+        query['flags'] = {"$gt":0}
 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        projects = Project.objects(resource=is_resource, active=True).order_by(sort_order)
+        projects = Project.objects(__raw__=query).order_by(sort_order)
     else:
-        projects = Project.objects(resource=is_resource, active=True)
+        projects = Project.objects(__raw__=query)
 
     projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)
 
     return jsonify_response( ReturnStructure( data = projects_list ) )
-
 
 
 class JoinProjectForm(Form):

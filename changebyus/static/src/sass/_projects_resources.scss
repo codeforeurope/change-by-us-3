@@ -35,13 +35,13 @@
 }
 
 .project-square {
-  @include box-skin; 
   padding: 10px 10px 50px;
   min-height: 400px;
   float: left;
   margin: auto auto 22px;
   width: 32%;
   margin-right: 2%;
+  @include box-skin; 
 
   &:hover{ 
     .hover-overlay{ 
@@ -61,6 +61,7 @@
     z-index: 1;
     @include border-top-right-radius(4px);
     @include border-bottom-right-radius(4px);
+    @include text-shadow(rgba(black, 0.5) 0px 0px 5px);
   }
 
   .hover-btn, .hover-overlay{
@@ -315,8 +316,8 @@
 }
 
 h2.admin-title{ 
-  @include font-styling("asap", 32px, $gray20, "normal", "regular");
   margin: 0 0 16px;
+  @include font-styling("asap", 32px, $gray20, "normal", "regular");
 }
 
 .content-left,
@@ -725,10 +726,10 @@ h2.admin-title{
   display: inline-block;
   width: auto;
   padding: 8px;
-  @include box-border;
-  @include border-bottom-left-radius(4px);
   color: $gray53;
   font-size: 14px;
+  @include box-border;
+  @include border-bottom-left-radius(4px);
 }
 
 .stream-wrapper{

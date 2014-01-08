@@ -56,8 +56,8 @@ define ["underscore", "backbone", "jquery", "template"],
 					
 					@$paginationContainer = $("<div class='center'/>")
 					@$pagination          = $("<ul class='pagination'/>")
-					@$prevArrow           = $("<li class='prev-arrow'><a href='#'>&laquo;</a></li>")
-					@$nextArrow           = $("<li class='next-arrow'><a href='#'>&raquo;</a></li>")
+					@$prevArrow           = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>")
+					@$nextArrow           = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>")
 
 					@$prevArrow.click (e)=>  
 						if $(e.currentTarget).hasClass('disabled') is false then @prevPage()

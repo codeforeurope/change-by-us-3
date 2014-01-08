@@ -1107,6 +1107,25 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   padding-left: 0;
   margin: 20px 0;
   border-radius: 4px;
+
+  .prev-arrow, .next-arrow{
+    a{ 
+      background-color: transparent !important;
+      border: none !important;
+      margin: 0;
+      padding: 0 50px;
+    }
+  }
+  /*
+  .prev-arrow, .next-arrow{
+    width: 25px;
+    height: 25px;
+    display: block;
+    background-repeat: no-repeat;
+  }
+  .prev-arrow{ background: url(../img/prev-arrow.png); }
+  .next-arrow{ background: url(../img/next-arrow.png); }
+  */
 }
 .pagination > li {
   display: inline;
@@ -1116,12 +1135,12 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
   color: $black;
   position: relative;
   float: left;
-  padding: 6px 12px;
+  padding: 2px 4px;
   line-height: 1.428571429;
-  text-decoration: none;
-  background-color: #ffffff;
-  border: 1px solid #dddddd;
-  margin-left: -1px;
+  text-decoration: underline;
+  border: 1px solid transparent;
+  background-color: transparent;
+  margin: 0 4px -1px;
 }
 .pagination > li:first-child > a,
 .pagination > li:first-child > span {
@@ -1148,9 +1167,9 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
 .pagination > .active > span:focus {
   z-index: 2;
   color: $black;
-  background-color: #428bca;
-  border-color: #428bca;
   cursor: default;
+  text-decoration: underline;
+  background: transparent;
 }
 .pagination > .disabled > span,
 .pagination > .disabled > span:hover,
@@ -1160,9 +1179,9 @@ input:focus:invalid:focus, textarea:focus:invalid:focus, select:focus:invalid:fo
 .pagination > .disabled > a:focus {
   color: $black;
   background-color: #ffffff;
-  border-color: #dddddd;
+  border: 1px solid #dddddd;
   cursor: not-allowed;
-  @include opacity(.25);
+  text-decoration: none;
 }
 .pagination-lg > li > a,
 .pagination-lg > li > span {

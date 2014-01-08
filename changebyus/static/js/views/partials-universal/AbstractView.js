@@ -60,8 +60,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         this.pages = Math.ceil(total / this.perPage);
         this.$paginationContainer = $("<div class='center'/>");
         this.$pagination = $("<ul class='pagination'/>");
-        this.$prevArrow = $("<li class='prev-arrow'><a href='#'>&laquo;</a></li>");
-        this.$nextArrow = $("<li class='next-arrow'><a href='#'>&raquo;</a></li>");
+        this.$prevArrow = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>");
+        this.$nextArrow = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>");
         this.$prevArrow.click(function(e) {
           if ($(e.currentTarget).hasClass('disabled') === false) {
             _this.prevPage();

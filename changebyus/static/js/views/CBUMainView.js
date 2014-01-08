@@ -32,31 +32,32 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
     },
     addAll: function() {
       var _this = this;
-      this.collection.each(function(projectModel) {
-        return _this.addProject(projectModel);
+      this.collection.each(function(projectModel_) {
+        return _this.addProject(projectModel_);
       });
       return onPageElementsLoad();
     },
-    addProject: function(projectModel) {
+    addProject: function(projectModel_) {
       var view;
       view = new ResourceProjectPreviewView({
-        model: projectModel
+        model: projectModel_
       });
       view.render();
       return this.$el.find("#project-list").append(view.$el);
     },
     addAllResources: function() {
       var _this = this;
-      this.resourceCollection.each(function(projectModel) {
-        return _this.addResource(projectModel);
+      this.resourceCollection.each(function(projectModel_) {
+        return _this.addResource(projectModel_);
       });
       return onPageElementsLoad();
     },
-    addResource: function(projectModel) {
+    addResource: function(projectModel_) {
       var view;
       view = new ResourceProjectPreviewView({
-        model: projectModel
+        model: projectModel_
       });
+      view.render();
       return this.$el.find("#resource-list").append(view.$el);
     }
   });

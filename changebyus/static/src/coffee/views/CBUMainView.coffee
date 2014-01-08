@@ -43,21 +43,23 @@ define ["underscore",
 				@resourceCollection.fetch reset: true
 
 			addAll: ->  
-				@collection.each (projectModel) => 
-					@addProject projectModel
+				@collection.each (projectModel_) => 
+					@addProject projectModel_
 				onPageElementsLoad() 
 
-			addProject: (projectModel) ->
-				view = new ResourceProjectPreviewView(model: projectModel)
+			addProject: (projectModel_) ->
+				view = new ResourceProjectPreviewView(model: projectModel_)
 				view.render()
 				
 				@$el.find("#project-list").append view.$el
 
 			addAllResources: ->
-				@resourceCollection.each (projectModel) => 
-					@addResource projectModel
+				@resourceCollection.each (projectModel_) => 
+					@addResource projectModel_
 				onPageElementsLoad() 
 
-			addResource: (projectModel) ->
-				view = new ResourceProjectPreviewView(model: projectModel)
+			addResource: (projectModel_) ->
+				view = new ResourceProjectPreviewView(model: projectModel_)
+				view.render()
+
 				@$el.find("#resource-list").append view.$el

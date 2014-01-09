@@ -24,7 +24,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       });
     },
     onCollectionLoad: function() {
-      console.log('onCollectionLoad');
       this.$el.find(".preload").remove();
       return this.addAll();
     },
@@ -57,7 +56,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
     },
     addOne: function(model_) {
       var m, view;
-      console.log(model_, this.$ul);
       m = moment(model_.get("created_at")).format("MMMM D");
       if (this.currentDate !== m) {
         this.newDay(m);

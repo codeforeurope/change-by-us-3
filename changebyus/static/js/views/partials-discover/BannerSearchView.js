@@ -19,11 +19,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     events: {
       "click .search-catagories li": "categoriesClick",
-      "focus #search-input": "showInput",
-      "keypress #search-input": "onInputEnter",
       "click #modify": "toggleVisibility",
       "click .pill-selection": "pillSelection",
-      "click .search-inputs .btn": "sendForm"
+      "click .search-inputs .btn": "sendForm",
+      "focus #search-input": "showInput",
+      "keypress #search-input": "onInputEnter"
     },
     render: function() {
       var _this = this;
@@ -90,7 +90,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       var url;
       this.locationObj.lat = loc.coords.latitude;
       this.locationObj.lon = loc.coords.longitude;
-      console.log('handleGetCurrentPosition:(loc)', loc);
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
       $.get(url, function(resp) {
         if (resp.success) {

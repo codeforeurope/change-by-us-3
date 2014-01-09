@@ -73,7 +73,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.team = [];
       this.members = [];
       $("#" + sort_).addClass('sort-deactive').removeClass('ul').siblings().removeClass('sort-deactive').addClass('ul');
-      console.log($("#" + sort_), sort_);
       if (sort_ === "alpha") {
         sortBy = this.collection.sortBy(function(model) {
           return model.get('last_name');

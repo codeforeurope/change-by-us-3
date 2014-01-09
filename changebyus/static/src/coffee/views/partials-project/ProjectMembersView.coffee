@@ -68,8 +68,6 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					.removeClass('sort-deactive')
 					.addClass('ul')
 
-				console.log $("#"+sort_),sort_
-
 				if sort_ is "alpha"
 					sortBy = @collection.sortBy (model)->
 						model.get('last_name')

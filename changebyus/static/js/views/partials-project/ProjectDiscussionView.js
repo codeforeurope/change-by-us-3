@@ -28,13 +28,11 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     updateDiscussion: function(id_, length) {
       var _this = this;
       this.length = length;
-      console.log('updateDiscussion>>>>');
       this.model = new ProjectDiscussionModel({
         id: id_
       });
       return this.model.fetch({
         success: function() {
-          console.log('@templateLoaded', _this.templateLoaded);
           if (_this.templateLoaded === false) {
             return _this.delayedDataLoad = true;
           } else {
@@ -66,15 +64,13 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         userAvatar: userAvatar,
         title: this.model.get("title")
       });
-      this.wysiwygFormView.success = function(e) {
-        console.log('e.success', e);
+      return this.wysiwygFormView.success = function(e) {
         if (e.success) {
           $("#new-thread-editor").html("");
           model = new ProjectDiscussionModel(e.data);
           return _this.addDiscussion(model);
         }
       };
-      return console.log('@$wysiwygFormView', this.wysiwygFormView, this.$threadFormID, $('#new-thread-editor'));
     },
     addDiscussion: function(model_) {
       var projectDiscussionThreadItemView;

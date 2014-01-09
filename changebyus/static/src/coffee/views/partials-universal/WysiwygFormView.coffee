@@ -51,8 +51,6 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
 
-				console.log '@templateDir+url',@templateDir+url, @$el, $(@parent)
-
 			onTemplateLoad:->
 				@trigger 'ON_TEMPLATE_LOAD'
 				onPageElementsLoad()
@@ -69,7 +67,6 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> #{msg} </div>").prependTo "#alerts"
 				 
 				$editor = $(@editorID)
-				console.log '$editor !!!!!!!!!!!!!!! ',$editor, @$el
 				@$updateForm = @$el.find("form")
 				options =
 					type: @$updateForm.attr('method')

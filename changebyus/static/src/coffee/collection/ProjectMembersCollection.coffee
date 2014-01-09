@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "model/UserModel", ], 
+define ["underscore", "backbone", "model/UserModel"], 
 	(_, Backbone, UserModel) ->
 		ProjectMembersCollection = Backbone.Collection.extend 
 			model: UserModel

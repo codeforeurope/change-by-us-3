@@ -45,8 +45,7 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 					data: JSON.stringify(dataObj) 
 					dataType: "text" 
 					contentType: "application/json; charset=utf-8"
-				).done (response_)=>
-					console.log response_
+				).done (response_)=> 
 					popWindow response_ 
 
 			slideToggle:->

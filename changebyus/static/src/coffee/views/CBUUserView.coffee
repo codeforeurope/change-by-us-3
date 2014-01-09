@@ -1,19 +1,16 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "resource-project-view"], 
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "resource-project-view"],
 	(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ResourceProjectPreviewView) ->
 		CBUUserView = AbstractView.extend
-			
+
 			joinedProjects:null
 			ownedProjects:null
-			
+
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 
-				# temp user
-				@flagUser()
-
 				@model = new UserModel(options.model)
 				@model.fetch success: =>
-					@render() 
+					@render()
 
 			render: ->
 				@$el = $("<div class='user'/>")
@@ -22,7 +19,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				if (@model.id is window.userID) then $('.edit').removeClass('invisible') 
+				if (@model.id is window.userID) then $('.edit').removeClass('invisible')
 				@loadProjects()
 
 			loadProjects:->
@@ -34,16 +31,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@ownedProjects.on "reset", @addOwned, @
 				@ownedProjects.fetch reset: true
 
-			flagUser:(e)-> 
-				#e.preventDefault()
-				#$this = $(e.currentTarget)
-				#$this.parent().css('opacity', 0.25)
-				#url = $this.attr('href')
-				url = "/api/user/#{@model.id}/flag"
-				$.post url, (res_)=>
+			flagUser:(e)->
+				e.preventDefault()
+				$.post "/api/user/#{@model.id}/flag", (res_)=>
 					console.log res_
 
-				
 			addJoined:->
 				@joinedProjects.each (projectModel) => @addOne projectModel, "#following-list"
 
@@ -53,5 +45,5 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 			addOne: (projectModel_, parent_) ->
 				view = new ResourceProjectPreviewView(model: projectModel_)
 				view.render()
-				
+
 				@$el.find(parent_).append view.$el

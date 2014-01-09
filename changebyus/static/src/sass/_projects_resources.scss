@@ -25,7 +25,8 @@
 
 .public-view{background-image: url(../img/icon_view_project.png);}
 
-.flag-project{background-image: url(../img/icon_flag.png);}
+.flag-project,
+.flag-user{background-image: url(../img/icon_flag.png);}
 
 .projects {
   padding: none;
@@ -150,16 +151,16 @@
 }
 
 .project-name {
-  @include font-styling("asap", 23px, $gray20, "normal", "bold");
   margin-top: 15px;
+  @include font-styling("asap", 23px, $gray20, "normal", "bold");
 }
 
 .project-description {
-  @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
   line-height: 1.6;
   margin-top: 15px;
   overflow: hidden;
   height: 125px;
+  @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
 }
 
 .project-category{

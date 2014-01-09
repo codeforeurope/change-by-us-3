@@ -15,7 +15,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						@ajaxForm()
 						@addListeners()
 						onPageElementsLoad()
-
 				$(@parent).append @$el 
 
 			events:
@@ -47,7 +46,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						$feedback.removeClass("alert").removeClass("alert-danger").html ""
 
 					success: (response) =>
-						console.log 'signup',response
 						$form.find("input, textarea").removeAttr("disabled")
 						#if response.success
 						if response.success
@@ -66,7 +64,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				$socialForm     = $socialSignup.find("form") 
 				$socialSubmit   = $socialSignup.find("input[type='submit']")
 				$socialFeedback = $socialSignup.find(".login-feedback")
-				console.log $socialFeedback
 				$socialSignup.hide()
 
 				socialOptions =
@@ -79,7 +76,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						$socialFeedback.removeClass("alert").html ""
 
 					success: (response) =>
-						console.log 'signup',response,$socialFeedback 
 						$socialForm.find("input, textarea").removeAttr("disabled")
 						#if response.success
 						if response.success
@@ -92,7 +88,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
 					json_str = JSON.stringify(obj)
 					socialOptions.data = json_str
-					console.log 'socialOptions.data',socialOptions.data
 					$.ajax socialOptions
 					false
 
@@ -118,7 +113,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						type: "GET"
 						url: "/api/user/socialinfo"
 					).done (response_)=>
-						console.log "response_",response_
 						if response_.msg.toLowerCase() is "ok"
 							@setSocialInfo(response_.data)
 						$socialForm.find("input, textarea").removeAttr("disabled")
@@ -136,5 +130,3 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				$socialSignup.find('input[name="id"]').val @socialInfo.id
 				$socialSignup.find('input[name="email"]').val @socialInfo.email if @socialInfo.email isnt "None"
 				$socialSignup.find('input[name="display_name"]').val @socialInfo.display_name
-
-				console.log @socialInfo,$('.social-avatar').find('img')

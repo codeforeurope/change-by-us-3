@@ -57,7 +57,7 @@ require.config({
 
 define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "admin-view", "create-view", "stripe-edit", "fundraising", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CBUAdminView, CreateView, CBUStripeEdit, CBUFundraisingView, SlickNav) {
   return $(document).ready(function() {
-    var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
+    var $clone, $cloneLast, $footer, $mainContent, $navTop, $topnav, $window, CBUAppRouter, CBURouter, config, debounce, footerHeight;
     config = {
       parent: ".main-content"
     };
@@ -238,15 +238,22 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
 
     $window = $(window);
     footerHeight = 0;
+    $topnav = $(".top-nav");
+    $mainContent = $(".main-content");
     $footer = $(".footer-nav");
+    debounce = null;
     window.positionFooter = function() {
-      return delay(100, function() {
+      if (debounce) {
+        clearTimeout(debounce);
+      }
+      return debounce = delay(10, function() {
+        var mainContentHeight, topNavHeight;
+        topNavHeight = $topnav.height();
+        mainContentHeight = $mainContent.height();
         footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
-        console.log($footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height());
-        if (($(document.body).height() + footerHeight) < $window.height()) {
+        if ((topNavHeight + mainContentHeight + footerHeight) < $window.height()) {
           return $footer.css({
-            position: "fixed",
-            bottom: 0
+            position: "fixed"
           });
         } else {
           return $footer.css({

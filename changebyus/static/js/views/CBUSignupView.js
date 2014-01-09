@@ -51,7 +51,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
         success: function(response) {
-          console.log('signup', response);
           $form.find("input, textarea").removeAttr("disabled");
           if (response.success) {
             return window.location.href = "/";
@@ -71,7 +70,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
       $socialFeedback = $socialSignup.find(".login-feedback");
-      console.log($socialFeedback);
       $socialSignup.hide();
       socialOptions = {
         type: $socialForm.attr('method'),
@@ -83,7 +81,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           return $socialFeedback.removeClass("alert").html("");
         },
         success: function(response) {
-          console.log('signup', response, $socialFeedback);
           $socialForm.find("input, textarea").removeAttr("disabled");
           if (response.success) {
             return window.location.href = "/";
@@ -102,7 +99,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         }
         json_str = JSON.stringify(obj);
         socialOptions.data = json_str;
-        console.log('socialOptions.data', socialOptions.data);
         $.ajax(socialOptions);
         return false;
       });
@@ -133,7 +129,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           type: "GET",
           url: "/api/user/socialinfo"
         }).done(function(response_) {
-          console.log("response_", response_);
           if (response_.msg.toLowerCase() === "ok") {
             _this.setSocialInfo(response_.data);
           }
@@ -154,8 +149,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       if (this.socialInfo.email !== "None") {
         $socialSignup.find('input[name="email"]').val(this.socialInfo.email);
       }
-      $socialSignup.find('input[name="display_name"]').val(this.socialInfo.display_name);
-      return console.log(this.socialInfo, $('.social-avatar').find('img'));
+      return $socialSignup.find('input[name="display_name"]').val(this.socialInfo.display_name);
     }
   });
 });

@@ -32,12 +32,11 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData.display_name = this.user.get("display_name");
       m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       this.model.set("format_date", m);
-      this.$el.template(this.templateDir + "/templates/partials-universal/update-list-item.html", {
+      return this.$el.template(this.templateDir + "/templates/partials-universal/update-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      return this;
     },
     onTemplateLoad: function() {
       var $projectTitle, projectName;
@@ -53,7 +52,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     addReplies: function() {
       var reply, self, viewData, _i, _len, _ref,
         _this = this;
-      console.log('addReplies', this.model);
       self = this;
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
       _ref = this.model.get('responses');
@@ -72,7 +70,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     },
     addReply: function(reply_) {
       var postReplyView, replyForm;
-      console.log('reply_', reply_);
       postReplyView = new PostReplyView({
         model: reply_
       });

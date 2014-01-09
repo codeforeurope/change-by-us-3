@@ -3,8 +3,7 @@ define ["underscore", "backbone", "model/ProjectModel"],
 		FlaggedUserCollection = Backbone.Collection.extend
 			model: ProjectModel
 			
-			url: ->
-				#"/api/user/list?flagged=1&"
+			url: -> 
 				"/api/user/list"
 			
 			parse: (response) ->

@@ -72,6 +72,8 @@ define ["underscore",
 				@viewData = @model.attributes
 				@getMemberStatus()
 
+				AbstractView::onTemplateLoad.call @
+
 			getMemberStatus:->
 				if window.userID is ""
 					@isMember = false
@@ -86,8 +88,6 @@ define ["underscore",
 							@viewData.isMember         = @isMember
 							@viewData.isOwnerOrganizer = @isOwnerOrganizer
 							@addHeaderView()
-
-						console.log @isMember,@isOwnerOrganizer 
 
 			addHeaderView: -> 
 				if @isResource
@@ -131,8 +131,6 @@ define ["underscore",
 													id:@model.get("id"), 
 													slim:true, 
 													userAvatar:userAvatar
-
-					console.log 'wysiwygFormView',@wysiwygFormView
 				else
 					@projectMembersView  = new ProjectMembersView
 													model:@model,
@@ -159,10 +157,7 @@ define ["underscore",
 
 			flagProject:(e)-> 
 				e.preventDefault()
-				$this = $(e.currentTarget)
-				$this.parent().css('opacity', 0.25)
-				url = $this.attr('href')
-				$.post url, (res_)=>
+				$.post "/api/project/#{@model.id}/flag", (res_)=>
 					console.log res_
 
 			joinProject:(e)-> 
@@ -185,7 +180,6 @@ define ["underscore",
 							@isMember = true
 							$join.html(feedback).css('background-color','#e6e6e6')
 			
-
 			toggleSubView: ->
 				view = window.location.hash.substring(1)
 				
@@ -205,3 +199,5 @@ define ["underscore",
 					else 
 						@updatesView.show()
 						@updatesBTN.addClass "active"
+
+				onPageElementsLoad()

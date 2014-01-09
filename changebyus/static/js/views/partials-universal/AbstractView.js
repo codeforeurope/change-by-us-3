@@ -26,7 +26,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       if (this.delayedCollectionLoad) {
         this.loadData();
       }
-      return this.delegateEvents();
+      this.delegateEvents();
+      return window.onPageElementsLoad();
     },
     changeHash: function(e) {
       return window.location.hash = $(e.currentTarget).attr("href").substring(1);

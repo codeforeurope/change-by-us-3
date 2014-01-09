@@ -1,8 +1,8 @@
 require.config
 	baseUrl: "/static/js"
-	paths: 
+	paths:
 		"jquery": "ext/jquery/jquery"
-		"hotkeys": "ext/jquery/jquery.hotkeys" 
+		"hotkeys": "ext/jquery/jquery.hotkeys"
 		"moment": "ext/moment/moment.min"
 		"underscore": "ext/underscore/underscore-min"
 		"backbone": "ext/backbone/backbone-min"
@@ -53,34 +53,34 @@ require.config
 		"serializeObject":["jquery"]
 		"serializeJSON":["jquery"]
 
-define ["jquery",  
-		"backbone", 
-		 "main-view", 
-		 "discover-view",  
-		 "city-view", 
-		 "project-view", 
-		 "project-owner-view", 
-		 "login-view", 
-		 "signup-view", 
-		 "user-view", 
-		 "dashboard-view", 
+define ["jquery",
+		"backbone",
+		 "main-view",
+		 "discover-view",
+		 "city-view",
+		 "project-view",
+		 "project-owner-view",
+		 "login-view",
+		 "signup-view",
+		 "user-view",
+		 "dashboard-view",
 		 "stream-view",
 		 "admin-view",
 		 "create-view",
 		 "stripe-edit",
 		 "fundraising",
-		 "slicknav"], 
-	($, 
+		 "slicknav"],
+	($,
 	 Backbone,
 	 CBUMainView,
 	 CBUDiscoverView,
 	 CBUCityView,
-	 CBUProjectView, 
-	 CBUProjectOwnerView, 
-	 CBULoginView, 
-	 CBUSignupView, 
-	 CBUUserView, 
-	 CBUDashboardView, 
+	 CBUProjectView,
+	 CBUProjectOwnerView,
+	 CBULoginView,
+	 CBUSignupView,
+	 CBUUserView,
+	 CBUDashboardView,
 	 CBUStreamView,
 	 CBUAdminView,
 	 CreateView,
@@ -105,14 +105,14 @@ define ["jquery",
 					"create/resource": "createResource"
 					"login": "login"
 					"signup": "signup"
-					"project": "project" 
-					"stream": "stream" 
-					"stream/": "stream" 
-					"admin": "admin" 
+					"project": "project"
+					"stream": "stream"
+					"stream/": "stream"
+					"admin": "admin"
 					"": "default"
 
 				project: (id_) ->
-					config.model = {id:id_} 
+					config.model = {id:id_}
 					config.isResource = false
 					config.isOwner = (userID is projectOwnerID)
 					window.CBUAppView =  new CBUProjectView(config)
@@ -125,11 +125,11 @@ define ["jquery",
 						window.location.href = "/login"
 
 				stripeEdit: (id_, sid_) ->
-					config.model = {id:id_, sid:sid_} 
+					config.model = {id:id_, sid:sid_}
 					window.CBUAppView =  new CBUStripeEdit(config)
 
 				fundraising: (id_) ->
-					config.model = {id:id_} 
+					config.model = {id:id_}
 					window.CBUAppView =  new CBUFundraisingView(config)
 
 				resource: (id_) ->
@@ -137,7 +137,7 @@ define ["jquery",
 					config.isResource = true
 					window.CBUAppView =  new CBUProjectView(config)
 
-				city: (id_) -> 
+				city: (id_) ->
 					config.model = {id:id_}
 					window.CBUAppView =  new CBUCityView(config)
 
@@ -150,7 +150,7 @@ define ["jquery",
 
 				dashboard: ->
 					config.model = {id:window.userID}
-					window.CBUAppView = new CBUDashboardView(config) 
+					window.CBUAppView = new CBUDashboardView(config)
 
 				createProject: ->
 					config.isResource = false
@@ -191,8 +191,8 @@ define ["jquery",
 				e.preventDefault()
 				$.ajax(
 					type: "GET"
-					url: "/logout" 
-				).done (response)=> 
+					url: "/logout"
+				).done (response)=>
 					window.location.reload()
 
 			### GLOBAL UTILS ###
@@ -211,7 +211,7 @@ define ["jquery",
 				for str,i in arr_
 					arr_[i] = capitalize(str)
 
-				if (arr_.length <= 1) 
+				if (arr_.length <= 1)
 					str = arr_.join()
 				else
 					str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length-1]
@@ -223,37 +223,41 @@ define ["jquery",
 
 			window.buttonize3D = ->
 				$btn3d = $('.btn-3d')
-				for btn in $btn3d 
+				for btn in $btn3d
 					$btn = $(btn)
 					$btn.parent().addClass('btn-3d-parent')
 					$btn.attr('data-content', $btn.html())
-		 
+
 			### STICKY FOOTER ###
 			$window      = $(window)
-			footerHeight = 0 
+			footerHeight = 0
+			$topnav      = $(".top-nav")
+			$mainContent = $(".main-content")
 			$footer      = $(".footer-nav")
+			debounce     = null
 
 			window.positionFooter = ->
-				delay 100, ->
-					footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
-					console.log $footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height()
+				if debounce then clearTimeout debounce
+				debounce = delay 10, ->
+					topNavHeight      = $topnav.height()
+					mainContentHeight = $mainContent.height()
+					footerHeight      = parseInt($footer.height()) + parseInt($footer.css('margin-top'))
 
-					if ($(document.body).height()+footerHeight) < $window.height()
-						$footer.css
-							position: "fixed" 
-							bottom: 0
+					if (topNavHeight+mainContentHeight+footerHeight) < $window.height()
+						$footer.css position: "fixed"
 					else
-						$footer.css position: "relative" 
-			
+						$footer.css position: "relative"
+
 			positionFooter()
 			$window.scroll(positionFooter).resize(positionFooter)
 
 			window.onPageElementsLoad = ->
 				positionFooter()
-			### END STICKY FOOTER ### 
+
+			### END STICKY FOOTER ###
 
 			$('.nav.nav-pills.pull-right').slicknav
-				label: '', 
+				label: '',
 				prependTo:'#responsive-menu'
 
 			$clone     = $('.resp-append')

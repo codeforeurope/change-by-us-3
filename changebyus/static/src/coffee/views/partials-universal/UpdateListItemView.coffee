@@ -48,7 +48,6 @@ define ["underscore",
 
 				@$el.template @templateDir+"/templates/partials-universal/update-list-item.html",
 					{data:@viewData}, => @onTemplateLoad()
-				@
 
 			onTemplateLoad:-> 
 				if @isStream
@@ -60,8 +59,7 @@ define ["underscore",
 				@addReplies()
 				@delegateEvents()
 
-			addReplies:-> 
-				console.log 'addReplies',@model
+			addReplies:->  
 				self = @ 
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 
@@ -75,7 +73,6 @@ define ["underscore",
 					{data:viewData}, => @onFormLoaded()
 
 			addReply:(reply_)->
-				console.log 'reply_',reply_
 				postReplyView = new PostReplyView({model:reply_})
 				replyForm = @$el.find('.post-reply-form')
 				if replyForm.length > 0

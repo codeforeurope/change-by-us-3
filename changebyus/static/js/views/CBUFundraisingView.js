@@ -15,9 +15,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       });
     },
-    event: {
-      "click #edit-goal": "onEditGoalClick"
-    },
     onEditGoalClick: function() {
       this.$el.toggle();
       return this.$review.toggle();
@@ -43,6 +40,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     onTemplateLoad: function() {
       var _this = this;
+      AbstractView.prototype.onTemplateLoad.call(this);
       if (this.$review === null) {
         this.$review = $("<div class='body-container'/>");
       }
@@ -53,7 +51,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       $(this.parent).append(this.$review);
       this.$review.hide();
-      return this.delegateEvents();
+      return $('#edit-goal').click(function(e) {
+        e.preventDefault();
+        return _this.onEditGoalClick();
+      });
     },
     ajaxForm: function() {
       var $form, options,

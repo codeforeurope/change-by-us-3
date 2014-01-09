@@ -54,7 +54,6 @@ define ["underscore",
 				id = @model.get("id")
 				$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
 					if res_.success
-						console.log 'res_',res_, @model
 						@memberData = res_.data
 
 						if (@memberData.organizer || @memberData.owner) then @render() else (window.location.href = "/project/"+@model.get("slug"))

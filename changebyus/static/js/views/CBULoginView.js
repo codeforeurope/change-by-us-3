@@ -58,7 +58,6 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
         var json_str;
         json_str = JSON.stringify($form.serializeJSON());
         options.data = json_str;
-        console.log('options.data', options.data);
         $.ajax(options);
         return false;
       });

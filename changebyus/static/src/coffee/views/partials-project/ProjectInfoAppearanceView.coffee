@@ -32,11 +32,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				options   =
 					type: $form.attr('method')
 					url: $form.attr('action')
-					dataType: "json" 
-					#contentType: "application/json; charset=utf-8"
+					dataType: "json"  
 					contentType: "multipart/form-data; charset=utf-8"
-					beforeSubmit: =>  
-					#beforeSend: =>  
+					beforeSubmit: =>   
 						if $form.valid()
 							$zip = $('input[name="zip"]')
 							console.log '$zip.val()  @location.name ',$zip, $zip.val(), @location.name 
@@ -64,16 +62,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 							$feedback.addClass('alert-success').removeClass('alert-error')
 						else
 							$feedback.removeClass('alert-success').addClass('alert-error')
-							
-				###
-				$form.submit ->
-					options.data = json_str
-					$.ajax options
-					false
-				### 
 
 				$form.ajaxForm options
-
 
 				# location autocomplete
 				$projectLocation = $("#project_location")

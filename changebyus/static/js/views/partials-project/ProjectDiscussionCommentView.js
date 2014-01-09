@@ -11,7 +11,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.$el = $("<div class='project'/>");
       this.$el.template(this.templateDir + "/templates/partials-project/project-discussion-comment.html", {
         data: this.viewData
-      }, function() {});
+      }, function() {
+        return _this.onTemplateLoad();
+      });
       return $(this.parent).append(this.$el);
     }
   });

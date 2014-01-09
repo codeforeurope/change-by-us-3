@@ -49,7 +49,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onTemplateLoad: function() {
       this.viewData = this.model.attributes;
-      return this.getMemberStatus();
+      this.getMemberStatus();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     getMemberStatus: function() {
       var id,
@@ -66,9 +67,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
             _this.viewData.isMember = _this.isMember;
             _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
-            _this.addHeaderView();
+            return _this.addHeaderView();
           }
-          return console.log(_this.isMember, _this.isOwnerOrganizer);
         });
       }
     },
@@ -128,7 +128,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             userAvatar: userAvatar
           });
         });
-        console.log('wysiwygFormView', this.wysiwygFormView);
       } else {
         this.projectMembersView = new ProjectMembersView({
           model: this.model,
@@ -155,13 +154,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.delegateEvents();
     },
     flagProject: function(e) {
-      var $this, url,
-        _this = this;
+      var _this = this;
       e.preventDefault();
-      $this = $(e.currentTarget);
-      $this.parent().css('opacity', 0.25);
-      url = $this.attr('href');
-      return $.post(url, function(res_) {
+      return $.post("/api/project/" + this.model.id + "/flag", function(res_) {
         return console.log(res_);
       });
     },
@@ -209,14 +204,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       switch (view) {
         case "members":
           this.projectMembersView.show();
-          return this.membersBTN.addClass("active");
+          this.membersBTN.addClass("active");
+          break;
         case "calendar":
           this.projectCalenderView.show();
-          return this.calendarBTN.addClass("active");
+          this.calendarBTN.addClass("active");
+          break;
         default:
           this.updatesView.show();
-          return this.updatesBTN.addClass("active");
+          this.updatesBTN.addClass("active");
       }
+      return onPageElementsLoad();
     }
   });
 });

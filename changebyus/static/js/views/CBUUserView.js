@@ -6,7 +6,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
-      this.flagUser();
       this.model = new UserModel(options.model);
       return this.model.fetch({
         success: function() {
@@ -47,10 +46,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
     },
     flagUser: function(e) {
-      var url,
-        _this = this;
-      url = "/api/user/" + this.model.id + "/flag";
-      return $.post(url, function(res_) {
+      var _this = this;
+      e.preventDefault();
+      return $.post("/api/user/" + this.model.id + "/flag", function(res_) {
         return console.log(res_);
       });
     },

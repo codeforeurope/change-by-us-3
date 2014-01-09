@@ -1,14 +1,14 @@
-define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
+define ["underscore",
+		"backbone",
+		"jquery",
+		"template",
 		"abstract-view",
 		"model/UserModel",
-		"model/ProjectModel"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
+		"model/ProjectModel"],
+	(_,
+	 Backbone,
+	 $,
+	 temp,
 	 AbstractView,
 	 UserModel,
 	 ProjectModel) ->
@@ -17,16 +17,13 @@ define ["underscore",
 
 				$review:null
 				stripe:{}
-				
+
 				initialize: (options) ->
 					AbstractView::initialize.call @, options
-					
+
 					@model = new ProjectModel({id:@model.id})
 					@model.fetch
 						success: => @onFetch()
-
-				event:
-					"click #edit-goal":"onEditGoalClick"
 
 				onEditGoalClick:->
 					@$el.toggle()
@@ -47,13 +44,17 @@ define ["underscore",
 
 
 				onTemplateLoad:->
+					AbstractView::onTemplateLoad.call @
+
 					@$review = $("<div class='body-container'/>") if @$review is null
 					@$review.template @templateDir+"/templates/partials-universal/stripe-form.html",
 						data:@stripe,  =>@ajaxForm()
 					$(@parent).append @$review
 					@$review.hide()
 
-					@delegateEvents()
+					$('#edit-goal').click (e)=>
+						e.preventDefault()
+						@onEditGoalClick()
 
 				ajaxForm:->
 					$form = @$review.find('form')
@@ -65,5 +66,3 @@ define ["underscore",
 								@render()
 
 					$form.ajaxForm options
-
-					

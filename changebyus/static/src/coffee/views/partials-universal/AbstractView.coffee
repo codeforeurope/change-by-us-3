@@ -26,6 +26,7 @@ define ["underscore", "backbone", "jquery", "template"],
 				@templateLoaded = true
 				if @delayedCollectionLoad then @loadData()
 				@delegateEvents()
+				window.onPageElementsLoad()
 				#override in subview
 
 			changeHash:(e)-> 

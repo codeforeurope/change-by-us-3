@@ -24,7 +24,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
       id = this.model.get("id");
       return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
         if (res_.success) {
-          console.log('res_', res_, _this.model);
           _this.memberData = res_.data;
           if (_this.memberData.organizer || _this.memberData.owner) {
             return _this.render();

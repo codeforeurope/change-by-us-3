@@ -23,7 +23,6 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 				url = $(e.currentTarget).attr("href")
 				popWindow url
 
-
 			ajaxForm: -> 
 				$submit   = $("input[type='submit']")
 				$form     = $("form")
@@ -53,6 +52,5 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 				$form.submit ->
 					json_str = JSON.stringify($form.serializeJSON())
 					options.data = json_str
-					console.log 'options.data',options.data
 					$.ajax options
 					false

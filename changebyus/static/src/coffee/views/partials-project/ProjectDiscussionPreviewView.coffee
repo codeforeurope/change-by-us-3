@@ -1,8 +1,7 @@
 define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
 	(_, Backbone, $, temp, AbstractView) ->
 		ProjectDiscussionPreviewView = AbstractView.extend
-			
-			#parent:"#project-update",
+
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@render()

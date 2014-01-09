@@ -53,7 +53,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
         dataType: "text",
         contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
-        console.log(response_);
         return popWindow(response_);
       });
     },

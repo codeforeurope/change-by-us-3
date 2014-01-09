@@ -76,13 +76,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           }
         }
       };
-      /*
-      				$form.submit ->
-      					options.data = json_str
-      					$.ajax options
-      					false
-      */
-
       $form.ajaxForm(options);
       $projectLocation = $("#project_location");
       $projectLocation.typeahead({

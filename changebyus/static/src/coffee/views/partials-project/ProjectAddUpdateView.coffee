@@ -26,7 +26,6 @@ define ["underscore",
 				"click .share-toggle":"shareToggle"
 				"click .share-options .styledCheckbox":"shareOption"
 
-
 			shareToggle:->
 				$(".share-options").toggleClass("hide")
 

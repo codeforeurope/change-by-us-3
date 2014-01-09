@@ -21,7 +21,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-user/profile-edit-form.html", 
 					{data:@viewData}, => @onTemplateLoaded()
-						
 
 			socialClick:(e)->
 				e.preventDefault()
@@ -45,7 +44,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					type: $form.attr('method')
 					url: $form.attr('action')
 					dataType: "json" 
-					#contentType: "application/json; charset=utf-8"
 					contentType: "multipart/form-data; charset=utf-8"
 					beforeSubmit:(arr_, form_, options_)->  
 						if $form.valid()

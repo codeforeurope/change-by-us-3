@@ -51,8 +51,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       }, function() {
         return _this.onTemplateLoad();
       });
-      $(this.parent).append(this.$el);
-      return console.log('@templateDir+url', this.templateDir + url, this.$el, $(this.parent));
+      return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
       var _this = this;
@@ -76,7 +75,6 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return $("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> " + msg + " </div>").prependTo("#alerts");
       };
       $editor = $(this.editorID);
-      console.log('$editor !!!!!!!!!!!!!!! ', $editor, this.$el);
       this.$updateForm = this.$el.find("form");
       options = {
         type: this.$updateForm.attr('method'),

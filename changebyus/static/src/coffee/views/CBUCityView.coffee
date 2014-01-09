@@ -5,9 +5,7 @@ define ["underscore",
 		"abstract-view", 
 		"resource-project-view",
 		"model/ProjectModel",
-		"model/CityModel", 
-		"collection/CityProjectCollection", 
-		"collection/CityResourceCollection" ], 
+		"model/CityModel"], 
 	(_, 
 	 Backbone, 
 	 $, 
@@ -15,9 +13,7 @@ define ["underscore",
 	 AbstractView, 
 	 ResourceProjectPreviewView,
 	 ProjectModel,
-	 CityModel, 
-	 CityProjectCollection, 
-	 CityResourceCollection) ->
+	 CityModel) ->
 	 	
 		CBUCityView = AbstractView.extend
 			
@@ -27,20 +23,12 @@ define ["underscore",
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				
-				@model       = new CityModel(options.model)
 				@collection  = options.collection or @collection
-				
-				###
-				@model.fetch 
-					success: =>@render()
-				###
 
-				console.log 'city >>> ', @model
 				$.getJSON "/static/js/config/cities.json", (data)=>
-					id = @model.get('id')
-					obj = data.cities[id]
-					@model = new CityModel(obj) #
-					console.log 'city ', @model, id, data, obj
+					id     = options.model.id
+					obj    = data.cities[id]
+					@model = new CityModel(obj)
 					@render()
 
 			events:

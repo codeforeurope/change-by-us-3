@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-modal-view", ],
+define ["underscore", "backbone", "jquery", "template", "abstract-modal-view"],
 	(_, Backbone, $, temp, AbstractModalView) ->
 		ProjectUpdateSuccessModalView = AbstractModalView.extend
 

@@ -19,7 +19,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				@collection.fetch {reset: true}
 
 			onCollectionLoad:->
-				console.log 'onCollectionLoad'
 				@$el.find(".preload").remove()
 				@addAll()
 				
@@ -47,7 +46,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "collec
 				@$projects = @$currentDay.find('.stream-wrapper')
 					
 			addOne: (model_) ->
-				console.log model_, @$ul
 				m = moment(model_.get("created_at")).format("MMMM D")
 				if @currentDate isnt m then @newDay(m)
 

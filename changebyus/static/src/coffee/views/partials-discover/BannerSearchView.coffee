@@ -17,17 +17,16 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 			events:
 				"click .search-catagories li":"categoriesClick"
-				"focus #search-input":"showInput"
-				"keypress #search-input":"onInputEnter"
 				"click #modify":"toggleVisibility"
 				"click .pill-selection":"pillSelection"
 				"click .search-inputs .btn":"sendForm"
-
+				"focus #search-input":"showInput"
+				"keypress #search-input":"onInputEnter"
+				
 			render: -> 
 				@$el = $(".banner-search")
 				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
-					data: @viewData, => 
-						@onTemplateLoad()
+					data: @viewData, => @onTemplateLoad()
 				$(@parent).append @$el
 
 			onTemplateLoad:->
@@ -71,7 +70,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@locationObj.lat = loc.coords.latitude
 				@locationObj.lon = loc.coords.longitude
 
-				console.log 'handleGetCurrentPosition:(loc)', loc
 				url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
 				$.get url, (resp) ->
 					if resp.success then $("#search-near").val resp.data[0].name
@@ -106,7 +104,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@category = ""
 				$('.search-catagories').show()
 				
-
 			toggleVisibility:(e)->
 				onClick = false
 				if e 
@@ -118,8 +115,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				$('.filter-within').toggle(onClick)
 
 			onInputEnter:(e) ->
-				if e.which is 13
-					@sendForm()
+				if e.which is 13 then @sendForm()
 
 			sendForm:(e)->
 				if e then e.preventDefault()
@@ -170,12 +166,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				s = @index*@perPage
 				e = (@index+1)*@perPage-1
 				for i in [s..e]
-					if i < @projects.length
-						@addProject @projects[i]
+					if i < @projects.length then @addProject @projects[i]
 
 				$("html, body").animate({ scrollTop: 0 }, "slow")
 
 			addProject:(id_)->
 				projectModel = new ProjectModel({id:id_})
 				view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list"})
-				view.fetch()  
+				view.fetch()

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "resource-project-view", "model/ProjectModel", "model/CityModel", "collection/CityProjectCollection", "collection/CityResourceCollection"], function(_, Backbone, $, temp, AbstractView, ResourceProjectPreviewView, ProjectModel, CityModel, CityProjectCollection, CityResourceCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "resource-project-view", "model/ProjectModel", "model/CityModel"], function(_, Backbone, $, temp, AbstractView, ResourceProjectPreviewView, ProjectModel, CityModel) {
   var CBUCityView;
   return CBUCityView = AbstractView.extend({
     $header: null,
@@ -6,20 +6,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
-      this.model = new CityModel(options.model);
       this.collection = options.collection || this.collection;
-      /*
-      				@model.fetch 
-      					success: =>@render()
-      */
-
-      console.log('city >>> ', this.model);
       return $.getJSON("/static/js/config/cities.json", function(data) {
         var id, obj;
-        id = _this.model.get('id');
+        id = options.model.id;
         obj = data.cities[id];
         _this.model = new CityModel(obj);
-        console.log('city ', _this.model, id, data, obj);
         return _this.render();
       });
     },

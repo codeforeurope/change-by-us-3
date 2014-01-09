@@ -12,6 +12,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				@model.fetch success: =>
 					@render()
 
+			events:
+				"click .flag-user a":"flagProject"
+
 			render: ->
 				@$el = $("<div class='user'/>")
 				@$el.template @templateDir + "/templates/partials-user/user.html",
@@ -34,6 +37,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 			flagUser:(e)->
 				e.preventDefault()
 				$.post "/api/user/#{@model.id}/flag", (res_)=>
+					$('.flag-user').css('opacity',0.25)
 					console.log res_
 
 			addJoined:->

@@ -82,7 +82,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     },
     onReplyToggleClick: function(e) {
       $(e.currentTarget).find('.reply').toggleClass('hide');
-      return self.$repliesHolder.toggleClass('hide');
+      return this.$repliesHolder.toggleClass('hide');
     },
     onFormLoaded: function() {
       var $form, options,

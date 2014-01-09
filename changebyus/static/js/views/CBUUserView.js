@@ -13,6 +13,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       });
     },
+    events: {
+      "click .flag-user a": "flagProject"
+    },
     render: function() {
       var _this = this;
       this.$el = $("<div class='user'/>");
@@ -49,6 +52,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       var _this = this;
       e.preventDefault();
       return $.post("/api/user/" + this.model.id + "/flag", function(res_) {
+        $('.flag-user').css('opacity', 0.25);
         return console.log(res_);
       });
     },

@@ -157,6 +157,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       var _this = this;
       e.preventDefault();
       return $.post("/api/project/" + this.model.id + "/flag", function(res_) {
+        $('.flag-project').css('opacity', 0.25);
         return console.log(res_);
       });
     },

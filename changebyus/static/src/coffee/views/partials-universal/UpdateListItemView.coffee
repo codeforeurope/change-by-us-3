@@ -82,7 +82,7 @@ define ["underscore",
 
 			onReplyToggleClick:(e)->
 				$(e.currentTarget).find('.reply').toggleClass('hide')
-				self.$repliesHolder.toggleClass('hide')
+				@$repliesHolder.toggleClass('hide')
 
 			onFormLoaded:->
 				@$el.find('.update-content').append @$repliesHolder

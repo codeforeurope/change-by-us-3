@@ -111,9 +111,13 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $this.siblings().toggleClass('active');
       switch ($this.html()) {
         case 'Projects':
-          return this.byProjectResources = 'project';
+          this.byProjectResources = 'project';
+          $('#create-project').css('display', 'block');
+          return $('#create-resource').hide();
         case 'Resources':
-          return this.byProjectResources = 'resource';
+          this.byProjectResources = 'resource';
+          $('#create-project').hide();
+          return $('#create-resource').css('display', 'block');
         case 'Popular':
           return this.sortByPopularDistance = 'popular';
         case 'Distance':

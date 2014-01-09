@@ -91,8 +91,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				switch $this.html()
 					when 'Projects'
 						@byProjectResources = 'project'
+						$('#create-project').css('display','block')
+						$('#create-resource').hide()
 					when 'Resources'
 						@byProjectResources = 'resource'
+						$('#create-project').hide()
+						$('#create-resource').css('display','block')
 					when 'Popular'
 						@sortByPopularDistance = 'popular'
 					when 'Distance'

@@ -46,6 +46,7 @@
 
 .tt-suggestion{
 	&:hover{background-color: $primaryColor;}
+	&.tt-is-under-cursor{background-color: $primaryColor;}
 }
 
 .feedback{ margin-top: 20px; }

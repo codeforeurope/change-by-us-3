@@ -72,7 +72,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
 				$.get url, (resp) ->
-					if resp.success then $("#search-near").val resp.data[0].name
+					if resp.success and resp.data.length > 0 then $("#search-near").val resp.data[0].name
 
 				@sendForm()
 

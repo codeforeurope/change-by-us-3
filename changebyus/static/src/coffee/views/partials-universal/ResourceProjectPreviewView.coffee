@@ -30,13 +30,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 				@$el = $("<li class='project-preview'/>")
 				@$el.template @templateDir+"/templates/partials-universal/project-resource.html", 
-					{data: viewData}, => @onTemplateLoad()
+					{data: viewData}, => 
+						@$el.find('img').load =>@onTemplateLoad()
 
 			onFetch:(r)-> 
-				console.log 'onFetch', @parent
 				$(@parent).append @render()
 
-			# onTemplateLoad
 			close:->
 				$closeX = @$el.find('.close-x')
 				$closeX.hide()

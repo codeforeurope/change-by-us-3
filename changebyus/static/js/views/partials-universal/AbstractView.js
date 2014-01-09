@@ -20,6 +20,14 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       this.parent = options.parent || this.parent;
       return this.viewData = options.viewData || this.viewData;
     },
+    events: {
+      "click .prev-arrow": function() {
+        return alert('prev');
+      },
+      "click .prev-arrow a": function() {
+        return alert('prev a');
+      }
+    },
     onTemplateLoad: function() {
       this.trigger('ON_TEMPLATE_LOAD');
       this.templateLoaded = true;
@@ -27,7 +35,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         this.loadData();
       }
       this.delegateEvents();
-      return window.onPageElementsLoad();
+      return onPageElementsLoad();
     },
     changeHash: function(e) {
       return window.location.hash = $(e.currentTarget).attr("href").substring(1);

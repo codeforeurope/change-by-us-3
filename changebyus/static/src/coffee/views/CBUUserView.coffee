@@ -22,7 +22,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				if (@model.id is window.userID) then $('.edit').removeClass('invisible')
+				if (@model.id is window.userID)
+					$('.edit').removeClass('invisible')
+					$('.flag-user').remove()
+					
 				@loadProjects()
 
 			loadProjects:->

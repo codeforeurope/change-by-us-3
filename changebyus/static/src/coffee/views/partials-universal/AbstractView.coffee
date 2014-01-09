@@ -21,12 +21,16 @@ define ["underscore", "backbone", "jquery", "template"],
 				@parent      = options.parent or @parent
 				@viewData    = options.viewData or @viewData
 
+			events:
+				"click .prev-arrow":->alert('prev')
+				"click .prev-arrow a":->alert('prev a')
+
 			onTemplateLoad:->
 				@trigger 'ON_TEMPLATE_LOAD'
 				@templateLoaded = true
 				if @delayedCollectionLoad then @loadData()
 				@delegateEvents()
-				window.onPageElementsLoad()
+				onPageElementsLoad()
 				#override in subview
 
 			changeHash:(e)-> 

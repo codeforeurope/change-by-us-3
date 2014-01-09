@@ -29,6 +29,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     onTemplateLoad: function() {
       if (this.model.id === window.userID) {
         $('.edit').removeClass('invisible');
+        $('.flag-user').remove();
       }
       return this.loadProjects();
     },

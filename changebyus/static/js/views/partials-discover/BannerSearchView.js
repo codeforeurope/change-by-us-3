@@ -92,7 +92,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.locationObj.lon = loc.coords.longitude;
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
       $.get(url, function(resp) {
-        if (resp.success) {
+        if (resp.success && resp.data.length > 0) {
           return $("#search-near").val(resp.data[0].name);
         }
       });

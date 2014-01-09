@@ -30,11 +30,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
         data: viewData
       }, function() {
-        return _this.onTemplateLoad();
+        return _this.$el.find('img').load(function() {
+          return _this.onTemplateLoad();
+        });
       });
     },
     onFetch: function(r) {
-      console.log('onFetch', this.parent);
       return $(this.parent).append(this.render());
     },
     close: function() {

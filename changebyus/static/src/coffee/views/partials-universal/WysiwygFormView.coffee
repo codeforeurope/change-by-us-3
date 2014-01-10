@@ -8,6 +8,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 			userAvatar:""
 			title:""
 			$updateForm:null
+			$formName:null
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
@@ -16,8 +17,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 				@title      = options.title || @title
 
 				@render()
- 
-			render: ->  
+
+			render: ->
 				@viewData =
 					project_id: window.projectID
 					response_to_id: @id 
@@ -51,7 +52,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
 
-			onTemplateLoad:->
+			onTemplateLoad:-> 
 				@trigger 'ON_TEMPLATE_LOAD'
 				onPageElementsLoad()
 				delay 100, =>@ajaxForm()
@@ -64,6 +65,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 						msg = "Unsupported format " + detail 
 					else
 						console.log "error uploading file", reason, detail
+
 					$("<div class='alert'> <button type='button' class='close' data-dismiss='alert'>&times;</button><strong>File upload error</strong> #{msg} </div>").prependTo "#alerts"
 				 
 				$editor = $(@editorID)
@@ -115,10 +117,18 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 							left: editorOffset.left + $editor.innerWidth() - 75
 				else
 					$("#voiceBtn").hide() 
-				###
-				$("#voiceBtn").hide()
+				### 
 				
-				$editor.wysiwyg fileUploadError: showErrorAlert
+				$editor.wysiwyg
+					fileUploadError: showErrorAlert 
+					startUpload: => 
+						console.log 'startUpload',@$updateForm
+						$editor.attr("contenteditable", false)
+						@$updateForm.find("input").attr("disabled", "disabled")
+					uploadSuccess: =>
+						console.log 'uploadSuccess',@$updateForm
+						$editor.attr("contenteditable", true)
+						@$updateForm.find("input").removeAttr("disabled")
 
 				window.prettyPrint and prettyPrint()
 

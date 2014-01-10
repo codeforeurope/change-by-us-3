@@ -1,5 +1,19 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "collection/ProjectListCollection", "resource-project-view"],
-	(_, Backbone, $, temp, AbstractView, UserModel, ProjectListCollection, ResourceProjectPreviewView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"abstract-view", 
+		"model/UserModel", 
+		"collection/ProjectListCollection", 
+		"resource-project-view"],
+	(_, 
+	 Backbone,
+	 $,
+	 temp,
+	 AbstractView,
+	 UserModel,
+	 ProjectListCollection,
+	 ResourceProjectPreviewView) ->
 		CBUUserView = AbstractView.extend
 
 			joinedProjects:null

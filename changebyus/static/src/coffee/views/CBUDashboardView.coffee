@@ -23,9 +23,9 @@ define ["underscore",
 
 		CBUDashboardView = AbstractView.extend
 
-			location:{name: "", lat: 0, lon: 0} 
-			className: "body-container"
 			currentView:""
+			className: "body-container"
+			location:{name: "", lat: 0, lon: 0} 
 
 			initialize: (options) ->  
 				AbstractView::initialize.call @, options
@@ -33,10 +33,10 @@ define ["underscore",
 				@userModel.fetch 
 					success: =>@render() 
 
-			events:
-				"click a[href^='#']":"changeHash"
+			events: ->
+				_.extend {}, AbstractView.prototype.events, {"click a[href^='#']":"changeHash"}
 
-			render: ->  
+			render: ->
 				@$el.template @templateDir+"/templates/dashboard.html", 
 					{data:@userModel.attributes}, => 
 						@onTemplateLoad()
@@ -44,13 +44,13 @@ define ["underscore",
 				$(@parent).append @$el
 
 			onTemplateLoad: ->
-				@$manageView   = $('#manage-projects')
-				@$followView   = $('#follow-projects')
-				@$profileView  = $('#edit-profile')
+				@$manageView  = $('#manage-projects')
+				@$followView  = $('#follow-projects')
+				@$profileView = $('#edit-profile')
 				
-				@$manageBTN  = $("a[href='#manage']").parent()
-				@$followBTN  = $("a[href='#follow']").parent()
-				@$profileBTN = $("a[href='#profile']").parent()
+				@$manageBTN   = $("a[href='#manage']").parent()
+				@$followBTN   = $("a[href='#follow']").parent()
+				@$profileBTN  = $("a[href='#profile']").parent()
 
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
@@ -102,10 +102,14 @@ define ["underscore",
 				@updateProjects(@joinedProjects.models, @$followView.find(".projects"), false, true)
 				@setPages @joinedProjects.length, @$followView
 
+				@delegateEvents()
+
 			addOwned:->
 				@updateCount() 
 				@updateProjects(@ownedProjects.models, @$manageView.find(".projects"), true, false)
 				@setPages @ownedProjects.length, @$manageView
+
+				@delegateEvents()
 
 			updatePage:->
 				if @currentView is "follow"

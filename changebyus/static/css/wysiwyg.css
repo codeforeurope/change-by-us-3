@@ -29,6 +29,8 @@
 
 
 #voiceBtn {
+  display: none;
+
   width: 20px;
   color: transparent;
   background-color: transparent;

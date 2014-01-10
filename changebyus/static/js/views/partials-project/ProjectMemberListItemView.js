@@ -22,7 +22,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     },
     render: function() {
       var _this = this;
-      console.log('ProjectMemberListItemView @viewData', this.viewData);
       this.$el = $(this.el);
       this.$el.template(this.templateDir + "/templates/partials-project/project-member-list-item.html", {
         data: this.viewData

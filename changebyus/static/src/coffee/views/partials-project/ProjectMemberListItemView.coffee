@@ -25,7 +25,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				"click .btn-warning": "delete"
 
 			render: ->
-				console.log 'ProjectMemberListItemView @viewData',@viewData
 				@$el = $(@el)
 				@$el.template @templateDir+"/templates/partials-project/project-member-list-item.html",
 					{data:@viewData}, => @onTemplateLoad()

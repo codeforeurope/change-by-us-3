@@ -1,5 +1,18 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-universal/UpdateListItemView"], 
-	(_, Backbone, $, temp, AbstractView, StreamCollection, UpdateListItemView) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"abstract-view", 
+		"collection/StreamCollection", 
+		"views/partials-universal/UpdateListItemView"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 AbstractView, 
+	 StreamCollection, 
+	 UpdateListItemView) ->
+	 	
 		CBUStreamView = AbstractView.extend
 
 			initialize: (options_) ->

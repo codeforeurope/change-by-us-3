@@ -18,6 +18,7 @@ define ["underscore",
 	 ProjectListCollection, 
 	 ResourceListCollection, 
 	 AbstractView) ->
+
 		CBUMainView = AbstractView.extend
 
 			initialize: (options) ->
@@ -28,7 +29,8 @@ define ["underscore",
 
 			render: -> 
 				@$el = $("<div class='projects-main'/>")
-				@$el.template @templateDir + "/templates/main.html", {}, => @onTemplateLoad()
+				@$el.template @templateDir+"/templates/main.html",
+					{}, => @onTemplateLoad()
 
 			onTemplateLoad:->
 				$(@parent).prepend @$el

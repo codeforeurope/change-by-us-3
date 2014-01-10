@@ -26,9 +26,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.onTemplateLoad();
       });
     },
-    onTemplateLoad: function() {
-      return ProjectSubView.prototype.onTemplateLoad.call(this);
-    },
     addAll: function() {
       var length,
         _this = this;

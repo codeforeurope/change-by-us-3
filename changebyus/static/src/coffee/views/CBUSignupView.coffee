@@ -77,7 +77,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
 					success: (response) =>
 						$socialForm.find("input, textarea").removeAttr("disabled")
-						#if response.success
+
 						if response.success
 							window.location.href = "/"
 						else

@@ -22,8 +22,9 @@ define ["underscore", "backbone", "jquery", "template"],
 				@viewData    = options.viewData or @viewData
 
 			events:
-				"click .prev-arrow":->alert('prev')
-				"click .prev-arrow a":->alert('prev a')
+				"click .next-arrow": "nextClick"
+				"click .prev-arrow": "prevClick"
+				"click .page": "pageClick"
 
 			onTemplateLoad:->
 				@trigger 'ON_TEMPLATE_LOAD'
@@ -64,47 +65,47 @@ define ["underscore", "backbone", "jquery", "template"],
 					@$prevArrow           = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>")
 					@$nextArrow           = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>")
 
-					@$prevArrow.click (e)=>  
-						if $(e.currentTarget).hasClass('disabled') is false then @prevPage()
-						false
-
-					@$nextArrow.click (e)=>  
-						if $(e.currentTarget).hasClass('disabled') is false then @nextPage()
-						false
-
 					@$pagination.append @$prevArrow
 					for i in [1..@pages]
 						$li = $("<li class='page'><a href='#' id='page-#{i}'>#{i}</a></li>")
-						$li.click (e)=>  
-							i = $(e.currentTarget).find('a').html()
-							@pageClick(i)
-							false
 						@$pagination.append $li
 					@$pagination.append @$nextArrow
 
 					@$paginationContainer.append @$pagination
 					$parent.append @$paginationContainer
 
-					@checkArrows() 
- 
+					@delegateEvents()
+					@checkArrows()
+
+			nextClick:(e)->
+				if $(e.currentTarget).hasClass('disabled') is false then @nextPage()
+				e.preventDefault() 
+
+			prevClick:(e)->
+				if $(e.currentTarget).hasClass('disabled') is false then @prevPage()
+				e.preventDefault() 
+
+			pageClick:(e)->
+				e.preventDefault()
+				i = $(e.currentTarget).find('a').html()
+
+				if @index isnt (i-1) 
+					@index = (i-1) 
+					@checkArrows()
+					@updatePage() 
+
 			nextPage:->
 				@index++
 				@checkArrows()
 				@updatePage()
 
-			prevPage:(e)->
+			prevPage:->
 				@index--
 				@checkArrows()
 				@updatePage()
 
 			updatePage:->
 				#override in subview
-
-			pageClick:(i)->
-				if @index isnt (i-1) 
-					@index = (i-1) 
-					@checkArrows()
-					@updatePage() 
 
 			checkArrows:->
 				$('.pagination li').removeClass('disabled') 

@@ -7,6 +7,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     userAvatar: "",
     title: "",
     $updateForm: null,
+    $formName: null,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
       this.slim = options.slim || this.slim;
@@ -128,9 +129,18 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       					$("#voiceBtn").hide()
       */
 
-      $("#voiceBtn").hide();
       $editor.wysiwyg({
-        fileUploadError: showErrorAlert
+        fileUploadError: showErrorAlert,
+        startUpload: function() {
+          console.log('startUpload', _this.$updateForm);
+          $editor.attr("contenteditable", false);
+          return _this.$updateForm.find("input").attr("disabled", "disabled");
+        },
+        uploadSuccess: function() {
+          console.log('uploadSuccess', _this.$updateForm);
+          $editor.attr("contenteditable", true);
+          return _this.$updateForm.find("input").removeAttr("disabled");
+        }
       });
       return window.prettyPrint && prettyPrint();
     },

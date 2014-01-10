@@ -21,12 +21,9 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       return this.viewData = options.viewData || this.viewData;
     },
     events: {
-      "click .prev-arrow": function() {
-        return alert('prev');
-      },
-      "click .prev-arrow a": function() {
-        return alert('prev a');
-      }
+      "click .next-arrow": "nextClick",
+      "click .prev-arrow": "prevClick",
+      "click .page": "pageClick"
     },
     onTemplateLoad: function() {
       this.trigger('ON_TEMPLATE_LOAD');
@@ -56,8 +53,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     },
     onFetch: function(r) {},
     setPages: function(total, parent_) {
-      var $li, $parent, i, _i, _ref,
-        _this = this;
+      var $li, $parent, i, _i, _ref;
       if (parent_ == null) {
         parent_ = null;
       }
@@ -71,32 +67,38 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         this.$pagination = $("<ul class='pagination'/>");
         this.$prevArrow = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>");
         this.$nextArrow = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>");
-        this.$prevArrow.click(function(e) {
-          if ($(e.currentTarget).hasClass('disabled') === false) {
-            _this.prevPage();
-          }
-          return false;
-        });
-        this.$nextArrow.click(function(e) {
-          if ($(e.currentTarget).hasClass('disabled') === false) {
-            _this.nextPage();
-          }
-          return false;
-        });
         this.$pagination.append(this.$prevArrow);
         for (i = _i = 1, _ref = this.pages; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
           $li = $("<li class='page'><a href='#' id='page-" + i + "'>" + i + "</a></li>");
-          $li.click(function(e) {
-            i = $(e.currentTarget).find('a').html();
-            _this.pageClick(i);
-            return false;
-          });
           this.$pagination.append($li);
         }
         this.$pagination.append(this.$nextArrow);
         this.$paginationContainer.append(this.$pagination);
         $parent.append(this.$paginationContainer);
+        this.delegateEvents();
         return this.checkArrows();
+      }
+    },
+    nextClick: function(e) {
+      if ($(e.currentTarget).hasClass('disabled') === false) {
+        this.nextPage();
+      }
+      return e.preventDefault();
+    },
+    prevClick: function(e) {
+      if ($(e.currentTarget).hasClass('disabled') === false) {
+        this.prevPage();
+      }
+      return e.preventDefault();
+    },
+    pageClick: function(e) {
+      var i;
+      e.preventDefault();
+      i = $(e.currentTarget).find('a').html();
+      if (this.index !== (i - 1)) {
+        this.index = i - 1;
+        this.checkArrows();
+        return this.updatePage();
       }
     },
     nextPage: function() {
@@ -104,19 +106,12 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       this.checkArrows();
       return this.updatePage();
     },
-    prevPage: function(e) {
+    prevPage: function() {
       this.index--;
       this.checkArrows();
       return this.updatePage();
     },
     updatePage: function() {},
-    pageClick: function(i) {
-      if (this.index !== (i - 1)) {
-        this.index = i - 1;
-        this.checkArrows();
-        return this.updatePage();
-      }
-    },
     checkArrows: function() {
       $('.pagination li').removeClass('disabled');
       if (this.index === this.pages - 1) {

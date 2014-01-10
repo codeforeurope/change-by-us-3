@@ -14,8 +14,7 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 				"click #get-started":"linkStripe"
 				"click #does-it-work":"slideToggle"
 
-			render: ->
-				console.log 'ProjectFundraisingView',@
+			render: -> 
 				@$el = $(@parent)
 				stripeAccount = @model.get("stripe_account")
 				if stripeAccount
@@ -26,9 +25,6 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 						{}, => 
 							@getStarted()
 							@delegateEvents()
-							
-			onTemplateLoad:->
-				AbstractView::onTemplateLoad.call @
 
 			getStarted:-> 
 				@$how = $('.fundraising-left .content-wrapper')

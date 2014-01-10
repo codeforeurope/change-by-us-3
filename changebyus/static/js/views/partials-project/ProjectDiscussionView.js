@@ -1,10 +1,10 @@
 define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, WysiwygFormView, ProjectDiscussionThreadItemView) {
   var ProjectDiscussionView;
   return ProjectDiscussionView = ProjectSubView.extend({
-    parent: "#project-discussion",
     $ul: null,
     $form: null,
     $threadFormID: "#add-thread-form",
+    parent: "#project-discussion",
     wysiwygFormView: null,
     delayedDataLoad: false,
     render: function() {

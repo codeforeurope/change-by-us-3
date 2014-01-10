@@ -15,9 +15,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       });
     },
+    events: {
+      "click #edit-goal": "onEditGoalClick"
+    },
     onEditGoalClick: function() {
       this.$el.toggle();
-      return this.$review.toggle();
+      this.$review.toggle();
+      return false;
     },
     onFetch: function() {
       this.stripe = this.model.get("stripe_account");
@@ -50,11 +54,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         return _this.ajaxForm();
       });
       $(this.parent).append(this.$review);
-      this.$review.hide();
-      return $('#edit-goal').click(function(e) {
-        e.preventDefault();
-        return _this.onEditGoalClick();
-      });
+      return this.$review.hide();
     },
     ajaxForm: function() {
       var $form, options,

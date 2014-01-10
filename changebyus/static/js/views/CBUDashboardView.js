@@ -1,13 +1,13 @@
 define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "template", "abstract-view", "collection/ProjectListCollection", "model/UserModel", "resource-project-view", "views/partials-user/ProfileEditView"], function(_, Backbone, fileupload, button, $, temp, AbstractView, ProjectListCollection, UserModel, ResourceProjectPreviewView, ProfileEditView) {
   var CBUDashboardView;
   return CBUDashboardView = AbstractView.extend({
+    currentView: "",
+    className: "body-container",
     location: {
       name: "",
       lat: 0,
       lon: 0
     },
-    className: "body-container",
-    currentView: "",
     initialize: function(options) {
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
@@ -20,8 +20,10 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         }
       });
     },
-    events: {
-      "click a[href^='#']": "changeHash"
+    events: function() {
+      return _.extend({}, AbstractView.prototype.events, {
+        "click a[href^='#']": "changeHash"
+      });
     },
     render: function() {
       var _this = this;
@@ -101,12 +103,14 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     addJoined: function() {
       this.updateCount();
       this.updateProjects(this.joinedProjects.models, this.$followView.find(".projects"), false, true);
-      return this.setPages(this.joinedProjects.length, this.$followView);
+      this.setPages(this.joinedProjects.length, this.$followView);
+      return this.delegateEvents();
     },
     addOwned: function() {
       this.updateCount();
       this.updateProjects(this.ownedProjects.models, this.$manageView.find(".projects"), true, false);
-      return this.setPages(this.ownedProjects.length, this.$manageView);
+      this.setPages(this.ownedProjects.length, this.$manageView);
+      return this.delegateEvents();
     },
     updatePage: function() {
       var $ul;

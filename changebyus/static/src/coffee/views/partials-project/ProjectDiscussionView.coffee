@@ -16,10 +16,10 @@ define ["underscore",
 	 ProjectDiscussionThreadItemView) ->
 		ProjectDiscussionView = ProjectSubView.extend
 
-			parent: "#project-discussion"
 			$ul:null
 			$form:null 
 			$threadFormID:"#add-thread-form"
+			parent: "#project-discussion"
 			wysiwygFormView:null
 			delayedDataLoad:false
 

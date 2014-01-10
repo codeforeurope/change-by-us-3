@@ -84,9 +84,9 @@
 }
 
 .circle {
-    @include border-radius(1000px, 1000px);
     background-position: center center;
     overflow: hidden;
+    @include border-radius(1000px, 1000px);
 }
 
 a.ul {

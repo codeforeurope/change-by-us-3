@@ -25,9 +25,13 @@ define ["underscore",
 					@model.fetch
 						success: => @onFetch()
 
+				events:
+					"click #edit-goal":"onEditGoalClick"
+
 				onEditGoalClick:->
 					@$el.toggle()
 					@$review.toggle()
+					false
 
 				onFetch:->
 					@stripe = @model.get("stripe_account")
@@ -52,11 +56,7 @@ define ["underscore",
 					$(@parent).append @$review
 					@$review.hide()
 
-					$('#edit-goal').click (e)=>
-						e.preventDefault()
-						@onEditGoalClick()
-
-				ajaxForm:->
+				ajaxForm:-> 
 					$form = @$review.find('form')
 					options =
 						success: (response_) =>

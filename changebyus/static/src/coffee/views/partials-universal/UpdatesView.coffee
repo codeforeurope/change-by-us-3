@@ -33,9 +33,6 @@ define ["underscore",
 				@$el.template @templateDir+"/templates/partials-universal/updates.html",
 					{data: @viewData}, =>@onTemplateLoad()
 
-			onTemplateLoad:->
-				ProjectSubView::onTemplateLoad.call @ 
-
 			addAll: ->
 				@$members = @$el.find(".team-members ul")
 				length = 0

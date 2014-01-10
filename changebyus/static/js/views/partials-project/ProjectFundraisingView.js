@@ -15,7 +15,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
     render: function() {
       var stripeAccount,
         _this = this;
-      console.log('ProjectFundraisingView', this);
       this.$el = $(this.parent);
       stripeAccount = this.model.get("stripe_account");
       if (stripeAccount) {
@@ -30,9 +29,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
           return _this.delegateEvents();
         });
       }
-    },
-    onTemplateLoad: function() {
-      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     getStarted: function() {
       this.$how = $('.fundraising-left .content-wrapper');

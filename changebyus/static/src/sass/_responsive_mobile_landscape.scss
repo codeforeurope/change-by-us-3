@@ -4,7 +4,6 @@
     body.debug {
         background: red;
     }
-    //body{background: red;}
     /*******************************************
      * Header/Nav
      *******************************************/
@@ -143,9 +142,10 @@
         .mail-icon {
             width: 30px;
             margin-right: 15px;
+            float: right;
         }
         .member-title {
-            width: 75%;
+            width: 100%;
             &:after {
                 clear: both;
             }

@@ -46,7 +46,7 @@ define ["underscore",
 				@isOwner     = options.isOwner || @isOwner
 				@isResource  = options.isResource || @isResource
 				@model.fetch 
-					success: =>@render()
+					success: => @render()
 
 			events:
 				"click .flag-project a":"flagProject"

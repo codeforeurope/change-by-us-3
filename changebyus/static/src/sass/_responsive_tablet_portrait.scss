@@ -1,12 +1,10 @@
 /**** affects all sizes from 0 to 1024px **/
-
 @import "variables";
 
 @media only screen and (max-width: 1024px) {
     body.debug {
         background: blue;
     }
-    //body{background: blue;}
     /*******************************************
      * Header/Nav
      *******************************************/
@@ -149,6 +147,11 @@
     }
     .view-project {
         display: none;
+    }
+    #project-update{
+        .user-avatar {
+            display: none; 
+        }
     }
     /*******************************************
      * Resource

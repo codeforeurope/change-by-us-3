@@ -9,7 +9,7 @@
 		formdata: !!window.FormData,
 		progress: "upload" in new XMLHttpRequest
     },
-    shouldPostImage = true,
+    //shouldPostImage = true,
 	readFileIntoDataUrl = function (fileInfo) {
 		var loader = $.Deferred(),
 			fReader = new FileReader();
@@ -26,6 +26,7 @@
 		var html = $(this).html();
 		return html && html.replace(/(<br>|\s|<div><br><\/div>|&nbsp;)*$/, '');
 	};
+
 	$.fn.wysiwyg = function (userOptions) {
 		var editor = this,
 			selectedRange,
@@ -44,6 +45,7 @@
 				}
 			},
 			execCommand = function (commandWithArgs, valueArg) {
+				editor.focus();
 				var commandArr = commandWithArgs.split(' '),
 					command = commandArr.shift(),
 					args = commandArr.join(' ') + (valueArg || '');
@@ -90,8 +92,7 @@
 			},
 			insertFiles = function (files) {
 				editor.focus();
-
-				if (shouldPostImage){
+				if (options.shouldPostImage){
 					postImages(files); 
 				}else{
 					$.each(files, function (idx, fileInfo) {
@@ -156,8 +157,8 @@
 			},
 			postImages = function(files){
 			    var data = new FormData(); 
-				data.append('photo',files[0]); 
-			   	//console.log('postImages',postImages);
+				data.append('photo',files[0]);
+				if (options.startUpload) options.startUpload()
 			    $.ajax({
 			        url: '/api/post/imageupload',
 			        data: data,
@@ -165,15 +166,15 @@
 			        cache: false,
 					contentType: false,
 					processData: false,
-			        success: function ( data ) {
-			            //console.log("success", data );
+			        success: function ( data ) { 
+			        	if (options.uploadSuccess) options.uploadSuccess()
 			            execCommand('insertimage', data.data.image_url);
 			        },
 			        error: function ( data ) {
 			            console.log("error", data );
 			        }
 			    })
-			},
+			}, 
 			initFileDrops = function () {
 				editor.on('dragenter dragover', false)
 					.on('drop', function (e) {
@@ -191,7 +192,7 @@
 		if (options.dragAndDropImages) {
 			initFileDrops();
 		}
-		shouldPostImage = options.shouldPostImage;
+		//shouldPostImage = options.shouldPostImage;
 		bindToolbar($(options.toolbarSelector), options);
 		editor.attr('contenteditable', true)
 			.on('mouseup keyup mouseout', function () {

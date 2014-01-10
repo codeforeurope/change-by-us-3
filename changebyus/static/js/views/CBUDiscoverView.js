@@ -16,16 +16,31 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       });
     },
     onTemplateLoad: function() {
-      var bannerSearchView, searchParent;
+      var searchParent;
       $(this.parent).append(this.$el);
       searchParent = this.$el.find(".content");
-      bannerSearchView = new BannerSearchView({
+      this.bannerSearchView = new BannerSearchView({
         parent: searchParent
       });
       this.collection.on("reset", this.addAll, this);
       return this.collection.fetch({
         reset: true
       });
+    },
+    updatePage: function() {
+      return this.bannerSearchView.updatePage();
+    },
+    nextPage: function(e) {
+      return this.bannerSearchView.nextPage(e);
+    },
+    prevClick: function(e) {
+      return this.bannerSearchView.prevClick(e);
+    },
+    pageClick: function(e) {
+      return this.bannerSearchView.pageClick(e);
+    },
+    checkArrows: function() {
+      return this.bannerSearchView.checkArrows();
     },
     addAll: function() {
       var _this = this;

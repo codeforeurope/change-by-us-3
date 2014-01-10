@@ -5,84 +5,96 @@
  * FUNCTIONS
  ***************************************/
 @function em($target, $context: $fontBase) {
-	@if $target == 0 { @return 0 }
-	@return $target / $context + 0em;
+    @if $target == 0 {
+        @return 0;
+    }
+    @return $target / $context + 0em;
 }
 
 @function perc($width, $containerWidth) {
-	@return percentage($width / $containerWidth);
+    @return percentage($width / $containerWidth);
 }
 
-@mixin placeholderColor($c){
-	color: $c;
-	&.placeholder{color: $c;}
-	&:-moz-placeholder{color: $c;}
-	&::-moz-placeholder{color: $c;}
-	&::-webkit-input-placeholder{color: $c;}
-	&:-ms-input-placeholder{color: $c;}
+@mixin placeholderColor($c) {
+    color: $c;
+    &.placeholder {
+        color: $c;
+    }
+    &:-moz-placeholder {
+        color: $c;
+    }
+    &::-moz-placeholder {
+        color: $c;
+    }
+    &::-webkit-input-placeholder {
+        color: $c;
+    }
+    &:-ms-input-placeholder {
+        color: $c;
+    }
 }
 
 /****************************************
  * TYPOGRAPHY
  ***************************************/
 
-@mixin asap{
-	font-family: "Asap", Helvetica, Arial, sans-serif;
+@mixin asap {
+    font-family: "Asap", Helvetica, Arial, sans-serif;
 }
 
-@mixin merriweather{
-	font-family: "Merriweather", Georgia, serif;
+@mixin merriweather {
+    font-family: "Merriweather", Georgia, serif;
 }
 
-@mixin bebas{
-	font-family: "bebas_neueregular", Arial, Helvetica, sans-serif;
+@mixin bebas {
+    font-family: "bebas_neueregular", Arial, Helvetica, sans-serif;
 }
 
-@mixin font-styling($family:"asap", $size:15px, $color:$black, $style:"normal", $weight:"regular") {
-	@if $family == "merriweather" {
-		@include merriweather;
-	} @else if $family == "bebas" {
-		@include bebas;
-	} @else {
-		@include asap;
-	}
-
-	@if $style == "italic" {
-		font-style: italic;
-	}
-
-	@if $weight == "bold" {
-		font-weight: bold;
-	} @else {
-		font-weight: normal;
-	}
-
-	font-size: $size;
-	color: $color;
+@mixin font-styling($family: "asap", $size: 15px, $color: $black, $style: "normal", $weight: "regular") {
+    @if $family == "merriweather" {
+        @include merriweather;
+    }
+    @else if $family == "bebas" {
+        @include bebas;
+    }
+    @else {
+        @include asap;
+    }
+    @if $style == "italic" {
+        font-style: italic;
+    }
+    @if $weight == "bold" {
+        font-weight: bold;
+    }
+    @else {
+        font-weight: normal;
+    }
+    font-size: $size;
+    color: $color;
 }
 
-@mixin highlight{
-	color:$primaryColor !important;
-	font-weight: bold;
+@mixin highlight {
+    color: $primaryColor !important;
+    font-weight: bold;
 }
 
-@mixin ellipsis{
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	display: block;
+@mixin ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 /****************************************
  * SKIN
  ***************************************/
 
-@mixin box-border{
-	border: 1px solid $grayBorder;
+@mixin box-border {
+    border: 1px solid $grayBorder;
 }
 
-@mixin box-skin{
-	background-color: $white;
-	@include box-border;
-	@include border-radius(4px);
+@mixin box-skin {
+    background-color: $white;
+    @include box-border;
+    @include border-radius(4px);
 }

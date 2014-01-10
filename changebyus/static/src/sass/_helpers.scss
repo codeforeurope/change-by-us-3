@@ -1,81 +1,104 @@
-@import 'compass/css3/filter';
+@import "compass/css3/filter";
 
 .clearfix {
-  *zoom: 1;
-
-  &:before {
-    display: table;
-    line-height: 0;
-    content: "";
-  }
-  
-  &:after {
-    display: table;
-    line-height: 0;
-    content: "";
-    clear: both;
-  }
+    *zoom: 1;
+    &:before {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+    &:after {
+        display: table;
+        line-height: 0;
+        content: "";
+        clear: both;
+    }
 }
 
-.clear-both{clear: both;}
+.clear-both {
+    clear: both;
+}
 
 .hide-text {
-  font: 0 / 0 a;
-  color: transparent;
-  text-shadow: none;
-  background-color: transparent;
-  border: 0;
+    font: 0 / 0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
 }
 
-.center{
-  margin-left:auto;
-  margin-right:auto;
-  text-align: center;
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
-.np{
-  padding: 0 !important;
-  overflow: visible;
+.np {
+    padding: 0 !important;
+    overflow: visible;
 }
 
-.pull-right { float: right;}
+.pull-right {
+    float: right;
+}
 
-.pull-left { float: left; }
+.pull-left {
+    float: left;
+}
 
-.tl{ text-align: left; }
+.tl {
+    text-align: left;
+}
 
-.tr{ text-align: right; }
+.tr {
+    text-align: right;
+}
 
-.hide{ display: none; }
+.hide {
+    display: none;
+}
 
-.show{ display: block; }
+.show {
+    display: block;
+}
 
-.invisible { visibility: hidden;}
+.invisible {
+    visibility: hidden;
+}
 
-.affix { position: fixed; }
+.affix {
+    position: fixed;
+}
 
-.highlight{ @include highlight; }
+.highlight {
+    @include highlight;
+}
 
 .emphasis {
-  font-size: 16px;
-  letter-spacing: .1em;
+    font-size: 16px;
+    letter-spacing: .1em;
 }
 
-.blur{ 
-  @include filter(blur(2px)); 
+.blur {
+    @include filter(blur(2px));
 }
 
-.circle{
-  @include border-radius(1000px, 1000px);
-  background-position: center center;
-  overflow: hidden;
+.circle {
+    @include border-radius(1000px, 1000px);
+    background-position: center center;
+    overflow: hidden;
 }
 
-a.ul{ 
-  color: $graySubtext;
-  text-decoration: underline ;
+a.ul {
+    color: $graySubtext;
+    text-decoration: underline;
 }
 
 /********** position helper ***********/
-.mt-16{margin-top: 16px;}
-.mr-10{margin-right: 10px;}
+.mt-16 {
+    margin-top: 16px;
+}
+
+.mr-10 {
+    margin-right: 10px;
+}

@@ -2,193 +2,211 @@
 @import "compass/css3/box-shadow";
 
 .form-left {
-	float: left;
-	width: 60%;
-	
-	label{ margin-top: 30px; }
-	>label:first-child{margin-top: 0;}
-
-	.input-xxlarge{width: 85%;}
+    float: left;
+    width: 60%;
+    label {
+        margin-top: 30px;
+    }
+    >label:first-child {
+        margin-top: 0;
+    }
+    .input-xxlarge {
+        width: 85%;
+    }
 }
 
 .form-right {
-	float: right;
-	width: 40%;
-}	
+    float: right;
+    width: 40%;
+}
 
-.form-footer{
-	margin-bottom: 48px;
-	.pull-right{ font-size: 14px; }
+.form-footer {
+    margin-bottom: 48px;
+    .pull-right {
+        font-size: 14px;
+    }
 }
 
 .tt-dropdown-menu {
-	width: 480px;
-	padding: 8px 0;
-	margin-bottom: 12px;
-	background-color: #fff;
-	border: 1px solid rgba(0, 0, 0, 0.2);
-	@include border-radius(8px);
-	@include box-shadow(rgba(0,0,0,.2) 0 5px 10px);
-	text-align: left;
+    width: 480px;
+    padding: 8px 0;
+    margin-bottom: 12px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    @include border-radius(8px);
+    @include box-shadow(rgba(0, 0, 0, 0.2) 0 5px 10px);
+    text-align: left;
 }
 
 .zip {
-	white-space: nowrap;
-	cursor: pointer; 
-	padding: 8px 20px;
-	font-size: 18px;
-	line-height: 24px;
-}
-
-.tt-suggestion + .tt-suggestion{
-	border-top: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.tt-suggestion{
-	&:hover{background-color: $primaryColor;}
-	&.tt-is-under-cursor{background-color: $primaryColor;}
-}
-
-.feedback{ margin-top: 20px; }
-
-.sub-text{color: $graySubtext;} 
-
-.profile-image, .project-image{
-	margin-bottom: 30px;
-	width: 240px;
-}
-
-.public-profile{ 
-	float: right;
- }
-
-.public-email{
-	*{float: left;}
-	span{ 
-		margin-left: 10px;
-		width: 90%;
-	} 
-}
-
-.notify-row, 
-.password-title{
-	width: 85%;
-	label{
-		margin-top: 0; 
-		float: left;
-	}
-}
-
-.notify-wrapper{
-	margin-top: 30px; 
-}
-
-.password-title{
-	margin-top: 30px; 
-	text-align: right;
-}
-
-.notify-row{
-	div{
-		float: left;
-		width: 10%; 
-		&:first-child{width: 80%;}
-	}
-}
-
-.public-visibility{
-	.styledRadio{
-		float: left;
-		margin-right: 15px;
-		margin-bottom: 15px;
-	}
-	
-	span{line-height: 1.5;}
-}
-
-.warning{
-	color: red !important;
-	text-decoration: underline;
-	&:hover{
-		text-decoration: underline;
-	}
-}
-
-.twitter-typeahead{width: 100%;}
-
-
-.create-project{
-  h1{
-    font-size: 52px;
-    font-weight: normal;
-  }
-}
-
-.form-edit-create{
-  p{
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 8px 20px;
     font-size: 18px;
-    line-height: 1.5;
-  }
+    line-height: 24px;
+}
 
-  .dk_toggle{
-    padding: 16px;
-  }
+.tt-suggestion + .tt-suggestion {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+}
 
-  .dk_label{
-    font-size: 18px;
-    font-weight: normal;
-  }
+.tt-suggestion {
+    &:hover {
+        background-color: $primaryColor;
+    }
+    &.tt-is-under-cursor {
+        background-color: $primaryColor;
+    }
+}
 
-  .dk_options a{
-    font-size: 18px;
-    font-weight: normal;
-    padding: 16px;
-  }
+.feedback {
+    margin-top: 20px;
+}
 
-  .dropdown-menu.input-append{
-    width: 350px;
+.sub-text {
+    color: $graySubtext;
+}
+
+.profile-image, .project-image {
+    margin-bottom: 30px;
+    width: 240px;
+}
+
+.public-profile {
+    float: right;
+}
+
+.public-email {
+    * {
+        float: left;
+    }
+    span {
+        margin-left: 10px;
+        width: 90%;
+    }
+}
+
+.notify-row,
+.password-title {
+    width: 85%;
+    label {
+        margin-top: 0;
+        float: left;
+    }
+}
+
+.notify-wrapper {
+    margin-top: 30px;
+}
+
+.password-title {
+    margin-top: 30px;
+    text-align: right;
+}
+
+.notify-row {
+    div {
+        float: left;
+        width: 10%;
+        &:first-child {
+            width: 80%;
+        }
+    }
+}
+
+.public-visibility {
+    .styledRadio {
+        float: left;
+        margin-right: 15px;
+        margin-bottom: 15px;
+    }
+    span {
+        line-height: 1.5;
+    }
+}
+
+.warning {
+    color: red !important;
+    text-decoration: underline;
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.twitter-typeahead {
+    width: 100%;
+}
+
+.create-project {
+    h1 {
+        font-size: 52px;
+        font-weight: normal;
+    }
+}
+
+.form-edit-create {
+    p {
+        font-size: 18px;
+        line-height: 1.5;
+    }
+    .dk_toggle {
+        padding: 16px;
+    }
+    .dk_label {
+        font-size: 18px;
+        font-weight: normal;
+    }
+    .dk_options a {
+        font-size: 18px;
+        font-weight: normal;
+        padding: 16px;
+    }
+    .dropdown-menu.input-append {
+        width: 350px;
+        height: auto;
+        padding: 5px;
+        white-space: normal;
+        .span2 {
+            width: 100%;
+        }
+        .btn {
+            float: right;
+            margin-top: 5px;
+            background-color: $primaryColor;
+            color: $white !important;
+            @include border-radius(4px);
+        }
+    }
+}
+
+.goal {
+    font-size: 20px;
+    margin-bottom: 17px;
+}
+
+.gray {
+    margin-left: 10px;
+    color: $graySubtext;
+}
+
+input[type="text"].input-slim {
+    width: 50%;
     height: auto;
-    padding: 5px;
-    white-space: normal;
-    .span2{
-      width: 100%;
-    }
-    .btn{
-      float: right;
-      margin-top: 5px;
-      background-color: $primaryColor;
-      color: $white !important;
-      @include border-radius(4px);
-    }
-  }
 }
 
-.goal{
-	font-size: 20px;
-	margin-bottom: 17px;
+iframe {
+    width: 100%;
 }
 
-.gray{
-	margin-left: 10px;
-	color: $graySubtext;
+select[name=category] {
+    width: 85%;
 }
 
-input[type="text"].input-slim{
-  width: 50%;
-  height: auto;
+textarea {
+    box-sizing: border-box;
 }
 
-iframe{ width: 100%; }
-
-select[name=category]{
-	width: 85%;
-}
-
-textarea{
-	box-sizing: border-box;
-}
-
-label[for=website]{
-	display: inline-block;
-	margin-right: 5px;
+label[for=website] {
+    display: inline-block;
+    margin-right: 5px;
 }

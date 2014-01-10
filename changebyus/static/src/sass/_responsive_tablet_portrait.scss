@@ -3,222 +3,225 @@
 @import "variables";
 
 @media only screen and (max-width: 1024px) {
-	body.debug{background: blue;}
-	//body{background: blue;}
-
-	/*******************************************
-	 * Header/Nav
-	 *******************************************/
-
-	.topnav{
-		.body-container{padding: 0;}
-	}
-
-	.nav-pills>li { 
-		padding-right: 16px;
-	} 
-
-	.feature-image{
-		.project-footer{
-			top: 300px;
-		}
-	}
-
-	.header-image{
-		.overlay-text{
-			margin: auto;
-			left: 3%;
-			width: 94%;
-			h1{
-				font-size: 70px;
-			}
-		}
-	}
-
-	.user-header {
-		.edit{
-			top: auto;
-			right: 2%;
-			bottom: 0;
-		}
-	}
-
-	.body-container{ padding: 0 2%; } 
-
-	.tabs-pane, .owner-tabs-pane{ 
-		position: relative; 
-		bottom: auto;
-		margin: 0;
-		padding: 0;
-		height: auto;
-		background: transparent;
-
-		ul{margin: 0;}
-
-		li{ 
-			display: list-item !important;
-			margin: auto; 
-			padding: 0;
-			border-bottom: 1px solid $grayBorder;
-			
-			&.active{
-				//display: none !important;
-				background-color: rgba(0,0,0,0.1);
-				a{display: inline;}
-			}
-		}
-
-		a{
-			font-size: 18px;
-			text-shadow: none;
-			line-height: 58px;
-			@include font-styling("asap", 22px, $black, "normal", "bold");
-		}
-
-		.profile-image{display: none;}
-	} 
-	
-	.member-popup{ left: 0; }
-
-	.content-wrapper {
-		padding: 2%;
-		ul.bordered-item>li {
-			padding: 10px;
-		}
-	}
-
-	/*******************************************
-	 * Homepage
-	 *******************************************/
-
-	.homepage-block-info{
-		padding: 55px 2%;
-	}
-
-	.homepage-tools {
-		h4{
-			white-space: nowrap;
-			font-size: 20px;
-		}
-		p{font-size: 20px;}
-	}
-
-	/*******************************************
-	 * Project
-	 *******************************************/
-	 .project-resource-section-header{
-		height: auto;
-		.project-container{
-			>.pull-left{float: none;}
-			.team-members{
-				float: none;
-				ul{float: none;}
-			}
-		}
-	}
-
-	.project-header,
-	.city-header{
-		margin-top: 0;
-	}
-
-	.project-square { 
-		width: 49%;
-		margin: 0 2% 16px 0;
-	}
-
-	.project-preview:nth-child(3n+3){
-		.project-square {margin-right: 2%;}
-		.admin-project-square {margin-right: 2%;}
-	}
-
-	.project-preview:nth-child(2n+2){
-		.project-square {margin-right: 0;}
-		.admin-project-square {margin-right: 0;}
-	}
-
-	.project-dashboard-image{
-		width: 100%;
-	}
-
-	.project-square .hover-btn {
-		width: 100%;
-	}
-
-	.project-description {
-		height: 100px;
-	}
-
-	.view-project{ display: none; }
-
-	/*******************************************
-	 * Resource
-	 *******************************************/
-
-	#add-resource-update {
-		width: 100%;
-		margin-right: 0;
-	}
-
-	.resource-container {
-		.team-members {
-			width: 100%;
-			ul{float: left;}
-		}
-		.popup-arrow {left: 13%;}
-	}
-	
-	/*******************************************
-	 * DISCOVER / DISCUSSION
-	 *******************************************/
-
-	.discover-header-right{ 
-		.btn-large{ font-size: 22px; }
-	}
-	
-	.discussion{ 
-		.description{ width:55%; }
-	}
-
-	.dashboard-header{  
-		.btn.btn-large{padding: 20px;}
-	}
-
-	/*******************************************
-	 * Modal
-	 *******************************************/
-	.modal, 
-	.success-modal, 
-	.embed-modal, 
-	.create-modal{ 
-		height: 100%;
-		width: 100%;
-		top:0;
-		left: 0;
-		margin-top: 0;
-		margin-left: 0;
-
-		@include transition-property(none);
-
-		.modal-innerwrapper{
-			width: 100%;
-			margin: 0;
-			padding: 0 2%;
-		}
-	}
-	
-	.modal-links{
-		width: 100%;
-		.btn:first-child{margin-bottom: 5px;}
-		a{
-			width: 100%;
-		}
-	}
-
-	.modal-btns{
-		width: 100%;
-		.btn.btn-large{
-			padding: 20px 35px;
-		}
-	}
+    body.debug {
+        background: blue;
+    }
+    //body{background: blue;}
+    /*******************************************
+     * Header/Nav
+     *******************************************/
+    .topnav {
+        .body-container {
+            padding: 0;
+        }
+    }
+    .nav-pills>li {
+        padding-right: 16px;
+    }
+    .feature-image {
+        .project-footer {
+            top: 300px;
+        }
+    }
+    .header-image {
+        .overlay-text {
+            margin: auto;
+            left: 3%;
+            width: 94%;
+            h1 {
+                font-size: 70px;
+            }
+        }
+    }
+    .user-header {
+        .edit {
+            top: auto;
+            right: 2%;
+            bottom: 0;
+        }
+    }
+    .body-container {
+        padding: 0 2%;
+    }
+    .tabs-pane, .owner-tabs-pane {
+        position: relative;
+        bottom: auto;
+        margin: 0;
+        padding: 0;
+        height: auto;
+        background: transparent;
+        ul {
+            margin: 0;
+        }
+        li {
+            display: list-item !important;
+            margin: auto;
+            padding: 0;
+            border-bottom: 1px solid $grayBorder;
+            &.active {
+                //display: none !important;
+                background-color: rgba(0, 0, 0, 0.1);
+                a {
+                    display: inline;
+                }
+            }
+        }
+        a {
+            font-size: 18px;
+            text-shadow: none;
+            line-height: 58px;
+            @include font-styling("asap", 22px, $black, "normal", "bold");
+        }
+        .profile-image {
+            display: none;
+        }
+    }
+    .member-popup {
+        left: 0;
+    }
+    .content-wrapper {
+        padding: 2%;
+        ul.bordered-item>li {
+            padding: 10px;
+        }
+    }
+    /*******************************************
+     * Homepage
+     *******************************************/
+    .homepage-block-info {
+        padding: 55px 2%;
+    }
+    .homepage-tools {
+        h4 {
+            white-space: nowrap;
+            font-size: 20px;
+        }
+        p {
+            font-size: 20px;
+        }
+    }
+    /*******************************************
+     * Project
+     *******************************************/
+    .project-resource-section-header {
+        height: auto;
+        .project-container {
+            >.pull-left {
+                float: none;
+            }
+            .team-members {
+                float: none;
+                ul {
+                    float: none;
+                }
+            }
+        }
+    }
+    .project-header,
+    .city-header {
+        margin-top: 0;
+    }
+    .project-square {
+        width: 49%;
+        margin: 0 2% 16px 0;
+    }
+    .project-preview:nth-child(3n+3) {
+        .project-square {
+            margin-right: 2%;
+        }
+        .admin-project-square {
+            margin-right: 2%;
+        }
+    }
+    .project-preview:nth-child(2n+2) {
+        .project-square {
+            margin-right: 0;
+        }
+        .admin-project-square {
+            margin-right: 0;
+        }
+    }
+    .project-dashboard-image {
+        width: 100%;
+    }
+    .project-square .hover-btn {
+        width: 100%;
+    }
+    .project-description {
+        height: 100px;
+    }
+    .view-project {
+        display: none;
+    }
+    /*******************************************
+     * Resource
+     *******************************************/
+    #add-resource-update {
+        width: 100%;
+        margin-right: 0;
+    }
+    .resource-container {
+        .team-members {
+            width: 100%;
+            ul {
+                float: left;
+            }
+        }
+        .popup-arrow {
+            left: 13%;
+        }
+    }
+    /*******************************************
+     * DISCOVER / DISCUSSION
+     *******************************************/
+    .discover-header-right {
+        .btn-large {
+            font-size: 22px;
+        }
+    }
+    .discussion {
+        .description {
+            width: 55%;
+        }
+    }
+    .dashboard-header {
+        .btn.btn-large {
+            padding: 20px;
+        }
+    }
+    /*******************************************
+     * Modal
+     *******************************************/
+    .modal,
+    .success-modal,
+    .embed-modal,
+    .create-modal {
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        margin-top: 0;
+        margin-left: 0;
+        @include transition-property(none);
+        .modal-innerwrapper {
+            width: 100%;
+            margin: 0;
+            padding: 0 2%;
+        }
+    }
+    .modal-links {
+        width: 100%;
+        .btn:first-child {
+            margin-bottom: 5px;
+        }
+        a {
+            width: 100%;
+        }
+    }
+    .modal-btns {
+        width: 100%;
+        .btn.btn-large {
+            padding: 20px 35px;
+        }
+    }
 }

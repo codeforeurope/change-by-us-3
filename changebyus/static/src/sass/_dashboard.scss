@@ -1,25 +1,25 @@
-.dashboard-header{
-	margin-top: 24px;
-
-	h1{
-		float: left;
-		font-weight: normal;
-		font-size: 54px;
-		margin: 0;
-	}
+.dashboard-header {
+    margin-top: 24px;
+    h1 {
+        float: left;
+        font-weight: normal;
+        font-size: 54px;
+        margin: 0;
+    }
 }
 
-.dashboard-tabs{
-	background: $gray37;
-	margin-top: 24px;
-	margin-bottom: 20px;
-	
-	li{
-		padding: 20px;
-		font-size: 20px;
-	}
-
-	a{font-weight: bold;}
-	
-	.active{background: $gray29;}
+.dashboard-tabs {
+    background: $gray37;
+    margin-top: 24px;
+    margin-bottom: 20px;
+    li {
+        padding: 20px;
+        font-size: 20px;
+    }
+    a {
+        font-weight: bold;
+    }
+    .active {
+        background: $gray29;
+    }
 }

@@ -1,203 +1,193 @@
 /********************************************************  
  DISCOVER 
  ********************************************************/
-.search-inputs{
-  margin-bottom: 12px;
-
-  >div{
-    float: left;
-    height: 94px;
-    z-index: 1;
-  }
-  
-  input {
-    width: 100%;
-    margin-right: 10px;
-    background-repeat: no-repeat;
-    box-sizing: border-box;
-    padding: 29px 10px;
-    z-index: 1;
-
-    &.category{
-      padding-left: 36px;
-      background-image: url('../img/icon_search.jpg');
-      background-position: 10px center;
+.search-inputs {
+    margin-bottom: 12px;
+    >div {
+        float: left;
+        height: 94px;
+        z-index: 1;
     }
-
-    &.zip{
-      background-image: url('../img/location-marker.jpg');
-      background-position: 95% center;
+    input {
+        width: 100%;
+        margin-right: 10px;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+        padding: 29px 10px;
+        z-index: 1;
+        &.category {
+            padding-left: 36px;
+            background-image: url("../img/icon_search.jpg");
+            background-position: 10px center;
+        }
+        &.zip {
+            background-image: url("../img/location-marker.jpg");
+            background-position: 95% center;
+        }
     }
-  }
-
-  .search-forms{
-    width: 42%;
-    margin-right: 3%;
-  }
-
-  .go{
-    width: 10%;
-  }
-
-  .btn {
-    margin-top: 37px;
-    padding: 20px 0;
-    width: 100%;
-  } 
+    .search-forms {
+        width: 42%;
+        margin-right: 3%;
+    }
+    .go {
+        width: 10%;
+    }
+    .btn {
+        margin-top: 37px;
+        padding: 20px 0;
+        width: 100%;
+    }
 }
 
-.results-modify{
+.results-modify {
     width: 224px;
-    a{
-      margin: 10px 0;
-      font-size: 14px;
+    a {
+        margin: 10px 0;
+        font-size: 14px;
     }
 }
 
-.search-catagories{
-  display: none;
-  margin-top: -15px;
-  width: 100%;
-  @include box-skin;
-
-  li{
-    padding:10px 20px;
-    cursor: pointer;
-  }
-
-  h3{margin-left: 10px;} 
-
+.search-catagories {
+    display: none;
+    margin-top: -15px;
+    width: 100%;
+    @include box-skin;
+    li {
+        padding: 10px 20px;
+        cursor: pointer;
+    }
+    h3 {
+        margin-left: 10px;
+    }
 }
 
-.search-filters{
-  span{ float: left; }
+.search-filters {
+    span {
+        float: left;
+    }
 }
 
-.search-toggles{
-  float: left;
-  width: 420px;
-  margin-right: 10px;
-}
-
-.filter-within{
-  float: left;
-  
-  select{width: 120px;}
-  
-  .dk_container {
+.search-toggles {
     float: left;
-    width: 120px;
-    margin-bottom:0;
-  }
-  .dk_toggle{padding: 13px;}
+    width: 420px;
+    margin-right: 10px;
 }
 
-
-.pill-toggle{
-  @include box-skin;
-  float: left;
-  margin-right: 10px;
-  width: 200px;
+.filter-within {
+    float: left;
+    select {
+        width: 120px;
+    }
+    .dk_container {
+        float: left;
+        width: 120px;
+        margin-bottom: 0;
+    }
+    .dk_toggle {
+        padding: 13px;
+    }
 }
 
-.pill-selection{
-  color: $gray80;
-  float: left;
-  width: 50%;
-  text-align: center;
-  padding: 10px;
-  cursor: pointer;
+.pill-toggle {
+    @include box-skin;
+    float: left;
+    margin-right: 10px;
+    width: 200px;
+}
 
-  &.active{
-    background: $gray80;
-    color: $black;
-  }
- 
-  &:first-child{
-    border-right: 1px solid $grayBorder;
-  }
+.pill-selection {
+    color: $gray80;
+    float: left;
+    width: 50%;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    &.active {
+        background: $gray80;
+        color: $black;
+    }
+    &:first-child {
+        border-right: 1px solid $grayBorder;
+    }
 }
 
 .banner-search {
-  width: 100%;
-  margin-top: 15px;
-  margin-bottom: 20px;
-  
-  h3{text-align: left;}
-}
- 
-.discover-header-right, 
-.dashboard-header-right{
-  float: right;
-}
-
-.discover-header-right{
-   width: 23%;
-   height: auto;
-   margin-left: 2%;
-
-  .btn-large {
     width: 100%;
-    line-height: 20px;
-    margin: auto;
-    padding: 20px 0;
-  }
-  
-  .cities{
-    @include box-skin;
-    margin-top: 10px;
-    min-height: 210px;
-    padding-top: 3px;
-    
-    li{
-      padding: 4px 12px;
-      line-height: 17px;
-      /* &:last-child{border-top: 1px solid $grayBorder;  } */
-      a{color: inherit;}
+    margin-top: 15px;
+    margin-bottom: 20px;
+    h3 {
+        text-align: left;
     }
-  }
 }
 
+.discover-header-right,
+.dashboard-header-right {
+    float: right;
+}
+
+.discover-header-right {
+    width: 23%;
+    height: auto;
+    margin-left: 2%;
+    .btn-large {
+        width: 100%;
+        line-height: 20px;
+        margin: auto;
+        padding: 20px 0;
+    }
+    .cities {
+        @include box-skin;
+        margin-top: 10px;
+        min-height: 210px;
+        padding-top: 3px;
+        li {
+            padding: 4px 12px;
+            line-height: 17px;
+            /* &:last-child{border-top: 1px solid $grayBorder;  } */
+            a {
+                color: inherit;
+            }
+        }
+    }
+}
 
 .search-box {
-  float: left;
-  border: 1px solid #dcdcdc;
-  width: 75%;
-  height: auto;
-  background-color: $white;
-  border-radius: 4px;
-  
-  >div{padding: 0 15px;}
-
-  .input-label {
-    font-size: 14px;
-    color: #8a8a8a;
-  }
-
-  .title {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    
-    h2{
-      margin-top: 22px;
-      font-weight: normal;
-      font-size: 40px;
+    float: left;
+    border: 1px solid #dcdcdc;
+    width: 75%;
+    height: auto;
+    background-color: $white;
+    border-radius: 4px;
+    >div {
+        padding: 0 15px;
     }
-  }
-
-  .search-filters{
-    border-top: 1px solid $grayBorder; 
-    padding-bottom: 16px;
-
-    input[type="search"] { margin-bottom: 0; }
-  }
+    .input-label {
+        font-size: 14px;
+        color: #8a8a8a;
+    }
+    .title {
+        margin-top: 10px;
+        margin-bottom: 20px;
+        h2 {
+            margin-top: 22px;
+            font-weight: normal;
+            font-size: 40px;
+        }
+    }
+    .search-filters {
+        border-top: 1px solid $grayBorder;
+        padding-bottom: 16px;
+        input[type="search"] {
+            margin-bottom: 0;
+        }
+    }
 }
 
 .search-box-geo {
-  width: 760px;
-  height: 90px;
-  border: 1px solid #dcdcdc;
-  border-top: none;
-  background-color: #fafafa;
-  border-radius: 4px;
+    width: 760px;
+    height: 90px;
+    border: 1px solid #dcdcdc;
+    border-top: none;
+    background-color: #fafafa;
+    border-radius: 4px;
 }

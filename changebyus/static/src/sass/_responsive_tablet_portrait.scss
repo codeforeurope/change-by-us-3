@@ -121,31 +121,28 @@
     .city-header {
         margin-top: 0;
     }
-    .project-square {
+    .project-square, .admin-project-square{
         width: 49%;
         margin: 0 2% 16px 0;
     }
+
     .project-preview:nth-child(3n+3) {
-        .project-square {
-            margin-right: 2%;
-        }
-        .admin-project-square {
+        .project-square, .admin-project-square {
             margin-right: 2%;
         }
     }
     .project-preview:nth-child(2n+2) {
-        .project-square {
-            margin-right: 0;
-        }
-        .admin-project-square {
+        .project-square, .admin-project-square{
             margin-right: 0;
         }
     }
     .project-dashboard-image {
         width: 100%;
     }
-    .project-square .hover-btn {
-        width: 100%;
+    .project-square, .admin-project-square{
+        .hover-btn {
+            width: 100%;
+        }
     }
     .project-description {
         height: 100px;

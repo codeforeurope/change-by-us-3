@@ -28,7 +28,9 @@
 }
 
 .tt-dropdown-menu {
-    width: 480px;
+    //width: 480px;
+    width: 100%;
+    max-width: 482px;
     padding: 8px 0;
     margin-bottom: 12px;
     background-color: #fff;

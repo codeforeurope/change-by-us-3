@@ -1,6 +1,5 @@
 /**** affects all sizes from 0 to 760px **/
 
-//@media only screen and (max-width: 655px) {
 @media only screen and (max-width: 760px) {
     body.debug {
         background: red;
@@ -132,6 +131,10 @@
         margin-top: 16px;
         margin-left: 0;
         height: auto;
+
+        .cities li {
+            line-height: 30px;
+        }
     }
     /*******************************************
      * Project
@@ -292,6 +295,9 @@
     .stream-wrapper {
         .content-wrapper {
             padding: 3%;
+        }
+        .user-avatar{
+            display: none;
         }
     }
     /*******************************************

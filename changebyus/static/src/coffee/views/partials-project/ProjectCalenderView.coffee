@@ -17,8 +17,7 @@ define ["underscore",
 			isOwner: false
 			isOrganizer: false
 			parent: "#project-calendar"
-			projectEmbedCalendarModalView: null
-			view: "public"
+			view: "public" 
 			
 			initialize: (options_) ->  
 				options               = options_ or {}
@@ -38,11 +37,10 @@ define ["underscore",
 				"click #delete-calendar":"deleteCalendar"
 				
 			render: ->  
-				@$el = $("<div class='project'/>")
+				@$el = $(@parent)
 				@$el.template @templateDir + "/templates/partials-project/project-calendar.html",
 					{data: @viewData}, => @onTemplateLoad()
-				$(@parent).append @$el
-
+					
 			onTemplateLoad:->
 				@$el.find(".preload").remove()
 

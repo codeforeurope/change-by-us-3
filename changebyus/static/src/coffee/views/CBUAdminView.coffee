@@ -84,12 +84,12 @@ define ["underscore",
 					console.log 'btn',btn
 
 				switch @currentView 
-					when "projects"
-						@$projects.show()
-						@$projectsBTN.addClass "active"
 					when "users"
 						@$users.show() 
 						@$usersBTN.addClass "active"
-					else 
+					when "resources" 
 						@$resources.show() 
 						@$resourcesBTN.addClass "active"
+					else 
+						@$projects.show()
+						@$projectsBTN.addClass "active"

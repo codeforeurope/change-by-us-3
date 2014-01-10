@@ -3,6 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
   return UpdateListItemView = AbstractView.extend({
     model: UpdateModel,
     isStream: false,
+    isMember: false,
     $repliesHolder: null,
     $postRight: null,
     $replyForm: null,
@@ -10,6 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       var _this = this;
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
+      this.isMember = options.isMember;
       this.isStream = options.isStream || this.isStream;
       this.el = this.isStream ? $('<div/>').addClass('content-wrapper') : $('<li/>');
       this.$el = $(this.el);
@@ -46,13 +48,15 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         $projectTitle.html(projectName);
         this.$el.append($projectTitle);
       }
+      this.$el.find('img').load(function() {
+        return onPageElementsLoad();
+      });
       this.addReplies();
       return this.delegateEvents();
     },
     addReplies: function() {
-      var reply, self, viewData, _i, _len, _ref,
+      var reply, viewData, _i, _len, _ref,
         _this = this;
-      self = this;
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
       _ref = this.model.get('responses');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -61,12 +65,16 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       }
       viewData = this.model.attributes;
       viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-      this.$replyForm = $('<li class="post-reply-form"/>');
-      return this.$replyForm.template(this.templateDir + "/templates/partials-universal/post-reply-form.html", {
-        data: viewData
-      }, function() {
-        return _this.onFormLoaded();
-      });
+      if (this.isMember) {
+        this.$replyForm = $('<li class="post-reply-form"/>');
+        this.$replyForm.template(this.templateDir + "/templates/partials-universal/post-reply-form.html", {
+          data: viewData
+        }, function() {
+          return _this.onFormLoaded();
+        });
+        this.$repliesHolder.append(this.$replyForm);
+      }
+      return this.$el.find('.update-content').append(this.$repliesHolder);
     },
     addReply: function(reply_) {
       var postReplyView, replyForm;
@@ -87,8 +95,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     onFormLoaded: function() {
       var $form, options,
         _this = this;
-      this.$el.find('.update-content').append(this.$repliesHolder);
-      this.$repliesHolder.append(this.$replyForm);
       $form = this.$replyForm.find('form');
       options = {
         type: $form.attr('method'),

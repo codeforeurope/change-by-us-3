@@ -131,6 +131,7 @@ define ["underscore",
 													id:@model.get("id"), 
 													slim:true, 
 													userAvatar:userAvatar
+													
 				else
 					@projectMembersView  = new ProjectMembersView
 													model:@model,

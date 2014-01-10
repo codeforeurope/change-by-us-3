@@ -84,15 +84,15 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
         console.log('btn', btn);
       }
       switch (this.currentView) {
-        case "projects":
-          this.$projects.show();
-          return this.$projectsBTN.addClass("active");
         case "users":
           this.$users.show();
           return this.$usersBTN.addClass("active");
-        default:
+        case "resources":
           this.$resources.show();
           return this.$resourcesBTN.addClass("active");
+        default:
+          this.$projects.show();
+          return this.$projectsBTN.addClass("active");
       }
     }
   });

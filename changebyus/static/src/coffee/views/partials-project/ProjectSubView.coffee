@@ -23,7 +23,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 					@collection.fetch {reset: true}
 
 			# override in subview
-			noResults:->
+			noResults:-> 
 				@$el.find('.no-results').show()
 
 			onCollectionLoad:-> 
@@ -34,8 +34,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			addOne: (model) ->
 				
 			# override in subview
-			addAll: -> 
-				if @collection.models.length is 0 then @noResults() 
+			addAll: ->  
+				if @collection.length is 0 then @noResults() 
 
 				@collection.each (model) =>  
 					@addOne model

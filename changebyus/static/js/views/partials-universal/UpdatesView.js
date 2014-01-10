@@ -7,16 +7,18 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     $ul: null,
     currentData: "",
     isResource: false,
+    isMember: false,
     initialize: function(options) {
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
+      this.isMember = options.isMember;
       this.viewData.slug = this.model.get('slug');
       this.viewData.isResource = options.isResource;
+      this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
       return this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
     },
     render: function() {
       var _this = this;
-      console.log('@viewData', this.viewData);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-universal/updates.html", {
         data: this.viewData
@@ -53,6 +55,18 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return onPageElementsLoad();
       });
     },
+    addOne: function(model_) {
+      var m, view;
+      m = moment(model_.get("created_at")).format("MMMM D");
+      if (this.currentDate !== m) {
+        this.newDay(m);
+      }
+      view = new UpdateListItemView({
+        model: model_,
+        isMember: this.isMember
+      });
+      return this.$ul.append(view.$el);
+    },
     addMember: function(model_) {
       var $member, roles,
         _this = this;
@@ -75,17 +89,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
       return this.$ul = this.$currentDay.find('.bordered-item');
-    },
-    addOne: function(model_) {
-      var m, view;
-      m = moment(model_.get("created_at")).format("MMMM D");
-      if (this.currentDate !== m) {
-        this.newDay(m);
-      }
-      view = new UpdateListItemView({
-        model: model_
-      });
-      return this.$ul.append(view.$el);
     }
   });
 });

@@ -34,7 +34,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     addOne: function(model) {},
     addAll: function() {
       var _this = this;
-      if (this.collection.models.length === 0) {
+      if (this.collection.length === 0) {
         this.noResults();
       }
       this.collection.each(function(model) {

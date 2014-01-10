@@ -116,7 +116,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
       if ((this.team.length === 0) && (this.members.length === 0)) {
-        $('.no-results').show();
+        this.$el.find('.no-results').show();
       } else {
         _ref = this.team;
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {

@@ -4,7 +4,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     isOwner: false,
     isOrganizer: false,
     parent: "#project-calendar",
-    projectEmbedCalendarModalView: null,
     view: "public",
     initialize: function(options_) {
       var options;
@@ -26,13 +25,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     render: function() {
       var _this = this;
-      this.$el = $("<div class='project'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-calendar.html", {
+      this.$el = $(this.parent);
+      return this.$el.template(this.templateDir + "/templates/partials-project/project-calendar.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
       return this.$el.find(".preload").remove();

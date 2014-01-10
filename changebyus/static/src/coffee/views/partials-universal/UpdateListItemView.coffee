@@ -20,6 +20,7 @@ define ["underscore",
 			
 			model:UpdateModel
 			isStream:false
+			isMember:false
 			$repliesHolder: null
 			$postRight: null
 			$replyForm: null 
@@ -27,6 +28,7 @@ define ["underscore",
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				@viewData = @model.attributes
+				@isMember = options.isMember
 				@isStream = options.isStream || @isStream
 
 				@el  = if @isStream then $('<div/>').addClass('content-wrapper') else $('<li/>')
@@ -56,21 +58,26 @@ define ["underscore",
 					$projectTitle.html(projectName)
 					@$el.append $projectTitle
 
+				@$el.find('img').load -> onPageElementsLoad()
+
 				@addReplies()
 				@delegateEvents()
 
-			addReplies:->  
-				self = @ 
+			addReplies:->
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 
 				@addReply(reply) for reply in @model.get('responses') 
 
 				viewData = @model.attributes
 				viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
+			
+				if @isMember
+					@$replyForm = $('<li class="post-reply-form"/>')
+					@$replyForm.template @templateDir+"/templates/partials-universal/post-reply-form.html",
+						{data:viewData}, => @onFormLoaded()
+					@$repliesHolder.append @$replyForm
 
-				@$replyForm = $('<li class="post-reply-form"/>')
-				@$replyForm.template @templateDir+"/templates/partials-universal/post-reply-form.html",
-					{data:viewData}, => @onFormLoaded()
+				@$el.find('.update-content').append @$repliesHolder
 
 			addReply:(reply_)->
 				postReplyView = new PostReplyView({model:reply_})
@@ -84,10 +91,7 @@ define ["underscore",
 				$(e.currentTarget).find('.reply').toggleClass('hide')
 				@$repliesHolder.toggleClass('hide')
 
-			onFormLoaded:->
-				@$el.find('.update-content').append @$repliesHolder
-				@$repliesHolder.append @$replyForm
-				
+			onFormLoaded:-> 
 				$form = @$replyForm.find('form')
 				
 				options =

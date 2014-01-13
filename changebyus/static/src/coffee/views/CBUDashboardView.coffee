@@ -57,6 +57,7 @@ define ["underscore",
 
 				profileEditView = new ProfileEditView({model:@userModel, parent:@$profileView})
 
+				AbstractView::onTemplateLoad.call @
 
 			toggleSubView: -> 
 				@currentView = window.location.hash.substring(1)

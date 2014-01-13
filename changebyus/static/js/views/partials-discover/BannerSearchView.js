@@ -72,9 +72,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
       this.$projectList = $("#projects-list");
-      this.delegateEvents();
-      onPageElementsLoad();
-      return this.autoGetGeoLocation();
+      this.autoGetGeoLocation();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     autoGetGeoLocation: function() {
       var _this = this;

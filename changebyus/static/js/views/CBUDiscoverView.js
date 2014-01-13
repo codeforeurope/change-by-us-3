@@ -23,9 +23,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
         parent: searchParent
       });
       this.collection.on("reset", this.addAll, this);
-      return this.collection.fetch({
+      this.collection.fetch({
         reset: true
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     updatePage: function() {
       return this.bannerSearchView.updatePage();

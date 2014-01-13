@@ -28,11 +28,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@$el = $(@el)
 				@$el.template @templateDir+"/templates/partials-project/project-member-list-item.html",
 					{data:@viewData}, => @onTemplateLoad()
-				@
-
+					
 			onTemplateLoad:-> 
 				if (@view is "admin")
 					delay 1, => @addDropKick()
+
+				AbstractView::onTemplateLoad.call @
 
 			addDropKick:->
 				$("#"+@viewData.sid).dropkick

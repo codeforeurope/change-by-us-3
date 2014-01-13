@@ -52,7 +52,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         return onPageElementsLoad();
       });
       this.addReplies();
-      return this.delegateEvents();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addReplies: function() {
       var reply, viewData, _i, _len, _ref,

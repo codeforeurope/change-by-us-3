@@ -52,6 +52,8 @@ define ["underscore",
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
 
+				AbstractView::onTemplateLoad.call @
+
 			addProjects: -> 
 				@flaggedProjects.each (projectModel_) =>
 					@addProject projectModel_
@@ -66,8 +68,7 @@ define ["underscore",
 				@flaggedUsers.each (userModel_) =>
 					@addUser userModel_
 
-			addUser: (userModel_) ->
-				console.log 'userModel_',userModel_
+			addUser: (userModel_) -> 
 				view = new ProjectMemberListItemView({model:userModel_, isAdmin:true}) 
 				view.render()
 
@@ -81,7 +82,6 @@ define ["underscore",
 
 				for btn in [@$projectsBTN,@$usersBTN,@$resourcesBTN]
 					btn.removeClass "active"
-					console.log 'btn',btn
 
 				switch @currentView 
 					when "users"

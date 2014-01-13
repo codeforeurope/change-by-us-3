@@ -26,9 +26,10 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
         reset: true
       });
       this.resourceCollection.on("reset", this.addAllResources, this);
-      return this.resourceCollection.fetch({
+      this.resourceCollection.fetch({
         reset: true
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addAll: function() {
       var _this = this;

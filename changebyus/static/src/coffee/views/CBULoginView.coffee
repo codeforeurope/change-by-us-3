@@ -11,7 +11,7 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 
 			render: -> 
 				@$el = $("<div class='login'/>")
-				@$el.template @templateDir + "/templates/login.html",
+				@$el.template @templateDir+"/templates/login.html",
 					data: @viewData, =>
 						@ajaxForm() 
 						onPageElementsLoad()

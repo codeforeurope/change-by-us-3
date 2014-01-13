@@ -51,6 +51,8 @@ define ["underscore",
 					{data:@viewData}, => @onHeaderLoaded()
 				@$el.prepend @$header
 
+				AbstractView::onTemplateLoad.call @
+
 			onHeaderLoaded:->
 				id = @model.get("id")
 				config = {id:id}

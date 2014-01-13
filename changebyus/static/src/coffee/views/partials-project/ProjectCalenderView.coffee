@@ -24,6 +24,7 @@ define ["underscore",
 				@id                   = options.id or @id
 				@templateDir          = options.templateDir or @templateDir
 				@parent               = options.parent or @parent 
+				
 				if @model
 					@viewData             = @model.attributes || @viewData
 					@viewData.isOwner     = options.isOwner || @isOwner
@@ -38,11 +39,12 @@ define ["underscore",
 				
 			render: ->  
 				@$el = $(@parent)
-				@$el.template @templateDir + "/templates/partials-project/project-calendar.html",
+				@$el.template @templateDir+"/templates/partials-project/project-calendar.html",
 					{data: @viewData}, => @onTemplateLoad()
 					
 			onTemplateLoad:->
 				@$el.find(".preload").remove()
+				ProjectSubView::onTemplateLoad.call @
 
 			embedCalendar:->
 				@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})

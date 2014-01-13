@@ -23,20 +23,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     render: function() {
       var _this = this;
       this.$el = $(this.el);
-      this.$el.template(this.templateDir + "/templates/partials-project/project-member-list-item.html", {
+      return this.$el.template(this.templateDir + "/templates/partials-project/project-member-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      return this;
     },
     onTemplateLoad: function() {
       var _this = this;
       if (this.view === "admin") {
-        return delay(1, function() {
+        delay(1, function() {
           return _this.addDropKick();
         });
       }
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addDropKick: function() {
       var _this = this;

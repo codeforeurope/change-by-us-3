@@ -56,8 +56,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     },
     onTemplateLoad: function() {
       var _this = this;
-      this.trigger('ON_TEMPLATE_LOAD');
-      onPageElementsLoad();
+      AbstractView.prototype.onTemplateLoad.call(this);
       return delay(100, function() {
         return _this.ajaxForm();
       });

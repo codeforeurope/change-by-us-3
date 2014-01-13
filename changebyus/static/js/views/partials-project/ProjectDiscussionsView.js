@@ -83,11 +83,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         }
       }).done(function(res_) {
         if (res_.success) {
-          $feedback.hide();
+          return $feedback.hide();
         } else {
-          $feedback.show().html(res_.msg);
+          return $feedback.show().html(res_.msg);
         }
-        return console.log('deleteDiscussion', res_);
       });
     }
   });

@@ -31,7 +31,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         $('.edit').removeClass('invisible');
         $('.flag-user').remove();
       }
-      return this.loadProjects();
+      this.loadProjects();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     loadProjects: function() {
       this.joinedProjects = new ProjectListCollection({

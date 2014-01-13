@@ -47,7 +47,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
           return _this.onSuccess(response_.data);
         }
       };
-      return $form.ajaxForm(options);
+      $form.ajaxForm(options);
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     onSuccess: function(data_) {
       var _this = this;

@@ -18,7 +18,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
     },
     onTemplateLoad: function() {
       var $form, options;
-      AbstractModalView.prototype.onTemplateLoad.call(this, options);
       $form = this.$el.find('form');
       options = {
         type: $form.attr('method'),
@@ -31,7 +30,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
           }
         }
       };
-      return $form.submit(function() {
+      $form.submit(function() {
         var json_str, obj;
         obj = $form.serializeJSON();
         json_str = JSON.stringify(obj);
@@ -39,6 +38,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
         $.ajax(options);
         return false;
       });
+      return AbstractModalView.prototype.onTemplateLoad.call(this);
     }
   });
 });

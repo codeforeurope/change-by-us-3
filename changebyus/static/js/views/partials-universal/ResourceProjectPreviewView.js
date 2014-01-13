@@ -8,10 +8,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     isAdmin: false,
     initialize: function(options) {
       AbstractView.prototype.initialize.call(this, options);
-      this.isProject = options.isProject || this.isProject;
-      this.isOwned = options.isOwned || this.isOwned;
-      this.isFollowed = options.isFollowed || this.isFollowed;
-      return this.isAdmin = options.isAdmin || this.isAdmin;
+      this.viewData = this.model.attributes;
+      this.viewData.isProject = options.isProject || this.isProject;
+      this.viewData.isOwned = options.isOwned || this.isOwned;
+      this.viewData.isFollowed = options.isFollowed || this.isFollowed;
+      return this.viewData.isAdmin = options.isAdmin || this.isAdmin;
     },
     events: {
       "click .close-x": "close",
@@ -19,16 +20,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       "click .btn-warning": "delete"
     },
     render: function() {
-      var viewData,
-        _this = this;
-      viewData = this.model.attributes;
-      viewData.isProject = this.isProject;
-      viewData.isOwned = this.isOwned;
-      viewData.isFollowed = this.isFollowed;
-      viewData.isAdmin = this.isAdmin;
+      var _this = this;
       this.$el = $("<li class='project-preview'/>");
       return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
-        data: viewData
+        data: this.viewData
       }, function() {
         return _this.$el.find('img').load(function() {
           return _this.onTemplateLoad();

@@ -20,10 +20,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       this.$el.template(this.templateDir + "/templates/partials-project/project-info-appearance.html", {
         data: this.viewData
       }, function() {
-        onPageElementsLoad();
-        return _this.ajaxForm();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      AbstractModalView.prototype.onTemplateLoad.call(this);
+      return this.ajaxForm();
     },
     ajaxForm: function() {
       var $dropkick, $feedback, $form, $projectLocation, $submit, options,

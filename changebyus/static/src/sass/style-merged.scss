@@ -214,14 +214,10 @@ textarea {
 
 body {
     margin: 0;
-    @include asap;
-    /*font-size: 14px;*/
+    @include asap; 
     line-height: 1.25;
     color: #333333;
-    background-color: #F2F2F2;
-    //padding-bottom: 50px;
-    //margin-bottom: 50px;
-}
+    background-color: #F2F2F2; 
 
 /* Main marketing message and sign up button */
 
@@ -526,6 +522,12 @@ a.text-success {
     text-align: center;
 }
 
+.page-header {
+    padding-bottom: 9px;
+    margin: 20px 0 30px;
+    border-bottom: 1px solid #eeeeee;
+}
+
 p {
     line-height: 1.7;
 }
@@ -547,11 +549,6 @@ h4 {
     margin-bottom: -8px;
 }
 
-.page-header {
-    padding-bottom: 9px;
-    margin: 20px 0 30px;
-    border-bottom: 1px solid #eeeeee;
-}
 
 ul, ol {
     padding: 0;
@@ -3059,7 +3056,7 @@ html, body, #page-wrapper {
 }
 
 /***************************************
- OVERRIDERS OR HELPERS
+ Overrides and Helpers
  ***************************************/
 
 @import "projects_resources";

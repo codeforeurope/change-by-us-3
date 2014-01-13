@@ -33,7 +33,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onTemplateLoad: function() {
-      return this.$el.find(".preload").remove();
+      this.$el.find(".preload").remove();
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     embedCalendar: function() {
       return this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({

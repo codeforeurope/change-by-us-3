@@ -31,7 +31,7 @@ define ["underscore",
 
 			render: ->
 				@$el = $("<div class='user'/>")
-				@$el.template @templateDir + "/templates/partials-user/user.html",
+				@$el.template @templateDir+"/templates/partials-user/user.html",
 					data: @model.attributes, => @onTemplateLoad()
 				$(@parent).append @$el
 
@@ -41,6 +41,8 @@ define ["underscore",
 					$('.flag-user').remove()
 					
 				@loadProjects()
+				
+				AbstractView::onTemplateLoad.call @
 
 			loadProjects:->
 				@joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joined-projects"})

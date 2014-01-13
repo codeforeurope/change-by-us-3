@@ -18,14 +18,15 @@ define ["underscore",
 			
 			model:UpdateModel
 			$repliesHolder: null
-			$postRight: null
-			$replyForm: null
 			tagName: "li" 
 
 			initialize: (options_) ->
 				AbstractView::initialize.call(@, options_)
 				@model.fetch
 					success: =>@loadUser()
+
+			events:
+				"click .reply-toggle:first":"onReplyToggle"
 
 			loadUser:->
 				@user = new UserModel(id:@model.get("user").id)
@@ -43,13 +44,10 @@ define ["underscore",
 				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
 					{data: @viewData}, => @onTemplateLoad()
 
-			onTemplateLoad:-> 
-				self = @ 
+			onTemplateLoad:->
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
-				@$postRight     = @$el.find('.update-content')
-				$replyToggle    = @$el.find('.reply-toggle').first()
-				$replyToggle.click ->
-					top = $("#add-thread-form").offset().top
-					$("html, body").animate({ scrollTop: top }, "slow")
+				AbstractView::onTemplateLoad.call(@)
 
-				onPageElementsLoad()
+			onReplyToggle:->
+				top = $("#add-thread-form").offset().top
+				$("html, body").animate({ scrollTop: top }, "slow")

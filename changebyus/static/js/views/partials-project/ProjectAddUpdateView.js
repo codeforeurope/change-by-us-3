@@ -7,6 +7,30 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       "click .share-toggle": "shareToggle",
       "click .share-options .styledCheckbox": "shareOption"
     },
+    render: function() {
+      var _this = this;
+      this.$el = $(this.parent);
+      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+      return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
+        data: this.viewData
+      }, function() {
+        return _this.onTemplateLoad();
+      });
+    },
+    onTemplateLoad: function() {
+      var _this = this;
+      this.$ul = this.$el.find('.updates-container ul');
+      $.get("/api/user/socialinfo", function(response_) {
+        var e;
+        try {
+          _this.socialInfo = response_.data;
+        } catch (_error) {
+          e = _error;
+        }
+        return _this.addForm();
+      });
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
+    },
     shareToggle: function() {
       return $(".share-options").toggleClass("hide");
     },
@@ -22,30 +46,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }
       });
       return $('#social_sharing').val(checked.join());
-    },
-    render: function() {
-      var _this = this;
-      this.$el = $(this.parent);
-      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
-        data: this.viewData
-      }, function() {
-        return _this.onTemplateLoad();
-      });
-    },
-    onTemplateLoad: function() {
-      var _this = this;
-      ProjectSubView.prototype.onTemplateLoad.call(this);
-      this.$ul = this.$el.find('.updates-container ul');
-      return $.get("/api/user/socialinfo", function(response_) {
-        var e;
-        try {
-          _this.socialInfo = response_.data;
-        } catch (_error) {
-          e = _error;
-        }
-        return _this.addForm();
-      });
     },
     addForm: function() {
       var form,
@@ -96,16 +96,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       var _this = this;
       this.$day = $('<div />');
       return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
-        var m, model_;
-        if (_this.collection.length > 0) {
-          model_ = _this.collection.models[0];
-          m = moment(model_.get("created_at")).format("MMMM D");
-          _this.newDay(m);
-        }
-        _this.isDataLoaded = true;
-        ProjectSubView.prototype.addAll.call(_this);
-        return onPageElementsLoad();
+        return _this.onDayWrapperLoad();
       });
+    },
+    onDayWrapperLoad: function() {
+      var m, model_;
+      if (this.collection.length > 0) {
+        model_ = this.collection.models[0];
+        m = moment(model_.get("created_at")).format("MMMM D");
+        this.newDay(m);
+      }
+      this.isDataLoaded = true;
+      ProjectSubView.prototype.addAll.call(this);
+      return onPageElementsLoad();
     },
     newDay: function(date_) {
       this.currentDate = date_;

@@ -228,6 +228,15 @@ define ["jquery",
 					$btn.parent().addClass('btn-3d-parent')
 					$btn.attr('data-content', $btn.html())
 
+
+			$(document).bind 'keydown', (e)->
+				console.log 'location.host',location.host
+				if location.host in ["localhost:5000", "localtunnel.com:5000"]
+					c = if e.keyCode then e.keyCode else e.which
+					k = String.fromCharCode(c).toLowerCase()
+					if k is 'd' then $('body').toggleClass('debug')
+					console.log k
+
 			### STICKY FOOTER ###
 			$window      = $(window)
 			footerHeight = 0

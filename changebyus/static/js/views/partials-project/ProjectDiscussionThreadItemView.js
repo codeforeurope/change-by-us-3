@@ -3,8 +3,6 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
   return ProjectDiscussionThreadItemView = AbstractView.extend({
     model: UpdateModel,
     $repliesHolder: null,
-    $postRight: null,
-    $replyForm: null,
     tagName: "li",
     initialize: function(options_) {
       var _this = this;
@@ -14,6 +12,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
           return _this.loadUser();
         }
       });
+    },
+    events: {
+      "click .reply-toggle:first": "onReplyToggle"
     },
     loadUser: function() {
       var _this = this;
@@ -41,19 +42,15 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       });
     },
     onTemplateLoad: function() {
-      var $replyToggle, self;
-      self = this;
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
-      this.$postRight = this.$el.find('.update-content');
-      $replyToggle = this.$el.find('.reply-toggle').first();
-      $replyToggle.click(function() {
-        var top;
-        top = $("#add-thread-form").offset().top;
-        return $("html, body").animate({
-          scrollTop: top
-        }, "slow");
-      });
-      return onPageElementsLoad();
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    onReplyToggle: function() {
+      var top;
+      top = $("#add-thread-form").offset().top;
+      return $("html, body").animate({
+        scrollTop: top
+      }, "slow");
     }
   });
 });

@@ -25,11 +25,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				
 			render: -> 
 				@$el = $(".banner-search")
-				@$el.template @templateDir + "/templates/partials-discover/banner-search.html",
+				@$el.template @templateDir+"/templates/partials-discover/banner-search.html",
 					data: @viewData, => @onTemplateLoad()
 				$(@parent).append @$el
 
 			onTemplateLoad:->
+				# set up zipcode autocomplete
 				$('#search-near').typeahead(
 					template: '<div class="zip">{{ name }} {{ zip }}</div>'
 					engine: Hogan 
@@ -54,9 +55,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@$resultsModify = $('.results-modify')
 				@$projectList   = $("#projects-list")
 				
-				@delegateEvents()
-				onPageElementsLoad()
 				@autoGetGeoLocation()
+				AbstractView::onTemplateLoad.call @
 
 			autoGetGeoLocation:->
 				if navigator.geolocation

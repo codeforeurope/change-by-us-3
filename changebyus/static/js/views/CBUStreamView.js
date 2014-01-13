@@ -19,9 +19,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
     onTemplateLoad: function() {
       this.$container = this.$el.find('.body-container');
       this.collection.on("reset", this.onCollectionLoad, this);
-      return this.collection.fetch({
+      this.collection.fetch({
         reset: true
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     onCollectionLoad: function() {
       this.$el.find(".preload").remove();
@@ -31,21 +32,25 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       var _this = this;
       this.$day = $('<div />');
       return this.$day.template(this.templateDir + "/templates/partials-user/stream-day-wrapper.html", {}, function() {
-        var m, model_;
-        if (_this.collection.length > 0) {
-          model_ = _this.collection.models[0];
-          m = moment(model_.get("created_at")).format("MMMM D");
-          _this.newDay(m);
-        }
-        if (_this.collection.models.length === 0) {
-          _this.noResults();
-        }
-        _this.collection.each(function(model) {
-          return _this.addOne(model);
-        });
-        _this.isDataLoaded = true;
-        return onPageElementsLoad();
+        return _this.onStreamWrapperLoad();
       });
+    },
+    onStreamWrapperLoad: function() {
+      var m, model_,
+        _this = this;
+      if (this.collection.length > 0) {
+        model_ = this.collection.models[0];
+        m = moment(model_.get("created_at")).format("MMMM D");
+        this.newDay(m);
+      }
+      if (this.collection.models.length === 0) {
+        this.noResults();
+      }
+      this.collection.each(function(model) {
+        return _this.addOne(model);
+      });
+      this.isDataLoaded = true;
+      return onPageElementsLoad();
     },
     newDay: function(date_) {
       this.currentDate = date_;

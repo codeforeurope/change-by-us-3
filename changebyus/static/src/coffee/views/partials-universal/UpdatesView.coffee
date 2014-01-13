@@ -26,7 +26,6 @@ define ["underscore",
 				@viewData.slug             = @model.get('slug')
 				@viewData.isResource       = options.isResource
 				@viewData.isOwnerOrganizer = options.isOwnerOrganizer
-				@viewData.isOwnerOrganizer = options.isOwnerOrganizer
 
 			render: -> 
 				@$el = $(@parent)

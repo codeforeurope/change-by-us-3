@@ -14,7 +14,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.isMember = options.isMember;
       this.viewData.slug = this.model.get('slug');
       this.viewData.isResource = options.isResource;
-      this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
       return this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
     },
     render: function() {

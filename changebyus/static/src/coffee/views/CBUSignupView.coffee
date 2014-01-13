@@ -10,7 +10,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
 			render: -> 
 				@$el = $("<div class='signup'/>")
-				@$el.template @templateDir + "/templates/signup.html",
+				@$el.template @templateDir+"/templates/signup.html",
 					data: @viewData, =>
 						@ajaxForm()
 						@addListeners()

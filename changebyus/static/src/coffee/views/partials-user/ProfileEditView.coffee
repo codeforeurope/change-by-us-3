@@ -29,8 +29,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
 			onTemplateLoaded:->
 				@ajaxForm()
-				onPageElementsLoad()
-				@delegateEvents()
+				AbstractView::onTemplateLoad.call @
 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})

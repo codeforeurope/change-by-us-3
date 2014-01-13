@@ -46,13 +46,12 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       return false;
     },
     onTemplateLoad: function() {
-      ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
       if ((this.view === "public") && (this.collection.length > 0)) {
         this.onCollectionLoad();
       }
-      return onPageElementsLoad();
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     onCollectionLoad: function() {
       var _this = this;

@@ -52,9 +52,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 					{data: @viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
 
-			onTemplateLoad:-> 
-				@trigger 'ON_TEMPLATE_LOAD'
-				onPageElementsLoad()
+			onTemplateLoad:->  
+				AbstractView::onTemplateLoad.call @
 				delay 100, =>@ajaxForm()
 
 			ajaxForm: -> 

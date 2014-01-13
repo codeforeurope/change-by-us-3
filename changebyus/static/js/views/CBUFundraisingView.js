@@ -54,7 +54,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         return _this.ajaxForm();
       });
       $(this.parent).append(this.$review);
-      return this.$review.hide();
+      this.$review.hide();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {
       var $form, options,

@@ -44,6 +44,8 @@ define ["underscore",
 				@resourceCollection.on "reset", @addAllResources, @
 				@resourceCollection.fetch reset: true
 
+				AbstractView::onTemplateLoad.call @
+
 			addAll: ->  
 				@collection.each (projectModel_) => 
 					@addProject projectModel_

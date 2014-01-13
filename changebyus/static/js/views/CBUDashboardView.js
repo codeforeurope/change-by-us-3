@@ -48,10 +48,11 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
         return _this.toggleSubView();
       });
       this.toggleSubView();
-      return profileEditView = new ProfileEditView({
+      profileEditView = new ProfileEditView({
         model: this.userModel,
         parent: this.$profileView
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     toggleSubView: function() {
       var btn, v, _i, _j, _len, _len1, _ref, _ref1;

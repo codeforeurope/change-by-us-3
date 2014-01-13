@@ -36,7 +36,8 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       $(window).bind("hashchange", function(e) {
         return _this.toggleSubView();
       });
-      return this.toggleSubView();
+      this.toggleSubView();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addProjects: function() {
       var _this = this;
@@ -61,7 +62,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
     },
     addUser: function(userModel_) {
       var view;
-      console.log('userModel_', userModel_);
       view = new ProjectMemberListItemView({
         model: userModel_,
         isAdmin: true
@@ -81,7 +81,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
         btn = _ref1[_j];
         btn.removeClass("active");
-        console.log('btn', btn);
       }
       switch (this.currentView) {
         case "users":

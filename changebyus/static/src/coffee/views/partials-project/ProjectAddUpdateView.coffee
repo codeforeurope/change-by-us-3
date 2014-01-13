@@ -26,6 +26,25 @@ define ["underscore",
 				"click .share-toggle":"shareToggle"
 				"click .share-options .styledCheckbox":"shareOption"
 
+			render: -> 
+				@$el = $(@parent) 
+				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+				@$el.template @templateDir+"/templates/partials-project/project-add-update.html",
+					{data: @viewData}, => @onTemplateLoad()
+
+			onTemplateLoad:-> 
+				@$ul = @$el.find('.updates-container ul')
+
+				# check to see if social accounts are linked and hide the share options if they aren't
+				$.get "/api/user/socialinfo", (response_)=>
+					try
+						@socialInfo = response_.data
+					catch e
+						
+					@addForm()
+
+				ProjectSubView::onTemplateLoad.call @
+
 			shareToggle:->
 				$(".share-options").toggleClass("hide")
 
@@ -37,24 +56,6 @@ define ["underscore",
 					if ($this.is(':checked')) then checked.push id
 						 
 				$('#social_sharing').val checked.join()
-
-			render: -> 
-				@$el = $(@parent) 
-				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
-					{data: @viewData}, => @onTemplateLoad()
-
-			onTemplateLoad:->
-				ProjectSubView::onTemplateLoad.call @
-				@$ul = @$el.find('.updates-container ul')
-
-				# check to see if social accounts are linked and hide the share options if they aren't
-				$.get "/api/user/socialinfo", (response_)=>
-					try
-						@socialInfo = response_.data
-					catch e
-						
-					@addForm()
 
 			addForm:->
 				form = new WysiwygFormView({parent:"#update-form"})
@@ -99,15 +100,17 @@ define ["underscore",
 			addAll: ->  
 				@$day = $('<div />')
 				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
-					{}, =>
-						if @collection.length > 0
-							model_ = @collection.models[0]
-							m = moment(model_.get("created_at")).format("MMMM D")
-							@newDay(m)
+					{}, => @onDayWrapperLoad()
 
-						@isDataLoaded = true
-						ProjectSubView::addAll.call(@) 
-						onPageElementsLoad()
+			onDayWrapperLoad: ->  
+				if @collection.length > 0
+					model_ = @collection.models[0]
+					m = moment(model_.get("created_at")).format("MMMM D")
+					@newDay(m)
+
+				@isDataLoaded = true
+				ProjectSubView::addAll.call(@) 
+				onPageElementsLoad()
 
 			newDay:(date_)-> 
 				@currentDate = date_

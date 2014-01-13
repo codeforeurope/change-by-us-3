@@ -37,6 +37,8 @@ define ["underscore",
 				@collection.on "reset", @addAll, @
 				@collection.fetch reset: true
 
+				AbstractView::onTemplateLoad.call @
+
 			updatePage:->
 				@bannerSearchView.updatePage()
 
@@ -57,7 +59,7 @@ define ["underscore",
 					@addOne projectModel_
 
 				if (@collection.length is 0)
-					@$el.template @templateDir + "/templates/partials-discover/no-results.html",
+					@$el.template @templateDir+"/templates/partials-discover/no-results.html",
 						data: @viewData, =>
 
 			addOne: (projectModel_) ->

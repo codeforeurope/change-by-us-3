@@ -32,11 +32,12 @@ define ["underscore",
 				@templateLoaded = true
 				@$ul = @$el.find('.bordered-item')
 				@$form = @$el.find(@$threadFormID)
-				onPageElementsLoad()
 				if @delayedDataLoad then @onSuccess()
 
+				ProjectSubView::onTemplateLoad.call @
+
 			updateDiscussion:(id_, @length)-> 
-				@model = new ProjectDiscussionModel(id:id_)
+				@model = new ProjectDiscussionModel({id:id_})
 				@model.fetch
 					success:=>
 						if @templateLoaded is false 
@@ -46,7 +47,6 @@ define ["underscore",
 			
 			onSuccess:-> 
 				@$el.find(".admin-title").html "All Discussions (#{@length}): #{@model.get("title")}"
-
 				@$ul.html('')
 				@$form.html('')
 

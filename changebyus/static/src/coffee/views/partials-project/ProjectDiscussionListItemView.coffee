@@ -8,8 +8,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
 				
-				@viewData = @model.attributes
-				
 				@user = new UserModel(id:@model.get("user").id)
 				@user.fetch
 					success: =>@render()
@@ -22,11 +20,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 			render: -> 
 				m =  moment(@model.get("created_at")).format("MMMM D hh:mm a")
 				@model.set("format_date", m)
+
+				@viewData                       = @model.attributes
 				@viewData.image_url_round_small = @user.get("image_url_round_small")
 				@viewData.display_name          = @user.get("display_name")
 				
 				@$el = $(@el)
-				@$el.template @templateDir + "/templates/partials-project/project-discussion-list-item.html",
+				@$el.template @templateDir+"/templates/partials-project/project-discussion-list-item.html",
 					{data: @viewData}, => @onTemplateLoad()
 
 			viewDescription: ->

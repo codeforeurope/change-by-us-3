@@ -39,7 +39,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       }, function() {
         return _this.onHeaderLoaded();
       });
-      return this.$el.prepend(this.$header);
+      this.$el.prepend(this.$header);
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     onHeaderLoaded: function() {
       var config, id;

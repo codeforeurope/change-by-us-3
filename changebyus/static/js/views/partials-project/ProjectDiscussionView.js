@@ -20,10 +20,10 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       this.templateLoaded = true;
       this.$ul = this.$el.find('.bordered-item');
       this.$form = this.$el.find(this.$threadFormID);
-      onPageElementsLoad();
       if (this.delayedDataLoad) {
-        return this.onSuccess();
+        this.onSuccess();
       }
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     updateDiscussion: function(id_, length) {
       var _this = this;

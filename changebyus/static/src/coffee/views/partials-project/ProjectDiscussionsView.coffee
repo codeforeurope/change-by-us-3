@@ -86,5 +86,3 @@ define ["underscore",
 						$feedback.hide()
 					else
 						$feedback.show().html(res_.msg)
-
-					console.log 'deleteDiscussion',res_

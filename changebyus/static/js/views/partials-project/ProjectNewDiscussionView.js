@@ -24,10 +24,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       form = new WysiwygFormView({
         parent: "#discussion-form"
       });
-      return form.success = function(response_) {
+      form.success = function(response_) {
         form.resetForm();
         return window.location.hash = "discussion/" + response_.data.id;
       };
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     cancel: function() {
       $("#discussion-editor").html('');

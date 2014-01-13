@@ -56,6 +56,8 @@ define ["underscore",
 					$(@parent).append @$review
 					@$review.hide()
 
+					AbstractView::onTemplateLoad.call @
+
 				ajaxForm:-> 
 					$form = @$review.find('form')
 					options =

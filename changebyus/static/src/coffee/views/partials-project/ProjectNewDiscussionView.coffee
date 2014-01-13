@@ -22,6 +22,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 					form.resetForm()
 					window.location.hash = "discussion/"+response_.data.id
 
+				AbstractView::onTemplateLoad.call @
+
 			cancel:->
 				$("#discussion-editor").html('')
 				@$el.find('form').resetForm()

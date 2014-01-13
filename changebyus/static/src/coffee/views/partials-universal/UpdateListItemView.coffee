@@ -59,9 +59,9 @@ define ["underscore",
 					@$el.append $projectTitle
 
 				@$el.find('img').load -> onPageElementsLoad()
-
 				@addReplies()
-				@delegateEvents()
+
+				AbstractView::onTemplateLoad.call @
 
 			addReplies:->
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')

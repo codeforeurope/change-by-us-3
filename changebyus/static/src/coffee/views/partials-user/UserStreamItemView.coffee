@@ -20,12 +20,13 @@ define ["underscore",
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
-				@viewData = @model.attributes
+				
 				@user = new UserModel(id:@model.get("user").id)
 				@user.fetch
 					success: =>@render()
 
 			render: ->
+				@viewData                       = @model.attributes
 				@viewData.image_url_round_small = @user.get("image_url_round_small")
 				@viewData.display_name          = @user.get("display_name")
 				
@@ -34,4 +35,3 @@ define ["underscore",
 
 				$(@el).template @templateDir+"/templates/partials-user/stream-item-view.html",
 					{data:@viewData}, => @onTemplateLoad()
-				@

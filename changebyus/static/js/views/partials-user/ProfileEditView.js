@@ -36,8 +36,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     },
     onTemplateLoaded: function() {
       this.ajaxForm();
-      onPageElementsLoad();
-      return this.delegateEvents();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {
       var $feedback, $form, $inputs, $projectLocation, $submit, options,

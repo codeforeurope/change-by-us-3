@@ -10,11 +10,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			initialize: (options) ->
 				AbstractView::initialize.call @, options
-				@isProject  = options.isProject || @isProject 
-				@isOwned    = options.isOwned || @isOwned
-				@isFollowed = options.isFollowed || @isFollowed
-				@isAdmin    = options.isAdmin || @isAdmin
-				# @render()
+
+				@viewData            = @model.attributes
+				@viewData.isProject  = options.isProject || @isProject 
+				@viewData.isOwned    = options.isOwned || @isOwned
+				@viewData.isFollowed = options.isFollowed || @isFollowed
+				@viewData.isAdmin    = options.isAdmin || @isAdmin
 
 			events: 
 				"click .close-x": "close"
@@ -22,15 +23,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				"click .btn-warning": "delete"
 
 			render: ->
-				viewData            = @model.attributes
-				viewData.isProject  = @isProject 
-				viewData.isOwned    = @isOwned
-				viewData.isFollowed = @isFollowed
-				viewData.isAdmin    = @isAdmin
-
 				@$el = $("<li class='project-preview'/>")
 				@$el.template @templateDir+"/templates/partials-universal/project-resource.html", 
-					{data: viewData}, => 
+					{data: @viewData}, => 
 						@$el.find('img').load =>@onTemplateLoad()
 
 			onFetch:(r)-> 

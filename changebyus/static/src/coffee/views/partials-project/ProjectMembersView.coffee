@@ -40,15 +40,13 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@addAll sort
 				false
 
-			onTemplateLoad:->  
-				ProjectSubView::onTemplateLoad.call @
-				
+			onTemplateLoad:-> 
 				@$teamList   = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
 
 				if (@view is "public") and (@collection.length > 0) then @onCollectionLoad()
 
-				onPageElementsLoad() 
+				ProjectSubView::onTemplateLoad.call @
 
 			onCollectionLoad:->
 				ProjectSubView::onCollectionLoad.call(@)

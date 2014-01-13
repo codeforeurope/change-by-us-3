@@ -66,8 +66,10 @@ define ["underscore",
 				
 			onTemplateLoad: -> 
 				@$header = $("<div class='project-header'/>")
-				@$header.template @templateDir + "/templates/partials-project/project-owner-header.html",
+				@$header.template @templateDir+"/templates/partials-project/project-owner-header.html",
 					{data:@model.attributes}, =>@addSubViews()
+
+				AbstractView::onTemplateLoad.call @
 						
 			addSubViews:->
 				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:@memberData.owner, isOrganizer:@memberData.organizer ,view:"admin"} 
@@ -103,7 +105,6 @@ define ["underscore",
 				@$el.prepend @$header
 
 			toggleSubView: -> 
-
 				view = window.location.hash.substring(1)
 				slug = @model.get('slug')
 

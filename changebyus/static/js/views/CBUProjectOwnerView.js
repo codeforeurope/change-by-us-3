@@ -44,11 +44,12 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
     onTemplateLoad: function() {
       var _this = this;
       this.$header = $("<div class='project-header'/>");
-      return this.$header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
+      this.$header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
         data: this.model.attributes
       }, function() {
         return _this.addSubViews();
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addSubViews: function() {
       var config, projectDiscussionsCollection, projectMembersCollection, updatesCollection,

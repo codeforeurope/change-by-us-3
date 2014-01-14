@@ -182,7 +182,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }).done(function(res_) {
           var feedback;
           if (res_.success) {
-            feedback = _this.isResource ? 'Following!' : 'Joined!';
+            feedback = 'Following!';
             _this.isMember = true;
             return $join.html(feedback).css('background-color', '#e6e6e6');
           }

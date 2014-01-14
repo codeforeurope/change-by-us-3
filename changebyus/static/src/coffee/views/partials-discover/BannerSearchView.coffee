@@ -22,6 +22,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				"click .search-inputs .btn":"sendForm"
 				"focus #search-input":"showInput"
 				"keypress #search-input":"onInputEnter"
+				"keypress #search-near":"onInputEnter"
 				
 			render: -> 
 				@$el = $(".banner-search")
@@ -31,7 +32,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 			onTemplateLoad:->
 				# set up zipcode autocomplete
-				$('#search-near').typeahead(
+				@$searchInput = $('#search-input')
+				@$searchNear  = $('#search-near')
+				@$searchNear.typeahead(
 					template: '<div class="zip">{{ name }} {{ zip }}</div>'
 					engine: Hogan 
 					valueKey: 'name'
@@ -71,14 +74,14 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@locationObj.lon = loc.coords.longitude
 
 				url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
-				$.get url, (resp) ->
-					if resp.success and resp.data.length > 0 then $("#search-near").val resp.data[0].name
+				$.get url, (resp) =>
+					if resp.success and resp.data.length > 0 then @$searchNear.val resp.data[0].name
 
 				@sendForm()
 
 			categoriesClick:(e)->
 				@category = $(e.currentTarget).html()
-				$('#search-input').val @category
+				@$searchInput.val @category
 				$('.search-catagories').hide()
 
 			pillSelection:(e)->
@@ -115,7 +118,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				$('.filter-within').toggle(onClick)
 
 			onInputEnter:(e) ->
-				if e.which is 13 then @sendForm()
+				if e.which is 13
+					console.log $(".tt-suggestion").first()
+					console.log @, @locationObj.name, @$searchInput.val()
+					if (@locationObj.name isnt @$searchInput.val() or @locationObj.name is "")
+						$(".tt-suggestion").first().trigger "click"
+					@sendForm()
 
 			sendForm:(e)->
 				if e then e.preventDefault()
@@ -124,7 +132,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@$projectList.html("")
 
 				dataObj = {
-					s: if @category is "" then $("#search-input").val() else ""
+					s: if @category is "" then @$searchInput.val() else ""
 					cat: @category
 					loc: @locationObj.name
 					d: $("select[name='range']").val()
@@ -147,6 +155,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 							@$resultsModify.find('input').val @locationObj.name
 						@initSend = false
 
+						@index = 0
 						@projects = []
 						size=0
 						for k,v of response_.data
@@ -159,6 +168,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 						t = if @byProjectResources is 'project' then "Projects" else "Resources"
 						$('.projects h4').html(size+" "+t)
 						onPageElementsLoad()
+
+						@trigger "ON_RESULTS", size
 
 			updatePage:->
 				@$projectList.html("")

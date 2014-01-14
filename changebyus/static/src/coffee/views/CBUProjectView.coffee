@@ -178,7 +178,7 @@ define ["underscore",
 						data: {project_id:id}
 					).done (res_)=>
 						if res_.success
-							feedback = if @isResource then 'Following!' else'Joined!'
+							feedback = 'Following!' # if @isResource then 'Following!' else'Joined!'
 							@isMember = true
 							$join.html(feedback).css('background-color','#e6e6e6')
 			

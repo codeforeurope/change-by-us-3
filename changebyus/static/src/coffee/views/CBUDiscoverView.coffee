@@ -33,6 +33,7 @@ define ["underscore",
 				searchParent = @$el.find(".content")
 				
 				@bannerSearchView = new BannerSearchView({parent:searchParent})
+				@bannerSearchView.on "ON_RESULTS", (s)=> @onResults(s)
 
 				@collection.on "reset", @addAll, @
 				@collection.fetch reset: true
@@ -54,16 +55,10 @@ define ["underscore",
 			checkArrows:->
 				@bannerSearchView.checkArrows()
 				
-			addAll: -> 
-				@collection.each (projectModel_) =>
-					@addOne projectModel_
-
-				if (@collection.length is 0)
-					@$el.template @templateDir+"/templates/partials-discover/no-results.html",
-						data: @viewData, =>
-
-			addOne: (projectModel_) ->
-				view = new ResourceProjectPreviewView({model:projectModel_})
-				view.render()
-
-				@$el.find("#project-list").append view.$el
+			onResults:(size_)->
+				console.log 'size_',size_
+				if size_ > 0
+					@$el.find("#no-result").hide()
+				else
+					@$el.find("#no-result").show().template @templateDir+"/templates/partials-discover/no-results.html",
+						data: {}, =>

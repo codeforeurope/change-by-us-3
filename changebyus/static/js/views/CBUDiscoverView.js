@@ -16,11 +16,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       });
     },
     onTemplateLoad: function() {
-      var searchParent;
+      var searchParent,
+        _this = this;
       $(this.parent).append(this.$el);
       searchParent = this.$el.find(".content");
       this.bannerSearchView = new BannerSearchView({
         parent: searchParent
+      });
+      this.bannerSearchView.on("ON_RESULTS", function(s) {
+        return _this.onResults(s);
       });
       this.collection.on("reset", this.addAll, this);
       this.collection.fetch({
@@ -43,24 +47,16 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
     checkArrows: function() {
       return this.bannerSearchView.checkArrows();
     },
-    addAll: function() {
+    onResults: function(size_) {
       var _this = this;
-      this.collection.each(function(projectModel_) {
-        return _this.addOne(projectModel_);
-      });
-      if (this.collection.length === 0) {
-        return this.$el.template(this.templateDir + "/templates/partials-discover/no-results.html", {
-          data: this.viewData
+      console.log('size_', size_);
+      if (size_ > 0) {
+        return this.$el.find("#no-result").hide();
+      } else {
+        return this.$el.find("#no-result").show().template(this.templateDir + "/templates/partials-discover/no-results.html", {
+          data: {}
         }, function() {});
       }
-    },
-    addOne: function(projectModel_) {
-      var view;
-      view = new ResourceProjectPreviewView({
-        model: projectModel_
-      });
-      view.render();
-      return this.$el.find("#project-list").append(view.$el);
     }
   });
 });

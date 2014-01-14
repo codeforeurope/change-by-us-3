@@ -23,7 +23,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       "click .pill-selection": "pillSelection",
       "click .search-inputs .btn": "sendForm",
       "focus #search-input": "showInput",
-      "keypress #search-input": "onInputEnter"
+      "keypress #search-input": "onInputEnter",
+      "keypress #search-near": "onInputEnter"
     },
     render: function() {
       var _this = this;
@@ -38,7 +39,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     onTemplateLoad: function() {
       var $dropkick,
         _this = this;
-      $('#search-near').typeahead({
+      this.$searchInput = $('#search-input');
+      this.$searchNear = $('#search-near');
+      this.$searchNear.typeahead({
         template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
@@ -86,20 +89,21 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
     },
     handleGetCurrentPosition: function(loc) {
-      var url;
+      var url,
+        _this = this;
       this.locationObj.lat = loc.coords.latitude;
       this.locationObj.lon = loc.coords.longitude;
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
       $.get(url, function(resp) {
         if (resp.success && resp.data.length > 0) {
-          return $("#search-near").val(resp.data[0].name);
+          return _this.$searchNear.val(resp.data[0].name);
         }
       });
       return this.sendForm();
     },
     categoriesClick: function(e) {
       this.category = $(e.currentTarget).html();
-      $('#search-input').val(this.category);
+      this.$searchInput.val(this.category);
       return $('.search-catagories').hide();
     },
     pillSelection: function(e) {
@@ -139,6 +143,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     onInputEnter: function(e) {
       if (e.which === 13) {
+        console.log($(".tt-suggestion").first());
+        console.log(this, this.locationObj.name, this.$searchInput.val());
+        if (this.locationObj.name !== this.$searchInput.val() || this.locationObj.name === "") {
+          $(".tt-suggestion").first().trigger("click");
+        }
         return this.sendForm();
       }
     },
@@ -151,7 +160,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $(".search-catagories").hide();
       this.$projectList.html("");
       dataObj = {
-        s: this.category === "" ? $("#search-input").val() : "",
+        s: this.category === "" ? this.$searchInput.val() : "",
         cat: this.category,
         loc: this.locationObj.name,
         d: $("select[name='range']").val(),
@@ -178,6 +187,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
             _this.$resultsModify.find('input').val(_this.locationObj.name);
           }
           _this.initSend = false;
+          _this.index = 0;
           _this.projects = [];
           size = 0;
           _ref = response_.data;
@@ -190,7 +200,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           _this.setPages(size, $(".projects"));
           t = _this.byProjectResources === 'project' ? "Projects" : "Resources";
           $('.projects h4').html(size + " " + t);
-          return onPageElementsLoad();
+          onPageElementsLoad();
+          return _this.trigger("ON_RESULTS", size);
         }
       });
     },

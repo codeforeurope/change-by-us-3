@@ -19,7 +19,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				AbstractModalView::onTemplateLoad.call @
+				AbstractView::onTemplateLoad.call @
 				@ajaxForm()
 
 			ajaxForm: ->

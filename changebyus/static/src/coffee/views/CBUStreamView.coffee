@@ -16,8 +16,7 @@ define ["underscore",
 		CBUStreamView = AbstractView.extend
 
 			initialize: (options_) ->
-				AbstractView::initialize.call @, options_
-				console.log 'CBUStreamView initialize'
+				AbstractView::initialize.call @, options_ 
 				@collection = new StreamCollection()
 				@render()
 

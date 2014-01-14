@@ -3,7 +3,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
   return CBUStreamView = AbstractView.extend({
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
-      console.log('CBUStreamView initialize');
       this.collection = new StreamCollection();
       return this.render();
     },

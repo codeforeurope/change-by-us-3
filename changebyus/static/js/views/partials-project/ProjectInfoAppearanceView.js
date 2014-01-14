@@ -25,7 +25,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      AbstractModalView.prototype.onTemplateLoad.call(this);
+      AbstractView.prototype.onTemplateLoad.call(this);
       return this.ajaxForm();
     },
     ajaxForm: function() {

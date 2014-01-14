@@ -25,19 +25,21 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
         data: this.viewData
       }, function() {
+        _this.onTemplateLoad();
         return _this.$el.find('img').load(function() {
-          return _this.onTemplateLoad();
+          return onPageElementsLoad();
         });
       });
     },
     onFetch: function(r) {
       return $(this.parent).append(this.render());
     },
-    close: function() {
+    close: function(e) {
       var $closeX, dataObj,
         _this = this;
-      $closeX = this.$el.find('.close-x');
+      $closeX = $(e.currentTarget);
       $closeX.hide();
+      console.log('$(e.currentTarget)', $(e.currentTarget));
       dataObj = {
         project_id: this.model.id
       };

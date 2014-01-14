@@ -26,14 +26,17 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@$el = $("<li class='project-preview'/>")
 				@$el.template @templateDir+"/templates/partials-universal/project-resource.html", 
 					{data: @viewData}, => 
-						@$el.find('img').load =>@onTemplateLoad()
-
+						@onTemplateLoad()
+						@$el.find('img').load -> onPageElementsLoad()
+							
 			onFetch:(r)-> 
 				$(@parent).append @render()
 
-			close:->
-				$closeX = @$el.find('.close-x')
+			close:(e)->
+				$closeX = $(e.currentTarget)
 				$closeX.hide()
+				console.log '$(e.currentTarget)',$(e.currentTarget)
+
 				dataObj = {project_id:@model.id}
 				$.ajax(
 					type: "POST"

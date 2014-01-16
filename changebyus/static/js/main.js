@@ -193,11 +193,11 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
 
     window.popWindow = function(url) {
       var h, left, title, top, w;
-      title = "social";
       w = 650;
       h = 650;
       left = (screen.width / 2) - (w / 2);
       top = (screen.height / 2) - (h / 2);
+      title = "social";
       return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
     };
     window.delay = function(time, fn) {

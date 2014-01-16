@@ -46,7 +46,8 @@ define ["underscore",
 				@$el.find(".preload").remove()
 				ProjectSubView::onTemplateLoad.call @
 
-			embedCalendar:->
+			embedCalendar:(e)->
+				e.preventDefault()
 				@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
 
 			deleteCalendar:(e)->

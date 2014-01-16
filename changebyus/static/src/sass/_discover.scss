@@ -102,6 +102,9 @@
     text-align: center;
     padding: 10px;
     cursor: pointer;
+    @include transition-property(color, background);
+    @include transition-duration(0.4s); 
+
     &.active {
         background: $gray80;
         color: $black;

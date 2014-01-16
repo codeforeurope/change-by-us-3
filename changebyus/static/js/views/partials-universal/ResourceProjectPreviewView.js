@@ -26,7 +26,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         data: this.viewData
       }, function() {
         _this.onTemplateLoad();
-        return _this.$el.find('img').load(function() {
+        return _this.$el.find('img').hide().load(function() {
+          $(this).fadeIn('slow');
           return onPageElementsLoad();
         });
       });
@@ -39,7 +40,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         _this = this;
       $closeX = $(e.currentTarget);
       $closeX.hide();
-      console.log('$(e.currentTarget)', $(e.currentTarget));
       dataObj = {
         project_id: this.model.id
       };

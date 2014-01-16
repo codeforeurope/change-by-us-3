@@ -197,11 +197,11 @@ define ["jquery",
 
 			### GLOBAL UTILS ###
 			window.popWindow = (url) ->
+				w     = 650
+				h     = 650
+				left  = (screen.width / 2) - (w / 2)
+				top   = (screen.height / 2) - (h / 2)
 				title = "social"
-				w = 650
-				h = 650
-				left = (screen.width / 2) - (w / 2)
-				top = (screen.height / 2) - (h / 2)
 				window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
 
 			window.delay = (time, fn) ->

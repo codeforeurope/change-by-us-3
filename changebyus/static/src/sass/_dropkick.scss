@@ -110,6 +110,9 @@
         border-bottom: 1px solid #999;
         font-weight: bold;
         padding: 8px 10px;
+         
+        @include transition-property(background);
+        @include transition-duration(0.4s); 
     }
     a:hover,
     .dk_option_current a {

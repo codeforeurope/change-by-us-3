@@ -515,6 +515,8 @@ h2.admin-title {
  * OWNER VIEW
  ******************************/
 .update-wrapper {
+    width: 90%;
+    float: left;
     input[type=submit] {
         background-color: $secondaryColor;
     }

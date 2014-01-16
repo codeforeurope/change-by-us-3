@@ -12,7 +12,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				AbstractView::initialize.call @, options
 
 				@viewData            = @model.attributes
-				@viewData.isProject  = options.isProject || @isProject 
+				@viewData.isProject  = options.isProject || @isProject
 				@viewData.isOwned    = options.isOwned || @isOwned
 				@viewData.isFollowed = options.isFollowed || @isFollowed
 				@viewData.isAdmin    = options.isAdmin || @isAdmin
@@ -24,10 +24,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			render: ->
 				@$el = $("<li class='project-preview'/>")
-				@$el.template @templateDir+"/templates/partials-universal/project-resource.html", 
+				@$el.template @templateDir+"/templates/partials-universal/project-resource.html",
 					{data: @viewData}, => 
 						@onTemplateLoad()
-						@$el.find('img').load -> onPageElementsLoad()
+						@$el.find('img').hide().load -> 
+							$(this).fadeIn('slow')
+							onPageElementsLoad()
 							
 			onFetch:(r)-> 
 				$(@parent).append @render()
@@ -35,7 +37,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 			close:(e)->
 				$closeX = $(e.currentTarget)
 				$closeX.hide()
-				console.log '$(e.currentTarget)',$(e.currentTarget)
 
 				dataObj = {project_id:@model.id}
 				$.ajax(

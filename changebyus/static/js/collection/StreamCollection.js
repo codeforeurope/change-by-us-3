@@ -5,9 +5,9 @@ define(["underscore", "backbone", "model/UpdateModel"], function(_, Backbone, Up
     url: function() {
       return "/api/stream";
     },
-    parse: function(response) {
-      if (response.success) {
-        return response.data;
+    parse: function(response_) {
+      if (response_.success) {
+        return response_.data;
       } else {
         return {};
       }

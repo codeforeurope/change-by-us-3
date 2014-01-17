@@ -5,9 +5,9 @@ define(["underscore", "backbone", "model/ProjectModel"], function(_, Backbone, P
     url: function() {
       return "/api/project/list?limit=6&sort=activity&order=desc";
     },
-    parse: function(response) {
-      if (response.success) {
-        return response.data;
+    parse: function(response_) {
+      if (response_.success) {
+        return response_.data;
       } else {
         return {};
       }

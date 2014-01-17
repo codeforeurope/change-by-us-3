@@ -7,7 +7,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       lon: 0
     },
     isResource: false,
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.isResource = options.isResource || this.isResource;
       return this.render();
@@ -61,12 +63,12 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
             return false;
           }
         },
-        success: function(res) {
+        success: function(res_) {
           var config, modal;
           $form.find("input, textarea").removeAttr("disabled");
-          if (res.success) {
+          if (res_.success) {
             config = {};
-            config.viewData = res;
+            config.viewData = res_;
             config.viewData.isResource = isResource;
             $form.resetForm();
             modal = new CreateModalView(config);
@@ -75,7 +77,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
             $("html, body").animate({
               scrollTop: 0
             }, "slow");
-            return $feedback.show().html(res.msg);
+            return $feedback.show().html(res_.msg);
           }
         }
       };

@@ -5,9 +5,9 @@ define(["underscore", "backbone", "model/ProjectDiscussionModel"], function(_, B
     url: function() {
       return "/api/post/project/" + window.projectID + "/discussions?sort=created_at&order=desc&";
     },
-    parse: function(response) {
-      if (response.success) {
-        return response.data;
+    parse: function(response_) {
+      if (response_.success) {
+        return response_.data;
       } else {
         return {};
       }

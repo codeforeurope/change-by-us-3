@@ -5,7 +5,7 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
 			parent: "#project-fundraising"
 			name:"My Project"
 			
-			initialize: (options) ->
+			initialize: (options_) ->
 				options = options_
 				AbstractView::initialize.call @, options
 				@name = options.name || @name;

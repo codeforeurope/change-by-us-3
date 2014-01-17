@@ -7,8 +7,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       lat: 0,
       lon: 0
     },
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       this.viewData = this.model.attributes;
       this.location.name = this.viewData.location;
       console.log('@viewData', this.viewData);

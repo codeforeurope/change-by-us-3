@@ -12,7 +12,9 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     isOwner: false,
     isOwnerOrganizer: false,
     view: "public",
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       this.isDataLoaded = options.isDataLoaded || this.isDataLoaded;
       this.view = options.view || this.view;
       this.projectID = options.projectID || this.projectID;
@@ -50,9 +52,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     sortClick: function(e) {
-      var sort;
-      sort = $(e.currentTarget).attr("id");
-      this.addAll(sort);
+      this.addAll($(e.currentTarget).attr("id"));
       return false;
     },
     onCollectionLoad: function() {

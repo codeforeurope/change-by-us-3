@@ -101,7 +101,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     },
     /* GETTER & SETTERS -----------------------------------------------------------------*/
 
-    setPages: function(total, parent_) {
+    setPages: function(total_, parent_) {
       var $li, $parent, i, _i, _ref;
       if (parent_ == null) {
         parent_ = null;
@@ -110,8 +110,8 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       if (this.$paginationContainer) {
         this.$paginationContainer.remove();
       }
-      if (total > this.perPage) {
-        this.pages = Math.ceil(total / this.perPage);
+      if (total_ > this.perPage) {
+        this.pages = Math.ceil(total_ / this.perPage);
         this.$paginationContainer = $("<div class='center'/>");
         this.$pagination = $("<ul class='pagination'/>");
         this.$prevArrow = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>");

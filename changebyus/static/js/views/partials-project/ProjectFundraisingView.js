@@ -3,7 +3,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
   return ProjectFundraisingView = AbstractView.extend({
     parent: "#project-fundraising",
     name: "My Project",
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.name = options.name || this.name;
       return this.render();

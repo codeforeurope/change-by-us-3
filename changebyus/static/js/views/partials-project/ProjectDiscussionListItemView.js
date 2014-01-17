@@ -3,9 +3,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
   return ProjectDiscussionListItemView = AbstractView.extend({
     tagName: "li",
     user: null,
-    initialize: function(options) {
+    initialize: function(options_) {
       var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractView.prototype.initialize.call(this, options_);
       this.user = new UserModel({
         id: this.model.get("user").id
       });

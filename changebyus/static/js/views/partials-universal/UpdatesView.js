@@ -8,7 +8,9 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     currentData: "",
     isResource: false,
     isMember: false,
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       ProjectSubView.prototype.initialize.call(this, options);
       this.members = options.members || this.members;
       this.isMember = options.isMember;

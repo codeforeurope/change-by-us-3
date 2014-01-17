@@ -2,8 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   var ProjectSubView;
   return ProjectSubView = AbstractView.extend({
     isDataLoaded: false,
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     show: function() {
@@ -31,14 +31,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.$el.find(".preload").remove();
       return this.addAll();
     },
-    addOne: function(model) {},
+    addOne: function(model_) {},
     addAll: function() {
       var _this = this;
       if (this.collection.length === 0) {
         this.noResults();
       }
-      this.collection.each(function(model) {
-        return _this.addOne(model);
+      this.collection.each(function(model_) {
+        return _this.addOne(model_);
       });
       return this.isDataLoaded = true;
     }

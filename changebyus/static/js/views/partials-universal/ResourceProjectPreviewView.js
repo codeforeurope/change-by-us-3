@@ -6,7 +6,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     isOwned: false,
     isFollowed: false,
     isAdmin: false,
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.viewData.isProject = options.isProject || this.isProject;

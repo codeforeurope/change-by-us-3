@@ -66,8 +66,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       if (this.collection.models.length === 0) {
         this.noResults();
       }
-      this.collection.each(function(model) {
-        return _this.addOne(model);
+      this.collection.each(function(model_) {
+        return _this.addOne(model_);
       });
       this.isDataLoaded = true;
       return onPageElementsLoad();

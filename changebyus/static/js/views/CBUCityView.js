@@ -3,8 +3,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
   return CBUCityView = AbstractView.extend({
     $header: null,
     collection: null,
-    initialize: function(options) {
-      var _this = this;
+    initialize: function(options_) {
+      var options,
+        _this = this;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || this.collection;
       return $.getJSON("/static/js/config/cities.json", function(data) {

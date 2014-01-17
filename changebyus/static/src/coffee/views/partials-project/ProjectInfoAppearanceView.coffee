@@ -7,9 +7,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 
 			initialize: (options_) ->
 				AbstractView::initialize.call @, options_
-				@viewData = @model.attributes
+				@viewData      = @model.attributes
 				@location.name = @viewData.location
-				console.log '@viewData',@viewData
+				@location.lat  = @viewData.lat
+				@location.lon  = @viewData.lon
 				@render()
 
 			render: ->
@@ -34,13 +35,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				options   =
 					type: $form.attr('method')
 					url: $form.attr('action')
-					dataType: "json"  
+					dataType: "json" 
 					contentType: "multipart/form-data; charset=utf-8"
 					beforeSubmit: =>   
 						if $form.valid()
 							$zip = $('input[name="zip"]')
-							console.log '$zip.val()  @location.name ',$zip, $zip.val(), @location.name 
-							if @location.name isnt "" and @location.name is $zip.val() 
+							if @location.name isnt ""
 								$form.find("input, textarea").attr("disabled", "disabled")
 								return true
 							else
@@ -83,13 +83,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 									zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon, 'zip':loc.zip}
 							zips
 				).bind('typeahead:selected', (obj, datum) =>
-						@location = datum
-						$('input[name="location"]').val @location.name
-						$('input[name="lat"]').val @location.lat
-						$('input[name="lon"]').val @location.lon
-						console.log(datum)
+					@location = datum
+					$('input[name="location"]').val @location.name
+					$('input[name="lat"]').val @location.lat
+					$('input[name="lon"]').val @location.lon
+					console.log(datum)
 				)
-
 
 				@$el.find('input:radio').screwDefaultButtons
 					image: 'url("/static/img/icon-lock.png")'

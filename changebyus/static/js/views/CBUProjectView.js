@@ -12,8 +12,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     calendarBTN: null,
     memberData: null,
     $header: null,
-    initialize: function(options) {
-      var _this = this;
+    initialize: function(options_) {
+      var options,
+        _this = this;
+      options = options_;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.model = new ProjectModel(options.model);
@@ -68,6 +70,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     /* EVENTS ---------------------------------------------*/
 
     onTemplateLoad: function() {
+      console.log('CBUProjectView onTemplateLoad');
       this.viewData = this.model.attributes;
       this.getMemberStatus();
       return AbstractView.prototype.onTemplateLoad.call(this);

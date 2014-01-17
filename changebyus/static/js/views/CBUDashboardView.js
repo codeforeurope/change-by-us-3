@@ -8,9 +8,9 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       lat: 0,
       lon: 0
     },
-    initialize: function(options) {
+    initialize: function(options_) {
       var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractView.prototype.initialize.call(this, options_);
       this.userModel = new UserModel({
         id: this.model.id
       });

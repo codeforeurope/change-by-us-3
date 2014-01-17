@@ -1,9 +1,9 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel", "model/ProjectModel"], function(_, Backbone, $, temp, AbstractView, UserModel, ProjectModel) {
   var CBUStripeEdit;
   return CBUStripeEdit = AbstractView.extend({
-    initialize: function(options) {
+    initialize: function(options_) {
       var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractView.prototype.initialize.call(this, options_);
       this.user = new UserModel({
         id: this.model.sid
       });

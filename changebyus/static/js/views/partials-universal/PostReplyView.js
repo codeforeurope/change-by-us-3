@@ -2,7 +2,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
   var PostReplyView;
   return PostReplyView = AbstractView.extend({
     tagName: "li",
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.model = new PostReplyModel(options.model);
       return this.fetch();

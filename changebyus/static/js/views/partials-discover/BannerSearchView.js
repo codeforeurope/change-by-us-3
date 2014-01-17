@@ -12,8 +12,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     projects: null,
     ajax: null,
     initSend: true,
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       this.showResources = window.location.hash.substring(1) === "resources";
       return this.render();
     },
@@ -110,8 +110,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     autoGetGeoLocation: function() {
       var _this = this;
       if (navigator.geolocation) {
-        return navigator.geolocation.getCurrentPosition(function(loc) {
-          return _this.handleGetCurrentPosition(loc);
+        return navigator.geolocation.getCurrentPosition(function(loc_) {
+          return _this.handleGetCurrentPosition(loc_);
         }, this.sendForm);
       } else {
         return this.sendForm();
@@ -119,11 +119,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     /* EVENTS -----------------------------------------------------------------*/
 
-    handleGetCurrentPosition: function(loc) {
+    handleGetCurrentPosition: function(loc_) {
       var url,
         _this = this;
-      this.locationObj.lat = loc.coords.latitude;
-      this.locationObj.lon = loc.coords.longitude;
+      this.locationObj.lat = loc_.coords.latitude;
+      this.locationObj.lon = loc_.coords.longitude;
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
       $.get(url, function(resp) {
         if (resp.success && resp.data.length > 0) {

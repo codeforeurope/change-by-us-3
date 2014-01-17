@@ -1,8 +1,8 @@
 define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], function(_, Backbone, $, temp, valid, AbstractView) {
   var CBUDLoginView;
   return CBUDLoginView = AbstractView.extend({
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     events: {
@@ -45,12 +45,12 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
             return false;
           }
         },
-        success: function(response) {
+        success: function(response_) {
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.success) {
+          if (response_.success) {
             return window.location.href = "/";
           } else {
-            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response_.msg);
           }
         }
       };

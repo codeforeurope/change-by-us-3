@@ -30,11 +30,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@$el.find('img').hide().load -> 
 							$(this).fadeIn('slow')
 							onPageElementsLoad()
-				@
 							
 			### EVENTS ---------------------------------------------###
 			onFetch:(r)-> 
-				$(@parent).append @render()
+				$(@parent).append @render() 
 
 			close:(e)->
 				$closeX = $(e.currentTarget)

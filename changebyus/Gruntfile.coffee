@@ -41,6 +41,15 @@ module.exports = (grunt) ->
 				dest: "static/js"
 				ext: ".js"
 
+		uglify:
+			my_target:
+				files: [{
+					expand: true,
+					cwd: 'static/js',
+					src: '**/*.js',
+					dest: "static/js"
+				}]
+
 		compass:
 			dev:  
 				options:
@@ -59,6 +68,7 @@ module.exports = (grunt) ->
 	grunt.loadNpmTasks "grunt-contrib-watch" 
 	grunt.loadNpmTasks "grunt-contrib-clean" 
 	grunt.loadNpmTasks "grunt-contrib-coffee"  
+	grunt.loadNpmTasks "grunt-contrib-uglify"  
 	grunt.loadNpmTasks "grunt-contrib-compass"
 	grunt.loadNpmTasks "grunt-contrib-sass"
 	grunt.loadNpmTasks "grunt-contrib-requirejs"

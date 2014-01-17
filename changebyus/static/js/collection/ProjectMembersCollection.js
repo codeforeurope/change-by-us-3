@@ -3,15 +3,15 @@ define(["underscore", "backbone", "model/UserModel"], function(_, Backbone, User
   return ProjectMembersCollection = Backbone.Collection.extend({
     model: UserModel,
     order: 'name',
-    initialize: function(options) {
-      return this.id = options.id;
+    initialize: function(options_) {
+      return this.id = options_.id;
     },
     url: function() {
       return "/api/project/" + this.id + "/users";
     },
-    parse: function(response) {
-      if (response.success) {
-        return response.data;
+    parse: function(response_) {
+      if (response_.success) {
+        return response_.data;
       } else {
         return {};
       }

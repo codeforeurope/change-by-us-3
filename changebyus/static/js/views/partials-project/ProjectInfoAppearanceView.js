@@ -7,11 +7,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       lat: 0,
       lon: 0
     },
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       this.viewData = this.model.attributes;
       this.location.name = this.viewData.location;
-      console.log('@viewData', this.viewData);
+      this.location.lat = this.viewData.lat;
+      this.location.lon = this.viewData.lon;
       return this.render();
     },
     render: function() {
@@ -47,8 +48,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');
-            console.log('$zip.val()  @location.name ', $zip, $zip.val(), _this.location.name);
-            if (_this.location.name !== "" && _this.location.name === $zip.val()) {
+            if (_this.location.name !== "") {
               $form.find("input, textarea").attr("disabled", "disabled");
               return true;
             } else {

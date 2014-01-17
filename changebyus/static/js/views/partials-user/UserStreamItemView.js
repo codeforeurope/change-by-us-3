@@ -2,9 +2,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
   var UserStreamItemView;
   return UserStreamItemView = AbstractView.extend({
     model: UpdateModel,
-    initialize: function(options) {
+    initialize: function(options_) {
       var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractView.prototype.initialize.call(this, options_);
       this.user = new UserModel({
         id: this.model.get("user").id
       });

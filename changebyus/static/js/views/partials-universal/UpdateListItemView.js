@@ -7,8 +7,10 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     $repliesHolder: null,
     $postRight: null,
     $replyForm: null,
-    initialize: function(options) {
-      var _this = this;
+    initialize: function(options_) {
+      var options,
+        _this = this;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.isMember = options.isMember;

@@ -3,6 +3,7 @@ define ["underscore",
 		"jquery", 
 		"template", 
 		"project-view", 
+		"abstract-view"
 		"model/ProjectModel", 
 		"collection/ProjectDiscussionsCollection", 
 		"collection/UpdatesCollection", 
@@ -21,6 +22,7 @@ define ["underscore",
 	 $, 
 	 temp, 
 	 CBUProjectView, 
+	 AbstractView,
 	 ProjectModel,
 	 ProjectDiscussionsCollection, 
 	 UpdatesCollection, 
@@ -38,6 +40,7 @@ define ["underscore",
 		CBUProjectOwnerView = CBUProjectView.extend
 
 			initialize: (options_) -> 
+				console.log 'new CBUProjectOwnerView'
 				options      = options_
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent

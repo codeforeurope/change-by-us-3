@@ -1,9 +1,9 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "serializeObject"], function(_, Backbone, $, temp, AbstractView, serializeObject) {
   var ProfileEditView;
   return ProfileEditView = AbstractView.extend({
-    initialize: function(options) {
+    initialize: function(options_) {
       var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
+      AbstractView.prototype.initialize.call(this, options_);
       this.viewData = this.model.attributes;
       return $.get("/api/user/socialstatus", function(response_) {
         var e;

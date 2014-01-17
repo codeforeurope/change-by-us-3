@@ -2,8 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   var AbstractModalView;
   return AbstractModalView = AbstractView.extend({
     parent: 'body',
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     events: {

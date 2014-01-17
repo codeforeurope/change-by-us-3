@@ -2,8 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
   var CBUSignupView;
   return CBUSignupView = AbstractView.extend({
     socialInfo: null,
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     render: function() {
@@ -66,12 +66,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           $form.find("input, textarea").attr("disabled", "disabled");
           return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
-        success: function(response) {
+        success: function(response_) {
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.success) {
+          if (response_.success) {
             return window.location.href = "/";
           } else {
-            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response_.msg);
           }
         }
       };
@@ -142,9 +142,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         });
       }
     },
-    setSocialInfo: function(data_) {
+    setSocialInfo: function(socialInfo) {
       var $socialAvatar, $socialSignup, img, name;
-      this.socialInfo = data_;
+      this.socialInfo = socialInfo;
       img = this.socialInfo.fb_image !== "" ? this.socialInfo.fb_image : this.socialInfo.twitter_image;
       name = this.socialInfo.fb_name !== "" ? this.socialInfo.fb_name : this.socialInfo.twitter_name;
       $socialAvatar = $('.social-avatar');

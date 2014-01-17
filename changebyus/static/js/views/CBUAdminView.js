@@ -1,7 +1,9 @@
 define(["underscore", "backbone", "jquery", "template", "resource-project-view", "views/partials-project/ProjectMemberListItemView", "collection/FlaggedProjectCollection", "collection/FlaggedUserCollection", "abstract-view"], function(_, Backbone, $, temp, ResourceProjectPreviewView, ProjectMemberListItemView, FlaggedProjectCollection, FlaggedUserCollection, AbstractView) {
   var CBUAdminView;
   return CBUAdminView = AbstractView.extend({
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.flaggedProjects = options.collection || new FlaggedProjectCollection();
       this.flaggedUsers = options.collection || new FlaggedUserCollection();

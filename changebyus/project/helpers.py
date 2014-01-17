@@ -140,7 +140,7 @@ def _edit_project(form):
     lat = form.lat.data
     lon = form.lon.data
 
-
+    print 'location',location, form.location.data
 
     p = Project.objects.with_id(project_id)
 
@@ -155,6 +155,7 @@ def _edit_project(form):
     if description: p.description = description
     if category: p.category = category
     if website: p.website = website
+    if location: p.location = location
     if gcal_code: p.gcal_code = gcal_code
 
     if (lat and lon):

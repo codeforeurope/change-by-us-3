@@ -10,7 +10,7 @@ from flask.ext.login import login_required, current_user, login_user
 
 from flask.ext.wtf.html5 import URLField
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
-                           SubmitField, Required, ValidationError)
+                           SubmitField, Required, ValidationError, BooleanField)
 
 from ..geonames import get_geopoint, get_geoname
 
@@ -165,6 +165,7 @@ class CreateProjectForm(Form):
     lon = HiddenField("lon")
     photo = FileField("photo")
     resource = HiddenField("resource")
+    private = BooleanField("private")
 
 @project_api.route('/create', methods = ['POST'])
 @login_required
@@ -258,9 +259,7 @@ class EditProjectForm(Form):
     lat = HiddenField("lat")
     lon = HiddenField("lon")
     photo = FileField("photo")    
-
-
-    
+    private = BooleanField("private")
 
 
 @project_api.route('/<project_id>/delete_calendar')

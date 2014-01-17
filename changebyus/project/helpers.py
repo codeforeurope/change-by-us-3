@@ -51,6 +51,7 @@ def _create_project(form):
     lat = form.lat.data
     lon = form.lon.data
     resource = form.resource.data
+    private = form.private.data
     
     if (lat and lon):
         geo_location = [float(lon), float(lat)]
@@ -77,7 +78,8 @@ def _create_project(form):
                  geo_location = geo_location,
                  owner = owner,
                  resource = resource,
-                 slug = slug )
+                 slug = slug, 
+                 private = private)
 
     filter_model(p, ['name', 'description'])
 
@@ -139,6 +141,7 @@ def _edit_project(form):
     location = form.location.data
     lat = form.lat.data
     lon = form.lon.data
+    private = form.private.data
 
 
 
@@ -156,9 +159,12 @@ def _edit_project(form):
     if category: p.category = category
     if website: p.website = website
     if gcal_code: p.gcal_code = gcal_code
-
+    if location: p.location = location
+    
     if (lat and lon):
         p.geo_location = [float(lon), float(lat)]
+        
+    if private: p.private = private
     
 
     # TODO flag objects if new content needs to be flagged,

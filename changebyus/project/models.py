@@ -128,6 +128,8 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
     
     activity = db.DecimalField()
 
+    private = db.BooleanField(default=False)
+
     meta = {
         'indexes': [
             {'fields': ['name'], 'unique': True },

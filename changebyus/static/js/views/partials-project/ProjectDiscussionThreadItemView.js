@@ -41,6 +41,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         return _this.onTemplateLoad();
       });
     },
+    /* EVENTS ---------------------------------------------*/
+
     onTemplateLoad: function() {
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
       return AbstractView.prototype.onTemplateLoad.call(this);

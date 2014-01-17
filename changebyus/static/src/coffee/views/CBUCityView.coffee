@@ -20,7 +20,8 @@ define ["underscore",
 			$header:null
 			collection:null
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options = options_
 				AbstractView::initialize.call @, options
 				
 				@collection  = options.collection or @collection
@@ -41,26 +42,6 @@ define ["underscore",
 				@$el.template @templateDir+"/templates/city.html", 
 					{data:@viewData}, => @onTemplateLoad()
 				$(@parent).append @$el
-
-			onTemplateLoad:->
-				@projectsView = @$el.find('#featured-projects')
-				@resourcesView = @$el.find('#featured-resources')
-
-				@$header = $("<div class='city-header'/>")
-				@$header.template @templateDir+"/templates/partials-city/city-header.html",
-					{data:@viewData}, => @onHeaderLoaded()
-				@$el.prepend @$header
-
-				AbstractView::onTemplateLoad.call @
-
-			onHeaderLoaded:->
-				id = @model.get("id")
-				config = {id:id}
-
-				@search "project"
-				@search "resource"
-
-				@delegateEvents()
 
 			search:(type_)->
 				console.log '@model',@model
@@ -86,6 +67,32 @@ define ["underscore",
 							@onProjectsLoad response_.data
 						else
 							@onResourcesLoad response_.data
+
+			addOne: (id_, parent_) -> 
+				projectModel = new ProjectModel id:id_
+				view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
+				view.fetch()
+				
+			### EVENTS ---------------------------------------------###
+			onTemplateLoad:->
+				@projectsView = @$el.find('#featured-projects')
+				@resourcesView = @$el.find('#featured-resources')
+
+				@$header = $("<div class='city-header'/>")
+				@$header.template @templateDir+"/templates/partials-city/city-header.html",
+					{data:@viewData}, => @onHeaderLoaded()
+				@$el.prepend @$header
+
+				AbstractView::onTemplateLoad.call @
+
+			onHeaderLoaded:->
+				id = @model.get("id")
+				config = {id:id}
+
+				@search "project"
+				@search "resource"
+
+				@delegateEvents()
 					
 			onProjectsLoad:(data_)->
 				count = 0
@@ -101,7 +108,6 @@ define ["underscore",
 					$featuredProjects.hide()
 					$('.city-container hr').hide()
 
-
 			onResourcesLoad:(data_)->
 				count = 0
 				for k,v of data_
@@ -115,9 +121,3 @@ define ["underscore",
 				if count is 0
 					$featuredResources.hide()
 					$('.city-container hr').hide()
-
-
-			addOne: (id_, parent_) -> 
-				projectModel = new ProjectModel id:id_
-				view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
-				view.fetch()

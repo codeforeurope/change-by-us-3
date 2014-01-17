@@ -29,29 +29,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       });
       return $(this.parent).append(this.$el);
     },
-    onTemplateLoad: function() {
-      var _this = this;
-      this.projectsView = this.$el.find('#featured-projects');
-      this.resourcesView = this.$el.find('#featured-resources');
-      this.$header = $("<div class='city-header'/>");
-      this.$header.template(this.templateDir + "/templates/partials-city/city-header.html", {
-        data: this.viewData
-      }, function() {
-        return _this.onHeaderLoaded();
-      });
-      this.$el.prepend(this.$header);
-      return AbstractView.prototype.onTemplateLoad.call(this);
-    },
-    onHeaderLoaded: function() {
-      var config, id;
-      id = this.model.get("id");
-      config = {
-        id: id
-      };
-      this.search("project");
-      this.search("resource");
-      return this.delegateEvents();
-    },
     search: function(type_) {
       var dataObj,
         _this = this;
@@ -80,6 +57,42 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
           }
         }
       });
+    },
+    addOne: function(id_, parent_) {
+      var projectModel, view;
+      projectModel = new ProjectModel({
+        id: id_
+      });
+      view = new ResourceProjectPreviewView({
+        model: projectModel,
+        parent: parent_
+      });
+      return view.fetch();
+    },
+    /* EVENTS ---------------------------------------------*/
+
+    onTemplateLoad: function() {
+      var _this = this;
+      this.projectsView = this.$el.find('#featured-projects');
+      this.resourcesView = this.$el.find('#featured-resources');
+      this.$header = $("<div class='city-header'/>");
+      this.$header.template(this.templateDir + "/templates/partials-city/city-header.html", {
+        data: this.viewData
+      }, function() {
+        return _this.onHeaderLoaded();
+      });
+      this.$el.prepend(this.$header);
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    onHeaderLoaded: function() {
+      var config, id;
+      id = this.model.get("id");
+      config = {
+        id: id
+      };
+      this.search("project");
+      this.search("resource");
+      return this.delegateEvents();
     },
     onProjectsLoad: function(data_) {
       var $featuredProjects, $more, count, k, v;
@@ -116,17 +129,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
         $featuredResources.hide();
         return $('.city-container hr').hide();
       }
-    },
-    addOne: function(id_, parent_) {
-      var projectModel, view;
-      projectModel = new ProjectModel({
-        id: id_
-      });
-      view = new ResourceProjectPreviewView({
-        model: projectModel,
-        parent: parent_
-      });
-      return view.fetch();
     }
   });
 });

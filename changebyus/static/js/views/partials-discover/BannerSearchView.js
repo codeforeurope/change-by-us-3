@@ -18,9 +18,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       return this.render();
     },
     events: {
-      "click .search-catagories li": "categoriesClick",
-      "click #modify": "toggleVisibility",
-      "click .pill-selection": "pillSelection",
+      "click .search-catagories li": "onCategoriesClick",
+      "click #modify": "onToggleVisibility",
+      "click .pill-selection": "onPillSelection",
       "click .search-inputs .btn": "sendForm",
       "focus #search-input": "showInput",
       "keypress #search-input": "onInputEnter",
@@ -78,6 +78,35 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.autoGetGeoLocation();
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
+    showInput: function() {
+      this.category = "";
+      return $('.search-catagories').show();
+    },
+    updatePage: function() {
+      var e, i, s, _i;
+      this.$projectList.html("");
+      s = this.index * this.perPage;
+      e = (this.index + 1) * this.perPage - 1;
+      for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
+        if (i < this.projects.length) {
+          this.addProject(this.projects[i]);
+        }
+      }
+      return $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+    },
+    addProject: function(id_) {
+      var projectModel, view;
+      projectModel = new ProjectModel({
+        id: id_
+      });
+      view = new ResourceProjectPreviewView({
+        model: projectModel,
+        parent: "#projects-list"
+      });
+      return view.fetch();
+    },
     autoGetGeoLocation: function() {
       var _this = this;
       if (navigator.geolocation) {
@@ -88,6 +117,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         return this.sendForm();
       }
     },
+    /* EVENTS -----------------------------------------------------------------*/
+
     handleGetCurrentPosition: function(loc) {
       var url,
         _this = this;
@@ -101,12 +132,12 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       });
       return this.sendForm();
     },
-    categoriesClick: function(e) {
+    onCategoriesClick: function(e) {
       this.category = $(e.currentTarget).html();
       this.$searchInput.val(this.category);
       return $('.search-catagories').hide();
     },
-    pillSelection: function(e) {
+    onPillSelection: function(e) {
       var $this;
       $this = $(e.currentTarget);
       $this.toggleClass('active');
@@ -126,11 +157,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           return this.sortByPopularDistance = 'distance';
       }
     },
-    showInput: function() {
-      this.category = "";
-      return $('.search-catagories').show();
-    },
-    toggleVisibility: function(e) {
+    onToggleVisibility: function(e) {
       var onClick;
       onClick = false;
       if (e) {
@@ -182,7 +209,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         if (response_.success) {
           if (_this.initSend === false) {
             if (_this.locationObj.name !== "") {
-              _this.toggleVisibility();
+              _this.onToggleVisibility();
             }
             _this.$resultsModify.find('input').val(_this.locationObj.name);
           }
@@ -204,31 +231,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           return _this.trigger("ON_RESULTS", size);
         }
       });
-    },
-    updatePage: function() {
-      var e, i, s, _i;
-      this.$projectList.html("");
-      s = this.index * this.perPage;
-      e = (this.index + 1) * this.perPage - 1;
-      for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
-        if (i < this.projects.length) {
-          this.addProject(this.projects[i]);
-        }
-      }
-      return $("html, body").animate({
-        scrollTop: 0
-      }, "slow");
-    },
-    addProject: function(id_) {
-      var projectModel, view;
-      projectModel = new ProjectModel({
-        id: id_
-      });
-      view = new ResourceProjectPreviewView({
-        model: projectModel,
-        parent: "#projects-list"
-      });
-      return view.fetch();
     }
   });
 });

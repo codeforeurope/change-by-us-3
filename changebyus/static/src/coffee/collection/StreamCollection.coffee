@@ -6,6 +6,6 @@ define ["underscore", "backbone", "model/UpdateModel"],
 			url: ->
 				"/api/stream"
 
-			parse: (response) -> 
-				if response.success then response.data else {}
+			parse: (response_) -> 
+				if response_.success then response_.data else {}
 

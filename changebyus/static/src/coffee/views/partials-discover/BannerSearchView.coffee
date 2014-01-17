@@ -10,15 +10,15 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			ajax:null
 			initSend:true
 
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@showResources = (window.location.hash.substring(1) is "resources")
 				@render()
 
 			events:
-				"click .search-catagories li":"categoriesClick"
-				"click #modify":"toggleVisibility"
-				"click .pill-selection":"pillSelection"
+				"click .search-catagories li":"onCategoriesClick"
+				"click #modify":"onToggleVisibility"
+				"click .pill-selection":"onPillSelection"
 				"click .search-inputs .btn":"sendForm"
 				"focus #search-input":"showInput"
 				"keypress #search-input":"onInputEnter"
@@ -61,17 +61,37 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				@autoGetGeoLocation()
 				AbstractView::onTemplateLoad.call @
 
+			showInput:->
+				@category = ""
+				$('.search-catagories').show()
+				
+			updatePage:->
+				@$projectList.html("")
+
+				s = @index*@perPage
+				e = (@index+1)*@perPage-1
+				for i in [s..e]
+					if i < @projects.length then @addProject @projects[i]
+
+				$("html, body").animate({ scrollTop: 0 }, "slow")
+
+			addProject:(id_)->
+				projectModel = new ProjectModel({id:id_})
+				view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list"})
+				view.fetch()
+
 			autoGetGeoLocation:->
 				if navigator.geolocation
-					navigator.geolocation.getCurrentPosition (loc)=>
-						@handleGetCurrentPosition(loc)
+					navigator.geolocation.getCurrentPosition (loc_)=>
+						@handleGetCurrentPosition(loc_)
 					, @sendForm
 				else
 					@sendForm()
 
-			handleGetCurrentPosition:(loc)->
-				@locationObj.lat = loc.coords.latitude
-				@locationObj.lon = loc.coords.longitude
+			### EVENTS ----------------------------------------------------------------- ###
+			handleGetCurrentPosition:(loc_)->
+				@locationObj.lat = loc_.coords.latitude
+				@locationObj.lon = loc_.coords.longitude
 
 				url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
 				$.get url, (resp) =>
@@ -79,12 +99,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
 				@sendForm()
 
-			categoriesClick:(e)->
+			onCategoriesClick:(e)->
 				@category = $(e.currentTarget).html()
 				@$searchInput.val @category
 				$('.search-catagories').hide()
 
-			pillSelection:(e)->
+			onPillSelection:(e)->
 				$this = $(e.currentTarget)
 				$this.toggleClass('active')
 				$this.siblings().toggleClass('active')
@@ -102,12 +122,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 						@sortByPopularDistance = 'popular'
 					when 'Distance'
 						@sortByPopularDistance = 'distance'
-
-			showInput:->
-				@category = ""
-				$('.search-catagories').show()
-				
-			toggleVisibility:(e)->
+ 
+			onToggleVisibility:(e)->
 				onClick = false
 				if e 
 					e.preventDefault()
@@ -151,7 +167,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				).done (response_)=>
 					if response_.success 
 						if @initSend is false
-							if @locationObj.name isnt "" then @toggleVisibility()
+							if @locationObj.name isnt "" then @onToggleVisibility()
 							@$resultsModify.find('input').val @locationObj.name
 						@initSend = false
 
@@ -170,18 +186,3 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 						onPageElementsLoad()
 
 						@trigger "ON_RESULTS", size
-
-			updatePage:->
-				@$projectList.html("")
-
-				s = @index*@perPage
-				e = (@index+1)*@perPage-1
-				for i in [s..e]
-					if i < @projects.length then @addProject @projects[i]
-
-				$("html, body").animate({ scrollTop: 0 }, "slow")
-
-			addProject:(id_)->
-				projectModel = new ProjectModel({id:id_})
-				view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list"})
-				view.fetch()

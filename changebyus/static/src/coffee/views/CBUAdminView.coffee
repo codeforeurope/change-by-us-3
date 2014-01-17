@@ -19,7 +19,8 @@ define ["underscore",
 
 		CBUAdminView = AbstractView.extend
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options = options_
 				# this is added later
 				AbstractView::initialize.call @, options
 				

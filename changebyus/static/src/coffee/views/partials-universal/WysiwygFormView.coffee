@@ -10,7 +10,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 			$updateForm:null
 			$formName:null
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options     = options_
 				AbstractView::initialize.call @, options
 				@slim       = options.slim || @slim
 				@userAvatar = options.userAvatar || @userAvatar
@@ -131,6 +132,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
 				window.prettyPrint and prettyPrint()
 
+			### FORM HOOKS ---------------------------------------------###
 			beforeSubmit:(arr_, form_, options_)->
 				# hook for beforeSubmit
 

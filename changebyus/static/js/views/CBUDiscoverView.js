@@ -32,6 +32,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       });
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
+    /* EVENTS ---------------------------------------------*/
+
     updatePage: function() {
       return this.bannerSearchView.updatePage();
     },
@@ -49,7 +51,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
     },
     onResults: function(size_) {
       var _this = this;
-      console.log('size_', size_);
       if (size_ > 0) {
         return this.$el.find("#no-result").hide();
       } else {

@@ -5,7 +5,8 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 			location:{name: "", lat: 0, lon: 0} 
 			isResource:false
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options = options_
 				AbstractView::initialize.call @, options 
 				@isResource = options.isResource || @isResource 
 				@render()
@@ -52,12 +53,12 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 						else
 							return false
 
-					success: (res) ->  
+					success: (res_) ->  
 						$form.find("input, textarea").removeAttr("disabled")
 						
-						if res.success
+						if res_.success
 							config = {}
-							config.viewData = res
+							config.viewData = res_
 							config.viewData.isResource = isResource
 
 							$form.resetForm()
@@ -65,7 +66,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 							$feedback.hide()
 						else
 							$("html, body").animate({ scrollTop: 0 }, "slow")
-							$feedback.show().html(res.msg)
+							$feedback.show().html(res_.msg)
 
 				$form.ajaxForm options
 

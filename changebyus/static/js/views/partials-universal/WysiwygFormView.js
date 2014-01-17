@@ -143,6 +143,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       });
       return window.prettyPrint && prettyPrint();
     },
+    /* FORM HOOKS ---------------------------------------------*/
+
     beforeSubmit: function(arr_, form_, options_) {},
     success: function(response_) {},
     error: function(response_) {},

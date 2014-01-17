@@ -21,6 +21,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     events: {
       "click .btn-info": "infoClick"
     },
+    /* EVENTS ---------------------------------------------*/
+
     infoClick: function(e) {
       var url;
       e.preventDefault();
@@ -34,6 +36,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       });
       return this.toggleSubView();
     },
+    toggleSubView: function() {
+      var view;
+      view = window.location.hash.substring(1);
+      if (view === "facebook" || view === "twitter") {
+        $('.social-signup').show();
+        $('.init-signup').hide();
+        return this.getSocialInfo();
+      } else {
+        $('.social-signup').hide();
+        return $('.init-signup').show();
+      }
+    },
+    /* AJAX FORM ---------------------------------------------*/
+
     ajaxForm: function() {
       var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options, socialOptions,
         _this = this;
@@ -103,18 +119,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return false;
       });
     },
-    toggleSubView: function() {
-      var view;
-      view = window.location.hash.substring(1);
-      if (view === "facebook" || view === "twitter") {
-        $('.social-signup').show();
-        $('.init-signup').hide();
-        return this.getSocialInfo();
-      } else {
-        $('.social-signup').hide();
-        return $('.init-signup').show();
-      }
-    },
+    /* GETTER & SETTERS -----------------------------------------------------------------*/
+
     getSocialInfo: function() {
       var $socialForm, $socialSignup,
         _this = this;

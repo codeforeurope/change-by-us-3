@@ -44,6 +44,7 @@ define ["underscore",
 				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
 					{data: @viewData}, => @onTemplateLoad()
 
+			### EVENTS ---------------------------------------------###
 			onTemplateLoad:->
 				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 				AbstractView::onTemplateLoad.call(@)

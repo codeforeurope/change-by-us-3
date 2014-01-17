@@ -2,8 +2,8 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
 	(_, Backbone, $, temp, form, AbstractModalView) ->
 		ProjectEmbedCalendarModalView = AbstractModalView.extend
 		
-			initialize: (options) ->
-				AbstractModalView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractModalView::initialize.call @, options_
 				@viewData.id   = @model.id
 				@viewData.slug = @model.slug
 
@@ -21,8 +21,8 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
 					url: $form.attr('action')
 					dataType: "json" 
 					contentType: "application/json; charset=utf-8"
-					success: (response) ->
-						if response.success then window.location.reload()
+					success: (response_) ->
+						if response_.success then window.location.reload()
 
 				$form.submit -> 
 					obj = $form.serializeJSON()

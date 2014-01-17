@@ -6,5 +6,5 @@ define ["underscore", "backbone", "model/ProjectModel"],
 			url: ->
 				"/api/project/list?limit=6&sort=activity&order=desc"
 			
-			parse: (response) ->
-				if response.success then response.data else {}
+			parse: (response_) ->
+				if response_.success then response_.data else {}

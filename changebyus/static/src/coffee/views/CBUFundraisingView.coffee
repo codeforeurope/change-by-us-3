@@ -18,8 +18,8 @@ define ["underscore",
 				$review:null
 				stripe:{}
 
-				initialize: (options) ->
-					AbstractView::initialize.call @, options
+				initialize: (options_) ->
+					AbstractView::initialize.call @, options_
 
 					@model = new ProjectModel({id:@model.id})
 					@model.fetch
@@ -28,6 +28,14 @@ define ["underscore",
 				events:
 					"click #edit-goal":"onEditGoalClick"
 
+				render: ->
+					@$el = $("<div class='body-container'/>") if @$el.html() is ""
+					@$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
+						data:@stripe,  =>@onTemplateLoad()
+					$(@parent).append @$el
+					@$el.show()
+
+				### EVENTS ---------------------------------------------###
 				onEditGoalClick:->
 					@$el.toggle()
 					@$review.toggle()
@@ -38,14 +46,6 @@ define ["underscore",
 					@stripe.project_id = @model.id
 					@stripe.account_id = @stripe.id
 					@render()
-
-				render: ->
-					@$el = $("<div class='body-container'/>") if @$el.html() is ""
-					@$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
-						data:@stripe,  =>@onTemplateLoad()
-					$(@parent).append @$el
-					@$el.show()
-
 
 				onTemplateLoad:->
 					AbstractView::onTemplateLoad.call @

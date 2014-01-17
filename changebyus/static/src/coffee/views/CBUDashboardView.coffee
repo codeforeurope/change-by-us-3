@@ -27,8 +27,8 @@ define ["underscore",
 			className: "body-container"
 			location:{name: "", lat: 0, lon: 0} 
 
-			initialize: (options) ->  
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->  
+				AbstractView::initialize.call @, options_
 				@userModel = new UserModel(id:@model.id)
 				@userModel.fetch 
 					success: =>@render() 

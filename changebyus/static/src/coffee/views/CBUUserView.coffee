@@ -19,7 +19,8 @@ define ["underscore",
 			joinedProjects:null
 			ownedProjects:null
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options = options_
 				AbstractView::initialize.call @, options
 
 				@model = new UserModel(options.model)

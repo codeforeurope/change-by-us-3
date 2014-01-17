@@ -19,7 +19,8 @@ define ["underscore",
 			isResource:false
 			isMember:false
 
-			initialize: (options) -> 
+			initialize: (options_) -> 
+				options                    = options_
 				ProjectSubView::initialize.call(@, options)
 				@members                   = options.members || @members 
 				@isMember                  = options.isMember

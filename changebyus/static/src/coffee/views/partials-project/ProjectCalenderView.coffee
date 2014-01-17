@@ -34,8 +34,8 @@ define ["underscore",
 				@render()
 
 			events:
-				"click #embed-calendar":"embedCalendar"
-				"click #delete-calendar":"deleteCalendar"
+				"click #embed-calendar":"onEmbedCalendar"
+				"click #delete-calendar":"onDeleteCalendar"
 				
 			render: ->  
 				@$el = $(@parent)
@@ -46,11 +46,13 @@ define ["underscore",
 				@$el.find(".preload").remove()
 				ProjectSubView::onTemplateLoad.call @
 
-			embedCalendar:(e)->
+			### EVENTS -------------------------------------------------------------------------###
+			onEmbedCalendar:(e)->
 				e.preventDefault()
+				
 				@projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({model:@model})
 
-			deleteCalendar:(e)->
+			onDeleteCalendar:(e)->
 				e.preventDefault() 
 
 				url = "/api/project/#{@model.id}/delete_calendar"

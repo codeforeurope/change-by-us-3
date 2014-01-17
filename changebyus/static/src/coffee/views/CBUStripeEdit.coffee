@@ -15,23 +15,20 @@ define ["underscore",
 
 			CBUStripeEdit = AbstractView.extend
 				
-				initialize: (options) ->
-					AbstractView::initialize.call @, options
+				initialize: (options_) ->
+					AbstractView::initialize.call @, options_
 					@user = new UserModel({id:@model.sid})
 					@user.fetch
 						success: =>@getProject()
 
-				getProject:->
-					@project = new ProjectModel({id:@model.id})
-					@project.fetch
-						success: =>@render()
 
 				render: ->
 					@$el = $("<div class='content-wrapper clearfix'/>") 
 					@$el.template @templateDir+"/templates/partials-universal/stripe-form.html",
 						data: {account_id:@user.id , project_id:@project.id , name:@project.get("name")}, => @onTemplateLoad()
 					$(@parent).append @$el
-
+				
+				### EVENTS ---------------------------------------------###
 				onTemplateLoad:->
 					$form = @$el.find('form')
 					options =
@@ -45,3 +42,9 @@ define ["underscore",
 					@$el.html("")
 					@$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
 						data: data_,  =>
+
+				### GETTER ---------------------------------------------###
+				getProject:->
+					@project = new ProjectModel({id:@model.id})
+					@project.fetch
+						success: =>@render()

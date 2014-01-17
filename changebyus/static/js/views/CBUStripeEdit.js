@@ -13,17 +13,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         }
       });
     },
-    getProject: function() {
-      var _this = this;
-      this.project = new ProjectModel({
-        id: this.model.id
-      });
-      return this.project.fetch({
-        success: function() {
-          return _this.render();
-        }
-      });
-    },
     render: function() {
       var _this = this;
       this.$el = $("<div class='content-wrapper clearfix'/>");
@@ -38,6 +27,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       return $(this.parent).append(this.$el);
     },
+    /* EVENTS ---------------------------------------------*/
+
     onTemplateLoad: function() {
       var $form, options,
         _this = this;
@@ -56,6 +47,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
         data: data_
       }, function() {});
+    },
+    /* GETTER ---------------------------------------------*/
+
+    getProject: function() {
+      var _this = this;
+      this.project = new ProjectModel({
+        id: this.model.id
+      });
+      return this.project.fetch({
+        success: function() {
+          return _this.render();
+        }
+      });
     }
   });
 });

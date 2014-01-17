@@ -39,12 +39,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.onTemplateLoad();
       });
     },
-    sortClick: function(e) {
-      var sort;
-      sort = $(e.currentTarget).attr("id");
-      this.addAll(sort);
-      return false;
-    },
+    /* EVENTS ---------------------------------------------*/
+
     onTemplateLoad: function() {
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
@@ -52,6 +48,12 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.onCollectionLoad();
       }
       return ProjectSubView.prototype.onTemplateLoad.call(this);
+    },
+    sortClick: function(e) {
+      var sort;
+      sort = $(e.currentTarget).attr("id");
+      this.addAll(sort);
+      return false;
     },
     onCollectionLoad: function() {
       var _this = this;

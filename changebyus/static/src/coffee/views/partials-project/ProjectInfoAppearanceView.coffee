@@ -5,8 +5,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 			parent: "#project-info"
 			location:{name: "", lat: 0, lon: 0} 
 
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@viewData = @model.attributes
 				@location.name = @viewData.location
 				console.log '@viewData',@viewData

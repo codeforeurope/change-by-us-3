@@ -38,7 +38,8 @@ define ["underscore",
 			memberData: null
 			$header:null
 
-			initialize: (options) -> 
+			initialize: (options_) -> 
+				options      = options_
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent
 				@model       = new ProjectModel(options.model)
@@ -66,29 +67,6 @@ define ["underscore",
 					{}, => @onTemplateLoad()
 				$(@parent).append @$el
 
-			onTemplateLoad:->
-				# determine if user is a member of the project
-				# if not, display the join button 
-				@viewData = @model.attributes
-				@getMemberStatus()
-
-				AbstractView::onTemplateLoad.call @
-
-			getMemberStatus:->
-				if window.userID is ""
-					@isMember = false
-					@addHeaderView()
-				else
-					id = @model.get("id")
-					$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
-						if res_.success
-							@memberData                = res_.data
-							@isMember                  = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
-							@isOwnerOrganizer          = if true in [@memberData.organizer, @memberData.owner] then true else false
-							@viewData.isMember         = @isMember
-							@viewData.isOwnerOrganizer = @isOwnerOrganizer
-							@addHeaderView()
-
 			addHeaderView: -> 
 				if @isResource
 					className   = "resource-header"
@@ -101,6 +79,15 @@ define ["underscore",
 				@$header.template @templateDir+templateURL, 
 					{data:@viewData}, => @onHeaderLoaded()
 				@$el.prepend @$header
+
+			### EVENTS ---------------------------------------------###
+			onTemplateLoad:->
+				# determine if user is a member of the project
+				# if not, display the join button 
+				@viewData = @model.attributes
+				@getMemberStatus()
+
+				AbstractView::onTemplateLoad.call @
 
 			onHeaderLoaded:->
 				id = @model.get("id")
@@ -203,3 +190,19 @@ define ["underscore",
 						@updatesBTN.addClass "active"
 
 				onPageElementsLoad()
+
+			### GETTER & SETTERS ----------------------------------------------------------------- ###
+			getMemberStatus:->
+				if window.userID is ""
+					@isMember = false
+					@addHeaderView()
+				else
+					id = @model.get("id")
+					$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
+						if res_.success
+							@memberData                = res_.data
+							@isMember                  = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+							@isOwnerOrganizer          = if true in [@memberData.organizer, @memberData.owner] then true else false
+							@viewData.isMember         = @isMember
+							@viewData.isOwnerOrganizer = @isOwnerOrganizer
+							@addHeaderView()

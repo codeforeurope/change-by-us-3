@@ -2,8 +2,8 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 	(_, Backbone, $, temp, valid, AbstractView) ->
 		CBUDLoginView = AbstractView.extend
 			
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@render()
 
 			events:
@@ -40,14 +40,14 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 						else
 							return false
 
-					success: (response) =>
+					success: (response_) =>
 						$form.find("input, textarea").removeAttr("disabled")
 
 						#if response.success 
-						if response.success
+						if response_.success
 							window.location.href = "/"
 						else
-							$feedback.addClass("alert").addClass("alert-danger").html response.msg
+							$feedback.addClass("alert").addClass("alert-danger").html response_.msg
 
 				$form.submit ->
 					json_str = JSON.stringify($form.serializeJSON())

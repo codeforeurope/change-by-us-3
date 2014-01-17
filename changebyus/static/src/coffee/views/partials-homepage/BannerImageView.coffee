@@ -2,8 +2,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 	(_, Backbone, $, temp, AbstractView) ->
 		BannerImageView = AbstractView.extend
 		
-			initialize: (options) ->
-				AbstractView::initialize.call this, options
+			initialize: (options_) ->
+				AbstractView::initialize.call this, options_
 				@render()
 
 			render: ->

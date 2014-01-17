@@ -18,17 +18,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     events: {
       "click #edit-goal": "onEditGoalClick"
     },
-    onEditGoalClick: function() {
-      this.$el.toggle();
-      this.$review.toggle();
-      return false;
-    },
-    onFetch: function() {
-      this.stripe = this.model.get("stripe_account");
-      this.stripe.project_id = this.model.id;
-      this.stripe.account_id = this.stripe.id;
-      return this.render();
-    },
     render: function() {
       var _this = this;
       if (this.$el.html() === "") {
@@ -41,6 +30,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       $(this.parent).append(this.$el);
       return this.$el.show();
+    },
+    /* EVENTS ---------------------------------------------*/
+
+    onEditGoalClick: function() {
+      this.$el.toggle();
+      this.$review.toggle();
+      return false;
+    },
+    onFetch: function() {
+      this.stripe = this.model.get("stripe_account");
+      this.stripe.project_id = this.model.id;
+      this.stripe.account_id = this.stripe.id;
+      return this.render();
     },
     onTemplateLoad: function() {
       var _this = this;

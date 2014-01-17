@@ -25,7 +25,8 @@ define ["underscore",
 			$postRight: null
 			$replyForm: null 
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options   = options_
 				AbstractView::initialize.call @, options
 				@viewData = @model.attributes
 				@isMember = options.isMember
@@ -87,6 +88,7 @@ define ["underscore",
 				else
 					@$repliesHolder.append postReplyView.$el
 
+			### EVENTS ---------------------------------------------###
 			onReplyToggleClick:(e)->
 				$(e.currentTarget).find('.reply').toggleClass('hide')
 				@$repliesHolder.toggleClass('hide')

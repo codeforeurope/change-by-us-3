@@ -12,7 +12,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 			isOwnerOrganizer:false
 			view:"public"
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options           = options_
 				@isDataLoaded     = options.isDataLoaded || @isDataLoaded
 				@view             = options.view || @view
 				@projectID        = options.projectID || @projectID
@@ -35,11 +36,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@$el.template @templateDir+templateURL, 
 					{data:@viewData}, => @onTemplateLoad() 
 
-			sortClick:(e)-> 
-				sort = $(e.currentTarget).attr("id")
-				@addAll sort
-				false
-
+			### EVENTS ---------------------------------------------###
 			onTemplateLoad:-> 
 				@$teamList   = @$el.find("#team-members ul")
 				@$memberList = @$el.find("#project-members ul")
@@ -47,6 +44,10 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				if (@view is "public") and (@collection.length > 0) then @onCollectionLoad()
 
 				ProjectSubView::onTemplateLoad.call @
+			
+			sortClick:(e)->  
+				@addAll $(e.currentTarget).attr("id")
+				false
 
 			onCollectionLoad:->
 				ProjectSubView::onCollectionLoad.call(@)

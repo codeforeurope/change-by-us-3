@@ -177,6 +177,14 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     }, function() {
       return $(this).removeClass('active');
     });
+    $('.nav.nav-pills.pull-right').slicknav({
+      label: '',
+      prependTo: '#responsive-menu'
+    });
+    $clone = $('.resp-append');
+    $cloneLast = $('.resp-append-last');
+    $clone.clone().appendTo($('.slicknav_nav'));
+    $cloneLast.clone().appendTo($('.slicknav_nav'));
     /* LOG OUT*/
 
     $("a[href='/logout']").click(function(e) {
@@ -189,7 +197,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return window.location.reload();
       });
     });
-    /* GLOBAL UTILS*/
+    /* GLOBAL UTILS ----------------------------------------------------------------------------------*/
 
     window.popWindow = function(url) {
       var h, left, title, top, w;
@@ -246,7 +254,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return console.log(k);
       }
     });
-    /* STICKY FOOTER*/
+    /* STICKY FOOTER ----------------------------------------------------------------------------------*/
 
     $window = $(window);
     footerHeight = 0;
@@ -276,18 +284,8 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     };
     positionFooter();
     $window.scroll(positionFooter).resize(positionFooter);
-    window.onPageElementsLoad = function() {
+    return window.onPageElementsLoad = function() {
       return positionFooter();
     };
-    /* END STICKY FOOTER*/
-
-    $('.nav.nav-pills.pull-right').slicknav({
-      label: '',
-      prependTo: '#responsive-menu'
-    });
-    $clone = $('.resp-append');
-    $cloneLast = $('.resp-append-last');
-    $clone.clone().appendTo($('.slicknav_nav'));
-    return $cloneLast.clone().appendTo($('.slicknav_nav'));
   });
 });

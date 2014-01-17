@@ -88,6 +88,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         return this.$repliesHolder.append(postReplyView.$el);
       }
     },
+    /* EVENTS ---------------------------------------------*/
+
     onReplyToggleClick: function(e) {
       $(e.currentTarget).find('.reply').toggleClass('hide');
       return this.$repliesHolder.toggleClass('hide');

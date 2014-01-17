@@ -37,7 +37,8 @@ define ["underscore",
 
 		CBUProjectOwnerView = CBUProjectView.extend
 
-			initialize: (options) -> 
+			initialize: (options_) -> 
+				options      = options_
 				@templateDir = options.templateDir or @templateDir
 				@parent      = options.parent or @parent
 				@model       = new ProjectModel(options.model)
@@ -49,14 +50,6 @@ define ["underscore",
 
 			events:
 				"click a[href^='#']":"changeHash"
-
-			getMemberStatus:->
-				id = @model.get("id")
-				$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
-					if res_.success
-						@memberData = res_.data
-
-						if (@memberData.organizer || @memberData.owner) then @render() else (window.location.href = "/project/"+@model.get("slug"))
 
 			render: -> 
 				@$el = $("<div class='project-container'/>")
@@ -150,3 +143,12 @@ define ["underscore",
 					else
 						@projectDiscussionsView.show()
 						@discussionBTN.addClass "active" 
+
+			### GETTER & SETTERS ----------------------------------------------------------------- ###
+			getMemberStatus:->
+				id = @model.get("id")
+				$.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
+					if res_.success
+						@memberData = res_.data
+
+						if (@memberData.organizer || @memberData.owner) then @render() else (window.location.href = "/project/"+@model.get("slug"))

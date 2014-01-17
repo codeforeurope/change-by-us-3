@@ -59,6 +59,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 						@model.collection.remove @model
 						@$el.remove() 
 
+			### EVENTS ---------------------------------------------###
 			delete:(e)-> 
 				e.preventDefault()
 				$.post "/api/user/#{@model.id}/delete", (res_)=>

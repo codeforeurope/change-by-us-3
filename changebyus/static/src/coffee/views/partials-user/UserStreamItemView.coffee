@@ -18,8 +18,8 @@ define ["underscore",
 			
 			model:UpdateModel
 
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				
 				@user = new UserModel(id:@model.get("user").id)
 				@user.fetch

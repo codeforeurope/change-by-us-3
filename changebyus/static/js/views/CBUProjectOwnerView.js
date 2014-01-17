@@ -18,21 +18,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
     events: {
       "click a[href^='#']": "changeHash"
     },
-    getMemberStatus: function() {
-      var id,
-        _this = this;
-      id = this.model.get("id");
-      return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
-        if (res_.success) {
-          _this.memberData = res_.data;
-          if (_this.memberData.organizer || _this.memberData.owner) {
-            return _this.render();
-          } else {
-            return window.location.href = "/project/" + _this.model.get("slug");
-          }
-        }
-      });
-    },
     render: function() {
       var _this = this;
       this.$el = $("<div class='project-container'/>");
@@ -148,6 +133,23 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "model/P
           this.projectDiscussionsView.show();
           return this.discussionBTN.addClass("active");
       }
+    },
+    /* GETTER & SETTERS -----------------------------------------------------------------*/
+
+    getMemberStatus: function() {
+      var id,
+        _this = this;
+      id = this.model.get("id");
+      return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
+        if (res_.success) {
+          _this.memberData = res_.data;
+          if (_this.memberData.organizer || _this.memberData.owner) {
+            return _this.render();
+          } else {
+            return window.location.href = "/project/" + _this.model.get("slug");
+          }
+        }
+      });
     }
   });
 });

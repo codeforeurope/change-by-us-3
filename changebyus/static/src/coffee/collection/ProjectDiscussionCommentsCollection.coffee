@@ -6,5 +6,5 @@ define ["underscore", "backbone", "model/ProjectDiscussionCommentModel"],
 			url: ->
 				"/api/project/#{window.projectID}/discussion_comments"
 			
-			parse: (response) ->
-				if response.success then response.data else {}
+			parse: (response_) ->
+				if response_.success then response_.data else {}

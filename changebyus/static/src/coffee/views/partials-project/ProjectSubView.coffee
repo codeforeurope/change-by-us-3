@@ -4,8 +4,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			isDataLoaded: false
 		
-			initialize: (options) -> 
-				AbstractView::initialize.call(@, options)
+			initialize: (options_) -> 
+				AbstractView::initialize.call(@, options_)
 				@render()
 
 			show: -> 
@@ -31,13 +31,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@addAll()
 			
 			# override in subview
-			addOne: (model) ->
+			addOne: (model_) ->
 				
 			# override in subview
 			addAll: ->  
 				if @collection.length is 0 then @noResults() 
 
-				@collection.each (model) =>  
-					@addOne model
+				@collection.each (model_) =>  
+					@addOne model_
 
 				@isDataLoaded = true

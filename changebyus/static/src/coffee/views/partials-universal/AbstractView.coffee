@@ -52,31 +52,6 @@ define ["underscore", "backbone", "jquery", "template"],
 			onFetch:(r)->
 				#hook 
 
-			setPages:(total, parent_=null)->
-				$parent = if parent_ then parent_ else @$el
-				
-				if @$paginationContainer then @$paginationContainer.remove()
-
-				if total > @perPage
-					@pages = Math.ceil(total/@perPage)
-					
-					@$paginationContainer = $("<div class='center'/>")
-					@$pagination          = $("<ul class='pagination'/>")
-					@$prevArrow           = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>")
-					@$nextArrow           = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>")
-
-					@$pagination.append @$prevArrow
-					for i in [1..@pages]
-						$li = $("<li class='page'><a href='#' id='page-#{i}'>#{i}</a></li>")
-						@$pagination.append $li
-					@$pagination.append @$nextArrow
-
-					@$paginationContainer.append @$pagination
-					$parent.append @$paginationContainer
-
-					@delegateEvents()
-					@checkArrows()
-
 			nextClick:(e)->
 				if $(e.currentTarget).hasClass('disabled') is false then @nextPage()
 				e.preventDefault() 
@@ -115,3 +90,28 @@ define ["underscore", "backbone", "jquery", "template"],
 				
 				$("#page-"+(@index+1)).parent().addClass('disabled')
 
+			### GETTER & SETTERS ----------------------------------------------------------------- ###
+			setPages:(total_, parent_=null)->
+				$parent = if parent_ then parent_ else @$el
+				
+				if @$paginationContainer then @$paginationContainer.remove()
+
+				if total_ > @perPage
+					@pages = Math.ceil(total_/@perPage)
+					
+					@$paginationContainer = $("<div class='center'/>")
+					@$pagination          = $("<ul class='pagination'/>")
+					@$prevArrow           = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>")
+					@$nextArrow           = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>")
+
+					@$pagination.append @$prevArrow
+					for i in [1..@pages]
+						$li = $("<li class='page'><a href='#' id='page-#{i}'>#{i}</a></li>")
+						@$pagination.append $li
+					@$pagination.append @$nextArrow
+
+					@$paginationContainer.append @$pagination
+					$parent.append @$paginationContainer
+
+					@delegateEvents()
+					@checkArrows()

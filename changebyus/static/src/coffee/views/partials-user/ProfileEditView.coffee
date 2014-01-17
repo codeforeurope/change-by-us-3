@@ -2,8 +2,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 	(_, Backbone, $, temp, AbstractView, serializeObject) ->
 		ProfileEditView = AbstractView.extend
 
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@viewData = @model.attributes
 
 				$.get "/api/user/socialstatus", (response_)=>

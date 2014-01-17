@@ -20,8 +20,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.render();
     },
     events: {
-      "click #embed-calendar": "embedCalendar",
-      "click #delete-calendar": "deleteCalendar"
+      "click #embed-calendar": "onEmbedCalendar",
+      "click #delete-calendar": "onDeleteCalendar"
     },
     render: function() {
       var _this = this;
@@ -36,13 +36,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.$el.find(".preload").remove();
       return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
-    embedCalendar: function(e) {
+    /* EVENTS -------------------------------------------------------------------------*/
+
+    onEmbedCalendar: function(e) {
       e.preventDefault();
       return this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({
         model: this.model
       });
     },
-    deleteCalendar: function(e) {
+    onDeleteCalendar: function(e) {
       var url;
       e.preventDefault();
       url = "/api/project/" + this.model.id + "/delete_calendar";

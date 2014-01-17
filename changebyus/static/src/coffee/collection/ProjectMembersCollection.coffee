@@ -4,13 +4,13 @@ define ["underscore", "backbone", "model/UserModel"],
 			model: UserModel
 			order: 'name'
 			
-			initialize: (options) ->
-				@id = options.id
+			initialize: (options_) ->
+				@id = options_.id
 
 			url: ->
 				"/api/project/#{@id}/users"
 
-			parse: (response) -> 
-				if response.success then response.data else {}
+			parse: (response_) -> 
+				if response_.success then response_.data else {}
 
 			

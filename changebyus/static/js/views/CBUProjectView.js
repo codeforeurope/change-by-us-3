@@ -47,31 +47,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       return $(this.parent).append(this.$el);
     },
-    onTemplateLoad: function() {
-      this.viewData = this.model.attributes;
-      this.getMemberStatus();
-      return AbstractView.prototype.onTemplateLoad.call(this);
-    },
-    getMemberStatus: function() {
-      var id,
-        _this = this;
-      if (window.userID === "") {
-        this.isMember = false;
-        return this.addHeaderView();
-      } else {
-        id = this.model.get("id");
-        return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
-          if (res_.success) {
-            _this.memberData = res_.data;
-            _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
-            _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
-            _this.viewData.isMember = _this.isMember;
-            _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
-            return _this.addHeaderView();
-          }
-        });
-      }
-    },
     addHeaderView: function() {
       var className, templateURL,
         _this = this;
@@ -89,6 +64,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return _this.onHeaderLoaded();
       });
       return this.$el.prepend(this.$header);
+    },
+    /* EVENTS ---------------------------------------------*/
+
+    onTemplateLoad: function() {
+      this.viewData = this.model.attributes;
+      this.getMemberStatus();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     onHeaderLoaded: function() {
       var config, id;
@@ -216,6 +198,28 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           this.updatesBTN.addClass("active");
       }
       return onPageElementsLoad();
+    },
+    /* GETTER & SETTERS -----------------------------------------------------------------*/
+
+    getMemberStatus: function() {
+      var id,
+        _this = this;
+      if (window.userID === "") {
+        this.isMember = false;
+        return this.addHeaderView();
+      } else {
+        id = this.model.get("id");
+        return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
+          if (res_.success) {
+            _this.memberData = res_.data;
+            _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.viewData.isMember = _this.isMember;
+            _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
+            return _this.addHeaderView();
+          }
+        });
+      }
     }
   });
 });

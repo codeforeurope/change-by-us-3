@@ -4,8 +4,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
 			socialInfo:null
 
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@render()
 
 			render: -> 
@@ -20,6 +20,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 			events:
 				"click .btn-info":"infoClick"
 
+			### EVENTS ---------------------------------------------###
 			infoClick:(e)->
 				e.preventDefault()
 				url = $(e.currentTarget).attr("href")
@@ -29,8 +30,19 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView()
 
+			toggleSubView:->
+				view = window.location.hash.substring(1)
+
+				if view is "facebook" or view is "twitter"
+					$('.social-signup').show()
+					$('.init-signup').hide()
+					@getSocialInfo()
+				else
+					$('.social-signup').hide()
+					$('.init-signup').show()
+
+			### AJAX FORM ---------------------------------------------###
 			ajaxForm: ->
-				# signup --------------------------------------------------
 				$signup   = $(".init-signup")
 				$form     = $signup.find("form") 
 				$submit   = $signup.find("input[type='submit']")
@@ -45,13 +57,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 						$form.find("input, textarea").attr("disabled", "disabled")
 						$feedback.removeClass("alert").removeClass("alert-danger").html ""
 
-					success: (response) =>
+					success: (response_) =>
 						$form.find("input, textarea").removeAttr("disabled")
 						#if response.success
-						if response.success
+						if response_.success
 							window.location.href = "/"
 						else
-							$feedback.addClass("alert").addClass("alert-danger").html response.msg
+							$feedback.addClass("alert").addClass("alert-danger").html response_.msg
  
 				$form.submit -> 
 					json_str = JSON.stringify($form.serializeJSON())
@@ -91,17 +103,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 					$.ajax socialOptions
 					false
 
-			toggleSubView:->
-				view = window.location.hash.substring(1)
 
-				if view is "facebook" or view is "twitter"
-					$('.social-signup').show()
-					$('.init-signup').hide()
-					@getSocialInfo()
-				else
-					$('.social-signup').hide()
-					$('.init-signup').show()
-
+			### GETTER & SETTERS ----------------------------------------------------------------- ###
 			getSocialInfo:->
 				unless @socialInfo
 					$socialSignup   = $(".social-signup")
@@ -117,10 +120,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 							@setSocialInfo(response_.data)
 						$socialForm.find("input, textarea").removeAttr("disabled")
 
-			setSocialInfo:(data_)->
-				@socialInfo = data_
-				img = if (@socialInfo.fb_image isnt "") then @socialInfo.fb_image else @socialInfo.twitter_image
-				name = if (@socialInfo.fb_name isnt "") then  @socialInfo.fb_name else @socialInfo.twitter_name
+			setSocialInfo:(@socialInfo)-> 
+				img         = if (@socialInfo.fb_image isnt "") then @socialInfo.fb_image else @socialInfo.twitter_image
+				name        = if (@socialInfo.fb_name isnt "") then  @socialInfo.fb_name else @socialInfo.twitter_name
 
 				$socialAvatar = $('.social-avatar')
 				$socialSignup = $(".social-signup")

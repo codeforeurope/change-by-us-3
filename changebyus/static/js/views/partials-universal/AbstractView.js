@@ -52,33 +52,6 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       });
     },
     onFetch: function(r) {},
-    setPages: function(total, parent_) {
-      var $li, $parent, i, _i, _ref;
-      if (parent_ == null) {
-        parent_ = null;
-      }
-      $parent = parent_ ? parent_ : this.$el;
-      if (this.$paginationContainer) {
-        this.$paginationContainer.remove();
-      }
-      if (total > this.perPage) {
-        this.pages = Math.ceil(total / this.perPage);
-        this.$paginationContainer = $("<div class='center'/>");
-        this.$pagination = $("<ul class='pagination'/>");
-        this.$prevArrow = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>");
-        this.$nextArrow = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>");
-        this.$pagination.append(this.$prevArrow);
-        for (i = _i = 1, _ref = this.pages; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
-          $li = $("<li class='page'><a href='#' id='page-" + i + "'>" + i + "</a></li>");
-          this.$pagination.append($li);
-        }
-        this.$pagination.append(this.$nextArrow);
-        this.$paginationContainer.append(this.$pagination);
-        $parent.append(this.$paginationContainer);
-        this.delegateEvents();
-        return this.checkArrows();
-      }
-    },
     nextClick: function(e) {
       if ($(e.currentTarget).hasClass('disabled') === false) {
         this.nextPage();
@@ -125,6 +98,35 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
         this.$prevArrow.removeClass('disabled');
       }
       return $("#page-" + (this.index + 1)).parent().addClass('disabled');
+    },
+    /* GETTER & SETTERS -----------------------------------------------------------------*/
+
+    setPages: function(total, parent_) {
+      var $li, $parent, i, _i, _ref;
+      if (parent_ == null) {
+        parent_ = null;
+      }
+      $parent = parent_ ? parent_ : this.$el;
+      if (this.$paginationContainer) {
+        this.$paginationContainer.remove();
+      }
+      if (total > this.perPage) {
+        this.pages = Math.ceil(total / this.perPage);
+        this.$paginationContainer = $("<div class='center'/>");
+        this.$pagination = $("<ul class='pagination'/>");
+        this.$prevArrow = $("<li class='prev-arrow'><a href='#'><img src='/static/img/prev-arrow.png'></a></li>");
+        this.$nextArrow = $("<li class='next-arrow'><a href='#'><img src='/static/img/next-arrow.png'></a></li>");
+        this.$pagination.append(this.$prevArrow);
+        for (i = _i = 1, _ref = this.pages; 1 <= _ref ? _i <= _ref : _i >= _ref; i = 1 <= _ref ? ++_i : --_i) {
+          $li = $("<li class='page'><a href='#' id='page-" + i + "'>" + i + "</a></li>");
+          this.$pagination.append($li);
+        }
+        this.$pagination.append(this.$nextArrow);
+        this.$paginationContainer.append(this.$pagination);
+        $parent.append(this.$paginationContainer);
+        this.delegateEvents();
+        return this.checkArrows();
+      }
     }
   });
 });

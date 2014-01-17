@@ -3,8 +3,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 		ProjectDiscussionCommentView = AbstractView.extend
 			parent: "#project"
 			
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@render()
 
 			render: ->

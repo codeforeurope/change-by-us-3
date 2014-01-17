@@ -17,7 +17,8 @@ define ["underscore",
 	 	
 		CBUDiscoverView = AbstractView.extend
 
-			initialize: (options) ->
+			initialize: (options_) ->
+				options = options_
 				# this is added later
 				AbstractView::initialize.call @, options
 				@collection  = options.collection or new ProjectListCollection()
@@ -40,6 +41,7 @@ define ["underscore",
 
 				AbstractView::onTemplateLoad.call @
 
+			### EVENTS ---------------------------------------------###
 			updatePage:->
 				@bannerSearchView.updatePage()
 
@@ -56,7 +58,6 @@ define ["underscore",
 				@bannerSearchView.checkArrows()
 				
 			onResults:(size_)->
-				console.log 'size_',size_
 				if size_ > 0
 					@$el.find("#no-result").hide()
 				else

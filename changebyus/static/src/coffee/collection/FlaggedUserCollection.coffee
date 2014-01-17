@@ -6,5 +6,5 @@ define ["underscore", "backbone", "model/ProjectModel"],
 			url: -> 
 				"/api/user/list"
 			
-			parse: (response) ->
-				if response.success then response.data else {}
+			parse: (response_) ->
+				if response_.success then response_.data else {}

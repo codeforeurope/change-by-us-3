@@ -4,8 +4,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
 			parent:'body'
 		
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
+			initialize: (options_) ->
+				AbstractView::initialize.call @, options_
 				@render()
 
 			events: 

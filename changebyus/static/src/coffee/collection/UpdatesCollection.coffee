@@ -3,12 +3,12 @@ define ["underscore", "backbone", "model/UpdateModel"],
 		UpdatesCollection = Backbone.Collection.extend 
 			model: UpdateModel
 			
-			initialize: (options) ->
-				@id = options.id
+			initialize: (options_) ->
+				@id = options_.id
 
 			url: -> 
 				"/api/post/project/#{@id}/updates?sort=created_at&order=desc&"
 
-			parse: (response) ->
-				if response.success then response.data else {}
+			parse: (response_) ->
+				if response_.success then response_.data else {}
 

@@ -186,6 +186,16 @@ define ["jquery",
 			, ->
 				$(this).removeClass('active')
 
+			$('.nav.nav-pills.pull-right').slicknav
+				label: '',
+				prependTo:'#responsive-menu'
+
+			$clone     = $('.resp-append')
+			$cloneLast = $('.resp-append-last')
+			
+			$clone.clone().appendTo $('.slicknav_nav')
+			$cloneLast.clone().appendTo $('.slicknav_nav')
+
 			### LOG OUT ###
 			$("a[href='/logout']").click (e)->
 				e.preventDefault()
@@ -195,7 +205,7 @@ define ["jquery",
 				).done (response)=>
 					window.location.reload()
 
-			### GLOBAL UTILS ###
+			### GLOBAL UTILS ----------------------------------------------------------------------------------###
 			window.popWindow = (url) ->
 				w     = 650
 				h     = 650
@@ -237,7 +247,7 @@ define ["jquery",
 					if k is 'd' then $('body').toggleClass('debug')
 					console.log k
 
-			### STICKY FOOTER ###
+			### STICKY FOOTER ----------------------------------------------------------------------------------###
 			$window      = $(window)
 			footerHeight = 0
 			$topnav      = $(".top-nav")
@@ -262,14 +272,3 @@ define ["jquery",
 
 			window.onPageElementsLoad = ->
 				positionFooter()
-
-			### END STICKY FOOTER ###
-
-			$('.nav.nav-pills.pull-right').slicknav
-				label: '',
-				prependTo:'#responsive-menu'
-
-			$clone     = $('.resp-append')
-			$cloneLast = $('.resp-append-last')
-			$clone.clone().appendTo $('.slicknav_nav')
-			$cloneLast.clone().appendTo $('.slicknav_nav')

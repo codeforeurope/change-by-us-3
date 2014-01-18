@@ -39,6 +39,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 					contentType: "multipart/form-data; charset=utf-8"
 					beforeSubmit: =>   
 						if $form.valid()
+							$('input[name="private"]').attr('checked', ($('input[name="visibility"]').val() is "private"))
+							console.log($('input[name="visibility"]').val() is "private")
 							$zip = $('input[name="zip"]')
 							if @location.name isnt ""
 								$form.find("input, textarea").attr("disabled", "disabled")
@@ -91,6 +93,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				)
 
 				@$el.find('input:radio').screwDefaultButtons
-					image: 'url("/static/img/icon-lock.png")'
-					width: 60
+					image: 'url("/static/img/dot-check.png")'
+					width: 25
 					height: 25

@@ -35,9 +35,11 @@
             <br> 
             <span>Brooklyn<%= data.user_location %></span>
             <br>
+            <% if (data.website){ %>
             <strong>
-                <a href="<%= data.user_website %>" target="_blank"><%= data.user_website %></a>
+                <a href="<%= data.website %>" target="_blank"><%= data.website %></a>
             </strong>
+            <% } %>
         </div>
     </div>
     <hr>

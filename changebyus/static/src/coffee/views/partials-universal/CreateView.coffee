@@ -1,5 +1,30 @@
-define ["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-universal/CreateModalView", "bootstrap", "autocomp","hogan", "validate", "dropkick"], 
-	(_, Backbone, $, temp, form, AbstractView, CreateModalView, bootstrap, autocomp, Hogan, valid, dropkick) ->
+define ["underscore", 
+		"backbone", 
+		"jquery", 
+		"template", 
+		"form", 
+		"abstract-view", 
+		"views/partials-universal/CreateModalView", 
+		"bootstrap", 
+		"autocomp",
+		"hogan", 
+		"validate", 
+		"dropkick", 
+		"button"], 
+	(_, 
+	 Backbone, 
+	 $, 
+	 temp, 
+	 form, 
+	 AbstractView, 
+	 CreateModalView, 
+	 bootstrap, 
+	 autocomp, 
+	 Hogan, 
+	 valid, 
+	 dropkick, 
+	 button) ->
+
 		CreateView = AbstractView.extend
 
 			location:{name: "", lat: 0, lon: 0} 
@@ -15,10 +40,21 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 				templateURL = if @isResource then "/templates/partials-resource/resource-create-form.html" else  "/templates/partials-project/project-create-form.html"
 				@$el = $("<div class='create-project'/>")
 				@$el.template @templateDir+templateURL,
-					data: @viewData, => 
-						onPageElementsLoad()
-						@ajaxForm()
+					data: @viewData, => @onTemplateLoad() 
 				$(@parent).append @$el
+
+			onTemplateLoad:->
+				@$el.find('input:radio').screwDefaultButtons
+					image: 'url("/static/img/dot-check.png")'
+					width: 25
+					height: 25
+
+				@ajaxForm()
+
+				$('input[name="visibility"]').change ->
+					$('input[name="private"]').attr('checked', ($(this).val() is "private"))
+
+				AbstractView::onTemplateLoad.call @
 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})
@@ -36,10 +72,10 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-view",
 					dataType: "json"  
 					contentType: "multipart/form-data; charset=utf-8"
 	
-					beforeSubmit: =>  
+					beforeSubmit:(arr, $form, options)  =>  
 						if $form.valid()
+							
 							$zip = $('input[name="zip"]')
-
 							if @location.name isnt "" and @location.name is $zip.val() 
 								$form.find("input, textarea").attr("disabled", "disabled")
 								return true

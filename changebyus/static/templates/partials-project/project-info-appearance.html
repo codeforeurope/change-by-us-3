@@ -28,11 +28,26 @@
 
             <div class="public-visibility">
                 <label for="name">Project Visibility</label>
+                
+                <% if (data.private){ %>
                 <input type="radio" name="visibility" value="public">
+                <% }else{ %>
+                <input type="radio" name="visibility" value="public" checked>
+                <% } %>
+
+                <img src="/static/img/icon-unlock.png">
                 <span>Public</span>  
                 <div class="clearfix"></div>
+
+                <% if (data.private){ %>
+                <input type="radio" name="visibility" value="private" checked>
+                <% }else{ %>
                 <input type="radio" name="visibility" value="private">
+                <% } %>
+                <img src="/static/img/icon-lock.png">
                 <span>Private</span> 
+
+                <input type="checkbox" name="private" class="hide">
             </div>
         </div>
         <div class="form-right">

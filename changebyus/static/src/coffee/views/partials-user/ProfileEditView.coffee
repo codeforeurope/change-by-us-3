@@ -29,6 +29,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
 			onTemplateLoaded:->
 				@ajaxForm()
+
+				$('input[name="visibility"]').change ->
+					$('input[name="private"]').attr('checked', ($(this).val() is "private"))
+					
 				AbstractView::onTemplateLoad.call @
 
 			ajaxForm: ->

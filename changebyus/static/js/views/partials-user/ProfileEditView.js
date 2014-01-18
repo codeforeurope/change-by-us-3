@@ -36,6 +36,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     },
     onTemplateLoaded: function() {
       this.ajaxForm();
+      $('input[name="visibility"]').change(function() {
+        return $('input[name="private"]').attr('checked', $(this).val() === "private");
+      });
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-universal/CreateModalView", "bootstrap", "autocomp", "hogan", "validate", "dropkick"], function(_, Backbone, $, temp, form, AbstractView, CreateModalView, bootstrap, autocomp, Hogan, valid, dropkick) {
+define(["underscore", "backbone", "jquery", "template", "form", "abstract-view", "views/partials-universal/CreateModalView", "bootstrap", "autocomp", "hogan", "validate", "dropkick", "button"], function(_, Backbone, $, temp, form, AbstractView, CreateModalView, bootstrap, autocomp, Hogan, valid, dropkick, button) {
   var CreateView;
   return CreateView = AbstractView.extend({
     location: {
@@ -22,10 +22,21 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
       this.$el.template(this.templateDir + templateURL, {
         data: this.viewData
       }, function() {
-        onPageElementsLoad();
-        return _this.ajaxForm();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      this.$el.find('input:radio').screwDefaultButtons({
+        image: 'url("/static/img/dot-check.png")',
+        width: 25,
+        height: 25
+      });
+      this.ajaxForm();
+      $('input[name="visibility"]').change(function() {
+        return $('input[name="private"]').attr('checked', $(this).val() === "private");
+      });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {
       var $dropkick, $feedback, $form, $location, $submit, isResource, options,
@@ -43,7 +54,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
         url: $form.attr('action'),
         dataType: "json",
         contentType: "multipart/form-data; charset=utf-8",
-        beforeSubmit: function() {
+        beforeSubmit: function(arr, $form, options) {
           var $zip;
           if ($form.valid()) {
             $zip = $('input[name="zip"]');

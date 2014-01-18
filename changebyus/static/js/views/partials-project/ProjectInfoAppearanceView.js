@@ -47,6 +47,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         beforeSubmit: function() {
           var $zip;
           if ($form.valid()) {
+            $('input[name="private"]').attr('checked', $('input[name="visibility"]').val() === "private");
+            console.log($('input[name="visibility"]').val() === "private");
             $zip = $('input[name="zip"]');
             if (_this.location.name !== "") {
               $form.find("input, textarea").attr("disabled", "disabled");
@@ -114,8 +116,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         return console.log(datum);
       });
       return this.$el.find('input:radio').screwDefaultButtons({
-        image: 'url("/static/img/icon-lock.png")',
-        width: 60,
+        image: 'url("/static/img/dot-check.png")',
+        width: 25,
         height: 25
       });
     }

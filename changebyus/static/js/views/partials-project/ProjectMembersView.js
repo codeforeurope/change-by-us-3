@@ -73,6 +73,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       }
       this.team = [];
       this.members = [];
+      console.log('addAll sort_', sort_);
       $("#" + sort_).addClass('sort-deactive').removeClass('ul').siblings().removeClass('sort-deactive').addClass('ul');
       if (sort_ === "alpha") {
         sortBy = this.collection.sortBy(function(model) {
@@ -82,6 +83,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         sortBy = this.collection.sortBy(function(model) {
           return model.get('created_at');
         });
+        sortBy.reverse();
       }
       $.each(sortBy, function(k, model) {
         var ownerID, roles;

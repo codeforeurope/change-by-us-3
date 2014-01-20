@@ -60,6 +60,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@team = []
 				@members = []
 
+				console.log 'addAll sort_',sort_
+
 				$("#"+sort_)
 					.addClass('sort-deactive')
 					.removeClass('ul')
@@ -73,6 +75,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				else
 					sortBy = @collection.sortBy (model)->
 						model.get('created_at')
+					sortBy.reverse();
 
 				$.each sortBy, (k, model) => 
 					roles = model.get("roles")

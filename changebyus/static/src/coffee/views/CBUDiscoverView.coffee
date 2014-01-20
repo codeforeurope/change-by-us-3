@@ -41,6 +41,7 @@ define ["underscore",
 
 				AbstractView::onTemplateLoad.call @
 
+
 			### EVENTS ---------------------------------------------###
 			updatePage:->
 				@bannerSearchView.updatePage()

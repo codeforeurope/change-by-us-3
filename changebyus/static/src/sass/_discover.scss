@@ -50,12 +50,15 @@
 
 .search-catagories {
     display: none;
-    margin-top: -15px;
     width: 100%;
     @include box-skin;
+    @include border-radius(8px);
+    @include box-shadow(rgba(0, 0, 0, 0.2) 0 5px 10px);
     li {
         padding: 10px 20px;
         cursor: pointer;
+        &:hover{background-color: $primaryColor;}
+        &.active{background-color: $primaryColor;} 
     }
     h3 {
         margin-left: 10px;

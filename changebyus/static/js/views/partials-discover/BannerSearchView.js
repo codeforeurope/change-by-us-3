@@ -22,9 +22,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       "click #modify": "onToggleVisibility",
       "click .pill-selection": "onPillSelection",
       "click .search-inputs .btn": "sendForm",
-      "focus #search-input": "showInput",
-      "keypress #search-input": "onInputEnter",
-      "keypress #search-near": "onInputEnter"
+      "focus #search-input": "onInputFocus",
+      "keydown #search-input": "onInputEnter",
+      "keydown #search-near": "onInputEnter"
     },
     render: function() {
       var _this = this;
@@ -75,12 +75,43 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
       this.$projectList = $("#projects-list");
+      this.$searchCatagories = $('.search-catagories');
       this.autoGetGeoLocation();
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
-    showInput: function() {
-      this.category = "";
-      return $('.search-catagories').show();
+    toggleActive: function(dir_) {
+      var $li, hasActive;
+      $li = this.$searchCatagories.find('li');
+      hasActive = this.$searchCatagories.find('li.active').length > 0;
+      if (dir_ === "up") {
+        if (hasActive) {
+          return $li.each(function(i) {
+            var newI;
+            if ($(this).hasClass('active')) {
+              $(this).removeClass('active');
+              newI = i === 0 ? $li.length - 1 : i - 1;
+              $($li[newI]).addClass('active');
+              return false;
+            }
+          });
+        } else {
+          return this.$searchCatagories.find('li').last().addClass('active');
+        }
+      } else {
+        if (hasActive) {
+          return $li.each(function(i) {
+            var newI;
+            if ($(this).hasClass('active')) {
+              $(this).removeClass('active');
+              newI = i < $li.length - 1 ? i + 1 : 0;
+              $($li[newI]).addClass('active');
+              return false;
+            }
+          });
+        } else {
+          return this.$searchCatagories.find('li').first().addClass('active');
+        }
+      }
     },
     updatePage: function() {
       var e, i, s, _i;
@@ -119,6 +150,10 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     /* EVENTS -----------------------------------------------------------------*/
 
+    onInputFocus: function() {
+      this.category = "";
+      return this.$searchCatagories.show();
+    },
     handleGetCurrentPosition: function(loc_) {
       var url,
         _this = this;
@@ -135,7 +170,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     onCategoriesClick: function(e) {
       this.category = $(e.currentTarget).html();
       this.$searchInput.val(this.category);
-      return $('.search-catagories').hide();
+      return this.$searchCatagories.hide();
     },
     onPillSelection: function(e) {
       var $this;
@@ -170,12 +205,22 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     onInputEnter: function(e) {
       if (e.which === 13) {
-        console.log($(".tt-suggestion").first());
-        console.log(this, this.locationObj.name, this.$searchInput.val());
         if (this.locationObj.name !== this.$searchInput.val() || this.locationObj.name === "") {
           $(".tt-suggestion").first().trigger("click");
+          if (this.$searchInput.val() === "" || this.$searchCatagories.is(':visible')) {
+            if (this.$searchCatagories.find('li.active').length > 0) {
+              this.category = this.$searchCatagories.find('li.active').html();
+              this.$searchInput.val(this.category);
+            }
+          }
         }
-        return this.sendForm();
+        this.sendForm();
+      }
+      if (e.which === 38) {
+        this.toggleActive("up");
+      }
+      if (e.which === 40) {
+        return this.toggleActive("down");
       }
     },
     sendForm: function(e) {
@@ -184,7 +229,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       if (e) {
         e.preventDefault();
       }
-      $(".search-catagories").hide();
+      this.$searchCatagories.hide();
       this.$projectList.html("");
       dataObj = {
         s: this.category === "" ? this.$searchInput.val() : "",

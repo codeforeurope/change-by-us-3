@@ -20,9 +20,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				"click #modify":"onToggleVisibility"
 				"click .pill-selection":"onPillSelection"
 				"click .search-inputs .btn":"sendForm"
-				"focus #search-input":"showInput"
-				"keypress #search-input":"onInputEnter"
-				"keypress #search-near":"onInputEnter"
+				"focus #search-input":"onInputFocus"
+				"keydown #search-input":"onInputEnter"
+				"keydown #search-near":"onInputEnter" 
 				
 			render: -> 
 				@$el = $(".banner-search")
@@ -54,17 +54,38 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				# deeplink resource select
 				if @showResources then $('#sort-by-pr .pill-selection').last().trigger('click')
 				
-				$dropkick       = $('#search-range').dropkick()
-				@$resultsModify = $('.results-modify')
-				@$projectList   = $("#projects-list")
+				$dropkick          = $('#search-range').dropkick()
+				@$resultsModify    = $('.results-modify')
+				@$projectList      = $("#projects-list")
+				@$searchCatagories = $('.search-catagories');
 				
 				@autoGetGeoLocation()
 				AbstractView::onTemplateLoad.call @
 
-			showInput:->
-				@category = ""
-				$('.search-catagories').show()
-				
+			toggleActive:(dir_)->
+					$li = @$searchCatagories.find('li')
+					hasActive = (@$searchCatagories.find('li.active').length > 0)
+					if dir_ is "up"
+						if hasActive
+							$li.each (i)-> 
+								if $(this).hasClass('active')
+									$(this).removeClass('active')
+									newI = if (i is 0) then ($li.length-1) else (i-1)
+									$($li[newI]).addClass('active')
+									return false
+						else
+							@$searchCatagories.find('li').last().addClass('active')
+					else
+						if hasActive
+							$li.each (i)->
+								if $(this).hasClass('active')
+									$(this).removeClass('active') 
+									newI = if (i < $li.length-1) then i+1 else 0
+									$($li[newI]).addClass('active')
+									return false
+						else
+							@$searchCatagories.find('li').first().addClass('active')
+
 			updatePage:->
 				@$projectList.html("")
 
@@ -89,6 +110,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 					@sendForm()
 
 			### EVENTS ----------------------------------------------------------------- ###
+			onInputFocus:->
+				@category = ""
+				@$searchCatagories.show()
+
 			handleGetCurrentPosition:(loc_)->
 				@locationObj.lat = loc_.coords.latitude
 				@locationObj.lon = loc_.coords.longitude
@@ -102,7 +127,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 			onCategoriesClick:(e)->
 				@category = $(e.currentTarget).html()
 				@$searchInput.val @category
-				$('.search-catagories').hide()
+				@$searchCatagories.hide()
 
 			onPillSelection:(e)->
 				$this = $(e.currentTarget)
@@ -134,17 +159,28 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 				$('.filter-within').toggle(onClick)
 
 			onInputEnter:(e) ->
+				# console.log 'onInputEnter', e.currentTarget
 				if e.which is 13
-					console.log $(".tt-suggestion").first()
-					console.log @, @locationObj.name, @$searchInput.val()
 					if (@locationObj.name isnt @$searchInput.val() or @locationObj.name is "")
 						$(".tt-suggestion").first().trigger "click"
+
+						if @$searchInput.val() is "" or @$searchCatagories.is(':visible')
+							if @$searchCatagories.find('li.active').length > 0
+								@category = @$searchCatagories.find('li.active').html()
+								@$searchInput.val @category
+
 					@sendForm()
+
+				if e.which is 38
+					@toggleActive("up")
+
+				if e.which is 40
+					@toggleActive("down")
 
 			sendForm:(e)->
 				if e then e.preventDefault()
 				
-				$(".search-catagories").hide()
+				@$searchCatagories.hide()
 				@$projectList.html("")
 
 				dataObj = {

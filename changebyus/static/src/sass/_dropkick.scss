@@ -1,4 +1,6 @@
+@import "compass/css3/box-sizing";
 @import "variables";
+
 
 /**
  * Default DropKick theme
@@ -29,7 +31,7 @@
         text-decoration: none;
     }
     * {
-        box-sizing: border-box;
+        @include box-sizing(border-box);
     }
 }
 

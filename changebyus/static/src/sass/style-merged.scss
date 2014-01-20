@@ -2,6 +2,7 @@
 @import "compass/css3/border-radius";
 @import "compass/css3/opacity";
 @import "compass/css3/transform";
+@import "compass/css3/box-sizing";
 
 @import "bootstrap-combined-no-icons";
 @import "variables";
@@ -21,9 +22,7 @@
     display: block;
     width: 100%;
     min-height: 30px;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    @include box-sizing(border-box);
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, nav, section {
@@ -79,7 +78,7 @@ sub {
 
 div {
     position: relative;
-    box-sizing: border-box;
+    @include box-sizing(border-box);
 }
 
 img {
@@ -122,7 +121,7 @@ input {
         cursor: pointer;
         -webkit-appearance: button;
     }
-    box-sizing: border-box;
+    @include box-sizing(border-box);
 }
 
 label, select, button {
@@ -134,9 +133,7 @@ input {
         cursor: pointer;
     }
     &[type="search"] {
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-        box-sizing: content-box;
+        @include box-sizing(content-box);
         -webkit-appearance: textfield;
         &::-webkit-search-decoration, &::-webkit-search-cancel-button {
             -webkit-appearance: none;
@@ -383,9 +380,7 @@ a {
         min-height: 30px;
         margin-left: 2.127659574468085%;
         *margin-left: 2.074468085106383%;
-        -webkit-box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        box-sizing: border-box;
+        @include box-sizing(border-box);
         &:first-child {
             margin-left: 0;
         }
@@ -1739,8 +1734,8 @@ a.btn, a.btn-3d:before {
     border: none;
     cursor: pointer;
     color: $white;
-    box-sizing: border-box;
     background-image: none;
+    @include box-sizing(border-box);
     @include border-radius(2px);
     @include transition-property(opacity, background);
     @include transition-duration(0.4s);

@@ -1,3 +1,4 @@
+@import "compass/css3/box-sizing";
 /********************************************************  
  DISCOVER 
  ********************************************************/
@@ -11,10 +12,10 @@
     input {
         width: 100%;
         margin-right: 10px;
-        background-repeat: no-repeat;
-        box-sizing: border-box;
+        background-repeat: no-repeat; 
         padding: 29px 10px;
         z-index: 1;
+        @include box-sizing(border-box);
         &.category {
             padding-left: 36px;
             background-image: url("../img/icon_search.jpg");

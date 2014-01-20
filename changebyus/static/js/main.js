@@ -230,18 +230,15 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
     };
-    window.buttonize3D = function() {
-      var $btn, $btn3d, btn, _i, _len, _results;
-      $btn3d = $('.btn-3d');
-      _results = [];
-      for (_i = 0, _len = $btn3d.length; _i < _len; _i++) {
-        btn = $btn3d[_i];
-        $btn = $(btn);
-        $btn.parent().addClass('btn-3d-parent');
-        _results.push($btn.attr('data-content', $btn.html()));
-      }
-      return _results;
-    };
+    /* temp off
+    			window.buttonize3D = ->
+    				$btn3d = $('.btn-3d')
+    				for btn in $btn3d
+    					$btn = $(btn)
+    					$btn.parent().addClass('btn-3d-parent')
+    					$btn.attr('data-content', $btn.html())
+    */
+
     $(document).bind('keydown', function(e) {
       var c, k, _ref;
       console.log('location.host', location.host);

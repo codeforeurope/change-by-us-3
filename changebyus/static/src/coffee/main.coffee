@@ -231,12 +231,14 @@ define ["jquery",
 				str = str_.replace /\w\S*/g, (txt) ->
 					txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
 
+			### temp off
 			window.buttonize3D = ->
 				$btn3d = $('.btn-3d')
 				for btn in $btn3d
 					$btn = $(btn)
 					$btn.parent().addClass('btn-3d-parent')
 					$btn.attr('data-content', $btn.html())
+			###
 
 
 			$(document).bind 'keydown', (e)->

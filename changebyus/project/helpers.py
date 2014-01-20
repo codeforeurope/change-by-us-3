@@ -162,7 +162,7 @@ def _edit_project(form):
     if (lat and lon):
         p.geo_location = [float(lon), float(lat)]
         
-    if private: p.private = private
+    p.private = private
     
 
     # TODO flag objects if new content needs to be flagged,

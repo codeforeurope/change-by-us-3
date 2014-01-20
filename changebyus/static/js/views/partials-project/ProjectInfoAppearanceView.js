@@ -26,8 +26,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      AbstractView.prototype.onTemplateLoad.call(this);
-      return this.ajaxForm();
+      $('input[name="visibility"]').change(function() {
+        return $('input[name="private"]').attr('checked', $(this).val() === "private");
+      });
+      this.ajaxForm();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {
       var $dropkick, $feedback, $form, $projectLocation, $submit, options,

@@ -20,8 +20,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 				$(@parent).append @$el
 
 			onTemplateLoad:->
-				AbstractView::onTemplateLoad.call @
+				$('input[name="visibility"]').change ->
+					$('input[name="private"]').attr('checked', ($(this).val() is "private"))
+
 				@ajaxForm()
+
+				AbstractView::onTemplateLoad.call @
 
 			ajaxForm: ->
 				$('.fileupload').fileupload({uploadtype: 'image'})

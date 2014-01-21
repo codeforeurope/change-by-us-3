@@ -87,12 +87,15 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					if ("MEMBER" in roles) or ("Member" in roles)
 						@members.push model
 					else
+						@team.push model
 						# don't include the owner when logged in order to display invite for new members
+						###
 						if (model.id isnt ownerID)
 							@team.push model
 						else
 							if (window.userID isnt ownerID)
 								@team.push model
+						###
 
 				@$teamList.html('')
 				@$memberList.html('')
@@ -109,7 +112,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 					@$memberList.parent().parent().show()
 					@$memberList.parent().parent().find('h4').html(@members.length+' Members')
 
-				if (@team.length is 0) and (@members.length is 0)
+				if (@team.length is 1) and (@members.length is 0)
 					@$el.find('.no-results').show()
 				else
 					@addTeam(model) for model in @team

@@ -95,13 +95,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
           return _this.members.push(model);
         } else {
-          if (model.id !== ownerID) {
-            return _this.team.push(model);
-          } else {
-            if (window.userID !== ownerID) {
-              return _this.team.push(model);
-            }
-          }
+          return _this.team.push(model);
+          /*
+          						if (model.id isnt ownerID)
+          							@team.push model
+          						else
+          							if (window.userID isnt ownerID)
+          								@team.push model
+          */
+
         }
       });
       this.$teamList.html('');
@@ -118,7 +120,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$memberList.parent().parent().show();
         this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
-      if ((this.team.length === 0) && (this.members.length === 0)) {
+      if ((this.team.length === 1) && (this.members.length === 0)) {
         this.$el.find('.no-results').show();
       } else {
         _ref = this.team;

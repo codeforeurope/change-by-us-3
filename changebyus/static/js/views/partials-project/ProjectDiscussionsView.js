@@ -21,7 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       var _this = this;
       if (this.collection.models.length === 0) {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {
-          return onPageElementsLoad();
+          return AbstractView.prototype.onTemplateLoad.call(_this);
         });
       } else {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {

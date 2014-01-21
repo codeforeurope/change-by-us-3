@@ -8,11 +8,8 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     parent: "#project-discussion",
     wysiwygFormView: null,
     delayedDataLoad: false,
+    count: 0,
     initialize: function(options_) {
-      this.discussionsCollection = options_.discussionsCollection || this.discussionsCollection;
-      this.discussionsCollection.on('add', this.updateCount, this);
-      this.discussionsCollection.on('reset', this.updateCount, this);
-      console.log('@discussionsCollection', this.discussionsCollection);
       return ProjectSubView.prototype.initialize.call(this, options_);
     },
     render: function() {
@@ -48,17 +45,18 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         }
       });
     },
-    updateCount: function() {
+    updateCount: function(count) {
       var title;
-      console.log('ProjectDiscussionView updateCount', this.discussionsCollection);
+      this.count = count;
       title = this.model != null ? this.model.get("title") : "";
-      return this.$el.find(".admin-title").html("All Discussions (" + this.discussionsCollection.length + "): " + title);
+      return this.$el.find(".admin-title").html("All Discussions (" + this.count + "): " + title);
     },
     onSuccess: function() {
       var model, response, userAvatar, _i, _len, _ref,
         _this = this;
       this.$ul.html('');
       this.$form.html('');
+      this.updateCount(this.count);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

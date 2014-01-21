@@ -68,25 +68,30 @@ define ["underscore",
 				AbstractView::onTemplateLoad.call @
 						
 			addSubViews:->
-				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:@memberData.owner, isOrganizer:@memberData.organizer ,view:"admin"} 
+				config = 
+					id:@model.get("id")
+					name:@model.get("name")
+					model:@model
+					isOwner:@memberData.owner
+					isOrganizer:@memberData.organizer
+					view:"admin"
 
-				###
-				TO DO add a listener to collection and update the discussion view 
-				###
 				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)
 				projectMembersCollection     = new ProjectMembersCollection(config)
 				updatesCollection            = new UpdatesCollection(config)
 				
-				@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
-				@projectDiscussionView     = new ProjectDiscussionView({discussionsCollection: projectDiscussionsCollection})
-				@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
-				@projectAddUpdateView      = new ProjectAddUpdateView({collection: updatesCollection, model:@model})
-				@projectFundraisingView    = new ProjectFundraisingView(config) 
-				@projectCalenderView       = new ProjectCalenderView(config) 
-				@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
-				@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
+				@projectDiscussionsView      = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
+				@projectDiscussionView       = new ProjectDiscussionView({discussionsCollection: projectDiscussionsCollection})
+				@projectNewDiscussionView    = new ProjectNewDiscussionView(config) 
+				@projectAddUpdateView        = new ProjectAddUpdateView({collection: updatesCollection, model:@model})
+				@projectFundraisingView      = new ProjectFundraisingView(config) 
+				@projectCalenderView         = new ProjectCalenderView(config) 
+				@projectMembersView          = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
+				@projectInfoAppearanceView   = new ProjectInfoAppearanceView(config)
 
-				# Get collection started
+				# GET COLLECTION STARTED ---------------------------------------#
+				projectDiscussionsCollection.on 'add remove', (m_,c_)=>@updateCount c_.length
+				projectDiscussionsCollection.on 'reset', (c_)=>@updateCount c_.length
 				@projectDiscussionsView.loadData()
 
 				@discussionBTN  = $("a[href='#discussions']")
@@ -100,8 +105,7 @@ define ["underscore",
 				@projectDiscussionsView.on 'DISCUSSION_CLICK', (arg_)=> 
 					window.location.hash = "discussion/"+arg_.model.id
 
-				@projectNewDiscussionView.on "NEW_DISCUSSION", (arg_)=> 
-					#console.log 'NEW_DISCUSSION', arg_, projectDiscussionsCollection, @projectDiscussionsView.collection
+				@projectNewDiscussionView.on "NEW_DISCUSSION", (arg_)=>
 					projectDiscussionsCollection.add arg_
 					window.location.hash = "discussion/"+arg_.id
 				
@@ -158,6 +162,10 @@ define ["underscore",
 					else
 						@projectDiscussionsView.show()
 						@discussionBTN.addClass "active" 
+
+			updateCount:(count_)->
+				@projectDiscussionView.updateCount count_
+
 
 			### GETTER & SETTERS ----------------------------------------------------------------- ###
 			getMemberStatus:->

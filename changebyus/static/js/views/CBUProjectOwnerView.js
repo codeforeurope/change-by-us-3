@@ -50,10 +50,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         isOrganizer: this.memberData.organizer,
         view: "admin"
       };
-      /*
-      				TO DO add a listener to collection and update the discussion view
-      */
-
       projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
       projectMembersCollection = new ProjectMembersCollection(config);
       updatesCollection = new UpdatesCollection(config);
@@ -76,6 +72,12 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         projectID: this.model.id
       });
       this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
+      projectDiscussionsCollection.on('add remove', function(m_, c_) {
+        return _this.updateCount(c_.length);
+      });
+      projectDiscussionsCollection.on('reset', function(c_) {
+        return _this.updateCount(c_.length);
+      });
       this.projectDiscussionsView.loadData();
       this.discussionBTN = $("a[href='#discussions']");
       this.updatesBTN = $("a[href='#updates']");
@@ -147,6 +149,9 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
           this.projectDiscussionsView.show();
           return this.discussionBTN.addClass("active");
       }
+    },
+    updateCount: function(count_) {
+      return this.projectDiscussionView.updateCount(count_);
     },
     /* GETTER & SETTERS -----------------------------------------------------------------*/
 

@@ -23,14 +23,9 @@ define ["underscore",
 			parent: "#project-discussion"
 			wysiwygFormView:null
 			delayedDataLoad:false
+			count:0
 
-			initialize: (options_) -> 
-				@discussionsCollection = options_.discussionsCollection || @discussionsCollection
-				@discussionsCollection.on 'add', @updateCount, @
-				@discussionsCollection.on 'reset', @updateCount, @
-				
-				console.log '@discussionsCollection',@discussionsCollection
-
+			initialize: (options_) ->  
 				ProjectSubView::initialize.call(@, options_)
 
 			render: ->
@@ -55,14 +50,14 @@ define ["underscore",
 						else
 							@onSuccess()
 
-			updateCount:->
-				console.log 'ProjectDiscussionView updateCount', @discussionsCollection
+			updateCount:(@count)-> 
 				title = if @model? then @model.get("title") else ""
-				@$el.find(".admin-title").html "All Discussions (#{@discussionsCollection.length}): #{title}"
+				@$el.find(".admin-title").html "All Discussions (#{@count}): #{title}"
 			
 			onSuccess:->  
 				@$ul.html('')
 				@$form.html('')
+				@updateCount(@count)
 
 				@addDiscussion @model
 				for response in @model.get("responses")
@@ -76,8 +71,6 @@ define ["underscore",
 						$("#new-thread-editor").html("")
 						model = new ProjectDiscussionModel(e.data)
 						@addDiscussion model
-
-						#@discussionsCollection.add model
 
 			addDiscussion:(model_)->
 				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})

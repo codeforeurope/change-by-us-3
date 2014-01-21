@@ -32,7 +32,7 @@ define ["underscore",
 			addAll: ->
 				if @collection.models.length is 0
 					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
-						{}, => onPageElementsLoad()
+						{}, => AbstractView::onTemplateLoad.call @
 				else
 					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
 						{}, => @loadDayTemplate()

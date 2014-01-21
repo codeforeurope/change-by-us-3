@@ -70,12 +70,15 @@ define ["underscore",
 			addSubViews:->
 				config = {id:@model.get("id"), name:@model.get("name"), model:@model, isOwner:@memberData.owner, isOrganizer:@memberData.organizer ,view:"admin"} 
 
-				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)  
+				###
+				TO DO add a listener to collection and update the discussion view 
+				###
+				projectDiscussionsCollection = new ProjectDiscussionsCollection(config)
 				projectMembersCollection     = new ProjectMembersCollection(config)
 				updatesCollection            = new UpdatesCollection(config)
 				
 				@projectDiscussionsView    = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
-				@projectDiscussionView     = new ProjectDiscussionView()
+				@projectDiscussionView     = new ProjectDiscussionView({discussionsCollection: projectDiscussionsCollection})
 				@projectNewDiscussionView  = new ProjectNewDiscussionView(config) 
 				@projectAddUpdateView      = new ProjectAddUpdateView({collection: updatesCollection, model:@model})
 				@projectFundraisingView    = new ProjectFundraisingView(config) 
@@ -83,15 +86,24 @@ define ["underscore",
 				@projectMembersView        = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
 				@projectInfoAppearanceView = new ProjectInfoAppearanceView(config)
 
-				@projectDiscussionsView.on 'discussionClick', (arg_)=> 
-					window.location.hash = "discussion/"+arg_.model.id
-				
+				# Get collection started
+				@projectDiscussionsView.loadData()
+
 				@discussionBTN  = $("a[href='#discussions']")
 				@updatesBTN     = $("a[href='#updates']")
 				@fundraisingBTN = $("a[href='#fundraising']") 
 				@calendarBTN    = $("a[href='#calendar']")
 				@membersBTN     = $("a[href='#members']")
 				@infoBTN        = $("a[href='#info']")
+
+				# ADD EVENT LISTENERS ---------------------------------------#
+				@projectDiscussionsView.on 'DISCUSSION_CLICK', (arg_)=> 
+					window.location.hash = "discussion/"+arg_.model.id
+
+				@projectNewDiscussionView.on "NEW_DISCUSSION", (arg_)=> 
+					#console.log 'NEW_DISCUSSION', arg_, projectDiscussionsCollection, @projectDiscussionsView.collection
+					projectDiscussionsCollection.add arg_
+					window.location.hash = "discussion/"+arg_.id
 				
 				$(window).bind "hashchange", (e) => @toggleSubView()
 				@toggleSubView() 
@@ -119,7 +131,7 @@ define ["underscore",
 
 				if view.indexOf("discussion/") > -1
 					id = view.split('/')[1]
-					@projectDiscussionView.updateDiscussion(id, @projectDiscussionsView.collection.models.length)
+					@projectDiscussionView.updateDiscussion(id)
 					@projectDiscussionView.show()
 					@discussionBTN.addClass "active"
 					return

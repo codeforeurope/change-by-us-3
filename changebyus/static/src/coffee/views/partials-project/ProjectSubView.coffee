@@ -27,6 +27,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 				@$el.find('.no-results').show()
 
 			onCollectionLoad:-> 
+				console.log 'ProjectSubView onCollectionLoad'
 				@$el.find(".preload").remove()
 				@addAll()
 			

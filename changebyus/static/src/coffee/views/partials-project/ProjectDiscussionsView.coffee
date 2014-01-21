@@ -24,7 +24,8 @@ define ["underscore",
 			onCollectionLoad:-> 
 				ProjectSubView::onCollectionLoad.call(@)
 
-				@collection.on 'remove', (obj_)=> 
+				@collection.on 'add', @updateCount, @
+				@collection.on 'remove', (obj_)=>
 					@addAll()
 					@deleteDiscussion(obj_.id)
 				
@@ -37,19 +38,24 @@ define ["underscore",
 						{}, => @loadDayTemplate()
 
 			loadDayTemplate:->
-				@$day = $('<div />')
+				@$day = $('<div class="day-wrapper"/>')
 				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
-					{}, =>
-						if @collection.length > 0
-							model_ = @collection.models[0]
-							m = moment(model_.get("created_at")).format("MMMM D")
-							@newDay(m)
+					{}, => @onDayWrapperLoad()
 
-						@isDataLoaded = true
+			onDayWrapperLoad:->
+				@isDataLoaded = true
 
-						@$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
+				if @collection.length > 0
+					model_ = @collection.models[0]
+					m = moment(model_.get("created_at")).format("MMMM D")
+					@newDay(m)
+					
+				@updateCount()
 
-						ProjectSubView::addAll.call(@) 
+				ProjectSubView::addAll.call(@) 
+
+			updateCount:->
+				@$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
 
 			newDay:(date_)->
 				@currentDate = date_
@@ -65,13 +71,14 @@ define ["underscore",
 				config = {model:model_}
 				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
 				projectDiscussionListItemView.on 'click', =>
-					@trigger 'discussionClick', config
+					@trigger 'DISCUSSION_CLICK', config
 
 				@$ul.append projectDiscussionListItemView.$el
 
 				onPageElementsLoad()
 
 			show:->
+				$(".day-wrapper").remove()
 				ProjectSubView::show.call(@)
 				@loadData()
 

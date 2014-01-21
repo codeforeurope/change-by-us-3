@@ -17,11 +17,21 @@ define ["underscore",
 		ProjectDiscussionView = ProjectSubView.extend
 
 			$ul:null
-			$form:null 
+			$form:null
+			discussionsCollection:null
 			$threadFormID:"#add-thread-form"
 			parent: "#project-discussion"
 			wysiwygFormView:null
 			delayedDataLoad:false
+
+			initialize: (options_) -> 
+				@discussionsCollection = options_.discussionsCollection || @discussionsCollection
+				@discussionsCollection.on 'add', @updateCount, @
+				@discussionsCollection.on 'reset', @updateCount, @
+				
+				console.log '@discussionsCollection',@discussionsCollection
+
+				ProjectSubView::initialize.call(@, options_)
 
 			render: ->
 				@$el = $(@parent)
@@ -36,7 +46,7 @@ define ["underscore",
 
 				ProjectSubView::onTemplateLoad.call @
 
-			updateDiscussion:(id_, @length)-> 
+			updateDiscussion:(id_)-> 
 				@model = new ProjectDiscussionModel({id:id_})
 				@model.fetch
 					success:=>
@@ -44,14 +54,17 @@ define ["underscore",
 							@delayedDataLoad = true
 						else
 							@onSuccess()
+
+			updateCount:->
+				console.log 'ProjectDiscussionView updateCount', @discussionsCollection
+				title = if @model? then @model.get("title") else ""
+				@$el.find(".admin-title").html "All Discussions (#{@discussionsCollection.length}): #{title}"
 			
-			onSuccess:-> 
-				@$el.find(".admin-title").html "All Discussions (#{@length}): #{@model.get("title")}"
+			onSuccess:->  
 				@$ul.html('')
 				@$form.html('')
 
 				@addDiscussion @model
-
 				for response in @model.get("responses")
 					model = new ProjectDiscussionModel({id:response.id})
 					@addDiscussion model 
@@ -63,6 +76,8 @@ define ["underscore",
 						$("#new-thread-editor").html("")
 						model = new ProjectDiscussionModel(e.data)
 						@addDiscussion model
+
+						#@discussionsCollection.add model
 
 			addDiscussion:(model_)->
 				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})

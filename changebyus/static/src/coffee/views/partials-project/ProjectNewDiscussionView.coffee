@@ -20,11 +20,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 				form = new WysiwygFormView({parent:"#discussion-form"})
 				form.success = (response_) =>
 					form.resetForm()
-					window.location.hash = "discussion/"+response_.data.id
+					@trigger "NEW_DISCUSSION", response_.data
 
 				AbstractView::onTemplateLoad.call @
 
 			cancel:->
 				$("#discussion-editor").html('')
 				@$el.find('form').resetForm()
-				window.location.hash = '#discussions'
+				window.location.hash = 'discussions'

@@ -50,13 +50,19 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         isOrganizer: this.memberData.organizer,
         view: "admin"
       };
+      /*
+      				TO DO add a listener to collection and update the discussion view
+      */
+
       projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
       projectMembersCollection = new ProjectMembersCollection(config);
       updatesCollection = new UpdatesCollection(config);
       this.projectDiscussionsView = new ProjectDiscussionsView({
         collection: projectDiscussionsCollection
       });
-      this.projectDiscussionView = new ProjectDiscussionView();
+      this.projectDiscussionView = new ProjectDiscussionView({
+        discussionsCollection: projectDiscussionsCollection
+      });
       this.projectNewDiscussionView = new ProjectNewDiscussionView(config);
       this.projectAddUpdateView = new ProjectAddUpdateView({
         collection: updatesCollection,
@@ -70,15 +76,20 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         projectID: this.model.id
       });
       this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
-      this.projectDiscussionsView.on('discussionClick', function(arg_) {
-        return window.location.hash = "discussion/" + arg_.model.id;
-      });
+      this.projectDiscussionsView.loadData();
       this.discussionBTN = $("a[href='#discussions']");
       this.updatesBTN = $("a[href='#updates']");
       this.fundraisingBTN = $("a[href='#fundraising']");
       this.calendarBTN = $("a[href='#calendar']");
       this.membersBTN = $("a[href='#members']");
       this.infoBTN = $("a[href='#info']");
+      this.projectDiscussionsView.on('DISCUSSION_CLICK', function(arg_) {
+        return window.location.hash = "discussion/" + arg_.model.id;
+      });
+      this.projectNewDiscussionView.on("NEW_DISCUSSION", function(arg_) {
+        projectDiscussionsCollection.add(arg_);
+        return window.location.hash = "discussion/" + arg_.id;
+      });
       $(window).bind("hashchange", function(e) {
         return _this.toggleSubView();
       });
@@ -108,7 +119,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       }
       if (view.indexOf("discussion/") > -1) {
         id = view.split('/')[1];
-        this.projectDiscussionView.updateDiscussion(id, this.projectDiscussionsView.collection.models.length);
+        this.projectDiscussionView.updateDiscussion(id);
         this.projectDiscussionView.show();
         this.discussionBTN.addClass("active");
         return;

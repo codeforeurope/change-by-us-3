@@ -11,6 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     onCollectionLoad: function() {
       var _this = this;
       ProjectSubView.prototype.onCollectionLoad.call(this);
+      this.collection.on('add', this.updateCount, this);
       return this.collection.on('remove', function(obj_) {
         _this.addAll();
         return _this.deleteDiscussion(obj_.id);
@@ -30,18 +31,24 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     loadDayTemplate: function() {
       var _this = this;
-      this.$day = $('<div />');
+      this.$day = $('<div class="day-wrapper"/>');
       return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
-        var m, model_;
-        if (_this.collection.length > 0) {
-          model_ = _this.collection.models[0];
-          m = moment(model_.get("created_at")).format("MMMM D");
-          _this.newDay(m);
-        }
-        _this.isDataLoaded = true;
-        _this.$el.find(".admin-title").html("All Discussions (" + _this.collection.models.length + ")");
-        return ProjectSubView.prototype.addAll.call(_this);
+        return _this.onDayWrapperLoad();
       });
+    },
+    onDayWrapperLoad: function() {
+      var m, model_;
+      this.isDataLoaded = true;
+      if (this.collection.length > 0) {
+        model_ = this.collection.models[0];
+        m = moment(model_.get("created_at")).format("MMMM D");
+        this.newDay(m);
+      }
+      this.updateCount();
+      return ProjectSubView.prototype.addAll.call(this);
+    },
+    updateCount: function() {
+      return this.$el.find(".admin-title").html("All Discussions (" + this.collection.models.length + ")");
     },
     newDay: function(date_) {
       this.currentDate = date_;
@@ -62,12 +69,13 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       };
       projectDiscussionListItemView = new ProjectDiscussionListItemView(config);
       projectDiscussionListItemView.on('click', function() {
-        return _this.trigger('discussionClick', config);
+        return _this.trigger('DISCUSSION_CLICK', config);
       });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();
     },
     show: function() {
+      $(".day-wrapper").remove();
       ProjectSubView.prototype.show.call(this);
       return this.loadData();
     },

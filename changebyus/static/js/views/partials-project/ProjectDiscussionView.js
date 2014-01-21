@@ -3,10 +3,18 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
   return ProjectDiscussionView = ProjectSubView.extend({
     $ul: null,
     $form: null,
+    discussionsCollection: null,
     $threadFormID: "#add-thread-form",
     parent: "#project-discussion",
     wysiwygFormView: null,
     delayedDataLoad: false,
+    initialize: function(options_) {
+      this.discussionsCollection = options_.discussionsCollection || this.discussionsCollection;
+      this.discussionsCollection.on('add', this.updateCount, this);
+      this.discussionsCollection.on('reset', this.updateCount, this);
+      console.log('@discussionsCollection', this.discussionsCollection);
+      return ProjectSubView.prototype.initialize.call(this, options_);
+    },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
@@ -25,9 +33,8 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       }
       return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
-    updateDiscussion: function(id_, length) {
+    updateDiscussion: function(id_) {
       var _this = this;
-      this.length = length;
       this.model = new ProjectDiscussionModel({
         id: id_
       });
@@ -41,10 +48,15 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         }
       });
     },
+    updateCount: function() {
+      var title;
+      console.log('ProjectDiscussionView updateCount', this.discussionsCollection);
+      title = this.model != null ? this.model.get("title") : "";
+      return this.$el.find(".admin-title").html("All Discussions (" + this.discussionsCollection.length + "): " + title);
+    },
     onSuccess: function() {
       var model, response, userAvatar, _i, _len, _ref,
         _this = this;
-      this.$el.find(".admin-title").html("All Discussions (" + this.length + "): " + (this.model.get("title")));
       this.$ul.html('');
       this.$form.html('');
       this.addDiscussion(this.model);

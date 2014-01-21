@@ -28,6 +28,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.find('.no-results').show();
     },
     onCollectionLoad: function() {
+      console.log('ProjectSubView onCollectionLoad');
       this.$el.find(".preload").remove();
       return this.addAll();
     },

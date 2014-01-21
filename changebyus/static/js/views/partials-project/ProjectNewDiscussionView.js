@@ -26,14 +26,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       form.success = function(response_) {
         form.resetForm();
-        return window.location.hash = "discussion/" + response_.data.id;
+        return _this.trigger("NEW_DISCUSSION", response_.data);
       };
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     cancel: function() {
       $("#discussion-editor").html('');
       this.$el.find('form').resetForm();
-      return window.location.hash = '#discussions';
+      return window.location.hash = 'discussions';
     }
   });
 });

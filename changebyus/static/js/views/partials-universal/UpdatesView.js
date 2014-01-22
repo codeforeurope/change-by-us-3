@@ -9,20 +9,15 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     isResource: false,
     isMember: false,
     initialize: function(options_) {
-      var options;
-      options = options_;
-      ProjectSubView.prototype.initialize.call(this, options);
-      this.members = options.members || this.members;
-      this.isMember = options.isMember;
-      this.viewData.slug = this.model.get('slug');
-      this.viewData.isResource = options.isResource;
-      return this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
+      ProjectSubView.prototype.initialize.call(this, options_);
+      this.members = options_.members || this.members;
+      return this.isMember = options_.isMember;
     },
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-universal/updates.html", {
-        data: this.viewData
+        data: this.model.attributes
       }, function() {
         return _this.onTemplateLoad();
       });

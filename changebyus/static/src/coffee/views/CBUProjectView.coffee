@@ -82,7 +82,6 @@ define ["underscore",
 
 			### EVENTS ---------------------------------------------###
 			onTemplateLoad:->
-				console.log 'CBUProjectView onTemplateLoad'
 				# determine if user is a member of the project
 				# if not, display the join button 
 				@viewData = @model.attributes
@@ -151,9 +150,9 @@ define ["underscore",
 					console.log res_
 
 			joinProject:(e)-> 
-				if @isMember then return
 				e.preventDefault()
-
+				if @isMember then return
+				 
 				if window.userID is ""
 					window.location = "/login"
 				else

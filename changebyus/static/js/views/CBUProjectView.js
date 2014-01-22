@@ -70,7 +70,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     /* EVENTS ---------------------------------------------*/
 
     onTemplateLoad: function() {
-      console.log('CBUProjectView onTemplateLoad');
       this.viewData = this.model.attributes;
       this.getMemberStatus();
       return AbstractView.prototype.onTemplateLoad.call(this);
@@ -149,10 +148,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     joinProject: function(e) {
       var $join, id,
         _this = this;
+      e.preventDefault();
       if (this.isMember) {
         return;
       }
-      e.preventDefault();
       if (window.userID === "") {
         return window.location = "/login";
       } else {

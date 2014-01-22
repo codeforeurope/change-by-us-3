@@ -122,12 +122,10 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
 				@isDataLoaded = true
 				@delegateEvents()
 
-			addTeam: (model_) -> 
-				#to do 
+			addTeam: (model_) ->  
 				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
 				@$teamList.append view.$el
 
-			addMember: (model_) -> 
-				#to do 
+			addMember: (model_) ->  
 				view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
 				@$memberList.append view.$el

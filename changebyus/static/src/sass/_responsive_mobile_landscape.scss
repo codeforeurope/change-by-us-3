@@ -162,6 +162,28 @@
             width: 100%;
         }
     }
+
+
+    .donation-header{
+        .stripe-overlay{
+            width:100%%;
+            .progress {
+                width:100%%;
+            }
+        }
+        .donation-description{
+            width:100%%;
+        }
+        .donate-btn{
+            width:100%%;
+            text-align: left;
+            margin-top: 24px;
+            .btn-large{
+                top:0;
+            }
+        }
+    }
+
     .admin {
         .content-left {
             width: 100%;

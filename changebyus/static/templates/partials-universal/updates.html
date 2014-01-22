@@ -28,6 +28,26 @@
     </div>
 
 </div>
+
+<% if (data.stripe_account){ %>
+<h4>Donations</h4>
+<div class="content-wrapper donation-header clearfix">
+    <% var percentage = (data.stripe_account.current_amount/data.stripe_account.goal)*100 %>
+    <div class="stripe-overlay">
+        <div class="progress progress-info" style="margin-top: 10px"> 
+            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= percentage %>;"></div>
+        </div> 
+        <div class="goal">$<%= data.stripe_account.current_amount %> Donated towards $<%= data.stripe_account.goal %></div>
+    </div>
+    <div class="donation-description">
+        <h3>This project needs your help!</h3>
+        <p><%= data.stripe_account.description %></p>
+    </div>
+    <div class="donate-btn">
+        <div class="btn btn-large btn-secondary">Donate</div>
+    </div>
+</div>
+<% } %>
  
 <div class="updates-container">
     <div class="preload content-wrapper">

@@ -11,7 +11,7 @@ from ..user.models import User
 from .models import Project
 from .helpers import _user_involved_in_project
 from ..stripe.api import _get_account_balance_percentage, _update_goal_description
-from .decorators import project_exists
+from .decorators import project_exists, valid_project_membership
 
 from mongoengine.errors import ValidationError
 
@@ -30,6 +30,7 @@ Web facing views for interacting with projects.
 @project_view.route('/<project_id>/admin')
 @project_view.route('/<project_id>')
 @project_exists
+@valid_project_membership
 def project_view_id(project_id):
     """
     ABOUT:

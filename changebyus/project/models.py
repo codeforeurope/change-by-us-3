@@ -170,7 +170,18 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
             resp[image] = url
 
         return resp
-
+        
+    @classmethod
+    def with_id_or_slug(cls, object_id):
+        """
+        Allows query by id or slug 
+        """
+        from bson.objectid import ObjectId
+        
+        if (ObjectId.is_valid(object_id)):
+            return cls.objects.with_id(object_id)
+        else:
+            return cls.objects(slug=object_id).first()
 
 class UserProjectLink(db.Document, EntityMixin):
     """

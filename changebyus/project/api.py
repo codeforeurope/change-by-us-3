@@ -27,7 +27,8 @@ from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_p
                        _get_user_owned_projects, _leave_project )
 
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
-                          project_member, project_ownership, project_organizer )
+                          project_member, project_ownership, project_organizer,
+                          valid_project_membership )
 
 from ..user.models import User
 
@@ -219,6 +220,7 @@ def api_get_project_slug(project_slug):
 
 @project_api.route('/<project_id>')
 @project_exists
+@valid_project_membership
 def api_get_project(project_id):
     """Get project by project_id
 

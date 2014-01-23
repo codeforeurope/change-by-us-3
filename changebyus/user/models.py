@@ -75,7 +75,7 @@ class Roles:
     ADMIN = "ADMIN"
 
 
-class Role(db.EmbeddedDocument):
+class Role(db.Document, RoleMixin, EntityMixin):
     """
     This allows us to define user roles, such as "Admin"
     """
@@ -134,7 +134,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     password = db.StringField(max_length=255)
     active = db.BooleanField(default=True)
     confirmed_at = db.DateTimeField()
-    roles = db.ListField(db.EmbeddedDocumentField(Role), default=[])
+    roles = db.ListField(db.ReferenceField(Role), default=[])
     
     # facebook login information
     facebook_id = db.IntField()
@@ -223,6 +223,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
 
 signals.post_init.connect(User.post_init, sender=User)
 signals.pre_save.connect(User.pre_save, sender=User)
+signals.pre_save.connect(Role.pre_save, sender=Role)
 """
 These signal methods help us encrypt and decrypt the sensitive data
 """

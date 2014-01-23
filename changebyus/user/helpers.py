@@ -59,7 +59,8 @@ def _create_user(email=None,
                  bio=None,
                  website=None,
                  location=None,
-                 geo_location=None):
+                 geo_location=None,
+                 roles=[]):
     """
         Routine to create a user record. This is purpusly flexible, you can
         create a user with no email, because the user may be identified by their
@@ -98,7 +99,8 @@ def _create_user(email=None,
              bio=bio,
              website=website,
              location=location,
-             geo_location=geo_location)
+             geo_location=geo_location,
+             roles=roles)
 
     u.notifications = UserNotifications()
 

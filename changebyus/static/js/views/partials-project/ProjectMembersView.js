@@ -97,11 +97,11 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         } else {
           return _this.team.push(model);
           /*
-          						if (model.id isnt ownerID)
-          							@team.push model
-          						else
-          							if (window.userID isnt ownerID)
-          								@team.push model
+          if (model.id isnt ownerID)
+              @team.push model
+          else
+              if (window.userID isnt ownerID)
+                  @team.push model
           */
 
         }

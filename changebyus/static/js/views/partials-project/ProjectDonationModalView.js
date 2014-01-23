@@ -35,8 +35,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], 
             return $('.modal-innerwrapper').append($feedback);
           }
           /*
-          						$form.get(0).reset()
-          						$form.find("input[name='stripeToken']").remove()
+          $form.get(0).reset()
+          $form.find("input[name='stripeToken']").remove()
           */
 
         },

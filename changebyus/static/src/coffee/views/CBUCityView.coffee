@@ -1,123 +1,123 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"abstract-view", 
-		"resource-project-view",
-		"model/ProjectModel",
-		"model/CityModel"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 AbstractView, 
-	 ResourceProjectPreviewView,
-	 ProjectModel,
-	 CityModel) ->
-	 	
-		CBUCityView = AbstractView.extend
-			
-			$header:null
-			collection:null
+        "backbone", 
+        "jquery", 
+        "template", 
+        "abstract-view", 
+        "resource-project-view",
+        "model/ProjectModel",
+        "model/CityModel"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView, 
+     ResourceProjectPreviewView,
+     ProjectModel,
+     CityModel) ->
+        
+        CBUCityView = AbstractView.extend
+            
+            $header:null
+            collection:null
 
-			initialize: (options_) ->
-				options = options_
-				AbstractView::initialize.call @, options
-				
-				@collection  = options.collection or @collection
+            initialize: (options_) ->
+                options = options_
+                AbstractView::initialize.call @, options
+                
+                @collection  = options.collection or @collection
 
-				$.getJSON "/static/js/config/cities.json", (data)=>
-					id     = options.model.id
-					obj    = data.cities[id]
-					@model = new CityModel(obj)
-					@render()
+                $.getJSON "/static/js/config/cities.json", (data)=>
+                    id     = options.model.id
+                    obj    = data.cities[id]
+                    @model = new CityModel(obj)
+                    @render()
 
-			events:
-				"click .change-city a":"changeCity" 
+            events:
+                "click .change-city a":"changeCity" 
 
-			render: -> 
-				@viewData = @model.attributes
+            render: -> 
+                @viewData = @model.attributes
 
-				@$el = $("<div class='city-container'/>")
-				@$el.template @templateDir+"/templates/city.html", 
-					{data:@viewData}, => @onTemplateLoad()
-				$(@parent).append @$el
+                @$el = $("<div class='city-container'/>")
+                @$el.template @templateDir+"/templates/city.html", 
+                    {data:@viewData}, => @onTemplateLoad()
+                $(@parent).append @$el
 
-			search:(type_)->
-				console.log '@model',@model
-				dataObj = {
-					s: ""
-					cat: ""
-					loc: ""
-					d: "25"
-					type: type_
-					lat: @model.get("lat")
-					lon: @model.get("lon")
-				}
+            search:(type_)->
+                console.log '@model',@model
+                dataObj = {
+                    s: ""
+                    cat: ""
+                    loc: ""
+                    d: "25"
+                    type: type_
+                    lat: @model.get("lat")
+                    lon: @model.get("lon")
+                }
 
-				$.ajax(
-					type: "POST"
-					url: "/api/project/search"
-					data: JSON.stringify(dataObj)
-					dataType: "json" 
-					contentType: "application/json; charset=utf-8"
-				).done (response_)=>
-					if response_.success 
-						if type_ is "project"
-							@onProjectsLoad response_.data
-						else
-							@onResourcesLoad response_.data
+                $.ajax(
+                    type: "POST"
+                    url: "/api/project/search"
+                    data: JSON.stringify(dataObj)
+                    dataType: "json" 
+                    contentType: "application/json; charset=utf-8"
+                ).done (response_)=>
+                    if response_.success 
+                        if type_ is "project"
+                            @onProjectsLoad response_.data
+                        else
+                            @onResourcesLoad response_.data
 
-			addOne: (id_, parent_) -> 
-				projectModel = new ProjectModel id:id_
-				view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
-				view.fetch()
-				
-			### EVENTS ---------------------------------------------###
-			onTemplateLoad:->
-				@projectsView = @$el.find('#featured-projects')
-				@resourcesView = @$el.find('#featured-resources')
+            addOne: (id_, parent_) -> 
+                projectModel = new ProjectModel id:id_
+                view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
+                view.fetch()
+                
+            ### EVENTS ---------------------------------------------###
+            onTemplateLoad:->
+                @projectsView = @$el.find('#featured-projects')
+                @resourcesView = @$el.find('#featured-resources')
 
-				@$header = $("<div class='city-header'/>")
-				@$header.template @templateDir+"/templates/partials-city/city-header.html",
-					{data:@viewData}, => @onHeaderLoaded()
-				@$el.prepend @$header
+                @$header = $("<div class='city-header'/>")
+                @$header.template @templateDir+"/templates/partials-city/city-header.html",
+                    {data:@viewData}, => @onHeaderLoaded()
+                @$el.prepend @$header
 
-				AbstractView::onTemplateLoad.call @
+                AbstractView::onTemplateLoad.call @
 
-			onHeaderLoaded:->
-				id = @model.get("id")
-				config = {id:id}
+            onHeaderLoaded:->
+                id = @model.get("id")
+                config = {id:id}
 
-				@search "project"
-				@search "resource"
+                @search "project"
+                @search "resource"
 
-				@delegateEvents()
-					
-			onProjectsLoad:(data_)->
-				count = 0
-				for k,v of data_
-					@addOne v._id, @projectsView.find("ul")
-					count++
+                @delegateEvents()
+                    
+            onProjectsLoad:(data_)->
+                count = 0
+                for k,v of data_
+                    @addOne v._id, @projectsView.find("ul")
+                    count++
 
-				$featuredProjects = $("#featured-projects")
-				$more = $featuredProjects.find('.sub-link')
+                $featuredProjects = $("#featured-projects")
+                $more = $featuredProjects.find('.sub-link')
 
-				if count < 3 then $more.hide()
-				if count is 0
-					$featuredProjects.hide()
-					$('.city-container hr').hide()
+                if count < 3 then $more.hide()
+                if count is 0
+                    $featuredProjects.hide()
+                    $('.city-container hr').hide()
 
-			onResourcesLoad:(data_)->
-				count = 0
-				for k,v of data_
-					@addOne v._id, @resourcesView.find("ul")
-					count++
+            onResourcesLoad:(data_)->
+                count = 0
+                for k,v of data_
+                    @addOne v._id, @resourcesView.find("ul")
+                    count++
 
-				$featuredResources = $("#featured-resources")
-				$more = $featuredResources.find('.sub-link')
+                $featuredResources = $("#featured-resources")
+                $more = $featuredResources.find('.sub-link')
 
-				if count < 3 then $more.hide()
-				if count is 0
-					$featuredResources.hide()
-					$('.city-container hr').hide()
+                if count < 3 then $more.hide()
+                if count is 0
+                    $featuredResources.hide()
+                    $('.city-container hr').hide()

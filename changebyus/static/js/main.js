@@ -231,12 +231,12 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       });
     };
     /* temp off
-    			window.buttonize3D = ->
-    				$btn3d = $('.btn-3d')
-    				for btn in $btn3d
-    					$btn = $(btn)
-    					$btn.parent().addClass('btn-3d-parent')
-    					$btn.attr('data-content', $btn.html())
+    window.buttonize3D = ->
+        $btn3d = $('.btn-3d')
+        for btn in $btn3d
+            $btn = $(btn)
+            $btn.parent().addClass('btn-3d-parent')
+            $btn.attr('data-content', $btn.html())
     */
 
     $(document).bind('keydown', function(e) {

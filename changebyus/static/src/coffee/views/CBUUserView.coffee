@@ -28,7 +28,7 @@ define ["underscore",
 					@render()
 
 			events:
-				"click .flag-user a":"flagProject"
+				"click .flag-user a":"flagUser"
 
 			render: ->
 				@$el = $("<div class='user'/>")

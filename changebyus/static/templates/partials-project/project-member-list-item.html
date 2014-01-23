@@ -47,13 +47,7 @@
                 </select>
             <% } %>
         <% }else{ %>
-            <% 
-                var newRoles = []
-                _.each(data.roles, function(r){
-                     newRoles.push( window.capitalize(r) )
-                })
-            %>
-            <%= newRoles.join() %>
+            <%= window.arrayToListString(data.roles) %>
         <% } %>
     </div>
     

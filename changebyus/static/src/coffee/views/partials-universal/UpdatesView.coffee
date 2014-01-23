@@ -19,19 +19,16 @@ define ["underscore",
 			isResource:false
 			isMember:false
 
-			initialize: (options_) -> 
-				options                    = options_
-				ProjectSubView::initialize.call(@, options)
-				@members                   = options.members || @members 
-				@isMember                  = options.isMember
-				@viewData.slug             = @model.get('slug')
-				@viewData.isResource       = options.isResource
-				@viewData.isOwnerOrganizer = options.isOwnerOrganizer
+			initialize: (options_) ->  
+				ProjectSubView::initialize.call(@, options_)
+				
+				@members                   = options_.members || @members 
+				@isMember                  = options_.isMember 
 
-			render: -> 
+			render: ->  
 				@$el = $(@parent)
 				@$el.template @templateDir+"/templates/partials-universal/updates.html",
-					{data: @viewData}, =>@onTemplateLoad()
+					{data: @model.attributes}, =>@onTemplateLoad()
 
 			addAll: ->
 				@$members = @$el.find(".team-members ul")

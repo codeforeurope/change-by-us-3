@@ -5,6 +5,7 @@ define ["underscore",
 		"abstract-view", 
 		"views/partials-project/ProjectCalenderView", 
 		"views/partials-project/ProjectMembersView", 
+		"views/partials-project/ProjectDonationModalView", 
 		"views/partials-universal/UpdatesView",
 		"views/partials-universal/WysiwygFormView",
 		"model/ProjectModel", 
@@ -18,6 +19,7 @@ define ["underscore",
 	 AbstractView, 
 	 ProjectCalenderView,
 	 ProjectMembersView, 
+	 ProjectDonationModalView, 
 	 UpdatesView, 
 	 WysiwygFormView, 
 	 ProjectModel, 
@@ -52,6 +54,7 @@ define ["underscore",
 			events:
 				"click .flag-project a":"flagProject"
 				"click .project-footer .btn":"joinProject"
+				"click .donation-header .btn":"onDonateClick"
 				"click  a[href^='#']":"changeHash"
 
 			render: ->
@@ -168,6 +171,9 @@ define ["underscore",
 							feedback = 'Following!' # if @isResource then 'Following!' else'Joined!'
 							@isMember = true
 							$join.html(feedback).css('background-color','#e6e6e6')
+
+			onDonateClick:->
+				projectDonationModalView = new ProjectDonationModalView({model:@model})
 			
 			toggleSubView: ->
 				view = window.location.hash.substring(1)

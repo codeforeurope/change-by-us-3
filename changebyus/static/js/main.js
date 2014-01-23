@@ -241,14 +241,12 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
 
     $(document).bind('keydown', function(e) {
       var c, k, _ref;
-      console.log('location.host', location.host);
       if ((_ref = location.host) === "localhost:5000" || _ref === "localtunnel.com:5000") {
         c = e.keyCode ? e.keyCode : e.which;
         k = String.fromCharCode(c).toLowerCase();
         if (k === 'd') {
-          $('body').toggleClass('debug');
+          return $('body').toggleClass('debug');
         }
-        return console.log(k);
       }
     });
     /* STICKY FOOTER ----------------------------------------------------------------------------------*/

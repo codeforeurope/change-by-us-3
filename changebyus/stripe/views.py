@@ -13,7 +13,7 @@ from .api import _capture_event_details, _get_account_balance_percentage
 from .models import StripeAccount, StripeDonation, StripeLink
 from ..user.models import User
 
-from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, 
+from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError, FieldList)
 
 from flask import current_app, session
@@ -337,11 +337,12 @@ def stripe_review_info():
 
 
 class StripeChargeForm(Form):
-    access_token    = TextField("stripe_id", validators=[Required()])
-    project_id      = TextField("goal", validators=[Required()])
+    access_token    = TextField("access_token", validators=[Required()])
+    project_id      = TextField("project_id", validators=[Required()])
     email           = TextField("description", validators=[Required()])
-    stripeToken     = TextField("description", validators=[Required()])
-    stripe_id       = TextField("description", validators=[Required()])
+    stripeToken     = HiddenField("stripeToken", validators=[Required()])
+    stripe_id       = TextField("stripe_id", validators=[Required()])
+    amount          = TextField("amount", validators=[Required()])
 
 @stripe_view.route('/charge', methods=['POST'])
 def charge():
@@ -351,7 +352,7 @@ def charge():
             access_token: stripe account access token
             project_id: project id related to the stripe charge
             email: email of the donator
-            stripe_token: token representing the stripe card (UNSURE)
+            stripeToken: token representing the stripe card (UNSURE)
             stripe_id: id of the stripe account associated with the project
 
         Returns:
@@ -363,6 +364,7 @@ def charge():
     """
 
     form = StripeChargeForm(request.form or as_multidict(request.json))
+
     if not form.validate():
         errStr = "Request contained errors."
         return jsonify_response( ReturnStructure( success = False, 
@@ -378,7 +380,7 @@ def charge():
 
     customer = stripe.Customer.create(
         email=form.email.data,
-        card=form.stripe_token.data
+        card=form.stripeToken.data
     )
 
     charge = stripe.Charge.create(
@@ -446,5 +448,7 @@ def charge():
                 infoStr = "Completed stripe donation of {0} for account {1}".format(sd.amount, stripe_account)
                 current_app.logger.info(infoStr)
 
-    return render_template('charge.html', amount=(amount/100), project_id=project_id)
- 
+    # return render_template('charge.html', amount=(amount/100), project_id=project_id)
+    successStr = "Success!"
+    return jsonify_response(ReturnStructure(success = True,
+                                            msg=successStr))

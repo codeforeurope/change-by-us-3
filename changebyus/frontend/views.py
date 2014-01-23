@@ -6,11 +6,12 @@
 from flask import Blueprint, render_template, redirect, url_for, g, abort, current_app
 from flask.ext.login import login_required, current_user, logout_user, login_user
 
-from ..user.api import api_get_user
+from changebyus.user.api import api_get_user
 
-from ..user.models import User
-from ..project.api import api_get_projects
-from ..helpers.flasktools import gen_blank_ok
+from changebyus.user.models import User
+from changebyus.project.api import api_get_projects
+from changebyus.project.decorators import is_site_admin
+from changebyus.helpers.flasktools import gen_blank_ok
 
 frontend_view = Blueprint('frontend_view', __name__)
 
@@ -28,13 +29,14 @@ def home():
     return _return_index()
 
 @frontend_view.route('/signup')
-def admin_view():
+def signup_view():
     """Renders the signup template
     """
     return render_template('index.html')
 
 @frontend_view.route('/admin')
-def signup_view():
+@is_site_admin
+def admin_view():
     """Renders the admin template
     """
     return render_template('index.html')

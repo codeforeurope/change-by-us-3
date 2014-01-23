@@ -26,6 +26,9 @@
         width: 505px;
         margin: 48px auto;
     }
+    form{
+        text-align: left;
+    }
     span, p {
         a {
             color: $black;
@@ -114,7 +117,9 @@
 
 .success-modal,
 .embed-modal,
-.create-modal {
+.create-modal,
+.donate-modal
+ {
     @extend .modal;
     h1 {
         font-size: 54px;
@@ -153,6 +158,10 @@
             padding: 20px 33px;
         }
     }
+}
+
+.donate-modal{
+    margin-top: -325px;
 }
 
 .modal-links {

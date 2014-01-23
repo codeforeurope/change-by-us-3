@@ -16,7 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
     },
     events: {
-      "click .flag-user a": "flagProject"
+      "click .flag-user a": "flagUser"
     },
     render: function() {
       var _this = this;

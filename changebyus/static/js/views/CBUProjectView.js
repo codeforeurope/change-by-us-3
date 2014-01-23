@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-universal/UpdatesView", "views/partials-universal/WysiwygFormView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, UpdatesView, WysiwygFormView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectDonationModalView", "views/partials-universal/UpdatesView", "views/partials-universal/WysiwygFormView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectDonationModalView, UpdatesView, WysiwygFormView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
@@ -31,6 +31,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     events: {
       "click .flag-project a": "flagProject",
       "click .project-footer .btn": "joinProject",
+      "click .donation-header .btn": "onDonateClick",
       "click  a[href^='#']": "changeHash"
     },
     render: function() {
@@ -172,6 +173,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           }
         });
       }
+    },
+    onDonateClick: function() {
+      var projectDonationModalView;
+      return projectDonationModalView = new ProjectDonationModalView({
+        model: this.model
+      });
     },
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;

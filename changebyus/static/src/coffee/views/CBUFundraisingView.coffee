@@ -1,70 +1,70 @@
 define ["underscore",
-		"backbone",
-		"jquery",
-		"template",
-		"abstract-view",
-		"model/UserModel",
-		"model/ProjectModel"],
-	(_,
-	 Backbone,
-	 $,
-	 temp,
-	 AbstractView,
-	 UserModel,
-	 ProjectModel) ->
+        "backbone",
+        "jquery",
+        "template",
+        "abstract-view",
+        "model/UserModel",
+        "model/ProjectModel"],
+    (_,
+     Backbone,
+     $,
+     temp,
+     AbstractView,
+     UserModel,
+     ProjectModel) ->
 
-			CBUFundraisingView = AbstractView.extend
+            CBUFundraisingView = AbstractView.extend
 
-				$review:null
-				stripe:{}
+                $review:null
+                stripe:{}
 
-				initialize: (options_) ->
-					AbstractView::initialize.call @, options_
+                initialize: (options_) ->
+                    AbstractView::initialize.call @, options_
 
-					@model = new ProjectModel({id:@model.id})
-					@model.fetch
-						success: => @onFetch()
+                    @model = new ProjectModel({id:@model.id})
+                    @model.fetch
+                        success: => @onFetch()
 
-				events:
-					"click #edit-goal":"onEditGoalClick"
+                events:
+                    "click #edit-goal":"onEditGoalClick"
 
-				render: ->
-					@$el = $("<div class='body-container'/>") if @$el.html() is ""
-					@$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
-						data:@stripe,  =>@onTemplateLoad()
-					$(@parent).append @$el
-					@$el.show()
+                render: ->
+                    @$el = $("<div class='body-container'/>") if @$el.html() is ""
+                    @$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
+                        data:@stripe,  =>@onTemplateLoad()
+                    $(@parent).append @$el
+                    @$el.show()
 
-				### EVENTS ---------------------------------------------###
-				onEditGoalClick:->
-					@$el.toggle()
-					@$review.toggle()
-					false
+                ### EVENTS ---------------------------------------------###
+                onEditGoalClick:->
+                    @$el.toggle()
+                    @$review.toggle()
+                    false
 
-				onFetch:->
-					@stripe = @model.get("stripe_account")
-					@stripe.project_id = @model.id
-					@stripe.account_id = @stripe.id
-					@render()
+                onFetch:->
+                    @stripe = @model.get("stripe_account")
+                    @stripe.project_id = @model.id
+                    @stripe.account_id = @stripe.id
+                    @render()
 
-				onTemplateLoad:->
-					AbstractView::onTemplateLoad.call @
+                onTemplateLoad:->
+                    AbstractView::onTemplateLoad.call @
 
-					@$review = $("<div class='body-container'/>") if @$review is null
-					@$review.template @templateDir+"/templates/partials-universal/stripe-form.html",
-						data:@stripe,  =>@ajaxForm()
-					$(@parent).append @$review
-					@$review.hide()
+                    @$review = $("<div class='body-container'/>") if @$review is null
+                    @$review.template @templateDir+"/templates/partials-universal/stripe-form.html",
+                        data:@stripe,  =>@ajaxForm()
+                    $(@parent).append @$review
+                    @$review.hide()
 
-					AbstractView::onTemplateLoad.call @
+                    AbstractView::onTemplateLoad.call @
 
-				ajaxForm:-> 
-					$form = @$review.find('form')
-					options =
-						success: (response_) =>
-							if response_.success
-								@stripe.description = response_.data.description
-								@stripe.goal = response_.data.funding
-								@render()
+                ajaxForm:-> 
+                    $form = @$review.find('form')
+                    options =
+                        success: (response_) =>
+                            if response_.success
+                                @stripe.description = response_.data.description
+                                @stripe.goal = response_.data.funding
+                                @render()
 
-					$form.ajaxForm options
+                    $form.ajaxForm options

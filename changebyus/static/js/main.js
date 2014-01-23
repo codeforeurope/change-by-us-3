@@ -231,24 +231,22 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       });
     };
     /* temp off
-    			window.buttonize3D = ->
-    				$btn3d = $('.btn-3d')
-    				for btn in $btn3d
-    					$btn = $(btn)
-    					$btn.parent().addClass('btn-3d-parent')
-    					$btn.attr('data-content', $btn.html())
+    window.buttonize3D = ->
+        $btn3d = $('.btn-3d')
+        for btn in $btn3d
+            $btn = $(btn)
+            $btn.parent().addClass('btn-3d-parent')
+            $btn.attr('data-content', $btn.html())
     */
 
     $(document).bind('keydown', function(e) {
       var c, k, _ref;
-      console.log('location.host', location.host);
       if ((_ref = location.host) === "localhost:5000" || _ref === "localtunnel.com:5000") {
         c = e.keyCode ? e.keyCode : e.which;
         k = String.fromCharCode(c).toLowerCase();
         if (k === 'd') {
-          $('body').toggleClass('debug');
+          return $('body').toggleClass('debug');
         }
-        return console.log(k);
       }
     });
     /* STICKY FOOTER ----------------------------------------------------------------------------------*/

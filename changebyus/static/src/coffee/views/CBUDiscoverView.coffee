@@ -1,66 +1,66 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"views/partials-discover/BannerSearchView", 
-		"resource-project-view", 
-		"collection/ProjectListCollection", 
-		"abstract-view"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 BannerSearchView, 
-	 ResourceProjectPreviewView, 
-	 ProjectListCollection, 
-	 AbstractView) ->
-	 	
-		CBUDiscoverView = AbstractView.extend
+        "backbone", 
+        "jquery", 
+        "template", 
+        "views/partials-discover/BannerSearchView", 
+        "resource-project-view", 
+        "collection/ProjectListCollection", 
+        "abstract-view"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     BannerSearchView, 
+     ResourceProjectPreviewView, 
+     ProjectListCollection, 
+     AbstractView) ->
+        
+        CBUDiscoverView = AbstractView.extend
 
-			initialize: (options_) ->
-				options = options_
-				# this is added later
-				AbstractView::initialize.call @, options
-				@collection  = options.collection or new ProjectListCollection()
-				@render()
+            initialize: (options_) ->
+                options = options_
+                # this is added later
+                AbstractView::initialize.call @, options
+                @collection  = options.collection or new ProjectListCollection()
+                @render()
 
-			render: -> 
-				@$el = $("<div class='discover'/>")
-				@$el.template @templateDir+"/templates/discover.html",
-					{data: @viewData}, => @onTemplateLoad()
+            render: -> 
+                @$el = $("<div class='discover'/>")
+                @$el.template @templateDir+"/templates/discover.html",
+                    {data: @viewData}, => @onTemplateLoad()
 
-			onTemplateLoad:->
-				$(@parent).append @$el
-				searchParent = @$el.find(".content")
-				
-				@bannerSearchView = new BannerSearchView({parent:searchParent})
-				@bannerSearchView.on "ON_RESULTS", (s)=> @onResults(s)
+            onTemplateLoad:->
+                $(@parent).append @$el
+                searchParent = @$el.find(".content")
+                
+                @bannerSearchView = new BannerSearchView({parent:searchParent})
+                @bannerSearchView.on "ON_RESULTS", (s)=> @onResults(s)
 
-				@collection.on "reset", @addAll, @
-				@collection.fetch reset: true
+                @collection.on "reset", @addAll, @
+                @collection.fetch reset: true
 
-				AbstractView::onTemplateLoad.call @
+                AbstractView::onTemplateLoad.call @
 
 
-			### EVENTS ---------------------------------------------###
-			updatePage:->
-				@bannerSearchView.updatePage()
+            ### EVENTS ---------------------------------------------###
+            updatePage:->
+                @bannerSearchView.updatePage()
 
-			nextPage:(e)->
-				@bannerSearchView.nextPage(e)
+            nextPage:(e)->
+                @bannerSearchView.nextPage(e)
 
-			prevClick:(e)->
-				@bannerSearchView.prevClick(e)
+            prevClick:(e)->
+                @bannerSearchView.prevClick(e)
 
-			pageClick:(e)->
-				@bannerSearchView.pageClick(e)
+            pageClick:(e)->
+                @bannerSearchView.pageClick(e)
 
-			checkArrows:->
-				@bannerSearchView.checkArrows()
-				
-			onResults:(size_)->
-				if size_ > 0
-					@$el.find("#no-result").hide()
-				else
-					@$el.find("#no-result").show().template @templateDir+"/templates/partials-discover/no-results.html",
-						data: {}, =>
+            checkArrows:->
+                @bannerSearchView.checkArrows()
+                
+            onResults:(size_)->
+                if size_ > 0
+                    @$el.find("#no-result").hide()
+                else
+                    @$el.find("#no-result").show().template @templateDir+"/templates/partials-discover/no-results.html",
+                        data: {}, =>

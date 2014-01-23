@@ -120,14 +120,14 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return overlay.css("opacity", 0).css("position", "absolute").offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
       });
       /*
-      				if "onwebkitspeechchange" of document.createElement("input")
-      					editorOffset = $editor.offset()
-      					if editorOffset
-      						$("#voiceBtn").css("position", "absolute").offset
-      							top: editorOffset.top - 20
-      							left: editorOffset.left + $editor.innerWidth() - 75
-      				else
-      					$("#voiceBtn").hide()
+      if "onwebkitspeechchange" of document.createElement("input")
+          editorOffset = $editor.offset()
+          if editorOffset
+              $("#voiceBtn").css("position", "absolute").offset
+                  top: editorOffset.top - 20
+                  left: editorOffset.left + $editor.innerWidth() - 75
+      else
+          $("#voiceBtn").hide()
       */
 
       $editor.wysiwyg({

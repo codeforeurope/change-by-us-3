@@ -231,16 +231,6 @@ define ["jquery",
                 str = str_.replace /\w\S*/g, (txt) ->
                     txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
 
-            ### temp off
-            window.buttonize3D = ->
-                $btn3d = $('.btn-3d')
-                for btn in $btn3d
-                    $btn = $(btn)
-                    $btn.parent().addClass('btn-3d-parent')
-                    $btn.attr('data-content', $btn.html())
-            ###
-
-
             $(document).bind 'keydown', (e)->
                 if location.host in ["localhost:5000", "localtunnel.com:5000"]
                     c = if e.keyCode then e.keyCode else e.which
@@ -249,10 +239,10 @@ define ["jquery",
 
             ### STICKY FOOTER ----------------------------------------------------------------------------------###
             $window      = $(window)
-            footerHeight = 0
             $topnav      = $(".top-nav")
             $mainContent = $(".main-content")
             $footer      = $(".footer-nav")
+            footerHeight = 0
             debounce     = null
 
             window.positionFooter = ->

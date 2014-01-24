@@ -37,7 +37,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       }
       view = new UpdateListItemView({
         model: model_,
-        isStream: true
+        isStream: true,
+        isMember: true
       });
       return this.$projects.append(view.$el);
     },

@@ -41,7 +41,7 @@ define ["underscore",
                 m = moment(model_.get("created_at")).format("MMMM D")
                 if @currentDate isnt m then @newDay(m)
 
-                view = new UpdateListItemView({model: model_, isStream:true})
+                view = new UpdateListItemView({model: model_, isStream:true, isMember:true})
                 @$projects.append view.$el 
 
             ### EVENTS ---------------------------------------------###

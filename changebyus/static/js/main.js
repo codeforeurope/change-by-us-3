@@ -230,15 +230,6 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
     };
-    /* temp off
-    window.buttonize3D = ->
-        $btn3d = $('.btn-3d')
-        for btn in $btn3d
-            $btn = $(btn)
-            $btn.parent().addClass('btn-3d-parent')
-            $btn.attr('data-content', $btn.html())
-    */
-
     $(document).bind('keydown', function(e) {
       var c, k, _ref;
       if ((_ref = location.host) === "localhost:5000" || _ref === "localtunnel.com:5000") {
@@ -252,10 +243,10 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     /* STICKY FOOTER ----------------------------------------------------------------------------------*/
 
     $window = $(window);
-    footerHeight = 0;
     $topnav = $(".top-nav");
     $mainContent = $(".main-content");
     $footer = $(".footer-nav");
+    footerHeight = 0;
     debounce = null;
     window.positionFooter = function() {
       if (debounce) {

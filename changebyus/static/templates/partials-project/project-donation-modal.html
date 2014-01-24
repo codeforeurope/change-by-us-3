@@ -2,6 +2,33 @@
     <div class="close-x"></div>
     <div class="modal-innerwrapper">
         <h1>Donate</h1>
-        
+        <form action="/stripe/charge" method="POST" id="payment-form">
+            <span class="payment-errors"></span>
+     
+            <input type="hidden" name="project_id" id="charge-project-id" value="<%= data.id %>"></input>
+
+            <input type="hidden" name="access_token" id="charge-access-token" value="<%= data.stripe_account.access_token %>"></input>
+            <input type="hidden" name="stripe_id" id="charge-account-id" value="<%= data.stripe_account.id %>"></input>
+            
+            <label>Donation Amount: $</label>
+            <input type="text" size="20" style="width: 50px" id="charge-amount" name="amount"/>
+    
+            <label>Card Number:</label>
+            <input type="text" size="20" style="width:200px" id="charge-card-number" data-stripe="number"/>
+    
+            <label>CVC:</label>
+            <input type="text" size="4" style="width: 50px" id="charge-cvc" data-stripe="cvc"/>
+
+            <label>Email address:</label>
+            <input type="text" size="4" style="width: 300px" id="charge-email" name="email"/>
+    
+            <label>Expiration (MM/YYYY)</label>
+            
+            <input type="text" size="2" style="width: 50px" id="charge-expiry-month" data-stripe="exp-month"/>
+            <span> / </span>
+            <input type="text" style="width: 100px" size="4" id="charge-expiry-year" data-stripe="exp-year"/>
+
+            <input type="submit" class="btn btn-large btn-secondary" value="Submit Payment"></input>
+        </form>
     </div>
 </div> 

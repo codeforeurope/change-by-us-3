@@ -9,23 +9,23 @@
             <input type="hidden" name="access_token" id="charge-access-token" value="<%= data.stripe_account.access_token %>"></input>
             <input type="hidden" name="stripe_id" id="charge-account-id" value="<%= data.stripe_account.id %>"></input>
             
-            <label>Donation Amount: $</label>
+            <label for="amount" class="first">Donation Amount: $</label>
             <input type="text" size="20" style="width: 100px" id="charge-amount" name="amount" data-numeric/>
     
-            <label>Card Number:</label>
-            <input type="text" size="20" style="width:200px" id="charge-card-number" data-stripe="number" />
+            <label for="number">Card Number:</label>
+            <input type="text" size="20" style="width:200px" id="charge-card-number" data-stripe="number" name="number"/>
     
-            <label>CVC:</label>
-            <input type="text" size="4" style="width: 100px" id="charge-cvc" data-stripe="cvc"/>
+            <label for="cvc">CVC:</label>
+            <input type="text" size="4" style="width: 100px" id="charge-cvc" name="cvc" data-stripe="cvc"/>
 
-            <label>Email address:</label>
-            <input type="email" size="4" style="width: 300px" id="charge-email" name="email"/>
-    
             <label>Expiration (MM/YYYY)</label>
-            
             <input type="text" size="2" style="width: 50px" id="charge-expiry-month" data-stripe="exp-month" data-numeric/>
             <span> / </span>
             <input type="text" style="width: 100px" size="4" id="charge-expiry-year" data-stripe="exp-year" data-numeric />
+
+            <label for="email">Email address:</label>
+            <input type="email" size="4" style="width: 300px" id="charge-email" name="email"/>
+    
             <div class="clearfix"></div>
             <input type="submit" class="btn btn-large btn-secondary" value="Submit Payment"></input>
         </form>

@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-modal-view"],
-    (_, Backbone, $, temp, AbstractModalView) ->
+define ["underscore", "backbone", "jquery", "template", "payment", "abstract-modal-view"],
+    (_, Backbone, $, temp, payment, AbstractModalView) ->
         ProjectDonationModalView = AbstractModalView.extend
 
             render: ->
@@ -19,7 +19,14 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view"],
             setupStripe:->
                 # This identifies your website in the createToken call below
                 Stripe.setPublishableKey @model.get('stripe_account').publishable_key
-                
+
+                $('[data-numeric]').payment('restrictNumeric');
+                $('#charge-card-number').payment('formatCardNumber'); 
+                $('#charge-cvc').payment('formatCardCVC');
+                $('#charge-cvc').payment('formatCardCVC');
+                $('#charge-expiry-month').payment('formatMonth');
+                $('#charge-expiry-year').payment('formatYear');
+                            
                 $form = $("#payment-form")
                 options =
                     type: $form.attr('method')
@@ -31,19 +38,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view"],
                             $form.remove()
                             $feedback = $('<p class="modal-feedback"/>').append response_.msg
                             $('.modal-innerwrapper').append $feedback
-                        ###
-                        $form.get(0).reset()
-                        $form.find("input[name='stripeToken']").remove()
-                        ###
-
                     error: (response_) => 
                         console.log 'error',response_
 
                 stripeResponseHandler = (status, response) ->
-                    if response.error
-                        
+                    if response.error 
                         # Show the errors on the form
-                        $form.find(".payment-errors").text response.error.message
+                        $form.find(".payment-errors").css("display","block").text response.error.message
                         $form.find("button").prop "disabled", false
                     else
                         
@@ -59,9 +60,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view"],
 
                 $form.submit (event) ->
                     # Prevent the form from submitting with the default action
-                    event.preventDefault();
-
-                    $form = $(this)
+                    event.preventDefault()
                     
                     # Disable the submit button to prevent repeated clicks
                     $form.find("button").prop "disabled", true

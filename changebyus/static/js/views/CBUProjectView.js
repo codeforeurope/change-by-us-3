@@ -37,6 +37,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var className, templateURL,
         _this = this;
+      this.viewData = this.model.attributes;
       if (this.isResource) {
         className = "resource-container";
         templateURL = "/templates/resource.html";
@@ -71,7 +72,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     /* EVENTS ---------------------------------------------*/
 
     onTemplateLoad: function() {
-      this.viewData = this.model.attributes;
       this.getMemberStatus();
       return AbstractView.prototype.onTemplateLoad.call(this);
     },

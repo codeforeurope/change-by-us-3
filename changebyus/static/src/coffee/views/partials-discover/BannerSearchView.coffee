@@ -47,7 +47,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                                 for loc in resp.data
                                     zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon, 'zip':loc.zip}
                             zips
-                ).bind('typeahead:selected', (obj, datum) =>
+                ).bind('typeahead:selected', (obj, datum)=>
                     @locationObj = datum 
                 )
 

@@ -47,9 +47,7 @@ define ["underscore",
                     @stripe.account_id = @stripe.id
                     @render()
 
-                onTemplateLoad:->
-                    AbstractView::onTemplateLoad.call @
-
+                onTemplateLoad:-> 
                     @$review = $("<div class='body-container'/>") if @$review is null
                     @$review.template @templateDir+"/templates/partials-universal/stripe-form.html",
                         data:@stripe,  =>@ajaxForm()

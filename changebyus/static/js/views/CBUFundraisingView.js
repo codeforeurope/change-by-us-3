@@ -46,7 +46,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     onTemplateLoad: function() {
       var _this = this;
-      AbstractView.prototype.onTemplateLoad.call(this);
       if (this.$review === null) {
         this.$review = $("<div class='body-container'/>");
       }

@@ -58,6 +58,8 @@ define ["underscore",
                 "click  a[href^='#']":"changeHash"
 
             render: ->
+                @viewData = @model.attributes
+
                 if @isResource
                     className   = "resource-container"
                     templateURL = "/templates/resource.html"
@@ -87,9 +89,7 @@ define ["underscore",
             onTemplateLoad:->
                 # determine if user is a member of the project
                 # if not, display the join button 
-                @viewData = @model.attributes
                 @getMemberStatus()
-
                 AbstractView::onTemplateLoad.call @
 
             onHeaderLoaded:->

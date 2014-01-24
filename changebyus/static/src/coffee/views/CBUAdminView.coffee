@@ -21,7 +21,6 @@ define ["underscore",
 
             initialize: (options_) ->
                 options = options_
-                # this is added later
                 AbstractView::initialize.call @, options
                 
                 @flaggedProjects  = options.collection or new FlaggedProjectCollection()

@@ -20,6 +20,7 @@ require.config
         "template": "ext/jquery/template"
         "form": "ext/jquery/jquery.form.min"
         "validate": "ext/jquery/jquery.validate.min"
+        "payment": "ext/jquery/jquery.payment"
         "main-view": "views/CBUMainView"
         "discover-view": "views/CBUDiscoverView"
         "city-view": "views/CBUCityView"
@@ -50,6 +51,7 @@ require.config
         "form":["jquery"]
         "template":["jquery"]
         "validate":["jquery"]
+        "payment":["jquery"]
         "serializeObject":["jquery"]
         "serializeJSON":["jquery"]
 

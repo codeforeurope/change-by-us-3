@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], function(_, Backbone, $, temp, AbstractModalView) {
+define(["underscore", "backbone", "jquery", "template", "payment", "abstract-modal-view"], function(_, Backbone, $, temp, payment, AbstractModalView) {
   var ProjectDonationModalView;
   return ProjectDonationModalView = AbstractModalView.extend({
     render: function() {
@@ -21,6 +21,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], 
       var $form, options, stripeResponseHandler,
         _this = this;
       Stripe.setPublishableKey(this.model.get('stripe_account').publishable_key);
+      $('[data-numeric]').payment('restrictNumeric');
+      $('#charge-card-number').payment('formatCardNumber');
+      $('#charge-cvc').payment('formatCardCVC');
+      $('#charge-cvc').payment('formatCardCVC');
+      $('#charge-expiry-month').payment('formatMonth');
+      $('#charge-expiry-year').payment('formatYear');
       $form = $("#payment-form");
       options = {
         type: $form.attr('method'),
@@ -34,11 +40,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], 
             $feedback = $('<p class="modal-feedback"/>').append(response_.msg);
             return $('.modal-innerwrapper').append($feedback);
           }
-          /*
-          $form.get(0).reset()
-          $form.find("input[name='stripeToken']").remove()
-          */
-
         },
         error: function(response_) {
           return console.log('error', response_);
@@ -47,7 +48,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], 
       stripeResponseHandler = function(status, response) {
         var token;
         if (response.error) {
-          $form.find(".payment-errors").text(response.error.message);
+          $form.find(".payment-errors").css("display", "block").text(response.error.message);
           return $form.find("button").prop("disabled", false);
         } else {
           token = response.id;
@@ -58,7 +59,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], 
       };
       return $form.submit(function(event) {
         event.preventDefault();
-        $form = $(this);
         $form.find("button").prop("disabled", true);
         Stripe.createToken($form, stripeResponseHandler);
         return false;

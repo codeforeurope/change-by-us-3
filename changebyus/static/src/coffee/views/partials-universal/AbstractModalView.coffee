@@ -5,6 +5,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             parent:'body'
         
             initialize: (options_) ->
+                $('body').css('overflow', 'hidden')
                 AbstractView::initialize.call @, options_
                 @render()
 
@@ -16,6 +17,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 delay 10, -> $('.scaled-fade').removeClass('scaled-fade')
 
             fadeOut:->
+                $('body').css('overflow', 'auto')
                 $('#page-wrapper').removeClass('blur')
                 $('.success-modal, .embed-modal, .donate-modal').addClass('scaled-fade')
                 $('.modal-fullscreen').fadeOut 500, => @$el.remove()

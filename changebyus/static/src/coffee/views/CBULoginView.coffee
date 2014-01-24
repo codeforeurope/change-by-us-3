@@ -43,7 +43,6 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
                     success: (response_) =>
                         $form.find("input, textarea").removeAttr("disabled")
 
-                        #if response.success 
                         if response_.success
                             window.location.href = "/"
                         else

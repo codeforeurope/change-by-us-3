@@ -156,6 +156,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     display_name = db.StringField(max_length=50)
     first_name = db.StringField(max_length=20)
     last_name = db.StringField(max_length=20)
+    flags = db.IntField(default=0)
     
     #visible profile information
     bio = db.StringField(max_length=1000)
@@ -201,7 +202,11 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
 
         for image, url in image_urls.iteritems():
             resp[image] = url
-
+            
+        # TODO this is temporary fix for assumptions in templates.
+        roles = []
+        resp['roles'] = roles
+        
         return resp
 
 

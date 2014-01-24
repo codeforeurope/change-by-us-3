@@ -8,9 +8,9 @@ from flask.ext.login import login_required, current_user, logout_user, login_use
 
 from changebyus.user.api import api_get_user
 
+from changebyus.user.decorators import is_site_admin
 from changebyus.user.models import User
 from changebyus.project.api import api_get_projects
-from changebyus.project.decorators import is_site_admin
 from changebyus.helpers.flasktools import gen_blank_ok
 
 frontend_view = Blueprint('frontend_view', __name__)

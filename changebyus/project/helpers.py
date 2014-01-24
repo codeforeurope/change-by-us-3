@@ -118,6 +118,23 @@ def _create_project(form):
     update_project_activity( p.id )
 
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
+    
+    
+def _delete_project(project_id):
+    p = Project.objects.with_id(project_id)
+    p.active = False
+    p.save()
+    
+    return True
+
+
+def _unflag_project(project_id):
+    p = Project.objects.with_id(project_id)
+    p.flags = 0
+    p.save()
+        
+    return True
+
 
 def _delete_cal(project_id):
     p = Project.objects.with_id(project_id)

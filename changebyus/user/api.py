@@ -13,7 +13,7 @@ from flask.ext.cdn_rackspace import upload_rackspace_image
 
 
 from .models import User
-from .helpers import _create_user
+from .helpers import _create_user, _delete_user, _unflag_user
 from ..helpers.stringtools import bool_strings
 
 from flask.ext.wtf.html5 import URLField
@@ -292,6 +292,25 @@ def api_edit_user():
 
     # defaults to success and 'OK'
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )
+
+
+@user_api.route('/<user_id>', methods = ['DELETE'])
+@user_api.route('/remove', methods = ['POST'])
+def api_delete_user(user_id=None):
+    if (not user_id):
+        form = request.form if request.form else as_multidict(request.json)
+        user_id = form.get('user_id')
+    
+    _delete_user(user_id)
+    
+    return jsonify_response(ReturnStructure())
+
+
+@user_api.route('/<user_id>/unflag', methods = ['POST'])
+def api_unflag_user(user_id=None):    
+    _unflag_user(user_id)
+    
+    return jsonify_response(ReturnStructure())
 
 
 @user_api.route('/socialstatus', methods = ['GET'])

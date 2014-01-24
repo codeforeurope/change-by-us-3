@@ -83,7 +83,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     "delete": function(e) {
       var _this = this;
       e.preventDefault();
-      return $.post("/api/user/" + this.model.id + "/delete", function(res_) {
+      return $.ajax({
+        type: "DELETE",
+        url: "/api/user/" + this.model.id
+      }).done(function(res_) {
         if (res_.success) {
           _this.model.collection.remove(_this.model);
           return _this.$el.remove();

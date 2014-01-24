@@ -55,7 +55,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             delete:(e)-> 
                 e.preventDefault()
-                $.post "/api/project/#{@model.id}/delete", (res_)=>
+                $.ajax(
+                    type: "DELETE"
+                    url: "/api/project/#{@model.id}"
+                ).done (res_)=>
                     if res_.success
                         @model.collection.remove @model
                         @$el.remove() 

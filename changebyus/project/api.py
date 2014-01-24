@@ -22,9 +22,9 @@ from ..mongo_search import search
 from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
 
 
-from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
+from .helpers import ( _delete_project, _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
                        _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location, _delete_cal,
-                       _get_user_owned_projects, _leave_project )
+                       _get_user_owned_projects, _leave_project, _unflag_project )
 
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
                           project_member, project_ownership, project_organizer,
@@ -262,6 +262,25 @@ class EditProjectForm(Form):
     lon = HiddenField("lon")
     photo = FileField("photo")    
     private = BooleanField("private")
+    
+
+@project_api.route('/<project_id>', methods = ['DELETE'])
+@project_api.route('/remove', methods = ['POST'])
+def api_delete_project(project_id=None):
+    if (not project_id):
+        form = request.form if request.form else as_multidict(request.json)
+        project_id = form.get('project_id')
+    
+    _delete_project(project_id)
+    
+    return jsonify_response(ReturnStructure())
+
+
+@project_api.route('/<project_id>/unflag', methods = ['POST'])
+def api_unflag_project(project_id=None):    
+    _unflag_project(project_id)
+    
+    return jsonify_response(ReturnStructure())
 
 
 @project_api.route('/<project_id>/delete_calendar')

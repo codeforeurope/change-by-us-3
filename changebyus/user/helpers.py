@@ -120,6 +120,25 @@ def _create_user(email=None,
         current_app.logger.exception(e)
 
         return None
+        
+        
+def _delete_user(user_id):
+    u = User.objects.with_id(user_id)
+    u.active = False
+    u.save()
+    
+    return True
+
+
+def _unflag_user(user_id):
+    u = User.objects.with_id(user_id)
+    u.flags = 0
+    u.save()
+    
+    from pprint import pprint
+    pprint(u.as_dict())
+        
+    return True        
 
 
 def _add_twitter(user_id=None,

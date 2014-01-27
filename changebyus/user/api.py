@@ -388,6 +388,8 @@ def api_get_users():
     users = users[0:limit]
     users_list = db_list_to_dict_list(users)
 
+    print "user query",query, users_list
+
     return jsonify_response( ReturnStructure( data = users_list ) )    
 
 

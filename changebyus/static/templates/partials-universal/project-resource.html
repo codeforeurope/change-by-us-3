@@ -48,8 +48,13 @@
 
 <% if(data.isAdmin){ %>
     <div class="admin-btns">
-        <a href="#" class="btn btn-medium btn-tertiary">Unflag</a>
-        <a href="#" class="btn btn-medium btn-warning">Delete</a>
+        <% if(data.resource){ %>
+        <a href="#" class="btn btn-medium btn-primary approve">Approve</a>
+        <a href="#" class="btn btn-medium btn-warning reject">Reject</a>
+        <% }else{ %>
+        <a href="#" class="btn btn-medium btn-primary unflag">Unflag</a>
+        <a href="#" class="btn btn-medium btn-warning delete-project">Delete</a>
+        <% } %>
     </div>
 </div>
 <% } %>

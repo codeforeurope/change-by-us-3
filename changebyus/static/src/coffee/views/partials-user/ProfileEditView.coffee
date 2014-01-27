@@ -16,6 +16,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
             events:
                 "click .social-btns a":"socialClick"
+                "click #delete-account":"deleteAccount"
 
             render: ->
                 @$el = $(@parent)
@@ -34,6 +35,18 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                     $('input[name="private"]').attr('checked', ($(this).val() is "private"))
                     
                 AbstractView::onTemplateLoad.call @
+
+            deleteAccount:(e)->
+                e.preventDefault()
+                confirmation = confirm("Are you sure you want to delete your account?");
+                if confirmation
+                    e.preventDefault()
+                    $.ajax(
+                        type: "DELETE"
+                        url: "/api/user/#{@model.id}"
+                    ).done (res_)=>
+                        if res_.success
+                           window.location = "/"
 
             ajaxForm: ->
                 $('.fileupload').fileupload({uploadtype: 'image'})

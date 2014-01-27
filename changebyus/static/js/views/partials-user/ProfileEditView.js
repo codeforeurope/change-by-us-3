@@ -17,7 +17,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       });
     },
     events: {
-      "click .social-btns a": "socialClick"
+      "click .social-btns a": "socialClick",
+      "click #delete-account": "deleteAccount"
     },
     render: function() {
       var _this = this;
@@ -40,6 +41,23 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return $('input[name="private"]').attr('checked', $(this).val() === "private");
       });
       return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    deleteAccount: function(e) {
+      var confirmation,
+        _this = this;
+      e.preventDefault();
+      confirmation = confirm("Are you sure you want to delete your account?");
+      if (confirmation) {
+        e.preventDefault();
+        return $.ajax({
+          type: "DELETE",
+          url: "/api/user/" + this.model.id
+        }).done(function(res_) {
+          if (res_.success) {
+            return window.location = "/";
+          }
+        });
+      }
     },
     ajaxForm: function() {
       var $feedback, $form, $inputs, $projectLocation, $submit, options,

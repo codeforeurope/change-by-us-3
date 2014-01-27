@@ -14,12 +14,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.viewData.isProject = options.isProject || this.isProject;
       this.viewData.isOwned = options.isOwned || this.isOwned;
       this.viewData.isFollowed = options.isFollowed || this.isFollowed;
-      return this.viewData.isAdmin = options.isAdmin || this.isAdmin;
+      this.viewData.isAdmin = options.isAdmin || this.isAdmin;
+      return this.url = "/api/project/" + this.model.id;
     },
     events: {
       "click .close-x": "close",
-      "click .btn-tertiary": "unflag",
-      "click .btn-warning": "delete"
+      "click .unflag": "unflag",
+      "click .delete-project": "delete",
+      "click .approve": "approve",
+      "click .reject": "reject"
     },
     render: function() {
       var _this = this;
@@ -62,28 +65,60 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         }
       });
     },
-    "delete": function(e) {
-      var _this = this;
-      e.preventDefault();
-      return $.ajax({
-        type: "DELETE",
-        url: "/api/project/" + this.model.id
-      }).done(function(res_) {
-        if (res_.success) {
-          _this.model.collection.remove(_this.model);
-          return _this.$el.remove();
-        }
-      });
-    },
     unflag: function(e) {
       var _this = this;
       e.preventDefault();
-      return $.post("/api/project/" + this.model.id + "/unflag", function(res_) {
-        if (res_.success) {
-          _this.model.collection.remove(_this.model);
-          return _this.$el.remove();
-        }
+      return $.post("" + this.url + "/unflag", function(res_) {
+        return _this.onResponce(res_);
       });
+    },
+    "delete": function(e) {
+      var confirmation,
+        _this = this;
+      e.preventDefault();
+      confirmation = confirm("Are you sure you want to delete " + (this.model.get('name')) + "?");
+      if (confirmation) {
+        return $.ajax({
+          type: "DELETE",
+          url: this.url
+        }).done(function(res_) {
+          return _this.onResponce(res_);
+        });
+      }
+    },
+    approve: function(e) {
+      var confirmation,
+        _this = this;
+      e.preventDefault();
+      confirmation = confirm("Are you sure you want to approve " + (this.model.get('name')) + "?");
+      if (confirmation) {
+        return $.ajax({
+          type: "UPDATE",
+          url: this.url
+        }).done(function(res_) {
+          return _this.onResponce(res_);
+        });
+      }
+    },
+    reject: function(e) {
+      var confirmation,
+        _this = this;
+      e.preventDefault();
+      confirmation = confirm("Are you sure you want to reject " + (this.model.get('name')) + "?");
+      if (confirmation) {
+        return $.ajax({
+          type: "DELETE",
+          url: this.url
+        }).done(function(res_) {
+          return _this.onResponce(res_);
+        });
+      }
+    },
+    onResponce: function(res_) {
+      if (res_.success) {
+        this.model.collection.remove(this.model);
+        return this.$el.remove();
+      }
     }
   });
 });

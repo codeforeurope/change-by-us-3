@@ -81,17 +81,21 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     /* EVENTS ---------------------------------------------*/
 
     "delete": function(e) {
-      var _this = this;
+      var confirmation,
+        _this = this;
       e.preventDefault();
-      return $.ajax({
-        type: "DELETE",
-        url: "/api/user/" + this.model.id
-      }).done(function(res_) {
-        if (res_.success) {
-          _this.model.collection.remove(_this.model);
-          return _this.$el.remove();
-        }
-      });
+      confirmation = confirm("Are you sure you want to delete " + (this.model.get('display_name')) + ": " + (this.model.get('first_name')) + " " + (this.model.get('last_name')) + "?");
+      if (confirmation) {
+        return $.ajax({
+          type: "DELETE",
+          url: "/api/user/" + this.model.id
+        }).done(function(res_) {
+          if (res_.success) {
+            _this.model.collection.remove(_this.model);
+            return _this.$el.remove();
+          }
+        });
+      }
     },
     unflag: function(e) {
       var _this = this;

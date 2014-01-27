@@ -14,7 +14,8 @@
             <input type="text" maxlength="30" name="display_name" id="display_name" placeholder="User Name" class="input-xxlarge" value="<%= data.display_name %>" required>
             <br>
             <span class="sub-text">Your public profile:
-                <strong>http://changeby.us/<%= data.display_name %></strong>
+                <% urlBase = window.location.protocol+"//"+window.location.host %>
+                <strong><%= urlBase %>/user/<%= data.id %></strong>
             </span>
 
             <label for="location">YOUR LOCATION</label>
@@ -143,7 +144,7 @@
             <input type="hidden" name="lon" value="<%= data.lon %>">
         </div>
         <div class="pull-right">
-            <span class="sub-text">Member since</span> * <a href="/delete" class="warning">Delete Account</a>
+            <span class="sub-text">Member since</span> * <a href="#" class="warning" id="delete-account">Delete Account</a>
         </div>
     </div>
 

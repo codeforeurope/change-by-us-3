@@ -16,11 +16,14 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 @viewData.isOwned    = options.isOwned || @isOwned
                 @viewData.isFollowed = options.isFollowed || @isFollowed
                 @viewData.isAdmin    = options.isAdmin || @isAdmin
+                @url                 = "/api/project/#{@model.id}"
 
             events: 
                 "click .close-x": "close"
-                "click .btn-tertiary": "unflag"
-                "click .btn-warning": "delete"
+                "click .unflag": "unflag"
+                "click .delete-project": "delete"
+                "click .approve": "approve"
+                "click .reject": "reject"
 
             render: ->
                 @$el = $("<li class='project-preview'/>")
@@ -53,19 +56,40 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                     else
                         $closeX.show()
 
-            delete:(e)-> 
-                e.preventDefault()
-                $.ajax(
-                    type: "DELETE"
-                    url: "/api/project/#{@model.id}"
-                ).done (res_)=>
-                    if res_.success
-                        @model.collection.remove @model
-                        @$el.remove() 
-
             unflag:(e)-> 
                 e.preventDefault()
-                $.post "/api/project/#{@model.id}/unflag", (res_)=>
-                    if res_.success
-                        @model.collection.remove @model
-                        @$el.remove() 
+                $.post "#{@url}/unflag", (res_)=> @onResponce res_
+
+            delete:(e)-> 
+                e.preventDefault()
+                confirmation = confirm("Are you sure you want to delete #{@model.get('name')}?");
+                if confirmation
+                    $.ajax(
+                        type: "DELETE"
+                        url: @url
+                    ).done (res_)=> @onResponce res_
+
+            approve:(e)-> 
+                e.preventDefault()
+                confirmation = confirm("Are you sure you want to approve #{@model.get('name')}?");
+                if confirmation
+                    $.ajax(
+                        type: "UPDATE"
+                        url: @url
+                    ).done (res_)=> @onResponce res_
+
+            reject:(e)-> 
+                e.preventDefault()
+                confirmation = confirm("Are you sure you want to reject #{@model.get('name')}?");
+                if confirmation
+                    $.ajax(
+                        type: "DELETE"
+                        url: @url
+                    ).done (res_)=> @onResponce res_
+                        
+
+            onResponce:(res_)->
+                if res_.success
+                    @model.collection.remove @model
+                    @$el.remove() 
+

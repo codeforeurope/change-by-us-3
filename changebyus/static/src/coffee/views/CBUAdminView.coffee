@@ -6,6 +6,7 @@ define ["underscore",
         "views/partials-project/ProjectMemberListItemView", 
         "collection/FlaggedProjectCollection", 
         "collection/FlaggedUserCollection", 
+        "collection/UnapprovedResourcesCollection", 
         "abstract-view"], 
     (_, 
      Backbone, 
@@ -15,6 +16,7 @@ define ["underscore",
      ProjectMemberListItemView, 
      FlaggedProjectCollection, 
      FlaggedUserCollection, 
+     UnapprovedResourcesCollection,
      AbstractView) ->
 
         CBUAdminView = AbstractView.extend
@@ -23,8 +25,9 @@ define ["underscore",
                 options = options_
                 AbstractView::initialize.call @, options
                 
-                @flaggedProjects  = options.collection or new FlaggedProjectCollection()
-                @flaggedUsers = options.collection or new FlaggedUserCollection()
+                @flaggedProjects     = options.flaggedProjects or new FlaggedProjectCollection()
+                @flaggedUsers        = options.flaggedUsers or new FlaggedUserCollection()
+                @unapprovedResources = options.unapprovedResources or new UnapprovedResourcesCollection()
                 
                 @render()
 
@@ -33,28 +36,40 @@ define ["underscore",
                 @$el.template @templateDir+"/templates/admin.html",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
-                
+
+            buttonCheck:->
+                if @flaggedProjects.length is 0 then @$projectsBTN.hide() else @$projectsBTN.show()
+                if @flaggedUsers.length is 0 then @$usersBTN.hide() else @$usersBTN.show()
+                if @unapprovedResources.length is 0 then @$resourcesBTN.hide() else @$resourcesBTN.show()
+
             onTemplateLoad:->
-                @$projects  = $("#flagged-projects")
-                @$users     = $("#flagged-users")
-                @$resources = $("#approved-resource")
+                @$projects     = $("#flagged-projects")
+                @$users        = $("#flagged-users")
+                @$resources    = $("#approved-resource")
                 
-                @$projectsBTN  = $("a[href='#projects']").parent()
-                @$usersBTN     = $("a[href='#users']").parent()
-                @$resourcesBTN = $("a[href='#resources']").parent()
+                @$projectsBTN  = $("#projects-btn")
+                @$usersBTN     = $("#users-btn")
+                @$resourcesBTN = $("#resources-btn")
 
                 @flaggedProjects.on "reset", @addProjects, @
+                @flaggedProjects.on "remove", @buttonCheck, @
                 @flaggedProjects.fetch reset: true
 
                 @flaggedUsers.on "reset", @addUsers, @
+                @flaggedUsers.on "remove", @buttonCheck, @
                 @flaggedUsers.fetch reset: true 
+
+                @unapprovedResources.on "reset", @addResources, @
+                @unapprovedResources.on "remove", @buttonCheck, @
+                @unapprovedResources.fetch reset: true 
 
                 $(window).bind "hashchange", (e) => @toggleSubView()
                 @toggleSubView()
 
                 AbstractView::onTemplateLoad.call @
 
-            addProjects: -> 
+            addProjects: ->
+                @buttonCheck()
                 @flaggedProjects.each (projectModel_) =>
                     @addProject projectModel_
 
@@ -64,7 +79,8 @@ define ["underscore",
 
                 $("#projects-list").append view.$el
 
-            addUsers: -> 
+            addUsers: ->  
+                @buttonCheck()
                 @flaggedUsers.each (userModel_) =>
                     @addUser userModel_
 
@@ -73,6 +89,17 @@ define ["underscore",
                 view.render()
 
                 $("#users-list").append view.$el
+
+            addResources: ->  
+                @buttonCheck()
+                @unapprovedResources.each (resourceModel_) =>
+                    @addResource resourceModel_
+
+            addResource: (resourceModel_) -> 
+                view = new ResourceProjectPreviewView({model:resourceModel_, isAdmin:true}) 
+                view.render()
+
+                $("#resource-list").append view.$el
 
             toggleSubView: -> 
                 @currentView = window.location.hash.substring(1)

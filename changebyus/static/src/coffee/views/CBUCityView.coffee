@@ -16,24 +16,29 @@ define ["underscore",
      CityModel) ->
         
         CBUCityView = AbstractView.extend
-            
-            $header:null
-            collection:null
+
+            bothLoaded:0
+            view:""
+            name:""
+            projects:[]
+            resources:[]
 
             initialize: (options_) ->
                 options = options_
                 AbstractView::initialize.call @, options
-                
-                @collection  = options.collection or @collection
 
-                $.getJSON "/static/js/config/cities.json", (data)=>
-                    id     = options.model.id
-                    obj    = data.cities[id]
-                    @model = new CityModel(obj)
-                    @render()
+                @fetch()
 
             events:
-                "click .change-city a":"changeCity" 
+                _.extend {}, AbstractView.prototype.events, {"click .change-city a":"changeCity"}
+                
+            fetch:->
+                $.getJSON "/api/project/cities", (res_)=> 
+                    for city in res_.data.cities
+                        if @model.id is city.slug 
+                            @model = new CityModel(city)
+                            @render()
+                            break
 
             render: -> 
                 @viewData = @model.attributes
@@ -44,22 +49,21 @@ define ["underscore",
                 $(@parent).append @$el
 
             search:(type_)->
-                console.log '@model',@model
                 dataObj = {
                     s: ""
                     cat: ""
                     loc: ""
                     d: "25"
                     type: type_
-                    lat: @model.get("lat")
-                    lon: @model.get("lon")
+                    lon: @model.get("geo_location").coordinates[0]
+                    lat: @model.get("geo_location").coordinates[1]
                 }
 
                 $.ajax(
                     type: "POST"
                     url: "/api/project/search"
                     data: JSON.stringify(dataObj)
-                    dataType: "json" 
+                    dataType: "json"
                     contentType: "application/json; charset=utf-8"
                 ).done (response_)=>
                     if response_.success 
@@ -68,20 +72,115 @@ define ["underscore",
                         else
                             @onResourcesLoad response_.data
 
+            addHashListener:->
+                $(window).bind "hashchange", (e) => @toggleSubView()
+                @toggleSubView()
+                
+            toggleSubView: ->
+                @view = window.location.hash.substring(1)
+                @index = 0
+
+                switch @view 
+                    when "projects"
+                        @showOnlyProjects()
+                        @updatePage()
+                    when "resources"
+                        @showOnlyResources()
+                        @updatePage()
+                    else 
+                        @showBoth()
+
+            showOnlyProjects:->
+                @$projectsView.find("ul.projects").html ""
+                @$projectsView.find("h2").html "Projects"
+
+                @$projectsView.show()
+                @$moreProjects.hide()
+                @$resourcesView.hide() 
+                @$hr.hide()
+
+                @setPages(@projects.length, @$projectsView.parent())
+
+            showOnlyResources:->
+                @$resourcesView.find("ul.resources").html ""
+                @$resourcesView.find("h2").html "Resources"
+
+                @$resourcesView.show()
+                @$moreResources.hide()
+                @$projectsView.hide() 
+                @$hr.hide()
+
+                @setPages(@resources.length, @$resourcesView.parent())
+                
+            showBoth:->
+                @$projectsView.find("ul.projects").html ""
+                @$resourcesView.find("ul.resources").html ""
+
+                @$projectsView.find("h2").html "Featured Projects"
+                @$resourcesView.find("h2").html "Featured Resources"
+
+                if @$paginationContainer then @$paginationContainer.remove()
+
+                # projects
+                count = 0
+                for v in @projects
+                    if count++ < 3 then @addOne v._id, @$projectsView.find("ul.projects")
+                
+                if count < 3 then @$moreProjects.hide() else @$moreProjects.show()
+                if count is 0 then @$projectsView.hide() else @$projectsView.show() 
+
+                # resources
+                count = 0
+                for v in @resources
+                    if count++ < 3 then @addOne v._id, @$resourcesView.find("ul.resources")
+
+                if count < 3 then @$moreResources.hide() else @$moreResources.show()
+                if count is 0 then @$resourcesView.hide() else @$resourcesView.show() 
+
+                if @projects.length is 0 or @resources.length is 0 then $('.city-container hr').hide()
+
+            updatePage:->
+                if @view is "projects"
+                    list = @projects
+                    view = @$projectsView.find("ul.projects")
+                else 
+                    list = @resources
+                    view = @$resourcesView.find("ul.resources")
+
+                view.html ""
+
+                s = @index*@perPage
+                e = (@index+1)*@perPage-1
+                for i in [s..e]
+                    if i < list.length then @addOne list[i]._id, view
+
+                $("html, body").animate({ scrollTop: 0 }, "slow")
+
             addOne: (id_, parent_) -> 
-                projectModel = new ProjectModel id:id_
+                console.log 'addOne', id_, parent_
+                projectModel = new ProjectModel {id:id_}
                 view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
                 view.fetch()
-                
+
             ### EVENTS ---------------------------------------------###
             onTemplateLoad:->
-                @projectsView = @$el.find('#featured-projects')
-                @resourcesView = @$el.find('#featured-resources')
+                @name = @model.get('name').split(',')[0]
 
-                @$header = $("<div class='city-header'/>")
-                @$header.template @templateDir+"/templates/partials-city/city-header.html",
+                @$projectsView = @$el.find('#featured-projects')
+                @$resourcesView = @$el.find('#featured-resources')
+
+                @$moreProjects = @$projectsView.find('.sub-link')
+                @$moreResources = @$resourcesView.find('.sub-link')
+
+                @$hr = $('.city-container hr')
+
+                @$projectsView.find('.sub-link a').html "See More Projects in "+@name
+                @$resourcesView.find('.sub-link a').html "See More Resources in "+@name
+
+                $header = $("<div class='city-header'/>")
+                $header.template @templateDir+"/templates/partials-city/city-header.html",
                     {data:@viewData}, => @onHeaderLoaded()
-                @$el.prepend @$header
+                @$el.prepend $header
 
                 AbstractView::onTemplateLoad.call @
 
@@ -94,30 +193,14 @@ define ["underscore",
 
                 @delegateEvents()
                     
-            onProjectsLoad:(data_)->
-                count = 0
-                for k,v of data_
-                    @addOne v._id, @projectsView.find("ul")
-                    count++
+            onProjectsLoad:(projects_)->
+                for k,v of projects_
+                    @projects.push v
 
-                $featuredProjects = $("#featured-projects")
-                $more = $featuredProjects.find('.sub-link')
+                if ++@bothLoaded is 2 then @addHashListener()
 
-                if count < 3 then $more.hide()
-                if count is 0
-                    $featuredProjects.hide()
-                    $('.city-container hr').hide()
+            onResourcesLoad:(resources_)->
+                for k,v of resources_
+                    @resources.push v
 
-            onResourcesLoad:(data_)->
-                count = 0
-                for k,v of data_
-                    @addOne v._id, @resourcesView.find("ul")
-                    count++
-
-                $featuredResources = $("#featured-resources")
-                $more = $featuredResources.find('.sub-link')
-
-                if count < 3 then $more.hide()
-                if count is 0
-                    $featuredResources.hide()
-                    $('.city-container hr').hide()
+                 if ++@bothLoaded is 2 then @addHashListener()

@@ -53,16 +53,16 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
     },
     onFetch: function(r) {},
     nextClick: function(e) {
+      e.preventDefault();
       if ($(e.currentTarget).hasClass('disabled') === false) {
-        this.nextPage();
+        return this.nextPage();
       }
-      return e.preventDefault();
     },
     prevClick: function(e) {
+      e.preventDefault();
       if ($(e.currentTarget).hasClass('disabled') === false) {
-        this.prevPage();
+        return this.prevPage();
       }
-      return e.preventDefault();
     },
     pageClick: function(e) {
       var i;

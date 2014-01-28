@@ -60,6 +60,8 @@ define ["underscore",
                 AbstractView::onTemplateLoad.call @
 
             toggleSubView: -> 
+                onPageElementsLoad()
+                
                 @currentView = window.location.hash.substring(1)
 
                 for v in [@$manageView,@$profileView,@$followView]

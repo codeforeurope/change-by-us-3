@@ -28,11 +28,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             render: ->
                 @$el = $("<li class='project-preview'/>")
                 @$el.template @templateDir+"/templates/partials-universal/project-resource.html",
-                    {data: @viewData}, => 
-                        @onTemplateLoad()
-                        @$el.find('img').hide().load -> 
-                            $(this).fadeIn('slow')
-                            onPageElementsLoad()
+                    {data: @viewData}, =>
+                        @$el.find('img').hide().load => 
+                            @$el.find('img').fadeIn('slow')
+                            @onTemplateLoad()
                             
             ### EVENTS ---------------------------------------------###
             onFetch:(r)-> 

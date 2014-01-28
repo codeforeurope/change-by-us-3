@@ -56,6 +56,7 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     toggleSubView: function() {
       var btn, v, _i, _j, _len, _len1, _ref, _ref1;
+      onPageElementsLoad();
       this.currentView = window.location.hash.substring(1);
       _ref = [this.$manageView, this.$profileView, this.$followView];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

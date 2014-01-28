@@ -103,6 +103,7 @@ define ["underscore",
 
             toggleSubView: -> 
                 @currentView = window.location.hash.substring(1)
+                onPageElementsLoad()
 
                 for v in [@$projects,@$users,@$resources]
                     v.hide()

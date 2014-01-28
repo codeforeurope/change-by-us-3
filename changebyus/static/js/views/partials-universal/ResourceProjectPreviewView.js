@@ -30,10 +30,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
         data: this.viewData
       }, function() {
-        _this.onTemplateLoad();
         return _this.$el.find('img').hide().load(function() {
-          $(this).fadeIn('slow');
-          return onPageElementsLoad();
+          _this.$el.find('img').fadeIn('slow');
+          return _this.onTemplateLoad();
         });
       });
     },

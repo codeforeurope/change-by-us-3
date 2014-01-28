@@ -53,12 +53,12 @@ define ["underscore", "backbone", "jquery", "template"],
                 #hook 
 
             nextClick:(e)->
+                e.preventDefault()  
                 if $(e.currentTarget).hasClass('disabled') is false then @nextPage()
-                e.preventDefault() 
 
             prevClick:(e)->
-                if $(e.currentTarget).hasClass('disabled') is false then @prevPage()
                 e.preventDefault() 
+                if $(e.currentTarget).hasClass('disabled') is false then @prevPage()
 
             pageClick:(e)->
                 e.preventDefault()
@@ -67,7 +67,7 @@ define ["underscore", "backbone", "jquery", "template"],
                 if @index isnt (i-1) 
                     @index = (i-1) 
                     @checkArrows()
-                    @updatePage() 
+                    @updatePage()
 
             nextPage:->
                 @index++

@@ -19,7 +19,7 @@ from ..helpers.mongotools import db_list_to_dict_list
 
 from ..mongo_search import search
 
-from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
+from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory, ProjectCity
 
 
 from .helpers import ( _delete_project, _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
@@ -139,6 +139,14 @@ def api_categories():
     
     return jsonify_response(ReturnStructure(data = data))
 
+
+@project_api.route('/cities')
+def api_cities():
+    cities = ProjectCity.objects(active=True)
+    
+    data = {"cities": db_list_to_dict_list(cities)}
+    
+    return jsonify_response(ReturnStructure(data = data))
 
 # TODO WTForms for flagging?
 

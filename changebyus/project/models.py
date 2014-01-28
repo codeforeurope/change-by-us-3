@@ -209,10 +209,33 @@ class ProjectCategory(db.Document, HasActiveEntityMixin):
     as a reference.  This model is strictly for bookkeeping.
     """
     name = db.StringField(required=True, unique=True)
+    
+
+class ProjectCity(db.Document, EntityMixin, HasActiveEntityMixin, LocationEnabledEntityMixin):
+    """
+    Model for cities that have city pages.
+    """
+    name = db.StringField(required=True, unique=True)
+    slug = db.StringField(unique=True)
+    quote = db.StringField()
+    image_name = db.StringField()
+    website = db.StringField()
+	
+    def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
+        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
+
+        image_urls = gen_image_urls(self.image_name)
+
+        for image, url in image_urls.iteritems():
+            resp[image] = url
+
+        return resp
 
 
 signals.post_init.connect(Project.post_init, sender=Project)
 signals.pre_save.connect(Project.pre_save, sender=Project)
+
+signals.pre_save.connect(ProjectCity.pre_save, sender=ProjectCity)
 
 signals.pre_save.connect(UserProjectLink.pre_save, sender=UserProjectLink)
 """

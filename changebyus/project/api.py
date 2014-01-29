@@ -12,17 +12,18 @@ from flask.ext.wtf.html5 import URLField
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError, BooleanField)
 
-from ..geonames import get_geopoint, get_geoname
+from changebyus.geonames import get_geopoint, get_geoname
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
-from ..helpers.mongotools import db_list_to_dict_list
+from changebyus.helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
+from changebyus.helpers.mongotools import db_list_to_dict_list
 
-from ..mongo_search import search
+from changebyus.mongo_search import search
 
 from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory, ProjectCity
 
 
-from .helpers import ( _delete_project, _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
+from .helpers import ( _approve_project,
+                       _delete_project, _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
                        _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location, _delete_cal,
                        _get_user_owned_projects, _leave_project, _unflag_project )
 
@@ -30,12 +31,13 @@ from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
                           project_member, project_ownership, project_organizer,
                           valid_project_membership )
 
-from ..user.models import User
+from changebyus.user.decorators import is_site_admin
+from changebyus.user.models import User
 
-from ..notifications.api import _notify_project_join
+from changebyus.notifications.api import _notify_project_join
 
-from ..stripe.api import _get_account_balance_percentage, _update_goal_description
-from ..stripe.models import StripeAccount
+from changebyus.stripe.api import _get_account_balance_percentage, _update_goal_description
+from changebyus.stripe.models import StripeAccount
 
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
@@ -44,6 +46,7 @@ from mongoengine.errors import ValidationError
 from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
+resource_api = Blueprint('resource_api', __name__, url_prefix='/api/resource')
 
 """
 .. module:: project/api
@@ -114,7 +117,7 @@ def api_search_projects():
         addl_filters.update({"category": cat})
     
     if (search_type == 'resource'):
-        addl_filters.update({"resource": True})
+        addl_filters.update({"resource": True, "approved": True})
     if (search_type == 'project'):
         addl_filters.update({"resource": False})
 
@@ -274,6 +277,9 @@ class EditProjectForm(Form):
 
 @project_api.route('/<project_id>', methods = ['DELETE'])
 @project_api.route('/remove', methods = ['POST'])
+@resource_api.route('/<resource_id>', methods = ['DELETE'])
+@resource_api.route('/remove', methods = ['POST'])
+@is_site_admin
 def api_delete_project(project_id=None):
     if (not project_id):
         form = request.form if request.form else as_multidict(request.json)
@@ -282,9 +288,20 @@ def api_delete_project(project_id=None):
     _delete_project(project_id)
     
     return jsonify_response(ReturnStructure())
+        
+
+@project_api.route('/<project_id>/approve', methods = ['POST'])
+@resource_api.route('/<project_id>/approve', methods = ['POST'])
+@is_site_admin
+def api_approve_project(project_id):
+    _approve_project(project_id)
+    
+    return jsonify_response( ReturnStructure( data = resources_list ) )
 
 
 @project_api.route('/<project_id>/unflag', methods = ['POST'])
+@resource_api.route('/<project_id>/unflag', methods = ['POST'])
+@is_site_admin
 def api_unflag_project(project_id=None):    
     _unflag_project(project_id)
     
@@ -485,7 +502,10 @@ def api_get_projects():
     # using raw query here so that most list queries aren't needlessly 
     # using flags__gt=-1 or something
     query = {"active":True}
-    query['resource'] = bool(request.args.get('is_resource', False))
+    
+    if (request.args.get('is_resource')):
+        query.update({'resource': True, 'approved': True})
+
     if bool(request.args.get('flagged', False)):
         query['flags'] = {"$gt":0}
 
@@ -499,6 +519,30 @@ def api_get_projects():
     projects_list = db_list_to_dict_list(projects)
 
     return jsonify_response( ReturnStructure( data = projects_list ) )
+
+
+@resource_api.route('/list/<status>')
+@is_site_admin
+def api_get_resources(status='approved'):
+    """
+    Returns list of unapproved resources
+    """
+    limit = int(request.args.get('limit', 100))
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+    
+    is_approved = (status != 'unapproved')
+    
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        resources = Project.objects(resource=True, approved=is_approved).order_by(sort_order)
+    else:
+        resources = Project.objects(resource=True, approved=is_approved)
+
+    resources = resources[0:limit]
+    resources_list = db_list_to_dict_list(resources)
+
+    return jsonify_response( ReturnStructure( data = resources_list ) )
 
 
 class JoinProjectForm(Form):

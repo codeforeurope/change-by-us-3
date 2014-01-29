@@ -51,6 +51,7 @@ def _create_project(form):
     lat = form.lat.data
     lon = form.lon.data
     resource = form.resource.data
+    approved = not resource # resources default to not approved
     private = form.private.data
     
     if (lat and lon):
@@ -78,6 +79,7 @@ def _create_project(form):
                  geo_location = geo_location,
                  owner = owner,
                  resource = resource,
+                 approved = approved,
                  slug = slug, 
                  private = private)
 
@@ -131,6 +133,14 @@ def _delete_project(project_id):
 def _unflag_project(project_id):
     p = Project.objects.with_id(project_id)
     p.flags = 0
+    p.save()
+        
+    return True
+
+
+def _approve_project(project_id):
+    p = Project.objects.with_id(project_id)
+    p.approve = True
     p.save()
         
     return True

@@ -123,6 +123,7 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
     # a project is either a project or a resource
     # resource is different on the UI side and does slightly less
     resource = db.BooleanField(default=False)
+    approved = db.BooleanField(default=True)
 
     slug = db.StringField(unique=True)
     

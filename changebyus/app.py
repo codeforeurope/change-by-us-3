@@ -162,29 +162,31 @@ def configure_blueprints(app, blueprints):
     # Load application's functionalities, many of which require
     #    the app context so that they can reference the main app.settings
     with app.app_context():
+        from .facebook.facebook import facebook_view
+        from .frontend.views import frontend_view
+        from .frontend.api import frontend_api
         from .post.api import post_api
         from .project.api import project_api
         from .project.views import project_view
-        from .facebook.facebook import facebook_view
-        from .twitter.twitter import twitter_view
+        from .project.api import resource_api
         from .stripe.views import stripe_view
         from .stream.views import stream_view
         from .stream.api import stream_api
+        from .twitter.twitter import twitter_view
         from .user.api import user_api
-        from .frontend.views import frontend_view
-        from .frontend.api import frontend_api
         
         BLUEPRINTS = (
+            facebook_view,
             frontend_view,
             frontend_api,
             post_api,
             project_view, 
             project_api,
-            facebook_view,
-            twitter_view,
+            resource_api,
             stripe_view,
             stream_view,
             stream_api,
+            twitter_view,
             user_api,
         )
     

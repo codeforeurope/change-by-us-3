@@ -140,7 +140,7 @@ def _unflag_project(project_id):
 
 def _approve_project(project_id):
     p = Project.objects.with_id(project_id)
-    p.approve = True
+    p.approved = True
     p.save()
         
     return True

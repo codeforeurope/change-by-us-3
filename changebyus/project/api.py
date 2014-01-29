@@ -277,7 +277,7 @@ class EditProjectForm(Form):
 
 @project_api.route('/<project_id>', methods = ['DELETE'])
 @project_api.route('/remove', methods = ['POST'])
-@resource_api.route('/<resource_id>', methods = ['DELETE'])
+@resource_api.route('/<project_id>', methods = ['DELETE'])
 @resource_api.route('/remove', methods = ['POST'])
 @is_site_admin
 def api_delete_project(project_id=None):
@@ -296,7 +296,7 @@ def api_delete_project(project_id=None):
 def api_approve_project(project_id):
     _approve_project(project_id)
     
-    return jsonify_response( ReturnStructure( data = resources_list ) )
+    return jsonify_response( ReturnStructure() )
 
 
 @project_api.route('/<project_id>/unflag', methods = ['POST'])
@@ -535,9 +535,9 @@ def api_get_resources(status='approved'):
     
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        resources = Project.objects(resource=True, approved=is_approved).order_by(sort_order)
+        resources = Project.objects(active=True, resource=True, approved=is_approved).order_by(sort_order)
     else:
-        resources = Project.objects(resource=True, approved=is_approved)
+        resources = Project.objects(active=True, resource=True, approved=is_approved)
 
     resources = resources[0:limit]
     resources_list = db_list_to_dict_list(resources)

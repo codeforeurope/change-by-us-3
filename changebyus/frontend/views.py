@@ -61,6 +61,7 @@ def create_project_view():
 def user_view(user_id): 
     return _return_index()
 
+@frontend_view.route('/resource/<resource_id>/admin')
 @frontend_view.route('/resource/<resource_id>')
 def resource_view(resource_id): 
     return _return_index()

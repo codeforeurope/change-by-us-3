@@ -15,8 +15,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 @viewData.isProject  = options.isProject || @isProject
                 @viewData.isOwned    = options.isOwned || @isOwned
                 @viewData.isFollowed = options.isFollowed || @isFollowed
-                @viewData.isAdmin    = options.isAdmin || @isAdmin
-                @url                 = "/api/project/#{@model.id}"
+                @viewData.isAdmin    = options.isAdmin || @isAdmin 
 
             events: 
                 "click .close-x": "close"
@@ -29,7 +28,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 @$el = $("<li class='project-preview'/>")
                 @$el.template @templateDir+"/templates/partials-universal/project-resource.html",
                     {data: @viewData}, =>
-                        @$el.find('img').hide().load => 
+                        @delegateEvents()
+                        @$el.find('img').hide().load =>
                             @$el.find('img').fadeIn('slow')
                             @onTemplateLoad()
                             
@@ -57,7 +57,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             unflag:(e)-> 
                 e.preventDefault()
-                $.post "#{@url}/unflag", (res_)=> @onResponce res_
+                $.post "/api/project/#{@model.id}/unflag", (res_)=> @onResponce res_
 
             delete:(e)-> 
                 e.preventDefault()
@@ -65,7 +65,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 if confirmation
                     $.ajax(
                         type: "DELETE"
-                        url: @url
+                        url: "/api/project/#{@model.id}"
                     ).done (res_)=> @onResponce res_
 
             approve:(e)-> 
@@ -74,7 +74,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 if confirmation
                     $.ajax(
                         type: "UPDATE"
-                        url: @url
+                        url: "/api/resource/#{@model.id}"
                     ).done (res_)=> @onResponce res_
 
             reject:(e)-> 
@@ -83,7 +83,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 if confirmation
                     $.ajax(
                         type: "DELETE"
-                        url: @url
+                        url: "/api/resource/#{@model.id}"
                     ).done (res_)=> @onResponce res_
                         
 

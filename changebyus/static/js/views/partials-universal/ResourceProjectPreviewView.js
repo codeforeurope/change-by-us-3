@@ -14,8 +14,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.viewData.isProject = options.isProject || this.isProject;
       this.viewData.isOwned = options.isOwned || this.isOwned;
       this.viewData.isFollowed = options.isFollowed || this.isFollowed;
-      this.viewData.isAdmin = options.isAdmin || this.isAdmin;
-      return this.url = "/api/project/" + this.model.id;
+      return this.viewData.isAdmin = options.isAdmin || this.isAdmin;
     },
     events: {
       "click .close-x": "close",
@@ -30,6 +29,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
         data: this.viewData
       }, function() {
+        _this.delegateEvents();
         return _this.$el.find('img').hide().load(function() {
           _this.$el.find('img').fadeIn('slow');
           return _this.onTemplateLoad();
@@ -67,7 +67,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     unflag: function(e) {
       var _this = this;
       e.preventDefault();
-      return $.post("" + this.url + "/unflag", function(res_) {
+      return $.post("/api/project/" + this.model.id + "/unflag", function(res_) {
         return _this.onResponce(res_);
       });
     },
@@ -79,7 +79,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       if (confirmation) {
         return $.ajax({
           type: "DELETE",
-          url: this.url
+          url: "/api/project/" + this.model.id
         }).done(function(res_) {
           return _this.onResponce(res_);
         });
@@ -93,7 +93,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       if (confirmation) {
         return $.ajax({
           type: "UPDATE",
-          url: this.url
+          url: "/api/resource/" + this.model.id
         }).done(function(res_) {
           return _this.onResponce(res_);
         });
@@ -107,7 +107,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       if (confirmation) {
         return $.ajax({
           type: "DELETE",
-          url: this.url
+          url: "/api/resource/" + this.model.id
         }).done(function(res_) {
           return _this.onResponce(res_);
         });

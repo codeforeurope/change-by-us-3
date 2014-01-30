@@ -4,7 +4,7 @@ define ["underscore", "backbone", "model/ProjectModel"],
             model: ProjectModel
              
             url: ->
-                "/api/resource/list/unapproved&"
+                "/api/resource/list/unapproved"
             
             parse: (response_) ->
                 if response_.success then response_.data else {}

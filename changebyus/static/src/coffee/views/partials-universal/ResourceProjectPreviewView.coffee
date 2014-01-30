@@ -72,10 +72,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 e.preventDefault()
                 confirmation = confirm("Are you sure you want to approve #{@model.get('name')}?");
                 if confirmation
-                    $.ajax(
-                        type: "UPDATE"
-                        url: "/api/resource/#{@model.id}"
-                    ).done (res_)=> @onResponce res_
+                    $.post "/api/resource/#{@model.id}/approve", (res_)=> @onResponce res_
 
             reject:(e)-> 
                 e.preventDefault()

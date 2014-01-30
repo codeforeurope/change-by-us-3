@@ -91,10 +91,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       e.preventDefault();
       confirmation = confirm("Are you sure you want to approve " + (this.model.get('name')) + "?");
       if (confirmation) {
-        return $.ajax({
-          type: "UPDATE",
-          url: "/api/resource/" + this.model.id
-        }).done(function(res_) {
+        return $.post("/api/resource/" + this.model.id + "/approve", function(res_) {
           return _this.onResponce(res_);
         });
       }

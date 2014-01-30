@@ -41,7 +41,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       return this.checkHash();
     },
     updateView: function(type_) {
-      console.log('updateView', type_, this.flaggedProjects.length);
       switch (type_) {
         case 'project':
           if (this.flaggedProjects.length === 0) {
@@ -173,7 +172,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       return this.buttonCheck();
     },
     checkHash: function() {
-      console.log('checkHash', this.resourcesLoaded, this.currentView);
       if (this.resourcesLoaded >= 3) {
         if ((this.flaggedProjects.length === 0) && (this.flaggedUsers.length === 0) && (this.unapprovedResources.length === 0)) {
           return alert('No items to administer');
@@ -190,7 +188,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
               }
               break;
             default:
-              console.log('check hash ', this.flaggedProjects.length);
               if (this.flaggedProjects.length === 0) {
                 return window.location.hash = this.flaggedUsers.length > 0 ? "users" : "resources";
               }

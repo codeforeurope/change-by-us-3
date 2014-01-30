@@ -49,7 +49,6 @@ define ["underscore",
                 @checkHash()
 
             updateView:(type_)->
-                console.log 'updateView',type_, @flaggedProjects.length
                 switch type_
                     when 'project'
                         if @flaggedProjects.length is 0 then @checkHash()
@@ -142,7 +141,6 @@ define ["underscore",
                 @buttonCheck()
 
             checkHash:->
-                console.log 'checkHash', @resourcesLoaded, @currentView 
                 if @resourcesLoaded >= 3
                     if (@flaggedProjects.length is 0) and (@flaggedUsers.length is 0) and (@unapprovedResources.length is 0 )
                         # display some nothing here message
@@ -155,8 +153,6 @@ define ["underscore",
                             when "resources" 
                                 if @unapprovedResources.length is 0 
                                     window.location.hash = if @flaggedProjects.length > 0 then "projects" else "users"
-                            else 
-                                console.log 'check hash ', @flaggedProjects.length
+                            else
                                 if @flaggedProjects.length is 0 
                                     window.location.hash = if @flaggedUsers.length > 0 then "users" else "resources"
-                    #

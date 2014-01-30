@@ -52,8 +52,8 @@ define ["underscore",
                     success: => @render()
 
             events:
-                "click .flag-project a":"flagProject"
-                "click .project-footer .btn":"joinProject"
+                "click #flag":"flagProject"
+                "click .follow":"joinProject"
                 "click .donation-header .btn":"onDonateClick"
                 "click  a[href^='#']":"changeHash"
 
@@ -85,6 +85,14 @@ define ["underscore",
                     {data:@viewData}, => @onHeaderLoaded()
                 @$el.prepend @$header
 
+            notMember:->
+                console.log 'notMember'
+                $('.tabs-pane').remove()
+                $notMember = $("<div class='body-container'/>")
+                $notMember.template @templateDir+"/templates/partials-project/project-not-member.html",
+                    {data:@viewData}, =>
+                @$el.append $notMember
+
             ### EVENTS ---------------------------------------------###
             onTemplateLoad:->
                 # determine if user is a member of the project
@@ -95,14 +103,18 @@ define ["underscore",
             onHeaderLoaded:->
                 id = @model.get("id")
                 config = {id:id}
-                
-                @updatesCollection        = new UpdatesCollection(config)  
-                @projectMembersCollection = new ProjectMembersCollection(config)
-                @projectMembersCollection.on "reset", @onCollectionLoad, @
-                @projectMembersCollection.fetch {reset: true}
+ 
+                if @isMember is false and @model.get("private")
+                    @notMember()
+                else
+                    @updatesCollection        = new UpdatesCollection(config)  
+                    @projectMembersCollection = new ProjectMembersCollection(config)
+                    @projectMembersCollection.on "reset", @onCollectionLoad, @
+                    @projectMembersCollection.fetch {reset: true}
 
             onCollectionLoad:->  
                 parent       = if @isResource then "#resource-updates" else "#project-updates"
+
                 @updatesView = new UpdatesView
                                         model:@model,
                                         collection:@updatesCollection, 

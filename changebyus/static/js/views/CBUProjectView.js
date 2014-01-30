@@ -29,8 +29,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     events: {
-      "click .flag-project a": "flagProject",
-      "click .project-footer .btn": "joinProject",
+      "click #flag": "flagProject",
+      "click .follow": "joinProject",
       "click .donation-header .btn": "onDonateClick",
       "click  a[href^='#']": "changeHash"
     },
@@ -69,6 +69,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       return this.$el.prepend(this.$header);
     },
+    notMember: function() {
+      var $notMember,
+        _this = this;
+      console.log('notMember');
+      $('.tabs-pane').remove();
+      $notMember = $("<div class='body-container'/>");
+      $notMember.template(this.templateDir + "/templates/partials-project/project-not-member.html", {
+        data: this.viewData
+      }, function() {});
+      return this.$el.append($notMember);
+    },
     /* EVENTS ---------------------------------------------*/
 
     onTemplateLoad: function() {
@@ -81,12 +92,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       config = {
         id: id
       };
-      this.updatesCollection = new UpdatesCollection(config);
-      this.projectMembersCollection = new ProjectMembersCollection(config);
-      this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
-      return this.projectMembersCollection.fetch({
-        reset: true
-      });
+      if (this.isMember === false && this.model.get("private")) {
+        return this.notMember();
+      } else {
+        this.updatesCollection = new UpdatesCollection(config);
+        this.projectMembersCollection = new ProjectMembersCollection(config);
+        this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
+        return this.projectMembersCollection.fetch({
+          reset: true
+        });
+      }
     },
     onCollectionLoad: function() {
       var parent,

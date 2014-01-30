@@ -99,6 +99,7 @@ define ["jquery",
                     "project/:id/stripe/:sid/edit": "stripeEdit"
                     "project/:id/fundraising": "fundraising"
                     "resource/:id": "resource"
+                    "resource/:id/admin": "resourceAdmin"
                     "city/:id": "city"
                     "user/:id": "user"
                     "discover": "discover"
@@ -138,6 +139,14 @@ define ["jquery",
                     config.model = {id:id_}
                     config.isResource = true
                     window.CBUAppView =  new CBUProjectView(config)
+
+                resourceAdmin: (id_) ->
+                    if userID
+                        config.model = {id:id_}
+                        config.isResource = true
+                        window.CBUAppView = new CBUProjectOwnerView(config)
+                    else
+                        window.location.href = "/login"
 
                 city: (id_) ->
                     config.model = {id:id_}

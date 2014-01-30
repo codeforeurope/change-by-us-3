@@ -21,6 +21,8 @@ define ["underscore",
 
         CBUAdminView = AbstractView.extend
 
+            resourcesLoaded:0
+
             initialize: (options_) ->
                 options = options_
                 AbstractView::initialize.call @, options
@@ -37,30 +39,44 @@ define ["underscore",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 
-            buttonCheck:->
+            buttonCheck:-> 
+                @resourcesLoaded++ 
+
                 if @flaggedProjects.length is 0 then @$projectsBTN.hide() else @$projectsBTN.show()
                 if @flaggedUsers.length is 0 then @$usersBTN.hide() else @$usersBTN.show()
                 if @unapprovedResources.length is 0 then @$resourcesBTN.hide() else @$resourcesBTN.show()
 
+                @checkHash()
+
+            updateView:(type_)->
+                console.log 'updateView',type_, @flaggedProjects.length
+                switch type_
+                    when 'project'
+                        if @flaggedProjects.length is 0 then @checkHash()
+                    when 'resource'
+                        if @unapprovedResources.length is 0 then @checkHash()
+                    when 'user'
+                        if @flaggedUsers.length is 0 then @checkHash()
+
             onTemplateLoad:->
                 @$projects     = $("#flagged-projects")
                 @$users        = $("#flagged-users")
-                @$resources    = $("#approved-resource")
-                
+                @$resources    = $("#approve-resources")
+
                 @$projectsBTN  = $("#projects-btn")
                 @$usersBTN     = $("#users-btn")
                 @$resourcesBTN = $("#resources-btn")
 
                 @flaggedProjects.on "reset", @addProjects, @
-                @flaggedProjects.on "remove", @buttonCheck, @
+                @flaggedProjects.on "remove", (=>@updateView('project')), @
                 @flaggedProjects.fetch reset: true
 
                 @flaggedUsers.on "reset", @addUsers, @
-                @flaggedUsers.on "remove", @buttonCheck, @
+                @flaggedUsers.on "remove", (=>@updateView('user')), @
                 @flaggedUsers.fetch reset: true 
 
                 @unapprovedResources.on "reset", @addResources, @
-                @unapprovedResources.on "remove", @buttonCheck, @
+                @unapprovedResources.on "remove", (=>@updateView('resource')), @
                 @unapprovedResources.fetch reset: true 
 
                 $(window).bind "hashchange", (e) => @toggleSubView()
@@ -79,7 +95,7 @@ define ["underscore",
 
                 $("#projects-list").append view.$el
 
-            addUsers: ->  
+            addUsers: -> 
                 @buttonCheck()
                 @flaggedUsers.each (userModel_) =>
                     @addUser userModel_
@@ -90,7 +106,7 @@ define ["underscore",
 
                 $("#users-list").append view.$el
 
-            addResources: ->  
+            addResources: -> 
                 @buttonCheck()
                 @unapprovedResources.each (resourceModel_) =>
                     @addResource resourceModel_
@@ -99,7 +115,7 @@ define ["underscore",
                 view = new ResourceProjectPreviewView({model:resourceModel_, isAdmin:true}) 
                 view.render()
 
-                $("#resource-list").append view.$el
+                $("#resource-list").append view.$el 
 
             toggleSubView: -> 
                 @currentView = window.location.hash.substring(1)
@@ -121,3 +137,26 @@ define ["underscore",
                     else 
                         @$projects.show()
                         @$projectsBTN.addClass "active"
+
+                @checkHash()
+                @buttonCheck()
+
+            checkHash:->
+                console.log 'checkHash', @resourcesLoaded, @currentView 
+                if @resourcesLoaded >= 3
+                    if (@flaggedProjects.length is 0) and (@flaggedUsers.length is 0) and (@unapprovedResources.length is 0 )
+                        # display some nothing here message
+                        alert 'No items to administer'
+                    else
+                        switch @currentView 
+                            when "users"
+                                if @flaggedUsers.length is 0 
+                                    window.location.hash = if @flaggedProjects.length > 0 then "projects" else "resources"
+                            when "resources" 
+                                if @unapprovedResources.length is 0 
+                                    window.location.hash = if @flaggedProjects.length > 0 then "projects" else "users"
+                            else 
+                                console.log 'check hash ', @flaggedProjects.length
+                                if @flaggedProjects.length is 0 
+                                    window.location.hash = if @flaggedUsers.length > 0 then "users" else "resources"
+                    #

@@ -1,6 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "resource-project-view", "views/partials-project/ProjectMemberListItemView", "collection/FlaggedProjectCollection", "collection/FlaggedUserCollection", "collection/UnapprovedResourcesCollection", "abstract-view"], function(_, Backbone, $, temp, ResourceProjectPreviewView, ProjectMemberListItemView, FlaggedProjectCollection, FlaggedUserCollection, UnapprovedResourcesCollection, AbstractView) {
   var CBUAdminView;
   return CBUAdminView = AbstractView.extend({
+    resourcesLoaded: 0,
     initialize: function(options_) {
       var options;
       options = options_;
@@ -21,6 +22,7 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       return $(this.parent).append(this.$el);
     },
     buttonCheck: function() {
+      this.resourcesLoaded++;
       if (this.flaggedProjects.length === 0) {
         this.$projectsBTN.hide();
       } else {
@@ -32,31 +34,57 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
         this.$usersBTN.show();
       }
       if (this.unapprovedResources.length === 0) {
-        return this.$resourcesBTN.hide();
+        this.$resourcesBTN.hide();
       } else {
-        return this.$resourcesBTN.show();
+        this.$resourcesBTN.show();
+      }
+      return this.checkHash();
+    },
+    updateView: function(type_) {
+      console.log('updateView', type_, this.flaggedProjects.length);
+      switch (type_) {
+        case 'project':
+          if (this.flaggedProjects.length === 0) {
+            return this.checkHash();
+          }
+          break;
+        case 'resource':
+          if (this.unapprovedResources.length === 0) {
+            return this.checkHash();
+          }
+          break;
+        case 'user':
+          if (this.flaggedUsers.length === 0) {
+            return this.checkHash();
+          }
       }
     },
     onTemplateLoad: function() {
       var _this = this;
       this.$projects = $("#flagged-projects");
       this.$users = $("#flagged-users");
-      this.$resources = $("#approved-resource");
+      this.$resources = $("#approve-resources");
       this.$projectsBTN = $("#projects-btn");
       this.$usersBTN = $("#users-btn");
       this.$resourcesBTN = $("#resources-btn");
       this.flaggedProjects.on("reset", this.addProjects, this);
-      this.flaggedProjects.on("remove", this.buttonCheck, this);
+      this.flaggedProjects.on("remove", (function() {
+        return _this.updateView('project');
+      }), this);
       this.flaggedProjects.fetch({
         reset: true
       });
       this.flaggedUsers.on("reset", this.addUsers, this);
-      this.flaggedUsers.on("remove", this.buttonCheck, this);
+      this.flaggedUsers.on("remove", (function() {
+        return _this.updateView('user');
+      }), this);
       this.flaggedUsers.fetch({
         reset: true
       });
       this.unapprovedResources.on("reset", this.addResources, this);
-      this.unapprovedResources.on("remove", this.buttonCheck, this);
+      this.unapprovedResources.on("remove", (function() {
+        return _this.updateView('resource');
+      }), this);
       this.unapprovedResources.fetch({
         reset: true
       });
@@ -131,13 +159,43 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       switch (this.currentView) {
         case "users":
           this.$users.show();
-          return this.$usersBTN.addClass("active");
+          this.$usersBTN.addClass("active");
+          break;
         case "resources":
           this.$resources.show();
-          return this.$resourcesBTN.addClass("active");
+          this.$resourcesBTN.addClass("active");
+          break;
         default:
           this.$projects.show();
-          return this.$projectsBTN.addClass("active");
+          this.$projectsBTN.addClass("active");
+      }
+      this.checkHash();
+      return this.buttonCheck();
+    },
+    checkHash: function() {
+      console.log('checkHash', this.resourcesLoaded, this.currentView);
+      if (this.resourcesLoaded >= 3) {
+        if ((this.flaggedProjects.length === 0) && (this.flaggedUsers.length === 0) && (this.unapprovedResources.length === 0)) {
+          return alert('No items to administer');
+        } else {
+          switch (this.currentView) {
+            case "users":
+              if (this.flaggedUsers.length === 0) {
+                return window.location.hash = this.flaggedProjects.length > 0 ? "projects" : "resources";
+              }
+              break;
+            case "resources":
+              if (this.unapprovedResources.length === 0) {
+                return window.location.hash = this.flaggedProjects.length > 0 ? "projects" : "users";
+              }
+              break;
+            default:
+              console.log('check hash ', this.flaggedProjects.length);
+              if (this.flaggedProjects.length === 0) {
+                return window.location.hash = this.flaggedUsers.length > 0 ? "users" : "resources";
+              }
+          }
+        }
       }
     }
   });

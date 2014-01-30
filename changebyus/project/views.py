@@ -30,7 +30,7 @@ Web facing views for interacting with projects.
 @project_view.route('/<project_id>/admin')
 @project_view.route('/<project_id>')
 @project_exists
-@valid_project_membership
+# @valid_project_membership
 def project_view_id(project_id):
     """
     ABOUT:

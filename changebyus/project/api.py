@@ -231,7 +231,7 @@ def api_get_project_slug(project_slug):
 
 @project_api.route('/<project_id>')
 @project_exists
-@valid_project_membership
+# @valid_project_membership
 def api_get_project(project_id):
     """Get project by project_id
 

@@ -70,6 +70,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         "project/:id/stripe/:sid/edit": "stripeEdit",
         "project/:id/fundraising": "fundraising",
         "resource/:id": "resource",
+        "resource/:id/admin": "resourceAdmin",
         "city/:id": "city",
         "user/:id": "user",
         "discover": "discover",
@@ -121,6 +122,17 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         };
         config.isResource = true;
         return window.CBUAppView = new CBUProjectView(config);
+      },
+      resourceAdmin: function(id_) {
+        if (userID) {
+          config.model = {
+            id: id_
+          };
+          config.isResource = true;
+          return window.CBUAppView = new CBUProjectOwnerView(config);
+        } else {
+          return window.location.href = "/login";
+        }
       },
       city: function(id_) {
         config.model = {

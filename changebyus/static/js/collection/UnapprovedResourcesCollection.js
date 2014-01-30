@@ -3,7 +3,7 @@ define(["underscore", "backbone", "model/ProjectModel"], function(_, Backbone, P
   return UnapprovedResourcesCollection = Backbone.Collection.extend({
     model: ProjectModel,
     url: function() {
-      return "/api/project/list?is_resource=true&";
+      return "/api/resource/list/unapproved&";
     },
     parse: function(response_) {
       if (response_.success) {

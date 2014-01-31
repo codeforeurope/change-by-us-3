@@ -117,8 +117,7 @@ define ["underscore",
                 $("#resource-list").append view.$el 
 
             toggleSubView: -> 
-                @currentView = window.location.hash.substring(1)
-                onPageElementsLoad()
+                @currentView = window.location.hash.substring(1) 
 
                 for v in [@$projects,@$users,@$resources]
                     v.hide()
@@ -139,6 +138,7 @@ define ["underscore",
 
                 @checkHash()
                 @buttonCheck()
+                onPageElementsLoad()
 
             checkHash:->
                 if @resourcesLoaded >= 3

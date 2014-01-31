@@ -170,6 +170,8 @@ define ["underscore",
                         @projectDiscussionsView.show()
                         @$discussionBTN.addClass "active" 
 
+                onPageElementsLoad()
+
             updateCount:(count_)->
                 @projectDiscussionView.updateCount count_
 

@@ -138,26 +138,33 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       switch (view) {
         case "new-discussion":
           this.projectNewDiscussionView.show();
-          return this.$discussionBTN.addClass("active");
+          this.$discussionBTN.addClass("active");
+          break;
         case "updates":
           this.projectAddUpdateView.show();
-          return this.$updatesBTN.addClass("active");
+          this.$updatesBTN.addClass("active");
+          break;
         case "fundraising":
           this.projectFundraisingView.show();
-          return this.$fundraisingBTN.addClass("active");
+          this.$fundraisingBTN.addClass("active");
+          break;
         case "calendar":
           this.projectCalenderView.show();
-          return this.$calendarBTN.addClass("active");
+          this.$calendarBTN.addClass("active");
+          break;
         case "members":
           this.projectMembersView.show();
-          return this.$membersBTN.addClass("active");
+          this.$membersBTN.addClass("active");
+          break;
         case "info":
           this.projectInfoAppearanceView.show();
-          return this.$infoBTN.addClass("active");
+          this.$infoBTN.addClass("active");
+          break;
         default:
           this.projectDiscussionsView.show();
-          return this.$discussionBTN.addClass("active");
+          this.$discussionBTN.addClass("active");
       }
+      return onPageElementsLoad();
     },
     updateCount: function(count_) {
       return this.projectDiscussionView.updateCount(count_);

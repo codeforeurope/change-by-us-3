@@ -1,3 +1,5 @@
+<% var type = (data.isResource) ? "resource" : "project"; %>
+
 <div class="project">
     <div class="body-container">
         <div class="feature-image slim" style="background-image:url(<%= data.image_url_medium_rect %>);">
@@ -5,7 +7,7 @@
                 <%= data.name %>
             </h1>
             <div class="header-icon public-view">
-                <a href="/project/<%= data.slug %>"> Public View</a>
+                <a href="/<%= type %>/<%= data.slug %>"> Public View</a>
             </div>
         </div>
 

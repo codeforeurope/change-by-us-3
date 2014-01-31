@@ -144,7 +144,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
     toggleSubView: function() {
       var btn, v, _i, _j, _len, _len1, _ref, _ref1;
       this.currentView = window.location.hash.substring(1);
-      onPageElementsLoad();
       _ref = [this.$projects, this.$users, this.$resources];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         v = _ref[_i];
@@ -169,7 +168,8 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
           this.$projectsBTN.addClass("active");
       }
       this.checkHash();
-      return this.buttonCheck();
+      this.buttonCheck();
+      return onPageElementsLoad();
     },
     checkHash: function() {
       if (this.resourcesLoaded >= 3) {

@@ -15,16 +15,18 @@
                 <a href="javascript:void(0)">View Project</a>
                 <div class="menu-toggle"></div>
             </div>
-            <ul class="tabs">
+            <ul class="tabs"> 
                 <li>
                     <a href="#discussions" data-toggle="tab">Discuss</a>
                 </li>
                 <li>
                     <a href="#updates" data-toggle="tab">Updates</a>
                 </li>
+                <% if (!data.isResource){ %>
                 <li>
                     <a href="#fundraising" data-toggle="tab">Fundraising</a>
                 </li>
+                <% } %>
                 <li>
                     <a href="#calendar" data-toggle="tab">Calendar</a>
                 </li>

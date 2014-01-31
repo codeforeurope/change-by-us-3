@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectDiscussionListItemView"], function(_, Backbone, $, temp, ProjectSubView, ProjectDiscussionListItemView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-project/ProjectDiscussionListItemView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectDiscussionListItemView) {
   var ProjectDiscussionsView;
   return ProjectDiscussionsView = ProjectSubView.extend({
     parent: "#project-discussions",

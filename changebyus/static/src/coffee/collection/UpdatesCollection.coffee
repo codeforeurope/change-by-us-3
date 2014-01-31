@@ -3,8 +3,8 @@ define ["underscore", "backbone", "model/UpdateModel"],
         UpdatesCollection = Backbone.Collection.extend 
             model: UpdateModel
             
-            initialize: (options_) ->
-                @id = options_.id
+            initialize: (models_, @options)->
+                @id = @options.id
 
             url: -> 
                 "/api/post/project/#{@id}/updates?sort=created_at&order=desc&"

@@ -2,8 +2,9 @@ define(["underscore", "backbone", "model/UpdateModel"], function(_, Backbone, Up
   var UpdatesCollection;
   return UpdatesCollection = Backbone.Collection.extend({
     model: UpdateModel,
-    initialize: function(options_) {
-      return this.id = options_.id;
+    initialize: function(models_, options) {
+      this.options = options;
+      return this.id = this.options.id;
     },
     url: function() {
       return "/api/post/project/" + this.id + "/updates?sort=created_at&order=desc&";

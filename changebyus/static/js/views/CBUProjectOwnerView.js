@@ -4,7 +4,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
     initialize: function(options_) {
       var options,
         _this = this;
-      console.log('new CBUProjectOwnerView');
       options = options_;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
@@ -23,8 +22,12 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
     },
     render: function() {
       var _this = this;
+      this.viewData = this.model.attributes;
+      this.viewData.isResource = this.isResource;
       this.$el = $("<div class='project-container'/>");
-      this.$el.template(this.templateDir + "/templates/project-owner.html", {}, function() {
+      this.$el.template(this.templateDir + "/templates/project-owner.html", {
+        data: this.viewData
+      }, function() {
         return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
@@ -33,7 +36,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       var _this = this;
       this.$header = $("<div class='project-header'/>");
       this.$header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
-        data: this.model.attributes
+        data: this.viewData
       }, function() {
         return _this.addSubViews();
       });
@@ -50,9 +53,10 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         isOrganizer: this.memberData.organizer,
         view: "admin"
       };
-      projectDiscussionsCollection = new ProjectDiscussionsCollection(config);
-      projectMembersCollection = new ProjectMembersCollection(config);
-      updatesCollection = new UpdatesCollection(config);
+      console.log('config', config);
+      projectDiscussionsCollection = new ProjectDiscussionsCollection([], config);
+      projectMembersCollection = new ProjectMembersCollection([], config);
+      updatesCollection = new UpdatesCollection([], config);
       this.projectDiscussionsView = new ProjectDiscussionsView({
         collection: projectDiscussionsCollection
       });
@@ -64,7 +68,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         collection: updatesCollection,
         model: this.model
       });
-      this.projectFundraisingView = new ProjectFundraisingView(config);
       this.projectCalenderView = new ProjectCalenderView(config);
       this.projectMembersView = new ProjectMembersView({
         collection: projectMembersCollection,
@@ -72,6 +75,15 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         projectID: this.model.id
       });
       this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
+      if (!this.isResource) {
+        this.projectFundraisingView = new ProjectFundraisingView(config);
+      }
+      this.$discussionBTN = $("a[href='#discussions']");
+      this.$updatesBTN = $("a[href='#updates']");
+      this.$fundraisingBTN = $("a[href='#fundraising']");
+      this.$calendarBTN = $("a[href='#calendar']");
+      this.$membersBTN = $("a[href='#members']");
+      this.$infoBTN = $("a[href='#info']");
       projectDiscussionsCollection.on('add remove', function(m_, c_) {
         return _this.updateCount(c_.length);
       });
@@ -79,12 +91,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         return _this.updateCount(c_.length);
       });
       this.projectDiscussionsView.loadData();
-      this.discussionBTN = $("a[href='#discussions']");
-      this.updatesBTN = $("a[href='#updates']");
-      this.fundraisingBTN = $("a[href='#fundraising']");
-      this.calendarBTN = $("a[href='#calendar']");
-      this.membersBTN = $("a[href='#members']");
-      this.infoBTN = $("a[href='#info']");
       this.projectDiscussionsView.on('DISCUSSION_CLICK', function(arg_) {
         return window.location.hash = "discussion/" + arg_.model.id;
       });
@@ -100,7 +106,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       return this.$el.prepend(this.$header);
     },
     toggleSubView: function() {
-      var btn, id, slug, stripeAccount, v, view, _i, _j, _len, _len1, _ref, _ref1;
+      var btn, id, slug, stripeAccount, v, view, views, _i, _j, _len, _len1, _ref;
       view = window.location.hash.substring(1);
       slug = this.model.get('slug');
       stripeAccount = this.model.get("stripe_account");
@@ -109,45 +115,48 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         window.location.href = "/project/" + slug + "/fundraising";
         return;
       }
-      _ref = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectFundraisingView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        v = _ref[_i];
+      views = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
+      if (!this.isResource) {
+        views.push(this.projectFundraisingView);
+      }
+      for (_i = 0, _len = views.length; _i < _len; _i++) {
+        v = views[_i];
         v.hide();
       }
-      _ref1 = [this.discussionBTN, this.updatesBTN, this.fundraisingBTN, this.calendarBTN, this.membersBTN, this.infoBTN];
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        btn = _ref1[_j];
+      _ref = [this.$discussionBTN, this.$updatesBTN, this.$fundraisingBTN, this.$calendarBTN, this.$membersBTN, this.$infoBTN];
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        btn = _ref[_j];
         btn.removeClass("active");
       }
       if (view.indexOf("discussion/") > -1) {
         id = view.split('/')[1];
         this.projectDiscussionView.updateDiscussion(id);
         this.projectDiscussionView.show();
-        this.discussionBTN.addClass("active");
+        this.$discussionBTN.addClass("active");
         return;
       }
       switch (view) {
         case "new-discussion":
           this.projectNewDiscussionView.show();
-          return this.discussionBTN.addClass("active");
+          return this.$discussionBTN.addClass("active");
         case "updates":
           this.projectAddUpdateView.show();
-          return this.updatesBTN.addClass("active");
+          return this.$updatesBTN.addClass("active");
         case "fundraising":
           this.projectFundraisingView.show();
-          return this.fundraisingBTN.addClass("active");
+          return this.$fundraisingBTN.addClass("active");
         case "calendar":
           this.projectCalenderView.show();
-          return this.calendarBTN.addClass("active");
+          return this.$calendarBTN.addClass("active");
         case "members":
           this.projectMembersView.show();
-          return this.membersBTN.addClass("active");
+          return this.$membersBTN.addClass("active");
         case "info":
           this.projectInfoAppearanceView.show();
-          return this.infoBTN.addClass("active");
+          return this.$infoBTN.addClass("active");
         default:
           this.projectDiscussionsView.show();
-          return this.discussionBTN.addClass("active");
+          return this.$discussionBTN.addClass("active");
       }
     },
     updateCount: function(count_) {

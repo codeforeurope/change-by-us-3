@@ -4,8 +4,8 @@ define ["underscore", "backbone", "model/UserModel"],
             model: UserModel
             order: 'name'
             
-            initialize: (options_) ->
-                @id = options_.id
+            initialize: (models_, @options)->
+                @id = @options.id
 
             url: ->
                 "/api/project/#{@id}/users"

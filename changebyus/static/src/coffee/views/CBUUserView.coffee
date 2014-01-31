@@ -20,7 +20,7 @@ define ["underscore",
             ownedProjects:null
 
             initialize: (options_) ->
-                options = options_
+                options = options_ 
                 AbstractView::initialize.call @, options
 
                 @model = new UserModel(options.model)
@@ -28,7 +28,7 @@ define ["underscore",
                     @render()
 
             events:
-                "click .flag-user a":"flagUser"
+                "click #flag":"flagUser"
 
             render: ->
                 @$el = $("<div class='user'/>")
@@ -45,26 +45,34 @@ define ["underscore",
                 
                 AbstractView::onTemplateLoad.call @
 
-            loadProjects:->
-                @joinedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/joined-projects"})
+            loadProjects:-> 
+                @joinedProjects = new ProjectListCollection()
+                @joinedProjects.url = "/api/project/user/#{@model.id}/joined-projects"
                 @joinedProjects.on "reset", @addJoined, @
                 @joinedProjects.fetch reset: true
-
-                @ownedProjects = new ProjectListCollection({url:"/api/project/user/#{@model.id}/owned-projects"})
+ 
+                @ownedProjects = new ProjectListCollection()
+                @ownedProjects.url = "/api/project/user/#{@model.id}/owned-projects"
                 @ownedProjects.on "reset", @addOwned, @
                 @ownedProjects.fetch reset: true
 
             flagUser:(e)->
                 e.preventDefault()
                 $.post "/api/user/#{@model.id}/flag", (res_)=>
-                    $('.flag-user').css('opacity',0.25)
-                    console.log res_
+                    $('.flag-user').addClass('disabled-btn')
+                    @$el.unbind "click #flag"
 
             addJoined:->
-                @joinedProjects.each (projectModel) => @addOne projectModel, "#following-list"
+                if @joinedProjects.length is 0
+                    $('.user-following').hide()
+                else
+                    @joinedProjects.each (projectModel) => @addOne projectModel, "#following-list"
 
-            addOwned:->
-                @ownedProjects.each (projectModel) => @addOne projectModel, "#project-list"
+            addOwned:-> 
+                if @ownedProjects.length is 0
+                    $('.user-projects').hide()
+                else 
+                    @ownedProjects.each (projectModel) => @addOne projectModel, "#project-list"
 
             addOne: (projectModel_, parent_) ->
                 view = new ResourceProjectPreviewView(model: projectModel_)

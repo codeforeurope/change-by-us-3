@@ -1,6 +1,5 @@
 <% 
     var type = (data.resource) ? "resource" : "project";
-    console.log('data',data);
 %>
 
 <% if(data.isAdmin){ %>
@@ -50,11 +49,11 @@
 <% if(data.isAdmin){ %>
     <div class="admin-btns">
         <% if(data.resource && data.flags == 0){ %>
-        <a href="#" class="btn btn-medium btn-tertiary approve">Approve</a>
-        <a href="#" class="btn btn-medium btn-warning reject">Reject</a>
+        <a href="javascript:void(0)" class="btn btn-medium btn-tertiary approve">Approve</a>
+        <a href="javascript:void(0)" class="btn btn-medium btn-warning reject">Reject</a>
         <% }else{ %>
-        <a href="#" class="btn btn-medium btn-tertiary unflag">Unflag</a>
-        <a href="#" class="btn btn-medium btn-warning delete-project">Delete</a>
+        <a href="javascript:void(0)" class="btn btn-medium btn-tertiary unflag">Unflag</a>
+        <a href="javascript:void(0)" class="btn btn-medium btn-warning delete-project">Delete</a>
         <% } %>
     </div>
 </div>

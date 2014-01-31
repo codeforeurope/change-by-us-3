@@ -1,7 +1,7 @@
 <div class="body-container">
     <div class="user-header clearfix">
-        <div class="header-icon flag-user">
-            <a href="#"> Flag User</a>
+        <div class="header-icon flag-user"> 
+            <a href="javascript:void(0)" id="flag"> Flag User</a>
         </div>
         <div class="edit invisible">
             <a href="/stream/dashboard#profile" class="btn btn-large btn-secondary">Edit Profile</a>
@@ -42,16 +42,16 @@
             <% } %>
         </div>
     </div>
-    <hr>
+    
     <div class="user-projects clearfix">
+        <hr>
         <h2>
             <%= data.first_name %> <%= data.last_name %>'s Projects</h2>
         <ul id="project-list"></ul>
     </div>
 
-    <hr>
-
     <div class="user-following clearfix">
+        <hr>
         <h2>Following</h2>
         <ul id="following-list"></ul>
     </div>

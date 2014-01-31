@@ -120,21 +120,26 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$memberList.parent().parent().show();
         this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
-      if ((this.team.length === 1) && (this.members.length === 0)) {
-        this.$el.find('.no-results').show();
-      } else {
-        _ref = this.team;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          model = _ref[_i];
-          this.addTeam(model);
-        }
-        _ref1 = this.members;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          model = _ref1[_j];
-          this.addMember(model);
-        }
-        ProjectSubView.prototype.addAll.call(this);
+      /*
+      if (@team.length is 1) and (@members.length is 0)
+          @$el.find('.no-results').show()
+      else
+          @addTeam(model) for model in @team
+          @addMember(model) for model in @members
+          ProjectSubView::addAll.call(@)
+      */
+
+      _ref = this.team;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        model = _ref[_i];
+        this.addTeam(model);
       }
+      _ref1 = this.members;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        model = _ref1[_j];
+        this.addMember(model);
+      }
+      ProjectSubView.prototype.addAll.call(this);
       this.isDataLoaded = true;
       return this.delegateEvents();
     },

@@ -16,7 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
     },
     events: {
-      "click .flag-user a": "flagUser"
+      "click #flag": "flagUser"
     },
     render: function() {
       var _this = this;
@@ -37,16 +37,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     loadProjects: function() {
-      this.joinedProjects = new ProjectListCollection({
-        url: "/api/project/user/" + this.model.id + "/joined-projects"
-      });
+      this.joinedProjects = new ProjectListCollection();
+      this.joinedProjects.url = "/api/project/user/" + this.model.id + "/joined-projects";
       this.joinedProjects.on("reset", this.addJoined, this);
       this.joinedProjects.fetch({
         reset: true
       });
-      this.ownedProjects = new ProjectListCollection({
-        url: "/api/project/user/" + this.model.id + "/owned-projects"
-      });
+      this.ownedProjects = new ProjectListCollection();
+      this.ownedProjects.url = "/api/project/user/" + this.model.id + "/owned-projects";
       this.ownedProjects.on("reset", this.addOwned, this);
       return this.ownedProjects.fetch({
         reset: true
@@ -56,21 +54,29 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       var _this = this;
       e.preventDefault();
       return $.post("/api/user/" + this.model.id + "/flag", function(res_) {
-        $('.flag-user').css('opacity', 0.25);
-        return console.log(res_);
+        $('.flag-user').addClass('disabled-btn');
+        return _this.$el.unbind("click #flag");
       });
     },
     addJoined: function() {
       var _this = this;
-      return this.joinedProjects.each(function(projectModel) {
-        return _this.addOne(projectModel, "#following-list");
-      });
+      if (this.joinedProjects.length === 0) {
+        return $('.user-following').hide();
+      } else {
+        return this.joinedProjects.each(function(projectModel) {
+          return _this.addOne(projectModel, "#following-list");
+        });
+      }
     },
     addOwned: function() {
       var _this = this;
-      return this.ownedProjects.each(function(projectModel) {
-        return _this.addOne(projectModel, "#project-list");
-      });
+      if (this.ownedProjects.length === 0) {
+        return $('.user-projects').hide();
+      } else {
+        return this.ownedProjects.each(function(projectModel) {
+          return _this.addOne(projectModel, "#project-list");
+        });
+      }
     },
     addOne: function(projectModel_, parent_) {
       var view;

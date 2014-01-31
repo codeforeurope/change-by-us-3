@@ -85,15 +85,13 @@ define ["underscore",
                 @joinedProjects = new ProjectListCollection()
                 @joinedProjects.url = "/api/project/user/#{@model.id}/joined-projects"
                 @joinedProjects.on "reset", @addJoined, @
-                @joinedProjects.on "remove", @updateCount, @
-                @joinedProjects.on "change", @updateCount, @
+                @joinedProjects.on "remove change", @updateCount, @ 
                 @joinedProjects.fetch reset: true
 
                 @ownedProjects = new ProjectListCollection()
                 @ownedProjects.url = "/api/project/user/#{@model.id}/owned-projects"
                 @ownedProjects.on "reset", @addOwned, @
-                @ownedProjects.on "remove", @updateCount, @
-                @ownedProjects.on "change", @updateCount, @
+                @ownedProjects.on "remove change", @updateCount, @ 
                 @ownedProjects.fetch reset: true
 
             updateCount:->
@@ -101,6 +99,8 @@ define ["underscore",
                 $('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
 
             addJoined:->
+                if @joinedProjects.length > 0 then @$followView.find('.updates-container').remove()
+
                 @updateCount() 
                 @updateProjects(@joinedProjects.models, @$followView.find(".projects"), false, true)
                 @setPages @joinedProjects.length, @$followView
@@ -108,6 +108,8 @@ define ["underscore",
                 @delegateEvents()
 
             addOwned:->
+                if @ownedProjects.length > 0 then @$manageView.find('.updates-container').remove()
+
                 @updateCount() 
                 @updateProjects(@ownedProjects.models, @$manageView.find(".projects"), true, false)
                 @setPages @ownedProjects.length, @$manageView

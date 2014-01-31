@@ -160,9 +160,10 @@ define ["underscore",
 
             flagProject:(e)-> 
                 e.preventDefault()
+
                 $.post "/api/project/#{@model.id}/flag", (res_)=>
-                    $('.flag-project').css('opacity',0.25)
-                    console.log res_
+                    $('.flag-project').addClass('disabled-btn')
+                    @$el.unbind "click #flag"
 
             joinProject:(e)-> 
                 e.preventDefault()

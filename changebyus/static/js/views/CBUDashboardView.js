@@ -84,16 +84,14 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       this.joinedProjects = new ProjectListCollection();
       this.joinedProjects.url = "/api/project/user/" + this.model.id + "/joined-projects";
       this.joinedProjects.on("reset", this.addJoined, this);
-      this.joinedProjects.on("remove", this.updateCount, this);
-      this.joinedProjects.on("change", this.updateCount, this);
+      this.joinedProjects.on("remove change", this.updateCount, this);
       this.joinedProjects.fetch({
         reset: true
       });
       this.ownedProjects = new ProjectListCollection();
       this.ownedProjects.url = "/api/project/user/" + this.model.id + "/owned-projects";
       this.ownedProjects.on("reset", this.addOwned, this);
-      this.ownedProjects.on("remove", this.updateCount, this);
-      this.ownedProjects.on("change", this.updateCount, this);
+      this.ownedProjects.on("remove change", this.updateCount, this);
       return this.ownedProjects.fetch({
         reset: true
       });
@@ -103,12 +101,18 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       return $('a[href=#manage]').html("Manage (" + this.ownedProjects.length + ")");
     },
     addJoined: function() {
+      if (this.joinedProjects.length > 0) {
+        this.$followView.find('.updates-container').remove();
+      }
       this.updateCount();
       this.updateProjects(this.joinedProjects.models, this.$followView.find(".projects"), false, true);
       this.setPages(this.joinedProjects.length, this.$followView);
       return this.delegateEvents();
     },
     addOwned: function() {
+      if (this.ownedProjects.length > 0) {
+        this.$manageView.find('.updates-container').remove();
+      }
       this.updateCount();
       this.updateProjects(this.ownedProjects.models, this.$manageView.find(".projects"), true, false);
       this.setPages(this.ownedProjects.length, this.$manageView);

@@ -112,12 +112,17 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                     @$memberList.parent().parent().show()
                     @$memberList.parent().parent().find('h4').html(@members.length+' Members')
 
+                ###
                 if (@team.length is 1) and (@members.length is 0)
                     @$el.find('.no-results').show()
                 else
                     @addTeam(model) for model in @team
                     @addMember(model) for model in @members
                     ProjectSubView::addAll.call(@)
+                ###
+                @addTeam(model) for model in @team
+                @addMember(model) for model in @members
+                ProjectSubView::addAll.call(@)
 
                 @isDataLoaded = true
                 @delegateEvents()

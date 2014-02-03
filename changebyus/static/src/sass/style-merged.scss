@@ -215,6 +215,11 @@ body {
     line-height: 1.25;
     color: #333333;
     background-color: #F2F2F2; 
+
+    -webkit-font-smoothing: antialiased;
+    -moz-font-smoothing: antialiased;
+    -ms-font-smoothing: antialiased;
+    -o-font-smoothing: antialiased;
 }
 
 /* Main marketing message and sign up button */
@@ -3041,14 +3046,6 @@ a.fileupload-exists {
 
 .header-links {
     padding: 0 20px 20px;
-}
-
-.main-content {
-    //min-height: calc(100% - 188px);
-}
-
-html, body, #page-wrapper {
-    //height: 100%;
 }
 
 /***************************************

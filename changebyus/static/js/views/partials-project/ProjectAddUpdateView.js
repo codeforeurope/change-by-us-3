@@ -8,28 +8,43 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       "click .share-options .styledCheckbox": "shareOption"
     },
     render: function() {
-      var _this = this;
+      var self,
+        _this = this;
       this.$el = $(this.parent);
       this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
+      this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
+      self = this;
+      return document.windowReload = function() {
+        return self.getSocial(false);
+      };
     },
     onTemplateLoad: function() {
-      var _this = this;
       this.$ul = this.$el.find('.updates-container ul');
-      $.get("/api/user/socialinfo", function(response_) {
+      this.getSocial();
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
+    },
+    getSocial: function(addForm_) {
+      var _this = this;
+      if (addForm_ == null) {
+        addForm_ = true;
+      }
+      return $.get("/api/user/socialinfo", function(response_) {
         var e;
         try {
           _this.socialInfo = response_.data;
         } catch (_error) {
           e = _error;
         }
-        return _this.addForm();
+        if (addForm_) {
+          return _this.addForm();
+        } else {
+          return _this.checkSocial(true);
+        }
       });
-      return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     shareToggle: function() {
       return $(".share-options").toggleClass("hide");
@@ -58,6 +73,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         $feedback = $("#feedback").hide();
         $submit = form.$el.find('input[type="submit"]');
         $inputs = $submit.find("input, textarea");
+        _this.$facebook = $("#facebook");
+        _this.$twitter = $("#twitter");
+        _this.$facebookLabel = $("label[for=facebook]");
+        _this.$twitterLabel = $("label[for=twitter]");
         form.beforeSubmit = function(arr_, form_, options_) {
           console.log('beforeSubmit', $feedback);
           $feedback.hide();
@@ -81,16 +100,39 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           width: 18,
           height: 18
         });
-        if (_this.socialInfo.fb_name === "") {
-          $("#facebook").parent().hide();
-          $("label[for=facebook]").hide();
-        }
-        if (_this.socialInfo.twitter_name === "") {
-          $("#twitter").parent().hide();
-          $("label[for=twitter]").hide();
-        }
+        _this.checkSocial();
         return _this.delegateEvents();
       });
+    },
+    checkSocial: function(forceClick_) {
+      var _this = this;
+      if (forceClick_ == null) {
+        forceClick_ = false;
+      }
+      if (this.socialInfo.fb_name === "") {
+        this.$facebook.screwDefaultButtons("disable");
+        this.$facebookLabel.addClass("disabled-btn").click(function() {
+          return _this.socialClick("facebook");
+        });
+      } else {
+        this.$facebook.screwDefaultButtons("enable");
+        if (forceClick_) {
+          this.$facebook.screwDefaultButtons("check");
+        }
+        this.$facebookLabel.removeClass("disabled-btn").unbind("click");
+      }
+      if (this.socialInfo.twitter_name === "") {
+        this.$twitter.screwDefaultButtons("disable");
+        return this.$twitterLabel.addClass("disabled-btn").click(function() {
+          return _this.socialClick("twitter");
+        });
+      } else {
+        this.$twitter.screwDefaultButtons("enable");
+        if (forceClick_) {
+          this.$twitter.screwDefaultButtons("check");
+        }
+        return this.$twitterLabel.removeClass("disabled-btn").unbind("click");
+      }
     },
     addAll: function() {
       var _this = this;
@@ -140,6 +182,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return $("html, body").animate({
         scrollTop: 0
       }, "slow");
+    },
+    socialClick: function(site_) {
+      return popWindow("/social/" + site_ + "/link");
     }
   });
 });

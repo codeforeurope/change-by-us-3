@@ -1,6 +1,6 @@
 define ["underscore", 
         "backbone", 
-        "jquery", 
+        "jquery",  
         "template", 
         "views/partials-discover/BannerSearchView", 
         "collection/ProjectListCollection", 

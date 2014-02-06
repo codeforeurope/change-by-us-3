@@ -165,7 +165,8 @@ def facebook_disconnect():
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
-    return redirect(url_for('stream_view.dashboard_view')+"#profile")
+    host = request.host_url[:-1]
+    return redirect(host+url_for('frontend_view.social_redirect_view', url='reload'))
 
 @facebook_view.route('/authorized')
 @facebook.authorized_handler

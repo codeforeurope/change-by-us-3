@@ -5,14 +5,11 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
             initialize: (options_) ->
                 AbstractView::initialize.call @, options_
                 @viewData = @model.attributes
+                self = @
 
-                $.get "/api/user/socialstatus", (response_)=>
-                    try
-                        @viewData.facebook = response_.data.facebook
-                        @viewData.twitter  = response_.data.twitter
-                    catch e
-                        
-                    @render()
+                @getSocial()
+
+                document.windowReload = -> self.getSocial(false)
 
             events:
                 "click .social-btns a":"socialClick"
@@ -23,10 +20,35 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                 @$el.template @templateDir+"/templates/partials-user/profile-edit-form.html", 
                     {data:@viewData}, => @onTemplateLoaded()
 
+            getSocial:(render_=true)->
+                $.get "/api/user/socialstatus", (response_)=>
+                    try
+                        @viewData.facebook = response_.data.facebook
+                        @viewData.twitter  = response_.data.twitter
+                    catch e
+                         
+                    if render_ then @render() else @checkSocial() 
+
             socialClick:(e)->
                 e.preventDefault()
                 url = $(e.currentTarget).attr("href")
                 popWindow url
+
+            checkSocial:->
+                $twitter = $('.twitter a')
+                $facebook = $('.facebook a')
+
+                console.log '@viewData.facebook', @viewData.facebook, @viewData.twitter
+
+                if @viewData.facebook
+                    $facebook.removeClass('btn-primary').addClass('btn-tertiary').text('Disconnect').attr("href","/social/facebook/disconnect")
+                else
+                    $facebook.addClass('btn-primary').removeClass('btn-tertiary').text('Connect').attr("href","/social/facebook/link")
+
+                if @viewData.twitter
+                    $twitter.removeClass('btn-primary').addClass('btn-tertiary').text('Disconnect').attr("href","/social/twitter/disconnect")
+                else
+                    $twitter.addClass('btn-primary').removeClass('btn-tertiary').text('Connect').attr("href","/social/twitter/link")
 
             onTemplateLoaded:->
                 @ajaxForm()

@@ -184,7 +184,9 @@ def twitter_disconnect():
     if session.has_key('twitter_oauth_tokens'):
         del session['twitter_oauth_tokens']
 
-    return redirect(url_for('stream_view.dashboard_view')+"#profile")
+    #return redirect(url_for('stream_view.dashboard_view')+"#profile")
+    host = request.host_url[:-1]
+    return redirect(host+url_for('frontend_view.social_redirect_view', url='reload'))
 
 
 @twitter_view.route('/authorized')

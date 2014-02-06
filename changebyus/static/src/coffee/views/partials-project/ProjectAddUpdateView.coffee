@@ -28,7 +28,7 @@ define ["underscore",
 
             render: -> 
                 @$el = $(@parent) 
-                @viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+                @viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
                 @$el.template @templateDir+"/templates/partials-project/project-add-update.html",
                     {data: @viewData}, => @onTemplateLoad()
 

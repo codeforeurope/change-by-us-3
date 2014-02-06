@@ -7,15 +7,17 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             isOwned:false
             isFollowed:false
             isAdmin:false
+            isDiscovered:false
 
             initialize: (options_) ->
                 options              = options_
                 AbstractView::initialize.call @, options
-                @viewData            = @model.attributes
-                @viewData.isProject  = options.isProject || @isProject
-                @viewData.isOwned    = options.isOwned || @isOwned
-                @viewData.isFollowed = options.isFollowed || @isFollowed
-                @viewData.isAdmin    = options.isAdmin || @isAdmin 
+                @viewData              = @model.attributes
+                @viewData.isProject    = options.isProject || @isProject
+                @viewData.isOwned      = options.isOwned || @isOwned
+                @viewData.isFollowed   = options.isFollowed || @isFollowed
+                @viewData.isAdmin      = options.isAdmin || @isAdmin 
+                @viewData.isDiscovered = options.isDiscovered || @isDiscovered 
 
             events: 
                 "click .close-x": "close"
@@ -61,7 +63,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             delete:(e)-> 
                 e.preventDefault()
-                confirmation = confirm("Are you sure you want to delete #{@model.get('name')}?");
+                confirmation = confirm("Are you sure you want to delete #{@model.get('name')}?")
                 if confirmation
                     $.ajax(
                         type: "DELETE"
@@ -70,13 +72,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             approve:(e)-> 
                 e.preventDefault()
-                confirmation = confirm("Are you sure you want to approve #{@model.get('name')}?");
+                confirmation = confirm("Are you sure you want to approve #{@model.get('name')}?")
                 if confirmation
                     $.post "/api/resource/#{@model.id}/approve", (res_)=> @onResponce res_
 
             reject:(e)-> 
                 e.preventDefault()
-                confirmation = confirm("Are you sure you want to reject #{@model.get('name')}?");
+                confirmation = confirm("Are you sure you want to reject #{@model.get('name')}?")
                 if confirmation
                     $.ajax(
                         type: "DELETE"

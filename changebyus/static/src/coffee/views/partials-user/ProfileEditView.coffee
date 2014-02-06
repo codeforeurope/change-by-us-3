@@ -38,7 +38,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
             deleteAccount:(e)->
                 e.preventDefault()
-                confirmation = confirm("Are you sure you want to delete your account?");
+                confirmation = confirm("Are you sure you want to delete your account?")
                 if confirmation
                     e.preventDefault()
                     $.ajax(

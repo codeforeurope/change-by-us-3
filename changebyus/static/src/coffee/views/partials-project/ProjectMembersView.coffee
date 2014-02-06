@@ -75,7 +75,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                 else
                     sortBy = @collection.sortBy (model)->
                         model.get('created_at')
-                    sortBy.reverse();
+                    sortBy.reverse()
 
                 $.each sortBy, (k, model) => 
                     roles = model.get("roles")

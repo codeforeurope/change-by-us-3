@@ -6,6 +6,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     isOwned: false,
     isFollowed: false,
     isAdmin: false,
+    isDiscovered: false,
     initialize: function(options_) {
       var options;
       options = options_;
@@ -14,7 +15,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       this.viewData.isProject = options.isProject || this.isProject;
       this.viewData.isOwned = options.isOwned || this.isOwned;
       this.viewData.isFollowed = options.isFollowed || this.isFollowed;
-      return this.viewData.isAdmin = options.isAdmin || this.isAdmin;
+      this.viewData.isAdmin = options.isAdmin || this.isAdmin;
+      return this.viewData.isDiscovered = options.isDiscovered || this.isDiscovered;
     },
     events: {
       "click .close-x": "close",

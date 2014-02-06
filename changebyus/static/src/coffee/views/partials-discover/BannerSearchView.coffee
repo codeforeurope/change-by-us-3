@@ -8,7 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
             category:""
             projects:null
             ajax:null
-            initSend:true
+            autoSend:false
 
             initialize: (options_) ->
                 AbstractView::initialize.call @, options_
@@ -20,7 +20,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 "click #modify":"onToggleVisibility"
                 "click .pill-selection":"onPillSelection"
                 "click .search-inputs .btn":"sendForm"
+                "click .geo-pin":"onGeoClick"
                 "focus #search-input":"onInputFocus"
+                "focus #search-near":"onNearFocus"
                 "keydown #search-input":"onInputEnter"
                 "keydown #search-near":"onInputEnter" 
                 
@@ -48,7 +50,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                                     zips.push {'name':loc.name,'lat':loc.lat,'lon':loc.lon, 'zip':loc.zip}
                             zips
                 ).bind('typeahead:selected', (obj, datum)=>
-                    @locationObj = datum 
+                    @locationObj = datum
                 )
 
                 # deeplink resource select
@@ -56,8 +58,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 
                 $dropkick          = $('#search-range').dropkick()
                 @$resultsModify    = $('.results-modify')
+                @$modifyInput      = @$resultsModify.find('input')
                 @$projectList      = $("#projects-list")
-                @$searchCatagories = $('.search-catagories');
+                @$searchCatagories = $('.search-catagories')
+                @$geoPin           = $('.geo-pin')
                 
                 @autoGetGeoLocation()
                 AbstractView::onTemplateLoad.call @
@@ -98,7 +102,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             addProject:(id_)->
                 projectModel = new ProjectModel({id:id_})
-                view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list"})
+                view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list", isDiscovered:true})
                 view.fetch()
 
             autoGetGeoLocation:->
@@ -107,12 +111,24 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         @handleGetCurrentPosition(loc_)
                     , @sendForm
                 else
-                    @sendForm()
+                    #@sendForm()
+
+            toggleModify:(showSorting_)->
+                @$resultsModify.toggle(!showSorting_)
+                $('.search-toggles').toggle(showSorting_)
+                $('.filter-within').toggle(showSorting_)
 
             ### EVENTS ----------------------------------------------------------------- ###
             onInputFocus:->
                 @category = ""
                 @$searchCatagories.show()
+
+            onNearFocus:->
+                @$geoPin.removeClass "active"
+
+            onGeoClick:->
+                if navigator.geolocation 
+                    @autoGetGeoLocation()
 
             handleGetCurrentPosition:(loc_)->
                 @locationObj.lat = loc_.coords.latitude
@@ -120,9 +136,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
                 url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
                 $.get url, (resp) =>
-                    if resp.success and resp.data.length > 0 then @$searchNear.val resp.data[0].name
-
-                @sendForm()
+                    if resp.success and resp.data.length > 0
+                        @autoSend = true
+                        @$geoPin.addClass "active"
+                        @$searchNear.val resp.data[0].name
+                        @sendForm()
 
             onCategoriesClick:(e)->
                 @category = $(e.currentTarget).html()
@@ -149,14 +167,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         @sortByPopularDistance = 'distance'
  
             onToggleVisibility:(e)->
-                onClick = false
-                if e 
-                    e.preventDefault()
-                    onClick = true
-
-                @$resultsModify.toggle(!onClick)
-                $('.search-toggles').toggle(onClick)
-                $('.filter-within').toggle(onClick)
+                @toggleModify true
+                e.preventDefault()
 
             onInputEnter:(e) ->
                 # console.log 'onInputEnter', e.currentTarget
@@ -165,6 +177,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         $(".tt-suggestion").first().trigger "click"
 
                         if @$searchInput.val() is "" or @$searchCatagories.is(':visible')
+                            # console.log @$searchInput.val()
+                            # console.log "vis", @$searchCatagories.is(':visible')
                             if @$searchCatagories.find('li.active').length > 0
                                 @category = @$searchCatagories.find('li.active').html()
                                 @$searchInput.val @category
@@ -193,6 +207,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     lon: @locationObj.lon
                 }
 
+                modifyInputVal = @$searchNear.val()
+
                 if @ajax then @ajax.abort()
                 @ajax = $.ajax(
                     type: "POST"
@@ -201,12 +217,13 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     dataType: "json" 
                     contentType: "application/json; charset=utf-8"
                 ).done (response_)=>
-                    if response_.success 
-                        if @initSend is false
-                            if @locationObj.name isnt "" then @onToggleVisibility()
-                            @$resultsModify.find('input').val @locationObj.name
-                        @initSend = false
+                    if response_.success
+                        console.log 'response_',response_, @$searchNear.val()
 
+                        @toggleModify @autoSend
+                        @$modifyInput.val modifyInputVal
+
+                        @autoSend = false
                         @index = 0
                         @projects = []
                         size=0

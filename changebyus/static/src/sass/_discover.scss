@@ -21,10 +21,6 @@
             background-image: url("../img/icon_search.jpg");
             background-position: 10px center;
         }
-        &.zip {
-            background-image: url("../img/location-marker.jpg");
-            background-position: 95% center;
-        }
     }
     .search-forms {
         width: 42%;
@@ -37,6 +33,21 @@
         margin-top: 37px;
         padding: 20px 0;
         width: 100%;
+    }
+
+    .geo-pin{
+        background-image: url("../img/location-marker.jpg");
+        position: absolute;
+        cursor: pointer;
+        right: 10px;
+        width: 17px;
+        height: 23px;
+        top: 55px;
+        z-index: 1;
+
+        &.active{ 
+            background-image: url("../img/location-marker-active.jpg");
+        }
     }
 }
 

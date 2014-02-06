@@ -40,36 +40,38 @@
     }
 }
 
-.donation-header{
-    >div{float:left;}
-    .stripe-overlay{
-        width:33%;
+.donation-header {
+    >div {
+        float: left;
+    }
+    .stripe-overlay {
+        width: 33%;
         margin-top: 5px;
-        .progress{
+        .progress {
             width: 80%;
             margin-bottom: 6px;
         }
-        .goal{
+        .goal {
             font-size: 16px;
         }
     }
-    .donation-description{
+    .donation-description {
         width: 47%;
-        h3{
+        h3 {
             @include ellipsis;
             font-weight: normal;
             font-size: 22px;
             margin-top: 0;
         }
-        p{
+        p {
             margin: 0;
             @include font-styling("merriweather", 14px, $gray20, "normal", "regular");
         }
     }
-    .donate-btn{
+    .donate-btn {
         width: 20%;
         text-align: right;
-        .btn-large{
+        .btn-large {
             top: 10px;
             padding: 20px 20px;
         }
@@ -200,13 +202,23 @@
     @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
 }
 
-.project-category {
+.project-bottom {
     position: absolute;
     bottom: 10px;
     left: 10px;
-    @include font-styling("bebas", 18px, $gray65);
-    a {
-        color: #868686;
+
+    .category {
+        @include font-styling("bebas", 18px, $gray65);
+
+        &.discover{
+            color: $primaryColor;
+            display: block;
+            margin-bottom: 2px;
+        }
+    }
+    .location{
+        color: $gray65;
+        font-size: 15px;
     }
 }
 
@@ -223,7 +235,7 @@
     }
 }
 
-.city-container{
+.city-container {
     margin-bottom: 40px;
 }
 
@@ -714,7 +726,7 @@ h2.admin-title {
 .team-members {
     float: right;
     width: auto;
-    .pull-right{
+    .pull-right {
         margin-left: 10px;
         padding-top: 10px;
     }

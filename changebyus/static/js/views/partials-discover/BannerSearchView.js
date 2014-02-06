@@ -11,7 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     category: "",
     projects: null,
     ajax: null,
-    initSend: true,
+    autoSend: false,
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
       this.showResources = window.location.hash.substring(1) === "resources";
@@ -22,7 +22,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       "click #modify": "onToggleVisibility",
       "click .pill-selection": "onPillSelection",
       "click .search-inputs .btn": "sendForm",
+      "click .geo-pin": "onGeoClick",
       "focus #search-input": "onInputFocus",
+      "focus #search-near": "onNearFocus",
       "keydown #search-input": "onInputEnter",
       "keydown #search-near": "onInputEnter"
     },
@@ -74,8 +76,10 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
+      this.$modifyInput = this.$resultsModify.find('input');
       this.$projectList = $("#projects-list");
       this.$searchCatagories = $('.search-catagories');
+      this.$geoPin = $('.geo-pin');
       this.autoGetGeoLocation();
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
@@ -134,7 +138,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       });
       view = new ResourceProjectPreviewView({
         model: projectModel,
-        parent: "#projects-list"
+        parent: "#projects-list",
+        isDiscovered: true
       });
       return view.fetch();
     },
@@ -145,8 +150,13 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           return _this.handleGetCurrentPosition(loc_);
         }, this.sendForm);
       } else {
-        return this.sendForm();
+
       }
+    },
+    toggleModify: function(showSorting_) {
+      this.$resultsModify.toggle(!showSorting_);
+      $('.search-toggles').toggle(showSorting_);
+      return $('.filter-within').toggle(showSorting_);
     },
     /* EVENTS -----------------------------------------------------------------*/
 
@@ -154,18 +164,28 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.category = "";
       return this.$searchCatagories.show();
     },
+    onNearFocus: function() {
+      return this.$geoPin.removeClass("active");
+    },
+    onGeoClick: function() {
+      if (navigator.geolocation) {
+        return this.autoGetGeoLocation();
+      }
+    },
     handleGetCurrentPosition: function(loc_) {
       var url,
         _this = this;
       this.locationObj.lat = loc_.coords.latitude;
       this.locationObj.lon = loc_.coords.longitude;
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
-      $.get(url, function(resp) {
+      return $.get(url, function(resp) {
         if (resp.success && resp.data.length > 0) {
-          return _this.$searchNear.val(resp.data[0].name);
+          _this.autoSend = true;
+          _this.$geoPin.addClass("active");
+          _this.$searchNear.val(resp.data[0].name);
+          return _this.sendForm();
         }
       });
-      return this.sendForm();
     },
     onCategoriesClick: function(e) {
       this.category = $(e.currentTarget).html();
@@ -193,15 +213,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
     },
     onToggleVisibility: function(e) {
-      var onClick;
-      onClick = false;
-      if (e) {
-        e.preventDefault();
-        onClick = true;
-      }
-      this.$resultsModify.toggle(!onClick);
-      $('.search-toggles').toggle(onClick);
-      return $('.filter-within').toggle(onClick);
+      this.toggleModify(true);
+      return e.preventDefault();
     },
     onInputEnter: function(e) {
       if (e.which === 13) {
@@ -224,7 +237,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
     },
     sendForm: function(e) {
-      var dataObj,
+      var dataObj, modifyInputVal,
         _this = this;
       if (e) {
         e.preventDefault();
@@ -240,6 +253,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         lat: this.locationObj.lat,
         lon: this.locationObj.lon
       };
+      modifyInputVal = this.$searchNear.val();
       if (this.ajax) {
         this.ajax.abort();
       }
@@ -252,13 +266,10 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }).done(function(response_) {
         var k, size, t, v, _ref;
         if (response_.success) {
-          if (_this.initSend === false) {
-            if (_this.locationObj.name !== "") {
-              _this.onToggleVisibility();
-            }
-            _this.$resultsModify.find('input').val(_this.locationObj.name);
-          }
-          _this.initSend = false;
+          console.log('response_', response_, _this.$searchNear.val());
+          _this.toggleModify(_this.autoSend);
+          _this.$modifyInput.val(modifyInputVal);
+          _this.autoSend = false;
           _this.index = 0;
           _this.projects = [];
           size = 0;

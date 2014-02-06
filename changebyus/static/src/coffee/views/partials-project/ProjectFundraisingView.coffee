@@ -8,7 +8,7 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
             initialize: (options_) ->
                 options = options_
                 AbstractView::initialize.call @, options
-                @name = options.name || @name;
+                @name = options.name || @name
                 @render()
 
             events:

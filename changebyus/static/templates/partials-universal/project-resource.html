@@ -1,4 +1,5 @@
 <% var type = (data.resource) ? "resource" : "project"; %>
+<% var discoverClass = (data.isDiscovered) ? "discover" : ""; %>
 
 <% if(data.isAdmin){ %>
 <div class="admin-project-square">
@@ -24,7 +25,12 @@
         </div> 
         <div class="project-name"><%= data.name %></div>
         <div class="project-description"><%= data.description %></div>
-        <div class="project-category"><a href="/discover"><%= data.category %></a> </div>
+        <div class="project-bottom">
+            <span class="category <%= discoverClass %>"><%= data.category %></span> 
+            <% if(data.isDiscovered){ %>
+            <span class="location"><%= data.location %></span>
+            <% } %>
+        </div>
         
         <% if(data.isProject){ %>
             <div class="hover-overlay"></div>

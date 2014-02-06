@@ -20,12 +20,12 @@ define ["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
                 # This identifies your website in the createToken call below
                 Stripe.setPublishableKey @model.get('stripe_account').publishable_key
 
-                $('[data-numeric]').payment('restrictNumeric');
-                $('#charge-card-number').payment('formatCardNumber'); 
-                $('#charge-cvc').payment('formatCardCVC');
-                $('#charge-cvc').payment('formatCardCVC');
-                $('#charge-expiry-month').payment('formatMonth');
-                $('#charge-expiry-year').payment('formatYear');
+                $('[data-numeric]').payment('restrictNumeric')
+                $('#charge-card-number').payment('formatCardNumber')
+                $('#charge-cvc').payment('formatCardCVC')
+                $('#charge-cvc').payment('formatCardCVC')
+                $('#charge-expiry-month').payment('formatMonth')
+                $('#charge-expiry-year').payment('formatYear')
                             
                 $form = $("#payment-form")
                 options =

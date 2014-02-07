@@ -3,15 +3,15 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from ..extensions import db
-from ..helpers.crypt import handle_decryption
-from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+from changebyus.extensions import db
+from changebyus.helpers.crypt import handle_decryption
+from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
-from ..helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
+from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
     LocationEnabledEntityMixin, encode_model)
-from ..helpers.stringtools import slugify
-from ..stripe.models import StripeAccount
-from ..user.models import User
+from changebyus.helpers.stringtools import slugify
+from changebyus.stripe.models import StripeAccount
+from changebyus.user.models import User
 from flask import current_app
 from flask.ext.cdn import url_for
 from mongoengine import signals

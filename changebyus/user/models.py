@@ -153,9 +153,11 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     
     # cbu-specific fields
     display_name = db.StringField(max_length=50)
+    slug = db.StringField()
     first_name = db.StringField(max_length=20)
     last_name = db.StringField(max_length=20)
     flags = db.IntField(default=0)
+    
     
     #visible profile information
     bio = db.StringField(max_length=1000)
@@ -219,9 +221,16 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
 
         elif document.__dict__.has_key('_changed_fields'):
             handle_update_encryption(document, document.ENCRYPTED_FIELDS)
-
+            
+        if document.is_new():
+            # ensure it's properly slugged
+            document.slug = slugify( document.display_name )
+        elif document.__dict__.has_key('_changed_fields'):
+            document.slug = slugify( document.display_name )
+        
     @classmethod    
     def post_init(cls, sender, document, **kwargs):
+        print("!!! " +document.display_name)
         handle_decryption(document, document.ENCRYPTED_FIELDS)
 
 

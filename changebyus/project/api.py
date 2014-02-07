@@ -99,12 +99,14 @@ def api_search_projects():
             list of search results
     """    
 
-    text = request.json.get('s')
-    geo_dist = request.json.get('d')
-    lat = request.json.get('lat')
-    lon = request.json.get('lon')
-    cat = request.json.get('cat')
-    search_type = request.json.get('type')
+    req = request.json if request.json else request.args
+
+    text = req.get('s')
+    geo_dist = req.get('d')
+    lat = req.get('lat')
+    lon = req.get('lon')
+    cat = req.get('cat')
+    search_type = req.get('type')
     
     geo_center = [lon, lat]
     

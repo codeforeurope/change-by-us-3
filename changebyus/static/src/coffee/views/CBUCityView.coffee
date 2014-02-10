@@ -18,10 +18,12 @@ define ["underscore",
         CBUCityView = AbstractView.extend
 
             bothLoaded:0
+            delayClear:null
             view:""
             name:""
             projects:[]
             resources:[]
+            both:[]
 
             initialize: (options_) ->
                 options = options_
@@ -41,7 +43,7 @@ define ["underscore",
                             break
 
             render: -> 
-                @viewData = @model.attributes
+                @viewData = @model.attributes 
 
                 @$el = $("<div class='city-container'/>")
                 @$el.template @templateDir+"/templates/city.html", 
@@ -89,6 +91,27 @@ define ["underscore",
                         @updatePage()
                     else 
                         @showBoth()
+
+            loadCityHeader:-> 
+                # loop to ensure that a new background is pulled
+                loop
+                    model = @both[ window.randomInt(@both.length) ]
+                    imgURL = model.get "image_url_large_rect"
+                    console.log 'imgURL', imgURL, new Date()
+                    break unless @lastImgURL is imgURL 
+
+                @lastImgURL = imgURL
+                
+                # preload image to memory to ensure smooth fading
+                $img = $('<img>').attr('src', imgURL)
+                $img.load =>
+                    if @$lastFeatured then @$lastFeatured.fadeOut 'slow', -> $(this).remove()
+                    @$lastFeatured = $("<div>").addClass("feature-rotating-image")
+                    @$featureImage.prepend @$lastFeatured
+                    @$lastFeatured.hide().css("background-image", "url(#{imgURL})").fadeIn()
+
+                if @delayClear then clearInterval @delayClear
+                @delayClear = delay 10000, => @loadCityHeader()
 
             showOnlyProjects:->
                 @$projectsView.find("ul.projects").html ""
@@ -157,8 +180,13 @@ define ["underscore",
                 $("html, body").animate({ scrollTop: 0 }, "slow")
 
             addOne: (id_, parent_) -> 
-                console.log 'addOne', id_, parent_
                 projectModel = new ProjectModel {id:id_}
+                projectModel.bind "change", =>
+                    @both.push projectModel
+
+                    if @delayClear then clearInterval @delayClear
+                    @delayClear = delay 2000, => @loadCityHeader()
+
                 view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
                 view.fetch()
 
@@ -166,13 +194,11 @@ define ["underscore",
             onTemplateLoad:->
                 @name = @model.get('name').split(',')[0]
 
-                @$projectsView = @$el.find('#featured-projects')
+                @$projectsView  = @$el.find('#featured-projects')
                 @$resourcesView = @$el.find('#featured-resources')
-
-                @$moreProjects = @$projectsView.find('.sub-link')
+                @$moreProjects  = @$projectsView.find('.sub-link')
                 @$moreResources = @$resourcesView.find('.sub-link')
-
-                @$hr = $('.city-container hr')
+                @$hr            = $('.city-container hr')
 
                 @$projectsView.find('.sub-link a').html "See More Projects in "+@name
                 @$resourcesView.find('.sub-link a').html "See More Resources in "+@name
@@ -187,20 +213,24 @@ define ["underscore",
             onHeaderLoaded:->
                 id = @model.get("id")
                 config = {id:id}
+                @$featureImage = $(".feature-image")
 
                 @search "project"
                 @search "resource"
 
                 @delegateEvents()
                     
-            onProjectsLoad:(projects_)->
+            onProjectsLoad:(projects_)-> 
                 for k,v of projects_
                     @projects.push v
 
-                if ++@bothLoaded is 2 then @addHashListener()
+                @onBothLoaded()
 
-            onResourcesLoad:(resources_)->
+            onResourcesLoad:(resources_)-> 
                 for k,v of resources_
                     @resources.push v
 
-                 if ++@bothLoaded is 2 then @addHashListener()
+                @onBothLoaded()
+
+            onBothLoaded:->
+                if ++@bothLoaded is 2 then @addHashListener()

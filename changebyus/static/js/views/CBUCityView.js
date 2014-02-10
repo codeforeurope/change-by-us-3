@@ -2,10 +2,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
   var CBUCityView;
   return CBUCityView = AbstractView.extend({
     bothLoaded: 0,
+    delayClear: null,
     view: "",
     name: "",
     projects: [],
     resources: [],
+    both: [],
     initialize: function(options_) {
       var options;
       options = options_;
@@ -93,6 +95,36 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
         default:
           return this.showBoth();
       }
+    },
+    loadCityHeader: function() {
+      var $img, imgURL, model,
+        _this = this;
+      while (true) {
+        model = this.both[window.randomInt(this.both.length)];
+        imgURL = model.get("image_url_large_rect");
+        console.log('imgURL', imgURL, new Date());
+        if (this.lastImgURL !== imgURL) {
+          break;
+        }
+      }
+      this.lastImgURL = imgURL;
+      $img = $('<img>').attr('src', imgURL);
+      $img.load(function() {
+        if (_this.$lastFeatured) {
+          _this.$lastFeatured.fadeOut('slow', function() {
+            return $(this).remove();
+          });
+        }
+        _this.$lastFeatured = $("<div>").addClass("feature-rotating-image");
+        _this.$featureImage.prepend(_this.$lastFeatured);
+        return _this.$lastFeatured.hide().css("background-image", "url(" + imgURL + ")").fadeIn();
+      });
+      if (this.delayClear) {
+        clearInterval(this.delayClear);
+      }
+      return this.delayClear = delay(10000, function() {
+        return _this.loadCityHeader();
+      });
     },
     showOnlyProjects: function() {
       this.$projectsView.find("ul.projects").html("");
@@ -183,10 +215,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       }, "slow");
     },
     addOne: function(id_, parent_) {
-      var projectModel, view;
-      console.log('addOne', id_, parent_);
+      var projectModel, view,
+        _this = this;
       projectModel = new ProjectModel({
         id: id_
+      });
+      projectModel.bind("change", function() {
+        _this.both.push(projectModel);
+        if (_this.delayClear) {
+          clearInterval(_this.delayClear);
+        }
+        return _this.delayClear = delay(2000, function() {
+          return _this.loadCityHeader();
+        });
       });
       view = new ResourceProjectPreviewView({
         model: projectModel,
@@ -222,6 +263,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       config = {
         id: id
       };
+      this.$featureImage = $(".feature-image");
       this.search("project");
       this.search("resource");
       return this.delegateEvents();
@@ -232,9 +274,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
         v = projects_[k];
         this.projects.push(v);
       }
-      if (++this.bothLoaded === 2) {
-        return this.addHashListener();
-      }
+      return this.onBothLoaded();
     },
     onResourcesLoad: function(resources_) {
       var k, v;
@@ -242,6 +282,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
         v = resources_[k];
         this.resources.push(v);
       }
+      return this.onBothLoaded();
+    },
+    onBothLoaded: function() {
       if (++this.bothLoaded === 2) {
         return this.addHashListener();
       }

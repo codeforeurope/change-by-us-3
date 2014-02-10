@@ -225,6 +225,9 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     window.delay = function(time, fn) {
       return setTimeout(fn, time);
     };
+    window.randomInt = function(num_) {
+      return Math.floor(Math.random() * num_);
+    };
     window.arrayToListString = function(arr_) {
       var i, str, _i, _len;
       for (i = _i = 0, _len = arr_.length; _i < _len; i = ++_i) {

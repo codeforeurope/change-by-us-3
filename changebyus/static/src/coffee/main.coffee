@@ -228,6 +228,9 @@ define ["jquery",
             window.delay = (time, fn) ->
                 setTimeout fn, time
 
+            window.randomInt = (num_) ->
+                Math.floor Math.random()*num_
+
             window.arrayToListString = (arr_) ->
                 for str,i in arr_
                     arr_[i] = capitalize(str)

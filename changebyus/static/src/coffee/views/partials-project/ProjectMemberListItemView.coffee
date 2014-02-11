@@ -47,17 +47,19 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                                 @model.set('roles', [value_])
 
             removeUser:->
-                dataObj = { project_id:@projectID, user_id:@model.id}
-                $.ajax(
-                    type: "POST"
-                    url: "/api/project/remove-member"
-                    data: JSON.stringify(dataObj) 
-                    dataType: "json" 
-                    contentType: "application/json; charset=utf-8"
-                ).done (response_)=>
-                    if (response_.success)
-                        @model.collection.remove @model
-                        @$el.remove() 
+                confirmation = confirm("Do you really want to remove this user?")
+                if confirmation
+                    dataObj = { project_id:@projectID, user_id:@model.id}
+                    $.ajax(
+                        type: "POST"
+                        url: "/api/project/remove-member"
+                        data: JSON.stringify(dataObj) 
+                        dataType: "json" 
+                        contentType: "application/json; charset=utf-8"
+                    ).done (response_)=>
+                        if (response_.success)
+                            @model.collection.remove @model
+                            @$el.remove() 
 
             ### EVENTS ---------------------------------------------###
             delete:(e)-> 

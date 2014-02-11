@@ -43,20 +43,23 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addSubViews: function() {
-      var config, projectDiscussionsCollection, projectMembersCollection, updatesCollection,
+      var config, id, projectDiscussionsCollection, projectMembersCollection, updatesCollection,
         _this = this;
+      id = this.model.get("id");
       config = {
-        id: this.model.get("id"),
+        id: id,
         name: this.model.get("name"),
         model: this.model,
         isOwner: this.memberData.owner,
         isOrganizer: this.memberData.organizer,
         view: "admin"
       };
-      console.log('config', config);
-      projectDiscussionsCollection = new ProjectDiscussionsCollection([], config);
-      projectMembersCollection = new ProjectMembersCollection([], config);
-      updatesCollection = new UpdatesCollection([], config);
+      projectDiscussionsCollection = new ProjectDiscussionsCollection();
+      projectMembersCollection = new ProjectMembersCollection();
+      updatesCollection = new UpdatesCollection();
+      projectDiscussionsCollection.id = id;
+      projectMembersCollection.id = id;
+      updatesCollection.id = id;
       this.projectDiscussionsView = new ProjectDiscussionsView({
         collection: projectDiscussionsCollection
       });
@@ -167,6 +170,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       return onPageElementsLoad();
     },
     updateCount: function(count_) {
+      console.log('updateCount');
       return this.projectDiscussionView.updateCount(count_);
     },
     /* GETTER & SETTERS -----------------------------------------------------------------*/

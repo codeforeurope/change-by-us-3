@@ -96,14 +96,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
           return _this.members.push(model);
         } else {
           return _this.team.push(model);
-          /*
-          if (model.id isnt ownerID)
-              @team.push model
-          else
-              if (window.userID isnt ownerID)
-                  @team.push model
-          */
-
         }
       });
       this.$teamList.html('');
@@ -120,15 +112,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$memberList.parent().parent().show();
         this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
-      /*
-      if (@team.length is 1) and (@members.length is 0)
-          @$el.find('.no-results').show()
-      else
-          @addTeam(model) for model in @team
-          @addMember(model) for model in @members
-          ProjectSubView::addAll.call(@)
-      */
-
       _ref = this.team;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         model = _ref[_i];

@@ -17,7 +17,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                     else
                         @delayedCollectionLoad = true
 
-            loadData: ->
+            loadData: -> 
                 if @collection
                     @collection.on "reset", @onCollectionLoad, @
                     @collection.fetch {reset: true}
@@ -26,8 +26,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             noResults:-> 
                 @$el.find('.no-results').show()
 
-            onCollectionLoad:-> 
-                console.log 'ProjectSubView onCollectionLoad'
+            onCollectionLoad:->  
                 @$el.find(".preload").remove()
                 @addAll()
             

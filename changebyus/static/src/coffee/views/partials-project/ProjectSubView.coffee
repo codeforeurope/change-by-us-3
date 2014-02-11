@@ -22,13 +22,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                     @collection.on "reset", @onCollectionLoad, @
                     @collection.fetch {reset: true}
 
-            # override in subview
-            noResults:-> 
-                @$el.find('.no-results').show()
-
             onCollectionLoad:->  
                 @$el.find(".preload").remove()
                 @addAll()
+
+            # override in subview
+            noResults:-> 
+                @$el.find('.no-results').show()
             
             # override in subview
             addOne: (model_) ->

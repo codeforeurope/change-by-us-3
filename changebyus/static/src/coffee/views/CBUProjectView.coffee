@@ -170,7 +170,7 @@ define ["underscore",
                 if @isMember then return
                  
                 if window.userID is ""
-                    window.location = "/login"
+                    window.location.href = "/login"
                 else
                     id    = @model.get("id")
                     $join = $(".project-footer .btn")

@@ -169,7 +169,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return;
       }
       if (window.userID === "") {
-        return window.location = "/login";
+        return window.location.href = "/login";
       } else {
         id = this.model.get("id");
         $join = $(".project-footer .btn");

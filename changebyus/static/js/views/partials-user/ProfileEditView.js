@@ -85,7 +85,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           url: "/api/user/" + this.model.id
         }).done(function(res_) {
           if (res_.success) {
-            return window.location = "/";
+            return window.location.href = "/";
           }
         });
       }

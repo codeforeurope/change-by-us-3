@@ -42,6 +42,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
       });
       return this.$projects.append(view.$el);
     },
+    noResults: function() {
+      return this.$el.find('.no-results').show();
+    },
     /* EVENTS ---------------------------------------------*/
 
     onTemplateLoad: function() {

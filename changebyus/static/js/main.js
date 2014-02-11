@@ -199,6 +199,9 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     $cloneLast = $('.resp-append-last');
     $clone.clone().appendTo($('.slicknav_nav'));
     $cloneLast.clone().appendTo($('.slicknav_nav'));
+    $(".logged-in .user-avatar").click(function(e) {
+      return window.location.href = "/discover";
+    });
     /* LOG OUT*/
 
     $("a[href='/logout']").click(function(e) {

@@ -44,7 +44,10 @@ define ["underscore",
                 view = new UpdateListItemView({model: model_, isStream:true, isMember:true})
                 @$projects.append view.$el 
 
-            ### EVENTS ---------------------------------------------###
+            noResults:-> 
+                @$el.find('.no-results').show()
+
+            ### EVENTS ---------------------------------------------### 
             onTemplateLoad: ->
                 @$container = @$el.find('.body-container')
                 @collection.on "reset", @onCollectionLoad, @
@@ -52,7 +55,7 @@ define ["underscore",
 
                 AbstractView::onTemplateLoad.call @
 
-            onCollectionLoad:->
+            onCollectionLoad:->  
                 @$el.find(".preload").remove()
                 @addAll()
 

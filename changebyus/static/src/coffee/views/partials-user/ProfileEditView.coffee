@@ -68,7 +68,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                         url: "/api/user/#{@model.id}"
                     ).done (res_)=>
                         if res_.success
-                           window.location = "/"
+                           window.location.href = "/"
 
             ajaxForm: ->
                 $('.fileupload').fileupload({uploadtype: 'image'})

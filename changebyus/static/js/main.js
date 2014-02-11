@@ -273,7 +273,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         var mainContentHeight, topNavHeight;
         topNavHeight = $topnav.height();
         mainContentHeight = $mainContent.height();
-        footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
+        footerHeight = $footer.height() + 140;
         if ((topNavHeight + mainContentHeight + footerHeight) < $window.height()) {
           return $footer.css({
             position: "fixed"

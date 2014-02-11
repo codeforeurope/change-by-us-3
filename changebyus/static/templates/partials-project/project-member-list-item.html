@@ -25,8 +25,7 @@
         <span><%= data.bio %></span> 
     </div>
     <div class="member-roles grey">
-        <% if (data.view == "admin"){ %>   
-             
+        <% if (data.view == "admin"){ %>    
                 <select name="category" id="<%= data.sid %>">
                 <% _.each(["Project Owner", "Organizer", "Member"], function(i) { %>
                      <% var roleMatch = false %>

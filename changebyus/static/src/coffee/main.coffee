@@ -264,7 +264,7 @@ define ["jquery",
                 debounce = delay 10, ->
                     topNavHeight      = $topnav.height()
                     mainContentHeight = $mainContent.height()
-                    footerHeight      = parseInt($footer.height()) + parseInt($footer.css('margin-top'))
+                    footerHeight      = $footer.height() + 140 #parseInt($footer.css('margin-top'))
 
                     if (topNavHeight+mainContentHeight+footerHeight) < $window.height()
                         $footer.css position: "fixed"

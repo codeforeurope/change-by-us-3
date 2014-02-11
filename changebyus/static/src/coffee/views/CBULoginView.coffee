@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], 
-    (_, Backbone, $, temp, valid, AbstractView) ->
+define ["underscore", "backbone", "jquery", "template", "validate", "abstract-view", "views/partials-universal/ForgotPasswordModalView"], 
+    (_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) ->
         CBUDLoginView = AbstractView.extend
             
             initialize: (options_) ->
@@ -8,6 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 
             events:
                 "click .btn-info":"popUp"
+                "click #forgot-password":"forgotPassword"
 
             render: -> 
                 @$el = $("<div class='login'/>")
@@ -22,6 +23,10 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
                 e.preventDefault()
                 url = $(e.currentTarget).attr("href")
                 popWindow url
+
+            forgotPassword:(e)->
+                e.preventDefault()
+                forgotPasswordModalView = new ForgotPasswordModalView()
 
             ajaxForm: -> 
                 $submit   = $("input[type='submit']")

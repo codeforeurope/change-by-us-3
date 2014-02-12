@@ -4,7 +4,7 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-from ..extensions import db
+from changebyus.extensions import db
 from flask import current_app as app
 from flask_mongoutils import object_to_dict
 from itertools import groupby

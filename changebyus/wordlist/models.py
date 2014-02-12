@@ -3,9 +3,8 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from ..extensions import db
-from ..helpers.mixin import EntityMixin
-from flask import current_app
+from changebyus.extensions import db
+from changebyus.helpers.mixin import EntityMixin
 from mongoengine import signals
 
 class WordList(db.Document, EntityMixin):

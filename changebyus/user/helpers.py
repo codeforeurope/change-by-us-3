@@ -4,7 +4,7 @@ from .models import User, UserNotifications
 from changebyus.project.models import UserProjectLink
 from mongoengine.errors import NotUniqueError
 
-from flask import current_app
+from flask import current_app as app
 from flask.ext.security.utils import ( encrypt_password, verify_password,
                                        verify_and_update_password )
 
@@ -117,8 +117,8 @@ def _create_user(email=None,
 
         # Not really an error but logging just in case
         infoStr = "Unable to create user with email {0} and display name {1}.".format(email, display_name)
-        current_app.logger.info(infoStr)
-        current_app.logger.exception(e)
+        app.logger.info(infoStr)
+        app.logger.exception(e)
 
         return None
         
@@ -165,7 +165,7 @@ def _add_twitter(user_id=None,
     
     user = User.objects.with_id(user_id)
     if user is None:
-        current_app.logger.warning("Tried to add twitter credentials to non-existent user {0}".format(user_id))
+        app.logger.warning("Tried to add twitter credentials to non-existent user {0}".format(user_id))
         return False
 
     user.twitter_id = twitter_id
@@ -193,7 +193,7 @@ def _add_facebook(user_id=None,
 
     user = User.objects.with_id(user_id)
     if user is None:
-        current_app.logger.warning("Tried to add facebook credentials to non-existent user {0}".format(user_id))
+        app.logger.warning("Tried to add facebook credentials to non-existent user {0}".format(user_id))
         return False
 
     user.facebook_id = facebook_id
@@ -221,7 +221,7 @@ def _get_user_by_email(email=None):
 
     if user.count() > 1:
         errStr = "ERROR, email {0} is in the User system twice.".format(email)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
         return None
 
     return user.first()

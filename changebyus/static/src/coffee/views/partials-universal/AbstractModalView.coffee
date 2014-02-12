@@ -3,7 +3,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
         AbstractModalView = AbstractView.extend
 
             parent:'body'
-        
+            
             initialize: (options_) ->
                 $('body').css('overflow', 'hidden')
                 AbstractView::initialize.call @, options_

@@ -200,7 +200,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     $clone.clone().appendTo($('.slicknav_nav'));
     $cloneLast.clone().appendTo($('.slicknav_nav'));
     $(".logged-in .user-avatar").click(function(e) {
-      return window.location.href = "/stream/dashboard#profile";
+      return window.location.href = "/stream/dashboard";
     });
     /* LOG OUT*/
 

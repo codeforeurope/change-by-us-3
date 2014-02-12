@@ -107,8 +107,11 @@ define ["underscore",
                 if @isMember is false and @model.get("private")
                     @notMember()
                 else
-                    @updatesCollection        = new UpdatesCollection([],config)  
-                    @projectMembersCollection = new ProjectMembersCollection([],config)
+                    @updatesCollection           = new UpdatesCollection()
+                    @updatesCollection.id        = id
+                    
+                    @projectMembersCollection    = new ProjectMembersCollection()
+                    @projectMembersCollection.id = id
                     @projectMembersCollection.on "reset", @onCollectionLoad, @
                     @projectMembersCollection.fetch {reset: true}
 

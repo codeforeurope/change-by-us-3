@@ -24,13 +24,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         });
       }
     },
-    noResults: function() {
-      return this.$el.find('.no-results').show();
-    },
     onCollectionLoad: function() {
-      console.log('ProjectSubView onCollectionLoad');
       this.$el.find(".preload").remove();
       return this.addAll();
+    },
+    noResults: function() {
+      return this.$el.find('.no-results').show();
     },
     addOne: function(model_) {},
     addAll: function() {

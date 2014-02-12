@@ -207,6 +207,9 @@ define ["jquery",
             $clone.clone().appendTo $('.slicknav_nav')
             $cloneLast.clone().appendTo $('.slicknav_nav')
 
+            $(".logged-in .user-avatar").click (e)->
+                window.location.href = "/discover"
+
             ### LOG OUT ###
             $("a[href='/logout']").click (e)->
                 e.preventDefault()
@@ -264,7 +267,7 @@ define ["jquery",
                 debounce = delay 10, ->
                     topNavHeight      = $topnav.height()
                     mainContentHeight = $mainContent.height()
-                    footerHeight      = parseInt($footer.height()) + parseInt($footer.css('margin-top'))
+                    footerHeight      = $footer.height() + 140 #parseInt($footer.css('margin-top'))
 
                     if (topNavHeight+mainContentHeight+footerHeight) < $window.height()
                         $footer.css position: "fixed"

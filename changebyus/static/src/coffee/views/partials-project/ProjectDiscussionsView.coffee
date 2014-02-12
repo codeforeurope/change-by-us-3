@@ -23,7 +23,7 @@ define ["underscore",
                 @$el = $(@parent)
                 @templateLoaded = true
 
-            onCollectionLoad:-> 
+            onCollectionLoad:->  
                 ProjectSubView::onCollectionLoad.call(@)
 
                 @collection.on 'add', @updateCount, @
@@ -31,7 +31,7 @@ define ["underscore",
                     @addAll()
                     @deleteDiscussion(obj_.id)
                 
-            addAll: ->
+            addAll: -> 
                 if @collection.models.length is 0
                     @$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
                         {}, => AbstractView::onTemplateLoad.call @

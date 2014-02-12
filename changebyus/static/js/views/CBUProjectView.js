@@ -95,8 +95,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       if (this.isMember === false && this.model.get("private")) {
         return this.notMember();
       } else {
-        this.updatesCollection = new UpdatesCollection([], config);
-        this.projectMembersCollection = new ProjectMembersCollection([], config);
+        this.updatesCollection = new UpdatesCollection();
+        this.updatesCollection.id = id;
+        this.projectMembersCollection = new ProjectMembersCollection();
+        this.projectMembersCollection.id = id;
         this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
         return this.projectMembersCollection.fetch({
           reset: true
@@ -169,7 +171,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return;
       }
       if (window.userID === "") {
-        return window.location = "/login";
+        return window.location.href = "/login";
       } else {
         id = this.model.get("id");
         $join = $(".project-footer .btn");

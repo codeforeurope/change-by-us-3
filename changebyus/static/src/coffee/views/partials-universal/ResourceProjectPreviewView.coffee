@@ -37,25 +37,27 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                             
             ### EVENTS ---------------------------------------------###
             onFetch:(r)-> 
-                $(@parent).append @render() 
+                $(@parent).append @render()  
 
-            close:(e)->
-                $closeX = $(e.currentTarget)
-                $closeX.hide()
+            close:(e)-> 
+                confirmation = confirm("Do you really want to leave this project?")
+                if confirmation
+                    $closeX = $(".close-x")
+                    $closeX.hide()
 
-                dataObj = {project_id:@model.id}
-                $.ajax(
-                    type: "POST"
-                    url: "/api/project/leave"
-                    data: JSON.stringify(dataObj) 
-                    dataType: "json" 
-                    contentType: "application/json; charset=utf-8"
-                ).done (response_)=>
-                    if response_.success
-                        @model.collection.remove @model
-                        @$el.remove() 
-                    else
-                        $closeX.show()
+                    dataObj = {project_id:@model.id}
+                    $.ajax(
+                        type: "POST"
+                        url: "/api/project/leave"
+                        data: JSON.stringify(dataObj) 
+                        dataType: "json" 
+                        contentType: "application/json; charset=utf-8"
+                    ).done (response_)=>
+                        if response_.success
+                            @model.collection.remove @model
+                            @$el.remove() 
+                        else
+                            $closeX.show()
 
             unflag:(e)-> 
                 e.preventDefault()

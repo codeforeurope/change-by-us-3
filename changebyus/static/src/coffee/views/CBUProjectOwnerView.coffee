@@ -70,18 +70,22 @@ define ["underscore",
                 AbstractView::onTemplateLoad.call @
                         
             addSubViews:->
+                id = @model.get("id")
                 config = 
-                    id:@model.get("id")
+                    id:id
                     name:@model.get("name")
                     model:@model
                     isOwner:@memberData.owner
                     isOrganizer:@memberData.organizer
                     view:"admin"
-
-                console.log 'config',config
-                projectDiscussionsCollection = new ProjectDiscussionsCollection([],config)
-                projectMembersCollection     = new ProjectMembersCollection([],config)
-                updatesCollection            = new UpdatesCollection([],config)
+ 
+                projectDiscussionsCollection = new ProjectDiscussionsCollection()
+                projectMembersCollection     = new ProjectMembersCollection()
+                updatesCollection            = new UpdatesCollection()
+                
+                projectDiscussionsCollection.id = id
+                projectMembersCollection.id     = id
+                updatesCollection.id            = id
              
                 @projectDiscussionsView      = new ProjectDiscussionsView({collection: projectDiscussionsCollection})
                 @projectDiscussionView       = new ProjectDiscussionView({discussionsCollection: projectDiscussionsCollection})
@@ -119,8 +123,9 @@ define ["underscore",
                 @delegateEvents()
                             
                 @$el.prepend @$header
+ 
 
-            toggleSubView: -> 
+            toggleSubView: ->  
                 view = window.location.hash.substring(1)
                 slug = @model.get('slug')
 
@@ -173,11 +178,12 @@ define ["underscore",
                 onPageElementsLoad()
 
             updateCount:(count_)->
+                console.log 'updateCount'
                 @projectDiscussionView.updateCount count_
 
 
             ### GETTER & SETTERS ----------------------------------------------------------------- ###
-            getMemberStatus:->
+            getMemberStatus:-> 
                 id = @model.get("id")
                 $.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
                     if res_.success

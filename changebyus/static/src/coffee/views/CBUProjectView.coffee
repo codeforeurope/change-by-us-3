@@ -107,8 +107,11 @@ define ["underscore",
                 if @isMember is false and @model.get("private")
                     @notMember()
                 else
-                    @updatesCollection        = new UpdatesCollection([],config)  
-                    @projectMembersCollection = new ProjectMembersCollection([],config)
+                    @updatesCollection           = new UpdatesCollection()
+                    @updatesCollection.id        = id
+                    
+                    @projectMembersCollection    = new ProjectMembersCollection()
+                    @projectMembersCollection.id = id
                     @projectMembersCollection.on "reset", @onCollectionLoad, @
                     @projectMembersCollection.fetch {reset: true}
 
@@ -170,7 +173,7 @@ define ["underscore",
                 if @isMember then return
                  
                 if window.userID is ""
-                    window.location = "/login"
+                    window.location.href = "/login"
                 else
                     id    = @model.get("id")
                     $join = $(".project-footer .btn")

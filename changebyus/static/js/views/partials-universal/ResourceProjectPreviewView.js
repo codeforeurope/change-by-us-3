@@ -44,27 +44,30 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return $(this.parent).append(this.render());
     },
     close: function(e) {
-      var $closeX, dataObj,
+      var $closeX, confirmation, dataObj,
         _this = this;
-      $closeX = $(e.currentTarget);
-      $closeX.hide();
-      dataObj = {
-        project_id: this.model.id
-      };
-      return $.ajax({
-        type: "POST",
-        url: "/api/project/leave",
-        data: JSON.stringify(dataObj),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8"
-      }).done(function(response_) {
-        if (response_.success) {
-          _this.model.collection.remove(_this.model);
-          return _this.$el.remove();
-        } else {
-          return $closeX.show();
-        }
-      });
+      confirmation = confirm("Do you really want to leave this project?");
+      if (confirmation) {
+        $closeX = $(".close-x");
+        $closeX.hide();
+        dataObj = {
+          project_id: this.model.id
+        };
+        return $.ajax({
+          type: "POST",
+          url: "/api/project/leave",
+          data: JSON.stringify(dataObj),
+          dataType: "json",
+          contentType: "application/json; charset=utf-8"
+        }).done(function(response_) {
+          if (response_.success) {
+            _this.model.collection.remove(_this.model);
+            return _this.$el.remove();
+          } else {
+            return $closeX.show();
+          }
+        });
+      }
     },
     unflag: function(e) {
       var _this = this;

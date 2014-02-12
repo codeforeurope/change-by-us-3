@@ -34,16 +34,18 @@
             </div>
             <div class="profile-nav-menu">
               <ul>
-                <li class="resp-append"><a href="/stream/dashboard">Dashboard</a></li>
+
+                <li class="resp-append "><a href="/stream/dashboard">Dashboard</a></li>
                 <li class="resp-append"><a href="/stream/dashboard#profile">Profile</a></li>
                 <li class="resp-append-last"><a href="/logout">Sign Out</a></li> 
               </ul>
             </div> 
         </div>
 
-          <ul class="nav nav-pills pull-right">    
-            <li><a href="/stream" class="header-links">Stream</a></li>
-            <li><a href="/discover" class="header-links">Discover</a></li>
+          <ul class="nav nav-pills pull-right">
+
+            <li><a href="/stream/" class="header-links {% if request.path == '/stream/' %}active{% endif %}">Stream</a></li>
+            <li><a href="/discover" class="header-links {% if request.path == '/discover' %}active{% endif %}">Discover</a></li>
           </ul>
 
           {% else %}
@@ -52,16 +54,20 @@
                   <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
                 </li>
                  <li class="resp-append">
-                  <a href="/create/project">Create a Project</a>
+                  <a href="/create/project" class="header-links {% if request.path == '/create/project' %}active{% endif %}">Create a Project</a>
                 </li>
                 <li class="resp-append">
-                  <a href="/discover">Discover Projects</a>
+                  <a href="/discover" class="header-links {% if request.path == '/discover' %}active{% endif %}">Discover Projects</a>
                 </li>
              </ul>
 
              <ul class="nav nav-pills pull-right">    
-              <li><a href="/signup" class="header-links">Sign Up</a></li>
-              <li><a href="/login" class="header-links">Log In</a></li>
+              <li>
+                <a href="/signup" class="header-links {% if request.path == '/signup' %}active{% endif %}">Sign Up</a>
+              </li>
+              <li>
+                <a href="/login" class="header-links {% if request.path == '/login' %}active{% endif %}">Log In</a>
+              </li>
             </ul>
 
           {% endif %}

@@ -25,12 +25,9 @@
         <span><%= data.bio %></span> 
     </div>
     <div class="member-roles grey">
-        <% if (data.view == "admin"){ %>   
-            <% if (data.roles == "OWNER" || data.roles == "Owner"){ %>
-                Project Owner
-            <% }else{ %>
+        <% if (data.view == "admin"){ %>    
                 <select name="category" id="<%= data.sid %>">
-                <% _.each(["Organizer", "Member"], function(i) { %>
+                <% _.each(["Project Owner", "Organizer", "Member"], function(i) { %>
                      <% var roleMatch = false %>
                      <% _.each(data.roles, function(r) { %>
                         <% if (i.toUpperCase() == r.toUpperCase()){ %> 
@@ -45,7 +42,7 @@
                      <% } %>
                 <% }); %>
                 </select>
-            <% } %>
+ 
         <% }else{ %>
             <%= window.arrayToListString(data.roles) %>
         <% } %>

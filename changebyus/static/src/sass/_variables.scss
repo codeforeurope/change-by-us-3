@@ -16,7 +16,8 @@ $black: black;
 /* colors */
 $primaryColor: #00ced1;
 $primaryHoverColor: #66e2e3;
-$primaryAltHoverColor: #0aafb1;
+$primaryActiveColor: rgba(10, 175, 177, 1);
+$primaryActiveHoverColor: rgba(10, 175, 177, 0.5);
 $warning: rgba(255, 0, 0, 1);
 $warningHover: rgba(255, 0, 0, 0.5);
 
@@ -29,3 +30,6 @@ $buttonTextColor: white;
 $secondaryButtonTextColor: white;
 $secondaryButtonFillColor: #fdfdfd;
 $secondaryButtonBorderColor: #dbdbdb;
+
+/* sizing */
+$loggedInHeight: 87px;

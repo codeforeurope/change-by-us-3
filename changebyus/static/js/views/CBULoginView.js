@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], function(_, Backbone, $, temp, valid, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view", "views/partials-universal/ForgotPasswordModalView"], function(_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) {
   var CBUDLoginView;
   return CBUDLoginView = AbstractView.extend({
     initialize: function(options_) {
@@ -6,7 +6,8 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       return this.render();
     },
     events: {
-      "click .btn-info": "popUp"
+      "click .btn-info": "popUp",
+      "click #forgot-password": "forgotPassword"
     },
     render: function() {
       var _this = this;
@@ -24,6 +25,11 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       e.preventDefault();
       url = $(e.currentTarget).attr("href");
       return popWindow(url);
+    },
+    forgotPassword: function(e) {
+      var forgotPasswordModalView;
+      e.preventDefault();
+      return forgotPasswordModalView = new ForgotPasswordModalView();
     },
     ajaxForm: function() {
       var $feedback, $form, $submit, options,

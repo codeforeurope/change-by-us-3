@@ -142,7 +142,7 @@ def api_get_user(user_id):
             User record if user found
     """
 
-    u = User.objects.with_id(user_id)
+    u = User.objects(id=user_id, active=True).first()
      
     if u is None:
         ret = ReturnStructure( msg = "User not found.",

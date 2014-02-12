@@ -35,8 +35,6 @@ def get_geopoint(s, exact=False):
     else:
         json_data = r.json()
         
-        print(r.url)
-        
         if dataname not in json_data:
             current_app.logger.error("Error on %s: %s" % (r.url, json_data['status']))
         else:
@@ -62,7 +60,7 @@ def get_geoname(lat, lng):
               'lng': lng}
 
     url = current_app.settings.get('GEONAMES').get('COORDINATE_SEARCH_URL')
-    print url, params
+    
     r = requests.get(url, params = params)
     data = []
     dataname = 'geonames'
@@ -71,9 +69,7 @@ def get_geoname(lat, lng):
         current_app.logger.error("Unsuccessful http response from %s" % r.url)
     else:
         json_data = r.json()
-        
-        print(r.url)
-        
+            
         if dataname not in json_data:
             current_app.logger.error("Error on %s: %s" % (r.url, json_data['status']))
         else:

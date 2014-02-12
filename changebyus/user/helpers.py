@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from .models import User, UserNotifications
+from changebyus.project.models import UserProjectLink
 from mongoengine.errors import NotUniqueError
 
 from flask import current_app
@@ -123,9 +124,14 @@ def _create_user(email=None,
         
         
 def _delete_user(user_id):
+    # deactivate user record
     u = User.objects.with_id(user_id)
     u.active = False
     u.save()
+    
+    # delete project memberships
+    up = UserProjectLink.objects(user=u)
+    up.delete()
     
     return True
 

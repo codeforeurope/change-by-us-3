@@ -4,6 +4,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
         urlRoot: "/api/project/"
     
         defaults:
+            active:false
             name: ""
             description: ""
             category: ""

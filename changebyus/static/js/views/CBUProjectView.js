@@ -37,19 +37,27 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var className, templateURL,
         _this = this;
-      this.viewData = this.model.attributes;
-      if (this.isResource) {
-        className = "resource-container";
-        templateURL = "/templates/resource.html";
+      if (this.model.get('active')) {
+        this.viewData = this.model.attributes;
+        if (this.isResource) {
+          className = "resource-container";
+          templateURL = "/templates/resource.html";
+        } else {
+          className = "project-container";
+          templateURL = "/templates/project.html";
+        }
+        this.$el = $("<div class='" + className + "'/>");
+        this.$el.template(this.templateDir + templateURL, {}, function() {
+          return _this.onTemplateLoad();
+        });
+        return $(this.parent).append(this.$el);
       } else {
-        className = "project-container";
-        templateURL = "/templates/project.html";
+        this.$el = $("<div class='not-found'/>");
+        this.$el.template(this.templateDir + "/templates/partials-project/not-found.html", {}, function() {
+          return _this.onTemplateLoad();
+        });
+        return $(this.parent).append(this.$el);
       }
-      this.$el = $("<div class='" + className + "'/>");
-      this.$el.template(this.templateDir + templateURL, {}, function() {
-        return _this.onTemplateLoad();
-      });
-      return $(this.parent).append(this.$el);
     },
     addHeaderView: function() {
       var className, templateURL,

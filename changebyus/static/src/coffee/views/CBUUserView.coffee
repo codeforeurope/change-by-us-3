@@ -31,10 +31,16 @@ define ["underscore",
                 "click #flag":"flagUser"
 
             render: ->
-                @$el = $("<div class='user'/>")
-                @$el.template @templateDir+"/templates/partials-user/user.html",
-                    data: @model.attributes, => @onTemplateLoad()
-                $(@parent).append @$el
+                if @model.get('active')
+                    @$el = $("<div class='user'/>")
+                    @$el.template @templateDir+"/templates/partials-user/user.html",
+                        {data: @model.attributes}, => @onTemplateLoad()
+                    $(@parent).append @$el
+                else
+                    @$el = $("<div class='user'/>")
+                    @$el.template @templateDir+"/templates/partials-user/not-found.html",
+                        {}, => @onTemplateLoad()
+                    $(@parent).append @$el
 
             onTemplateLoad:->
                 if (@model.id is window.userID)

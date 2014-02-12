@@ -58,19 +58,25 @@ define ["underscore",
                 "click  a[href^='#']":"changeHash"
 
             render: ->
-                @viewData = @model.attributes
+                if @model.get('active')
+                    @viewData = @model.attributes
 
-                if @isResource
-                    className   = "resource-container"
-                    templateURL = "/templates/resource.html"
-                else
-                    className   = "project-container"
-                    templateURL = "/templates/project.html"
+                    if @isResource
+                        className   = "resource-container"
+                        templateURL = "/templates/resource.html"
+                    else
+                        className   = "project-container"
+                        templateURL = "/templates/project.html"
 
-                @$el = $("<div class='#{className}'/>")
-                @$el.template @templateDir+templateURL, 
-                    {}, => @onTemplateLoad()
-                $(@parent).append @$el
+                    @$el = $("<div class='#{className}'/>")
+                    @$el.template @templateDir+templateURL, 
+                        {}, => @onTemplateLoad()
+                    $(@parent).append @$el
+                else 
+                    @$el = $("<div class='not-found'/>")
+                    @$el.template @templateDir+"/templates/partials-project/not-found.html",
+                        {}, => @onTemplateLoad()
+                    $(@parent).append @$el
 
             addHeaderView: -> 
                 if @isResource

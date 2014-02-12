@@ -20,13 +20,21 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     render: function() {
       var _this = this;
-      this.$el = $("<div class='user'/>");
-      this.$el.template(this.templateDir + "/templates/partials-user/user.html", {
-        data: this.model.attributes
-      }, function() {
-        return _this.onTemplateLoad();
-      });
-      return $(this.parent).append(this.$el);
+      if (this.model.get('active')) {
+        this.$el = $("<div class='user'/>");
+        this.$el.template(this.templateDir + "/templates/partials-user/user.html", {
+          data: this.model.attributes
+        }, function() {
+          return _this.onTemplateLoad();
+        });
+        return $(this.parent).append(this.$el);
+      } else {
+        this.$el = $("<div class='user'/>");
+        this.$el.template(this.templateDir + "/templates/partials-user/not-found.html", {}, function() {
+          return _this.onTemplateLoad();
+        });
+        return $(this.parent).append(this.$el);
+      }
     },
     onTemplateLoad: function() {
       if (this.model.id === window.userID) {

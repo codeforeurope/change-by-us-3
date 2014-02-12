@@ -2191,8 +2191,9 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
 .nav-pills {
     *zoom: 1;
+    height: 100%;
     img {
-        margin-top: -29px;
+        margin-top: -4px;
     }
     &:after {
         clear: both;
@@ -2211,13 +2212,10 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
         }
         li {
             float: left;
-            padding-right: 40px;
-            padding-top: 8px;
-            padding-bottom: 20px;
-            line-height: 20px;
-            height: 20px;
+            margin-right: 30px;
             font-weight: bold;
-            font-size: 28px;
+            font-size: 28px; 
+            line-height: 76px;
         }
     }
     .open .dropdown-toggle {
@@ -2243,22 +2241,45 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     li {
         font-size: 22px;
     }
+    .body-container{
+        height: 100%;
+    }
 }
 
 .logged-in {
     .topnav {
-        height: 88px;
+        height: $loggedInHeight;
         li {
             font-size: 28px;
         }
     }
+
+    .nav {
+        &.user {
+            height: $loggedInHeight+1;
+        }
+    }
+
+    .nav-pills{
+        >li{
+            line-height: $loggedInHeight;
+        }
+    }
+
+    .profile-nav-header {
+        height: $loggedInHeight;
+        >span {
+            line-height: $loggedInHeight;
+        }
+    }
+
 }
 
 .nav {
-    margin-top: 22px;
+    // margin-top: 22px;
     z-index: 3;
     &.user {
-        height: 87px;
+        //height: $loggedInHeight;
         width: 260px;
         margin: 0;
         &.pull-left {
@@ -2268,10 +2289,10 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
         }
     }
     .profile-nav-header {
-        height: 88px;
+        //height: $loggedInHeight;
         >span {
             color: $white;
-            line-height: 87px;
+            //line-height: $loggedInHeight;
             font-size: 22px;
         }
     }
@@ -2304,7 +2325,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
     }
     &.active {
         .profile-nav-header {
-            background-color: $primaryAltHoverColor;
+            background-color: $primaryActiveColor;
         }
         .profile-nav-menu {
             height: 158px;
@@ -3046,8 +3067,15 @@ a.fileupload-exists {
 }
 
 .header-links {
-    padding: 0 20px 20px;
+    padding: 0 20px;
+    &:hover{
+        background-color: $primaryActiveHoverColor;
+    }
+    &.active{
+        background-color: $primaryActiveColor;
+    }
 }
+
 
 /***************************************
  Overrides and Helpers

@@ -54,7 +54,7 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
         success: function(response_) {
           $form.find("input, textarea").removeAttr("disabled");
           if (response_.success) {
-            return window.location.href = "/";
+            return window.location.href = "/stream/dashboard";
           } else {
             return $feedback.addClass("alert").addClass("alert-danger").html(response_.msg);
           }

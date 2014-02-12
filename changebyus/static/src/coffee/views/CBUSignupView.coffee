@@ -61,7 +61,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                         $form.find("input, textarea").removeAttr("disabled")
                         #if response.success
                         if response_.success
-                            window.location.href = "/"
+                            window.location.href = "/stream/dashboard"
                         else
                             $feedback.addClass("alert").addClass("alert-danger").html response_.msg
  

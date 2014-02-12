@@ -208,7 +208,7 @@ define ["jquery",
             $cloneLast.clone().appendTo $('.slicknav_nav')
 
             $(".logged-in .user-avatar").click (e)->
-                window.location.href = "/discover"
+                window.location.href = "/stream/dashboard"
 
             ### LOG OUT ###
             $("a[href='/logout']").click (e)->

@@ -1,5 +1,5 @@
+# flask + modules
 Flask==0.10.1
--e git+https://github.com/local-projects/flask-cdn.git@10c7577e223a520e1e9d9d40db2711714ea48f76#egg=flask-cdn-lp
 Flask-Login==0.2.6
 Flask-Mail==0.9.0
 Flask-OAuth==0.12
@@ -10,6 +10,12 @@ Flask-Social==1.5.5
 Flask-Testing==0.4
 Flask-Uploads==0.1.3
 Flask-WTF==0.8.4
+
+# modules from dev branches
+-e git+https://github.com/local-projects/flask-cdn.git@10c7577e223a520e1e9d9d40db2711714ea48f76#egg=flask-cdn-lp
+-e git+https://github.com/cybertoast/flask-mongoutils@0.3.6#egg=Flask-Mongoutils-dev
+
+# the rest of the stuff
 Jinja2==2.7.1
 MarkupSafe==0.18
 Pillow==2.1.0

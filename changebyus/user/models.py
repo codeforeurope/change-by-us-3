@@ -9,14 +9,16 @@ from changebyus.helpers.crypt import (handle_decryption, handle_initial_encrypti
 from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
                                            generate_ellipse_png)
 from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, 
-                                      LocationEnabledEntityMixin, encode_model)
+                                      LocationEnabledEntityMixin)
 from changebyus.helpers.stringtools import slugify
 
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security.utils import encrypt_password
-from flask import current_app
+from flask import current_app as app
 from mongoengine import signals
 from flask.ext.cdn import url_for
+from flask_mongoutils import object_to_dict
+
 import os
 
 """
@@ -58,7 +60,7 @@ def gen_image_urls(image_url):
 
     images = {}
 
-    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_USER_IMAGE']
+    root_image = image_url if image_url is not None else app.settings['DEFAULT_USER_IMAGE']
 
     for manipulator in user_images:
         base, extension = os.path.splitext(root_image)
@@ -195,7 +197,11 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
       
     # we override the as_dict to handle the email logic
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
+        resp = object_to_dict(self, app=app, 
+                              exclude_nulls=exclude_nulls, 
+                              recursive=recursive, 
+                              depth=depth, 
+                              **kwargs)
   
         image_urls = gen_image_urls(self.image_name)
 

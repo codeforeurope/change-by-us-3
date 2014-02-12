@@ -8,12 +8,13 @@ from changebyus.helpers.crypt import handle_decryption
 from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
 from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
-    LocationEnabledEntityMixin, encode_model)
+                                      LocationEnabledEntityMixin)
 from changebyus.helpers.stringtools import slugify
 from changebyus.stripe.models import StripeAccount
 from changebyus.user.models import User
-from flask import current_app
+from flask import current_app as app
 from flask.ext.cdn import url_for
+from flask_mongoutils import object_to_dict
 from mongoengine import signals
 
 import os
@@ -79,7 +80,7 @@ def gen_image_urls(image_url):
 
     images = {}
 
-    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
+    root_image = image_url if image_url is not None else app.settings['DEFAULT_PROJECT_IMAGE']
 
     for manipulator in project_images:
         base, extension = os.path.splitext(root_image)
@@ -163,8 +164,12 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
         handle_decryption(document, document.ENCRYPTED_FIELDS)
 
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
-
+        resp = object_to_dict(self, app=app, 
+                      exclude_nulls=exclude_nulls, 
+                      recursive=recursive, 
+                      depth=depth, 
+                      **kwargs)
+                              
         image_urls = gen_image_urls(self.image_name)
 
         for image, url in image_urls.iteritems():
@@ -223,8 +228,12 @@ class ProjectCity(db.Document, EntityMixin, HasActiveEntityMixin, LocationEnable
     website = db.StringField()
 	
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
-
+        resp = object_to_dict(self, app=app, 
+                      exclude_nulls=exclude_nulls, 
+                      recursive=recursive, 
+                      depth=depth, 
+                      **kwargs)
+                              
         image_urls = gen_image_urls(self.image_name)
 
         for image, url in image_urls.iteritems():

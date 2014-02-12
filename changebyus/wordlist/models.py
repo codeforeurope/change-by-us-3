@@ -4,7 +4,7 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from ..extensions import db
-from ..helpers.mixin import EntityMixin, encode_model
+from ..helpers.mixin import EntityMixin
 from flask import current_app
 from mongoengine import signals
 

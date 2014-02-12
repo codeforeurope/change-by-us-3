@@ -3,6 +3,7 @@ define(["underscore", "backbone"], function(_, Backbone) {
   return ProjectModel = Backbone.Model.extend({
     urlRoot: "/api/project/",
     defaults: {
+      active: false,
       name: "",
       description: "",
       category: "",

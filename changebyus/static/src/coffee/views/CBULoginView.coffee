@@ -2,7 +2,10 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
     (_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) ->
         CBUDLoginView = AbstractView.extend
             
-            initialize: (options_) ->
+            # token: null
+
+            initialize: (options_) -> 
+                # @token = options_.token || @token
                 AbstractView::initialize.call @, options_
                 @render()
 
@@ -13,11 +16,16 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
             render: -> 
                 @$el = $("<div class='login'/>")
                 @$el.template @templateDir+"/templates/login.html",
-                    data: @viewData, =>
-                        @ajaxForm() 
-                        onPageElementsLoad()
-
+                    data: @viewData, => @onTemplateLoad() 
                 $(@parent).append @$el
+
+            onTemplateLoad:->
+                AbstractView::onTemplateLoad.call @
+
+                @ajaxForm() 
+                onPageElementsLoad()
+                #if @token isnt null
+                #    forgotPasswordModalView = new ForgotPasswordModalView(@token)
 
             popUp:(e)->
                 e.preventDefault()

@@ -17,7 +17,7 @@ define ["underscore", "backbone"], (_, Backbone) ->
                 posts_update_to_my_project: true
             active: false
             password: ""
-            id: ""
+            id: -1
             public_email: false
             first_name: ""
             display_name: ""

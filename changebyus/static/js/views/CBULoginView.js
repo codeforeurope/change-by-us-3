@@ -15,10 +15,14 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       this.$el.template(this.templateDir + "/templates/login.html", {
         data: this.viewData
       }, function() {
-        _this.ajaxForm();
-        return onPageElementsLoad();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      AbstractView.prototype.onTemplateLoad.call(this);
+      this.ajaxForm();
+      return onPageElementsLoad();
     },
     popUp: function(e) {
       var url;

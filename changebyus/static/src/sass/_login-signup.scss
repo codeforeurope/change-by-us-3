@@ -1,8 +1,8 @@
 .login,
+.reset,
 .signup {
     text-align: center;
     h1 {
-        font-size: 60px;
         font-weight: bold;
         text-align: center;
         padding-top: 25px;
@@ -46,10 +46,17 @@
                 }
             }
         }
-    }
+    } 
     .label {
         @include bebas;
         margin-top: 20px;
+    }
+}
+
+.login,
+.signup {
+    h1 {
+        font-size: 60px;
     }
     .btn {
         padding: 13px 22px;
@@ -59,6 +66,18 @@
     }
     .btn-info {
         width: 47%;
+    }
+} 
+
+.reset {
+    h1 {
+        font-size: 56px;
+    }
+    p {
+        text-align: left;
+    }
+    label {
+        color: black;
     }
 }
 

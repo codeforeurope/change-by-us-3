@@ -116,6 +116,7 @@
 }
 
 .success-modal,
+.reset-modal,
 .embed-modal,
 .create-modal,
 .donate-modal
@@ -157,6 +158,14 @@
         .btn.btn-large {
             padding: 20px 33px;
         }
+    }
+}
+
+.reset-modal{
+    h2{
+        font-size: 2em;
+        text-align: left;
+        margin-bottom: 50px;
     }
 }
 

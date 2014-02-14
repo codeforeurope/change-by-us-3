@@ -4,19 +4,17 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from flask import Blueprint, render_template, redirect, url_for, g
-from flask import current_app, request, session, abort
+from flask import current_app as app, request, session, abort
 from flask.ext.login import login_required, current_user, login_user
 
-from ..helpers.flasktools import gen_blank_ok, jsonify_response, ReturnStructure, as_multidict
+from changebyus.helpers.flasktools import gen_blank_ok, jsonify_response, ReturnStructure, as_multidict
 
 from .api import _capture_event_details, _get_account_balance_percentage
 from .models import StripeAccount, StripeDonation, StripeLink
-from ..user.models import User
+from changebyus.user.models import User
 
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
                            SubmitField, Required, ValidationError, FieldList)
-
-from flask import current_app, session
 
 import yaml
 import os
@@ -78,7 +76,7 @@ def stripe_link():
     if not _check_user_owns_project(user_id=g.user.id,
                                     project_id=project_id):
         warnStr = "User {0} tried to link stripe account to project {1} without being owner".format(g.user.id, project_id)
-        current_app.logger.warning(warnStr)
+        app.logger.warning(warnStr)
         abort(401)
 
     project_name = _get_project_name(project_id)
@@ -103,7 +101,7 @@ def stripe_link():
     params = {
              'response_type': 'code',
              'scope': 'read_write',
-             'client_id': current_app.settings.get('STRIPE').get('CLIENT_ID'),
+             'client_id': app.settings.get('STRIPE').get('CLIENT_ID'),
              'stripe_user[url]': project_url,
              'stripe_user[email]': email,
              'stripe_user[business_type]': biz_type,
@@ -125,7 +123,7 @@ class StripeWebhookForm(Form):
     event_type  = TextField("event_type", validators=[Required()])
     user_id     = TextField("user_id", validators=[Required()])
 
-@stripe_view.route(current_app.settings.get('STRIPE').get('HOOK_URL'), methods=['GET', 'POST'])
+@stripe_view.route(app.settings.get('STRIPE').get('HOOK_URL'), methods=['GET', 'POST'])
 def stripe_hook():
     """
         Provides a callback url for Stripe to hit when there is account activity
@@ -158,13 +156,13 @@ def stripe_hook():
     # If we use webhooks, we can really trust our data, but it's slower to get here
     # if we don't use webhooks, the user experience is a bit better.
     # in an ideal world we would use both, one for ui feeback one to verify.
-    if current_app.settings.get('STRIPE').get('USE_WEBHOOKS'):
-        current_app.logger.debug("Received stripe hook: {0}".format(request.json))
+    if app.settings.get('STRIPE').get('USE_WEBHOOKS'):
+        app.logger.debug("Received stripe hook: {0}".format(request.json))
     else:
-        current_app.logger.debug("Received BUT IGNORING stripe hook: {0}".format(request.json))        
+        app.logger.debug("Received BUT IGNORING stripe hook: {0}".format(request.json))        
 
     # Do we act on or thwo away test data?
-    if current_app.settings.get('STRIPE').get('SKIP_TESTS') and livemode == False:
+    if app.settings.get('STRIPE').get('SKIP_TESTS') and livemode == False:
         # TODO log it
         return gen_blank_ok()
 
@@ -175,7 +173,7 @@ def stripe_hook():
         # TODO log this
         return gen_blank_ok()
 
-    if current_app.settings.get('STRIPE').get('USE_WEBHOOKS'):
+    if app.settings.get('STRIPE').get('USE_WEBHOOKS'):
         _capture_event_details(event_id=event_id, stripe_user_id=user_id)
 
     return gen_blank_ok()
@@ -207,20 +205,20 @@ def stripe_authorized():
 
     if project_id == None or project_name == None:
         errStr = "Stripe /authorized was called without required session details for user {0}".format(g.user.id)
-        current_app.logger.error(errstr)
+        app.logger.error(errstr)
         abort(401)
 
     if not _check_user_owns_project(user_id=g.user.id,
                                     project_id=project_id):
         warnStr = "User {0} tried to authorize stripe account to project {1} without being owner".format(g.user.id, project_id)
-        current_app.logger.warning(warnStr)
+        app.logger.warning(warnStr)
         abort(401)
 
     code   = request.args.get('code')
     data   = {
-             'client_secret': current_app.settings.get('STRIPE').get('API_SECRET'),
+             'client_secret': app.settings.get('STRIPE').get('API_SECRET'),
              'grant_type': 'authorization_code',
-             'client_id': current_app.settings.get('STRIPE').get('CLIENT_ID'),
+             'client_id': app.settings.get('STRIPE').get('CLIENT_ID'),
              'code': code
            }
 
@@ -232,7 +230,7 @@ def stripe_authorized():
         errStr = "Authorize callback was not 200.  out data: {0}, status_code: {1}, text: {2}".format(data,
                                                                                                       resp.status_code,
                                                                                                       resp.text)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
         errStr = "Sorry, strype returned an error.  Please try again."
         #return render_template('stripe_error.html', error=errStr)
         return render_template('index.html', error=errStr)
@@ -265,7 +263,7 @@ def stripe_authorized():
     if stripe_accounts.count() > 0:
         if stripe_accounts.count() > 1:
             errStr = "Error multiple stripe accounts for stripe_user_id {0}".format(stripe_user_id)
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
 
         account = stripe_accounts.first()
 
@@ -284,7 +282,7 @@ def stripe_authorized():
     if not _link_stripe_to_project(project_id, account.id):
         errStr = "Stripe link for project {0} and stripe account.id {1} failed".format(project_id,
                                                                                        account.id)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
 
     # clear out our variable
     del( session['stripe_project_id'] )
@@ -293,7 +291,7 @@ def stripe_authorized():
     infoStr = "Stripe linked stripe account.id {0} to project {1} by user {2}".format(account.id, 
                                                                                       project_id,
                                                                                       g.user.id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return redirect(url_for('project_view.edit_stripe', project_id = project_id, account_id = account.id))
 
@@ -390,7 +388,7 @@ def charge():
         description='Flask Charge'
     )
      
-    if current_app.settings.get('STRIPE').get('USE_WEBHOOKS'):
+    if app.settings.get('STRIPE').get('USE_WEBHOOKS'):
         # this lets us associate a charge to an email address and user when processing
         # via webhooks (callbacks)
 
@@ -403,7 +401,7 @@ def charge():
         link.save()
 
         infoStr = "StripeLink saved for email {0} and customer id {1}.  Awaiting webhook.".format(email, customer_id)
-        current_app.logger.info(infoStr)
+        app.logger.info(infoStr)
 
     else:
 
@@ -413,7 +411,7 @@ def charge():
         if charge_dict['paid'] == False:
 
             infoStr = "Stripe charge failed. {0}".format(charge_dict)
-            current_app.logger.info(infoStr)
+            app.logger.info(infoStr)
             amount = 0
 
         else:
@@ -421,7 +419,7 @@ def charge():
 
             if stripe_account == None:
                 errStr = "Error locating stripe account for donation.  Stripe Account id {0}".format(stripe_user_id)
-                current_app.logger.error(errStr)
+                app.logger.error(errStr)
 
                 abort(500)
 
@@ -446,7 +444,7 @@ def charge():
                 stripe_account.save()
 
                 infoStr = "Completed stripe donation of {0} for account {1}".format(sd.amount, stripe_account)
-                current_app.logger.info(infoStr)
+                app.logger.info(infoStr)
 
     # return render_template('charge.html', amount=(amount/100), project_id=project_id)
     successStr = "Success!"

@@ -3,14 +3,12 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from datetime import datetime
 from mongoengine import signals
 
-from ..extensions import db
-from ..helpers.mixin import EntityMixin, encode_model
-from ..helpers.mongotools import db_list_to_dict_list
-from ..project.models import Project
-from ..user.models import User
+from changebyus.extensions import db
+from changebyus.helpers.mixin import EntityMixin
+from changebyus.project.models import Project
+from changebyus.user.models import User
 
 
 """

@@ -3,7 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, current_app, url_for
+from flask import current_app as app, Blueprint, url_for
 
 from flask.ext.mail import Message
 
@@ -17,9 +17,9 @@ import smtplib
 
 from sets import Set
 
-from ..user.models import User, UserNotifications
-from ..project.models import Project, UserProjectLink
-from ..project.helpers import ( _get_project_organizers, _get_project_members)
+from changebyus.user.models import User, UserNotifications
+from changebyus.project.models import Project, UserProjectLink
+from changebyus.project.helpers import ( _get_project_organizers, _get_project_members)
 
 notifications_api = Blueprint('notificiations_api', __name__, url_prefix='/api/notifications')
 

@@ -4,8 +4,9 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-from ..extensions import db
+from changebyus.extensions import db
 from flask import current_app as app
+from flask_mongoutils import object_to_dict
 from itertools import groupby
 from mongoengine import Document, EmbeddedDocument
 from mongoengine.queryset import QuerySet
@@ -40,11 +41,11 @@ class EntityMixin(object):
         document.updated_at = datetime.datetime.utcnow() 
         
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, 
-                            exclude_nulls=exclude_nulls, 
-                            recursive=recursive, 
-                            depth=depth, 
-                            **kwargs)
+        resp = object_to_dict(self, app=app,
+                              exclude_nulls=exclude_nulls, 
+                              recursive=recursive, 
+                              depth=depth, 
+                              **kwargs)
         return resp
 
 

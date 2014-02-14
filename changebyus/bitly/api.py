@@ -3,7 +3,7 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import Blueprint, current_app
+from flask import Blueprint, current_app as app
 
 import requests
 import yaml
@@ -31,8 +31,8 @@ def _get_bitly_url(original_url):
     """
 
     params = {
-        'login' : current_app.settings.get('BITLY').get('LOGIN'),
-        'apiKey' : current_app.settings.get('BITLY').get('API_KEY'),
+        'login' : app.settings.get('BITLY').get('LOGIN'),
+        'apiKey' : app.settings.get('BITLY').get('API_KEY'),
         'longUrl' : original_url
     }
 
@@ -43,7 +43,7 @@ def _get_bitly_url(original_url):
 
     if json['status_code'] != 200:
         errStr = "Bitly for base url {0} failed: {1}".format(original_url, resp.text)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
 
         return ''
 

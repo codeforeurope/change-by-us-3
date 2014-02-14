@@ -4,8 +4,8 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-from flask import Blueprint, request, render_template, redirect
-from flask import url_for, g, current_app
+from flask import (Blueprint, request, render_template, redirect,
+                   url_for, g, current_app as app)
 
 from flask.ext.cdn_rackspace import upload_rackspace_image
 
@@ -17,25 +17,25 @@ from flask.ext.wtf import (Form, TextField, TextAreaField, FileField,
 from .models import ProjectPost, Project, User, SocialMediaObject
 from .decorators import post_delete_permission, post_edit_permission, post_exists 
 
-from ..facebook.facebook import _post_user_facebook_feed
-from ..twitter.twitter import _post_user_twitter_update
-from ..bitly.api import _get_bitly_url
+from changebyus.facebook.facebook import _post_user_facebook_feed
+from changebyus.twitter.twitter import _post_user_twitter_update
+from changebyus.bitly.api import _get_bitly_url
 
-from ..helpers.mongotools import db_list_to_dict_list
+from changebyus.helpers.mongotools import db_list_to_dict_list
 
-from ..stream.api import _get_user_stream
+from changebyus.stream.api import _get_user_stream
 
-from ..project.helpers import ( _get_user_involved_projects, _get_project_users_and_common_projects,
+from changebyus.project.helpers import ( _get_user_involved_projects, _get_project_users_and_common_projects,
                                 _user_involved_in_project )
 
-from ..project.decorators import ( project_exists, project_member, 
+from changebyus.project.decorators import ( project_exists, project_member, 
                                    _is_organizer as _is_project_organizer )
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
+from changebyus.helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
 
-from ..stripe.api import _get_account_balance_percentage
-from ..twitter.twitter import _get_user_name_and_thumbnail
-from ..facebook.facebook import _get_fb_user_name_and_thumbnail
+from changebyus.stripe.api import _get_account_balance_percentage
+from changebyus.twitter.twitter import _get_user_name_and_thumbnail
+from changebyus.facebook.facebook import _get_fb_user_name_and_thumbnail
 
 from .helpers import _create_project_post
 
@@ -240,7 +240,7 @@ def api_edit_post():
     post.save()
 
     infoStr = "Post {0} edited by {1}.".format(id, g.user.id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return jsonify_response( ReturnStructure( data = post.as_dict() ) )
 
@@ -284,7 +284,7 @@ def api_delete_post():
     post.delete()
 
     infoStr = "User {0} deleted post {1}".format(g.user.id, post_id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return jsonify_response( ReturnStructure( ) )
 
@@ -318,7 +318,7 @@ def api_upload_image():
                                                       msg = msg ) )  
 
     except Exception as e:
-        current_app.logger.exception(e)
+        app.logger.exception(e)
         msg = "An error occured."
         return jsonify_response( ReturnStructure( success = False, 
                                                   msg = msg ) )

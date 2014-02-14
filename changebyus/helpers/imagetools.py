@@ -13,7 +13,7 @@
 
 import os
 from PIL import Image, ImageOps, ImageDraw, ImageFilter
-from flask import current_app
+from flask import current_app as app
 from flask.ext.cdn_rackspace import upload_rackspace_image
 
 class NamedImage():
@@ -68,7 +68,7 @@ def generate_ellipse_png( filepath, size, blurs = 0 ):
         return resource
 
     except IOError as e:
-        current_app.logger.exception(e)
+        app.logger.exception(e)
         return None
 
 
@@ -110,7 +110,7 @@ def generate_thumbnail( filepath, size, blurs = 0 ):
 
     except IOError as e:
 
-        current_app.logger.exception(e)
+        app.logger.exception(e)
         return None
 
 
@@ -156,7 +156,7 @@ def upload_image(photo, manipulators):
                 return None
 
         except Exception as e:
-            current_app.logger.exception(e)
+            app.logger.exception(e)
             return None
 
         file_name = result.name

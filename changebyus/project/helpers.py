@@ -1,19 +1,19 @@
 # -*- coding: utf-8 -*-
 
 
-from flask import g, current_app, request, abort
+from flask import current_app as app, g, request, abort
 
-from ..user.models import User
-from ..helpers.mongotools import db_list_to_dict_list
-from ..helpers.flasktools import jsonify_response, ReturnStructure
-from ..helpers.imagetools import generate_thumbnail, upload_image
-from ..helpers.stringtools import slugify
+from changebyus.user.models import User
+from changebyus.helpers.mongotools import db_list_to_dict_list
+from changebyus.helpers.flasktools import jsonify_response, ReturnStructure
+from changebyus.helpers.imagetools import generate_thumbnail, upload_image
+from changebyus.helpers.stringtools import slugify
 
-from ..stripe.models import StripeAccount
+from changebyus.stripe.models import StripeAccount
 
 from .models import Project, UserProjectLink, Roles, ACTIVE_ROLES, ProjectCategory
  
-from ..wordlist import filter_model
+from changebyus.wordlist import filter_model
 
 import requests
 import simplejson as json
@@ -89,8 +89,8 @@ def _create_project(form):
         p.save()
     except Exception as e:
         infoStr = "Hit race condition saving project with name {0}".format(name)
-        current_app.logger.info(infoStr)
-        current_app.logger.exception(e)
+        app.logger.info(infoStr)
+        app.logger.exception(e)
 
         errStr = "Sorry, the name '{0}' is already in use.".format(name)
         return jsonify_response( ReturnStructure( success = False, 
@@ -114,7 +114,7 @@ def _create_project(form):
 
     p.save()
     infoStr = "User {0} has created project called {1}".format(g.user.id, name)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     from ..post.activity import update_project_activity
     update_project_activity( p.id )
@@ -152,7 +152,7 @@ def _delete_cal(project_id):
     p.save()
 
     infoStr = "Calendar was delete from {0}".format(project_id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
@@ -218,7 +218,7 @@ def _edit_project(form):
     infoStr = "User {0} has edited project {1} with request {2}".format(g.user.id,
                                                                         project_id,
                                                                         str(request.json))
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return jsonify_response( ReturnStructure( data = p.as_dict() ))
 
@@ -257,7 +257,7 @@ def _user_involved_in_project( project_id = None,
     warnStr = "User {0} has role in project {1} but it's of unknown type {2}".format(user_id,
                                                                                      project_id,
                                                                                      upl[0].role)
-    current_app.logger.warn(warnStr)
+    app.logger.warn(warnStr)
     return False
 
 
@@ -501,14 +501,14 @@ def _link_stripe_to_project(project_id=None,
     if stripe_account is None:
         warnStr = "Tried to link non existent stripe account {0} to project {1}".format(stripe_account_id, 
                                                                                         project_id)
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
         return False
 
     if project.stripe_account is not None:
         warnStr = "Tried to link stripe account {0} to project {1} but project has stripe account {2} already".format(stripe_account_id,
                                                                                                                       project_id,
                                                                                                                       project.stripe_account.stripe_user_id)
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
         return False
 
 
@@ -516,7 +516,7 @@ def _link_stripe_to_project(project_id=None,
     project.save()
 
     infoStr = "Stripe account {0} has been linked to project {1}".format(stripe_account_id, project_id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return True
 
@@ -559,13 +559,13 @@ def _unlink_stripe_account(project_id=None):
     project = Project.objects.with_id(project_id)
     if project == None:
         errStr = "Requested unlink of stripe from non existant project {0}".format(project_id)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
 
         return False
 
     if project.stripe_account == None:
         errStr = "Requested unlink of stripe from non project {0} that has no stripe".format(project_id)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
 
         return False
 
@@ -577,7 +577,7 @@ def _unlink_stripe_account(project_id=None):
 
     infoStr = "Unlinking stripe account {0} from project {1}".format(project.stripe_account,
                                                                      project.id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     project.save()
 
@@ -601,7 +601,7 @@ def _check_stripe_account_link(stripe_user_id=None):
 
     if stripe.count() > 1:
         errStr = "Multiple stripe accounts for stripe_user_id {0}".format(stripe_user_id)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
 
     project = Project.objects(stripe_account = stripe.first())
     if project.count() is 0:
@@ -629,7 +629,7 @@ def _leave_project(project_id=None, user_id=None):
     if links.count() > 1:
         warnStr = "Warning, user {0} has multiple user_project_links on project {1}".format(user_id,
                                                                                             project_id)
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
 
     for link in links:
         link.delete()

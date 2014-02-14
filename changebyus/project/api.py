@@ -3,8 +3,8 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import (Blueprint, render_template, redirect, 
-                   request, current_app, g, abort)
+from flask import (current_app as app, Blueprint, render_template, redirect, 
+                   request, g, abort)
 
 from flask.ext.login import login_required, current_user, login_user
 
@@ -226,7 +226,7 @@ def api_get_project_slug(project_slug):
     if p.count() == 0 or p.count() > 1:
         warnStr = "Project of slug {0} returned {1} objects.".format(project_slug,
                                                                      p.count())
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
 
     return jsonify_response( ReturnStructure( data = p[0].as_dict() ))
 
@@ -415,7 +415,7 @@ def api_review_info():
     
     if g.user.id != project.owner.id:
         warnStr = "User {0} tried to review fundraising on project {1}".format(g.user.id, project_id)
-        current_app.logger.warning(warnStr)
+        app.logger.warning(warnStr)
         abort(401)
     
     # we want to pass the fundraiser view the small 160x50 image
@@ -627,7 +627,7 @@ def remove_project_user():
     infoStr = "User {0} is attempting removal of user {1} on project {2}.".format(g.user.id,
                                                                                   user_id,
                                                                                   project_id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return _leave_project(project_id=project_id, user_id=user_id)
 

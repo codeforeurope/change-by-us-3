@@ -107,7 +107,6 @@ define ["jquery",
                     "create/project": "createProject"
                     "create/resource": "createResource"
                     "login": "login"
-                    #"reset/:token": "reset"
                     "signup": "signup"
                     "project": "project"
                     "stream": "stream"
@@ -174,12 +173,6 @@ define ["jquery",
 
                 login: ->
                     window.CBUAppView = new CBULoginView(config)
-
-                ###
-                reset:(token) ->
-                    config.token = token
-                    window.CBUAppView = new CBULoginView(config)
-                ###
 
                 signup: ->
                     window.CBUAppView = new CBUSignupView(config)

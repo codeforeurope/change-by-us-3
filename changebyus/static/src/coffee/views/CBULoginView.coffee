@@ -1,11 +1,8 @@
 define ["underscore", "backbone", "jquery", "template", "validate", "abstract-view", "views/partials-universal/ForgotPasswordModalView"], 
     (_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) ->
         CBUDLoginView = AbstractView.extend
-            
-            # token: null
 
             initialize: (options_) -> 
-                # @token = options_.token || @token
                 AbstractView::initialize.call @, options_
                 @render()
 
@@ -24,8 +21,6 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 
                 @ajaxForm() 
                 onPageElementsLoad()
-                #if @token isnt null
-                #    forgotPasswordModalView = new ForgotPasswordModalView(@token)
 
             popUp:(e)->
                 e.preventDefault()

@@ -166,12 +166,6 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       login: function() {
         return window.CBUAppView = new CBULoginView(config);
       },
-      /*
-      reset:(token) ->
-          config.token = token
-          window.CBUAppView = new CBULoginView(config)
-      */
-
       signup: function() {
         return window.CBUAppView = new CBUSignupView(config);
       },

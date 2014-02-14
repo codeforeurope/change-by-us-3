@@ -1,11 +1,6 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-modal-view"], function(_, Backbone, $, temp, AbstractModalView) {
   var ForgotPasswordModalView;
   return ForgotPasswordModalView = AbstractModalView.extend({
-    /*
-    initialize: (@token) ->
-        AbstractModalView::initialize.call @
-    */
-
     render: function() {
       var _this = this;
       this.$el = $("<div class='modal-fullscreen dark'/>");

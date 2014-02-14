@@ -10,15 +10,7 @@ define ["underscore",
      AbstractModalView) ->
         ForgotPasswordModalView = AbstractModalView.extend
 
-            #token: null
-
-            ###
-            initialize: (@token) ->
-                AbstractModalView::initialize.call @
-            ###
-
-            render: ->
-                #token = if (@token isnt null) then ("/"+@token) else ""
+            render: -> 
                 @$el = $("<div class='modal-fullscreen dark'/>") 
                 @$el.template ("/reset"),
                     {data: @viewData},  =>@onTemplateLoad()

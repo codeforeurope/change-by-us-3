@@ -1,3 +1,5 @@
+var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
+
 define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, ProjectSubView, UpdateListItemView) {
   var UpdatesView;
   return UpdatesView = ProjectSubView.extend({
@@ -5,25 +7,20 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     $ul: null,
     currentData: "",
     isResource: false,
-    initialize: function(options) {
-      ProjectSubView.prototype.initialize.call(this, options);
-      this.members = options.members || this.members;
-      this.viewData.slug = this.model.get('slug');
-      this.viewData.isResource = options.isResource;
-      return this.viewData.isOwnerOrganizer = options.isOwnerOrganizer;
+    isMember: false,
+    initialize: function(options_) {
+      ProjectSubView.prototype.initialize.call(this, options_);
+      this.members = options_.members || this.members;
+      return this.isMember = options_.isMember;
     },
     render: function() {
       var _this = this;
-      console.log('@viewData', this.viewData);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-universal/updates.html", {
-        data: this.viewData
+        data: this.model.attributes
       }, function() {
         return _this.onTemplateLoad();
       });
-    },
-    onTemplateLoad: function() {
-      return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     addAll: function() {
       var length,
@@ -51,11 +48,27 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return onPageElementsLoad();
       });
     },
+    addOne: function(model_) {
+      var m, view;
+      m = moment(model_.get("created_at")).format("MMMM D");
+      if (this.currentDate !== m) {
+        this.newDay(m);
+      }
+      view = new UpdateListItemView({
+        model: model_,
+        isMember: this.isMember
+      });
+      return this.$ul.append(view.$el);
+    },
     addMember: function(model_) {
-      var $member,
+      var $member, roles,
         _this = this;
-      if (model_.get("roles").length === 0) {
+      roles = model_.get("roles");
+      if (roles.length === 0) {
         model_.set("roles", ["Owner"]);
+      }
+      if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
+        return;
       }
       $member = $('<li/>');
       $member.template(this.templateDir + "/templates/partials-universal/member-avatar.html", {
@@ -69,17 +82,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       this.$el.append(this.$currentDay);
       this.$currentDay.find('h4').html(date_);
       return this.$ul = this.$currentDay.find('.bordered-item');
-    },
-    addOne: function(model_) {
-      var m, view;
-      m = moment(model_.get("created_at")).format("MMMM D");
-      if (this.currentDate !== m) {
-        this.newDay(m);
-      }
-      view = new UpdateListItemView({
-        model: model_
-      });
-      return this.$ul.append(view.$el);
     }
   });
 });

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectDiscussionListItemView"], function(_, Backbone, $, temp, ProjectSubView, ProjectDiscussionListItemView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-project/ProjectDiscussionListItemView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectDiscussionListItemView) {
   var ProjectDiscussionsView;
   return ProjectDiscussionsView = ProjectSubView.extend({
     parent: "#project-discussions",
@@ -6,12 +6,12 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     currentData: "",
     render: function() {
       this.$el = $(this.parent);
-      this.templateLoaded = true;
-      return console.log('ProjectDiscussionsView', this);
+      return this.templateLoaded = true;
     },
     onCollectionLoad: function() {
       var _this = this;
       ProjectSubView.prototype.onCollectionLoad.call(this);
+      this.collection.on('add', this.updateCount, this);
       return this.collection.on('remove', function(obj_) {
         _this.addAll();
         return _this.deleteDiscussion(obj_.id);
@@ -21,7 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       var _this = this;
       if (this.collection.models.length === 0) {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {
-          return onPageElementsLoad();
+          return AbstractView.prototype.onTemplateLoad.call(_this);
         });
       } else {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
@@ -31,17 +31,24 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     loadDayTemplate: function() {
       var _this = this;
-      this.$day = $('<div />');
+      this.$day = $('<div class="day-wrapper"/>');
       return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
-        var m, model_;
-        if (_this.collection.length > 0) {
-          model_ = _this.collection.models[0];
-          m = moment(model_.get("created_at")).format("MMMM D");
-          _this.newDay(m);
-        }
-        _this.isDataLoaded = true;
-        return ProjectSubView.prototype.addAll.call(_this);
+        return _this.onDayWrapperLoad();
       });
+    },
+    onDayWrapperLoad: function() {
+      var m, model_;
+      this.isDataLoaded = true;
+      if (this.collection.length > 0) {
+        model_ = this.collection.models[0];
+        m = moment(model_.get("created_at")).format("MMMM D");
+        this.newDay(m);
+      }
+      this.updateCount();
+      return ProjectSubView.prototype.addAll.call(this);
+    },
+    updateCount: function() {
+      return this.$el.find(".admin-title").html("All Discussions (" + this.collection.models.length + ")");
     },
     newDay: function(date_) {
       this.currentDate = date_;
@@ -62,12 +69,13 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       };
       projectDiscussionListItemView = new ProjectDiscussionListItemView(config);
       projectDiscussionListItemView.on('click', function() {
-        return _this.trigger('discussionClick', config);
+        return _this.trigger('DISCUSSION_CLICK', config);
       });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();
     },
     show: function() {
+      $(".day-wrapper").remove();
       ProjectSubView.prototype.show.call(this);
       return this.loadData();
     },
@@ -83,11 +91,10 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         }
       }).done(function(res_) {
         if (res_.success) {
-          $feedback.hide();
+          return $feedback.hide();
         } else {
-          $feedback.show().html(res_.msg);
+          return $feedback.show().html(res_.msg);
         }
-        return console.log('deleteDiscussion', res_);
       });
     }
   });

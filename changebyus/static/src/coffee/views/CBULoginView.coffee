@@ -1,58 +1,63 @@
-define ["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], 
-	(_, Backbone, $, temp, valid, AbstractView) ->
-		CBUDLoginView = AbstractView.extend
-			
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
-				@render()
+define ["underscore", "backbone", "jquery", "template", "validate", "abstract-view", "views/partials-universal/ForgotPasswordModalView"], 
+    (_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) ->
+        CBUDLoginView = AbstractView.extend
 
-			events:
-				"click .btn-info":"popUp"
+            initialize: (options_) -> 
+                AbstractView::initialize.call @, options_
+                @render()
 
-			render: -> 
-				@$el = $("<div class='login'/>")
-				@$el.template @templateDir + "/templates/login.html",
-					data: @viewData, =>
-						@ajaxForm() 
-						onPageElementsLoad()
+            events:
+                "click .btn-info":"popUp"
+                "click #forgot-password":"forgotPassword"
 
-				$(@parent).append @$el
+            render: -> 
+                @$el = $("<div class='login'/>")
+                @$el.template @templateDir+"/templates/login.html",
+                    data: @viewData, => @onTemplateLoad() 
+                $(@parent).append @$el
 
-			popUp:(e)->
-				e.preventDefault()
-				url = $(e.currentTarget).attr("href")
-				popWindow url
+            onTemplateLoad:->
+                AbstractView::onTemplateLoad.call @
 
+                @ajaxForm() 
+                onPageElementsLoad()
 
-			ajaxForm: -> 
-				$submit   = $("input[type='submit']")
-				$form     = $("form")
-				$feedback = $(".login-feedback")
-				options   =
-					type: $form.attr('method')
-					url: $form.attr('action')
-					dataType: "json" 
-					contentType: "application/json; charset=utf-8"
-					beforeSend: => 
-						if $form.valid()
-							$form.find("input, textarea").attr("disabled", "disabled")
-							$feedback.removeClass("alert").removeClass("alert-danger").html ""
-							return true
-						else
-							return false
+            popUp:(e)->
+                e.preventDefault()
+                url = $(e.currentTarget).attr("href")
+                popWindow url
 
-					success: (response) =>
-						$form.find("input, textarea").removeAttr("disabled")
+            forgotPassword:(e)->
+                e.preventDefault()
+                forgotPasswordModalView = new ForgotPasswordModalView()
 
-						#if response.success 
-						if response.success
-							window.location.href = "/"
-						else
-							$feedback.addClass("alert").addClass("alert-danger").html response.msg
+            ajaxForm: -> 
+                $submit   = $("input[type='submit']")
+                $form     = $("form")
+                $feedback = $(".login-feedback")
+                options   =
+                    type: $form.attr('method')
+                    url: $form.attr('action')
+                    dataType: "json" 
+                    contentType: "application/json; charset=utf-8"
+                    beforeSend: => 
+                        if $form.valid()
+                            $form.find("input, textarea").attr("disabled", "disabled")
+                            $feedback.removeClass("alert").removeClass("alert-danger").html ""
+                            return true
+                        else
+                            return false
 
-				$form.submit ->
-					json_str = JSON.stringify($form.serializeJSON())
-					options.data = json_str
-					console.log 'options.data',options.data
-					$.ajax options
-					false
+                    success: (response_) =>
+                        $form.find("input, textarea").removeAttr("disabled")
+
+                        if response_.success
+                            window.location.href = "/stream/dashboard"
+                        else
+                            $feedback.addClass("alert").addClass("alert-danger").html response_.msg
+
+                $form.submit ->
+                    json_str = JSON.stringify($form.serializeJSON())
+                    options.data = json_str
+                    $.ajax options
+                    false

@@ -1,55 +1,54 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"moment", 
-		"abstract-view", 
-		"model/UserModel",
-		"model/UpdateModel"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 moment, 
-	 AbstractView, 
-	 UserModel,
-	 UpdateModel ) ->
-		ProjectDiscussionThreadItemView = AbstractView.extend
-			
-			model:UpdateModel
-			$repliesHolder: null
-			$postRight: null
-			$replyForm: null
-			tagName: "li" 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "moment", 
+        "abstract-view", 
+        "model/UserModel",
+        "model/UpdateModel"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     moment, 
+     AbstractView, 
+     UserModel,
+     UpdateModel ) ->
+        ProjectDiscussionThreadItemView = AbstractView.extend
+            
+            model:UpdateModel
+            $repliesHolder: null
+            tagName: "li" 
 
-			initialize: (options_) ->
-				AbstractView::initialize.call(@, options_)
-				@model.fetch
-					success: =>@loadUser()
+            initialize: (options_) ->
+                AbstractView::initialize.call(@, options_)
+                @model.fetch
+                    success: =>@loadUser()
 
-			loadUser:->
-				@user = new UserModel(id:@model.get("user").id)
-				@user.fetch
-					success: =>@render()
+            events:
+                "click .reply-toggle:first":"onReplyToggle"
 
-			render: ->
-				m = moment(@model.get('created_at')).format("MMMM D hh:mm a")
-				@model.set('created_at',m)
+            loadUser:->
+                @user = new UserModel(id:@model.get("user").id)
+                @user.fetch
+                    success: =>@render()
 
-				@viewData                       = @model.attributes
-				@viewData.image_url_round_small = @user.get("image_url_round_small")
-				@viewData.display_name          = @user.get("display_name")
-				
-				$(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
-					{data: @viewData}, => @onTemplateLoad()
+            render: ->
+                m = moment(@model.get('created_at')).format("MMMM D hh:mm a")
+                @model.set('created_at',m)
 
-			onTemplateLoad:-> 
-				self = @ 
-				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
-				@$postRight     = @$el.find('.update-content')
-				$replyToggle    = @$el.find('.reply-toggle').first()
-				$replyToggle.click ->
-					top = $("#add-thread-form").offset().top
-					$("html, body").animate({ scrollTop: top }, "slow")
+                @viewData                       = @model.attributes
+                @viewData.image_url_round_small = @user.get("image_url_round_small")
+                @viewData.display_name          = @user.get("display_name")
 
-				onPageElementsLoad()
+                $(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
+                    {data: @viewData}, => @onTemplateLoad()
+
+            ### EVENTS ---------------------------------------------###
+            onTemplateLoad:->
+                @$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
+                AbstractView::onTemplateLoad.call(@)
+
+            onReplyToggle:->
+                top = $("#add-thread-form").offset().top
+                $("html, body").animate({ scrollTop: top }, "slow")

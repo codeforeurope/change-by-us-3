@@ -3,7 +3,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
   return ProjectFundraisingView = AbstractView.extend({
     parent: "#project-fundraising",
     name: "My Project",
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.name = options.name || this.name;
       return this.render();
@@ -13,14 +15,15 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       "click #does-it-work": "slideToggle"
     },
     render: function() {
-      var _this = this;
+      var stripeAccount,
+        _this = this;
       this.$el = $(this.parent);
-      if (this.started) {
-        return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-goals.html", {
-          data: this.viewData
+      stripeAccount = this.model.get("stripe_account");
+      if (stripeAccount) {
+        return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
+          data: stripeAccount
         }, function() {
-          _this.onTemplateLoad();
-          return _this.delegateEvents();
+          return _this.onTemplateLoad();
         });
       } else {
         return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {
@@ -48,7 +51,6 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
         dataType: "text",
         contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
-        console.log(response_);
         return popWindow(response_);
       });
     },

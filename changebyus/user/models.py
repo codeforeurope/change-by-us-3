@@ -3,21 +3,22 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from ..extensions import db
+from changebyus.extensions import db
+from changebyus.helpers.crypt import (handle_decryption, handle_initial_encryption, 
+                                      handle_update_encryption)
+from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+                                           generate_ellipse_png)
+from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, 
+                                      LocationEnabledEntityMixin)
+from changebyus.helpers.stringtools import slugify
 
-from ..helpers.crypt import (handle_decryption, handle_initial_encryption, 
-    handle_update_encryption)
-
-from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
-    generate_ellipse_png)
-
-from ..helpers.mixin import (EntityMixin, HasActiveEntityMixin, 
-    LocationEnabledEntityMixin, encode_model)
 from flask.ext.security import UserMixin, RoleMixin
 from flask.ext.security.utils import encrypt_password
-from flask import current_app
+from flask import current_app as app
 from mongoengine import signals
 from flask.ext.cdn import url_for
+from flask_mongoutils import object_to_dict
+
 import os
 
 """
@@ -59,7 +60,7 @@ def gen_image_urls(image_url):
 
     images = {}
 
-    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_USER_IMAGE']
+    root_image = image_url if image_url is not None else app.settings['DEFAULT_USER_IMAGE']
 
     for manipulator in user_images:
         base, extension = os.path.splitext(root_image)
@@ -75,7 +76,7 @@ class Roles:
     ADMIN = "ADMIN"
 
 
-class Role(db.EmbeddedDocument):
+class Role(db.Document, RoleMixin, EntityMixin):
     """
     This allows us to define user roles, such as "Admin"
     """
@@ -134,7 +135,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     password = db.StringField(max_length=255)
     active = db.BooleanField(default=True)
     confirmed_at = db.DateTimeField()
-    roles = db.ListField(db.EmbeddedDocumentField(Role), default=[])
+    roles = db.ListField(db.ReferenceField(Role), default=[])
     
     # facebook login information
     facebook_id = db.IntField()
@@ -156,6 +157,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
     display_name = db.StringField(max_length=50)
     first_name = db.StringField(max_length=20)
     last_name = db.StringField(max_length=20)
+    flags = db.IntField(default=0)
     
     #visible profile information
     bio = db.StringField(max_length=1000)
@@ -195,13 +197,21 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
       
     # we override the as_dict to handle the email logic
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
+        resp = object_to_dict(self, app=app, 
+                              exclude_nulls=exclude_nulls, 
+                              recursive=recursive, 
+                              depth=depth, 
+                              **kwargs)
   
         image_urls = gen_image_urls(self.image_name)
 
         for image, url in image_urls.iteritems():
             resp[image] = url
-
+            
+        # TODO this is temporary fix for assumptions in templates.
+        roles = []
+        resp['roles'] = roles
+        
         return resp
 
 
@@ -223,6 +233,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
 
 signals.post_init.connect(User.post_init, sender=User)
 signals.pre_save.connect(User.pre_save, sender=User)
+signals.pre_save.connect(Role.pre_save, sender=Role)
 """
 These signal methods help us encrypt and decrypt the sensitive data
 """

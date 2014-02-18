@@ -1,12 +1,13 @@
-define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view"], function(_, Backbone, $, temp, valid, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view", "views/partials-universal/ForgotPasswordModalView"], function(_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) {
   var CBUDLoginView;
   return CBUDLoginView = AbstractView.extend({
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     events: {
-      "click .btn-info": "popUp"
+      "click .btn-info": "popUp",
+      "click #forgot-password": "forgotPassword"
     },
     render: function() {
       var _this = this;
@@ -14,16 +15,25 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
       this.$el.template(this.templateDir + "/templates/login.html", {
         data: this.viewData
       }, function() {
-        _this.ajaxForm();
-        return onPageElementsLoad();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      AbstractView.prototype.onTemplateLoad.call(this);
+      this.ajaxForm();
+      return onPageElementsLoad();
     },
     popUp: function(e) {
       var url;
       e.preventDefault();
       url = $(e.currentTarget).attr("href");
       return popWindow(url);
+    },
+    forgotPassword: function(e) {
+      var forgotPasswordModalView;
+      e.preventDefault();
+      return forgotPasswordModalView = new ForgotPasswordModalView();
     },
     ajaxForm: function() {
       var $feedback, $form, $submit, options,
@@ -45,12 +55,12 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
             return false;
           }
         },
-        success: function(response) {
+        success: function(response_) {
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.success) {
-            return window.location.href = "/";
+          if (response_.success) {
+            return window.location.href = "/stream/dashboard";
           } else {
-            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response_.msg);
           }
         }
       };
@@ -58,7 +68,6 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
         var json_str;
         json_str = JSON.stringify($form.serializeJSON());
         options.data = json_str;
-        console.log('options.data', options.data);
         $.ajax(options);
         return false;
       });

@@ -1,7 +1,9 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "resource-project-view", "collection/ProjectListCollection", "abstract-view"], function(_, Backbone, $, temp, BannerSearchView, ResourceProjectPreviewView, ProjectListCollection, AbstractView) {
+define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "collection/ProjectListCollection", "abstract-view"], function(_, Backbone, $, temp, BannerSearchView, ProjectListCollection, AbstractView) {
   var CBUDiscoverView;
   return CBUDiscoverView = AbstractView.extend({
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();
       return this.render();
@@ -16,32 +18,46 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       });
     },
     onTemplateLoad: function() {
-      var bannerSearchView, searchParent;
+      var searchParent,
+        _this = this;
       $(this.parent).append(this.$el);
       searchParent = this.$el.find(".content");
-      bannerSearchView = new BannerSearchView({
+      this.bannerSearchView = new BannerSearchView({
         parent: searchParent
       });
+      this.bannerSearchView.on("ON_RESULTS", function(s) {
+        return _this.onResults(s);
+      });
       this.collection.on("reset", this.addAll, this);
-      return this.collection.fetch({
+      this.collection.fetch({
         reset: true
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
-    addOne: function(projectModel) {
-      var view;
-      view = new ResourceProjectPreviewView({
-        model: projectModel
-      });
-      return this.$el.find("#project-list").append(view.el);
+    /* EVENTS ---------------------------------------------*/
+
+    updatePage: function() {
+      return this.bannerSearchView.updatePage();
     },
-    addAll: function() {
+    nextPage: function(e) {
+      return this.bannerSearchView.nextPage(e);
+    },
+    prevClick: function(e) {
+      return this.bannerSearchView.prevClick(e);
+    },
+    pageClick: function(e) {
+      return this.bannerSearchView.pageClick(e);
+    },
+    checkArrows: function() {
+      return this.bannerSearchView.checkArrows();
+    },
+    onResults: function(size_) {
       var _this = this;
-      this.collection.each(function(projectModel) {
-        return _this.addOne(projectModel);
-      });
-      if (this.collection.length === 0) {
-        return this.$el.template(this.templateDir + "/templates/partials-discover/no-results.html", {
-          data: this.viewData
+      if (size_ > 0) {
+        return this.$el.find("#no-result").hide();
+      } else {
+        return this.$el.find("#no-result").show().template(this.templateDir + "/templates/partials-discover/no-results.html", {
+          data: {}
         }, function() {});
       }
     }

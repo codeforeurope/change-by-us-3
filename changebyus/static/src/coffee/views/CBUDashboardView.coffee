@@ -1,120 +1,147 @@
 define ["underscore", 
-		"backbone", 
-		"bootstrap-fileupload", 
-		"button"
-		"jquery", 
-		"template", 
-		"abstract-view", 
-		"collection/ProjectListCollection", 
-		"model/UserModel",
-		"resource-project-view",
-		"views/partials-user/ProfileEditView"], 
-	(_, 
-	 Backbone, 
-	 fileupload, 
-	 button, 
-	 $, 
-	 temp, 
-	 AbstractView, 
-	 ProjectListCollection, 
-	 UserModel, 
-	 ResourceProjectPreviewView, 
-	 ProfileEditView) ->
+        "backbone", 
+        "bootstrap-fileupload", 
+        "button"
+        "jquery", 
+        "template", 
+        "abstract-view", 
+        "collection/ProjectListCollection", 
+        "model/UserModel",
+        "resource-project-view",
+        "views/partials-user/ProfileEditView"], 
+    (_, 
+     Backbone, 
+     fileupload, 
+     button, 
+     $, 
+     temp, 
+     AbstractView, 
+     ProjectListCollection, 
+     UserModel, 
+     ResourceProjectPreviewView, 
+     ProfileEditView) ->
 
-		CBUDashboardView = AbstractView.extend
+        CBUDashboardView = AbstractView.extend
 
-			location:{name: "", lat: 0, lon: 0} 
-			className: "body-container"
+            currentView:""
+            className: "body-container"
+            location:{name: "", lat: 0, lon: 0} 
 
-			initialize: (options) ->  
-				AbstractView::initialize.call @, options
-				@userModel = new UserModel(id:@model.id)
-				@userModel.fetch 
-					success: =>@render() 
+            initialize: (options_) ->  
+                AbstractView::initialize.call @, options_
+                @userModel = new UserModel(id:@model.id)
+                @userModel.fetch 
+                    success: =>@render() 
 
-			events:
-				"click a[href^='#']":"changeHash"
+            events: ->
+                _.extend {}, AbstractView.prototype.events, {"click a[href^='#']":"changeHash"}
 
-			render: ->  
-				@$el.template @templateDir+"/templates/dashboard.html", 
-					{data:@userModel.attributes}, => 
-						@onTemplateLoad()
-						@loadProjects()
-				$(@parent).append @$el
+            render: ->
+                @$el.template @templateDir+"/templates/dashboard.html", 
+                    {data:@userModel.attributes}, => 
+                        @onTemplateLoad()
+                        @loadProjects()
+                $(@parent).append @$el
 
-			onTemplateLoad: ->
-				@manageView   = $('#manage-projects')
-				@followView   = $('#follow-projects')
-				@profileView  = $('#edit-profile')
-				
-				@manageBTN  = $("a[href='#manage']").parent()
-				@followBTN  = $("a[href='#follow']").parent()
-				@profileBTN = $("a[href='#profile']").parent()
+            onTemplateLoad: ->
+                @$manageView  = $('#manage-projects')
+                @$followView  = $('#follow-projects')
+                @$profileView = $('#edit-profile')
+                
+                @$manageBTN   = $("a[href='#manage']").parent()
+                @$followBTN   = $("a[href='#follow']").parent()
+                @$profileBTN  = $("a[href='#profile']").parent()
 
-				$(window).bind "hashchange", (e) => @toggleSubView()
-				@toggleSubView()
+                $(window).bind "hashchange", (e) => @toggleSubView()
+                @toggleSubView()
 
-				profileEditView = new ProfileEditView({model:@userModel, parent:@profileView})
+                profileEditView = new ProfileEditView({model:@userModel, parent:@$profileView})
 
+                AbstractView::onTemplateLoad.call @
 
-			toggleSubView: -> 
-				view = window.location.hash.substring(1)
+            toggleSubView: -> 
+                onPageElementsLoad()
+                
+                @currentView = window.location.hash.substring(1)
 
-				for v in [@manageView,@profileView,@followView]
-					v.hide()
+                for v in [@$manageView,@$profileView,@$followView]
+                    v.hide()
 
-				for btn in [@followBTN,@profileBTN,@manageBTN]
-					btn.removeClass "active"
+                for btn in [@$followBTN,@$profileBTN,@$manageBTN]
+                    btn.removeClass "active"
 
-				switch view 
-					when "follow"
-						@followView.show()
-						@followBTN.addClass "active"
-					when "profile"
-						@profileView.show()
-						@profileBTN.addClass "active"
-					else 
-						@manageView.show()
-						@manageBTN.addClass "active"
+                switch @currentView 
+                    when "follow"
+                        @$followView.show()
+                        @$followBTN.addClass "active"
+                    when "profile"
+                        @$profileView.show()
+                        @$profileBTN.addClass "active"
+                    else 
+                        @$manageView.show()
+                        @$manageBTN.addClass "active"
 
-			loadProjects:-> 
-				@joinedProjects = new ProjectListCollection()
-				@joinedProjects.url = "/api/project/user/#{@model.id}/joined-projects"
-				@joinedProjects.on "reset", @addJoined, @
-				@joinedProjects.on "remove", @updateCount, @
-				@joinedProjects.on "change", @updateCount, @
-				@joinedProjects.fetch reset: true
+            loadProjects:-> 
+                @joinedProjects = new ProjectListCollection()
+                @joinedProjects.url = "/api/project/user/#{@model.id}/joined-projects"
+                @joinedProjects.on "reset", @addJoined, @
+                @joinedProjects.on "remove change", @updateCount, @ 
+                @joinedProjects.fetch reset: true
 
-				@ownedProjects = new ProjectListCollection()
-				@ownedProjects.url = "/api/project/user/#{@model.id}/owned-projects"
-				@ownedProjects.on "reset", @addOwned, @
-				@ownedProjects.on "remove", @updateCount, @
-				@ownedProjects.on "change", @updateCount, @
-				@ownedProjects.fetch reset: true
+                @ownedProjects = new ProjectListCollection()
+                @ownedProjects.url = "/api/project/user/#{@model.id}/owned-projects"
+                @ownedProjects.on "reset", @addOwned, @
+                @ownedProjects.on "remove change", @updateCount, @ 
+                @ownedProjects.fetch reset: true
 
-				console.log '@joinedProjects',@joinedProjects,'@ownedProjects',@ownedProjects
+            updateCount:->
+                $('a[href=#follow]').html "Follow (#{@joinedProjects.length})"
+                $('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
 
-			updateCount:->
-				$('a[href=#follow]').html "Follow (#{@joinedProjects.length})"
-				$('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
+            addJoined:->
+                if @joinedProjects.length > 0 then @$followView.find('.updates-container').remove()
 
-			addJoined:->
-				@updateCount()
-				@joinedProjects.each (projectModel) => @addOne(projectModel, @followView.find("ul" ), false, true)
+                @updateCount() 
+                @updateProjects(@joinedProjects.models, @$followView.find(".projects"), false, true)
+                @setPages @joinedProjects.length, @$followView
 
-			addOwned:->
-				@updateCount()
-				@ownedProjects.each (projectModel) => @addOne(projectModel, @manageView.find("ul"), true, false)
+                @delegateEvents()
 
-			addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->
-				view = new ResourceProjectPreviewView
-					model: projectModel_
-					isOwned: isOwned_
-					isFollowed: isFollowed_
-					isProject: true
-					isResource: false
+            addOwned:->
+                if @ownedProjects.length > 0 then @$manageView.find('.updates-container').remove()
 
-				@$el.find(parent_).append view.$el
-				delay 100, ->
-					buttonize3D()
-					positionFooter()
+                @updateCount() 
+                @updateProjects(@ownedProjects.models, @$manageView.find(".projects"), true, false)
+                @setPages @ownedProjects.length, @$manageView
+
+                @delegateEvents()
+
+            updatePage:->
+                if @currentView is "follow"
+                    $ul = @$followView.find(".projects")
+                    $ul.html("")
+                    @updateProjects(@joinedProjects.models, $ul, false, true)
+                else
+                    $ul = @$manageView.find(".projects")
+                    $ul.html("")
+                    @updateProjects(@ownedProjects.models, $ul, true, false)
+
+                $("html, body").animate({ scrollTop: 0 }, "slow")
+
+            updateProjects:(results_, parent_, isOwned_=false, isFollowed_=false)-> 
+                s = @index*@perPage
+                e = (@index+1)*@perPage-1
+                for i in [s..e]
+                    if i < results_.length
+                        projectModel = results_[i]
+                        @addOne(projectModel, parent_, isOwned_, isFollowed_)
+
+            addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) ->
+                view = new ResourceProjectPreviewView
+                    model: projectModel_
+                    isOwned: isOwned_
+                    isFollowed: isFollowed_
+                    isProject: true
+                    isResource: false
+                    parent:parent_
+                view.fetch()

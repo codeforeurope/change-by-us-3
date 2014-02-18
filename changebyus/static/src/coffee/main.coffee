@@ -1,239 +1,281 @@
 require.config
-	baseUrl: "/static/js"
-	paths: 
-		"jquery": "ext/jquery/jquery"
-		"hotkeys": "ext/jquery/jquery.hotkeys" 
-		"moment": "ext/moment/moment.min"
-		"underscore": "ext/underscore/underscore-min"
-		"backbone": "ext/backbone/backbone-min"
-		"bootstrap": "ext/bootstrap/bootstrap.min"
-		"bootstrap-fileupload": "ext/bootstrap/bootstrap-fileupload"
-		"button": "ext/jquery/jquery.screwdefaultbuttonsV2.min"
-		"serializeObject": "ext/jquery/jquery.serializeObject.min"
-		"serializeJSON": "ext/jquery/jquery.serializeJSON.min"
-		"dropkick": "ext/jquery/jquery.dropkick-min"
-		"slicknav": "ext/jquery/jquery.slicknav.min"
-		"hogan": "ext/hogan/hogan-2.0.0.amd"
-		"wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
-		"autocomp": "ext/bootstrap/typeahead.min"
-		"prettify": "ext/google/prettify"
-		"template": "ext/jquery/template"
-		"form": "ext/jquery/jquery.form.min"
-		"validate": "ext/jquery/jquery.validate.min"
-		"main-view": "views/CBUMainView"
-		"discover-view": "views/CBUDiscoverView"
-		"city-view": "views/CBUCityView"
-		"project-view": "views/CBUProjectView"
-		"project-owner-view": "views/CBUProjectOwnerView"
-		"login-view": "views/CBULoginView"
-		"signup-view": "views/CBUSignupView"
-		"create-view": "views/partials-universal/CreateView"
-		"abstract-view": "views/partials-universal/AbstractView"
-		"abstract-modal-view": "views/partials-universal/AbstractModalView"
-		"project-sub-view": "views/partials-project/ProjectSubView"
-		"resource-project-view": "views/partials-universal/ResourceProjectPreviewView"
-		"user-view": "views/CBUUserView"
-		"dashboard-view": "views/CBUDashboardView"
-		"stream-view": "views/CBUStreamView"
+    baseUrl: "/static/js"
+    paths:
+        "jquery": "ext/jquery/jquery"
+        "hotkeys": "ext/jquery/jquery.hotkeys"
+        "moment": "ext/moment/moment.min"
+        "underscore": "ext/underscore/underscore-min"
+        "backbone": "ext/backbone/backbone-min"
+        "bootstrap": "ext/bootstrap/bootstrap.min"
+        "bootstrap-fileupload": "ext/bootstrap/bootstrap-fileupload"
+        "button": "ext/jquery/jquery.screwdefaultbuttonsV2.min"
+        "serializeObject": "ext/jquery/jquery.serializeObject.min"
+        "serializeJSON": "ext/jquery/jquery.serializeJSON.min"
+        "dropkick": "ext/jquery/jquery.dropkick-min"
+        "slicknav": "ext/jquery/jquery.slicknav.min"
+        "hogan": "ext/hogan/hogan-2.0.0.amd"
+        "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
+        "autocomp": "ext/bootstrap/typeahead.min"
+        "prettify": "ext/google/prettify"
+        "template": "ext/jquery/template"
+        "form": "ext/jquery/jquery.form.min"
+        "validate": "ext/jquery/jquery.validate.min"
+        "payment": "ext/jquery/jquery.payment"
+        "main-view": "views/CBUMainView"
+        "discover-view": "views/CBUDiscoverView"
+        "city-view": "views/CBUCityView"
+        "project-view": "views/CBUProjectView"
+        "fundraising": "views/CBUFundraisingView"
+        "project-owner-view": "views/CBUProjectOwnerView"
+        "login-view": "views/CBULoginView"
+        "signup-view": "views/CBUSignupView"
+        "create-view": "views/partials-universal/CreateView"
+        "abstract-view": "views/partials-universal/AbstractView"
+        "abstract-modal-view": "views/partials-universal/AbstractModalView"
+        "project-sub-view": "views/partials-project/ProjectSubView"
+        "resource-project-view": "views/partials-universal/ResourceProjectPreviewView"
+        "user-view": "views/CBUUserView"
+        "dashboard-view": "views/CBUDashboardView"
+        "stripe-edit": "views/CBUStripeEdit"
+        "stream-view": "views/CBUStreamView"
+        "admin-view": "views/CBUAdminView"
 
-	shim:
-		"slicknav":["jquery"]
-		"dropkick":["jquery"]
-		"button":["jquery"]
-		"bootstrap-fileupload":["jquery", "bootstrap"]
-		"autocomp":["jquery", "bootstrap"]
-		"wysiwyg":["jquery", "bootstrap"]
-		"hotkeys":["jquery"]
-		"form":["jquery"]
-		"template":["jquery"]
-		"validate":["jquery"]
-		"serializeObject":["jquery"]
-		"serializeJSON":["jquery"]
+    shim:
+        "slicknav":["jquery"]
+        "dropkick":["jquery"]
+        "button":["jquery"]
+        "bootstrap-fileupload":["jquery", "bootstrap"]
+        "autocomp":["jquery", "bootstrap"]
+        "wysiwyg":["jquery", "bootstrap"]
+        "hotkeys":["jquery"]
+        "form":["jquery"]
+        "template":["jquery"]
+        "validate":["jquery"]
+        "payment":["jquery"]
+        "serializeObject":["jquery"]
+        "serializeJSON":["jquery"]
 
-define ["jquery",  
-		"backbone", 
-		 "main-view", 
-		 "discover-view",  
-		 "city-view", 
-		 "project-view", 
-		 "project-owner-view", 
-		 "login-view", 
-		 "signup-view", 
-		 "user-view", 
-		 "dashboard-view", 
-		 "stream-view",
-		 "create-view",
-		 "slicknav"], 
-	($, 
-	 Backbone,
-	 CBUMainView,
-	 CBUDiscoverView,
-	 CBUCityView,
-	 CBUProjectView, 
-	 CBUProjectOwnerView, 
-	 CBULoginView, 
-	 CBUSignupView, 
-	 CBUUserView, 
-	 CBUDashboardView, 
-	 CBUStreamView,
-	 CreateView,
-	 SlickNav) ->
-		$(document).ready ->
-			config = {parent:".main-content"}
+define ["jquery",
+        "backbone",
+         "main-view",
+         "discover-view",
+         "city-view",
+         "project-view",
+         "project-owner-view",
+         "login-view",
+         "signup-view",
+         "user-view",
+         "dashboard-view",
+         "stream-view",
+         "admin-view",
+         "create-view",
+         "stripe-edit",
+         "fundraising",
+         "slicknav"],
+    ($,
+     Backbone,
+     CBUMainView,
+     CBUDiscoverView,
+     CBUCityView,
+     CBUProjectView,
+     CBUProjectOwnerView,
+     CBULoginView,
+     CBUSignupView,
+     CBUUserView,
+     CBUDashboardView,
+     CBUStreamView,
+     CBUAdminView,
+     CreateView,
+     CBUStripeEdit,
+     CBUFundraisingView,
+     SlickNav) ->
+        $(document).ready ->
+            config = {parent:".main-content"}
 
-			CBURouter = Backbone.Router.extend
-				routes:
-					"project/:id": "project"
-					"project/:id/admin": "projectAdmin"
-					"resource/:id": "resource"
-					"city/:id": "city"
-					"user/:id": "user"
-					"discover": "discover"
-					"stream/dashboard": "dashboard"
-					"create/project": "createProject"
-					"create/resource": "createResource"
-					"login": "login"
-					"signup": "signup"
-					"project": "project" 
-					"stream": "stream" 
-					"stream/": "stream" 
-					"": "default"
+            CBURouter = Backbone.Router.extend
+                routes:
+                    "project/:id": "project"
+                    "project/:id/admin": "projectAdmin"
+                    "project/:id/stripe/:sid/edit": "stripeEdit"
+                    "project/:id/fundraising": "fundraising"
+                    "resource/:id": "resource"
+                    "resource/:id/admin": "resourceAdmin"
+                    "city/:id": "city"
+                    "user/:id": "user"
+                    "discover": "discover"
+                    "stream/dashboard": "dashboard"
+                    "create/project": "createProject"
+                    "create/resource": "createResource"
+                    "login": "login"
+                    "signup": "signup"
+                    "project": "project"
+                    "stream": "stream"
+                    "stream/": "stream"
+                    "admin": "admin"
+                    "": "default"
 
-				project: (id_) ->
-					config.model = {id:id_} 
-					config.isResource = false
-					config.isOwner = (userID is projectOwnerID)
-					window.CBUAppView =  new CBUProjectView(config)
+                project: (id_) ->
+                    config.model = {id:id_}
+                    config.isResource = false
+                    config.isOwner = (userID is projectOwnerID)
+                    window.CBUAppView =  new CBUProjectView(config)
 
-				projectAdmin: (id_) ->
-					if userID
-						config.model = {id:id_}
-						window.CBUAppView = new CBUProjectOwnerView(config)
-					else
-						window.location.href = "/login"
+                projectAdmin: (id_) ->
+                    if userID
+                        config.model = {id:id_}
+                        window.CBUAppView = new CBUProjectOwnerView(config)
+                    else
+                        window.location.href = "/login"
 
-				resource: (id_) ->
-					config.model = {id:id_}
-					config.isResource = true
-					window.CBUAppView =  new CBUProjectView(config)
+                stripeEdit: (id_, sid_) ->
+                    config.model = {id:id_, sid:sid_}
+                    window.CBUAppView =  new CBUStripeEdit(config)
 
-				city: (id_) -> 
-					config.model = {id:id_}
-					window.CBUAppView =  new CBUCityView(config)
+                fundraising: (id_) ->
+                    config.model = {id:id_}
+                    window.CBUAppView =  new CBUFundraisingView(config)
 
-				user: (id_) ->
-					config.model = {id:id_}
-					window.CBUAppView = new CBUUserView(config)
+                resource: (id_) ->
+                    config.model = {id:id_}
+                    config.isResource = true
+                    window.CBUAppView =  new CBUProjectView(config)
 
-				discover: ->
-					window.CBUAppView = new CBUDiscoverView(config)
+                resourceAdmin: (id_) ->
+                    if userID
+                        config.model = {id:id_}
+                        config.isResource = true
+                        window.CBUAppView = new CBUProjectOwnerView(config)
+                    else
+                        window.location.href = "/login"
 
-				dashboard: ->
-					config.model = {id:window.userID}
-					window.CBUAppView = new CBUDashboardView(config) 
+                city: (id_) ->
+                    config.model = {id:id_}
+                    window.CBUAppView =  new CBUCityView(config)
 
-				createProject: ->
-					config.isResource = false
-					window.CBUAppView = new CreateView(config)
+                user: (id_) ->
+                    config.model = {id:id_}
+                    window.CBUAppView = new CBUUserView(config)
 
-				createResource: ->
-					config.isResource = true
-					window.CBUAppView = new CreateView(config)
+                discover: ->
+                    window.CBUAppView = new CBUDiscoverView(config)
 
-				login: ->
-					window.CBUAppView = new CBULoginView(config)
+                dashboard: ->
+                    config.model = {id:window.userID}
+                    window.CBUAppView = new CBUDashboardView(config)
 
-				signup: ->
-					window.CBUAppView = new CBUSignupView(config)
+                createProject: ->
+                    config.isResource = false
+                    window.CBUAppView = new CreateView(config)
 
-				stream:->
-					window.CBUAppView = new CBUStreamView(config)
+                createResource: ->
+                    config.isResource = true
+                    window.CBUAppView = new CreateView(config)
 
-				default: ->
-					# added in dev tool
-					window.CBUAppView = new CBUMainView(config)
+                login: ->
+                    window.CBUAppView = new CBULoginView(config)
 
-			CBUAppRouter = new CBURouter()
-			Backbone.history.start pushState: true
+                signup: ->
+                    window.CBUAppView = new CBUSignupView(config)
 
-			### NAV ###
-			$navTop = $('.nav.pull-left')
-			$navTop.hover ->
-				$(this).toggleClass('active')
-			, ->
-				$(this).removeClass('active')
+                stream:->
+                    window.CBUAppView = new CBUStreamView(config)
 
-			### LOG OUT ###
-			$("a[href='/logout']").click (e)->
-				e.preventDefault()
-				$.ajax(
-					type: "GET"
-					url: "/logout" 
-				).done (response)=> 
-					window.location.reload()
+                admin:->
+                    window.CBUAppView = new CBUAdminView(config)
 
-			### GLOBAL UTILS ###
-			window.popWindow = (url) ->
-				title = "social"
-				w = 650
-				h = 650
-				left = (screen.width / 2) - (w / 2)
-				top = (screen.height / 2) - (h / 2)
-				window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
+                default: ->
+                    # added in dev tool
+                    window.CBUAppView = new CBUMainView(config)
 
-			window.delay = (time, fn) ->
-				setTimeout fn, time
+            CBUAppRouter = new CBURouter()
+            Backbone.history.start pushState: true
 
-			window.arrayToListString = (arr_) ->
-				for str,i in arr_
-					arr_[i] = capitalize(str)
+            ### NAV ###
+            $navTop = $('.nav.pull-left')
+            $navTop.hover ->
+                $(this).toggleClass('active')
+            , ->
+                $(this).removeClass('active')
 
-				if (arr_.length <= 1) 
-					str = arr_.join()
-				else
-					str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length-1]
-				str
+            $('.nav.nav-pills.pull-right').slicknav
+                label: '',
+                prependTo:'#responsive-menu'
 
-			window.capitalize = (str_) ->
-				str = str_.replace /\w\S*/g, (txt) ->
-					txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+            $clone     = $('.resp-append')
+            $cloneLast = $('.resp-append-last')
+            
+            $clone.clone().appendTo $('.slicknav_nav')
+            $cloneLast.clone().appendTo $('.slicknav_nav')
 
-			window.buttonize3D = ->
-				$btn3d = $('.btn-3d')
-				for btn in $btn3d 
-					$btn = $(btn)
-					$btn.parent().addClass('btn-3d-parent')
-					$btn.attr('data-content', $btn.html())
-		 
-			### STICKY FOOTER ###
-			$window      = $(window)
-			footerHeight = 0 
-			$footer      = $(".footer-nav")
+            $(".logged-in .user-avatar").click (e)->
+                window.location.href = "/stream/dashboard"
 
-			window.positionFooter = ->
-				delay 100, ->
-					footerHeight = parseInt($footer.height()) +  parseInt($footer.css('margin-top'))
-					console.log $footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height()
+            ### LOG OUT ###
+            $("a[href='/logout']").click (e)->
+                e.preventDefault()
+                $.ajax(
+                    type: "GET"
+                    url: "/logout"
+                ).done (response)=>
+                    window.location.reload()
 
-					if ($(document.body).height()+footerHeight) < $window.height()
-						$footer.css
-							position: "fixed" 
-							bottom: 0
-					else
-						$footer.css position: "relative" 
-			
-			positionFooter()
-			$window.scroll(positionFooter).resize(positionFooter)
+            ### GLOBAL UTILS ----------------------------------------------------------------------------------###
+            window.popWindow = (url) ->
+                w     = 650
+                h     = 650
+                left  = (screen.width / 2) - (w / 2)
+                top   = (screen.height / 2) - (h / 2)
+                title = "social"
+                window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
 
-			window.onPageElementsLoad = ->
-				positionFooter()
-			### END STICKY FOOTER ### 
+            window.delay = (time, fn) ->
+                setTimeout fn, time
 
-			$('.nav.nav-pills.pull-right').slicknav
-				label: '', 
-				prependTo:'#responsive-menu'
+            window.randomInt = (num_) ->
+                Math.floor Math.random()*num_
 
-			$clone     = $('.resp-append')
-			$cloneLast = $('.resp-append-last')
-			$clone.clone().appendTo $('.slicknav_nav')
-			$cloneLast.clone().appendTo $('.slicknav_nav')
+            window.arrayToListString = (arr_) ->
+                for str,i in arr_
+                    arr_[i] = capitalize(str)
+
+                if (arr_.length <= 1)
+                    str = arr_.join()
+                else
+                    str = arr_.slice(0, -1).join(", ") + " and " + arr_[arr_.length-1]
+                str
+
+            window.capitalize = (str_) ->
+                str = str_.replace /\w\S*/g, (txt) ->
+                    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+
+            $(document).bind 'keydown', (e)->
+                if location.host in ["localhost:5000", "localtunnel.com:5000"]
+                    c = if e.keyCode then e.keyCode else e.which
+                    k = String.fromCharCode(c).toLowerCase()
+                    if k is 'd' then $('body').toggleClass('debug')
+
+            ### STICKY FOOTER ----------------------------------------------------------------------------------###
+            $window      = $(window)
+            $topnav      = $(".top-nav")
+            $mainContent = $(".main-content")
+            $footer      = $(".footer-nav")
+            footerHeight = 0
+            debounce     = null
+
+            window.positionFooter = ->
+                if debounce then clearTimeout debounce
+                debounce = delay 10, ->
+                    topNavHeight      = $topnav.height()
+                    mainContentHeight = $mainContent.height()
+                    footerHeight      = $footer.height() + 140 #parseInt($footer.css('margin-top'))
+
+                    if (topNavHeight+mainContentHeight+footerHeight) < $window.height()
+                        $footer.css position: "fixed"
+                    else
+                        $footer.css position: "relative"
+
+            positionFooter()
+            $window.scroll(positionFooter).resize(positionFooter)
+
+            window.onPageElementsLoad = ->
+                positionFooter()

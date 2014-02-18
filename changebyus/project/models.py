@@ -3,17 +3,18 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from ..extensions import db
-from ..helpers.crypt import handle_decryption
-from ..helpers.imagetools import (ImageManipulator, generate_thumbnail, 
+from changebyus.extensions import db
+from changebyus.helpers.crypt import handle_decryption
+from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
     generate_ellipse_png)
-from ..helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
-    LocationEnabledEntityMixin, encode_model)
-from ..helpers.stringtools import slugify
-from ..stripe.models import StripeAccount
-from ..user.models import User
-from flask import current_app
+from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
+                                      LocationEnabledEntityMixin)
+from changebyus.helpers.stringtools import slugify
+from changebyus.stripe.models import StripeAccount
+from changebyus.user.models import User
+from flask import current_app as app
 from flask.ext.cdn import url_for
+from flask_mongoutils import object_to_dict
 from mongoengine import signals
 
 import os
@@ -79,7 +80,7 @@ def gen_image_urls(image_url):
 
     images = {}
 
-    root_image = image_url if image_url is not None else current_app.settings['DEFAULT_PROJECT_IMAGE']
+    root_image = image_url if image_url is not None else app.settings['DEFAULT_PROJECT_IMAGE']
 
     for manipulator in project_images:
         base, extension = os.path.splitext(root_image)
@@ -123,10 +124,13 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
     # a project is either a project or a resource
     # resource is different on the UI side and does slightly less
     resource = db.BooleanField(default=False)
+    approved = db.BooleanField(default=True)
 
     slug = db.StringField(unique=True)
     
     activity = db.DecimalField()
+
+    private = db.BooleanField(default=False)
 
     meta = {
         'indexes': [
@@ -160,15 +164,30 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
         handle_decryption(document, document.ENCRYPTED_FIELDS)
 
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, exclude_nulls, recursive, depth, **kwargs)
-
+        resp = object_to_dict(self, app=app, 
+                      exclude_nulls=exclude_nulls, 
+                      recursive=recursive, 
+                      depth=depth, 
+                      **kwargs)
+                              
         image_urls = gen_image_urls(self.image_name)
 
         for image, url in image_urls.iteritems():
             resp[image] = url
 
         return resp
-
+        
+    @classmethod
+    def with_id_or_slug(cls, object_id):
+        """
+        Allows query by id or slug 
+        """
+        from bson.objectid import ObjectId
+        
+        if (ObjectId.is_valid(object_id)):
+            return cls.objects.with_id(object_id)
+        else:
+            return cls.objects(slug=object_id).first()
 
 class UserProjectLink(db.Document, EntityMixin):
     """
@@ -196,10 +215,37 @@ class ProjectCategory(db.Document, HasActiveEntityMixin):
     as a reference.  This model is strictly for bookkeeping.
     """
     name = db.StringField(required=True, unique=True)
+    
+
+class ProjectCity(db.Document, EntityMixin, HasActiveEntityMixin, LocationEnabledEntityMixin):
+    """
+    Model for cities that have city pages.
+    """
+    name = db.StringField(required=True, unique=True)
+    slug = db.StringField(unique=True)
+    quote = db.StringField()
+    image_name = db.StringField()
+    website = db.StringField()
+	
+    def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
+        resp = object_to_dict(self, app=app, 
+                      exclude_nulls=exclude_nulls, 
+                      recursive=recursive, 
+                      depth=depth, 
+                      **kwargs)
+                              
+        image_urls = gen_image_urls(self.image_name)
+
+        for image, url in image_urls.iteritems():
+            resp[image] = url
+
+        return resp
 
 
 signals.post_init.connect(Project.post_init, sender=Project)
 signals.pre_save.connect(Project.pre_save, sender=Project)
+
+signals.pre_save.connect(ProjectCity.pre_save, sender=ProjectCity)
 
 signals.pre_save.connect(UserProjectLink.pre_save, sender=UserProjectLink)
 """

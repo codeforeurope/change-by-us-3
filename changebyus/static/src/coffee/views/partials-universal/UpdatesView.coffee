@@ -1,76 +1,74 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"views/partials-project/ProjectSubView", 
-		"views/partials-universal/UpdateListItemView"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 ProjectSubView, 
-	 UpdateListItemView) ->
+        "backbone", 
+        "jquery", 
+        "template", 
+        "views/partials-project/ProjectSubView", 
+        "views/partials-universal/UpdateListItemView"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     ProjectSubView, 
+     UpdateListItemView) ->
 
-		UpdatesView = ProjectSubView.extend
+        UpdatesView = ProjectSubView.extend
 
-			members: null
-			$ul:null
-			currentData:"" 
-			isResource:false
+            members: null
+            $ul:null
+            currentData:"" 
+            isResource:false
+            isMember:false
 
-			initialize: (options) -> 
-				ProjectSubView::initialize.call(@, options)
-				@members                   = options.members || @members 
-				@viewData.slug             = @model.get('slug')
-				@viewData.isResource       = options.isResource
-				@viewData.isOwnerOrganizer = options.isOwnerOrganizer
+            initialize: (options_) ->  
+                ProjectSubView::initialize.call(@, options_)
+                
+                @members                   = options_.members || @members 
+                @isMember                  = options_.isMember 
 
-			render: ->
-				console.log '@viewData',@viewData
-				@$el = $(@parent)
-				@$el.template @templateDir+"/templates/partials-universal/updates.html",
-					{data: @viewData}, =>@onTemplateLoad()   
+            render: ->  
+                @$el = $(@parent)
+                @$el.template @templateDir+"/templates/partials-universal/updates.html",
+                    {data: @model.attributes}, =>@onTemplateLoad()
 
-			onTemplateLoad:->
-				ProjectSubView::onTemplateLoad.call @ 
+            addAll: ->
+                @$members = @$el.find(".team-members ul")
+                length = 0
+                @members.each (model) => 
+                    if (length++ < 4) then @addMember model
+                if length <= 4 then $('.team-members .pull-right').remove()
 
-			addAll: ->  
-				# members
-				@$members = @$el.find(".team-members ul")
-				length = 0
-				@members.each (model) => 
-					if (length++ < 4) then @addMember model
-				if length <= 4 then $('.team-members .pull-right').remove()
+                @$day = $('<div />')
+                @$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
+                    {}, =>
+                        if @collection.length > 0
+                            model_ = @collection.models[0]
+                            m = moment(model_.get("created_at")).format("MMMM D")
+                            @newDay(m)
 
-				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
-					{}, =>
-						if @collection.length > 0
-							model_ = @collection.models[0]
-							m = moment(model_.get("created_at")).format("MMMM D")
-							@newDay(m)
+                        @isDataLoaded = true
+                        ProjectSubView::addAll.call(@) 
+                        onPageElementsLoad()
 
-						@isDataLoaded = true
-						ProjectSubView::addAll.call(@) 
-						onPageElementsLoad()
+            addOne: (model_) -> 
+                m = moment(model_.get("created_at")).format("MMMM D")
+                if @currentDate isnt m then @newDay(m)
 
-			addMember: (model_) -> 
-				if model_.get("roles").length is 0 then model_.set("roles", ["Owner"]) # temp fix
-				$member = $('<li/>')
-				$member.template @templateDir+"/templates/partials-universal/member-avatar.html",
-					{data: model_.attributes}, =>  
-				@$members.append $member 
+                view = new UpdateListItemView({model: model_, isMember:@isMember})
+                @$ul.append view.$el
 
-			newDay:(date_)-> 
-				@currentDate = date_
-				@$currentDay = @$day.clone()
-				@$el.append @$currentDay
-				@$currentDay.find('h4').html(date_)
-				@$ul = @$currentDay.find('.bordered-item')  
-					
-			addOne: (model_) -> 
-				m = moment(model_.get("created_at")).format("MMMM D")
-				if @currentDate isnt m then @newDay(m)
+            addMember: (model_) ->
+                roles = model_.get("roles")
+                if roles.length is 0 then model_.set("roles", ["Owner"]) # temp fix
+                if ("MEMBER" in roles) or ("Member" in roles) then return
+                
+                $member = $('<li/>')
+                $member.template @templateDir+"/templates/partials-universal/member-avatar.html",
+                    {data: model_.attributes}, =>  
+                @$members.append $member 
 
-				view = new UpdateListItemView({model: model_})
-				@$ul.append view.$el
+            newDay:(date_)-> 
+                @currentDate = date_
+                @$currentDay = @$day.clone()
+                @$el.append @$currentDay
+                @$currentDay.find('h4').html(date_)
+                @$ul = @$currentDay.find('.bordered-item')  

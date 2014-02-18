@@ -1,15 +1,19 @@
 define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, WysiwygFormView, ProjectDiscussionThreadItemView) {
   var ProjectDiscussionView;
   return ProjectDiscussionView = ProjectSubView.extend({
-    parent: "#project-discussion",
     $ul: null,
     $form: null,
+    discussionsCollection: null,
     $threadFormID: "#add-thread-form",
+    parent: "#project-discussion",
     wysiwygFormView: null,
     delayedDataLoad: false,
+    count: 0,
+    initialize: function(options_) {
+      return ProjectSubView.prototype.initialize.call(this, options_);
+    },
     render: function() {
       var _this = this;
-      console.log('pdv >>>>>>>> ', this);
       this.$el = $(this.parent);
       return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion.html", {
         data: this.viewData
@@ -21,10 +25,10 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       this.templateLoaded = true;
       this.$ul = this.$el.find('.bordered-item');
       this.$form = this.$el.find(this.$threadFormID);
-      onPageElementsLoad();
       if (this.delayedDataLoad) {
-        return this.onSuccess();
+        this.onSuccess();
       }
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     updateDiscussion: function(id_) {
       var _this = this;
@@ -41,11 +45,18 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         }
       });
     },
+    updateCount: function(count) {
+      var title;
+      this.count = count;
+      title = this.model != null ? this.model.get("title") : "";
+      return this.$el.find(".admin-title").html("All Discussions (" + this.count + "): " + title);
+    },
     onSuccess: function() {
       var model, response, userAvatar, _i, _len, _ref,
         _this = this;
       this.$ul.html('');
       this.$form.html('');
+      this.updateCount(this.count);
       this.addDiscussion(this.model);
       _ref = this.model.get("responses");
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -60,7 +71,8 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
-        userAvatar: userAvatar
+        userAvatar: userAvatar,
+        title: this.model.get("title")
       });
       return this.wysiwygFormView.success = function(e) {
         if (e.success) {

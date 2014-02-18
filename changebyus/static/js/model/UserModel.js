@@ -18,7 +18,7 @@ define(["underscore", "backbone"], function(_, Backbone) {
       },
       active: false,
       password: "",
-      id: "",
+      id: -1,
       public_email: false,
       first_name: "",
       display_name: "",

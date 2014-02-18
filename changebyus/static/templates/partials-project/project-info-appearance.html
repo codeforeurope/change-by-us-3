@@ -28,11 +28,26 @@
 
             <div class="public-visibility">
                 <label for="name">Project Visibility</label>
+                
+                <% if (data.private){ %>
                 <input type="radio" name="visibility" value="public">
+                <% }else{ %>
+                <input type="radio" name="visibility" value="public" checked>
+                <% } %>
+
+                <img src="/static/img/icon-unlock.png">
                 <span>Public</span>  
                 <div class="clearfix"></div>
+
+                <% if (data.private){ %>
+                <input type="radio" name="visibility" value="private" checked>
+                <% }else{ %>
                 <input type="radio" name="visibility" value="private">
+                <% } %>
+                <img src="/static/img/icon-lock.png">
                 <span>Private</span> 
+
+                <input type="checkbox" name="private" class="hide">
             </div>
         </div>
         <div class="form-right">
@@ -52,7 +67,7 @@
                             <div class="load-preview" style="background-image:url(<%= data.image_url_round %>)"></div>
                         <% } %>
                     </div>
-                    <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="#">Remove</a>
+                    <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="javascript:void(0)">Remove</a>
                 </div>
                 <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
             </div>
@@ -61,11 +76,11 @@
                 <label>Social</label>
                 <div class="twitter">
                     <div class="social-icon icon-twitter"></div>
-                    <a href="#" class="btn btn-medium btn-primary">Disconnect</a>
+                    <a href="javascript:void(0)" class="btn btn-medium btn-primary">Disconnect</a>
                 </div>
                 <div class="facebook">
                     <div class="social-icon icon-facebook"></div>
-                    <a href="#" class="btn btn-medium btn-primary">Disconnect</a>
+                    <a href="javascript:void(0)" class="btn btn-medium btn-primary">Disconnect</a>
                 </div>
             </div>
             -->
@@ -80,6 +95,7 @@
     </div>
     <input type="hidden" name="lat" value="<%= data.lat %>">
     <input type="hidden" name="lon" value="<%= data.lon %>">
+    <input type="hidden" name="location" value="<%= data.location %>">
     <input type="hidden" name="project_id" value="<%= data.id %>">
     <input type="hidden" name="project_slug" value="<%= data.slug %>">
 </form>

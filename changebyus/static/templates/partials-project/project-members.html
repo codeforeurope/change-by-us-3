@@ -1,4 +1,4 @@
-<div class="project-resource-section-header members">
+<div class="project-resource-section-header members clearfix">
     <div class="pull-left">
         <h2>Members</h2>
     </div>
@@ -15,7 +15,7 @@
     </h3>
     <% if (data.isOwnerOrganizer){ %> 
         <p>
-            You currently don't have any members. <a href="#" class="highlight">Invite members</a> to your project on Facebook and/or Twitter, or copy the following link to your project to send.
+            You currently don't have any members. <a href="javascript:void(0)" class="highlight">Invite members</a> to your project on Facebook and/or Twitter, or copy the following link to your project to send.
         </p>
         <div>
             <div class="icon_share_angle">
@@ -28,6 +28,11 @@
 
 <!-- organizers -->
 <div id="team-members" class="">
+    <div class="pull-right">
+        <a href="javascript:void(0)" id="alpha" class="ul">Alphabetical</a>
+        &#8226;
+        <a href="javascript:void(0)" id="created" class="ul">Newest</a>
+    </div>
     <h4>Person Team</h4>
     <div class="content-wrapper np">
         <ul class="bordered-item"></ul>

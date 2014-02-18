@@ -1,8 +1,8 @@
 define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-view"], function(_, Backbone, $, temp, form, AbstractModalView) {
   var ProjectEmbedCalendarModalView;
   return ProjectEmbedCalendarModalView = AbstractModalView.extend({
-    initialize: function(options) {
-      AbstractModalView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractModalView.prototype.initialize.call(this, options_);
       this.viewData.id = this.model.id;
       return this.viewData.slug = this.model.slug;
     },
@@ -18,20 +18,19 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
     },
     onTemplateLoad: function() {
       var $form, options;
-      AbstractModalView.prototype.onTemplateLoad.call(this, options);
       $form = this.$el.find('form');
       options = {
         type: $form.attr('method'),
         url: $form.attr('action'),
         dataType: "json",
         contentType: "application/json; charset=utf-8",
-        success: function(response) {
-          if (response.success) {
+        success: function(response_) {
+          if (response_.success) {
             return window.location.reload();
           }
         }
       };
-      return $form.submit(function() {
+      $form.submit(function() {
         var json_str, obj;
         obj = $form.serializeJSON();
         json_str = JSON.stringify(obj);
@@ -39,6 +38,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
         $.ajax(options);
         return false;
       });
+      return AbstractModalView.prototype.onTemplateLoad.call(this);
     }
   });
 });

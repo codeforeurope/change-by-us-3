@@ -3,34 +3,41 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
-from flask import (Blueprint, render_template, redirect, 
-                   request, current_app, g, abort)
+from flask import (current_app as app, Blueprint, render_template, redirect, 
+                   request, g, abort)
 
 from flask.ext.login import login_required, current_user, login_user
 
 from flask.ext.wtf.html5 import URLField
 from flask.ext.wtf import (Form, TextField, TextAreaField, FileField, HiddenField,
-                           SubmitField, Required, ValidationError)
+                           SubmitField, Required, ValidationError, BooleanField)
 
-from ..geonames import get_geopoint, get_geoname
+from changebyus.geonames import get_geopoint, get_geoname
 
-from ..helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
-from ..helpers.mongotools import db_list_to_dict_list
+from changebyus.helpers.flasktools import jsonify_response, ReturnStructure, as_multidict
+from changebyus.helpers.mongotools import db_list_to_dict_list
 
-from ..mongo_search import search
+from changebyus.mongo_search import search
 
-from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory
+from .models import Project, Roles, ACTIVE_ROLES, UserProjectLink, ProjectCategory, ProjectCity
 
-from .helpers import ( _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
-                       _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location,
-                       _get_user_owned_projects, _leave_project )
+
+from .helpers import ( _approve_project,
+                       _delete_project, _get_users_for_project, _get_user_joined_projects, _get_project_users_and_common_projects,
+                       _get_user_roles_for_project, _create_project, _edit_project, _get_lat_lon_from_location, _delete_cal,
+                       _get_user_owned_projects, _leave_project, _unflag_project )
 
 from .decorators import ( _is_member, _is_organizer, _is_owner, project_exists,
-                          project_member, project_ownership, project_organizer )
+                          project_member, project_ownership, project_organizer,
+                          valid_project_membership )
 
-from ..user.models import User
+from changebyus.user.decorators import is_site_admin
+from changebyus.user.models import User
 
-from ..notifications.api import _notify_project_join
+from changebyus.notifications.api import _notify_project_join
+
+from changebyus.stripe.api import _get_account_balance_percentage, _update_goal_description
+from changebyus.stripe.models import StripeAccount
 
 from flaskext.uploads import UploadNotAllowed
 from mongoengine.connection import _get_db
@@ -39,6 +46,7 @@ from mongoengine.errors import ValidationError
 from urlparse import urlparse
 
 project_api = Blueprint('project_api', __name__, url_prefix='/api/project')
+resource_api = Blueprint('resource_api', __name__, url_prefix='/api/resource')
 
 """
 .. module:: project/api
@@ -91,12 +99,14 @@ def api_search_projects():
             list of search results
     """    
 
-    text = request.json.get('s')
-    geo_dist = request.json.get('d')
-    lat = request.json.get('lat')
-    lon = request.json.get('lon')
-    cat = request.json.get('cat')
-    search_type = request.json.get('type')
+    req = request.json if request.json else request.args
+
+    text = req.get('s')
+    geo_dist = req.get('d')
+    lat = req.get('lat')
+    lon = req.get('lon')
+    cat = req.get('cat')
+    search_type = req.get('type')
     
     geo_center = [lon, lat]
     
@@ -109,7 +119,7 @@ def api_search_projects():
         addl_filters.update({"category": cat})
     
     if (search_type == 'resource'):
-        addl_filters.update({"resource": True})
+        addl_filters.update({"resource": True, "approved": True})
     if (search_type == 'project'):
         addl_filters.update({"resource": False})
 
@@ -134,6 +144,14 @@ def api_categories():
     
     return jsonify_response(ReturnStructure(data = data))
 
+
+@project_api.route('/cities')
+def api_cities():
+    cities = ProjectCity.objects(active=True)
+    
+    data = {"cities": db_list_to_dict_list(cities)}
+    
+    return jsonify_response(ReturnStructure(data = data))
 
 # TODO WTForms for flagging?
 
@@ -161,6 +179,7 @@ class CreateProjectForm(Form):
     lon = HiddenField("lon")
     photo = FileField("photo")
     resource = HiddenField("resource")
+    private = BooleanField("private")
 
 @project_api.route('/create', methods = ['POST'])
 @login_required
@@ -207,13 +226,14 @@ def api_get_project_slug(project_slug):
     if p.count() == 0 or p.count() > 1:
         warnStr = "Project of slug {0} returned {1} objects.".format(project_slug,
                                                                      p.count())
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
 
     return jsonify_response( ReturnStructure( data = p[0].as_dict() ))
 
 
 @project_api.route('/<project_id>')
 @project_exists
+# @valid_project_membership
 def api_get_project(project_id):
     """Get project by project_id
 
@@ -232,6 +252,13 @@ def api_get_project(project_id):
         # overwrite the slug with the project_id
         project_id = project.id
 
+    if project.stripe_account:
+        stripe_account_id = project.stripe_account.id
+        account = StripeAccount.objects.with_id(stripe_account_id)
+
+        if account is not None:
+            project.stripe_account = account
+
     return jsonify_response( ReturnStructure( data = project.as_dict() ))
 
 
@@ -247,6 +274,63 @@ class EditProjectForm(Form):
     lat = HiddenField("lat")
     lon = HiddenField("lon")
     photo = FileField("photo")    
+    private = BooleanField("private")
+    
+
+@project_api.route('/<project_id>', methods = ['DELETE'])
+@project_api.route('/remove', methods = ['POST'])
+@resource_api.route('/<project_id>', methods = ['DELETE'])
+@resource_api.route('/remove', methods = ['POST'])
+@is_site_admin
+def api_delete_project(project_id=None):
+    if (not project_id):
+        form = request.form if request.form else as_multidict(request.json)
+        project_id = form.get('project_id')
+    
+    _delete_project(project_id)
+    
+    return jsonify_response(ReturnStructure())
+        
+
+@project_api.route('/<project_id>/approve', methods = ['POST'])
+@resource_api.route('/<project_id>/approve', methods = ['POST'])
+@is_site_admin
+def api_approve_project(project_id):
+    _approve_project(project_id)
+    
+    return jsonify_response( ReturnStructure() )
+
+
+@project_api.route('/<project_id>/unflag', methods = ['POST'])
+@resource_api.route('/<project_id>/unflag', methods = ['POST'])
+@is_site_admin
+def api_unflag_project(project_id=None):    
+    _unflag_project(project_id)
+    
+    return jsonify_response(ReturnStructure())
+
+
+@project_api.route('/<project_id>/delete_calendar')
+@login_required
+@project_exists
+@project_organizer
+def api_delete_calendar(project_id):
+    """Edit an existing project
+ 
+        All arguments except project_id are optional
+
+        Args:
+            project_id: id of the project to edit
+            name: New name of the project
+            description: New description of the project
+            location: New location of the project
+            photo: New image file to associate with the project
+    
+        Returns:
+            Resultant project structure
+    """
+
+    return _delete_cal(project_id)
 
 
 @project_api.route('/edit', methods = ['POST'])
@@ -301,6 +385,46 @@ def api_view_project_users(project_id):
 
     return jsonify_response( ReturnStructure( data = users ))
 
+
+@project_api.route('/review', methods = ['POST'])
+def api_review_info():
+    """
+    ABOUT
+        Renders a template that lets user review and confirm fundraising details
+        such as amount, description, etc
+    METHOD
+        POST
+    INPUT
+        account_id, project_id, goal, description
+    OUTPUT
+        Rendered template for funrasise_review
+    PRECONDITIONS
+        User logged in
+    """
+ 
+    account_id = request.form.get('account_id')
+    project_id = request.form.get('project_id')
+    funding_goal = request.form.get('goal')
+    description = request.form.get('description')
+    project = Project.objects.with_id(project_id)
+
+    
+    _update_goal_description(account_id, funding_goal, description)
+    balance, percentage = _get_account_balance_percentage(account_id)
+
+    
+    if g.user.id != project.owner.id:
+        warnStr = "User {0} tried to review fundraising on project {1}".format(g.user.id, project_id)
+        app.logger.warning(warnStr)
+        abort(401)
+    
+    # we want to pass the fundraiser view the small 160x50 image
+    project_dict = project.as_dict()
+    project_image = project_dict['image_url_small_square']
+    
+
+    return jsonify_response( ReturnStructure( data = {'funding':funding_goal, 'project_id':project_id, 'description':description, 'name':project.name, 
+                               'image_url':project_image, 'balance':balance, 'percentage':percentage}) )
 
 
 @project_api.route('/user/<user_id>/owned-projects')
@@ -376,19 +500,51 @@ def api_get_projects():
     limit = int(request.args.get('limit', 100))
     sort = request.args.get('sort')
     order = request.args.get('order', 'asc')
-    is_resource = bool(request.args.get('is_resource', False))
+    
+    # using raw query here so that most list queries aren't needlessly 
+    # using flags__gt=-1 or something
+    query = {"active":True}
+    
+    if (request.args.get('is_resource')):
+        query.update({'resource': True, 'approved': True})
+
+    if bool(request.args.get('flagged', False)):
+        query['flags'] = {"$gt":0}
 
     if (sort):
         sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
-        projects = Project.objects(resource=is_resource, active=True).order_by(sort_order)
+        projects = Project.objects(__raw__=query).order_by(sort_order)
     else:
-        projects = Project.objects(resource=is_resource, active=True)
+        projects = Project.objects(__raw__=query)
 
     projects = projects[0:limit]
     projects_list = db_list_to_dict_list(projects)
 
     return jsonify_response( ReturnStructure( data = projects_list ) )
 
+
+@resource_api.route('/list/<status>')
+@is_site_admin
+def api_get_resources(status='approved'):
+    """
+    Returns list of unapproved resources
+    """
+    limit = int(request.args.get('limit', 100))
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+    
+    is_approved = (status != 'unapproved')
+    
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        resources = Project.objects(active=True, resource=True, approved=is_approved).order_by(sort_order)
+    else:
+        resources = Project.objects(active=True, resource=True, approved=is_approved)
+
+    resources = resources[0:limit]
+    resources_list = db_list_to_dict_list(resources)
+
+    return jsonify_response( ReturnStructure( data = resources_list ) )
 
 
 class JoinProjectForm(Form):
@@ -471,7 +627,7 @@ def remove_project_user():
     infoStr = "User {0} is attempting removal of user {1} on project {2}.".format(g.user.id,
                                                                                   user_id,
                                                                                   project_id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     return _leave_project(project_id=project_id, user_id=user_id)
 

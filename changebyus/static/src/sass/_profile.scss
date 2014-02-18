@@ -3,46 +3,44 @@
 
 .user-header {
     margin-top: 50px;
-    width: 100%; 
-
-    .edit{
+    width: 100%;
+    .edit {
         position: absolute;
         top: 0;
         right: 0;
     }
-    
-    .user-avatar{
+    .user-avatar {
         margin: 2%;
         width: 25%;
-        
-        img{max-width: 100%;}
+        img {
+            max-width: 100%;
+        }
     }
 }
 
 .user-info {
-    float: left; 
-    font-size: 20px; 
+    float: left;
+    font-size: 20px;
     margin: 35px 0 10px;
     width: 71%;
-
-    em{ color: $gray59; }
-
-    a{ color: $black; }
-
-    h1{
+    em {
+        color: $gray59;
+    }
+    a {
+        color: $black;
+    }
+    h1 {
         font-size: 68px;
         font-weight: normal;
         margin: 0;
         line-height: 68px;
         margin: 0 0 14px;
     }
-
     h2 {
         font-size: 42px;
         font-weight: normal;
     }
 }
-
 
 .user-image {
     height: 400px;
@@ -54,6 +52,7 @@
         font-size: 42px;
         font-weight: normal;
     }
-    
-    span { font-size: 18px; }
+    span {
+        font-size: 18px;
+    }
 }

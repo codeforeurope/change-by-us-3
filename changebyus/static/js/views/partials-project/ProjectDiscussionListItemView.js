@@ -3,10 +3,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
   return ProjectDiscussionListItemView = AbstractView.extend({
     tagName: "li",
     user: null,
-    initialize: function(options) {
+    initialize: function(options_) {
       var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
-      this.viewData = this.model.attributes;
+      AbstractView.prototype.initialize.call(this, options_);
       this.user = new UserModel({
         id: this.model.get("user").id
       });
@@ -26,6 +25,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         _this = this;
       m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       this.model.set("format_date", m);
+      this.viewData = this.model.attributes;
       this.viewData.image_url_round_small = this.user.get("image_url_round_small");
       this.viewData.display_name = this.user.get("display_name");
       this.$el = $(this.el);

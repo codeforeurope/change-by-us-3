@@ -1,132 +1,157 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"abstract-view", 
-		"views/partials-project/ProjectSubView",
-		"views/partials-universal/WysiwygFormView",
-		"views/partials-universal/UpdateListItemView",
-		"views/partials-project/ProjectUpdateSuccessModalView"],
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 AbstractView, 
-	 ProjectSubView, 
-	 WysiwygFormView, 
-	 UpdateListItemView, 
-	 ProjectUpdateSuccessModalView) ->
+        "backbone", 
+        "jquery", 
+        "template", 
+        "abstract-view", 
+        "views/partials-project/ProjectSubView",
+        "views/partials-universal/WysiwygFormView",
+        "views/partials-universal/UpdateListItemView",
+        "views/partials-project/ProjectUpdateSuccessModalView"],
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView, 
+     ProjectSubView, 
+     WysiwygFormView, 
+     UpdateListItemView, 
+     ProjectUpdateSuccessModalView) ->
 
-		ProjectAddUpdateView = ProjectSubView.extend
+        ProjectAddUpdateView = ProjectSubView.extend
 
-			parent: "#project-update"
+            parent: "#project-update"
 
-			events: 
-				"click #post-update":"animateUp"
-				"click .share-toggle":"shareToggle"
-				"click .share-options .styledCheckbox":"shareOption"
+            events: 
+                "click #post-update":"animateUp"
+                "click .share-toggle":"shareToggle"
+                "click .share-options .styledCheckbox":"shareOption"
 
+            render: -> 
+                @$el = $(@parent)
+                @viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
+                @$el.template @templateDir+"/templates/partials-project/project-add-update.html",
+                    {data: @viewData}, => @onTemplateLoad()
 
-			shareToggle:->
-				$(".share-options").toggleClass("hide")
+                self = @
+                document.windowReload = -> self.getSocial(false)
 
-			shareOption:(e)->
-				checked = []
-				$.each $('.share-options input'), ->
-					$this = $(this)
-					id = $this.attr('id')
-					if ($this.is(':checked')) then checked.push id
-						 
-				$('#social_sharing').val checked.join()
+            onTemplateLoad:-> 
+                @$ul = @$el.find('.updates-container ul')
+                
+                @getSocial()
 
-			render: -> 
-				@$el = $(@parent) 
-				@viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-				@$el.template @templateDir + "/templates/partials-project/project-add-update.html",
-					{data: @viewData}, => @onTemplateLoad()
+                ProjectSubView::onTemplateLoad.call @
 
-			onTemplateLoad:->
-				ProjectSubView::onTemplateLoad.call @
-				@$ul = @$el.find('.updates-container ul')
+            getSocial:(addForm_=true)->
+                # check to see if social accounts are linked and hide the share options if they aren't
+                $.get "/api/user/socialinfo", (response_)=>
+                    try
+                        @socialInfo = response_.data
+                    catch e
+                        
+                    if addForm_ then @addForm() else @checkSocial(true)
 
-				# check to see if social accounts are linked and hide the share options if they aren't
-				$.get "/api/user/socialinfo", (response_)=>
-					try
-						@socialInfo = response_.data
-					catch e
-						
-					@addForm()
+            shareToggle:->
+                $(".share-options").toggleClass("hide")
 
-			addForm:->
-				form = new WysiwygFormView({parent:"#update-form"})
-				form.on 'ON_TEMPLATE_LOAD', =>  
-					$feedback = $("#feedback").hide()
-					$submit = form.$el.find('input[type="submit"]')
-					$inputs = $submit.find("input, textarea")
-					
-					form.beforeSubmit = (arr_, form_, options_)->
-						console.log 'beforeSubmit', $feedback
-						$feedback.hide()
-						$inputs.attr("disabled", "disabled")
+            shareOption:(e)->
+                checked = []
+                $.each $('.share-options input'), ->
+                    $this = $(this)
+                    id = $this.attr('id')
+                    if ($this.is(':checked')) then checked.push id
+                         
+                $('#social_sharing').val checked.join()
 
-					form.success = (response_)=>
-						console.log 'success response_',response_
-						if response_.success
-							@addModal response_.data
+            addForm:->
+                form = new WysiwygFormView({parent:"#update-form"})
+                form.on 'ON_TEMPLATE_LOAD', =>  
+                    $feedback       = $("#feedback").hide()
+                    $submit         = form.$el.find('input[type="submit"]')
+                    $inputs         = $submit.find("input, textarea")
+                    @$facebook      = $("#facebook")
+                    @$twitter       = $("#twitter")
+                    @$facebookLabel = $("label[for=facebook]")
+                    @$twitterLabel  = $("label[for=twitter]")
+                    
+                    form.beforeSubmit = (arr_, form_, options_)->
+                        console.log 'beforeSubmit', $feedback
+                        $feedback.hide()
+                        $inputs.attr("disabled", "disabled")
 
-						form.resetForm()
-						$("#editor").html("")
-						$inputs.removeAttr("disabled")
+                    form.success = (response_)=>
+                        console.log 'success response_',response_
+                        if response_.success
+                            @addModal response_.data
 
-					form.error = (error_)=>
-						$feedback.show()
-						console.log 'error response_',error_
+                        form.resetForm()
+                        $("#editor").html("")
+                        $inputs.removeAttr("disabled")
 
-					@$el.find('input:radio, input:checkbox').screwDefaultButtons
-						image: 'url("/static/img/black-check.png")'
-						width: 18
-						height: 18
+                    form.error = (error_)=>
+                        $feedback.show()
+                        console.log 'error response_',error_
 
-					if @socialInfo.fb_name is ""
-						$("#facebook").parent().hide()
-						$("label[for=facebook]").hide()
+                    @$el.find('input:radio, input:checkbox').screwDefaultButtons
+                        image: 'url("/static/img/black-check.png")'
+                        width: 18
+                        height: 18
 
-					if @socialInfo.twitter_name is ""
-						$("#twitter").parent().hide()
-						$("label[for=twitter]").hide()
+                    @checkSocial()
+                    @delegateEvents()
 
-					@delegateEvents()
+            checkSocial:(forceClick_=false)->
+                if @socialInfo.fb_name is ""
+                    @$facebook.screwDefaultButtons("disable")
+                    @$facebookLabel.addClass("disabled-btn").click ()=> @socialClick("facebook")
+                else
+                    @$facebook.screwDefaultButtons("enable")
+                    if forceClick_ then @$facebook.screwDefaultButtons("check")
+                    @$facebookLabel.removeClass("disabled-btn").unbind "click"
 
-			addAll: ->  
-				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
-					{}, =>
-						if @collection.length > 0
-							model_ = @collection.models[0]
-							m = moment(model_.get("created_at")).format("MMMM D")
-							@newDay(m)
+                if @socialInfo.twitter_name is ""
+                    @$twitter.screwDefaultButtons("disable")
+                    @$twitterLabel.addClass("disabled-btn").click ()=> @socialClick("twitter")
+                else
+                    @$twitter.screwDefaultButtons("enable")
+                    if forceClick_ then @$twitter.screwDefaultButtons("check")
+                    @$twitterLabel.removeClass("disabled-btn").unbind "click"
 
-						@isDataLoaded = true
-						ProjectSubView::addAll.call(@) 
-						onPageElementsLoad()
+            addAll: ->  
+                @$day = $('<div />')
+                @$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
+                    {}, => @onDayWrapperLoad()
 
-			newDay:(date_)-> 
-				@currentDate = date_
-				@$currentDay = @$day.clone()
-				@$el.append @$currentDay
-				@$currentDay.find('h4').html(date_)
-				@$ul = @$currentDay.find('.bordered-item') 
-					
-			addOne: (model_) ->
-				m = moment(model_.get("created_at")).format("MMMM D")
-				if @currentDate isnt m then @newDay(m) 
-				view = new UpdateListItemView({model: model_})
-				@$ul.append view.$el 
+            onDayWrapperLoad: ->  
+                if @collection.length > 0
+                    model_ = @collection.models[0]
+                    m = moment(model_.get("created_at")).format("MMMM D")
+                    @newDay(m)
 
-			addModal:(data_)-> 
-				data_.twitter_name = @socialInfo.twitter_name
-				data_.slug         = @model.get("slug")
-				modal              = new ProjectUpdateSuccessModalView({model:data_})
+                @isDataLoaded = true
+                ProjectSubView::addAll.call(@) 
+                onPageElementsLoad()
 
-			animateUp:->
-				$("html, body").animate({ scrollTop: 0 }, "slow")
+            newDay:(date_)-> 
+                @currentDate = date_
+                @$currentDay = @$day.clone()
+                @$el.append @$currentDay
+                @$currentDay.find('h4').html(date_)
+                @$ul = @$currentDay.find('.bordered-item') 
+                    
+            addOne: (model_) ->
+                m = moment(model_.get("created_at")).format("MMMM D")
+                if @currentDate isnt m then @newDay(m) 
+                view = new UpdateListItemView({model: model_})
+                @$ul.append view.$el 
+
+            addModal:(data_)-> 
+                data_.twitter_name = @socialInfo.twitter_name
+                data_.slug         = @model.get("slug")
+                modal              = new ProjectUpdateSuccessModalView({model:data_})
+
+            animateUp:->
+                $("html, body").animate({ scrollTop: 0 }, "slow")
+
+            socialClick:(site_)->
+                popWindow "/social/#{site_}/link"

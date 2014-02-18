@@ -11,7 +11,7 @@
 
 """
 
-from flask import request, current_app
+from flask import request, current_app as app
 from werkzeug import MultiDict
 
 try:
@@ -68,15 +68,15 @@ def jsonify_response(data, status_code = 200, status = 'OK', indent=None):
     if isinstance(data, ReturnStructure):
         d = data.as_dict()
     else:
-        current_app.logger.info(infoStr)
+        app.logger.info(infoStr)
         errStr = "jsonify_response expects the data to be of type ReturnStructure."
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
 
         d = {}
         status_code = 500
         status = "ERROR"
 
-    resp =  current_app.response_class(json.dumps(d, indent=indent), 
+    resp =  app.response_class(json.dumps(d, indent=indent), 
                                        mimetype='application/json')
 
     resp.status = status

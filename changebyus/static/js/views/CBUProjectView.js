@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-universal/UpdatesView", "views/partials-universal/WysiwygFormView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, UpdatesView, WysiwygFormView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectDonationModalView", "views/partials-universal/UpdatesView", "views/partials-universal/WysiwygFormView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/UpdatesCollection"], function(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectDonationModalView, UpdatesView, WysiwygFormView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, UpdatesCollection) {
   var CBUProjectView;
   return CBUProjectView = AbstractView.extend({
     isOwner: false,
@@ -12,8 +12,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     calendarBTN: null,
     memberData: null,
     $header: null,
-    initialize: function(options) {
-      var _this = this;
+    initialize: function(options_) {
+      var options,
+        _this = this;
+      options = options_;
       this.templateDir = options.templateDir || this.templateDir;
       this.parent = options.parent || this.parent;
       this.model = new ProjectModel(options.model);
@@ -27,49 +29,34 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     events: {
-      "click .flag-project a": "flagProject",
-      "click .project-footer .btn": "joinProject",
+      "click #flag": "flagProject",
+      "click .follow": "joinProject",
+      "click .donation-header .btn": "onDonateClick",
       "click  a[href^='#']": "changeHash"
     },
     render: function() {
       var className, templateURL,
         _this = this;
-      if (this.isResource) {
-        className = "resource-container";
-        templateURL = "/templates/resource.html";
-      } else {
-        className = "project-container";
-        templateURL = "/templates/project.html";
-      }
-      this.$el = $("<div class='" + className + "'/>");
-      this.$el.template(this.templateDir + templateURL, {}, function() {
-        return _this.onTemplateLoad();
-      });
-      return $(this.parent).append(this.$el);
-    },
-    onTemplateLoad: function() {
-      this.viewData = this.model.attributes;
-      return this.getMemberStatus();
-    },
-    getMemberStatus: function() {
-      var id,
-        _this = this;
-      if (window.userID === "") {
-        this.isMember = false;
-        return this.addHeaderView();
-      } else {
-        id = this.model.get("id");
-        return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
-          if (res_.success) {
-            _this.memberData = res_.data;
-            _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
-            _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
-            _this.viewData.isMember = _this.isMember;
-            _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
-            _this.addHeaderView();
-          }
-          return console.log(_this.isMember, _this.isOwnerOrganizer);
+      if (this.model.get('active')) {
+        this.viewData = this.model.attributes;
+        if (this.isResource) {
+          className = "resource-container";
+          templateURL = "/templates/resource.html";
+        } else {
+          className = "project-container";
+          templateURL = "/templates/project.html";
+        }
+        this.$el = $("<div class='" + className + "'/>");
+        this.$el.template(this.templateDir + templateURL, {}, function() {
+          return _this.onTemplateLoad();
         });
+        return $(this.parent).append(this.$el);
+      } else {
+        this.$el = $("<div class='not-found'/>");
+        this.$el.template(this.templateDir + "/templates/partials-project/not-found.html", {}, function() {
+          return _this.onTemplateLoad();
+        });
+        return $(this.parent).append(this.$el);
       }
     },
     addHeaderView: function() {
@@ -90,18 +77,41 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       return this.$el.prepend(this.$header);
     },
+    notMember: function() {
+      var $notMember,
+        _this = this;
+      console.log('notMember');
+      $('.tabs-pane').remove();
+      $notMember = $("<div class='body-container'/>");
+      $notMember.template(this.templateDir + "/templates/partials-project/project-not-member.html", {
+        data: this.viewData
+      }, function() {});
+      return this.$el.append($notMember);
+    },
+    /* EVENTS ---------------------------------------------*/
+
+    onTemplateLoad: function() {
+      this.getMemberStatus();
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
     onHeaderLoaded: function() {
       var config, id;
       id = this.model.get("id");
       config = {
         id: id
       };
-      this.updatesCollection = new UpdatesCollection(config);
-      this.projectMembersCollection = new ProjectMembersCollection(config);
-      this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
-      return this.projectMembersCollection.fetch({
-        reset: true
-      });
+      if (this.isMember === false && this.model.get("private")) {
+        return this.notMember();
+      } else {
+        this.updatesCollection = new UpdatesCollection();
+        this.updatesCollection.id = id;
+        this.projectMembersCollection = new ProjectMembersCollection();
+        this.projectMembersCollection.id = id;
+        this.projectMembersCollection.on("reset", this.onCollectionLoad, this);
+        return this.projectMembersCollection.fetch({
+          reset: true
+        });
+      }
     },
     onCollectionLoad: function() {
       var parent,
@@ -128,7 +138,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
             userAvatar: userAvatar
           });
         });
-        console.log('wysiwygFormView', this.wysiwygFormView);
       } else {
         this.projectMembersView = new ProjectMembersView({
           model: this.model,
@@ -155,25 +164,22 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return this.delegateEvents();
     },
     flagProject: function(e) {
-      var $this, url,
-        _this = this;
+      var _this = this;
       e.preventDefault();
-      $this = $(e.currentTarget);
-      $this.parent().css('opacity', 0.25);
-      url = $this.attr('href');
-      return $.post(url, function(res_) {
-        return console.log(res_);
+      return $.post("/api/project/" + this.model.id + "/flag", function(res_) {
+        $('.flag-project').addClass('disabled-btn');
+        return _this.$el.unbind("click #flag");
       });
     },
     joinProject: function(e) {
       var $join, id,
         _this = this;
+      e.preventDefault();
       if (this.isMember) {
         return;
       }
-      e.preventDefault();
       if (window.userID === "") {
-        return window.location = "/login";
+        return window.location.href = "/login";
       } else {
         id = this.model.get("id");
         $join = $(".project-footer .btn");
@@ -186,12 +192,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         }).done(function(res_) {
           var feedback;
           if (res_.success) {
-            feedback = _this.isResource ? 'Following!' : 'Joined!';
+            feedback = 'Following!';
             _this.isMember = true;
             return $join.html(feedback).css('background-color', '#e6e6e6');
           }
         });
       }
+    },
+    onDonateClick: function() {
+      var projectDonationModalView;
+      return projectDonationModalView = new ProjectDonationModalView({
+        model: this.model
+      });
     },
     toggleSubView: function() {
       var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
@@ -209,13 +221,38 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       switch (view) {
         case "members":
           this.projectMembersView.show();
-          return this.membersBTN.addClass("active");
+          this.membersBTN.addClass("active");
+          break;
         case "calendar":
           this.projectCalenderView.show();
-          return this.calendarBTN.addClass("active");
+          this.calendarBTN.addClass("active");
+          break;
         default:
           this.updatesView.show();
-          return this.updatesBTN.addClass("active");
+          this.updatesBTN.addClass("active");
+      }
+      return onPageElementsLoad();
+    },
+    /* GETTER & SETTERS -----------------------------------------------------------------*/
+
+    getMemberStatus: function() {
+      var id,
+        _this = this;
+      if (window.userID === "") {
+        this.isMember = false;
+        return this.addHeaderView();
+      } else {
+        id = this.model.get("id");
+        return $.get("/api/project/" + id + "/user/" + window.userID, function(res_) {
+          if (res_.success) {
+            _this.memberData = res_.data;
+            _this.isMember = true === _this.memberData.member || true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.isOwnerOrganizer = true === _this.memberData.organizer || true === _this.memberData.owner ? true : false;
+            _this.viewData.isMember = _this.isMember;
+            _this.viewData.isOwnerOrganizer = _this.isOwnerOrganizer;
+            return _this.addHeaderView();
+          }
+        });
       }
     }
   });

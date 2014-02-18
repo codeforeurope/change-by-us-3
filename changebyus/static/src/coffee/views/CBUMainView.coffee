@@ -1,61 +1,70 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"form", 
-		"resource-project-view", 
-		"views/partials-homepage/BannerImageView", 
-		"collection/ProjectListCollection", 
-		"collection/ResourceListCollection", 
-		"abstract-view"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 form, 
-	 ResourceProjectPreviewView, 
-	 BannerImageView, 
-	 ProjectListCollection, 
-	 ResourceListCollection, 
-	 AbstractView) ->
-		CBUMainView = AbstractView.extend
+        "backbone", 
+        "jquery", 
+        "template", 
+        "form", 
+        "resource-project-view", 
+        "views/partials-homepage/BannerImageView", 
+        "collection/ProjectListCollection", 
+        "collection/ResourceListCollection", 
+        "abstract-view"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     form, 
+     ResourceProjectPreviewView, 
+     BannerImageView, 
+     ProjectListCollection, 
+     ResourceListCollection, 
+     AbstractView) ->
 
-			initialize: (options) ->
-				AbstractView::initialize.call @, options
-				@collection         = options.collection or new ProjectListCollection()
-				@resourceCollection = options.resourceCollection or new ResourceListCollection()
-				@render()
+        CBUMainView = AbstractView.extend
 
-			render: -> 
-				@$el = $("<div class='projects-main'/>")
-				@$el.template @templateDir + "/templates/main.html", {}, => @onTemplateLoad()
+            initialize: (options_) ->
+                options             = options_
+                AbstractView::initialize.call @, options
+                @collection         = options.collection or new ProjectListCollection()
+                @resourceCollection = options.resourceCollection or new ResourceListCollection()
+                @render()
 
-			onTemplateLoad:->
-				$(@parent).prepend @$el
-				
-				bannerParent = @$el.find(".body-container-wide")
-				bannerImageView = new BannerImageView({parent:bannerParent})
-				
-				@collection.on "reset", @addAll, @
-				@collection.fetch reset: true
+            render: -> 
+                @$el = $("<div class='projects-main'/>")
+                @$el.template @templateDir+"/templates/main.html",
+                    {}, => @onTemplateLoad()
 
-				@resourceCollection.on "reset", @addAllResources, @
-				@resourceCollection.fetch reset: true
+            onTemplateLoad:->
+                $(@parent).prepend @$el
+                
+                bannerParent = @$el.find(".body-container-wide")
+                bannerImageView = new BannerImageView({parent:bannerParent})
+                
+                @collection.on "reset", @addAll, @
+                @collection.fetch reset: true
 
-			addAll: ->  
-				@collection.each (projectModel) => 
-					@addProject projectModel
-				onPageElementsLoad() 
+                @resourceCollection.on "reset", @addAllResources, @
+                @resourceCollection.fetch reset: true
 
-			addProject: (projectModel) ->
-				view = new ResourceProjectPreviewView(model: projectModel)
-				@$el.find("#project-list").append view.$el
+                AbstractView::onTemplateLoad.call @
 
-			addAllResources: ->
-				@resourceCollection.each (projectModel) => 
-					@addResource projectModel
-				onPageElementsLoad() 
+            addAll: ->  
+                @collection.each (projectModel_) => 
+                    @addProject projectModel_
+                onPageElementsLoad() 
 
-			addResource: (projectModel) ->
-				view = new ResourceProjectPreviewView(model: projectModel)
-				@$el.find("#resource-list").append view.$el
+            addProject: (projectModel_) ->
+                view = new ResourceProjectPreviewView(model: projectModel_)
+                view.render()
+                
+                @$el.find("#project-list").append view.$el
+
+            addAllResources: ->
+                @resourceCollection.each (projectModel_) => 
+                    @addResource projectModel_
+                onPageElementsLoad() 
+
+            addResource: (projectModel_) ->
+                view = new ResourceProjectPreviewView(model: projectModel_)
+                view.render()
+
+                @$el.find("#resource-list").append view.$el

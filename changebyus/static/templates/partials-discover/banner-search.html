@@ -29,17 +29,18 @@
         <div class="search-forms">
             <h3 class="input-label">Near...</h3>
             <input class="search-projects zip" id="search-near" placeholder="e.g. 10018" type="text">
+            <div class="geo-pin"></div>
         </div>
 
         <div class="go">
-            <a class="btn btn-primary btn-large" href="#">Go</a>
+            <a class="btn btn-primary btn-large" href="javascript:void(0)">Go</a>
         </div>
     </div>
 
     <div class="search-filters clearfix">
         <div class="results-modify hide">
             <h3 class="input-label pull-left">Results For</h3>
-            <a href="#" class="ul pull-right" id="modify">Modify</a>
+            <a href="javascript:void(0)" class="ul pull-right" id="modify">Modify</a>
             <input class="search-projects" id="results-for" type="text">
         </div>
         
@@ -69,15 +70,11 @@
 </div>
 
 <div class="discover-header-right">
-    <a class="btn btn-large btn-secondary" href="/create/project">Create a Project</a>
+    <a class="btn btn-large btn-secondary" href="/create/project" id="create-project">Create a Project</a>
+    <a class="btn btn-large btn-secondary hide" href="/create/resource" id="create-resource">Add a Resource</a>
+    <h4>cities</h4>
     <div class="cities">
-        <ul>
-            <li>
-                <a href="/city/philadelphia">Philadelphia, PA</a>
-            </li>
-            <li>
-                <a href="/city/sanjose">San Jose, CA</a>
-            </li>
+        <ul> 
             <li>
                 <a href="/city/akron">Akron, OH</a>
             </li>
@@ -92,6 +89,12 @@
             </li>
             <li>
                 <a href="/city/miami">Miami, FL</a>
+            </li>
+            <li>
+                <a href="/city/philadelphia">Philadelphia, PA</a>
+            </li>
+            <li>
+                <a href="/city/sanjose">San Jose, CA</a>
             </li>
             <li>
                 <a href="/city/stpaul">St. Paul, MN</a>

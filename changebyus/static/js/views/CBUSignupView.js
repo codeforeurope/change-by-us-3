@@ -2,8 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
   var CBUSignupView;
   return CBUSignupView = AbstractView.extend({
     socialInfo: null,
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     render: function() {
@@ -21,6 +21,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     events: {
       "click .btn-info": "infoClick"
     },
+    /* EVENTS ---------------------------------------------*/
+
     infoClick: function(e) {
       var url;
       e.preventDefault();
@@ -34,6 +36,20 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       });
       return this.toggleSubView();
     },
+    toggleSubView: function() {
+      var view;
+      view = window.location.hash.substring(1);
+      if (view === "facebook" || view === "twitter") {
+        $('.social-signup').show();
+        $('.init-signup').hide();
+        return this.getSocialInfo();
+      } else {
+        $('.social-signup').hide();
+        return $('.init-signup').show();
+      }
+    },
+    /* AJAX FORM ---------------------------------------------*/
+
     ajaxForm: function() {
       var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options, socialOptions,
         _this = this;
@@ -50,13 +66,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           $form.find("input, textarea").attr("disabled", "disabled");
           return $feedback.removeClass("alert").removeClass("alert-danger").html("");
         },
-        success: function(response) {
-          console.log('signup', response);
+        success: function(response_) {
           $form.find("input, textarea").removeAttr("disabled");
-          if (response.success) {
-            return window.location.href = "/";
+          if (response_.success) {
+            return window.location.href = "/stream/dashboard";
           } else {
-            return $feedback.addClass("alert").addClass("alert-danger").html(response.msg);
+            return $feedback.addClass("alert").addClass("alert-danger").html(response_.msg);
           }
         }
       };
@@ -71,7 +86,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
       $socialFeedback = $socialSignup.find(".login-feedback");
-      console.log($socialFeedback);
       $socialSignup.hide();
       socialOptions = {
         type: $socialForm.attr('method'),
@@ -83,7 +97,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           return $socialFeedback.removeClass("alert").html("");
         },
         success: function(response) {
-          console.log('signup', response, $socialFeedback);
           $socialForm.find("input, textarea").removeAttr("disabled");
           if (response.success) {
             return window.location.href = "/";
@@ -102,23 +115,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         }
         json_str = JSON.stringify(obj);
         socialOptions.data = json_str;
-        console.log('socialOptions.data', socialOptions.data);
         $.ajax(socialOptions);
         return false;
       });
     },
-    toggleSubView: function() {
-      var view;
-      view = window.location.hash.substring(1);
-      if (view === "facebook" || view === "twitter") {
-        $('.social-signup').show();
-        $('.init-signup').hide();
-        return this.getSocialInfo();
-      } else {
-        $('.social-signup').hide();
-        return $('.init-signup').show();
-      }
-    },
+    /* GETTER & SETTERS -----------------------------------------------------------------*/
+
     getSocialInfo: function() {
       var $socialForm, $socialSignup,
         _this = this;
@@ -133,7 +135,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
           type: "GET",
           url: "/api/user/socialinfo"
         }).done(function(response_) {
-          console.log("response_", response_);
           if (response_.msg.toLowerCase() === "ok") {
             _this.setSocialInfo(response_.data);
           }
@@ -141,9 +142,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         });
       }
     },
-    setSocialInfo: function(data_) {
+    setSocialInfo: function(socialInfo) {
       var $socialAvatar, $socialSignup, img, name;
-      this.socialInfo = data_;
+      this.socialInfo = socialInfo;
       img = this.socialInfo.fb_image !== "" ? this.socialInfo.fb_image : this.socialInfo.twitter_image;
       name = this.socialInfo.fb_name !== "" ? this.socialInfo.fb_name : this.socialInfo.twitter_name;
       $socialAvatar = $('.social-avatar');
@@ -154,8 +155,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       if (this.socialInfo.email !== "None") {
         $socialSignup.find('input[name="email"]').val(this.socialInfo.email);
       }
-      $socialSignup.find('input[name="display_name"]').val(this.socialInfo.display_name);
-      return console.log(this.socialInfo, $('.social-avatar').find('img'));
+      return $socialSignup.find('input[name="display_name"]').val(this.socialInfo.display_name);
     }
   });
 });

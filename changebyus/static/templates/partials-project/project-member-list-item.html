@@ -25,17 +25,12 @@
         <span><%= data.bio %></span> 
     </div>
     <div class="member-roles grey">
-        <% if (data.view == "admin"){ %>  
-            <% console.log('data',data) %>
-            <% if (data.roles == "OWNER" || data.roles == "Owner"){ %>
-                Project Owner
-            <% }else{ %>
+        <% if (data.view == "admin"){ %>    
                 <select name="category" id="<%= data.sid %>">
-                <% _.each(["Organizer", "Member"], function(i) { %>
+                <% _.each(["Project Owner", "Organizer", "Member"], function(i) { %>
                      <% var roleMatch = false %>
                      <% _.each(data.roles, function(r) { %>
-                        <% if (i.toUpperCase() == r.toUpperCase()){ %>
-                             <% console.log(i,r) %>
+                        <% if (i.toUpperCase() == r.toUpperCase()){ %> 
                              <% roleMatch = true %>
                         <% } %>
                      <% }) %>
@@ -47,12 +42,20 @@
                      <% } %>
                 <% }); %>
                 </select>
-            <% } %>
+ 
         <% }else{ %>
-            <%= data.roles %>
+            <%= window.arrayToListString(data.roles) %>
         <% } %>
     </div>
-    <% if (data.view == "admin" && (data.roles != "OWNER" || data.roles != "Owner") ){ %>  
+    
+    <% if(data.isAdmin){ %>
+        <div class="admin-btns">
+            <a href="javascript:void(0)" class="btn btn-medium btn-tertiary">Unflag</a>
+            <a href="javascript:void(0)" class="btn btn-medium btn-warning">Delete</a>
+        </div>
+    <% } %>
+
+    <% if (data.view == "admin" && data.roles[0] != "OWNER" && data.roles[0] != "Owner"){ %>  
         <div class="delete-x"></div>
     <% } %>
 </div>

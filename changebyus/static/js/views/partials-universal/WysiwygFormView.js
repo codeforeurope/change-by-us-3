@@ -5,11 +5,16 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     editorID: "#editor",
     slim: false,
     userAvatar: "",
+    title: "",
     $updateForm: null,
-    initialize: function(options) {
+    $formName: null,
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.slim = options.slim || this.slim;
       this.userAvatar = options.userAvatar || this.userAvatar;
+      this.title = options.title || this.title;
       return this.render();
     },
     render: function() {
@@ -20,6 +25,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         response_to_id: this.id,
         editorID: this.editorID,
         slim: this.slim,
+        title: this.title,
         userAvatar: this.userAvatar
       };
       if (this.parent === "#update-form") {
@@ -34,7 +40,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else if (this.parent === "#add-thread-form") {
         url = "/templates/partials-project/project-new-thread-form.html";
-        this.editorID = "#new-thread-editor";
+        this.editorID = ".wsyiwyg-editor.slim";
         this.formName = "new-discussion";
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else {
@@ -48,13 +54,14 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       }, function() {
         return _this.onTemplateLoad();
       });
-      $(this.parent).append(this.$el);
-      return console.log('@templateDir+url', this.templateDir + url, this.$el, $(this.parent));
+      return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      this.trigger('ON_TEMPLATE_LOAD');
-      this.ajaxForm();
-      return onPageElementsLoad();
+      var _this = this;
+      AbstractView.prototype.onTemplateLoad.call(this);
+      return delay(100, function() {
+        return _this.ajaxForm();
+      });
     },
     ajaxForm: function() {
       var $editor, options, showErrorAlert,
@@ -113,22 +120,33 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         return overlay.css("opacity", 0).css("position", "absolute").offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
       });
       /*
-      				if "onwebkitspeechchange" of document.createElement("input")
-      					editorOffset = $editor.offset()
-      					if editorOffset
-      						$("#voiceBtn").css("position", "absolute").offset
-      							top: editorOffset.top - 20
-      							left: editorOffset.left + $editor.innerWidth() - 75
-      				else
-      					$("#voiceBtn").hide()
+      if "onwebkitspeechchange" of document.createElement("input")
+          editorOffset = $editor.offset()
+          if editorOffset
+              $("#voiceBtn").css("position", "absolute").offset
+                  top: editorOffset.top - 20
+                  left: editorOffset.left + $editor.innerWidth() - 75
+      else
+          $("#voiceBtn").hide()
       */
 
-      $("#voiceBtn").hide();
       $editor.wysiwyg({
-        fileUploadError: showErrorAlert
+        fileUploadError: showErrorAlert,
+        startUpload: function() {
+          console.log('startUpload', _this.$updateForm);
+          $editor.attr("contenteditable", false);
+          return _this.$updateForm.find("input").attr("disabled", "disabled");
+        },
+        uploadSuccess: function() {
+          console.log('uploadSuccess', _this.$updateForm);
+          $editor.attr("contenteditable", true);
+          return _this.$updateForm.find("input").removeAttr("disabled");
+        }
       });
       return window.prettyPrint && prettyPrint();
     },
+    /* FORM HOOKS ---------------------------------------------*/
+
     beforeSubmit: function(arr_, form_, options_) {},
     success: function(response_) {},
     error: function(response_) {},

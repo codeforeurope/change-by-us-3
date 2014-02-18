@@ -20,10 +20,12 @@ require.config({
     "template": "ext/jquery/template",
     "form": "ext/jquery/jquery.form.min",
     "validate": "ext/jquery/jquery.validate.min",
+    "payment": "ext/jquery/jquery.payment",
     "main-view": "views/CBUMainView",
     "discover-view": "views/CBUDiscoverView",
     "city-view": "views/CBUCityView",
     "project-view": "views/CBUProjectView",
+    "fundraising": "views/CBUFundraisingView",
     "project-owner-view": "views/CBUProjectOwnerView",
     "login-view": "views/CBULoginView",
     "signup-view": "views/CBUSignupView",
@@ -34,7 +36,9 @@ require.config({
     "resource-project-view": "views/partials-universal/ResourceProjectPreviewView",
     "user-view": "views/CBUUserView",
     "dashboard-view": "views/CBUDashboardView",
-    "stream-view": "views/CBUStreamView"
+    "stripe-edit": "views/CBUStripeEdit",
+    "stream-view": "views/CBUStreamView",
+    "admin-view": "views/CBUAdminView"
   },
   shim: {
     "slicknav": ["jquery"],
@@ -47,14 +51,15 @@ require.config({
     "form": ["jquery"],
     "template": ["jquery"],
     "validate": ["jquery"],
+    "payment": ["jquery"],
     "serializeObject": ["jquery"],
     "serializeJSON": ["jquery"]
   }
 });
 
-define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "create-view", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CreateView, SlickNav) {
+define(["jquery", "backbone", "main-view", "discover-view", "city-view", "project-view", "project-owner-view", "login-view", "signup-view", "user-view", "dashboard-view", "stream-view", "admin-view", "create-view", "stripe-edit", "fundraising", "slicknav"], function($, Backbone, CBUMainView, CBUDiscoverView, CBUCityView, CBUProjectView, CBUProjectOwnerView, CBULoginView, CBUSignupView, CBUUserView, CBUDashboardView, CBUStreamView, CBUAdminView, CreateView, CBUStripeEdit, CBUFundraisingView, SlickNav) {
   return $(document).ready(function() {
-    var $clone, $cloneLast, $footer, $navTop, $window, CBUAppRouter, CBURouter, config, footerHeight;
+    var $clone, $cloneLast, $footer, $mainContent, $navTop, $topnav, $window, CBUAppRouter, CBURouter, config, debounce, footerHeight;
     config = {
       parent: ".main-content"
     };
@@ -62,7 +67,10 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       routes: {
         "project/:id": "project",
         "project/:id/admin": "projectAdmin",
+        "project/:id/stripe/:sid/edit": "stripeEdit",
+        "project/:id/fundraising": "fundraising",
         "resource/:id": "resource",
+        "resource/:id/admin": "resourceAdmin",
         "city/:id": "city",
         "user/:id": "user",
         "discover": "discover",
@@ -74,6 +82,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         "project": "project",
         "stream": "stream",
         "stream/": "stream",
+        "admin": "admin",
         "": "default"
       },
       project: function(id_) {
@@ -94,12 +103,36 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
           return window.location.href = "/login";
         }
       },
+      stripeEdit: function(id_, sid_) {
+        config.model = {
+          id: id_,
+          sid: sid_
+        };
+        return window.CBUAppView = new CBUStripeEdit(config);
+      },
+      fundraising: function(id_) {
+        config.model = {
+          id: id_
+        };
+        return window.CBUAppView = new CBUFundraisingView(config);
+      },
       resource: function(id_) {
         config.model = {
           id: id_
         };
         config.isResource = true;
         return window.CBUAppView = new CBUProjectView(config);
+      },
+      resourceAdmin: function(id_) {
+        if (userID) {
+          config.model = {
+            id: id_
+          };
+          config.isResource = true;
+          return window.CBUAppView = new CBUProjectOwnerView(config);
+        } else {
+          return window.location.href = "/login";
+        }
       },
       city: function(id_) {
         config.model = {
@@ -139,6 +172,9 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
       stream: function() {
         return window.CBUAppView = new CBUStreamView(config);
       },
+      admin: function() {
+        return window.CBUAppView = new CBUAdminView(config);
+      },
       "default": function() {
         return window.CBUAppView = new CBUMainView(config);
       }
@@ -155,6 +191,17 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     }, function() {
       return $(this).removeClass('active');
     });
+    $('.nav.nav-pills.pull-right').slicknav({
+      label: '',
+      prependTo: '#responsive-menu'
+    });
+    $clone = $('.resp-append');
+    $cloneLast = $('.resp-append-last');
+    $clone.clone().appendTo($('.slicknav_nav'));
+    $cloneLast.clone().appendTo($('.slicknav_nav'));
+    $(".logged-in .user-avatar").click(function(e) {
+      return window.location.href = "/stream/dashboard";
+    });
     /* LOG OUT*/
 
     $("a[href='/logout']").click(function(e) {
@@ -167,19 +214,22 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return window.location.reload();
       });
     });
-    /* GLOBAL UTILS*/
+    /* GLOBAL UTILS ----------------------------------------------------------------------------------*/
 
     window.popWindow = function(url) {
       var h, left, title, top, w;
-      title = "social";
       w = 650;
       h = 650;
       left = (screen.width / 2) - (w / 2);
       top = (screen.height / 2) - (h / 2);
+      title = "social";
       return window.open(url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=" + w + ", height=" + h + ", top=" + top + ", left=+" + left);
     };
     window.delay = function(time, fn) {
       return setTimeout(fn, time);
+    };
+    window.randomInt = function(num_) {
+      return Math.floor(Math.random() * num_);
     };
     window.arrayToListString = function(arr_) {
       var i, str, _i, _len;
@@ -200,31 +250,36 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
     };
-    window.buttonize3D = function() {
-      var $btn, $btn3d, btn, _i, _len, _results;
-      $btn3d = $('.btn-3d');
-      _results = [];
-      for (_i = 0, _len = $btn3d.length; _i < _len; _i++) {
-        btn = $btn3d[_i];
-        $btn = $(btn);
-        $btn.parent().addClass('btn-3d-parent');
-        _results.push($btn.attr('data-content', $btn.html()));
+    $(document).bind('keydown', function(e) {
+      var c, k, _ref;
+      if ((_ref = location.host) === "localhost:5000" || _ref === "localtunnel.com:5000") {
+        c = e.keyCode ? e.keyCode : e.which;
+        k = String.fromCharCode(c).toLowerCase();
+        if (k === 'd') {
+          return $('body').toggleClass('debug');
+        }
       }
-      return _results;
-    };
-    /* STICKY FOOTER*/
+    });
+    /* STICKY FOOTER ----------------------------------------------------------------------------------*/
 
     $window = $(window);
-    footerHeight = 0;
+    $topnav = $(".top-nav");
+    $mainContent = $(".main-content");
     $footer = $(".footer-nav");
+    footerHeight = 0;
+    debounce = null;
     window.positionFooter = function() {
-      return delay(100, function() {
-        footerHeight = parseInt($footer.height()) + parseInt($footer.css('margin-top'));
-        console.log($footer.css('margin-top'), footerHeight, $(document.body).height(), $window.height());
-        if (($(document.body).height() + footerHeight) < $window.height()) {
+      if (debounce) {
+        clearTimeout(debounce);
+      }
+      return debounce = delay(10, function() {
+        var mainContentHeight, topNavHeight;
+        topNavHeight = $topnav.height();
+        mainContentHeight = $mainContent.height();
+        footerHeight = $footer.height() + 140;
+        if ((topNavHeight + mainContentHeight + footerHeight) < $window.height()) {
           return $footer.css({
-            position: "fixed",
-            bottom: 0
+            position: "fixed"
           });
         } else {
           return $footer.css({
@@ -235,18 +290,8 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     };
     positionFooter();
     $window.scroll(positionFooter).resize(positionFooter);
-    window.onPageElementsLoad = function() {
+    return window.onPageElementsLoad = function() {
       return positionFooter();
     };
-    /* END STICKY FOOTER*/
-
-    $('.nav.nav-pills.pull-right').slicknav({
-      label: '',
-      prependTo: '#responsive-menu'
-    });
-    $clone = $('.resp-append');
-    $cloneLast = $('.resp-append-last');
-    $clone.clone().appendTo($('.slicknav_nav'));
-    return $cloneLast.clone().appendTo($('.slicknav_nav'));
   });
 });

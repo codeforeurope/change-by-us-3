@@ -1,27 +1,23 @@
-<% console.log(data); %>
 <div class="success-modal scaled-fade">
     <div class="close-x"></div>
     <div class="modal-innerwrapper">
-        <% if (data.msg.toLowerCase()=="ok" ) { %>
-            <h1>Success!</h1>
-            <p class="modal-feedback">
-                <% if (data.isResource){ %>
-                    Your Resource:<br>
-                <% }else{ %>
+        <% if (data.success ) { %>
+            <% if (data.isResource){ %>
+                <h1>Thank You!</h1>
+                <p class="modal-feedback">
+                    We will be in touch when we have finished reviewing your application.
+                </p>
+            <% } else { %>
+                <h1>Success!</h1>
+                <p class="modal-feedback">
                     Your Project:<br>
-                <% } %>
-                    <%= data.data.name %> has been created.
-                <br>
-            </p>
-            <div class="modal-links">
-                <% if (data.isResource){ %>
-                    <a href="/resource/<%= data.data.slug %>" class="btn btn-large btn-secondary">Share Invite Link</a>
-                    <a href="/resource/<%= data.data.slug %>" class="btn btn-large btn-tertiary">View Resource</a>
-                <% }else{ %>
+                    <%= data.data.name %> has been created.<br>
+                </p>
+                <div class="modal-links">
                     <a href="/project/<%= data.data.slug %>" class="btn btn-large btn-secondary">Share Invite Link</a>
                     <a href="/project/<%= data.data.slug %>" class="btn btn-large btn-tertiary">View Project</a>
-                <% } %>
-            </div>
+                </div>
+             <% } %>
         <% } else { %>
             <div class="modal-feedback">
                 <%= data.msg %>

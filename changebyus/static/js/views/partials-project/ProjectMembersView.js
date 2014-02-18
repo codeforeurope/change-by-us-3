@@ -9,15 +9,23 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     $teamList: null,
     $memberList: null,
     projectID: 0,
+    isOwner: false,
     isOwnerOrganizer: false,
     view: "public",
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       this.isDataLoaded = options.isDataLoaded || this.isDataLoaded;
       this.view = options.view || this.view;
       this.projectID = options.projectID || this.projectID;
       this.model = options.model || this.model;
+      this.isOwner = options.isOwner || this.isOwner;
       this.isOwnerOrganizer = options.isOwnerOrganizer || this.isOwnerOrganizer;
       return ProjectSubView.prototype.initialize.call(this, options);
+    },
+    events: {
+      "click #alpha": "sortClick",
+      "click #created": "sortClick"
     },
     render: function() {
       var templateURL,
@@ -33,14 +41,19 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.onTemplateLoad();
       });
     },
+    /* EVENTS ---------------------------------------------*/
+
     onTemplateLoad: function() {
-      ProjectSubView.prototype.onTemplateLoad.call(this);
       this.$teamList = this.$el.find("#team-members ul");
       this.$memberList = this.$el.find("#project-members ul");
       if ((this.view === "public") && (this.collection.length > 0)) {
         this.onCollectionLoad();
       }
-      return onPageElementsLoad();
+      return ProjectSubView.prototype.onTemplateLoad.call(this);
+    },
+    sortClick: function(e) {
+      this.addAll($(e.currentTarget).attr("id"));
+      return false;
     },
     onCollectionLoad: function() {
       var _this = this;
@@ -52,23 +65,37 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return _this.addAll();
       });
     },
-    addAll: function() {
-      var model, _i, _j, _len, _len1, _ref, _ref1,
+    addAll: function(sort_) {
+      var model, sortBy, _i, _j, _len, _len1, _ref, _ref1,
         _this = this;
+      if (sort_ == null) {
+        sort_ = "alpha";
+      }
       this.team = [];
       this.members = [];
-      console.log('@collection addAll', this.collection);
-      this.collection.each(function(model) {
-        var roles;
+      console.log('addAll sort_', sort_);
+      $("#" + sort_).addClass('sort-deactive').removeClass('ul').siblings().removeClass('sort-deactive').addClass('ul');
+      if (sort_ === "alpha") {
+        sortBy = this.collection.sortBy(function(model) {
+          return model.get('last_name');
+        });
+      } else {
+        sortBy = this.collection.sortBy(function(model) {
+          return model.get('created_at');
+        });
+        sortBy.reverse();
+      }
+      $.each(sortBy, function(k, model) {
+        var ownerID, roles;
         roles = model.get("roles");
+        ownerID = _this.model ? _this.model.get('owner').id : -1;
         if (roles.length === 0) {
-          return model.set("roles", ["Owner"]);
+          model.set("roles", ["Owner"]);
+        }
+        if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
+          return _this.members.push(model);
         } else {
-          if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
-            return _this.members.push(model);
-          } else {
-            return _this.team.push(model);
-          }
+          return _this.team.push(model);
         }
       });
       this.$teamList.html('');
@@ -85,43 +112,37 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         this.$memberList.parent().parent().show();
         this.$memberList.parent().parent().find('h4').html(this.members.length + ' Members');
       }
-      console.log('team >>>>>>>>>> ', this.team, this.members);
-      if ((this.team.length === 0) && (this.members.length === 0)) {
-        $('.no-results').show();
-      } else {
-        _ref = this.team;
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          model = _ref[_i];
-          this.addTeam(model);
-        }
-        _ref1 = this.members;
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          model = _ref1[_j];
-          this.addMember(model);
-        }
-        ProjectSubView.prototype.addAll.call(this);
+      _ref = this.team;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        model = _ref[_i];
+        this.addTeam(model);
       }
-      return this.isDataLoaded = true;
+      _ref1 = this.members;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        model = _ref1[_j];
+        this.addMember(model);
+      }
+      ProjectSubView.prototype.addAll.call(this);
+      this.isDataLoaded = true;
+      return this.delegateEvents();
     },
     addTeam: function(model_) {
       var view;
-      console.log('addTeam model_', model_);
       view = new ProjectMemberListItemView({
         model: model_,
         view: this.view,
         projectID: this.projectID
       });
-      return this.$teamList.append(view.el);
+      return this.$teamList.append(view.$el);
     },
     addMember: function(model_) {
       var view;
-      console.log('addMember model_', model_);
       view = new ProjectMemberListItemView({
         model: model_,
         view: this.view,
         projectID: this.projectID
       });
-      return this.$memberList.append(view.el);
+      return this.$memberList.append(view.$el);
     }
   });
 });

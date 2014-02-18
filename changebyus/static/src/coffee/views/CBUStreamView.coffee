@@ -1,55 +1,73 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-universal/UpdateListItemView"], 
-	(_, Backbone, $, temp, AbstractView, StreamCollection, UpdateListItemView) ->
-		CBUStreamView = AbstractView.extend
+define ["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "abstract-view", 
+        "collection/StreamCollection", 
+        "views/partials-universal/UpdateListItemView"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView, 
+     StreamCollection, 
+     UpdateListItemView) ->
+        
+        CBUStreamView = AbstractView.extend
 
-			initialize: (options_) ->
-				AbstractView::initialize.call @, options_
-				console.log 'CBUStreamView initialize'
-				@collection = new StreamCollection()
-				@render()
+            initialize: (options_) ->
+                AbstractView::initialize.call @, options_ 
+                @collection = new StreamCollection()
+                @render()
 
-			render: ->
-				@$el = $(@parent)
-				@$el.template @templateDir+"/templates/stream.html",
-					{data: @viewData}, => @onTemplateLoad()
+            render: ->
+                @$el = $(@parent)
+                @$el.template @templateDir+"/templates/stream.html",
+                    {data: @viewData}, => @onTemplateLoad()
+                
+            addAll: -> 
+                @$day = $('<div />')
+                @$day.template @templateDir+"/templates/partials-user/stream-day-wrapper.html",
+                    {}, => @onStreamWrapperLoad()
 
-			onTemplateLoad: ->
-				@$container = @$el.find('.body-container')
-				@collection.on "reset", @onCollectionLoad, @
-				@collection.fetch {reset: true}
+            newDay:(date_)-> 
+                @currentDate = date_
+                @$currentDay = @$day.clone()
+                @$currentDay.find('h4').html(date_)
+                @$container.append(@$currentDay)
+                @$projects = @$currentDay.find('.stream-wrapper')
+                    
+            addOne: (model_) ->
+                m = moment(model_.get("created_at")).format("MMMM D")
+                if @currentDate isnt m then @newDay(m)
 
-			onCollectionLoad:->
-				console.log 'onCollectionLoad'
-				@$el.find(".preload").remove()
-				@addAll()
-				
-			addAll: -> 
-				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-user/stream-day-wrapper.html",
-					{}, =>
-						if @collection.length > 0
-							model_ = @collection.models[0]
-							m = moment(model_.get("created_at")).format("MMMM D")
-							@newDay(m)
-						
-						if @collection.models.length is 0 then @noResults() 
-						@collection.each (model) =>  
-							@addOne(model)
+                view = new UpdateListItemView({model: model_, isStream:true, isMember:true})
+                @$projects.append view.$el 
 
-						@isDataLoaded = true
-						onPageElementsLoad()
+            noResults:-> 
+                @$el.find('.no-results').show()
 
-			newDay:(date_)-> 
-				@currentDate = date_
-				@$currentDay = @$day.clone()
-				@$currentDay.find('h4').html(date_)
-				@$container.append(@$currentDay)
-				@$projects = @$currentDay.find('.stream-wrapper')
-					
-			addOne: (model_) ->
-				console.log model_, @$ul
-				m = moment(model_.get("created_at")).format("MMMM D")
-				if @currentDate isnt m then @newDay(m)
+            ### EVENTS ---------------------------------------------### 
+            onTemplateLoad: ->
+                @$container = @$el.find('.body-container')
+                @collection.on "reset", @onCollectionLoad, @
+                @collection.fetch {reset: true}
 
-				view = new UpdateListItemView({model: model_, isStream:true})
-				@$projects.append view.$el 
+                AbstractView::onTemplateLoad.call @
+
+            onCollectionLoad:->  
+                @$el.find(".preload").remove()
+                @addAll()
+
+            onStreamWrapperLoad:->
+                if @collection.length > 0
+                    model_ = @collection.models[0]
+                    m = moment(model_.get("created_at")).format("MMMM D")
+                    @newDay(m)
+                
+                if @collection.models.length is 0 then @noResults() 
+                @collection.each (model_) =>  
+                    @addOne(model_)
+
+                @isDataLoaded = true
+                onPageElementsLoad()

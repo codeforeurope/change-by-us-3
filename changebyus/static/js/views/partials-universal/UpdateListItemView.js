@@ -3,13 +3,17 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
   return UpdateListItemView = AbstractView.extend({
     model: UpdateModel,
     isStream: false,
+    isMember: false,
     $repliesHolder: null,
     $postRight: null,
     $replyForm: null,
-    initialize: function(options) {
-      var _this = this;
+    initialize: function(options_) {
+      var options,
+        _this = this;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
+      this.isMember = options.isMember;
       this.isStream = options.isStream || this.isStream;
       this.el = this.isStream ? $('<div/>').addClass('content-wrapper') : $('<li/>');
       this.$el = $(this.el);
@@ -22,6 +26,9 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         }
       });
     },
+    events: {
+      "click .reply-toggle:first": "onReplyToggleClick"
+    },
     render: function() {
       var m,
         _this = this;
@@ -29,12 +36,11 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData.display_name = this.user.get("display_name");
       m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       this.model.set("format_date", m);
-      this.$el.template(this.templateDir + "/templates/partials-universal/update-list-item.html", {
+      return this.$el.template(this.templateDir + "/templates/partials-universal/update-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      return this;
     },
     onTemplateLoad: function() {
       var $projectTitle, projectName;
@@ -44,19 +50,16 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         $projectTitle.html(projectName);
         this.$el.append($projectTitle);
       }
+      this.$el.find('img').load(function() {
+        return onPageElementsLoad();
+      });
       this.addReplies();
-      return this.delegateEvents();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addReplies: function() {
-      var reply, self, viewData, _i, _len, _ref,
+      var reply, viewData, _i, _len, _ref,
         _this = this;
-      console.log('addReplies', this.model);
-      self = this;
       this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
-      this.$el.find('.reply-toggle').first().click(function() {
-        $(this).find('.reply').toggleClass('hide');
-        return self.$repliesHolder.toggleClass('hide');
-      });
       _ref = this.model.get('responses');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         reply = _ref[_i];
@@ -64,16 +67,19 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       }
       viewData = this.model.attributes;
       viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-      this.$replyForm = $('<li class="post-reply-form"/>');
-      return this.$replyForm.template(this.templateDir + "/templates/partials-universal/post-reply-form.html", {
-        data: viewData
-      }, function() {
-        return _this.onFormLoaded();
-      });
+      if (this.isMember) {
+        this.$replyForm = $('<li class="post-reply-form"/>');
+        this.$replyForm.template(this.templateDir + "/templates/partials-universal/post-reply-form.html", {
+          data: viewData
+        }, function() {
+          return _this.onFormLoaded();
+        });
+        this.$repliesHolder.append(this.$replyForm);
+      }
+      return this.$el.find('.update-content').append(this.$repliesHolder);
     },
     addReply: function(reply_) {
       var postReplyView, replyForm;
-      console.log('reply_', reply_);
       postReplyView = new PostReplyView({
         model: reply_
       });
@@ -84,11 +90,15 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         return this.$repliesHolder.append(postReplyView.$el);
       }
     },
+    /* EVENTS ---------------------------------------------*/
+
+    onReplyToggleClick: function(e) {
+      $(e.currentTarget).find('.reply').toggleClass('hide');
+      return this.$repliesHolder.toggleClass('hide');
+    },
     onFormLoaded: function() {
       var $form, options,
         _this = this;
-      this.$el.find('.update-content').append(this.$repliesHolder);
-      this.$repliesHolder.append(this.$replyForm);
       $form = this.$replyForm.find('form');
       options = {
         type: $form.attr('method'),

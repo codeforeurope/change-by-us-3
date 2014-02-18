@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from .models import User, UserNotifications
+from changebyus.project.models import UserProjectLink
 from mongoengine.errors import NotUniqueError
 
-from flask import current_app
+from flask import current_app as app
 from flask.ext.security.utils import ( encrypt_password, verify_password,
                                        verify_and_update_password )
 
@@ -59,7 +60,8 @@ def _create_user(email=None,
                  bio=None,
                  website=None,
                  location=None,
-                 geo_location=None):
+                 geo_location=None,
+                 roles=[]):
     """
         Routine to create a user record. This is purpusly flexible, you can
         create a user with no email, because the user may be identified by their
@@ -98,7 +100,8 @@ def _create_user(email=None,
              bio=bio,
              website=website,
              location=location,
-             geo_location=geo_location)
+             geo_location=geo_location,
+             roles=roles)
 
     u.notifications = UserNotifications()
 
@@ -114,10 +117,34 @@ def _create_user(email=None,
 
         # Not really an error but logging just in case
         infoStr = "Unable to create user with email {0} and display name {1}.".format(email, display_name)
-        current_app.logger.info(infoStr)
-        current_app.logger.exception(e)
+        app.logger.info(infoStr)
+        app.logger.exception(e)
 
         return None
+        
+        
+def _delete_user(user_id):
+    # deactivate user record
+    u = User.objects.with_id(user_id)
+    u.active = False
+    u.save()
+    
+    # delete project memberships
+    up = UserProjectLink.objects(user=u)
+    up.delete()
+    
+    return True
+
+
+def _unflag_user(user_id):
+    u = User.objects.with_id(user_id)
+    u.flags = 0
+    u.save()
+    
+    from pprint import pprint
+    pprint(u.as_dict())
+        
+    return True        
 
 
 def _add_twitter(user_id=None,
@@ -138,7 +165,7 @@ def _add_twitter(user_id=None,
     
     user = User.objects.with_id(user_id)
     if user is None:
-        current_app.logger.warning("Tried to add twitter credentials to non-existent user {0}".format(user_id))
+        app.logger.warning("Tried to add twitter credentials to non-existent user {0}".format(user_id))
         return False
 
     user.twitter_id = twitter_id
@@ -166,7 +193,7 @@ def _add_facebook(user_id=None,
 
     user = User.objects.with_id(user_id)
     if user is None:
-        current_app.logger.warning("Tried to add facebook credentials to non-existent user {0}".format(user_id))
+        app.logger.warning("Tried to add facebook credentials to non-existent user {0}".format(user_id))
         return False
 
     user.facebook_id = facebook_id
@@ -194,7 +221,7 @@ def _get_user_by_email(email=None):
 
     if user.count() > 1:
         errStr = "ERROR, email {0} is in the User system twice.".format(email)
-        current_app.logger.error(errStr)
+        app.logger.error(errStr)
         return None
 
     return user.first()

@@ -1,23 +1,19 @@
 define(["underscore", "backbone", "jquery", "template", "abstract-view", "serializeObject"], function(_, Backbone, $, temp, AbstractView, serializeObject) {
   var ProfileEditView;
   return ProfileEditView = AbstractView.extend({
-    initialize: function(options) {
-      var _this = this;
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      var self;
+      AbstractView.prototype.initialize.call(this, options_);
       this.viewData = this.model.attributes;
-      return $.get("/api/user/socialstatus", function(response_) {
-        var e;
-        try {
-          _this.viewData.facebook = response_.data.facebook;
-          _this.viewData.twitter = response_.data.twitter;
-        } catch (_error) {
-          e = _error;
-        }
-        return _this.render();
-      });
+      self = this;
+      this.getSocial();
+      return document.windowReload = function() {
+        return self.getSocial(false);
+      };
     },
     events: {
-      "click .social-btns a": "socialClick"
+      "click .social-btns a": "socialClick",
+      "click #delete-account": "deleteAccount"
     },
     render: function() {
       var _this = this;
@@ -28,16 +24,71 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return _this.onTemplateLoaded();
       });
     },
+    getSocial: function(render_) {
+      var _this = this;
+      if (render_ == null) {
+        render_ = true;
+      }
+      return $.get("/api/user/socialstatus", function(response_) {
+        var e;
+        try {
+          _this.viewData.facebook = response_.data.facebook;
+          _this.viewData.twitter = response_.data.twitter;
+        } catch (_error) {
+          e = _error;
+        }
+        if (render_) {
+          return _this.render();
+        } else {
+          return _this.checkSocial();
+        }
+      });
+    },
     socialClick: function(e) {
       var url;
       e.preventDefault();
       url = $(e.currentTarget).attr("href");
       return popWindow(url);
     },
+    checkSocial: function() {
+      var $facebook, $twitter;
+      $twitter = $('.twitter a');
+      $facebook = $('.facebook a');
+      console.log('@viewData.facebook', this.viewData.facebook, this.viewData.twitter);
+      if (this.viewData.facebook) {
+        $facebook.removeClass('btn-primary').addClass('btn-tertiary').text('Disconnect').attr("href", "/social/facebook/disconnect");
+      } else {
+        $facebook.addClass('btn-primary').removeClass('btn-tertiary').text('Connect').attr("href", "/social/facebook/link");
+      }
+      if (this.viewData.twitter) {
+        return $twitter.removeClass('btn-primary').addClass('btn-tertiary').text('Disconnect').attr("href", "/social/twitter/disconnect");
+      } else {
+        return $twitter.addClass('btn-primary').removeClass('btn-tertiary').text('Connect').attr("href", "/social/twitter/link");
+      }
+    },
     onTemplateLoaded: function() {
       this.ajaxForm();
-      onPageElementsLoad();
-      return this.delegateEvents();
+      $('input[name="visibility"]').change(function() {
+        return $('input[name="private"]').attr('checked', $(this).val() === "private");
+      });
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    deleteAccount: function(e) {
+      var confirmation,
+        _this = this;
+      e.preventDefault();
+      confirmation = confirm("Are you sure you want to delete your account?");
+      if (confirmation) {
+        e.preventDefault();
+        return $.ajax({
+          type: "DELETE",
+          url: "/api/user/" + this.model.id
+        }).done(function(res_) {
+          if (res_.success) {
+            return window.location.href = "/";
+          }
+        });
+      }
     },
     ajaxForm: function() {
       var $feedback, $form, $inputs, $projectLocation, $submit, options,

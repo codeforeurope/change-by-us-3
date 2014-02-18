@@ -9,7 +9,7 @@
         <div class="popup-arrow"></div>
         <div class="mail-icon">
             <% if (data.public_email && data.email != ""){ %>
-            <a href="mailto:<% data.email %>">
+            <a href="mailto:<%= data.email %>">
                 <img src="/static/img/mail_icon.png" alt="Email">
             </a>
             <% }else{ %>

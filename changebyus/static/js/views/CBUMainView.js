@@ -1,7 +1,9 @@
 define(["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection", "collection/ResourceListCollection", "abstract-view"], function(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection, ResourceListCollection, AbstractView) {
   var CBUMainView;
   return CBUMainView = AbstractView.extend({
-    initialize: function(options) {
+    initialize: function(options_) {
+      var options;
+      options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();
       this.resourceCollection = options.resourceCollection || new ResourceListCollection();
@@ -26,36 +28,39 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
         reset: true
       });
       this.resourceCollection.on("reset", this.addAllResources, this);
-      return this.resourceCollection.fetch({
+      this.resourceCollection.fetch({
         reset: true
       });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addAll: function() {
       var _this = this;
-      this.collection.each(function(projectModel) {
-        return _this.addProject(projectModel);
+      this.collection.each(function(projectModel_) {
+        return _this.addProject(projectModel_);
       });
       return onPageElementsLoad();
     },
-    addProject: function(projectModel) {
+    addProject: function(projectModel_) {
       var view;
       view = new ResourceProjectPreviewView({
-        model: projectModel
+        model: projectModel_
       });
+      view.render();
       return this.$el.find("#project-list").append(view.$el);
     },
     addAllResources: function() {
       var _this = this;
-      this.resourceCollection.each(function(projectModel) {
-        return _this.addResource(projectModel);
+      this.resourceCollection.each(function(projectModel_) {
+        return _this.addResource(projectModel_);
       });
       return onPageElementsLoad();
     },
-    addResource: function(projectModel) {
+    addResource: function(projectModel_) {
       var view;
       view = new ResourceProjectPreviewView({
-        model: projectModel
+        model: projectModel_
       });
+      view.render();
       return this.$el.find("#resource-list").append(view.$el);
     }
   });

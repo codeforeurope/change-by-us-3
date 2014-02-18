@@ -4,14 +4,13 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from flask import Blueprint, render_template, redirect, url_for, g
-from flask import current_app, request
+from flask import current_app as app, request, session
 from flask.ext.login import login_required, current_user, login_user
 
-from ..user.models import User
-from ..user.helpers import _create_user, _add_twitter, _is_display_name_in_use
-from ..helpers.stringtools import string_generator
+from changebyus.user.models import User
+from changebyus.user.helpers import _create_user, _add_twitter, _is_display_name_in_use
+from changebyus.helpers.stringtools import string_generator
 
-from flask import current_app, session
 from flask_oauth import OAuth
 
 import yaml
@@ -62,8 +61,8 @@ twitter = oauth.remote_app('twitter',
     # user interface on the twitter side.
     authorize_url='https://api.twitter.com/oauth/authorize',
     # the consumer keys from the twitter application registry.
-    consumer_key=current_app.settings.get('TWITTER').get('CONSUMER_KEY'),
-    consumer_secret=current_app.settings.get('TWITTER').get('CONSUMER_SECRET'),
+    consumer_key=app.settings.get('TWITTER').get('CONSUMER_KEY'),
+    consumer_secret=app.settings.get('TWITTER').get('CONSUMER_SECRET'),
 )
 
 
@@ -147,7 +146,7 @@ def twitter_link():
     if g.user.twitter_id is not None:
         infoStr = "User {0} is overwriting their twitter link of old id {1}".format(g.user.id,
                                                                                      g.user.twitter_id)
-        current_app.logger.info(infoStr)
+        app.logger.info(infoStr)
 
     return twitter.authorize(callback=url_for('twitter_view.twitter_authorized',
         next=request.args.get('next') or request.referrer or None,
@@ -172,7 +171,7 @@ def twitter_disconnect():
         This is, overall, a badly thought out method
     """
     infoStr = "Disconnecting user {0} from twitter".format(g.user.id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
     user = User.objects.with_id(g.user.id)
     user.twitter_id = None
     user.twitter_token = None
@@ -184,7 +183,9 @@ def twitter_disconnect():
     if session.has_key('twitter_oauth_tokens'):
         del session['twitter_oauth_tokens']
 
-    return redirect(url_for('stream_view.dashboard_view')+"#profile")
+    #return redirect(url_for('stream_view.dashboard_view')+"#profile")
+    host = request.host_url[:-1]
+    return redirect(host+url_for('frontend_view.social_redirect_view', url='reload'))
 
 
 @twitter_view.route('/authorized')
@@ -221,7 +222,7 @@ def twitter_authorized(resp):
             userStr = g.user.id
 
         warningStr = "Twitter auth failed on user [{0}]".format(userStr)
-        current_app.logger.warning(warningStr)
+        app.logger.warning(warningStr)
 
         if g.user.is_authenticated():
             # they were trying to link 
@@ -260,7 +261,7 @@ def twitter_authorized(resp):
                        twitter_token_secret=oauth_token_secret):
 
             debugStr = "Linked user {0} with twitter id {1}".format(g.user.id, twitter_id)
-            current_app.logger.debug(debugStr)
+            app.logger.debug(debugStr)
             # or wherever they were originally from 
             return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
@@ -268,7 +269,7 @@ def twitter_authorized(resp):
 
             errStr = "Unable to link user {0} with twitter id {1}".format(g.user.id, twitter_id)
             # or wherever they were originally from
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
  
         return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
@@ -303,7 +304,7 @@ def twitter_authorized(resp):
         # if the twitter account fails it's most likely something to do w/ the display_name
         if u is None:
             errStr = "Erorr creating an account for the twitter display_name {0}.".format(display_name)
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
             return render_template('error.html', error="Sorry, an error occured while creating your account.")
 
         _add_twitter(user_id=u.id,
@@ -320,7 +321,7 @@ def twitter_authorized(resp):
 
         if user.count() > 1:
             errStr = "User identified by twitter_id {0} has multiple accounts.".format(twitter_id)
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
 
         login_user(user.first())
 
@@ -350,7 +351,7 @@ def _post_user_twitter_update(status=None):
 
     if resp.status == 200:
         debugStr = "Successfully posted to twitter for user {0}".format(g.user.id)
-        current_app.logger.debug(debugStr)
+        app.logger.debug(debugStr)
         return (True, resp.data['id'], 0, "Success")
 
     if resp.status == 403 and resp.data['errors'][0]['code'] == 187:
@@ -360,7 +361,7 @@ def _post_user_twitter_update(status=None):
 
     errorStr = "Twitter generak error posting for user {0}: {1}".format(g.user.id,
                                                                          val.data)
-    current_app.logger.error(errorStr)
+    app.logger.error(errorStr)
     return (False, 403, resp.data['code'], resp.data['errors'][0]['message'])
 
 
@@ -391,7 +392,7 @@ def _get_user_name_and_thumbnail():
         warnStr = "Twitter request failed user {0} status {1} response {2}.".format(g.user.id,
                                                                                     req.status,
                                                                                     req.data)
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
         return False, '', ''
 
     name = req.data['screen_name']

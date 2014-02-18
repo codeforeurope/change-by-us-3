@@ -4,12 +4,12 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 from flask import Blueprint, render_template, redirect, url_for, g
-from flask import current_app, request, session
+from flask import current_app as app, request, session
 from flask.ext.login import login_required, current_user, login_user
 
-from ..user.models import User
-from ..user.helpers import _create_user, _add_facebook, _is_email_in_use, _is_display_name_in_use
-from ..helpers.stringtools import string_generator
+from changebyus.user.models import User
+from changebyus.user.helpers import _create_user, _add_facebook, _is_email_in_use, _is_display_name_in_use
+from changebyus.helpers.stringtools import string_generator
 
 from flask_oauth import OAuth
 
@@ -38,8 +38,8 @@ facebook = oauth.remote_app('facebook',
     request_token_url=None,
     access_token_url='/oauth/access_token',
     authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=current_app.settings.get('FACEBOOK').get('CONSUMER_KEY'),
-    consumer_secret=current_app.settings.get('FACEBOOK').get('CONSUMER_SECRET'),
+    consumer_key=app.settings.get('FACEBOOK').get('CONSUMER_KEY'),
+    consumer_secret=app.settings.get('FACEBOOK').get('CONSUMER_SECRET'),
     request_token_params={'scope': 'email,publish_actions'}
 )
 
@@ -112,7 +112,7 @@ def facebook_link():
     if g.user.facebook_id is not None:
         infoStr = "User {0} is overwriting their facebook link of old id {1}".format(g.user.id,
                                                                                      g.user.facebook_id)
-        current_app.logger.info(infoStr)
+        app.logger.info(infoStr)
 
     return facebook.authorize(callback=url_for('facebook_view.facebook_authorized',
         next=request.args.get('next') or request.referrer or None,
@@ -153,7 +153,7 @@ def facebook_disconnect():
             Redirect to the dashboard
     """
     infoStr = "Disconnecting user {0} from facebook".format(g.user.id)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
     user = User.objects.with_id(g.user.id)
     user.facebook_id = None
     user.facebook_token = None
@@ -165,7 +165,8 @@ def facebook_disconnect():
     if session.has_key('facebook_oauth_token'):
         del session['facebook_oauth_token']
 
-    return redirect(url_for('stream_view.dashboard_view')+"#profile")
+    host = request.host_url[:-1]
+    return redirect(host+url_for('frontend_view.social_redirect_view', url='reload'))
 
 @facebook_view.route('/authorized')
 @facebook.authorized_handler
@@ -191,7 +192,7 @@ def facebook_authorized(resp):
         warningStr = "Facebook auth failed on user [{0}], reason {1} description {2}".format(userStr,
                                                                                              request.args['error_reason'],
                                                                                              request.args['error_description'])
-        current_app.logger.warning(warningStr)
+        app.logger.warning(warningStr)
 
         if g.user.is_authenticated():
             # they were trying to link 
@@ -218,13 +219,13 @@ def facebook_authorized(resp):
                         facebook_token=facebook_token):
 
             debugStr = "Linked user {0} with facebook id {1}".format(g.user.id, facebook_id)
-            current_app.logger.debug(debugStr)
+            app.logger.debug(debugStr)
             # or return them to where they were
             return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
         else:
 
             errStr = "Unable to link user {0} with facebook id {1}".format(g.user.id, facebook_id)
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
             # or return them to where they were            
             return redirect(url_for('frontend_view.social_redirect_view', url='reload'))
 
@@ -249,7 +250,7 @@ def facebook_authorized(resp):
 
         if _is_email_in_use(email):
             infoStr = "User tried to link facebook with email {0} but email already used.".format(email)
-            current_app.logger.info(infoStr)
+            app.logger.info(infoStr)
             return render_template('error.html', error = "Sorry, the email {0} is already in use.".format(email))
 
         # check that the display_name is not already used.
@@ -272,7 +273,7 @@ def facebook_authorized(resp):
 
         if u is None:
             errStr = "Erorr creating an account for the facebook display_name {0}.".format(display_name)
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
             return render_template('error.html', error="Sorry, an error occured while creating your account.")
 
 
@@ -290,7 +291,7 @@ def facebook_authorized(resp):
 
         if user.count() > 1:
             errStr = "user identified by facebook_id {0} has multiple accounts".format(facebook_id)
-            current_app.logger.error(errStr)
+            app.logger.error(errStr)
 
         login_user(user.first())
 
@@ -343,18 +344,18 @@ def _post_user_facebook_feed(link=None,
 
     if val.status == 200:
         debugStr = "Successfully posted to facebook for user {0}".format(g.user.id)
-        current_app.logger.debug(debugStr)
+        app.logger.debug(debugStr)
         return (True, val.data['id'])
 
     if val.status == 400:
         debugStr = "Facebook OAUTH related error posting for user {0}: {1}".format(g.user.id, 
                                                                                    val.data)
-        current_app.logger.debug(debugStr)
+        app.logger.debug(debugStr)
         return (False, 400)
 
     errorStr = "Facebook unknown error posting for user {0}: {1}".format(g.user.id,
                                                                          val.data)
-    current_app.logger.error(errorStr)
+    app.logger.error(errorStr)
     return (False, val.status)
 
 
@@ -382,7 +383,7 @@ def _get_fb_user_name_and_thumbnail():
         warnStr = "Facebook request failed user {0} status {1} response {2}.".format(g.user.id,
                                                                                      req.status,
                                                                                      req.data)
-        current_app.logger.warn(warnStr)
+        app.logger.warn(warnStr)
         return False, '', ''
 
 

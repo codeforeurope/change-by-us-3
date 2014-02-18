@@ -1,68 +1,77 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"model/ProjectDiscussionModel", 
-		"views/partials-project/ProjectSubView", 
-		"views/partials-universal/WysiwygFormView", 
-		"views/partials-project/ProjectDiscussionThreadItemView"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 ProjectDiscussionModel, 
-	 ProjectSubView, 
-	 WysiwygFormView, 
-	 ProjectDiscussionThreadItemView) ->
-		ProjectDiscussionView = ProjectSubView.extend
+        "backbone", 
+        "jquery", 
+        "template", 
+        "model/ProjectDiscussionModel", 
+        "views/partials-project/ProjectSubView", 
+        "views/partials-universal/WysiwygFormView", 
+        "views/partials-project/ProjectDiscussionThreadItemView"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     ProjectDiscussionModel, 
+     ProjectSubView, 
+     WysiwygFormView, 
+     ProjectDiscussionThreadItemView) ->
+        ProjectDiscussionView = ProjectSubView.extend
 
-			parent: "#project-discussion"
-			$ul:null
-			$form:null 
-			$threadFormID:"#add-thread-form"
-			wysiwygFormView:null
-			delayedDataLoad:false
+            $ul:null
+            $form:null
+            discussionsCollection:null
+            $threadFormID:"#add-thread-form"
+            parent: "#project-discussion"
+            wysiwygFormView:null
+            delayedDataLoad:false
+            count:0
 
-			render: ->
-				console.log 'pdv >>>>>>>> ',@
-				@$el = $(@parent)
-				@$el.template @templateDir+"/templates/partials-project/project-discussion.html",
-					{data: @viewData}, => @onTemplateLoad()
+            initialize: (options_) ->  
+                ProjectSubView::initialize.call(@, options_)
 
-			onTemplateLoad:->
-				@templateLoaded = true
-				@$ul = @$el.find('.bordered-item')
-				@$form = @$el.find(@$threadFormID)
-				onPageElementsLoad()
-				if @delayedDataLoad then @onSuccess()
+            render: ->
+                @$el = $(@parent)
+                @$el.template @templateDir+"/templates/partials-project/project-discussion.html",
+                    {data: @viewData}, => @onTemplateLoad()
 
-			updateDiscussion:(id_)->
-				@model = new ProjectDiscussionModel(id:id_)
-				@model.fetch
-					success:=> 
-						if @templateLoaded is false 
-							@delayedDataLoad = true
-						else
-							@onSuccess()
-			
-			onSuccess:-> 
-				@$ul.html('')
-				@$form.html('')
+            onTemplateLoad:->
+                @templateLoaded = true
+                @$ul = @$el.find('.bordered-item')
+                @$form = @$el.find(@$threadFormID)
+                if @delayedDataLoad then @onSuccess()
 
-				@addDiscussion @model
-				for response in @model.get("responses")
-					model = new ProjectDiscussionModel({id:response.id})
-					@addDiscussion model 
+                ProjectSubView::onTemplateLoad.call @
 
-				userAvatar = $('.profile-nav-header img').attr('src')
-				@wysiwygFormView = new WysiwygFormView({parent: @$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar})
-				@wysiwygFormView.success = (e)=>
-					if e.success
-						$("#new-thread-editor").html("")
-						model = new ProjectDiscussionModel(e.data)
-						@addDiscussion model
+            updateDiscussion:(id_)-> 
+                @model = new ProjectDiscussionModel({id:id_})
+                @model.fetch
+                    success:=>
+                        if @templateLoaded is false 
+                            @delayedDataLoad = true
+                        else
+                            @onSuccess()
 
+            updateCount:(@count)-> 
+                title = if @model? then @model.get("title") else ""
+                @$el.find(".admin-title").html "All Discussions (#{@count}): #{title}"
+            
+            onSuccess:->  
+                @$ul.html('')
+                @$form.html('')
+                @updateCount(@count)
 
-			addDiscussion:(model_)->
-				projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})
-				@$ul.append projectDiscussionThreadItemView.$el
+                @addDiscussion @model
+                for response in @model.get("responses")
+                    model = new ProjectDiscussionModel({id:response.id})
+                    @addDiscussion model 
+
+                userAvatar = $('.profile-nav-header img').attr('src')
+                @wysiwygFormView = new WysiwygFormView({parent:@$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar, title:@model.get("title")})
+                @wysiwygFormView.success = (e)=>
+                    if e.success
+                        $("#new-thread-editor").html("")
+                        model = new ProjectDiscussionModel(e.data)
+                        @addDiscussion model
+
+            addDiscussion:(model_)->
+                projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})
+                @$ul.append projectDiscussionThreadItemView.$el

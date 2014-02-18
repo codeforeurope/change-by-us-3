@@ -1,0 +1,33 @@
+<% var percentage = (data.current_amount/data.goal)*100 %>
+
+
+<div class="admin-header">
+    <h2>Your Fundraising Goals</h2>
+</div>
+
+<div class="content-wrapper clearfix">
+  <label>Progress</label>
+  <div class="progress progress-info" style="margin-top: 10px"> 
+    <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= percentage %>;"></div>
+  </div> 
+  <div class="goal">$<%= data.current_amount %> Donated towards our $<%= data.goal %> goal</div>
+
+  <div>
+    <a href="javascript:void(0)" id="edit-goal" class="btn btn-medium btn-primary">Edit Goal</a>
+    <span class="gray">Manage your account on <a href="https://manage.stripe.com" target="_blank" class="ul">Stripe</a></span>
+  </div>
+  <br>
+  <br>
+  <br>
+  <label for="description">Description</label>
+  <textarea rows="8" maxlength="140" name="description" placeholder="We want to raise money for..." class="input-xxlarge" disabled><%= data.description  %></textarea>
+  <br>
+  <br>
+  <br>
+  <!--
+  <input type="hidden" name="account_id" value="<%= data.account_id %>"></input>
+  <input type="hidden" name="project_id" value="<%= data.project_id %>"></input>
+  <input type="submit" class="btn btn-large btn-secondary" value="Save">
+  -->
+</div>
+

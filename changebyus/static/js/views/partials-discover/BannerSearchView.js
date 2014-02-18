@@ -1,7 +1,7 @@
 define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
-    byProjectResources: 'projects',
+    byProjectResources: 'project',
     sortByPopularDistance: 'popular',
     locationObj: {
       lat: 0,
@@ -9,20 +9,24 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       name: ""
     },
     category: "",
+    projects: null,
     ajax: null,
-    initSend: true,
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    autoSend: false,
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       this.showResources = window.location.hash.substring(1) === "resources";
       return this.render();
     },
     events: {
-      "click .search-catagories li": "categoriesClick",
-      "focus #search-input": "showInput",
-      "keypress #search-input": "onInputEnter",
-      "click #modify": "toggleVisibility",
-      "click .pill-selection": "pillSelection",
-      "click .search-inputs .btn": "sendForm"
+      "click .search-catagories li": "onCategoriesClick",
+      "click #modify": "onToggleVisibility",
+      "click .pill-selection": "onPillSelection",
+      "click .search-inputs .btn": "sendForm",
+      "click .geo-pin": "onGeoClick",
+      "focus #search-input": "onInputFocus",
+      "focus #search-near": "onNearFocus",
+      "keydown #search-input": "onInputEnter",
+      "keydown #search-near": "onInputEnter"
     },
     render: function() {
       var _this = this;
@@ -37,7 +41,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     onTemplateLoad: function() {
       var $dropkick,
         _this = this;
-      $('#search-near').typeahead({
+      this.$searchInput = $('#search-input');
+      this.$searchNear = $('#search-near');
+      this.$searchNear.typeahead({
         template: '<div class="zip">{{ name }} {{ zip }}</div>',
         engine: Hogan,
         valueKey: 'name',
@@ -70,84 +76,176 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
       $dropkick = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
-      this.delegateEvents();
-      onPageElementsLoad();
-      return this.autoGetGeoLocation();
+      this.$modifyInput = this.$resultsModify.find('input');
+      this.$projectList = $("#projects-list");
+      this.$searchCatagories = $('.search-catagories');
+      this.$geoPin = $('.geo-pin');
+      this.autoGetGeoLocation();
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    toggleActive: function(dir_) {
+      var $li, hasActive;
+      $li = this.$searchCatagories.find('li');
+      hasActive = this.$searchCatagories.find('li.active').length > 0;
+      if (dir_ === "up") {
+        if (hasActive) {
+          return $li.each(function(i) {
+            var newI;
+            if ($(this).hasClass('active')) {
+              $(this).removeClass('active');
+              newI = i === 0 ? $li.length - 1 : i - 1;
+              $($li[newI]).addClass('active');
+              return false;
+            }
+          });
+        } else {
+          return this.$searchCatagories.find('li').last().addClass('active');
+        }
+      } else {
+        if (hasActive) {
+          return $li.each(function(i) {
+            var newI;
+            if ($(this).hasClass('active')) {
+              $(this).removeClass('active');
+              newI = i < $li.length - 1 ? i + 1 : 0;
+              $($li[newI]).addClass('active');
+              return false;
+            }
+          });
+        } else {
+          return this.$searchCatagories.find('li').first().addClass('active');
+        }
+      }
+    },
+    updatePage: function() {
+      var e, i, s, _i;
+      this.$projectList.html("");
+      s = this.index * this.perPage;
+      e = (this.index + 1) * this.perPage - 1;
+      for (i = _i = s; s <= e ? _i <= e : _i >= e; i = s <= e ? ++_i : --_i) {
+        if (i < this.projects.length) {
+          this.addProject(this.projects[i]);
+        }
+      }
+      return $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+    },
+    addProject: function(id_) {
+      var projectModel, view;
+      projectModel = new ProjectModel({
+        id: id_
+      });
+      view = new ResourceProjectPreviewView({
+        model: projectModel,
+        parent: "#projects-list",
+        isDiscovered: true
+      });
+      return view.fetch();
     },
     autoGetGeoLocation: function() {
       var _this = this;
       if (navigator.geolocation) {
-        return navigator.geolocation.getCurrentPosition(function(loc) {
-          return _this.handleGetCurrentPosition(loc);
+        return navigator.geolocation.getCurrentPosition(function(loc_) {
+          return _this.handleGetCurrentPosition(loc_);
         }, this.sendForm);
       } else {
-        return this.sendForm();
+
       }
     },
-    handleGetCurrentPosition: function(loc) {
-      var url;
-      this.locationObj.lat = loc.coords.latitude;
-      this.locationObj.lon = loc.coords.longitude;
-      console.log('handleGetCurrentPosition:(loc)', loc);
+    toggleModify: function(showSorting_) {
+      this.$resultsModify.toggle(!showSorting_);
+      $('.search-toggles').toggle(showSorting_);
+      return $('.filter-within').toggle(showSorting_);
+    },
+    /* EVENTS -----------------------------------------------------------------*/
+
+    onInputFocus: function() {
+      this.category = "";
+      return this.$searchCatagories.show();
+    },
+    onNearFocus: function() {
+      return this.$geoPin.removeClass("active");
+    },
+    onGeoClick: function() {
+      if (navigator.geolocation) {
+        return this.autoGetGeoLocation();
+      }
+    },
+    handleGetCurrentPosition: function(loc_) {
+      var url,
+        _this = this;
+      this.locationObj.lat = loc_.coords.latitude;
+      this.locationObj.lon = loc_.coords.longitude;
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
-      $.get(url, function(resp) {
-        if (resp.success) {
-          return $("#search-near").val(resp.data[0].name);
+      return $.get(url, function(resp) {
+        if (resp.success && resp.data.length > 0) {
+          _this.autoSend = true;
+          _this.$geoPin.addClass("active");
+          _this.$searchNear.val(resp.data[0].name);
+          return _this.sendForm();
         }
       });
-      return this.sendForm();
     },
-    categoriesClick: function(e) {
+    onCategoriesClick: function(e) {
       this.category = $(e.currentTarget).html();
-      $('#search-input').val(this.category);
-      return $('.search-catagories').hide();
+      this.$searchInput.val(this.category);
+      return this.$searchCatagories.hide();
     },
-    pillSelection: function(e) {
+    onPillSelection: function(e) {
       var $this;
       $this = $(e.currentTarget);
       $this.toggleClass('active');
       $this.siblings().toggleClass('active');
       switch ($this.html()) {
         case 'Projects':
-          return this.byProjectResources = 'projects';
+          this.byProjectResources = 'project';
+          $('#create-project').css('display', 'block');
+          return $('#create-resource').hide();
         case 'Resources':
-          return this.byProjectResources = 'resources';
+          this.byProjectResources = 'resource';
+          $('#create-project').hide();
+          return $('#create-resource').css('display', 'block');
         case 'Popular':
           return this.sortByPopularDistance = 'popular';
         case 'Distance':
           return this.sortByPopularDistance = 'distance';
       }
     },
-    showInput: function() {
-      this.category = "";
-      return $('.search-catagories').show();
-    },
-    toggleVisibility: function(e) {
-      var onClick;
-      onClick = false;
-      if (e) {
-        e.preventDefault();
-        onClick = true;
-      }
-      this.$resultsModify.toggle(!onClick);
-      $('.search-toggles').toggle(onClick);
-      return $('.filter-within').toggle(onClick);
+    onToggleVisibility: function(e) {
+      this.toggleModify(true);
+      return e.preventDefault();
     },
     onInputEnter: function(e) {
       if (e.which === 13) {
-        return this.sendForm();
+        if (this.locationObj.name !== this.$searchInput.val() || this.locationObj.name === "") {
+          $(".tt-suggestion").first().trigger("click");
+          if (this.$searchInput.val() === "" || this.$searchCatagories.is(':visible')) {
+            if (this.$searchCatagories.find('li.active').length > 0) {
+              this.category = this.$searchCatagories.find('li.active').html();
+              this.$searchInput.val(this.category);
+            }
+          }
+        }
+        this.sendForm();
+      }
+      if (e.which === 38) {
+        this.toggleActive("up");
+      }
+      if (e.which === 40) {
+        return this.toggleActive("down");
       }
     },
     sendForm: function(e) {
-      var dataObj,
+      var dataObj, modifyInputVal,
         _this = this;
       if (e) {
         e.preventDefault();
       }
-      $('.search-catagories').hide();
-      $("#projects-list").html("");
+      this.$searchCatagories.hide();
+      this.$projectList.html("");
       dataObj = {
-        s: this.category === "" ? $("#search-input").val() : "",
+        s: this.category === "" ? this.$searchInput.val() : "",
         cat: this.category,
         loc: this.locationObj.name,
         d: $("select[name='range']").val(),
@@ -155,6 +253,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         lat: this.locationObj.lat,
         lon: this.locationObj.lon
       };
+      modifyInputVal = this.$searchNear.val();
       if (this.ajax) {
         this.ajax.abort();
       }
@@ -165,37 +264,29 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         dataType: "json",
         contentType: "application/json; charset=utf-8"
       }).done(function(response_) {
-        var k, size, v, _ref;
+        var k, size, t, v, _ref;
         if (response_.success) {
-          if (_this.initSend === false) {
-            if (_this.locationObj.name !== "") {
-              _this.toggleVisibility();
-            }
-            _this.$resultsModify.find('input').val(_this.locationObj.name);
-          }
-          _this.initSend = false;
+          console.log('response_', response_, _this.$searchNear.val());
+          _this.toggleModify(_this.autoSend);
+          _this.$modifyInput.val(modifyInputVal);
+          _this.autoSend = false;
+          _this.index = 0;
+          _this.projects = [];
           size = 0;
           _ref = response_.data;
           for (k in _ref) {
             v = _ref[k];
-            _this.addProject(v._id);
+            _this.projects.push(v._id);
             size++;
           }
-          $('h4').html(size + " Projects");
-          return onPageElementsLoad();
+          _this.updatePage();
+          _this.setPages(size, $(".projects"));
+          t = _this.byProjectResources === 'project' ? "Projects" : "Resources";
+          $('.projects h4').html(size + " " + t);
+          onPageElementsLoad();
+          return _this.trigger("ON_RESULTS", size);
         }
       });
-    },
-    addProject: function(id_) {
-      var projectModel, view;
-      projectModel = new ProjectModel({
-        id: id_
-      });
-      view = new ResourceProjectPreviewView({
-        model: projectModel,
-        parent: "#projects-list"
-      });
-      return view.fetch();
     }
   });
 });

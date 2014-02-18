@@ -35,6 +35,15 @@
 	}
 }
 
+.btn-warning{
+	@extend .btn-text;
+	background-color: $warning;
+	&:hover, &.btn-3d:before{
+		@extend .btn-text;
+		background-color: $warningHover;
+	}
+}
+
 /**** BUTTON HOVER 
 .btn-3d-parent{
 	@include perspective(1000);

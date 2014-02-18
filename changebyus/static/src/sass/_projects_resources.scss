@@ -4,709 +4,855 @@
 @import "compass/css3/text-shadow";
 @import "compass/css3/background-clip";
 @import "compass/css3/transform";
+@import "compass/typography/text/ellipsis";
 
 /*** HEADER *****/
-.header-icon{ 
-  position: absolute;
-  top: 15px;
-  right: 30px;
-  height: 20px;
-  width: auto;
-  font-size: 14px;
-  font-weight: bold;
-  background-position: left center;
-  background-repeat: no-repeat;
-  
-  a{ 
-    padding-left: 30px;
-    @include text-shadow(rgba(0,0,0,.5) 0 0 5px);
-  }
+.header-icon {
+    position: absolute;
+    top: 15px;
+    right: 30px;
+    height: 20px;
+    width: auto;
+    font-size: 14px;
+    font-weight: bold;
+    background-position: left center;
+    background-repeat: no-repeat;
+    a {
+        padding-left: 30px;
+        @include text-shadow(rgba(0, 0, 0, 0.5) 0 0 5px);
+    }
 }
 
-.public-view{background-image: url(../img/icon_view_project.png);}
+.public-view {
+    background-image: url(../img/icon_view_project.png);
+}
 
-.flag-project{background-image: url(../img/icon_flag.png);}
+.flag-project,
+.flag-user {
+    background-image: url(../img/icon_flag.png);
+}
 
 .projects {
-  padding: none;
-  margin: none;
-  
-  h4{margin-bottom:10px;}
+    padding: none;
+    margin: none;
+    h4 {
+        margin-bottom: 10px;
+    }
+}
+
+.donation-header {
+    >div {
+        float: left;
+    }
+    .stripe-overlay {
+        width: 33%;
+        margin-top: 5px;
+        .progress {
+            width: 80%;
+            margin-bottom: 6px;
+        }
+        .goal {
+            font-size: 16px;
+        }
+    }
+    .donation-description {
+        width: 47%;
+        h3 {
+            @include ellipsis;
+            font-weight: normal;
+            font-size: 22px;
+            margin-top: 0;
+        }
+        p {
+            margin: 0;
+            @include font-styling("merriweather", 14px, $gray20, "normal", "regular");
+        }
+    }
+    .donate-btn {
+        width: 20%;
+        text-align: right;
+        .btn-large {
+            top: 10px;
+            padding: 20px 20px;
+        }
+    }
+}
+
+.admin-project-square {
+    float: left;
+    margin: auto 2% 22px auto;
+    width: 32%;
+    .project-square {
+        float: none;
+        margin: auto;
+        width: 100%%;
+    }
+    .admin-btns {
+        margin-top: 12px;
+        float: left;
+    }
+    .btn-neutral {}
+    .btn-warning {}
 }
 
 .project-square {
-  @include box-skin; 
-  padding: 10px 10px 50px;
-  min-height: 400px;
-  float: left;
-  margin: auto auto 22px;
-  width: 32%;
-  margin-right: 2%;
-
-  &:hover{ 
-    .hover-overlay{ 
-      visibility: visible;
-      @include opacity(1);
+    padding: 10px 10px 50px;
+    min-height: 400px;
+    float: left;
+    margin: auto 2% 22px auto;
+    width: 32%;
+    @include box-skin;
+    &:hover {
+        .hover-overlay {
+            visibility: visible;
+            @include opacity(1);
+        }
+        .hover-btn {
+            @include opacity(1);
+        }
     }
-    .hover-btn{ @include opacity(1); }
-  }
-
-  .side-tab{
-    position: absolute;
-    top:20px;
-    left:10px;
-    background-color: rgba(0,0,0,0.5);
-    padding:10px;
-    color: $white; 
-    z-index: 1;
-    @include border-top-right-radius(4px);
-    @include border-bottom-right-radius(4px);
-  }
-
-  .hover-btn, .hover-overlay{
-    position: absolute;
-    @include opacity(0);
-    @include transition-property(opacity);
-  }
-
-  .hover-btn{
-    text-align: center;
-    width: 100%;
-    top: 0;
-    left: 0;
-    @include transition-duration(.3s);
-  }
-
-  .hover-overlay{ 
-    background-color: rgba(255,255,255,0.5);
-    width: 100%;
-    height: 100%;
-    top:0;
-    left: 0; 
-    @include transition-duration(.1s);
-  }
-
-  .btn, .btn-3d:hover{ 
-    margin-top: 150px;
-    font-size: 18px;
-  }
+    .side-tab {
+        position: absolute;
+        top: 20px;
+        left: 10px;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 10px;
+        color: $white;
+        z-index: 1;
+        @include border-top-right-radius(4px);
+        @include border-bottom-right-radius(4px);
+        @include text-shadow(rgba(black, 0.5) 0px 0px 5px);
+    }
+    .hover-btn, .hover-overlay {
+        position: absolute;
+        @include opacity(0);
+        @include transition-property(opacity);
+    }
+    .hover-btn {
+        text-align: center;
+        width: 100%;
+        top: 0;
+        left: 0;
+        @include transition-duration(0.3s);
+    }
+    .hover-overlay {
+        background-color: rgba(255, 255, 255, 0.5);
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        @include transition-duration(0.1s);
+    }
+    .btn, .btn-3d:hover {
+        margin-top: 150px;
+        font-size: 18px;
+    }
+    .stripe-overlay {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 15px;
+        color: $white;
+        background: rgba(0, 0, 0, 0.5);
+        text-align: left;
+        .progress {
+            margin: 10px 0;
+            width: 100%;
+            border: 3px solid $white;
+            background: transparent;
+        }
+        .progress-bar {
+            background-color: $white;
+        }
+        .goal {
+            margin-bottom: 0;
+        }
+    }
 }
 
-.project-preview:nth-child(3n+3){
-    .project-square {margin-right: 0;}
+.project-preview:nth-child(3n+3) {
+    .project-square {
+        margin-right: 0;
+    }
+    .admin-project-square {
+        margin-right: 0;
+    }
 }
 
 .project-dashboard-image {
-  text-align: center;
-  width: 100%;
-  img{ 
-    width: 100%; 
-    height: auto;
-  } 
+    text-align: center;
+    width: 100%;
+    min-height: 306px;
+    img {
+        width: 100%;
+        height: auto;
+    }
 }
 
 .project-name {
-  @include font-styling("asap", 23px, $gray20, "normal", "bold");
-  margin-top: 15px;
+    margin-top: 15px;
+    @include font-styling("asap", 23px, $gray20, "normal", "bold");
 }
 
 .project-description {
-  @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
-  line-height: 1.6;
-  margin-top: 15px;
-  overflow: hidden;
-  height: 125px;
+    line-height: 1.6;
+    margin-top: 15px;
+    overflow: hidden;
+    height: 125px;
+    @include font-styling("merriweather", 16px, $gray20, "normal", "regular");
 }
 
-.project-category{
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  @include font-styling("bebas", 18px, $gray65 );
-  
-  a{color: #868686;}
+.project-bottom {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+
+    .category {
+        @include font-styling("bebas", 18px, $gray65);
+
+        &.discover{
+            color: $primaryColor;
+            display: block;
+            margin-bottom: 2px;
+        }
+    }
+    .location{
+        color: $gray65;
+        font-size: 15px;
+    }
 }
 
-.city-container, 
-.project-container, 
+.city-container,
+.project-container,
 .resource-container {
-  h2 {
-    font-size: 42px;
-    font-weight: normal;  
-    text-align: left;
-  }
-
-  &.feature-image .overlay-backdrop {
-    background-color: $white;
-  }
+    h2 {
+        font-size: 42px;
+        font-weight: normal;
+        text-align: left;
+    }
+    &.feature-image .overlay-backdrop {
+        background-color: $white;
+    }
 }
 
-.project-header, 
-.city-header{
-  margin-top: 12px;
+.city-container {
+    margin-bottom: 40px;
 }
 
-.resource-header{
-  .feature-image{ height: 400px; }
+.project-header,
+.city-header {
+    margin-top: 12px;
 }
 
-.project-resource-section-header{
-  height: 120px;
-  z-index: 1;
-  
-  h2{margin-top: 50px;}
+.resource-header {
+    .feature-image {
+        height: 400px;
+    }
+}
+
+.project-resource-section-header {
+    height: 120px;
+    z-index: 1;
+    h2 {
+        margin-top: 50px;
+    }
+}
+
+.feature-rotating-image{
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 430px;
+    position: absolute;
+    background-size: cover;
 }
 
 .feature-image {
-  width: 100%;
-  height: 430px;
-  position: relative;
-  background-size: cover;
- 
-  h1{
-    @include font-styling("asap", 48px, $white, "normal", "bold");
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75));  
-  }
-
-  .circle{ 
-    background: $defaultGray;
-
-    &:before{
-      content: "";
-      display: block;
-      padding-top: 100%;
+    width: 100%;
+    height: 430px;
+    position: relative;
+    background-size: cover;
+    h1 {
+        @include font-styling("asap", 48px, $white, "normal", "bold");
+        @include text-shadow(0 1px 5px rgba(0, 0, 0, 0.75));
     }
-    
-    .content{
-      position:  absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
+    .circle {
+        background: $defaultGray;
+        &:before {
+            content: "";
+            display: block;
+            padding-top: 100%;
+        }
+        .content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+        }
     }
-  }
-
-  .preview{
-    position: absolute;
-    top:70px;
-    left: percentage(30px/1018px);
-    width: percentage(249px/1018px);
-    border: 4px solid #fff;  
-    @include background-clip(padding-box);
-  }
-
-  .project-location{
-    display: inline-block;
-    @include font-styling("asap", 21px, $white );
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
-  }
-
-  .project-footer{
-    position: absolute;
-    left: percentage(310px/1018px); 
-    top: 257px;
-    width: percentage(620px/1018px);
-  }
-
-  .overlay-title {
-    left: percentage(310px/1018px); 
-    width: percentage(708px/1018px); 
-    top: 100px;
-    padding: 0;
-    margin: 0;
-    position: absolute;
-  }
-
-  .overlay-description {
-    position: absolute; 
-    top: 160px; 
-    left: percentage(310px/1018px); 
-    width: percentage(650px/1018px); 
-    line-height: 24px;
-    @include font-styling("merriweather", 18px, $white );
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75));
-  }
-
-  &.slim{ 
+    .preview {
+        position: absolute;
+        top: 70px;
+        left: percentage(30px / 1018px);
+        width: percentage(249px / 1018px);
+        border: 4px solid #fff;
+        @include background-clip(padding-box);
+    }
+    .project-location {
+        display: inline-block;
+        @include font-styling("asap", 21px, $white);
+        @include text-shadow(0 1px 5px rgba(0, 0, 0, 0.75));
+    }
+    .project-footer {
+        position: absolute;
+        left: percentage(310px / 1018px);
+        top: 257px;
+        width: percentage(620px / 1018px);
+    }
     .overlay-title {
-      left: 30px;
-      top: 40px;
-      line-height: 1;
+        left: percentage(310px / 1018px);
+        width: percentage(708px / 1018px);
+        top: 100px;
+        padding: 0;
+        margin: 0;
+        position: absolute;
     }
-
-    height: 167px;
-  }
+    .overlay-description {
+        position: absolute;
+        top: 160px;
+        left: percentage(310px / 1018px);
+        width: percentage(650px / 1018px);
+        line-height: 24px;
+        @include font-styling("merriweather", 18px, $white);
+        @include text-shadow(0 1px 5px rgba(0, 0, 0, 0.75));
+    }
+    &.slim {
+        .overlay-title {
+            left: 30px;
+            top: 40px;
+            line-height: 1;
+        }
+        height: 167px;
+    }
 }
 
 /*****************************
  * Resources
  *****************************/
 
-.resource-container{
-  .feature-image { 
-    h1, .overlay-description, .project-location{ 
-      color: $black;
-      @include text-shadow(none);
+.resource-container {
+    .feature-image {
+        h1, .overlay-description, .project-location {
+            color: $black;
+            @include text-shadow(none);
+        }
     }
-  }
-
-  .project-resource-section-header { height: auto; }
-
-  .team-members{ 
-    width: 15%; 
-    li{margin-left: 10px;}
-  }
-
-  .content-wrapper.thin-pad{ padding-top: 40px; }
+    .project-resource-section-header {
+        height: auto;
+    }
+    .team-members {
+        width: 15%;
+        li {
+            margin-left: 10px;
+        }
+    }
+    .content-wrapper.thin-pad {
+        padding-top: 40px;
+    }
 }
 
-#add-resource-update{
+#add-resource-update {
     width: 83%;
     margin-right: 2%;
 }
 
-.content-header{ margin-top: 24px; }
-
-.content-wrapper {
-  padding: 36px;
-  margin-top: 15px;
-  margin-bottom: 30px;
-  height: auto;
-  @include box-skin;
-
-  a{color: $black;}
-  
-  p{
-    @include font-styling("asap", 20px, $gray20, "normal", "regular");
-    margin-bottom: 28px;
-  }
-
-  ul.bordered-item{
-    >li{
-      padding: 20px;
-      border-bottom: 1px solid #dcdcdc;
-      &:last-child{border: none;}
-    }
-  }
-  &.thin-pad{padding: 20px;}
+.content-header {
+    margin-top: 24px;
 }
 
-h2.admin-title{ 
-  @include font-styling("asap", 32px, $gray20, "normal", "regular");
-  margin: 0 0 16px;
+.content-wrapper {
+    padding: 36px;
+    margin-top: 15px;
+    margin-bottom: 30px;
+    height: auto;
+    @include box-skin;
+    a {
+        color: $black;
+    }
+    p {
+        @include font-styling("asap", 20px, $gray20, "normal", "regular");
+        margin-bottom: 28px;
+    }
+    ul.bordered-item {
+        >li {
+            padding: 20px;
+            border-bottom: 1px solid #dcdcdc;
+            &:last-child {
+                border: none;
+            }
+        }
+    }
+    &.thin-pad {
+        padding: 20px;
+    }
+}
+
+h2.admin-title {
+    margin: 0 0 16px;
+    @include font-styling("asap", 32px, $gray20, "normal", "regular");
 }
 
 .content-left,
 .content-right,
 .post-right,
 .reply-left,
-.reply-right{
-  float: left;  
+.reply-right {
+    float: left;
 }
 
-.project-left{ width: 80px; }
-
-.content-left{ width: 64%; } 
-
-.content-right{
-  width: 36%;
-  height: 100%;
-  text-align: center;
-  vertical-align: middle;
+.project-left {
+    width: 80px;
 }
 
-.no-results{
-  h3{
-    font-weight: normal;
-    font-size: 32px; 
-  }
+.content-left {
+    width: 64%;
 }
 
-.large-icon{ margin-top: 50px; }
-
-.user-avatar{
-  float: left;
-  min-width: 70px;
-  width: percentage(70px/1018px);
-  margin-right: percentage(20px/1018px);
+.content-right {
+    width: 36%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
 }
 
-.update-content{
-  float: left;
-  width: 85%;
+.no-results {
+    h3 {
+        font-weight: normal;
+        font-size: 32px;
+    }
+}
 
-  input[type=button]{background-color: $graySupport;}
-  
-  input[type=submit]{ 
-    margin-left: 16px;
-  }
-    
-  .tr{
-    float: right;
-    margin-top: 10px;
-  }
+.large-icon {
+    margin-top: 50px;
+}
+
+.user-avatar {
+    float: left;
+    min-width: 70px;
+    width: percentage(70px / 1018px);
+    margin-right: 20px;
+}
+
+.update-content {
+    float: left;
+    width: 85%;
+    input[type=button] {
+        background-color: $graySupport;
+    }
+    input[type=submit] {
+        margin-left: 16px;
+    }
+    .tr {
+        float: right;
+        margin-top: 10px;
+    }
 }
 
 .post-title,
-.reply-title{
-  color: $gray20;
-  margin-bottom: 10px;
-  font-weight: bold;
+.reply-title {
+    color: $gray20;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
- 
 
 .post-content,
-.reply-content{
-  @include font-styling("merriweather", 14px, $gray20);
-  
-  p{
+.reply-content {
     @include font-styling("merriweather", 14px, $gray20);
-  }
+    p {
+        @include font-styling("merriweather", 14px, $gray20);
+    }
 }
 
 .post-footer,
-.reply-date{ 
-  margin-top: 10px;
-  @include font-styling("asap", 14px, $gray53);
+.reply-date {
+    margin-top: 10px;
+    @include font-styling("asap", 14px, $gray53);
 }
 
-.post-replies{ padding: 0; }
-
-.reply-toggle{
-  .reply{
-    cursor: pointer;
-    text-decoration: underline;
-  } 
-
-  .jq-date{
-    text-decoration: none;
-  }
+.post-replies {
+    padding: 0;
 }
 
-.post-reply-form{
-  .input-xxlarge{
-    height: 41px; 
-    width: 80%; 
-  }
-  input[type=submit] {
-    margin-left: 3%;
-    width: 17%;
-    padding: 10px 0;
-  }
-}
-
-.reply-right{
-  margin-top: 12px;
-  width: 85%;
-}
-
-.project-member{
-  .mail-icon{ 
-    float: left; 
-    width: percentage(60px/1018px);
-
-    img{ 
-      max-width: none;
-      min-width: 20px;
-      margin-top: 20px; 
+.reply-toggle {
+    .reply {
+        cursor: pointer;
+        text-decoration: underline;
     }
-  }
-  
-  .member-title{  
-    float: left;  
-    margin-top: 15px; 
-    width: percentage(175px/1018px);
-    padding-right: 15px;
-  }
-  
-  .member-description{ 
-    float: left;  
-    width: percentage(505px/1018px);
-    height: 80px;
-    display: table;
-
-    span{
-      height: 100%;
-      vertical-align: middle;
-      display: table-cell;
+    .jq-date {
+        text-decoration: none;
     }
-  }
-  .member-roles{ 
-    float: left;
-    margin-top: 25px;
-    width: percentage(120px/1018px);
-  }
-  .aka{ @include font-styling("asap", 15px, $gray53); }
-  .grey{ @include font-styling("asap", 15px, $gray53); }
 }
 
-
-.project-member{
-  .member-description{ 
-    width: percentage(475px/1018px); 
-    padding-right: 15px;
-  }
-  .dk_container{width: 100%;}
- 
-  select{width: 100%;}
+.post-reply-form {
+    .input-xxlarge {
+        height: 41px;
+        width: 80%;
+    }
+    input[type=submit] {
+        margin-left: 3%;
+        width: 17%;
+        padding: 10px 0;
+    }
 }
 
-.admin{
-  .alert{margin-top: 20px;}
+.reply-right {
+    margin-top: 12px;
+    width: 85%;
+}
+
+.project-member {
+    .mail-icon {
+        float: left;
+        width: percentage(60px / 1018px);
+        img {
+            max-width: none;
+            min-width: 20px;
+            margin-top: 20px;
+        }
+    }
+    .member-title {
+        float: left;
+        margin-top: 15px;
+        width: percentage(175px / 1018px);
+        padding-right: 15px;
+    }
+    .member-description {
+        float: left;
+        width: percentage(505px / 1018px);
+        height: 80px;
+        display: table;
+        span {
+            height: 100%;
+            vertical-align: middle;
+            display: table-cell;
+        }
+    }
+    .member-roles {
+        float: left;
+        margin-top: 25px;
+        width: percentage(120px / 1018px);
+    }
+    .aka {
+        @include font-styling("asap", 15px, $gray53);
+    }
+    .grey {
+        @include font-styling("asap", 15px, $gray53);
+    }
+    .admin-btns {
+        float: right;
+    }
+}
+
+.project-member {
+    .member-description {
+        width: percentage(475px / 1018px);
+        padding-right: 15px;
+    }
+    .dk_container {
+        width: 100%;
+    }
+    select {
+        width: 100%;
+    }
+}
+
+.admin {
+    .alert {
+        margin-top: 20px;
+    }
 }
 
 /******************************
  * OWNER VIEW
  ******************************/
-.update-wrapper{
-   input[type=submit]{background-color: $secondaryColor}
-   input[type=button]{background-color: $graySupport}
-}
-
-.share-select{ margin-bottom: 20px; }
-
-.share-toggle-wrapper{
-  float: left;
-  height: 25px;
-  width: 205px;
-  z-index: 1;
-  top:-7px;
-  left: 5px;
-}
-
-.share-toggle{
-  cursor: pointer; 
-  padding: 5px;
-  @include box-skin;
-  
-  .caret{
-    float: right;
-    margin-top: 8px;
-    margin-right: 5px;
-  }
-}
-.share-options{
-  padding: 5px 5px 0;
-  @include box-skin;
-  
-  .styledRadio, 
-  .styledCheckbox{float: left;}
-  
-  label{ 
-    height: 15px; 
-    font-size: 16px;
-    line-height: 15px;
-    margin: 0 0 12px 24px;  
-
-    &:first-child{
-      margin-top: 0;
-    }
-  } 
-}
-
-.discussion{ 
-  .user-avatar{cursor: pointer;}
-  
-  .description{
-    cursor: pointer;
+.update-wrapper {
+    width: 90%;
     float: left;
-    width: 670px;
-    
-    h5{
-      margin-bottom: 0;
-      @include font-styling("asap", 18px, $gray20, "normal", "bold" );
+    input[type=submit] {
+        background-color: $secondaryColor;
     }
-    
-    span{
-      @include ellipsis;
-      @include font-styling("merriweather", 14px, $gray20);
-      >*{
-        @include ellipsis;
-      }
+    input[type=button] {
+        background-color: $graySupport;
     }
-  }
-  
-  .date{
+}
+
+.share-select {
+    margin-bottom: 20px;
+}
+
+.share-toggle-wrapper {
+    float: left;
+    height: 25px;
+    width: 205px;
+    z-index: 1;
+    top: -7px;
+    left: 5px;
+}
+
+.share-toggle {
+    cursor: pointer;
+    padding: 5px;
+    @include box-skin;
+    .caret {
+        float: right;
+        margin-top: 8px;
+        margin-right: 5px;
+    }
+}
+
+.share-options {
+    padding: 5px 5px 0;
+    @include box-skin;
+    .styledRadio,
+    .styledCheckbox {
+        float: left;
+    }
+    label {
+        height: 15px;
+        font-size: 16px;
+        line-height: 15px;
+        margin: 0 0 12px 24px;
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+}
+
+.discussion {
+    .user-avatar {
+        cursor: pointer;
+    }
+    .description {
+        cursor: pointer;
+        float: left;
+        width: 670px;
+        h5 {
+            margin-bottom: 0;
+            @include font-styling("asap", 18px, $gray20, "normal", "bold");
+        }
+        span {
+            @include ellipsis;
+            @include font-styling("merriweather", 14px, $gray20);
+            >* {
+                @include ellipsis;
+            }
+        }
+    }
+    .date {
+        float: right;
+        margin-top: 20px;
+        margin-right: 55px;
+        @include font-styling("asap", 15px, $gray65);
+    }
+    .delete,.close {
+        margin-top: 20px;
+        margin-right: 20px;
+    }
+}
+
+.fundraising-wrapper {
+    padding: 30px;
+    @include box-skin;
+}
+
+.fundraising-left {
+    span {
+        font-weight: bold;
+        color: $primaryColor;
+    }
+    p {
+        margin-bottom: 24px;
+    }
+}
+
+.fundraising-right {
+    float: left;
+    width: 33%;
+    text-align: center;
+}
+
+.tabs-pane, .owner-tabs-pane {
+    position: absolute;
+    bottom: 0;
+    height: 58px;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    ul {
+        margin-left: 30px;
+    }
+    li {
+        height: 100%;
+        display: inline-block;
+        list-style-type: none;
+        padding: 0 1%;
+        margin: 0 1%;
+    }
+    a {
+        line-height: 58px;
+        @include font-styling("asap", 22px, $white, "normal", "bold");
+        @include text-shadow(0 1px 5px rgba(0, 0, 0, 0.75));
+        // drop shadow
+   
+    }
+}
+
+.owner-tabs-pane {
+    li.active {
+        background-color: rgba(0, 0, 0, 0.75);
+    }
+    .view-project {
+        display: none;
+    }
+}
+
+.tabs-pane {
+    img {
+        vertical-align: initial;
+    }
+    li {
+        a {
+            vertical-align: text-bottom;
+        }
+        &.active {
+            a {
+                display: none;
+            }
+        }
+    }
+}
+
+.team-members {
     float: right;
-    margin-top: 20px;
-    margin-right: 55px;
-    @include font-styling("asap", 15px, $gray65);
-  }
-
-  .delete,.close{
-    margin-top: 20px;
-    margin-right: 20px; 
-  }
+    width: auto;
+    .pull-right {
+        margin-left: 10px;
+        padding-top: 10px;
+    }
+    a {
+        color: $black;
+    }
+    ul {
+        float: right;
+        display: inline-block;
+    }
+    li {
+        float: left;
+        margin-left: 15px;
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+    h4 {
+        margin-bottom: 10px;
+    }
 }
 
-.fundraising-wrapper{
-  padding: 30px;
-  @include box-skin;
+.member-avatar {
+    width: 70px;
+    cursor: pointer;
+    .circle {
+        z-index: 2;
+    }
+    .mail-icon {
+        float: right;
+        margin-top: 5px;
+        z-index: 1;
+    }
+    &:hover {
+        .member-popup {
+            visibility: visible;
+            @include opacity(1);
+            top: 78px;
+        }
+    }
 }
 
-.fundraising-left{
-  span{
-    font-weight: bold;
-    color:$primaryColor;
-  }
-  
-  p{ margin-bottom: 24px; }
+.member-popup {
+    position: absolute;
+    visibility: hidden;
+    padding: 15px;
+    height: 75px;
+    width: 200px;
+    left: -110px;
+    top: 58px;
+    z-index: 1;
+    @include opacity(0);
+    @include box-skin;
+    @include transition-property(all);
+    @include transition-duration(0.1s);
 }
 
-.fundraising-right{
-  float: left;
-  width: 33%;
-  text-align: center;
+.member-info {
+    span {
+        font-size: 14px;
+        color: #848484;
+    }
 }
 
-.tabs-pane, .owner-tabs-pane{
-  position: absolute;
-  bottom: 0;
-  height: 58px;
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 100%;
+.hover-padding {
+    position: absolute;
+    width: 50%;
+    height: 80px;
+    top: -80px;
+    right: 0;
+}
 
-  ul{margin-left: 30px;}
+.popup-arrow {
+    @include box-border;
+    @include rotate(45deg);
+    position: absolute;
+    background-color: $white;
+    border-bottom: none;
+    border-right: none;
+    width: 15px;
+    height: 15px;
+    top: -8px;
+    left: 69%;
+}
 
-  li{
-    height: 100%;
+.icon_share_angle {
+    float: left;
+    background: url(../img/icon_share_angle.png);
+    padding-left: 25px;
+    margin-right: 15px;
+    line-height: 40px;
+    background-repeat: no-repeat;
+    background-position: left center;
+}
+
+.project-name-corner {
+    position: absolute;
+    top: -1px;
+    right: -1px;
     display: inline-block;
-    list-style-type: none;
-    padding: 0 1%; 
-    margin: 0 1%; 
-  }
-
-  a{
-    line-height: 58px;
-    @include font-styling("asap", 22px, $white, "normal", "bold");
-    @include text-shadow(0 1px 5px rgba(0,0,0,.75)); // drop shadow
-  }
-}
-
-.owner-tabs-pane{
-  li.active{background-color: rgba(0,0,0,.75);}
-  
-  .view-project{
-    display: none;
-  }
-}
-
-.tabs-pane{
-  img{vertical-align:initial;}
-
-  li{
-    a{ vertical-align: text-bottom; }
-    &.active {
-      a{ display: none; }
-    }
-  } 
-}
-
-.team-members{
-  float: right;
-  width: auto; 
-
-  a{ color: $black; }
-
-  ul{ 
-    float: right;
-    display: inline-block; 
-  }
-
-  li{ 
-    float: left; 
-    margin-left: 15px;
-    &:first-child{ margin-left: 0;}
-  }
-
-  h4{margin-bottom:10px;}
-}
-.member-avatar{
-  width: 70px;  
-  cursor: pointer;
-
-  .circle{z-index: 2;}
-  
-  .mail-icon{
-    float: right;
-    margin-top: 5px;
-  } 
-
-  &:hover{
-    .member-popup{
-      visibility: visible;
-      @include opacity(1);
-      top:78px;
-    }
-  }  
-}
-
-.member-popup{
-  position: absolute;
-  visibility: hidden;
-  padding: 15px;
-  height: 75px;
-  width: 200px;
-  left: -110px;
-  top:58px;
-  z-index: 1;
-  @include opacity(0);
-  @include box-skin;
-  @include transition-property(all);
-  @include transition-duration(.1s);
-}
-
-.member-info{
-  span{
+    width: auto;
+    padding: 8px;
+    color: $gray53;
     font-size: 14px;
-    color: #848484;
-  }
+    @include box-border;
+    @include border-bottom-left-radius(4px);
 }
 
-.hover-padding{
-  position: absolute;
-  width: 50%;
-  height: 80px;
-  top:-80px;
-  right: 0;
+.stream-wrapper {
+    .content-wrapper {
+        overflow: hidden;
+    }
 }
 
-.popup-arrow{
-  @include box-border;
-  @include rotate(45deg);
-  position: absolute;
-  background-color: $white;
-  border-bottom: none;
-  border-right: none;
-  width: 15px;
-  height: 15px;
-  top: -8px;
-  left: 69%;
-}
-
-.icon_share_angle{
-  float: left;
-  background: url(../img/icon_share_angle.png);
-  padding-left: 25px;
-  margin-right: 15px;
-  line-height: 40px;
-  background-repeat: no-repeat;
-  background-position: left center;
-}
-
-.project-name-corner{
-  position: absolute;
-  top: -1px;
-  right: -1px;
-  display: inline-block;
-  width: auto;
-  padding: 8px;
-  @include box-border;
-  @include border-bottom-left-radius(4px);
-  color: $gray53;
-  font-size: 14px;
-}
-
-.stream-wrapper{
-  .content-wrapper{overflow: hidden;}
+.sort-deactive {
+    color: $graySubtext;
+    border: 1px solid $grayBorder;
+    padding: 4px;
+    @include border-radius(2px);
 }

@@ -3,7 +3,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
   return CBUStreamView = AbstractView.extend({
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
-      console.log('CBUStreamView initialize');
       this.collection = new StreamCollection();
       return this.render();
     },
@@ -16,36 +15,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
         return _this.onTemplateLoad();
       });
     },
-    onTemplateLoad: function() {
-      this.$container = this.$el.find('.body-container');
-      this.collection.on("reset", this.onCollectionLoad, this);
-      return this.collection.fetch({
-        reset: true
-      });
-    },
-    onCollectionLoad: function() {
-      console.log('onCollectionLoad');
-      this.$el.find(".preload").remove();
-      return this.addAll();
-    },
     addAll: function() {
       var _this = this;
       this.$day = $('<div />');
       return this.$day.template(this.templateDir + "/templates/partials-user/stream-day-wrapper.html", {}, function() {
-        var m, model_;
-        if (_this.collection.length > 0) {
-          model_ = _this.collection.models[0];
-          m = moment(model_.get("created_at")).format("MMMM D");
-          _this.newDay(m);
-        }
-        if (_this.collection.models.length === 0) {
-          _this.noResults();
-        }
-        _this.collection.each(function(model) {
-          return _this.addOne(model);
-        });
-        _this.isDataLoaded = true;
-        return onPageElementsLoad();
+        return _this.onStreamWrapperLoad();
       });
     },
     newDay: function(date_) {
@@ -57,16 +31,50 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
     },
     addOne: function(model_) {
       var m, view;
-      console.log(model_, this.$ul);
       m = moment(model_.get("created_at")).format("MMMM D");
       if (this.currentDate !== m) {
         this.newDay(m);
       }
       view = new UpdateListItemView({
         model: model_,
-        isStream: true
+        isStream: true,
+        isMember: true
       });
       return this.$projects.append(view.$el);
+    },
+    noResults: function() {
+      return this.$el.find('.no-results').show();
+    },
+    /* EVENTS ---------------------------------------------*/
+
+    onTemplateLoad: function() {
+      this.$container = this.$el.find('.body-container');
+      this.collection.on("reset", this.onCollectionLoad, this);
+      this.collection.fetch({
+        reset: true
+      });
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    onCollectionLoad: function() {
+      this.$el.find(".preload").remove();
+      return this.addAll();
+    },
+    onStreamWrapperLoad: function() {
+      var m, model_,
+        _this = this;
+      if (this.collection.length > 0) {
+        model_ = this.collection.models[0];
+        m = moment(model_.get("created_at")).format("MMMM D");
+        this.newDay(m);
+      }
+      if (this.collection.models.length === 0) {
+        this.noResults();
+      }
+      this.collection.each(function(model_) {
+        return _this.addOne(model_);
+      });
+      this.isDataLoaded = true;
+      return onPageElementsLoad();
     }
   });
 });

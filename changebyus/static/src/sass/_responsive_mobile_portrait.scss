@@ -1,109 +1,113 @@
 /**** affects all sizes from 0 to 480px **/
 
 @media only screen and (max-width: 480px) {
-	body.debug{background: green;}
-	//body{background: green;}
-
-	/*******************************************
-	 * Header/Nav
-	 *******************************************/
-	.dashboard-tabs{
-		li{float: none;}
-	}
-
-	.header-image {
-		.overlay-text {
-			left: 5%;
-			width: 95%;
-			h1 {font-size: 28px;}
-		}
-	}
-
-	.header-image{
-		height: 340px;
-	}
-
-	.post-reply-form{
-		.user-avatar{display: none;}
-		input[type=submit] {
-			width: auto;
-			padding: 10px 16px;
-		}
-	}
-
-	.reply-right{ 
-		width: 100%;
-		.input-xxlarge{width: 100%;}
-	}
-
-	.icons-wrapper {
-		margin: 32px auto 0;
-	}
-
-	/*******************************************
-	 * Project
-	 *******************************************/
-
-	.project-square{
-		margin: 10px 0;
-		width: 100%;
-	}
-
-	.project-preview:nth-child(2n+2){
-		.project-square {margin-right: 0;}
-	}
-	.project-preview:nth-child(3n+3){
-		.project-square {margin-right: 0;}
-	}
-
-	.created-by, .supported-by{
-		padding: 0 2%;
-		width: 100%; 
-		text-align: left;
-
-		div{
-			&:first-child{
-				width: 100%;
-				margin-bottom: 6px;
-				&:after{ clear: both; }
-			}
-			&:last-child{
-				&:after{ clear: both; }
-			}
-		}
-	}
-	
-	.create-by{ margin-bottom: 24px; }
-	
-	.notify-row{
-		margin-bottom: 12px;
-		div{
-			width: 15%;
-			&:first-child {
-				width: 70%;
-			}
-		}
-	}
-	
-	.create-project{
-		h1{font-size: 40px;}
-	}
-
-	.admin {
-		h2 {
-			font-size: 22px;
-			line-height: 40px;
-		}
-	}
-
-	.search-toggles,
-	.pill-toggle{
-		width: 100%;
-	}
-
-	#sort-by-pr{
-		margin-bottom: 12px;
-	}
- 
-
+    body.debug {
+        background: green;
+    }
+    /*******************************************
+     * Header/Nav
+     *******************************************/
+    .dashboard-tabs {
+        li {
+            float: none;
+        }
+    }
+    .header-image {
+        .overlay-text {
+            left: 5%;
+            width: 95%;
+            h1 {
+                font-size: 28px;
+            }
+        }
+    }
+    .header-image {
+        height: 340px;
+    }
+    .post-reply-form {
+        .user-avatar {
+            display: none;
+        }
+        input[type=submit] {
+            width: auto;
+            padding: 10px 16px;
+        }
+    }
+    .reply-right {
+        width: 100%;
+        .input-xxlarge {
+            width: 100%;
+        }
+    }
+    .icons-wrapper {
+        margin: 32px auto 0;
+    }
+    /*******************************************
+     * Project
+     *******************************************/
+    .project-square, .admin-project-square {
+        margin: 10px 0;
+        width: 100%;
+    }
+    .project-preview:nth-child(2n+2) {
+        .project-square, 
+        .admin-project-square {
+            margin-right: 0;
+        }
+    }
+    .project-preview:nth-child(3n+3) {
+        .project-square, 
+        .admin-project-square {
+            margin-right: 0;
+        }
+    }
+    .created-by, .supported-by {
+        padding: 0 2%;
+        width: 100%;
+        text-align: left;
+        div {
+            &:first-child {
+                width: 100%;
+                margin-bottom: 6px;
+                &:after {
+                    clear: both;
+                }
+            }
+            &:last-child {
+                &:after {
+                    clear: both;
+                }
+            }
+        }
+    }
+    .create-by {
+        margin-bottom: 24px;
+    }
+    .notify-row {
+        margin-bottom: 12px;
+        div {
+            width: 15%;
+            &:first-child {
+                width: 70%;
+            }
+        }
+    }
+    .create-project {
+        h1 {
+            font-size: 40px;
+        }
+    }
+    .admin {
+        h2 {
+            font-size: 22px;
+            line-height: 40px;
+        }
+    }
+    .search-toggles,
+    .pill-toggle {
+        width: 100%;
+    }
+    #sort-by-pr {
+        margin-bottom: 12px;
+    }
 }

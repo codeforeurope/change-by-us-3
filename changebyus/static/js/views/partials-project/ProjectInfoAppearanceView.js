@@ -7,11 +7,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       lat: 0,
       lon: 0
     },
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       this.viewData = this.model.attributes;
       this.location.name = this.viewData.location;
-      console.log('@viewData', this.viewData);
+      this.location.lat = this.viewData.lat;
+      this.location.lon = this.viewData.lon;
       return this.render();
     },
     render: function() {
@@ -20,10 +21,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
       this.$el.template(this.templateDir + "/templates/partials-project/project-info-appearance.html", {
         data: this.viewData
       }, function() {
-        onPageElementsLoad();
-        return _this.ajaxForm();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
+    },
+    onTemplateLoad: function() {
+      $('input[name="visibility"]').change(function() {
+        return $('input[name="private"]').attr('checked', $(this).val() === "private");
+      });
+      this.ajaxForm();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {
       var $dropkick, $feedback, $form, $projectLocation, $submit, options,
@@ -43,9 +50,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         beforeSubmit: function() {
           var $zip;
           if ($form.valid()) {
+            $('input[name="private"]').attr('checked', $('input[name="visibility"]').val() === "private");
+            console.log($('input[name="visibility"]').val() === "private");
             $zip = $('input[name="zip"]');
-            console.log('$zip.val()  @location.name ', $zip, $zip.val(), _this.location.name);
-            if (_this.location.name !== "" && _this.location.name === $zip.val()) {
+            if (_this.location.name !== "") {
               $form.find("input, textarea").attr("disabled", "disabled");
               return true;
             } else {
@@ -76,13 +84,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           }
         }
       };
-      /*
-      				$form.submit ->
-      					options.data = json_str
-      					$.ajax options
-      					false
-      */
-
       $form.ajaxForm(options);
       $projectLocation = $("#project_location");
       $projectLocation.typeahead({
@@ -118,8 +119,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
         return console.log(datum);
       });
       return this.$el.find('input:radio').screwDefaultButtons({
-        image: 'url("/static/img/icon-lock.png")',
-        width: 60,
+        image: 'url("/static/img/dot-check.png")',
+        width: 25,
         height: 25
       });
     }

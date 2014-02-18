@@ -2,8 +2,8 @@
   <head>
     <script>
     {% if url %}
-      {% if (url == 'reload') %}
-        window.opener.location.reload();
+      {% if (url == 'reload') %} 
+        window.opener.document.windowReload();
       {% else %}
         window.opener.location.href = "/{{ url }}";
       {% endif %}

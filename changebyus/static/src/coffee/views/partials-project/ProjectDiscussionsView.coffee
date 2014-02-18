@@ -1,89 +1,97 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"views/partials-project/ProjectSubView",
-		"views/partials-project/ProjectDiscussionListItemView"],
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 ProjectSubView, 
-	 ProjectDiscussionListItemView) ->
+        "backbone", 
+        "jquery", 
+        "template", 
+        "abstract-view",
+        "views/partials-project/ProjectSubView",
+        "views/partials-project/ProjectDiscussionListItemView"],
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView,
+     ProjectSubView, 
+     ProjectDiscussionListItemView) ->
 
-		ProjectDiscussionsView = ProjectSubView.extend
+        ProjectDiscussionsView = ProjectSubView.extend
 
-			parent: "#project-discussions"
-			$ul:null
-			currentData:""
- 
-			render: ->  
-				@$el = $(@parent)
-				@templateLoaded = true
-				console.log 'ProjectDiscussionsView',@
+            parent: "#project-discussions"
+            $ul:null
+            currentData:""
 
-			onCollectionLoad:-> 
-				ProjectSubView::onCollectionLoad.call(@)
+            render: ->
+                @$el = $(@parent)
+                @templateLoaded = true
 
-				@collection.on 'remove', (obj_)=> 
-					@addAll()
-					@deleteDiscussion(obj_.id)
-				
-			addAll: ->
-				if @collection.models.length is 0
-					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
-						{}, => onPageElementsLoad()
-				else
-					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
-						{}, => @loadDayTemplate()
+            onCollectionLoad:->  
+                ProjectSubView::onCollectionLoad.call(@)
 
-			loadDayTemplate:->
-				@$day = $('<div />')
-				@$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
-					{}, =>
-						if @collection.length > 0
-							model_ = @collection.models[0]
-							m = moment(model_.get("created_at")).format("MMMM D")
-							@newDay(m)
+                @collection.on 'add', @updateCount, @
+                @collection.on 'remove', (obj_)=>
+                    @addAll()
+                    @deleteDiscussion(obj_.id)
+                
+            addAll: -> 
+                if @collection.models.length is 0
+                    @$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
+                        {}, => AbstractView::onTemplateLoad.call @
+                else
+                    @$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
+                        {}, => @loadDayTemplate()
 
-						@isDataLoaded = true
+            loadDayTemplate:->
+                @$day = $('<div class="day-wrapper"/>')
+                @$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
+                    {}, => @onDayWrapperLoad()
 
-						ProjectSubView::addAll.call(@) 
+            onDayWrapperLoad:->
+                @isDataLoaded = true
 
-			newDay:(date_)->
-				@currentDate = date_
-				@$currentDay = @$day.clone()
-				@$el.append @$currentDay
-				@$currentDay.find('h4').html(date_)
-				@$ul = @$currentDay.find('.bordered-item') 
+                if @collection.length > 0
+                    model_ = @collection.models[0]
+                    m = moment(model_.get("created_at")).format("MMMM D")
+                    @newDay(m)
+                    
+                @updateCount()
 
-			addOne:(model_)->
-				m = moment(model_.get("created_at")).format("MMMM D")
-				if @currentDate isnt m then @newDay(m)
+                ProjectSubView::addAll.call(@) 
 
-				config = {model:model_}
-				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
-				projectDiscussionListItemView.on 'click', =>
-					@trigger 'discussionClick', config
+            updateCount:->
+                @$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
 
-				@$ul.append projectDiscussionListItemView.$el
+            newDay:(date_)->
+                @currentDate = date_
+                @$currentDay = @$day.clone()
+                @$el.append @$currentDay
+                @$currentDay.find('h4').html(date_)
+                @$ul = @$currentDay.find('.bordered-item') 
 
-				onPageElementsLoad()
+            addOne:(model_)->
+                m = moment(model_.get("created_at")).format("MMMM D")
+                if @currentDate isnt m then @newDay(m)
 
-			show:->
-				ProjectSubView::show.call(@)
-				@loadData()
+                config = {model:model_}
+                projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
+                projectDiscussionListItemView.on 'click', =>
+                    @trigger 'DISCUSSION_CLICK', config
 
-			deleteDiscussion:(id_)->
-				$feedback = $("#discussions-feedback")
-				$.ajax(
-					type: "POST"
-					url: "/api/post/delete"
-					data: { post_id:id_ }
-				).done (res_)=> 
-					if res_.success
-						$feedback.hide()
-					else
-						$feedback.show().html(res_.msg)
+                @$ul.append projectDiscussionListItemView.$el
 
-					console.log 'deleteDiscussion',res_
+                onPageElementsLoad()
+
+            show:->
+                $(".day-wrapper").remove()
+                ProjectSubView::show.call(@)
+                @loadData()
+
+            deleteDiscussion:(id_)->
+                $feedback = $("#discussions-feedback")
+                $.ajax(
+                    type: "POST"
+                    url: "/api/post/delete"
+                    data: { post_id:id_ }
+                ).done (res_)=> 
+                    if res_.success
+                        $feedback.hide()
+                    else
+                        $feedback.show().html(res_.msg)

@@ -7,7 +7,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":39.95,
-			"lon":-75.17
+			"lon":-75.17,
+			"image_name": "Honeycomb.jpg"
 		},
 		"sanjose":{
 			"name":"San Jose, CA",
@@ -16,7 +17,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":37.33,
-			"lon":-121.90
+			"lon":-121.90,
+			"image_name": "Honeycomb.jpg"
 		},
 		"akron":{
 			"name":"Akron, OH",
@@ -25,7 +27,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":41.07,
-			"lon":-81.51
+			"lon":-81.51,
+			"image_name": "Honeycomb.jpg"
 		},
 		"charlotte":{
 			"name":"Charlotte, NC",
@@ -34,7 +37,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":35.22,
-			"lon":-80.84
+			"lon":-80.84,
+			"image_name": "Honeycomb.jpg"
 		},
 		"detroit":{
 			"name":"Detroit, MI",
@@ -43,7 +47,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":42.33,
-			"lon":-83.04
+			"lon":-83.04,
+			"image_name": "Honeycomb.jpg"
 		},
 		"macon":{
 			"name":"Macon, GA",
@@ -52,7 +57,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":32.83,
-			"lon":-83.65
+			"lon":-83.65,
+			"image_name": "Honeycomb.jpg"
 		},
 		"miami":{
 			"name":"Miami, FL",
@@ -61,7 +67,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":25.78,
-			"lon":-80.22
+			"lon":-80.22,
+			"image_name": "Honeycomb.jpg"
 		},
 		"stpaul":{
 			"name":"St. Paul, MN",
@@ -70,7 +77,8 @@
 			"image_url_large_rect":"http://lorempixel.com/1024/430",
 			"website":"http://google.com",
 			"lat":44.94,
-			"lon":-93.08
+			"lon":-93.08,
+			"image_name": "Honeycomb.jpg"
 		}
 	}
 }

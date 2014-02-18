@@ -13,7 +13,7 @@ from flask.ext.cdn_rackspace import upload_rackspace_image
 
 
 from .models import User
-from .helpers import _create_user
+from .helpers import _create_user, _delete_user, _unflag_user
 from ..helpers.stringtools import bool_strings
 
 from flask.ext.wtf.html5 import URLField
@@ -142,7 +142,7 @@ def api_get_user(user_id):
             User record if user found
     """
 
-    u = User.objects.with_id(user_id)
+    u = User.objects(id=user_id, active=True).first()
      
     if u is None:
         ret = ReturnStructure( msg = "User not found.",
@@ -294,6 +294,25 @@ def api_edit_user():
     return jsonify_response( ReturnStructure( data = u.as_dict() ) )
 
 
+@user_api.route('/<user_id>', methods = ['DELETE'])
+@user_api.route('/remove', methods = ['POST'])
+def api_delete_user(user_id=None):
+    if (not user_id):
+        form = request.form if request.form else as_multidict(request.json)
+        user_id = form.get('user_id')
+    
+    _delete_user(user_id)
+    
+    return jsonify_response(ReturnStructure())
+
+
+@user_api.route('/<user_id>/unflag', methods = ['POST'])
+def api_unflag_user(user_id=None):    
+    _unflag_user(user_id)
+    
+    return jsonify_response(ReturnStructure())
+
+
 @user_api.route('/socialstatus', methods = ['GET'])
 @login_required
 def api_get_user_social_status():
@@ -336,9 +355,43 @@ def api_get_user_social_info():
            }
 
     return jsonify_response( ReturnStructure( data = data ) )
+    
+@user_api.route('/list')
+def api_get_users():
+    """Returns a simple list of users, optionally sorted and limited
+   
+        Args:
+            limit: limit of number of users to return
+            sort: sort parameter
+            order: order by parameter
 
+        Returns:
+            list of users dictionaries
 
-# TODO WTForms for flagging?
+    """
+    limit = int(request.args.get('limit', 100))
+    sort = request.args.get('sort')
+    order = request.args.get('order', 'asc')
+    
+    # using raw query here so that most list queries aren't needlessly 
+    # using flags__gt=-1 or something
+    query = {"active":True}
+    if bool(request.args.get('flagged', False)):
+        query['flags'] = {"$gt":0}
+
+    if (sort):
+        sort_order = "%s%s" % (("-" if order == 'desc' else ""), sort)
+        users = User.objects(__raw__=query).order_by(sort_order)
+    else:
+        users = User.objects(__raw__=query)
+
+    users = users[0:limit]
+    users_list = db_list_to_dict_list(users)
+
+    print "user query",query, users_list
+
+    return jsonify_response( ReturnStructure( data = users_list ) )    
+
 
 @user_api.route('/<user_id>/flag', methods = ['POST'])
 @login_required

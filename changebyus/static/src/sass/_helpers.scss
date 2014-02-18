@@ -1,75 +1,103 @@
-@import 'compass/css3/filter';
+@import "compass/css3/filter";
+@import "compass/css3/opacity";
 
 .clearfix {
-  *zoom: 1;
-
-  &:before {
-    display: table;
-    line-height: 0;
-    content: "";
-  }
-  
-  &:after {
-    display: table;
-    line-height: 0;
-    content: "";
-    clear: both;
-  }
+    *zoom: 1;
+    &:before {
+        display: table;
+        line-height: 0;
+        content: "";
+    }
+    &:after {
+        display: table;
+        line-height: 0;
+        content: "";
+        clear: both;
+    }
 }
 
-.clear-both{clear: both;}
+.clear-both {
+    clear: both;
+}
 
 .hide-text {
-  font: 0 / 0 a;
-  color: transparent;
-  text-shadow: none;
-  background-color: transparent;
-  border: 0;
+    font: 0 / 0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0;
 }
 
-.np{
-  padding: 0 !important;
-  overflow: visible;
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
-.pull-right { float: right;}
+.np {
+    padding: 0 !important;
+    overflow: visible;
+}
 
-.pull-left { float: left; }
+.pull-right {
+    float: right;
+}
 
-.tl{ text-align: left; }
+.pull-left {
+    float: left;
+}
 
-.tr{ text-align: right; }
+.tl {
+    text-align: left;
+}
 
-.hide{ display: none; }
+.tr {
+    text-align: right;
+}
 
-.show{ display: block; }
+.hide {
+    display: none;
+}
 
-.invisible { visibility: hidden;}
+.show {
+    display: block;
+}
 
-.affix { position: fixed; }
+.invisible {
+    visibility: hidden;
+}
 
-.highlight{ @include highlight; }
+.affix {
+    position: fixed;
+}
+
+.highlight {
+    @include highlight;
+}
 
 .emphasis {
-  font-size: 16px;
-  letter-spacing: .1em;
+    font-size: 16px;
+    letter-spacing: .1em;
 }
 
-.blur{ 
-  @include filter(blur(2px)); 
+.disabled-btn{
+    @include opacity(.25);
+    cursor: default;
+    a{ cursor: default; }
 }
 
-.circle{
-  @include border-radius(1000px, 1000px);
-  background-position: center center;
-  overflow: hidden;
+.blur {
+    @include filter(blur(2px));
 }
 
-a.ul{ 
-  color: $graySubtext;
-  text-decoration: underline ;
+.circle {
+    background-position: center center;
+    overflow: hidden;
+    @include border-radius(1000px, 1000px);
 }
 
-/********** position helper ***********/
-.mt-16{margin-top: 16px;}
-.mr-10{margin-right: 10px;}
+a.ul {
+    color: $graySubtext;
+    text-decoration: underline;
+}
+

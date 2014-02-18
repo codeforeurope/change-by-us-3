@@ -1,22 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from flask import g, current_app
+from flask import g, current_app as app
 
 
-from ..user.models import User
-from ..helpers.mongotools import db_list_to_dict_list
-from ..helpers.flasktools import ReturnStructure, jsonify_response
-from ..project.decorators import _is_organizer as _is_project_organizer
-from ..notifications.api import _notify_post
-from ..facebook.facebook import _post_user_facebook_feed
-from ..bitly.api import _get_bitly_url
-from ..twitter.twitter import _post_user_twitter_update
+from changebyus.user.models import User
+from changebyus.helpers.mongotools import db_list_to_dict_list
+from changebyus.helpers.flasktools import ReturnStructure, jsonify_response
+from changebyus.project.decorators import _is_organizer as _is_project_organizer
+from changebyus.notifications.api import _notify_post
+from changebyus.facebook.facebook import _post_user_facebook_feed
+from changebyus.bitly.api import _get_bitly_url
+from changebyus.twitter.twitter import _post_user_twitter_update
 
 from flask.ext.cdn import url_for
 
 from .models import Project, ProjectPost, SocialMediaObject
 
-from ..post.activity import update_project_activity
+from changebyus.post.activity import update_project_activity
 
 """
 .. module:: post/helpers
@@ -194,7 +194,7 @@ def _create_project_post(title = None,
     infoStr = "Post for project {0} created by user {1} description {2}".format(project_id,
                                                                                 g.user.id,
                                                                                 pp.description)
-    current_app.logger.info(infoStr)
+    app.logger.info(infoStr)
 
     _notify_post( post_id = pp.id )
 

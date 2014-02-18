@@ -2,8 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   var ProjectNewDiscussionView;
   return ProjectNewDiscussionView = AbstractView.extend({
     parent: "#project-new-discussion",
-    initialize: function(options) {
-      AbstractView.prototype.initialize.call(this, options);
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
     },
     events: {
@@ -24,15 +24,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       form = new WysiwygFormView({
         parent: "#discussion-form"
       });
-      return form.success = function(response_) {
+      form.success = function(response_) {
         form.resetForm();
-        return window.location.hash = "discussion/" + response_.data.id;
+        return _this.trigger("NEW_DISCUSSION", response_.data);
       };
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     cancel: function() {
       $("#discussion-editor").html('');
       this.$el.find('form').resetForm();
-      return window.location.hash = '#discussions';
+      return window.location.hash = 'discussions';
     }
   });
 });

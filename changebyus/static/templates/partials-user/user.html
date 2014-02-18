@@ -1,5 +1,8 @@
 <div class="body-container">
     <div class="user-header clearfix">
+        <div class="header-icon flag-user"> 
+            <a href="javascript:void(0)" id="flag"> Flag User</a>
+        </div>
         <div class="edit invisible">
             <a href="/stream/dashboard#profile" class="btn btn-large btn-secondary">Edit Profile</a>
         </div>
@@ -32,21 +35,23 @@
             <br> 
             <span>Brooklyn<%= data.user_location %></span>
             <br>
+            <% if (data.website){ %>
             <strong>
-                <a href="<%= data.user_website %>" target="_blank"><%= data.user_website %></a>
+                <a href="<%= data.website %>" target="_blank"><%= data.website %></a>
             </strong>
+            <% } %>
         </div>
     </div>
-    <hr>
+    
     <div class="user-projects clearfix">
+        <hr>
         <h2>
             <%= data.first_name %> <%= data.last_name %>'s Projects</h2>
         <ul id="project-list"></ul>
     </div>
 
-    <hr>
-
     <div class="user-following clearfix">
+        <hr>
         <h2>Following</h2>
         <ul id="following-list"></ul>
     </div>

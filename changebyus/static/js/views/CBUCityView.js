@@ -37,8 +37,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       });
     },
     render: function() {
-      var _this = this;
+      var s,
+        _this = this;
       this.viewData = this.model.attributes;
+      s = this.viewData.image_url_round;
+      this.viewData.image_url_round = s.substring(s.lastIndexOf("/static/img/"));
       this.$el = $("<div class='city-container'/>");
       this.$el.template(this.templateDir + "/templates/city.html", {
         data: this.viewData
@@ -99,12 +102,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
     loadCityHeader: function() {
       var $img, imgURL, model,
         _this = this;
-      while (true) {
-        model = this.both[window.randomInt(this.both.length)];
+      if (this.both.length === 1) {
+        model = this.both[0];
         imgURL = model.get("image_url_large_rect");
-        console.log('imgURL', imgURL, new Date());
-        if (this.lastImgURL !== imgURL) {
-          break;
+      } else {
+        while (true) {
+          model = this.both[window.randomInt(this.both.length)];
+          imgURL = model.get("image_url_large_rect");
+          console.log('imgURL', imgURL, new Date());
+          if (this.lastImgURL !== imgURL) {
+            break;
+          }
         }
       }
       this.lastImgURL = imgURL;

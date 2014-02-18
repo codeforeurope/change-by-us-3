@@ -44,6 +44,8 @@ define ["underscore",
 
             render: -> 
                 @viewData = @model.attributes 
+                s = @viewData.image_url_round
+                @viewData.image_url_round= s.substring(s.lastIndexOf("/static/img/"))
 
                 @$el = $("<div class='city-container'/>")
                 @$el.template @templateDir+"/templates/city.html", 
@@ -94,11 +96,15 @@ define ["underscore",
 
             loadCityHeader:-> 
                 # loop to ensure that a new background is pulled
-                loop
-                    model = @both[ window.randomInt(@both.length) ]
+                if @both.length is 1
+                    model = @both[ 0 ]
                     imgURL = model.get "image_url_large_rect"
-                    console.log 'imgURL', imgURL, new Date()
-                    break unless @lastImgURL is imgURL 
+                else
+                    loop
+                        model = @both[ window.randomInt(@both.length) ]
+                        imgURL = model.get "image_url_large_rect"
+                        console.log 'imgURL', imgURL, new Date()
+                        break unless @lastImgURL is imgURL 
 
                 @lastImgURL = imgURL
                 

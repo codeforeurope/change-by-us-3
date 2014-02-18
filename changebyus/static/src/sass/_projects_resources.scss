@@ -297,7 +297,7 @@
         left: percentage(30px / 1018px);
         width: percentage(249px / 1018px);
         border: 4px solid #fff;
-        @include background-clip(padding-box);
+        @include background-clip(border-box);
     }
     .project-location {
         display: inline-block;

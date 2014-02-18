@@ -299,8 +299,18 @@
         p {
             margin-top: 22px;
         }
+        .title{
+            width: 100%;
+        }
+        .discover-nav{
+            width: 100%;
+        }
     }
     .search-inputs {
+        >div {
+            height: auto;
+            z-index: auto;
+        }
         .search-forms {
             width: 80%;
             &:first-child {
@@ -310,6 +320,9 @@
         .go {
             width: 17%;
         }
+    }
+    .search-toggles{
+        width: 80%;
     }
     .update-content {
         width: 100%;

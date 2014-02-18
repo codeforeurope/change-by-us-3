@@ -9,12 +9,16 @@
      * Header/Nav
      *******************************************/
     .topnav {
+        li {
+            font-size: 20px;
+        }
         .body-container {
             padding: 0;
         }
-    }
+
+    } 
     .nav-pills>li {
-        padding-right: 16px;
+        padding-right: 0;
     }
     .feature-image {
         .project-footer {
@@ -30,6 +34,9 @@
                 font-size: 70px;
             }
         }
+    }
+    .header-links {
+        padding: 0 8px;
     }
     .user-header {
         .edit {

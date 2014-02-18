@@ -12,11 +12,12 @@
         span {
             display: none;
         }
-    }
-    .nav-pills>li {
-        font-size: 14px;
-    }
+    } 
     .nav-pills {
+        z-index: 1;
+        >li {
+            font-size: 14px;
+        }
         &.pull-right {
             display: none;
         }
@@ -311,8 +312,8 @@
             height: auto;
             z-index: auto;
         }
-        .search-forms {
-            width: 80%;
+        .search-forms { 
+            width: 100%;
             &:first-child {
                 z-index: 2;
             }

@@ -49,7 +49,8 @@
           </ul>
 
           {% else %}
-             <ul class="nav nav-pills pull-left">
+           <div class="nav pull-left">
+             <ul class="nav-pills">
                 <li>
                   <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
                 </li>
@@ -60,7 +61,7 @@
                   <a href="/discover" class="header-links {% if request.path == '/discover' %}active{% endif %}">Discover Projects</a>
                 </li>
              </ul>
-
+           </div>
              <ul class="nav nav-pills pull-right">    
               <li>
                 <a href="/signup" class="header-links {% if request.path == '/signup' %}active{% endif %}">Sign Up</a>

@@ -111,6 +111,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
       if (this.socialInfo.fb_name === "") {
         this.$facebook.screwDefaultButtons("disable");
+        this.$facebook.parent().click(function() {
+          return _this.socialClick("facebook");
+        });
         this.$facebookLabel.addClass("disabled-btn").click(function() {
           return _this.socialClick("facebook");
         });
@@ -123,6 +126,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
       if (this.socialInfo.twitter_name === "") {
         this.$twitter.screwDefaultButtons("disable");
+        this.$twitter.parent().click(function() {
+          return _this.socialClick("twitter");
+        });
         return this.$twitterLabel.addClass("disabled-btn").click(function() {
           return _this.socialClick("twitter");
         });

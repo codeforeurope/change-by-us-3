@@ -103,6 +103,7 @@ define ["underscore",
             checkSocial:(forceClick_=false)->
                 if @socialInfo.fb_name is ""
                     @$facebook.screwDefaultButtons("disable")
+                    @$facebook.parent().click ()=> @socialClick("facebook")
                     @$facebookLabel.addClass("disabled-btn").click ()=> @socialClick("facebook")
                 else
                     @$facebook.screwDefaultButtons("enable")
@@ -111,6 +112,7 @@ define ["underscore",
 
                 if @socialInfo.twitter_name is ""
                     @$twitter.screwDefaultButtons("disable")
+                    @$twitter.parent().click ()=> @socialClick("twitter")
                     @$twitterLabel.addClass("disabled-btn").click ()=> @socialClick("twitter")
                 else
                     @$twitter.screwDefaultButtons("enable")

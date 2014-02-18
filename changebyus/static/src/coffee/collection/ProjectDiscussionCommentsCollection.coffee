@@ -4,6 +4,7 @@ define ["underscore", "backbone", "model/ProjectDiscussionCommentModel"],
             model: ProjectDiscussionCommentModel
             
             url: ->
+                # TODO... pass ID in argument
                 "/api/project/#{window.projectID}/discussion_comments"
             
             parse: (response_) ->

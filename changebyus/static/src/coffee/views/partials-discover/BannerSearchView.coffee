@@ -2,8 +2,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     (_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) ->
         BannerSearchView = AbstractView.extend
 
-            byProjectResources:'project'
-            sortByPopularDistance:'popular'
+            byProjectResources:"all"
+            sortByPopularDistance:"popular"
             locationObj:{lat:0, lon:0, name:""}
             category:""
             projects:null
@@ -56,15 +56,32 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 # deeplink resource select
                 if @showResources then $('#sort-by-pr .pill-selection').last().trigger('click')
                 
-                $dropkick          = $('#search-range').dropkick()
+                @$searchRange      = $('#search-range').dropkick()
                 @$resultsModify    = $('.results-modify')
                 @$modifyInput      = @$resultsModify.find('input')
                 @$projectList      = $("#projects-list")
                 @$searchCatagories = $('.search-catagories')
                 @$geoPin           = $('.geo-pin')
                 
+                @addListeners()
                 @autoGetGeoLocation()
                 AbstractView::onTemplateLoad.call @
+
+            addListeners:->
+                @$addOwn = $('#add-own').dropkick({change: (v,l)->
+                    window.location.href = "/create/"+v
+                })
+                @$city = $('#city').dropkick({change: (v,l)->
+                    window.location.href = "/city/"+v
+                })
+                
+                @$all       = $('#all')
+                @$projects  = $('#projects')
+                @$resources = $('#resources')
+
+                @$all.click (e)=> @onToggleClick(e)
+                @$projects.click (e)=> @onToggleClick(e)
+                @$resources.click (e)=> @onToggleClick(e)
 
             toggleActive:(dir_)->
                     $li = @$searchCatagories.find('li')
@@ -110,8 +127,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     navigator.geolocation.getCurrentPosition (loc_)=>
                         @handleGetCurrentPosition(loc_)
                     , @sendForm
-                else
-                    #@sendForm()
 
             toggleModify:(showSorting_)->
                 @$resultsModify.toggle(!showSorting_)
@@ -147,7 +162,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     if response_.success
                         console.log 'response_',response_, @$searchNear.val()
                         
-                        @toggleModify @autoSend
+                        # @toggleModify @autoSend
                         @$modifyInput.val modifyInputVal
 
                         @autoSend = false
@@ -161,7 +176,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         @updatePage()
                         @setPages size, $(".projects")
 
-                        t = if @byProjectResources is 'project' then "Projects" else "Resources"
+                        t = if @byProjectResources is 'project' then "Projects" else if @byProjectResources is 'resource' then "Resources" else "Resources & Projects"
                         $('.projects h4').html(size+" "+t)
                         onPageElementsLoad()
 
@@ -184,7 +199,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @locationObj.lon = loc_.coords.longitude
 
                 url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
-                $.get url, (resp) =>
+                if @autoLocation then @autoLocation.abort()
+                @autoLocation = $.get url, (resp) =>
                     if resp.success and resp.data.length > 0
                         @autoSend = true
                         @$geoPin.addClass "active"
@@ -201,15 +217,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 $this.toggleClass('active')
                 $this.siblings().toggleClass('active')
 
-                switch $this.html()
-                    when 'Projects'
-                        @byProjectResources = 'project'
-                        $('#create-project').css('display','block')
-                        $('#create-resource').hide()
-                    when 'Resources'
-                        @byProjectResources = 'resource'
-                        $('#create-project').hide()
-                        $('#create-resource').css('display','block')
+                switch $this.text()
                     when 'Popular'
                         @sortByPopularDistance = 'popular'
                     when 'Distance'
@@ -218,6 +226,19 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
             onToggleVisibility:(e)->
                 @toggleModify true
                 e.preventDefault()
+
+            onToggleClick:(e)->
+                $('.type-toggle a').removeClass('active')
+                $this = $(e.currentTarget)
+                $this.addClass('active')
+
+                switch $this.text()
+                    when 'Projects'
+                        @byProjectResources = 'project' 
+                    when 'Resources'
+                        @byProjectResources = 'resource' 
+                    else
+                        @byProjectResources = 'all'
 
             onInputEnter:(e) ->
                 # console.log 'onInputEnter', e.currentTarget

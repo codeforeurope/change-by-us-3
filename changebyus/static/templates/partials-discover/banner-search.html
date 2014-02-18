@@ -1,11 +1,34 @@
 <div class="search-box">
     <div class="title">
         <h2>I am looking for...</h2>
+        <div class="type-toggle">
+            <a href="javascript:void(0);" id="all" class="active">All</a> / <a href="javascript:void(0);" id="projects">Projects</a> / <a href="javascript:void(0);" id="resources">Resources</a> 
+        </div>
+    </div>
+    <div class="discover-nav">
+        <select name="add-own" class="default" id="add-own">
+                <option>Add my own</option>
+                <option value="project">Project</option>
+                <option value="resource">Resources</option>
+        </select>
+
+        <select name="city" class="default" id="city">
+                <option>Featured Cities</option>
+                <option value="akron">Akron, OH</option>
+                <option value="charlotte">Charlotte, NC</option>
+                <option value="detroit">Detroit, MI</option>
+                <option value="macon">Macon, GA</option>
+                <option value="miami">Miami, FL</option>
+                <option value="newyork">New York, NY</option>
+                <option value="philadelphia">Philadelphia, PA</option>
+                <option value="sanjose">San Jose, CA</option>
+                <option value="stpaul">St. Paul, MN</option>
+        </select>
     </div>
 
     <div class="search-inputs clearfix">
         <div class="search-forms">
-            <h3 class="input-label">Search for Anything</h3>
+            <h3 class="input-label">About:</h3>
             <input class="search-projects category" id="search-input" placeholder="e.g. bees" type="text">
             <div class="search-catagories">
                 <ul>
@@ -27,78 +50,33 @@
         </div>
 
         <div class="search-forms">
-            <h3 class="input-label">Near...</h3>
+            <h3 class="input-label">Near:</h3>
             <input class="search-projects zip" id="search-near" placeholder="e.g. 10018" type="text">
             <div class="geo-pin"></div>
+            <div class="results-modify">
+                <a href="javascript:void(0)" id="modify">Modify</a>
+            </div>
+            <div class="filter-within hide">
+                <h3 class="input-label">Expand radius:</h3>
+                <select name="range" class="default" id="search-range">
+                    <option value="10">10 Miles</option>
+                    <option value="25">25 Miles</option>
+                    <option value="50">50 Miles</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="search-toggles">
+            <h3 class="input-label">About:</h3>
+            <div id="sort-by-pd" class="pill-toggle">
+                <div class="pill-selection active">Popular</div>
+                <div class="pill-selection">Distance</div>
+            </div>
         </div>
 
         <div class="go">
             <a class="btn btn-primary btn-large" href="javascript:void(0)">Go</a>
         </div>
-    </div>
-
-    <div class="search-filters clearfix">
-        <div class="results-modify hide">
-            <h3 class="input-label pull-left">Results For</h3>
-            <a href="javascript:void(0)" class="ul pull-right" id="modify">Modify</a>
-            <input class="search-projects" id="results-for" type="text">
-        </div>
-        
-        <div class="search-toggles">
-            
-            <h3 class="input-label">Sort By</h3>
-            <div id="sort-by-pr" class="pill-toggle">
-                <div class="pill-selection active">Projects</div>
-                <div class="pill-selection">Resources</div>
-            </div>
-
-            <div id="sort-by-pd" class="pill-toggle">
-                <div class="pill-selection active">Popular</div>
-                <div class="pill-selection">Distance</div>
-            </div>
-           
-        </div>
-        <div class="filter-within">
-            <h3 class="input-label">Filter Within</h3>
-            <select name="range" class="default" id="search-range">
-                <option value="10">10 Miles</option>
-                <option value="25">25 Miles</option>
-                <option value="50">50 Miles</option>
-            </select>
-        </div> 
-    </div>
-</div>
-
-<div class="discover-header-right">
-    <a class="btn btn-large btn-secondary" href="/create/project" id="create-project">Create a Project</a>
-    <a class="btn btn-large btn-secondary hide" href="/create/resource" id="create-resource">Add a Resource</a>
-    <h4>cities</h4>
-    <div class="cities">
-        <ul> 
-            <li>
-                <a href="/city/akron">Akron, OH</a>
-            </li>
-            <li>
-                <a href="/city/charlotte">Charlotte, NC</a>
-            </li>
-            <li>
-                <a href="/city/detroit">Detroit, MI</a>
-            </li>
-            <li>
-                <a href="/city/macon">Macon, GA</a>
-            </li>
-            <li>
-                <a href="/city/miami">Miami, FL</a>
-            </li>
-            <li>
-                <a href="/city/philadelphia">Philadelphia, PA</a>
-            </li>
-            <li>
-                <a href="/city/sanjose">San Jose, CA</a>
-            </li>
-            <li>
-                <a href="/city/stpaul">St. Paul, MN</a>
-            </li>
-        </ul>
+         
     </div>
 </div>

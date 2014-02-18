@@ -1,8 +1,8 @@
 define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
-    byProjectResources: 'project',
-    sortByPopularDistance: 'popular',
+    byProjectResources: "all",
+    sortByPopularDistance: "popular",
     locationObj: {
       lat: 0,
       lon: 0,
@@ -39,8 +39,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
-      var $dropkick,
-        _this = this;
+      var _this = this;
       this.$searchInput = $('#search-input');
       this.$searchNear = $('#search-near');
       this.$searchNear.typeahead({
@@ -74,14 +73,40 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       if (this.showResources) {
         $('#sort-by-pr .pill-selection').last().trigger('click');
       }
-      $dropkick = $('#search-range').dropkick();
+      this.$searchRange = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
       this.$modifyInput = this.$resultsModify.find('input');
       this.$projectList = $("#projects-list");
       this.$searchCatagories = $('.search-catagories');
       this.$geoPin = $('.geo-pin');
+      this.addListeners();
       this.autoGetGeoLocation();
       return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    addListeners: function() {
+      var _this = this;
+      this.$addOwn = $('#add-own').dropkick({
+        change: function(v, l) {
+          return window.location.href = "/create/" + v;
+        }
+      });
+      this.$city = $('#city').dropkick({
+        change: function(v, l) {
+          return window.location.href = "/city/" + v;
+        }
+      });
+      this.$all = $('#all');
+      this.$projects = $('#projects');
+      this.$resources = $('#resources');
+      this.$all.click(function(e) {
+        return _this.onToggleClick(e);
+      });
+      this.$projects.click(function(e) {
+        return _this.onToggleClick(e);
+      });
+      return this.$resources.click(function(e) {
+        return _this.onToggleClick(e);
+      });
     },
     toggleActive: function(dir_) {
       var $li, hasActive;
@@ -149,8 +174,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         return navigator.geolocation.getCurrentPosition(function(loc_) {
           return _this.handleGetCurrentPosition(loc_);
         }, this.sendForm);
-      } else {
-
       }
     },
     toggleModify: function(showSorting_) {
@@ -189,7 +212,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         var k, size, t, v, _ref;
         if (response_.success) {
           console.log('response_', response_, _this.$searchNear.val());
-          _this.toggleModify(_this.autoSend);
           _this.$modifyInput.val(modifyInputVal);
           _this.autoSend = false;
           _this.index = 0;
@@ -203,7 +225,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           }
           _this.updatePage();
           _this.setPages(size, $(".projects"));
-          t = _this.byProjectResources === 'project' ? "Projects" : "Resources";
+          t = _this.byProjectResources === 'project' ? "Projects" : _this.byProjectResources === 'resource' ? "Resources" : "Resources & Projects";
           $('.projects h4').html(size + " " + t);
           onPageElementsLoad();
           return _this.trigger("ON_RESULTS", size);
@@ -230,7 +252,10 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.locationObj.lat = loc_.coords.latitude;
       this.locationObj.lon = loc_.coords.longitude;
       url = "/api/project/geoname?lat=" + this.locationObj.lat + "&lon=" + this.locationObj.lon;
-      return $.get(url, function(resp) {
+      if (this.autoLocation) {
+        this.autoLocation.abort();
+      }
+      return this.autoLocation = $.get(url, function(resp) {
         if (resp.success && resp.data.length > 0) {
           _this.autoSend = true;
           _this.$geoPin.addClass("active");
@@ -249,15 +274,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $this = $(e.currentTarget);
       $this.toggleClass('active');
       $this.siblings().toggleClass('active');
-      switch ($this.html()) {
-        case 'Projects':
-          this.byProjectResources = 'project';
-          $('#create-project').css('display', 'block');
-          return $('#create-resource').hide();
-        case 'Resources':
-          this.byProjectResources = 'resource';
-          $('#create-project').hide();
-          return $('#create-resource').css('display', 'block');
+      switch ($this.text()) {
         case 'Popular':
           return this.sortByPopularDistance = 'popular';
         case 'Distance':
@@ -267,6 +284,20 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     onToggleVisibility: function(e) {
       this.toggleModify(true);
       return e.preventDefault();
+    },
+    onToggleClick: function(e) {
+      var $this;
+      $('.type-toggle a').removeClass('active');
+      $this = $(e.currentTarget);
+      $this.addClass('active');
+      switch ($this.text()) {
+        case 'Projects':
+          return this.byProjectResources = 'project';
+        case 'Resources':
+          return this.byProjectResources = 'resource';
+        default:
+          return this.byProjectResources = 'all';
+      }
     },
     onInputEnter: function(e) {
       if (e.which === 13) {

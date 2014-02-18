@@ -57,6 +57,8 @@ define ["underscore",
                 @bannerSearchView.checkArrows()
                 
             onResults:(size_)->
+                @$el.find(".preload").remove()
+
                 if size_ > 0
                     @$el.find("#no-result").hide()
                 else

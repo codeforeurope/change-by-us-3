@@ -118,6 +118,55 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 $('.search-toggles').toggle(showSorting_)
                 $('.filter-within').toggle(showSorting_)
 
+            sendForm:(e)->
+                if e then e.preventDefault()
+                
+                @$searchCatagories.hide()
+                @$projectList.html("")
+
+                dataObj = {
+                    s: if @category is "" then @$searchInput.val() else ""
+                    cat: @category
+                    loc: @locationObj.name
+                    d: $("select[name='range']").val()
+                    type: @byProjectResources  
+                    lat: @locationObj.lat
+                    lon: @locationObj.lon
+                }
+
+                modifyInputVal = @$searchNear.val()
+
+                if @ajax then @ajax.abort()
+                @ajax = $.ajax(
+                    type: "POST"
+                    url: "/api/project/search"
+                    data: JSON.stringify(dataObj)
+                    dataType: "json" 
+                    contentType: "application/json; charset=utf-8"
+                ).done (response_)=>
+                    if response_.success
+                        console.log 'response_',response_, @$searchNear.val()
+                        
+                        @toggleModify @autoSend
+                        @$modifyInput.val modifyInputVal
+
+                        @autoSend = false
+                        @index = 0
+                        @projects = []
+                        size=0
+                        for k,v of response_.data
+                            @projects.push v._id
+                            size++
+                        
+                        @updatePage()
+                        @setPages size, $(".projects")
+
+                        t = if @byProjectResources is 'project' then "Projects" else "Resources"
+                        $('.projects h4').html(size+" "+t)
+                        onPageElementsLoad()
+
+                        @trigger "ON_RESULTS", size
+
             ### EVENTS ----------------------------------------------------------------- ###
             onInputFocus:->
                 @category = ""
@@ -190,52 +239,3 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
                 if e.which is 40
                     @toggleActive("down")
-
-            sendForm:(e)->
-                if e then e.preventDefault()
-                
-                @$searchCatagories.hide()
-                @$projectList.html("")
-
-                dataObj = {
-                    s: if @category is "" then @$searchInput.val() else ""
-                    cat: @category
-                    loc: @locationObj.name
-                    d: $("select[name='range']").val()
-                    type: @byProjectResources  
-                    lat: @locationObj.lat
-                    lon: @locationObj.lon
-                }
-
-                modifyInputVal = @$searchNear.val()
-
-                if @ajax then @ajax.abort()
-                @ajax = $.ajax(
-                    type: "POST"
-                    url: "/api/project/search"
-                    data: JSON.stringify(dataObj)
-                    dataType: "json" 
-                    contentType: "application/json; charset=utf-8"
-                ).done (response_)=>
-                    if response_.success
-                        console.log 'response_',response_, @$searchNear.val()
-
-                        @toggleModify @autoSend
-                        @$modifyInput.val modifyInputVal
-
-                        @autoSend = false
-                        @index = 0
-                        @projects = []
-                        size=0
-                        for k,v of response_.data
-                            @projects.push v._id
-                            size++
-                        
-                        @updatePage()
-                        @setPages size, $(".projects")
-
-                        t = if @byProjectResources is 'project' then "Projects" else "Resources"
-                        $('.projects h4').html(size+" "+t)
-                        onPageElementsLoad()
-
-                        @trigger "ON_RESULTS", size

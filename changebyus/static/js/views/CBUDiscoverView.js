@@ -53,6 +53,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
     },
     onResults: function(size_) {
       var _this = this;
+      this.$el.find(".preload").remove();
       if (size_ > 0) {
         return this.$el.find("#no-result").hide();
       } else {

@@ -158,6 +158,58 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $('.search-toggles').toggle(showSorting_);
       return $('.filter-within').toggle(showSorting_);
     },
+    sendForm: function(e) {
+      var dataObj, modifyInputVal,
+        _this = this;
+      if (e) {
+        e.preventDefault();
+      }
+      this.$searchCatagories.hide();
+      this.$projectList.html("");
+      dataObj = {
+        s: this.category === "" ? this.$searchInput.val() : "",
+        cat: this.category,
+        loc: this.locationObj.name,
+        d: $("select[name='range']").val(),
+        type: this.byProjectResources,
+        lat: this.locationObj.lat,
+        lon: this.locationObj.lon
+      };
+      modifyInputVal = this.$searchNear.val();
+      if (this.ajax) {
+        this.ajax.abort();
+      }
+      return this.ajax = $.ajax({
+        type: "POST",
+        url: "/api/project/search",
+        data: JSON.stringify(dataObj),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8"
+      }).done(function(response_) {
+        var k, size, t, v, _ref;
+        if (response_.success) {
+          console.log('response_', response_, _this.$searchNear.val());
+          _this.toggleModify(_this.autoSend);
+          _this.$modifyInput.val(modifyInputVal);
+          _this.autoSend = false;
+          _this.index = 0;
+          _this.projects = [];
+          size = 0;
+          _ref = response_.data;
+          for (k in _ref) {
+            v = _ref[k];
+            _this.projects.push(v._id);
+            size++;
+          }
+          _this.updatePage();
+          _this.setPages(size, $(".projects"));
+          t = _this.byProjectResources === 'project' ? "Projects" : "Resources";
+          $('.projects h4').html(size + " " + t);
+          onPageElementsLoad();
+          return _this.trigger("ON_RESULTS", size);
+        }
+      });
+    },
     /* EVENTS -----------------------------------------------------------------*/
 
     onInputFocus: function() {
@@ -235,58 +287,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       if (e.which === 40) {
         return this.toggleActive("down");
       }
-    },
-    sendForm: function(e) {
-      var dataObj, modifyInputVal,
-        _this = this;
-      if (e) {
-        e.preventDefault();
-      }
-      this.$searchCatagories.hide();
-      this.$projectList.html("");
-      dataObj = {
-        s: this.category === "" ? this.$searchInput.val() : "",
-        cat: this.category,
-        loc: this.locationObj.name,
-        d: $("select[name='range']").val(),
-        type: this.byProjectResources,
-        lat: this.locationObj.lat,
-        lon: this.locationObj.lon
-      };
-      modifyInputVal = this.$searchNear.val();
-      if (this.ajax) {
-        this.ajax.abort();
-      }
-      return this.ajax = $.ajax({
-        type: "POST",
-        url: "/api/project/search",
-        data: JSON.stringify(dataObj),
-        dataType: "json",
-        contentType: "application/json; charset=utf-8"
-      }).done(function(response_) {
-        var k, size, t, v, _ref;
-        if (response_.success) {
-          console.log('response_', response_, _this.$searchNear.val());
-          _this.toggleModify(_this.autoSend);
-          _this.$modifyInput.val(modifyInputVal);
-          _this.autoSend = false;
-          _this.index = 0;
-          _this.projects = [];
-          size = 0;
-          _ref = response_.data;
-          for (k in _ref) {
-            v = _ref[k];
-            _this.projects.push(v._id);
-            size++;
-          }
-          _this.updatePage();
-          _this.setPages(size, $(".projects"));
-          t = _this.byProjectResources === 'project' ? "Projects" : "Resources";
-          $('.projects h4').html(size + " " + t);
-          onPageElementsLoad();
-          return _this.trigger("ON_RESULTS", size);
-        }
-      });
     }
   });
 });

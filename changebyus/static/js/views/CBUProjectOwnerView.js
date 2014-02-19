@@ -25,7 +25,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       this.viewData = this.model.attributes;
       this.viewData.isResource = this.isResource;
       this.$el = $("<div class='project-container'/>");
-      this.$el.template(this.templateDir + "/templates/project-owner.html", {
+      this.$el.template(this.templateDir + "project-owner.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -35,7 +35,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
     onTemplateLoad: function() {
       var _this = this;
       this.$header = $("<div class='project-header'/>");
-      this.$header.template(this.templateDir + "/templates/partials-project/project-owner-header.html", {
+      this.$header.template(this.templateDir + "partials-project/project-owner-header.html", {
         data: this.viewData
       }, function() {
         return _this.addSubViews();

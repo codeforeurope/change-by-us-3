@@ -33,15 +33,15 @@ define ["underscore",
                 
             addAll: -> 
                 if @collection.models.length is 0
-                    @$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
+                    @$el.template @templateDir+"partials-project/project-zero-discussions.html", 
                         {}, => AbstractView::onTemplateLoad.call @
                 else
-                    @$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
+                    @$el.template @templateDir+"partials-project/project-all-discussions.html",
                         {}, => @loadDayTemplate()
 
             loadDayTemplate:->
                 @$day = $('<div class="day-wrapper"/>')
-                @$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
+                @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
                     {}, => @onDayWrapperLoad()
 
             onDayWrapperLoad:->

@@ -39,7 +39,7 @@ define ["underscore",
                 
             render: ->  
                 @$el = $(@parent)
-                @$el.template @templateDir+"/templates/partials-project/project-calendar.html",
+                @$el.template @templateDir+"partials-project/project-calendar.html",
                     {data: @viewData}, => @onTemplateLoad()
                     
             onTemplateLoad:->

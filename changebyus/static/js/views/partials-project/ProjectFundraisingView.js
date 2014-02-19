@@ -20,13 +20,13 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
       this.$el = $(this.parent);
       stripeAccount = this.model.get("stripe_account");
       if (stripeAccount) {
-        return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
+        return this.$el.template(this.templateDir + "partials-universal/stripe-review.html", {
           data: stripeAccount
         }, function() {
           return _this.onTemplateLoad();
         });
       } else {
-        return this.$el.template(this.templateDir + "/templates/partials-project/project-fundraising-get-started.html", {}, function() {
+        return this.$el.template(this.templateDir + "partials-project/project-fundraising-get-started.html", {}, function() {
           _this.getStarted();
           return _this.delegateEvents();
         });

@@ -9,7 +9,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             render: ->
                 @$el = $("<div class='project'/>")
-                @$el.template @templateDir+"/templates/partials-project/project-discussion-comment.html",
+                @$el.template @templateDir+"partials-project/project-discussion-comment.html",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 

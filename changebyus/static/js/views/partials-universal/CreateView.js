@@ -17,7 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view",
     render: function() {
       var templateURL,
         _this = this;
-      templateURL = this.isResource ? "/templates/partials-resource/resource-create-form.html" : "/templates/partials-project/project-create-form.html";
+      templateURL = this.isResource ? "partials-resource/resource-create-form.html" : "partials-project/project-create-form.html";
       this.$el = $("<div class='create-project'/>");
       this.$el.template(this.templateDir + templateURL, {
         data: this.viewData

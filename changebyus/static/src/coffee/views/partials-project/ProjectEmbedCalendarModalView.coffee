@@ -9,7 +9,7 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
 
             render: ->
                 @$el = $("<div class='modal-fullscreen dark'/>") 
-                @$el.template @templateDir+"/templates/partials-project/project-embed-calendar.html",
+                @$el.template @templateDir+"partials-project/project-embed-calendar.html",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 

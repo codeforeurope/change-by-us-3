@@ -8,7 +8,7 @@ define ["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
                 @viewData = @model.attributes
 
                 @$el = $("<div class='modal-fullscreen dark'/>") 
-                @$el.template @templateDir+"/templates/partials-project/project-donation-modal.html",
+                @$el.template @templateDir+"partials-project/project-donation-modal.html",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el 
 

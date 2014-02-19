@@ -22,7 +22,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData.display_name = this.user.get("display_name");
       m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       this.model.set("format_date", m);
-      return $(this.el).template(this.templateDir + "/templates/partials-user/stream-item-view.html", {
+      return $(this.el).template(this.templateDir + "partials-user/stream-item-view.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

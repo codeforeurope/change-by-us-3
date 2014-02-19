@@ -12,7 +12,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this = this;
       this.$el = $(this.parent);
       this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-      this.$el.template(this.templateDir + "/templates/partials-project/project-add-update.html", {
+      this.$el.template(this.templateDir + "partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -36,13 +36,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         var e;
         try {
           _this.socialInfo = response_.data;
+          if (addForm_) {
+            return _this.addForm();
+          } else {
+            return _this.checkSocial(true);
+          }
         } catch (_error) {
           e = _error;
-        }
-        if (addForm_) {
-          return _this.addForm();
-        } else {
-          return _this.checkSocial(true);
+          return console.log('getSocial ERROR:', e);
         }
       });
     },
@@ -78,12 +79,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this.$facebookLabel = $("label[for=facebook]");
         _this.$twitterLabel = $("label[for=twitter]");
         form.beforeSubmit = function(arr_, form_, options_) {
-          console.log('beforeSubmit', $feedback);
           $feedback.hide();
           return $inputs.attr("disabled", "disabled");
         };
         form.success = function(response_) {
-          console.log('success response_', response_);
           if (response_.success) {
             _this.addModal(response_.data);
           }
@@ -143,7 +142,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     addAll: function() {
       var _this = this;
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "partials-universal/entries-day-wrapper.html", {}, function() {
         return _this.onDayWrapperLoad();
       });
     },

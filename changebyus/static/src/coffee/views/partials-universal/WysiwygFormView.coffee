@@ -29,22 +29,22 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
                     userAvatar:@userAvatar
 
                 if @parent is "#update-form"
-                    url = "/templates/partials-project/project-update-form.html" 
+                    url = "partials-project/project-update-form.html" 
                     @editorID =  "#editor"
                     @formName = "project-update"
                     @$el = $("<div class='update-wrapper thin-pad clearfix'/>")
                 else if @parent is "#add-resource-update"
-                    url = "/templates/partials-resource/resource-add-update-form.html" 
+                    url = "partials-resource/resource-add-update-form.html" 
                     @editorID =  "#add-update"
                     @formName = "resource-update"
                     @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
                 else if @parent is "#add-thread-form"
-                    url = "/templates/partials-project/project-new-thread-form.html" 
+                    url = "partials-project/project-new-thread-form.html" 
                     @editorID =  ".wsyiwyg-editor.slim"
                     @formName = "new-discussion"
                     @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
                 else
-                    url = "/templates/partials-project/project-new-discussion-form.html" 
+                    url = "partials-project/project-new-discussion-form.html" 
                     @editorID = "#discussion-editor"
                     @formName = "new-thread"
                     @$el = $("<div class='content-wrapper thin-pad clearfix'/>")

@@ -37,10 +37,10 @@ define ["underscore",
                 @render()
 
             render: -> 
-                templateURL = if @isResource then "/templates/partials-resource/resource-create-form.html" else  "/templates/partials-project/project-create-form.html"
+                templateURL = if @isResource then "partials-resource/resource-create-form.html" else  "partials-project/project-create-form.html"
                 @$el = $("<div class='create-project'/>")
                 @$el.template @templateDir+templateURL,
-                    data: @viewData, => @onTemplateLoad() 
+                    data: @viewData, => @onTemplateLoad()
                 $(@parent).append @$el
 
             onTemplateLoad:->
@@ -59,13 +59,13 @@ define ["underscore",
             ajaxForm: ->
                 $('.fileupload').fileupload({uploadtype: 'image'})
 
-                $dropkick = $('#project-category').dropkick()
-                $feedback = $("#feedback")
+                $dropkick  = $('#project-category').dropkick()
+                $feedback  = $("#feedback")
                 isResource = @isResource
 
                 # ajax the form
                 $submit = $("input[type=submit]")
-                $form = @$el.find("form")
+                $form   = @$el.find("form")
                 options =
                     type: $form.attr('method')
                     url: $form.attr('action')

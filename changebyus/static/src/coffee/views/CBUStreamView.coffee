@@ -22,12 +22,12 @@ define ["underscore",
 
             render: ->
                 @$el = $(@parent)
-                @$el.template @templateDir+"/templates/stream.html",
+                @$el.template @templateDir+"stream.html",
                     {data: @viewData}, => @onTemplateLoad()
                 
             addAll: -> 
                 @$day = $('<div />')
-                @$day.template @templateDir+"/templates/partials-user/stream-day-wrapper.html",
+                @$day.template @templateDir+"partials-user/stream-day-wrapper.html",
                     {}, => @onStreamWrapperLoad()
 
             newDay:(date_)-> 

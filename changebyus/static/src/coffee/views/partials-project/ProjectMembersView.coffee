@@ -27,12 +27,14 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                 "click #alpha":"sortClick" 
                 "click #created":"sortClick" 
 
-            render: ->
-                console.log 'rr',@
+            render: -> 
                 @$el = $(@parent)
+                
                 @viewData = if @model then @model.attributes else {}
                 @viewData.isOwnerOrganizer = @isOwnerOrganizer
-                templateURL = if (@view is "public") then "/templates/partials-project/project-members.html" else "/templates/partials-project/project-members-admin.html"
+                
+                templateURL = "partials-project/"
+                templateURL += if (@view is "public") then "project-members.html" else "project-members-admin.html"
                 @$el.template @templateDir+templateURL, 
                     {data:@viewData}, => @onTemplateLoad() 
 
@@ -60,8 +62,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                 @team = []
                 @members = []
 
-                console.log 'addAll sort_',sort_
-
+                # sort all the member by last name or date joined
                 $("#"+sort_)
                     .addClass('sort-deactive')
                     .removeClass('ul')
@@ -78,17 +79,19 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                     sortBy.reverse()
 
                 $.each sortBy, (k, model) => 
-                    roles = model.get("roles")
-                    ownerID = if @model then @model.get('owner').id else -1
-                     
-                    if roles.length is 0 
-                        model.set("roles", ["Owner"]) 
+                    if model.get("active")
+                        roles = model.get("roles")
+                        ownerID = if @model then @model.get('owner').id else -1
+                         
+                        if roles.length is 0 
+                            model.set("roles", ["Owner"]) 
 
-                    if ("MEMBER" in roles) or ("Member" in roles)
-                        @members.push model
-                    else
-                        @team.push model
+                        if ("MEMBER" in roles) or ("Member" in roles)
+                            @members.push model
+                        else
+                            @team.push model
 
+                # attach members to the page
                 @$teamList.html('')
                 @$memberList.html('')
 

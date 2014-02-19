@@ -16,7 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     render: function() {
       var _this = this;
       this.$el = $("<div class='content-wrapper clearfix'/>");
-      this.$el.template(this.templateDir + "/templates/partials-universal/stripe-form.html", {
+      this.$el.template(this.templateDir + "partials-universal/stripe-form.html", {
         data: {
           account_id: this.user.id,
           project_id: this.project.id,
@@ -42,11 +42,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     onSuccess: function(data_) {
-      var _this = this;
       this.$el.html("");
-      return this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
+      return this.$el.template(this.templateDir + "partials-universal/stripe-review.html", {
         data: data_
-      }, function() {});
+      });
     },
     /* GETTER ---------------------------------------------*/
 

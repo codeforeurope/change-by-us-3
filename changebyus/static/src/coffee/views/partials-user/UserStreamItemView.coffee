@@ -33,5 +33,5 @@ define ["underscore",
                 m = moment(@model.get("created_at")).format("MMMM D hh:mm a")
                 @model.set("format_date", m)
 
-                $(@el).template @templateDir+"/templates/partials-user/stream-item-view.html",
+                $(@el).template @templateDir+"partials-user/stream-item-view.html",
                     {data:@viewData}, => @onTemplateLoad()

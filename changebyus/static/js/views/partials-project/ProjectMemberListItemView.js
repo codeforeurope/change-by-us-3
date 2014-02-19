@@ -23,7 +23,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     render: function() {
       var _this = this;
       this.$el = $(this.el);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-member-list-item.html", {
+      return this.$el.template(this.templateDir + "partials-project/project-member-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -39,17 +39,19 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addDropKick: function() {
-      var _this = this;
+      var dataObj,
+        _this = this;
+      dataObj = {
+        project_id: this.projectID,
+        user_id: this.model.id,
+        user_role: value_
+      };
       return $("#" + this.viewData.sid).dropkick({
         change: function(value_, label_) {
           return $.ajax({
             type: "POST",
             url: "/api/project/change-user-role",
-            data: {
-              project_id: _this.projectID,
-              user_id: _this.model.id,
-              user_role: value_
-            }
+            data: dataObj
           }).done(function(response_) {
             if (response_.success) {
               return _this.model.set('roles', [value_]);

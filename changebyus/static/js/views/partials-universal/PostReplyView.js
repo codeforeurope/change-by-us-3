@@ -28,7 +28,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData.display_name = this.user.get("display_name");
       this.viewData.format_date = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       $reply = $("<div class='post-reply clearfix'/>");
-      $reply.template(this.templateDir + "/templates/partials-universal/post-reply-view.html", {
+      $reply.template(this.templateDir + "partials-universal/post-reply-view.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

@@ -9,7 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     render: function() {
       var _this = this;
       this.$el = $("<div class='signup'/>");
-      this.$el.template(this.templateDir + "/templates/signup.html", {
+      this.$el.template(this.templateDir + "signup.html", {
         data: this.viewData
       }, function() {
         _this.ajaxForm();
@@ -82,6 +82,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         $.ajax(options);
         return false;
       });
+      /* SOCIAL SIGNUP --------------------------------------------------*/
+
       $socialSignup = $(".social-signup");
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");

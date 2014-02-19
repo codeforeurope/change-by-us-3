@@ -43,7 +43,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       s = this.viewData.image_url_round;
       this.viewData.image_url_round = s.substring(s.lastIndexOf("/static/img/"));
       this.$el = $("<div class='city-container'/>");
-      this.$el.template(this.templateDir + "/templates/city.html", {
+      this.$el.template(this.templateDir + "city.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -257,7 +257,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       this.$projectsView.find('.sub-link a').html("See More Projects in " + this.name);
       this.$resourcesView.find('.sub-link a').html("See More Resources in " + this.name);
       $header = $("<div class='city-header'/>");
-      $header.template(this.templateDir + "/templates/partials-city/city-header.html", {
+      $header.template(this.templateDir + "partials-city/city-header.html", {
         data: this.viewData
       }, function() {
         return _this.onHeaderLoaded();

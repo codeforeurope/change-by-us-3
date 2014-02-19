@@ -29,22 +29,22 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         userAvatar: this.userAvatar
       };
       if (this.parent === "#update-form") {
-        url = "/templates/partials-project/project-update-form.html";
+        url = "partials-project/project-update-form.html";
         this.editorID = "#editor";
         this.formName = "project-update";
         this.$el = $("<div class='update-wrapper thin-pad clearfix'/>");
       } else if (this.parent === "#add-resource-update") {
-        url = "/templates/partials-resource/resource-add-update-form.html";
+        url = "partials-resource/resource-add-update-form.html";
         this.editorID = "#add-update";
         this.formName = "resource-update";
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else if (this.parent === "#add-thread-form") {
-        url = "/templates/partials-project/project-new-thread-form.html";
+        url = "partials-project/project-new-thread-form.html";
         this.editorID = ".wsyiwyg-editor.slim";
         this.formName = "new-discussion";
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       } else {
-        url = "/templates/partials-project/project-new-discussion-form.html";
+        url = "partials-project/project-new-discussion-form.html";
         this.editorID = "#discussion-editor";
         this.formName = "new-thread";
         this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");

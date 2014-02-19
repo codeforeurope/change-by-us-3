@@ -2,7 +2,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
   var AbstractView;
   return AbstractView = Backbone.View.extend({
     parent: "body",
-    templateDir: "/static",
+    templateDir: "/static/templates/",
     viewData: {},
     templateLoaded: false,
     delayedCollectionLoad: false,

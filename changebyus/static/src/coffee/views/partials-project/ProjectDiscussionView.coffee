@@ -30,7 +30,7 @@ define ["underscore",
 
             render: ->
                 @$el = $(@parent)
-                @$el.template @templateDir+"/templates/partials-project/project-discussion.html",
+                @$el.template @templateDir+"partials-project/project-discussion.html",
                     {data: @viewData}, => @onTemplateLoad()
 
             onTemplateLoad:->
@@ -45,10 +45,7 @@ define ["underscore",
                 @model = new ProjectDiscussionModel({id:id_})
                 @model.fetch
                     success:=>
-                        if @templateLoaded is false 
-                            @delayedDataLoad = true
-                        else
-                            @onSuccess()
+                        if (@templateLoaded is false) then @delayedDataLoad = true else @onSuccess()
 
             updateCount:(@count)-> 
                 title = if @model? then @model.get("title") else ""
@@ -59,13 +56,20 @@ define ["underscore",
                 @$form.html('')
                 @updateCount(@count)
 
+                # add discussions
                 @addDiscussion @model
                 for response in @model.get("responses")
                     model = new ProjectDiscussionModel({id:response.id})
-                    @addDiscussion model 
+                    @addDiscussion model
 
+                # create Wysiwyg Form
                 userAvatar = $('.profile-nav-header img').attr('src')
-                @wysiwygFormView = new WysiwygFormView({parent:@$threadFormID, id:@model.get("id"), slim:true, userAvatar:userAvatar, title:@model.get("title")})
+                dataObj = 
+                    parent:@$threadFormID
+                    id:@model.get("id")
+                    slim:true, userAvatar:userAvatar
+                    title:@model.get("title")
+                @wysiwygFormView = new WysiwygFormView(dataObj)
                 @wysiwygFormView.success = (e)=>
                     if e.success
                         $("#new-thread-editor").html("")

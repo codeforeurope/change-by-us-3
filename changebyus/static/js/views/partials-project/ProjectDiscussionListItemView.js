@@ -29,7 +29,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       this.viewData.image_url_round_small = this.user.get("image_url_round_small");
       this.viewData.display_name = this.user.get("display_name");
       this.$el = $(this.el);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion-list-item.html", {
+      return this.$el.template(this.templateDir + "partials-project/project-discussion-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

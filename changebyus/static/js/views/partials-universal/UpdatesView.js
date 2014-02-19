@@ -16,7 +16,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-universal/updates.html", {
+      return this.$el.template(this.templateDir + "partials-universal/updates.html", {
         data: this.model.attributes
       }, function() {
         return _this.onTemplateLoad();
@@ -36,17 +36,20 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         $('.team-members .pull-right').remove();
       }
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
-        var m, model_;
-        if (_this.collection.length > 0) {
-          model_ = _this.collection.models[0];
-          m = moment(model_.get("created_at")).format("MMMM D");
-          _this.newDay(m);
-        }
-        _this.isDataLoaded = true;
-        ProjectSubView.prototype.addAll.call(_this);
-        return onPageElementsLoad();
+      return this.$day.template(this.templateDir + "partials-universal/entries-day-wrapper.html", {}, function() {
+        return _this.onDayWrapperLoad();
       });
+    },
+    onDayWrapperLoad: function() {
+      var m, model_;
+      if (this.collection.length > 0) {
+        model_ = this.collection.models[0];
+        m = moment(model_.get("created_at")).format("MMMM D");
+        this.newDay(m);
+      }
+      this.isDataLoaded = true;
+      ProjectSubView.prototype.addAll.call(this);
+      return onPageElementsLoad();
     },
     addOne: function(model_) {
       var m, view;
@@ -61,8 +64,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       return this.$ul.append(view.$el);
     },
     addMember: function(model_) {
-      var $member, roles,
-        _this = this;
+      var $member, roles;
       roles = model_.get("roles");
       if (roles.length === 0) {
         model_.set("roles", ["Owner"]);
@@ -71,9 +73,9 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         return;
       }
       $member = $('<li/>');
-      $member.template(this.templateDir + "/templates/partials-universal/member-avatar.html", {
+      $member.template(this.templateDir + "partials-universal/member-avatar.html", {
         data: model_.attributes
-      }, function() {});
+      });
       return this.$members.append($member);
     },
     newDay: function(date_) {

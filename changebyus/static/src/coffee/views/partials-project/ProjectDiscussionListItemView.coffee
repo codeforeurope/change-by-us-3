@@ -26,7 +26,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
                 @viewData.display_name          = @user.get("display_name")
                 
                 @$el = $(@el)
-                @$el.template @templateDir+"/templates/partials-project/project-discussion-list-item.html",
+                @$el.template @templateDir+"partials-project/project-discussion-list-item.html",
                     {data: @viewData}, => @onTemplateLoad()
 
             viewDescription: ->

@@ -63,10 +63,10 @@ define ["underscore",
 
                     if @isResource
                         className   = "resource-container"
-                        templateURL = "/templates/resource.html"
+                        templateURL = "resource.html"
                     else
                         className   = "project-container"
-                        templateURL = "/templates/project.html"
+                        templateURL = "project.html"
 
                     @$el = $("<div class='#{className}'/>")
                     @$el.template @templateDir+templateURL, 
@@ -74,17 +74,17 @@ define ["underscore",
                     $(@parent).append @$el
                 else 
                     @$el = $("<div class='not-found'/>")
-                    @$el.template @templateDir+"/templates/partials-project/not-found.html",
+                    @$el.template @templateDir+"partials-project/not-found.html",
                         {}, => @onTemplateLoad()
                     $(@parent).append @$el
 
             addHeaderView: -> 
                 if @isResource
                     className   = "resource-header"
-                    templateURL = "/templates/partials-resource/resource-header.html"
+                    templateURL = "partials-resource/resource-header.html"
                 else
                     className   = "project-header"
-                    templateURL = "/templates/partials-project/project-header.html"
+                    templateURL = "partials-project/project-header.html"
 
                 @$header = $("<div class='#{className}'/>")
                 @$header.template @templateDir+templateURL, 
@@ -95,7 +95,7 @@ define ["underscore",
                 console.log 'notMember'
                 $('.tabs-pane').remove()
                 $notMember = $("<div class='body-container'/>")
-                $notMember.template @templateDir+"/templates/partials-project/project-not-member.html",
+                $notMember.template @templateDir+"partials-project/project-not-member.html",
                     {data:@viewData}, =>
                 @$el.append $notMember
 
@@ -122,16 +122,17 @@ define ["underscore",
                     @projectMembersCollection.fetch {reset: true}
 
             onCollectionLoad:->  
-                parent       = if @isResource then "#resource-updates" else "#project-updates"
+                parent = if @isResource then "#resource-updates" else "#project-updates"
+                config =                                         
+                    model:@model
+                    collection:@updatesCollection
+                    members:@projectMembersCollection
+                    isMember:@isMember
+                    isOwnerOrganizer:@isOwnerOrganizer
+                    isResource:@isResource
+                    parent:parent
 
-                @updatesView = new UpdatesView
-                                        model:@model,
-                                        collection:@updatesCollection, 
-                                        members:@projectMembersCollection, 
-                                        isMember:@isMember, 
-                                        isOwnerOrganizer:@isOwnerOrganizer, 
-                                        isResource:@isResource, 
-                                        parent:parent
+                @updatesView = new UpdatesView config
 
                 if @isResource
                     @updatesView.show()
@@ -144,19 +145,16 @@ define ["underscore",
                                                     userAvatar:userAvatar
                                                     
                 else
-                    @projectMembersView  = new ProjectMembersView
-                                                    model:@model,
-                                                    collection:@projectMembersCollection,
-                                                    isDataLoaded:true,
-                                                    isMember:@isMember
-                                                    isOwnerOrganizer:@isOwnerOrganizer,
-                                                    isOwner:@isOwner
-                                                    
-                    @projectCalenderView = new ProjectCalenderView
-                                                    model:@model, 
-                                                    isMember:@isMember,
-                                                    isOwnerOrganizer:@isOwnerOrganizer,
-                                                    isOwner:@isOwner
+                    config = 
+                        model:@model
+                        collection:@projectMembersCollection
+                        isDataLoaded:true
+                        isMember:@isMember
+                        isOwnerOrganizer:@isOwnerOrganizer
+                        isOwner:@isOwner
+
+                    @projectMembersView  = new ProjectMembersView config
+                    @projectCalenderView = new ProjectCalenderView config
                     
                     @updatesBTN  = $("a[href='#updates']").parent()
                     @membersBTN  = $("a[href='#members']").parent()

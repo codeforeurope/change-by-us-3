@@ -26,7 +26,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             render: ->
                 @$el = $(@el)
-                @$el.template @templateDir+"/templates/partials-project/project-member-list-item.html",
+                @$el.template @templateDir+"partials-project/project-member-list-item.html",
                     {data:@viewData}, => @onTemplateLoad()
                     
             onTemplateLoad:-> 
@@ -36,12 +36,17 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 AbstractView::onTemplateLoad.call @
 
             addDropKick:->
+                dataObj = 
+                    project_id:@projectID
+                    user_id:@model.id
+                    user_role:value_
+
                 $("#"+@viewData.sid).dropkick
                     change: (value_, label_) =>
                         $.ajax(
                             type: "POST"
                             url: "/api/project/change-user-role"
-                            data: { project_id:@projectID, user_id:@model.id, user_role:value_}
+                            data: dataObj
                         ).done (response_)=>
                             if (response_.success)
                                 @model.set('roles', [value_])

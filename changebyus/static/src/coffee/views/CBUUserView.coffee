@@ -33,12 +33,12 @@ define ["underscore",
             render: ->
                 if @model.get('active')
                     @$el = $("<div class='user'/>")
-                    @$el.template @templateDir+"/templates/partials-user/user.html",
+                    @$el.template @templateDir+"partials-user/user.html",
                         {data: @model.attributes}, => @onTemplateLoad()
                     $(@parent).append @$el
                 else
                     @$el = $("<div class='user'/>")
-                    @$el.template @templateDir+"/templates/partials-user/not-found.html",
+                    @$el.template @templateDir+"partials-user/not-found.html",
                         {}, => @onTemplateLoad()
                     $(@parent).append @$el
 

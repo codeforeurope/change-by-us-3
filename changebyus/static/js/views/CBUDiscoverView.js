@@ -11,7 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
     render: function() {
       var _this = this;
       this.$el = $("<div class='discover'/>");
-      return this.$el.template(this.templateDir + "/templates/discover.html", {
+      return this.$el.template(this.templateDir + "discover.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -57,7 +57,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       if (size_ > 0) {
         return this.$el.find("#no-result").hide();
       } else {
-        return this.$el.find("#no-result").show().template(this.templateDir + "/templates/partials-discover/no-results.html", {
+        return this.$el.find("#no-result").show().template(this.templateDir + "partials-discover/no-results.html", {
           data: {}
         }, function() {});
       }

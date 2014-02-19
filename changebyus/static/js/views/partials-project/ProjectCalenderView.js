@@ -26,7 +26,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-calendar.html", {
+      return this.$el.template(this.templateDir + "partials-project/project-calendar.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

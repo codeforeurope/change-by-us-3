@@ -22,7 +22,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       var _this = this;
       if (this.model.get('active')) {
         this.$el = $("<div class='user'/>");
-        this.$el.template(this.templateDir + "/templates/partials-user/user.html", {
+        this.$el.template(this.templateDir + "partials-user/user.html", {
           data: this.model.attributes
         }, function() {
           return _this.onTemplateLoad();
@@ -30,7 +30,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         return $(this.parent).append(this.$el);
       } else {
         this.$el = $("<div class='user'/>");
-        this.$el.template(this.templateDir + "/templates/partials-user/not-found.html", {}, function() {
+        this.$el.template(this.templateDir + "partials-user/not-found.html", {}, function() {
           return _this.onTemplateLoad();
         });
         return $(this.parent).append(this.$el);

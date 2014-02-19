@@ -29,7 +29,7 @@ define ["underscore",
             render: -> 
                 @$el = $(@parent)
                 @viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
-                @$el.template @templateDir+"/templates/partials-project/project-add-update.html",
+                @$el.template @templateDir+"partials-project/project-add-update.html",
                     {data: @viewData}, => @onTemplateLoad()
 
                 self = @
@@ -47,9 +47,9 @@ define ["underscore",
                 $.get "/api/user/socialinfo", (response_)=>
                     try
                         @socialInfo = response_.data
+                        if addForm_ then @addForm() else @checkSocial(true)
                     catch e
-                        
-                    if addForm_ then @addForm() else @checkSocial(true)
+                        console.log 'getSocial ERROR:', e
 
             shareToggle:->
                 $(".share-options").toggleClass("hide")
@@ -74,13 +74,11 @@ define ["underscore",
                     @$facebookLabel = $("label[for=facebook]")
                     @$twitterLabel  = $("label[for=twitter]")
                     
-                    form.beforeSubmit = (arr_, form_, options_)->
-                        console.log 'beforeSubmit', $feedback
+                    form.beforeSubmit = (arr_, form_, options_)-> 
                         $feedback.hide()
                         $inputs.attr("disabled", "disabled")
 
-                    form.success = (response_)=>
-                        console.log 'success response_',response_
+                    form.success = (response_)=> 
                         if response_.success
                             @addModal response_.data
 
@@ -121,7 +119,7 @@ define ["underscore",
 
             addAll: ->  
                 @$day = $('<div />')
-                @$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
+                @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
                     {}, => @onDayWrapperLoad()
 
             onDayWrapperLoad: ->  

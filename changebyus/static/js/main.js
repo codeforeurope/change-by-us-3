@@ -183,7 +183,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     Backbone.history.start({
       pushState: true
     });
-    /* NAV*/
+    /* TOP NAV AND RESPONSIVE --------------------------------------------------------------------*/
 
     $navTop = $('.nav.pull-left');
     $navTop.hover(function() {
@@ -202,7 +202,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     $(".logged-in .user-avatar").click(function(e) {
       return window.location.href = "/stream/dashboard";
     });
-    /* LOG OUT*/
+    /* LOG OUT ----------------------------------------------------------------------------------*/
 
     $("a[href='/logout']").click(function(e) {
       var _this = this;
@@ -214,7 +214,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return window.location.reload();
       });
     });
-    /* GLOBAL UTILS ----------------------------------------------------------------------------------*/
+    /* GLOBAL UTILS ----------------------------------------------------------------------------*/
 
     window.popWindow = function(url) {
       var h, left, title, top, w;
@@ -260,7 +260,7 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         }
       }
     });
-    /* STICKY FOOTER ----------------------------------------------------------------------------------*/
+    /* STICKY FOOTER --------------------------------------------------------------------------*/
 
     $window = $(window);
     $topnav = $(".top-nav");
@@ -288,8 +288,8 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         }
       });
     };
-    positionFooter();
     $window.scroll(positionFooter).resize(positionFooter);
+    positionFooter();
     return window.onPageElementsLoad = function() {
       return positionFooter();
     };

@@ -12,10 +12,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 @$el.show()
                  
                 if @collection and @isDataLoaded is false
-                    if @templateLoaded
-                        @loadData()
-                    else
-                        @delayedCollectionLoad = true
+                    if @templateLoaded then @loadData() else @delayedCollectionLoad = true
 
             loadData: -> 
                 if @collection

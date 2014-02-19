@@ -15,7 +15,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
 
             render: ->
                 @$el = $("<div />")
-                @$el.template @templateDir+"/templates/partials-project/project-info-appearance.html",
+                @$el.template @templateDir+"partials-project/project-info-appearance.html",
                     data: @viewData, => @onTemplateLoad()
                 $(@parent).append @$el
 

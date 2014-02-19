@@ -12,7 +12,7 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
 
             render: -> 
                 @$el = $("<div class='login'/>")
-                @$el.template @templateDir+"/templates/login.html",
+                @$el.template @templateDir+"login.html",
                     data: @viewData, => @onTemplateLoad() 
                 $(@parent).append @$el
 

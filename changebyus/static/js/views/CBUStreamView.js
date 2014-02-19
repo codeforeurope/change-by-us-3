@@ -9,7 +9,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/stream.html", {
+      return this.$el.template(this.templateDir + "stream.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -18,7 +18,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
     addAll: function() {
       var _this = this;
       this.$day = $('<div />');
-      return this.$day.template(this.templateDir + "/templates/partials-user/stream-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "partials-user/stream-day-wrapper.html", {}, function() {
         return _this.onStreamWrapperLoad();
       });
     },

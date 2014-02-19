@@ -10,7 +10,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
             render: -> 
                 @$el = $("<div class='signup'/>")
-                @$el.template @templateDir+"/templates/signup.html",
+                @$el.template @templateDir+"signup.html",
                     data: @viewData, =>
                         @ajaxForm()
                         @addListeners()
@@ -71,7 +71,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                     $.ajax options
                     false
 
-                # social signup --------------------------------------------------
+                ### SOCIAL SIGNUP --------------------------------------------------###
                 $socialSignup   = $(".social-signup")
                 $socialForm     = $socialSignup.find("form") 
                 $socialSubmit   = $socialSignup.find("input[type='submit']")
@@ -104,7 +104,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                     false
 
 
-            ### GETTER & SETTERS ----------------------------------------------------------------- ###
+            ### GETTER & SETTERS -----------------------------------------------------------------###
             getSocialInfo:->
                 unless @socialInfo
                     $socialSignup   = $(".social-signup")

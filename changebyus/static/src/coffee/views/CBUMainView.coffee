@@ -30,7 +30,7 @@ define ["underscore",
 
             render: -> 
                 @$el = $("<div class='projects-main'/>")
-                @$el.template @templateDir+"/templates/main.html",
+                @$el.template @templateDir+"main.html",
                     {}, => @onTemplateLoad()
 
             onTemplateLoad:->

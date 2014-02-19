@@ -37,13 +37,13 @@ define ["underscore",
                 _.extend {}, AbstractView.prototype.events, {"click a[href^='#']":"changeHash"}
 
             render: ->
-                @$el.template @templateDir+"/templates/dashboard.html", 
-                    {data:@userModel.attributes}, => 
-                        @onTemplateLoad()
-                        @loadProjects()
+                @$el.template @templateDir+"dashboard.html", 
+                    {data:@userModel.attributes}, => @onTemplateLoad()
                 $(@parent).append @$el
 
             onTemplateLoad: ->
+                @loadProjects()
+
                 @$manageView  = $('#manage-projects')
                 @$followView  = $('#follow-projects')
                 @$profileView = $('#edit-profile')

@@ -6,7 +6,7 @@ define(["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
       console.log('ProjectDonationModalView', this.model);
       this.viewData = this.model.attributes;
       this.$el = $("<div class='modal-fullscreen dark'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-donation-modal.html", {
+      this.$el.template(this.templateDir + "partials-project/project-donation-modal.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

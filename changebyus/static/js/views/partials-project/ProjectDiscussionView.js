@@ -15,7 +15,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-project/project-discussion.html", {
+      return this.$el.template(this.templateDir + "partials-project/project-discussion.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -52,7 +52,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       return this.$el.find(".admin-title").html("All Discussions (" + this.count + "): " + title);
     },
     onSuccess: function() {
-      var model, response, userAvatar, _i, _len, _ref,
+      var dataObj, model, response, userAvatar, _i, _len, _ref,
         _this = this;
       this.$ul.html('');
       this.$form.html('');
@@ -67,13 +67,14 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         this.addDiscussion(model);
       }
       userAvatar = $('.profile-nav-header img').attr('src');
-      this.wysiwygFormView = new WysiwygFormView({
+      dataObj = {
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
         userAvatar: userAvatar,
         title: this.model.get("title")
-      });
+      };
+      this.wysiwygFormView = new WysiwygFormView(dataObj);
       return this.wysiwygFormView.success = function(e) {
         if (e.success) {
           $("#new-thread-editor").html("");

@@ -30,11 +30,11 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     render: function() {
       var templateURL,
         _this = this;
-      console.log('rr', this);
       this.$el = $(this.parent);
       this.viewData = this.model ? this.model.attributes : {};
       this.viewData.isOwnerOrganizer = this.isOwnerOrganizer;
-      templateURL = this.view === "public" ? "/templates/partials-project/project-members.html" : "/templates/partials-project/project-members-admin.html";
+      templateURL = "partials-project/";
+      templateURL += this.view === "public" ? "project-members.html" : "project-members-admin.html";
       return this.$el.template(this.templateDir + templateURL, {
         data: this.viewData
       }, function() {
@@ -73,7 +73,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       }
       this.team = [];
       this.members = [];
-      console.log('addAll sort_', sort_);
       $("#" + sort_).addClass('sort-deactive').removeClass('ul').siblings().removeClass('sort-deactive').addClass('ul');
       if (sort_ === "alpha") {
         sortBy = this.collection.sortBy(function(model) {
@@ -87,15 +86,17 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       }
       $.each(sortBy, function(k, model) {
         var ownerID, roles;
-        roles = model.get("roles");
-        ownerID = _this.model ? _this.model.get('owner').id : -1;
-        if (roles.length === 0) {
-          model.set("roles", ["Owner"]);
-        }
-        if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
-          return _this.members.push(model);
-        } else {
-          return _this.team.push(model);
+        if (model.get("active")) {
+          roles = model.get("roles");
+          ownerID = _this.model ? _this.model.get('owner').id : -1;
+          if (roles.length === 0) {
+            model.set("roles", ["Owner"]);
+          }
+          if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
+            return _this.members.push(model);
+          } else {
+            return _this.team.push(model);
+          }
         }
       });
       this.$teamList.html('');

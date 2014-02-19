@@ -31,7 +31,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     render: function() {
       var _this = this;
       this.$el = $(".banner-search");
-      this.$el.template(this.templateDir + "/templates/partials-discover/banner-search.html", {
+      this.$el.template(this.templateDir + "partials-discover/banner-search.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -79,6 +79,9 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.$projectList = $("#projects-list");
       this.$searchCatagories = $('.search-catagories');
       this.$geoPin = $('.geo-pin');
+      this.$all = $('#all');
+      this.$projects = $('#projects');
+      this.$resources = $('#resources');
       this.addListeners();
       this.autoGetGeoLocation();
       return AbstractView.prototype.onTemplateLoad.call(this);
@@ -95,9 +98,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           return window.location.href = "/city/" + v;
         }
       });
-      this.$all = $('#all');
-      this.$projects = $('#projects');
-      this.$resources = $('#resources');
       this.$all.click(function(e) {
         return _this.onToggleClick(e);
       });
@@ -189,6 +189,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
       this.$searchCatagories.hide();
       this.$projectList.html("");
+      modifyInputVal = this.$searchNear.val();
       dataObj = {
         s: this.category === "" ? this.$searchInput.val() : "",
         cat: this.category,
@@ -198,7 +199,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         lat: this.locationObj.lat,
         lon: this.locationObj.lon
       };
-      modifyInputVal = this.$searchNear.val();
       if (this.ajax) {
         this.ajax.abort();
       }
@@ -211,7 +211,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }).done(function(response_) {
         var k, size, t, v, _ref;
         if (response_.success) {
-          console.log('response_', response_, _this.$searchNear.val());
           _this.$modifyInput.val(modifyInputVal);
           _this.autoSend = false;
           _this.index = 0;
@@ -276,9 +275,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $this.siblings().toggleClass('active');
       switch ($this.text()) {
         case 'Popular':
-          return this.sortByPopularDistance = 'popular';
+          this.sortByPopularDistance = 'popular';
+          break;
         case 'Distance':
-          return this.sortByPopularDistance = 'distance';
+          this.sortByPopularDistance = 'distance';
+          break;
       }
     },
     onToggleVisibility: function(e) {
@@ -292,31 +293,36 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       $this.addClass('active');
       switch ($this.text()) {
         case 'Projects':
-          return this.byProjectResources = 'project';
+          this.byProjectResources = 'project';
+          break;
         case 'Resources':
-          return this.byProjectResources = 'resource';
+          this.byProjectResources = 'resource';
+          break;
         default:
-          return this.byProjectResources = 'all';
+          this.byProjectResources = 'all';
+          break;
       }
     },
     onInputEnter: function(e) {
-      if (e.which === 13) {
-        if (this.locationObj.name !== this.$searchInput.val() || this.locationObj.name === "") {
-          $(".tt-suggestion").first().trigger("click");
-          if (this.$searchInput.val() === "" || this.$searchCatagories.is(':visible')) {
-            if (this.$searchCatagories.find('li.active').length > 0) {
-              this.category = this.$searchCatagories.find('li.active').html();
-              this.$searchInput.val(this.category);
+      switch (e.which) {
+        case 13:
+          if (this.locationObj.name !== this.$searchInput.val() || this.locationObj.name === "") {
+            $(".tt-suggestion").first().trigger("click");
+            if (this.$searchInput.val() === "" || this.$searchCatagories.is(':visible')) {
+              if (this.$searchCatagories.find('li.active').length > 0) {
+                this.category = this.$searchCatagories.find('li.active').html();
+                this.$searchInput.val(this.category);
+              }
             }
           }
-        }
-        this.sendForm();
-      }
-      if (e.which === 38) {
-        this.toggleActive("up");
-      }
-      if (e.which === 40) {
-        return this.toggleActive("down");
+          this.sendForm();
+          break;
+        case 38:
+          this.toggleActive("up");
+          break;
+        case 40:
+          this.toggleActive("down");
+          break;
       }
     }
   });

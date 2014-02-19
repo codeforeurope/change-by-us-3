@@ -41,10 +41,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         this.viewData = this.model.attributes;
         if (this.isResource) {
           className = "resource-container";
-          templateURL = "/templates/resource.html";
+          templateURL = "resource.html";
         } else {
           className = "project-container";
-          templateURL = "/templates/project.html";
+          templateURL = "project.html";
         }
         this.$el = $("<div class='" + className + "'/>");
         this.$el.template(this.templateDir + templateURL, {}, function() {
@@ -53,7 +53,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return $(this.parent).append(this.$el);
       } else {
         this.$el = $("<div class='not-found'/>");
-        this.$el.template(this.templateDir + "/templates/partials-project/not-found.html", {}, function() {
+        this.$el.template(this.templateDir + "partials-project/not-found.html", {}, function() {
           return _this.onTemplateLoad();
         });
         return $(this.parent).append(this.$el);
@@ -64,10 +64,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         _this = this;
       if (this.isResource) {
         className = "resource-header";
-        templateURL = "/templates/partials-resource/resource-header.html";
+        templateURL = "partials-resource/resource-header.html";
       } else {
         className = "project-header";
-        templateURL = "/templates/partials-project/project-header.html";
+        templateURL = "partials-project/project-header.html";
       }
       this.$header = $("<div class='" + className + "'/>");
       this.$header.template(this.templateDir + templateURL, {
@@ -83,7 +83,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       console.log('notMember');
       $('.tabs-pane').remove();
       $notMember = $("<div class='body-container'/>");
-      $notMember.template(this.templateDir + "/templates/partials-project/project-not-member.html", {
+      $notMember.template(this.templateDir + "partials-project/project-not-member.html", {
         data: this.viewData
       }, function() {});
       return this.$el.append($notMember);
@@ -114,10 +114,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
     },
     onCollectionLoad: function() {
-      var parent,
+      var config, parent,
         _this = this;
       parent = this.isResource ? "#resource-updates" : "#project-updates";
-      this.updatesView = new UpdatesView({
+      config = {
         model: this.model,
         collection: this.updatesCollection,
         members: this.projectMembersCollection,
@@ -125,7 +125,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         isOwnerOrganizer: this.isOwnerOrganizer,
         isResource: this.isResource,
         parent: parent
-      });
+      };
+      this.updatesView = new UpdatesView(config);
       if (this.isResource) {
         this.updatesView.show();
         this.updatesView.on('ON_TEMPLATE_LOAD', function() {
@@ -139,20 +140,16 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           });
         });
       } else {
-        this.projectMembersView = new ProjectMembersView({
+        config = {
           model: this.model,
           collection: this.projectMembersCollection,
           isDataLoaded: true,
           isMember: this.isMember,
           isOwnerOrganizer: this.isOwnerOrganizer,
           isOwner: this.isOwner
-        });
-        this.projectCalenderView = new ProjectCalenderView({
-          model: this.model,
-          isMember: this.isMember,
-          isOwnerOrganizer: this.isOwnerOrganizer,
-          isOwner: this.isOwner
-        });
+        };
+        this.projectMembersView = new ProjectMembersView(config);
+        this.projectCalenderView = new ProjectCalenderView(config);
         this.updatesBTN = $("a[href='#updates']").parent();
         this.membersBTN = $("a[href='#members']").parent();
         this.calendarBTN = $("a[href='#calendar']").parent();

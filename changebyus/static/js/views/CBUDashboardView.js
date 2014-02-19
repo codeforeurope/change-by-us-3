@@ -27,17 +27,17 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
     },
     render: function() {
       var _this = this;
-      this.$el.template(this.templateDir + "/templates/dashboard.html", {
+      this.$el.template(this.templateDir + "dashboard.html", {
         data: this.userModel.attributes
       }, function() {
-        _this.onTemplateLoad();
-        return _this.loadProjects();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
     },
     onTemplateLoad: function() {
       var profileEditView,
         _this = this;
+      this.loadProjects();
       this.$manageView = $('#manage-projects');
       this.$followView = $('#follow-projects');
       this.$profileView = $('#edit-profile');

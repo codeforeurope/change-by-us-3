@@ -14,7 +14,7 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
     render: function() {
       var _this = this;
       this.$el = $("<div class='body-container'/>");
-      this.$el.template(this.templateDir + "/templates/admin.html", {
+      this.$el.template(this.templateDir + "admin.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -44,18 +44,19 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       switch (type_) {
         case 'project':
           if (this.flaggedProjects.length === 0) {
-            return this.checkHash();
+            this.checkHash();
           }
           break;
         case 'resource':
           if (this.unapprovedResources.length === 0) {
-            return this.checkHash();
+            this.checkHash();
           }
           break;
         case 'user':
           if (this.flaggedUsers.length === 0) {
-            return this.checkHash();
+            this.checkHash();
           }
+          break;
       }
     },
     onTemplateLoad: function() {
@@ -166,6 +167,7 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
         default:
           this.$projects.show();
           this.$projectsBTN.addClass("active");
+          break;
       }
       this.checkHash();
       this.buttonCheck();
@@ -179,18 +181,19 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
           switch (this.currentView) {
             case "users":
               if (this.flaggedUsers.length === 0) {
-                return window.location.hash = this.flaggedProjects.length > 0 ? "projects" : "resources";
+                window.location.hash = this.flaggedProjects.length > 0 ? "projects" : "resources";
               }
               break;
             case "resources":
               if (this.unapprovedResources.length === 0) {
-                return window.location.hash = this.flaggedProjects.length > 0 ? "projects" : "users";
+                window.location.hash = this.flaggedProjects.length > 0 ? "projects" : "users";
               }
               break;
             default:
               if (this.flaggedProjects.length === 0) {
-                return window.location.hash = this.flaggedUsers.length > 0 ? "users" : "resources";
+                window.location.hash = this.flaggedUsers.length > 0 ? "users" : "resources";
               }
+              break;
           }
         }
       }

@@ -23,7 +23,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       if (this.$el.html() === "") {
         this.$el = $("<div class='body-container'/>");
       }
-      this.$el.template(this.templateDir + "/templates/partials-universal/stripe-review.html", {
+      this.$el.template(this.templateDir + "partials-universal/stripe-review.html", {
         data: this.stripe
       }, function() {
         return _this.onTemplateLoad();
@@ -49,7 +49,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       if (this.$review === null) {
         this.$review = $("<div class='body-container'/>");
       }
-      this.$review.template(this.templateDir + "/templates/partials-universal/stripe-form.html", {
+      this.$review.template(this.templateDir + "partials-universal/stripe-form.html", {
         data: this.stripe
       }, function() {
         return _this.ajaxForm();

@@ -28,8 +28,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 
             render: -> 
                 @$el = $(".banner-search")
-                @$el.template @templateDir+"/templates/partials-discover/banner-search.html",
-                    data: @viewData, => @onTemplateLoad()
+                @$el.template @templateDir+"partials-discover/banner-search.html",
+                    {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 
             onTemplateLoad:->
@@ -62,6 +62,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @$projectList      = $("#projects-list")
                 @$searchCatagories = $('.search-catagories')
                 @$geoPin           = $('.geo-pin')
+                @$all              = $('#all')
+                @$projects         = $('#projects')
+                @$resources        = $('#resources')
                 
                 @addListeners()
                 @autoGetGeoLocation()
@@ -74,40 +77,37 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @$city = $('#city').dropkick({change: (v,l)->
                     window.location.href = "/city/"+v
                 })
-                
-                @$all       = $('#all')
-                @$projects  = $('#projects')
-                @$resources = $('#resources')
 
                 @$all.click (e)=> @onToggleClick(e)
                 @$projects.click (e)=> @onToggleClick(e)
                 @$resources.click (e)=> @onToggleClick(e)
 
             toggleActive:(dir_)->
-                    $li = @$searchCatagories.find('li')
-                    hasActive = (@$searchCatagories.find('li.active').length > 0)
-                    if dir_ is "up"
-                        if hasActive
-                            $li.each (i)-> 
-                                if $(this).hasClass('active')
-                                    $(this).removeClass('active')
-                                    newI = if (i is 0) then ($li.length-1) else (i-1)
-                                    $($li[newI]).addClass('active')
-                                    return false
-                        else
-                            @$searchCatagories.find('li').last().addClass('active')
+                $li = @$searchCatagories.find('li')
+                hasActive = (@$searchCatagories.find('li.active').length > 0)
+                if dir_ is "up"
+                    if hasActive
+                        $li.each (i)-> 
+                            if $(this).hasClass('active')
+                                $(this).removeClass('active')
+                                newI = if (i is 0) then ($li.length-1) else (i-1)
+                                $($li[newI]).addClass('active')
+                                return false
                     else
-                        if hasActive
-                            $li.each (i)->
-                                if $(this).hasClass('active')
-                                    $(this).removeClass('active') 
-                                    newI = if (i < $li.length-1) then i+1 else 0
-                                    $($li[newI]).addClass('active')
-                                    return false
-                        else
-                            @$searchCatagories.find('li').first().addClass('active')
+                        @$searchCatagories.find('li').last().addClass('active')
+                else
+                    if hasActive
+                        $li.each (i)->
+                            if $(this).hasClass('active')
+                                $(this).removeClass('active') 
+                                newI = if (i < $li.length-1) then i+1 else 0
+                                $($li[newI]).addClass('active')
+                                return false
+                    else
+                        @$searchCatagories.find('li').first().addClass('active')
 
             updatePage:->
+                # clear the page and attach new results
                 @$projectList.html("")
 
                 s = @index*@perPage
@@ -123,6 +123,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 view.fetch()
 
             autoGetGeoLocation:->
+                # used by HTML5 geolocation of autofill location
                 if navigator.geolocation
                     navigator.geolocation.getCurrentPosition (loc_)=>
                         @handleGetCurrentPosition(loc_)
@@ -139,6 +140,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @$searchCatagories.hide()
                 @$projectList.html("")
 
+                modifyInputVal = @$searchNear.val()
+
+                # package up query variables
                 dataObj = {
                     s: if @category is "" then @$searchInput.val() else ""
                     cat: @category
@@ -149,8 +153,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     lon: @locationObj.lon
                 }
 
-                modifyInputVal = @$searchNear.val()
-
+                # abort previous calls
                 if @ajax then @ajax.abort()
                 @ajax = $.ajax(
                     type: "POST"
@@ -160,9 +163,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     contentType: "application/json; charset=utf-8"
                 ).done (response_)=>
                     if response_.success
-                        console.log 'response_',response_, @$searchNear.val()
-                        
-                        # @toggleModify @autoSend
                         @$modifyInput.val modifyInputVal
 
                         @autoSend = false
@@ -195,6 +195,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     @autoGetGeoLocation()
 
             handleGetCurrentPosition:(loc_)->
+                # get location and auto send form
                 @locationObj.lat = loc_.coords.latitude
                 @locationObj.lon = loc_.coords.longitude
 
@@ -220,8 +221,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 switch $this.text()
                     when 'Popular'
                         @sortByPopularDistance = 'popular'
+                        break
                     when 'Distance'
                         @sortByPopularDistance = 'distance'
+                        break
  
             onToggleVisibility:(e)->
                 @toggleModify true
@@ -235,28 +238,30 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 switch $this.text()
                     when 'Projects'
                         @byProjectResources = 'project' 
+                        break
                     when 'Resources'
                         @byProjectResources = 'resource' 
+                        break
                     else
                         @byProjectResources = 'all'
+                        break
 
-            onInputEnter:(e) ->
-                # console.log 'onInputEnter', e.currentTarget
-                if e.which is 13
-                    if (@locationObj.name isnt @$searchInput.val() or @locationObj.name is "")
-                        $(".tt-suggestion").first().trigger "click"
+            onInputEnter:(e) -> 
+                switch e.which
+                    when 13
+                        # send form when enter clicked
+                        if (@locationObj.name isnt @$searchInput.val() or @locationObj.name is "")
+                            $(".tt-suggestion").first().trigger "click"
 
-                        if @$searchInput.val() is "" or @$searchCatagories.is(':visible')
-                            # console.log @$searchInput.val()
-                            # console.log "vis", @$searchCatagories.is(':visible')
-                            if @$searchCatagories.find('li.active').length > 0
-                                @category = @$searchCatagories.find('li.active').html()
-                                @$searchInput.val @category
-
-                    @sendForm()
-
-                if e.which is 38
-                    @toggleActive("up")
-
-                if e.which is 40
-                    @toggleActive("down")
+                            if @$searchInput.val() is "" or @$searchCatagories.is(':visible')
+                                if @$searchCatagories.find('li.active').length > 0
+                                    @category = @$searchCatagories.find('li.active').html()
+                                    @$searchInput.val @category
+                        @sendForm()
+                        break
+                    when 38
+                        @toggleActive("up")
+                        break
+                    when 40
+                        @toggleActive("down")
+                        break

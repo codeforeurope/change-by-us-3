@@ -27,7 +27,7 @@ define ["underscore",
 
             render: ->  
                 @$el = $(@parent)
-                @$el.template @templateDir+"/templates/partials-universal/updates.html",
+                @$el.template @templateDir+"partials-universal/updates.html",
                     {data: @model.attributes}, =>@onTemplateLoad()
 
             addAll: ->
@@ -38,16 +38,18 @@ define ["underscore",
                 if length <= 4 then $('.team-members .pull-right').remove()
 
                 @$day = $('<div />')
-                @$day.template @templateDir+"/templates/partials-universal/entries-day-wrapper.html",
-                    {}, =>
-                        if @collection.length > 0
-                            model_ = @collection.models[0]
-                            m = moment(model_.get("created_at")).format("MMMM D")
-                            @newDay(m)
+                @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
+                    {}, =>@onDayWrapperLoad()
 
-                        @isDataLoaded = true
-                        ProjectSubView::addAll.call(@) 
-                        onPageElementsLoad()
+            onDayWrapperLoad: ->  
+                if @collection.length > 0
+                    model_ = @collection.models[0]
+                    m = moment(model_.get("created_at")).format("MMMM D")
+                    @newDay(m)
+
+                @isDataLoaded = true
+                ProjectSubView::addAll.call(@) 
+                onPageElementsLoad()
 
             addOne: (model_) -> 
                 m = moment(model_.get("created_at")).format("MMMM D")
@@ -62,8 +64,7 @@ define ["underscore",
                 if ("MEMBER" in roles) or ("Member" in roles) then return
                 
                 $member = $('<li/>')
-                $member.template @templateDir+"/templates/partials-universal/member-avatar.html",
-                    {data: model_.attributes}, =>  
+                $member.template @templateDir+"partials-universal/member-avatar.html", {data: model_.attributes}
                 @$members.append $member 
 
             newDay:(date_)-> 

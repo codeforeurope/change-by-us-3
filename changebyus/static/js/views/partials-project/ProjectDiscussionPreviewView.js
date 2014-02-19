@@ -8,7 +8,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     render: function() {
       var _this = this;
       this.$el = $("<div class='project'/>");
-      this.$el.template(this.templateDir + "/templates/partials-project/project-discussion-preview.html", {
+      this.$el.template(this.templateDir + "partials-project/project-discussion-preview.html", {
         data: this.viewData
       }, function() {
         return _this.ajaxForm();

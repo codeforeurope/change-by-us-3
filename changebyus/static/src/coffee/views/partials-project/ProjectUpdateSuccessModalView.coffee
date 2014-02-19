@@ -4,6 +4,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view"],
 
             render: ->  
                 @$el = $("<div class='modal-fullscreen dark'/>") 
-                @$el.template @templateDir+"/templates/partials-project/project-share-success-modal.html",
+                @$el.template @templateDir+"partials-project/project-share-success-modal.html",
                     {data: @model}, => @onTemplateLoad()
                 $(@parent).append @$el 

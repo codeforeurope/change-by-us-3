@@ -18,7 +18,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
     render: function() {
       var _this = this;
       this.$el = $(this.parent);
-      return this.$el.template(this.templateDir + "/templates/partials-user/profile-edit-form.html", {
+      return this.$el.template(this.templateDir + "partials-user/profile-edit-form.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoaded();
@@ -54,7 +54,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       var $facebook, $twitter;
       $twitter = $('.twitter a');
       $facebook = $('.facebook a');
-      console.log('@viewData.facebook', this.viewData.facebook, this.viewData.twitter);
       if (this.viewData.facebook) {
         $facebook.removeClass('btn-primary').addClass('btn-tertiary').text('Disconnect').attr("href", "/social/facebook/disconnect");
       } else {

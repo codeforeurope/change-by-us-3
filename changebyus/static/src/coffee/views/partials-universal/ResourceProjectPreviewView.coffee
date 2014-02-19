@@ -28,7 +28,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
             render: ->
                 @$el = $("<li class='project-preview'/>")
-                @$el.template @templateDir+"/templates/partials-universal/project-resource.html",
+                @$el.template @templateDir+"partials-universal/project-resource.html",
                     {data: @viewData}, =>
                         @delegateEvents()
                         @$el.find('img').hide().load =>
@@ -87,7 +87,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                         url: "/api/resource/#{@model.id}"
                     ).done (res_)=> @onResponce res_
                         
-
             onResponce:(res_)->
                 if res_.success
                     @model.collection.remove @model

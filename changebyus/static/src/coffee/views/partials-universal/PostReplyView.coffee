@@ -22,6 +22,6 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
                 @viewData.format_date           = moment(@model.get("created_at")).format("MMMM D hh:mm a")
 
                 $reply = $("<div class='post-reply clearfix'/>")
-                $reply.template @templateDir+"/templates/partials-universal/post-reply-view.html", 
+                $reply.template @templateDir+"partials-universal/post-reply-view.html", 
                     {data:@viewData}, => @onTemplateLoad()
                 $(@el).append $reply

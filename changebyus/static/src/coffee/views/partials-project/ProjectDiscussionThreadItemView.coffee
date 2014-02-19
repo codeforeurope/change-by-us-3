@@ -41,7 +41,7 @@ define ["underscore",
                 @viewData.image_url_round_small = @user.get("image_url_round_small")
                 @viewData.display_name          = @user.get("display_name")
 
-                $(@el).template @templateDir+"/templates/partials-project/project-thread-list-item.html",
+                $(@el).template @templateDir+"partials-project/project-thread-list-item.html",
                     {data: @viewData}, => @onTemplateLoad()
 
             ### EVENTS ---------------------------------------------###

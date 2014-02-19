@@ -49,7 +49,7 @@ define ["underscore",
                 m = moment(@model.get("created_at")).format("MMMM D hh:mm a")
                 @model.set("format_date", m)
 
-                @$el.template @templateDir+"/templates/partials-universal/update-list-item.html",
+                @$el.template @templateDir+"partials-universal/update-list-item.html",
                     {data:@viewData}, => @onTemplateLoad()
 
             onTemplateLoad:-> 
@@ -74,7 +74,7 @@ define ["underscore",
             
                 if @isMember
                     @$replyForm = $('<li class="post-reply-form"/>')
-                    @$replyForm.template @templateDir+"/templates/partials-universal/post-reply-form.html",
+                    @$replyForm.template @templateDir+"partials-universal/post-reply-form.html",
                         {data:viewData}, => @onFormLoaded()
                     @$repliesHolder.append @$replyForm
 

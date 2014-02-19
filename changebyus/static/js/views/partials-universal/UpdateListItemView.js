@@ -36,7 +36,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData.display_name = this.user.get("display_name");
       m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       this.model.set("format_date", m);
-      return this.$el.template(this.templateDir + "/templates/partials-universal/update-list-item.html", {
+      return this.$el.template(this.templateDir + "partials-universal/update-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
@@ -69,7 +69,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
       if (this.isMember) {
         this.$replyForm = $('<li class="post-reply-form"/>');
-        this.$replyForm.template(this.templateDir + "/templates/partials-universal/post-reply-form.html", {
+        this.$replyForm.template(this.templateDir + "partials-universal/post-reply-form.html", {
           data: viewData
         }, function() {
           return _this.onFormLoaded();

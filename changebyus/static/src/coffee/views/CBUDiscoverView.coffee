@@ -24,7 +24,7 @@ define ["underscore",
 
             render: -> 
                 @$el = $("<div class='discover'/>")
-                @$el.template @templateDir+"/templates/discover.html",
+                @$el.template @templateDir+"discover.html",
                     {data: @viewData}, => @onTemplateLoad()
 
             onTemplateLoad:->
@@ -62,5 +62,5 @@ define ["underscore",
                 if size_ > 0
                     @$el.find("#no-result").hide()
                 else
-                    @$el.find("#no-result").show().template @templateDir+"/templates/partials-discover/no-results.html",
+                    @$el.find("#no-result").show().template @templateDir+"partials-discover/no-results.html",
                         data: {}, =>

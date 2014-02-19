@@ -58,13 +58,13 @@ define ["underscore",
                 @viewData.isResource = @isResource
 
                 @$el = $("<div class='project-container'/>")
-                @$el.template @templateDir+"/templates/project-owner.html", 
+                @$el.template @templateDir+"project-owner.html", 
                     {data:@viewData}, => @onTemplateLoad()
                 $(@parent).append @$el 
                 
             onTemplateLoad: -> 
                 @$header = $("<div class='project-header'/>")
-                @$header.template @templateDir+"/templates/partials-project/project-owner-header.html",
+                @$header.template @templateDir+"partials-project/project-owner-header.html",
                     {data:@viewData}, =>@addSubViews()
 
                 AbstractView::onTemplateLoad.call @
@@ -79,10 +79,9 @@ define ["underscore",
                     isOrganizer:@memberData.organizer
                     view:"admin"
  
-                projectDiscussionsCollection = new ProjectDiscussionsCollection()
-                projectMembersCollection     = new ProjectMembersCollection()
-                updatesCollection            = new UpdatesCollection()
-                
+                projectDiscussionsCollection    = new ProjectDiscussionsCollection()
+                projectMembersCollection        = new ProjectMembersCollection()
+                updatesCollection               = new UpdatesCollection()
                 projectDiscussionsCollection.id = id
                 projectMembersCollection.id     = id
                 updatesCollection.id            = id

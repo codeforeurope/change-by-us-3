@@ -35,7 +35,7 @@ define ["underscore",
 
             render: -> 
                 @$el = $("<div class='body-container'/>")
-                @$el.template @templateDir+"/templates/admin.html",
+                @$el.template @templateDir+"admin.html",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 
@@ -52,10 +52,13 @@ define ["underscore",
                 switch type_
                     when 'project'
                         if @flaggedProjects.length is 0 then @checkHash()
+                        break
                     when 'resource'
                         if @unapprovedResources.length is 0 then @checkHash()
+                        break
                     when 'user'
                         if @flaggedUsers.length is 0 then @checkHash()
+                        break
 
             onTemplateLoad:->
                 @$projects     = $("#flagged-projects")
@@ -129,12 +132,15 @@ define ["underscore",
                     when "users"
                         @$users.show() 
                         @$usersBTN.addClass "active"
+                        break
                     when "resources" 
                         @$resources.show() 
                         @$resourcesBTN.addClass "active"
+                        break
                     else 
                         @$projects.show()
                         @$projectsBTN.addClass "active"
+                        break
 
                 @checkHash()
                 @buttonCheck()
@@ -150,9 +156,12 @@ define ["underscore",
                             when "users"
                                 if @flaggedUsers.length is 0 
                                     window.location.hash = if @flaggedProjects.length > 0 then "projects" else "resources"
+                                break
                             when "resources" 
                                 if @unapprovedResources.length is 0 
                                     window.location.hash = if @flaggedProjects.length > 0 then "projects" else "users"
+                                break
                             else
                                 if @flaggedProjects.length is 0 
                                     window.location.hash = if @flaggedUsers.length > 0 then "users" else "resources"
+                                break

@@ -13,7 +13,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/
 
             render: -> 
                 @$el = $(@parent)
-                @$el.template @templateDir+"/templates/partials-project/project-new-discussion.html",
+                @$el.template @templateDir+"partials-project/project-new-discussion.html",
                     {data: @viewData}, => @onTemplateLoad()
 
             onTemplateLoad:->

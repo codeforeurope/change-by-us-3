@@ -28,7 +28,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     render: function() {
       var _this = this;
       this.$el = $("<li class='project-preview'/>");
-      return this.$el.template(this.templateDir + "/templates/partials-universal/project-resource.html", {
+      return this.$el.template(this.templateDir + "partials-universal/project-resource.html", {
         data: this.viewData
       }, function() {
         _this.delegateEvents();

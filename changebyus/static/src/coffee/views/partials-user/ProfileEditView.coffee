@@ -17,7 +17,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
             render: ->
                 @$el = $(@parent)
-                @$el.template @templateDir+"/templates/partials-user/profile-edit-form.html", 
+                @$el.template @templateDir+"partials-user/profile-edit-form.html", 
                     {data:@viewData}, => @onTemplateLoaded()
 
             getSocial:(render_=true)->
@@ -37,8 +37,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
             checkSocial:->
                 $twitter = $('.twitter a')
                 $facebook = $('.facebook a')
-
-                console.log '@viewData.facebook', @viewData.facebook, @viewData.twitter
 
                 if @viewData.facebook
                     $facebook.removeClass('btn-primary').addClass('btn-tertiary').text('Disconnect').attr("href","/social/facebook/disconnect")

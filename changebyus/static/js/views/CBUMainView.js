@@ -12,7 +12,7 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
     render: function() {
       var _this = this;
       this.$el = $("<div class='projects-main'/>");
-      return this.$el.template(this.templateDir + "/templates/main.html", {}, function() {
+      return this.$el.template(this.templateDir + "main.html", {}, function() {
         return _this.onTemplateLoad();
       });
     },

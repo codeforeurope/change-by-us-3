@@ -19,10 +19,10 @@ define ["underscore", "backbone", "jquery", "template",  "form", "abstract-view"
                 @$el = $(@parent)
                 stripeAccount = @model.get("stripe_account")
                 if stripeAccount
-                    @$el.template @templateDir+"/templates/partials-universal/stripe-review.html",
+                    @$el.template @templateDir+"partials-universal/stripe-review.html",
                         {data: stripeAccount}, => @onTemplateLoad()
                 else
-                    @$el.template @templateDir+"/templates/partials-project/project-fundraising-get-started.html", 
+                    @$el.template @templateDir+"partials-project/project-fundraising-get-started.html", 
                         {}, => 
                             @getStarted()
                             @delegateEvents()

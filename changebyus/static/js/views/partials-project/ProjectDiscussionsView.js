@@ -20,11 +20,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     addAll: function() {
       var _this = this;
       if (this.collection.models.length === 0) {
-        return this.$el.template(this.templateDir + "/templates/partials-project/project-zero-discussions.html", {}, function() {
+        return this.$el.template(this.templateDir + "partials-project/project-zero-discussions.html", {}, function() {
           return AbstractView.prototype.onTemplateLoad.call(_this);
         });
       } else {
-        return this.$el.template(this.templateDir + "/templates/partials-project/project-all-discussions.html", {}, function() {
+        return this.$el.template(this.templateDir + "partials-project/project-all-discussions.html", {}, function() {
           return _this.loadDayTemplate();
         });
       }
@@ -32,7 +32,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     loadDayTemplate: function() {
       var _this = this;
       this.$day = $('<div class="day-wrapper"/>');
-      return this.$day.template(this.templateDir + "/templates/partials-universal/entries-day-wrapper.html", {}, function() {
+      return this.$day.template(this.templateDir + "partials-universal/entries-day-wrapper.html", {}, function() {
         return _this.onDayWrapperLoad();
       });
     },

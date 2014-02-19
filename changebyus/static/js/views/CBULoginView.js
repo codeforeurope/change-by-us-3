@@ -12,7 +12,7 @@ define(["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
     render: function() {
       var _this = this;
       this.$el = $("<div class='login'/>");
-      this.$el.template(this.templateDir + "/templates/login.html", {
+      this.$el.template(this.templateDir + "login.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

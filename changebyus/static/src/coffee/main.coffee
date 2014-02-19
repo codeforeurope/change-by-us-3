@@ -190,7 +190,7 @@ define ["jquery",
             CBUAppRouter = new CBURouter()
             Backbone.history.start pushState: true
 
-            ### NAV ###
+            ### TOP NAV AND RESPONSIVE --------------------------------------------------------------------###
             $navTop = $('.nav.pull-left')
             $navTop.hover ->
                 $(this).toggleClass('active')
@@ -210,7 +210,7 @@ define ["jquery",
             $(".logged-in .user-avatar").click (e)->
                 window.location.href = "/stream/dashboard"
 
-            ### LOG OUT ###
+            ### LOG OUT ----------------------------------------------------------------------------------###
             $("a[href='/logout']").click (e)->
                 e.preventDefault()
                 $.ajax(
@@ -219,7 +219,7 @@ define ["jquery",
                 ).done (response)=>
                     window.location.reload()
 
-            ### GLOBAL UTILS ----------------------------------------------------------------------------------###
+            ### GLOBAL UTILS ----------------------------------------------------------------------------###
             window.popWindow = (url) ->
                 w     = 650
                 h     = 650
@@ -254,7 +254,7 @@ define ["jquery",
                     k = String.fromCharCode(c).toLowerCase()
                     if k is 'd' then $('body').toggleClass('debug')
 
-            ### STICKY FOOTER ----------------------------------------------------------------------------------###
+            ### STICKY FOOTER --------------------------------------------------------------------------###
             $window      = $(window)
             $topnav      = $(".top-nav")
             $mainContent = $(".main-content")
@@ -267,15 +267,15 @@ define ["jquery",
                 debounce = delay 10, ->
                     topNavHeight      = $topnav.height()
                     mainContentHeight = $mainContent.height()
-                    footerHeight      = $footer.height() + 140 #parseInt($footer.css('margin-top'))
+                    footerHeight      = $footer.height() + 140
 
                     if (topNavHeight+mainContentHeight+footerHeight) < $window.height()
                         $footer.css position: "fixed"
                     else
                         $footer.css position: "relative"
-
-            positionFooter()
             $window.scroll(positionFooter).resize(positionFooter)
+            positionFooter()
 
             window.onPageElementsLoad = ->
+                # add any additional functions to perform here
                 positionFooter()

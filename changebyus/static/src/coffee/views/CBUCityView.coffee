@@ -48,7 +48,7 @@ define ["underscore",
                 @viewData.image_url_round= s.substring(s.lastIndexOf("/static/img/"))
 
                 @$el = $("<div class='city-container'/>")
-                @$el.template @templateDir+"/templates/city.html", 
+                @$el.template @templateDir+"city.html", 
                     {data:@viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 
@@ -210,7 +210,7 @@ define ["underscore",
                 @$resourcesView.find('.sub-link a').html "See More Resources in "+@name
 
                 $header = $("<div class='city-header'/>")
-                $header.template @templateDir+"/templates/partials-city/city-header.html",
+                $header.template @templateDir+"partials-city/city-header.html",
                     {data:@viewData}, => @onHeaderLoaded()
                 @$el.prepend $header
 

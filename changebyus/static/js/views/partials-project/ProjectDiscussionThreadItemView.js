@@ -35,7 +35,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData = this.model.attributes;
       this.viewData.image_url_round_small = this.user.get("image_url_round_small");
       this.viewData.display_name = this.user.get("display_name");
-      return $(this.el).template(this.templateDir + "/templates/partials-project/project-thread-list-item.html", {
+      return $(this.el).template(this.templateDir + "partials-project/project-thread-list-item.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();

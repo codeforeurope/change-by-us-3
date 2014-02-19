@@ -3066,14 +3066,18 @@ a.fileupload-exists {
     }
 }
 
+.cbu-avatar{
+    z-index: 2;
+}
 .header-links {
-    padding: 0 20px;
+    padding: 0 20px; 
     &:hover{
         background-color: $primaryActiveHoverColor;
     }
     &.active{
         background-color: $primaryActiveColor;
     }
+
 }
 
 

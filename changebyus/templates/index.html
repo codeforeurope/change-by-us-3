@@ -43,14 +43,13 @@
         </div>
 
           <ul class="nav nav-pills pull-right">
-
             <li><a href="/stream/" class="header-links {% if request.path == '/stream/' %}active{% endif %}">Stream</a></li>
             <li><a href="/discover" class="header-links {% if request.path == '/discover' %}active{% endif %}">Discover</a></li>
           </ul>
 
           {% else %}
-           <div class="nav pull-left">
-             <ul class="nav-pills">
+           <div class="cbu-avatar">
+             <ul class="nav nav-pills pull-left">
                 <li>
                   <a href="/"> <img src="/static/img/cbu_home.png" alt="Change By Us"></a>
                 </li>

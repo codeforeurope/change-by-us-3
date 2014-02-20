@@ -70,6 +70,10 @@
     .topnav {
         height: 90px;
     }
+    .pagination .prev-arrow a,
+    .pagination .next-arrow a {
+        padding: 0 15px;
+    }
     /*******************************************
      * Homepage
      *******************************************/

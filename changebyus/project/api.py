@@ -168,10 +168,10 @@ def api_flag_project(project_id):
 
 
 class CreateProjectForm(Form):
-
     name = TextField("name", validators=[Required()])
     description = TextAreaField("description", validators=[Required()])
     category = TextField("category")
+    email = TextField("email")
     website = URLField("website")
     gcal_code = TextField("gcal_code")
     location = HiddenField("location")
@@ -193,6 +193,7 @@ def api_create_project():
             location:
             lat:
             lon:
+            email:
             Photo: Image file to associate with the project
             resource: 
 

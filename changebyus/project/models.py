@@ -107,6 +107,7 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
     servers and domains pretty easily
     """
     name = db.StringField(max_length=100, required=True, unique=True)
+    email = db.StringField(max_length=100)
     description = db.StringField(max_length=600)
     website = db.StringField(max_length=200)
 

@@ -59,13 +59,14 @@ define ["underscore",
                 @$ul.append view.$el
 
             addMember: (model_) ->
-                roles = model_.get("roles")
-                if roles.length is 0 then model_.set("roles", ["Owner"]) # temp fix
-                if ("MEMBER" in roles) or ("Member" in roles) then return
-                
-                $member = $('<li/>')
-                $member.template @templateDir+"partials-universal/member-avatar.html", {data: model_.attributes}
-                @$members.append $member 
+                if  model_.get("active")
+                    roles = model_.get("roles")
+                    if roles.length is 0 then model_.set("roles", ["Owner"]) # temp fix
+                    if ("MEMBER" in roles) or ("Member" in roles) then return
+                    
+                    $member = $('<li/>')
+                    $member.template @templateDir+"partials-universal/member-avatar.html", {data: model_.attributes}
+                    @$members.append $member 
 
             newDay:(date_)-> 
                 @currentDate = date_

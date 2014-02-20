@@ -74,6 +74,7 @@
     display: none;
     width: 100%;
     overflow: hidden;
+    z-index: 1;
     @include box-skin;
     @include border-radius(8px);
     @include box-shadow(rgba(0, 0, 0, 0.2) 0 5px 10px);
@@ -160,6 +161,8 @@
 
 .filter-within {
     float: left;
+    width: 100%;
+
     h3{
         margin-top: 0;
         float: left;
@@ -182,6 +185,11 @@
     }
     .dk_options_inner{
         border-bottom-width: 1px;
+    }
+
+    .close-x{
+        top:-2px;
+        right: 8px;
     }
 }
 

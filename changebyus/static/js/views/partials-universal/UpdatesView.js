@@ -65,18 +65,20 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     },
     addMember: function(model_) {
       var $member, roles;
-      roles = model_.get("roles");
-      if (roles.length === 0) {
-        model_.set("roles", ["Owner"]);
+      if (model_.get("active")) {
+        roles = model_.get("roles");
+        if (roles.length === 0) {
+          model_.set("roles", ["Owner"]);
+        }
+        if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
+          return;
+        }
+        $member = $('<li/>');
+        $member.template(this.templateDir + "partials-universal/member-avatar.html", {
+          data: model_.attributes
+        });
+        return this.$members.append($member);
       }
-      if ((__indexOf.call(roles, "MEMBER") >= 0) || (__indexOf.call(roles, "Member") >= 0)) {
-        return;
-      }
-      $member = $('<li/>');
-      $member.template(this.templateDir + "partials-universal/member-avatar.html", {
-        data: model_.attributes
-      });
-      return this.$members.append($member);
     },
     newDay: function(date_) {
       this.currentDate = date_;

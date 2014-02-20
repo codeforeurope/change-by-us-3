@@ -11,7 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     category: "",
     projects: null,
     ajax: null,
-    autoSend: false,
+    hasInitUserSend: false,
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
       this.showResources = window.location.hash.substring(1) === "resources";
@@ -82,6 +82,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.$all = $('#all');
       this.$projects = $('#projects');
       this.$resources = $('#resources');
+      this.$submitButton = $('.go a');
       this.addListeners();
       this.autoGetGeoLocation();
       return AbstractView.prototype.onTemplateLoad.call(this);
@@ -104,8 +105,18 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.$projects.click(function(e) {
         return _this.onToggleClick(e);
       });
-      return this.$resources.click(function(e) {
+      this.$resources.click(function(e) {
         return _this.onToggleClick(e);
+      });
+      $('.filter-within .close-x').click(function() {
+        return _this.toggleModify(false);
+      });
+      return $('body').click(function(e) {
+        if (e.target === _this.$searchInput.get(0)) {
+          return _this.$searchCatagories.show();
+        } else {
+          return _this.$searchCatagories.hide();
+        }
       });
     },
     toggleActive: function(dir_) {
@@ -156,6 +167,12 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         scrollTop: 0
       }, "slow");
     },
+    updateSubmit: function() {
+      if (this.hasInitUserSend) {
+        this.$submitButton.text("Update");
+        return this.$submitButton.css("font-size", "22px");
+      }
+    },
     addProject: function(id_) {
       var projectModel, view;
       projectModel = new ProjectModel({
@@ -178,7 +195,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     toggleModify: function(showSorting_) {
       this.$resultsModify.toggle(!showSorting_);
-      $('.search-toggles').toggle(showSorting_);
       return $('.filter-within').toggle(showSorting_);
     },
     sendForm: function(e) {
@@ -186,6 +202,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         _this = this;
       if (e) {
         e.preventDefault();
+        this.hasInitUserSend = true;
       }
       this.$searchCatagories.hide();
       this.$projectList.html("");
@@ -212,7 +229,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         var k, size, t, v, _ref;
         if (response_.success) {
           _this.$modifyInput.val(modifyInputVal);
-          _this.autoSend = false;
           _this.index = 0;
           _this.projects = [];
           size = 0;
@@ -234,10 +250,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     /* EVENTS -----------------------------------------------------------------*/
 
     onInputFocus: function() {
-      this.category = "";
-      return this.$searchCatagories.show();
+      this.updateSubmit();
+      return this.category = "";
     },
     onNearFocus: function() {
+      this.updateSubmit();
       return this.$geoPin.removeClass("active");
     },
     onGeoClick: function() {
@@ -256,7 +273,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
       return this.autoLocation = $.get(url, function(resp) {
         if (resp.success && resp.data.length > 0) {
-          _this.autoSend = true;
           _this.$geoPin.addClass("active");
           _this.$searchNear.val(resp.data[0].name);
           return _this.sendForm();
@@ -315,7 +331,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
               }
             }
           }
-          this.sendForm();
+          this.sendForm(e);
           break;
         case 38:
           this.toggleActive("up");

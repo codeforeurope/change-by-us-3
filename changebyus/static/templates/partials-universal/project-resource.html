@@ -6,10 +6,7 @@
 <% } %>
 
     <div class="project-square" id="<%= data.slug %>">
-        <% if(data.resource ){ %>
-            <div class="side-tab">Resource</div>
-        <% } %>
-         
+        
         <div class="project-dashboard-image">
             <img src="<%= data.image_url_small_square %>" alt="Icon">
 
@@ -32,6 +29,10 @@
             <% } %>
         </div>
         
+        <% if(data.resource ){ %>
+            <div class="side-tab">Resource</div>
+        <% } %>
+         
         <% if(data.isProject){ %>
             <div class="hover-overlay"></div>
             <div class="hover-btn">

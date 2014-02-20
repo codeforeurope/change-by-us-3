@@ -7,8 +7,8 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
             locationObj:{lat:0, lon:0, name:""}
             category:""
             projects:null
-            ajax:null
-            autoSend:false
+            ajax:null 
+            hasInitUserSend:false
 
             initialize: (options_) ->
                 AbstractView::initialize.call @, options_
@@ -65,6 +65,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @$all              = $('#all')
                 @$projects         = $('#projects')
                 @$resources        = $('#resources')
+                @$submitButton     = $('.go a')
                 
                 @addListeners()
                 @autoGetGeoLocation()
@@ -81,6 +82,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @$all.click (e)=> @onToggleClick(e)
                 @$projects.click (e)=> @onToggleClick(e)
                 @$resources.click (e)=> @onToggleClick(e)
+
+                $('.filter-within .close-x').click =>@toggleModify false
+
+                $('body').click (e)=>
+                    if e.target is @$searchInput.get(0) then @$searchCatagories.show() else @$searchCatagories.hide()
 
             toggleActive:(dir_)->
                 $li = @$searchCatagories.find('li')
@@ -117,6 +123,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
                 $("html, body").animate({ scrollTop: 0 }, "slow")
 
+            updateSubmit:->
+                if @hasInitUserSend
+                    @$submitButton.text "Update"
+                    @$submitButton.css("font-size", "22px")
+
             addProject:(id_)->
                 projectModel = new ProjectModel({id:id_})
                 view = new ResourceProjectPreviewView({model:projectModel, parent:"#projects-list", isDiscovered:true})
@@ -131,11 +142,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             toggleModify:(showSorting_)->
                 @$resultsModify.toggle(!showSorting_)
-                $('.search-toggles').toggle(showSorting_)
                 $('.filter-within').toggle(showSorting_)
 
             sendForm:(e)->
-                if e then e.preventDefault()
+                if e 
+                    e.preventDefault()
+                    @hasInitUserSend = true
                 
                 @$searchCatagories.hide()
                 @$projectList.html("")
@@ -164,8 +176,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 ).done (response_)=>
                     if response_.success
                         @$modifyInput.val modifyInputVal
-
-                        @autoSend = false
+ 
                         @index = 0
                         @projects = []
                         size=0
@@ -184,10 +195,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             ### EVENTS ----------------------------------------------------------------- ###
             onInputFocus:->
+                @updateSubmit()
                 @category = ""
-                @$searchCatagories.show()
 
             onNearFocus:->
+                @updateSubmit()
                 @$geoPin.removeClass "active"
 
             onGeoClick:->
@@ -202,8 +214,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 url = "/api/project/geoname?lat=#{@locationObj.lat}&lon=#{@locationObj.lon}"
                 if @autoLocation then @autoLocation.abort()
                 @autoLocation = $.get url, (resp) =>
-                    if resp.success and resp.data.length > 0
-                        @autoSend = true
+                    if resp.success and resp.data.length > 0 
                         @$geoPin.addClass "active"
                         @$searchNear.val resp.data[0].name
                         @sendForm()
@@ -257,7 +268,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                                 if @$searchCatagories.find('li.active').length > 0
                                     @category = @$searchCatagories.find('li.active').html()
                                     @$searchInput.val @category
-                        @sendForm()
+                        @sendForm(e)
                         break
                     when 38
                         @toggleActive("up")

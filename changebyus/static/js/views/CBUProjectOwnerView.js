@@ -40,6 +40,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       }, function() {
         return _this.addSubViews();
       });
+      this.$el.prepend(this.$header);
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addSubViews: function() {
@@ -81,12 +82,13 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       if (!this.isResource) {
         this.projectFundraisingView = new ProjectFundraisingView(config);
       }
-      this.$discussionBTN = $("a[href='#discussions']");
-      this.$updatesBTN = $("a[href='#updates']");
-      this.$fundraisingBTN = $("a[href='#fundraising']");
-      this.$calendarBTN = $("a[href='#calendar']");
-      this.$membersBTN = $("a[href='#members']");
-      this.$infoBTN = $("a[href='#info']");
+      this.$discussionBTN = $("a[href='#discussions']").parent();
+      this.$updatesBTN = $("a[href='#updates']").parent();
+      this.$fundraisingBTN = $("a[href='#fundraising']").parent();
+      this.$calendarBTN = $("a[href='#calendar']").parent();
+      this.$membersBTN = $("a[href='#members']").parent();
+      this.$infoBTN = $("a[href='#info']").parent();
+      console.log('@$discussionBTN <<<<<<< ', this.$discussionBTN);
       projectDiscussionsCollection.on('add remove', function(m_, c_) {
         return _this.updateCount(c_.length);
       });
@@ -105,8 +107,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         return _this.toggleSubView();
       });
       this.toggleSubView();
-      this.delegateEvents();
-      return this.$el.prepend(this.$header);
+      return this.delegateEvents();
     },
     toggleSubView: function() {
       var btn, id, slug, stripeAccount, v, view, views, _i, _j, _len, _len1, _ref;
@@ -129,6 +130,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       _ref = [this.$discussionBTN, this.$updatesBTN, this.$fundraisingBTN, this.$calendarBTN, this.$membersBTN, this.$infoBTN];
       for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
         btn = _ref[_j];
+        console.log(btn);
         btn.removeClass("active");
       }
       if (view.indexOf("discussion/") > -1) {
@@ -138,6 +140,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         this.$discussionBTN.addClass("active");
         return;
       }
+      console.log('toggleSubView', view);
       switch (view) {
         case "new-discussion":
           this.projectNewDiscussionView.show();
@@ -166,6 +169,7 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
         default:
           this.projectDiscussionsView.show();
           this.$discussionBTN.addClass("active");
+          console.log('discussion >>>>>>>>', this.$discussionBTN);
       }
       return onPageElementsLoad();
     },

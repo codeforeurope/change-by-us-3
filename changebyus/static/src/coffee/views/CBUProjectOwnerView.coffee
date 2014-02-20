@@ -66,6 +66,7 @@ define ["underscore",
                 @$header = $("<div class='project-header'/>")
                 @$header.template @templateDir+"partials-project/project-owner-header.html",
                     {data:@viewData}, =>@addSubViews()
+                @$el.prepend @$header
 
                 AbstractView::onTemplateLoad.call @
                         
@@ -96,13 +97,15 @@ define ["underscore",
                 unless @isResource
                     @projectFundraisingView      = new ProjectFundraisingView(config) 
 
-                @$discussionBTN  = $("a[href='#discussions']")
-                @$updatesBTN     = $("a[href='#updates']")
-                @$fundraisingBTN = $("a[href='#fundraising']") 
-                @$calendarBTN    = $("a[href='#calendar']")
-                @$membersBTN     = $("a[href='#members']")
-                @$infoBTN        = $("a[href='#info']")
+                @$discussionBTN  = $("a[href='#discussions']").parent()
+                @$updatesBTN     = $("a[href='#updates']").parent()
+                @$fundraisingBTN = $("a[href='#fundraising']").parent()
+                @$calendarBTN    = $("a[href='#calendar']").parent()
+                @$membersBTN     = $("a[href='#members']").parent()
+                @$infoBTN        = $("a[href='#info']").parent()
 
+                console.log '@$discussionBTN <<<<<<< ',@$discussionBTN
+  
                 # GET COLLECTION STARTED ---------------------------------------#
                 projectDiscussionsCollection.on 'add remove', (m_,c_)=>@updateCount c_.length
                 projectDiscussionsCollection.on 'reset', (c_)=>@updateCount c_.length
@@ -119,12 +122,10 @@ define ["underscore",
                 $(window).bind "hashchange", (e) => @toggleSubView()
                 @toggleSubView() 
 
-                @delegateEvents()
-                            
-                @$el.prepend @$header
- 
+                @delegateEvents() 
 
             toggleSubView: ->  
+
                 view = window.location.hash.substring(1)
                 slug = @model.get('slug')
 
@@ -142,6 +143,7 @@ define ["underscore",
                     v.hide()
 
                 for btn in [@$discussionBTN, @$updatesBTN, @$fundraisingBTN, @$calendarBTN, @$membersBTN, @$infoBTN]
+                    console.log btn
                     btn.removeClass "active"
 
                 if view.indexOf("discussion/") > -1
@@ -151,28 +153,37 @@ define ["underscore",
                     @$discussionBTN.addClass "active"
                     return
 
+                console.log 'toggleSubView',view
+
                 switch view 
                     when "new-discussion" 
                         @projectNewDiscussionView.show()
                         @$discussionBTN.addClass "active"
+                        break
                     when "updates"
                         @projectAddUpdateView.show()
                         @$updatesBTN.addClass "active"
+                        break
                     when "fundraising"
                         @projectFundraisingView.show()
                         @$fundraisingBTN.addClass "active" 
+                        break
                     when "calendar"
                         @projectCalenderView.show()
                         @$calendarBTN.addClass "active" 
+                        break
                     when "members"
                         @projectMembersView.show()
                         @$membersBTN.addClass "active"
+                        break
                     when "info"
                         @projectInfoAppearanceView.show()
                         @$infoBTN.addClass "active"
+                        break
                     else
                         @projectDiscussionsView.show()
                         @$discussionBTN.addClass "active" 
+                        console.log 'discussion >>>>>>>>', @$discussionBTN
 
                 onPageElementsLoad()
 

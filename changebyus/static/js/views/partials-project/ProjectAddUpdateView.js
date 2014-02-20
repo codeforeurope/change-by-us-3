@@ -2,6 +2,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
   var ProjectAddUpdateView;
   return ProjectAddUpdateView = ProjectSubView.extend({
     parent: "#project-update",
+    linkingSite: "",
     events: {
       "click #post-update": "animateUp",
       "click .share-toggle": "shareToggle",
@@ -118,7 +119,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         });
       } else {
         this.$facebook.screwDefaultButtons("enable");
-        if (forceClick_) {
+        if (forceClick_ && this.linkingSite === "facebook") {
           this.$facebook.screwDefaultButtons("check");
         }
         this.$facebookLabel.removeClass("disabled-btn").unbind("click");
@@ -133,7 +134,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         });
       } else {
         this.$twitter.screwDefaultButtons("enable");
-        if (forceClick_) {
+        if (forceClick_ && this.linkingSite === "twitter") {
           this.$twitter.screwDefaultButtons("check");
         }
         return this.$twitterLabel.removeClass("disabled-btn").unbind("click");
@@ -189,6 +190,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }, "slow");
     },
     socialClick: function(site_) {
+      this.linkingSite = site_;
       return popWindow("/social/" + site_ + "/link");
     }
   });

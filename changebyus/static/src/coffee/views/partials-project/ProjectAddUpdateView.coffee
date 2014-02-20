@@ -106,7 +106,7 @@ define ["underscore",
                     @$facebookLabel.addClass("disabled-btn").click ()=> @socialClick("facebook")
                 else
                     @$facebook.screwDefaultButtons("enable")
-                    if forceClick_ and linkingSite is "facebook" then @$facebook.screwDefaultButtons("check")
+                    if forceClick_ and @linkingSite is "facebook" then @$facebook.screwDefaultButtons("check")
                     @$facebookLabel.removeClass("disabled-btn").unbind "click"
 
                 if @socialInfo.twitter_name is ""
@@ -115,10 +115,10 @@ define ["underscore",
                     @$twitterLabel.addClass("disabled-btn").click ()=> @socialClick("twitter")
                 else
                     @$twitter.screwDefaultButtons("enable")
-                    if forceClick_ and linkingSite is "twitter" then @$twitter.screwDefaultButtons("check")
+                    if forceClick_ and @linkingSite is "twitter" then @$twitter.screwDefaultButtons("check")
                     @$twitterLabel.removeClass("disabled-btn").unbind "click"
 
-            addAll: ->  
+            addAll: ->   
                 @$day = $('<div />')
                 @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
                     {}, => @onDayWrapperLoad()

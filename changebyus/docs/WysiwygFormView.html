@@ -379,9 +379,9 @@
             <span class="hljs-attribute">$formName</span>:<span class="hljs-literal">null</span>
 
             <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span> 
-                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
-
                 options     = options_
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options
+
                 <span class="hljs-property">@slim</span>       = options.slim || <span class="hljs-property">@slim</span>
                 <span class="hljs-property">@userAvatar</span> = options.userAvatar || <span class="hljs-property">@userAvatar</span>
                 <span class="hljs-property">@title</span>      = options.title || <span class="hljs-property">@title</span>

@@ -384,8 +384,10 @@
         CBUStreamView = AbstractView.extend
 
             <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
-                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_ 
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
+
                 <span class="hljs-property">@collection</span> = <span class="hljs-keyword">new</span> StreamCollection()
+                
                 <span class="hljs-property">@render</span>()
 
             <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>

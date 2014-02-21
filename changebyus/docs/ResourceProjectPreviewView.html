@@ -378,9 +378,8 @@
             <span class="hljs-attribute">isDiscovered</span>:<span class="hljs-literal">false</span>
 
             <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
-                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
-
                 options                = options_
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options
                 <span class="hljs-property">@viewData</span>              = <span class="hljs-property">@model</span>.attributes
                 <span class="hljs-property">@viewData</span>.isProject    = options.isProject || <span class="hljs-property">@isProject</span>
                 <span class="hljs-property">@viewData</span>.isOwned      = options.isOwned || <span class="hljs-property">@isOwned</span>

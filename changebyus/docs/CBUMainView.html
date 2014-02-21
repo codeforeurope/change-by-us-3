@@ -390,9 +390,9 @@
         CBUMainView = AbstractView.extend
 
             <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
-                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
-
                 options             = options_ 
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
+                
                 <span class="hljs-property">@collection</span>         = options.collection <span class="hljs-keyword">or</span> <span class="hljs-keyword">new</span> ProjectListCollection()
                 <span class="hljs-property">@resourceCollection</span> = options.resourceCollection <span class="hljs-keyword">or</span> <span class="hljs-keyword">new</span> ResourceListCollection()
                 <span class="hljs-property">@render</span>()

@@ -392,8 +392,7 @@
                 <span class="hljs-attribute">AbstractView</span>::initialize.call @, options
 
                 <span class="hljs-property">@model</span> = <span class="hljs-keyword">new</span> UserModel(options.model)
-                <span class="hljs-property">@model</span>.fetch <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span>
-                    <span class="hljs-property">@render</span>()
+                <span class="hljs-property">@model</span>.fetch <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@render</span>()
 
             <span class="hljs-attribute">events</span>:
                 <span class="hljs-string">"click #flag"</span>:<span class="hljs-string">"flagUser"</span>

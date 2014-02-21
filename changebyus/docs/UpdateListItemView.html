@@ -393,17 +393,16 @@
             <span class="hljs-attribute">$postRight</span>: <span class="hljs-literal">null</span>
             <span class="hljs-attribute">$replyForm</span>: <span class="hljs-literal">null</span> 
 
-            <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span> 
-                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
-
+            <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
                 options   = options_
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options
                 <span class="hljs-property">@viewData</span> = <span class="hljs-property">@model</span>.attributes
                 <span class="hljs-property">@isMember</span> = options.isMember
                 <span class="hljs-property">@isStream</span> = options.isStream || <span class="hljs-property">@isStream</span>
 
                 <span class="hljs-property">@el</span>  = <span class="hljs-keyword">if</span> <span class="hljs-property">@isStream</span> <span class="hljs-keyword">then</span> $(<span class="hljs-string">'&lt;div/&gt;'</span>).addClass(<span class="hljs-string">'content-wrapper'</span>) <span class="hljs-keyword">else</span> $(<span class="hljs-string">'&lt;li/&gt;'</span>)
-                <span class="hljs-property">@$el</span> = $(<span class="hljs-property">@el</span>) 
-
+                <span class="hljs-property">@$el</span> = $(<span class="hljs-property">@el</span>)
+ 
                 <span class="hljs-property">@user</span> = <span class="hljs-keyword">new</span> UserModel(<span class="hljs-attribute">id</span>:<span class="hljs-property">@model</span>.get(<span class="hljs-string">"user"</span>).id)
                 <span class="hljs-property">@user</span>.fetch
                     <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span><span class="hljs-property">@render</span>()

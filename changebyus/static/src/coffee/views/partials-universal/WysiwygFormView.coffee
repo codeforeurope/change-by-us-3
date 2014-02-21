@@ -11,9 +11,9 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
             $formName:null
 
             initialize: (options_) -> 
-                AbstractView::initialize.call @, options_
-
                 options     = options_
+                AbstractView::initialize.call @, options
+
                 @slim       = options.slim || @slim
                 @userAvatar = options.userAvatar || @userAvatar
                 @title      = options.title || @title

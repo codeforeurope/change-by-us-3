@@ -24,8 +24,7 @@ define ["underscore",
                 AbstractView::initialize.call @, options
 
                 @model = new UserModel(options.model)
-                @model.fetch success: =>
-                    @render()
+                @model.fetch success: => @render()
 
             events:
                 "click #flag":"flagUser"

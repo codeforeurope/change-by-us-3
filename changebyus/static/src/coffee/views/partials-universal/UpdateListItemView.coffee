@@ -25,17 +25,16 @@ define ["underscore",
             $postRight: null
             $replyForm: null 
 
-            initialize: (options_) -> 
-                AbstractView::initialize.call @, options_
-
+            initialize: (options_) ->
                 options   = options_
+                AbstractView::initialize.call @, options
                 @viewData = @model.attributes
                 @isMember = options.isMember
                 @isStream = options.isStream || @isStream
 
                 @el  = if @isStream then $('<div/>').addClass('content-wrapper') else $('<li/>')
-                @$el = $(@el) 
-
+                @$el = $(@el)
+ 
                 @user = new UserModel(id:@model.get("user").id)
                 @user.fetch
                     success: =>@render()
@@ -90,7 +89,7 @@ define ["underscore",
                     @$repliesHolder.append postReplyView.$el
 
             # EVENTS 
-            # ----------------------------------------------------------------------
+            # ---------------------------------------------
             onReplyToggleClick:(e)->
                 $(e.currentTarget).find('.reply').toggleClass('hide')
                 @$repliesHolder.toggleClass('hide')

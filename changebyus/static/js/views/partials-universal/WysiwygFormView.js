@@ -10,8 +10,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     $formName: null,
     initialize: function(options_) {
       var options;
-      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
+      AbstractView.prototype.initialize.call(this, options);
       this.slim = options.slim || this.slim;
       this.userAvatar = options.userAvatar || this.userAvatar;
       this.title = options.title || this.title;

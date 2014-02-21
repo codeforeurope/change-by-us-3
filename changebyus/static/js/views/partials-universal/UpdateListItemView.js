@@ -10,8 +10,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     initialize: function(options_) {
       var options,
         _this = this;
-      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
+      AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.isMember = options.isMember;
       this.isStream = options.isStream || this.isStream;

@@ -3,8 +3,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   return AbstractModalView = AbstractView.extend({
     parent: 'body',
     initialize: function(options_) {
-      $('body').css('overflow', 'hidden');
       AbstractView.prototype.initialize.call(this, options_);
+      $('body').css('overflow', 'hidden');
       return this.render();
     },
     events: {

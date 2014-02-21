@@ -5,8 +5,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             parent:'body'
             
             initialize: (options_) ->
-                $('body').css('overflow', 'hidden')
                 AbstractView::initialize.call @, options_
+                $('body').css('overflow', 'hidden')
                 @render()
 
             events: 

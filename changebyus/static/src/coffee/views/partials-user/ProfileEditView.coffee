@@ -5,7 +5,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
             initialize: (options_) ->
                 AbstractView::initialize.call @, options_
                 @viewData = @model.attributes
-                self = @
+                self      = @
 
                 @getSocial()
 

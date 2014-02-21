@@ -3,8 +3,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
   return CBUMainView = AbstractView.extend({
     initialize: function(options_) {
       var options;
-      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
+      AbstractView.prototype.initialize.call(this, options_);
       this.collection = options.collection || new ProjectListCollection();
       this.resourceCollection = options.resourceCollection || new ResourceListCollection();
       return this.render();

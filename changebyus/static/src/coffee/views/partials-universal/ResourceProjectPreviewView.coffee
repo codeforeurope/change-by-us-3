@@ -10,9 +10,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             isDiscovered:false
 
             initialize: (options_) ->
-                AbstractView::initialize.call @, options_
-
                 options                = options_
+                AbstractView::initialize.call @, options
                 @viewData              = @model.attributes
                 @viewData.isProject    = options.isProject || @isProject
                 @viewData.isOwned      = options.isOwned || @isOwned

@@ -9,8 +9,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     isDiscovered: false,
     initialize: function(options_) {
       var options;
-      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
+      AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.viewData.isProject = options.isProject || this.isProject;
       this.viewData.isOwned = options.isOwned || this.isOwned;

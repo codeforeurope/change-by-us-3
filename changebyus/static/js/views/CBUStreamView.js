@@ -45,8 +45,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "collec
     noResults: function() {
       return this.$el.find('.no-results').show();
     },
-    /* EVENTS ---------------------------------------------*/
-
     onTemplateLoad: function() {
       this.$container = this.$el.find('.body-container');
       this.collection.on("reset", this.onCollectionLoad, this);

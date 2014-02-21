@@ -11,14 +11,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var self,
         _this = this;
-      this.$el = $(this.parent);
       this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+      self = this;
+      this.$el = $(this.parent);
       this.$el.template(this.templateDir + "partials-project/project-add-update.html", {
         data: this.viewData
       }, function() {
         return _this.onTemplateLoad();
       });
-      self = this;
       return document.windowReload = function() {
         return self.getSocial(false);
       };
@@ -92,8 +92,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           return $inputs.removeAttr("disabled");
         };
         form.error = function(error_) {
-          $feedback.show();
-          return console.log('error response_', error_);
+          return $feedback.show();
         };
         _this.$el.find('input:radio, input:checkbox').screwDefaultButtons({
           image: 'url("/static/img/black-check.png")',
@@ -140,6 +139,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return this.$twitterLabel.removeClass("disabled-btn").unbind("click");
       }
     },
+    animateUp: function() {
+      return $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+    },
+    socialClick: function(site_) {
+      this.linkingSite = site_;
+      return popWindow("/social/" + site_ + "/link");
+    },
     addAll: function() {
       var _this = this;
       this.$day = $('<div />');
@@ -149,12 +157,12 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     },
     onDayWrapperLoad: function() {
       var m, model_;
+      this.isDataLoaded = true;
       if (this.collection.length > 0) {
         model_ = this.collection.models[0];
         m = moment(model_.get("created_at")).format("MMMM D");
         this.newDay(m);
       }
-      this.isDataLoaded = true;
       ProjectSubView.prototype.addAll.call(this);
       return onPageElementsLoad();
     },
@@ -183,15 +191,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return modal = new ProjectUpdateSuccessModalView({
         model: data_
       });
-    },
-    animateUp: function() {
-      return $("html, body").animate({
-        scrollTop: 0
-      }, "slow");
-    },
-    socialClick: function(site_) {
-      this.linkingSite = site_;
-      return popWindow("/social/" + site_ + "/link");
     }
   });
 });

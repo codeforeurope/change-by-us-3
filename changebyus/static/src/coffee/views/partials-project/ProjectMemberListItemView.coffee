@@ -66,7 +66,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                             @model.collection.remove @model
                             @$el.remove() 
 
-            ### EVENTS ---------------------------------------------###
+            # EVENTS
+            # ----------------------------------------------------------------------
             delete:(e)-> 
                 e.preventDefault()
                 confirmation = confirm("Are you sure you want to delete #{@model.get('display_name')}: #{@model.get('first_name')} #{@model.get('last_name')}?")

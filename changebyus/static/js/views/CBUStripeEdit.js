@@ -27,8 +27,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       return $(this.parent).append(this.$el);
     },
-    /* EVENTS ---------------------------------------------*/
-
     onTemplateLoad: function() {
       var $form, options,
         _this = this;
@@ -47,8 +45,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         data: data_
       });
     },
-    /* GETTER ---------------------------------------------*/
-
     getProject: function() {
       var _this = this;
       this.project = new ProjectModel({

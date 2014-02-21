@@ -35,7 +35,8 @@ define ["underscore",
                     $(@parent).append @$el
                     @$el.show()
 
-                ### EVENTS ---------------------------------------------###
+                # EVENTS 
+                # ----------------------------------------------------------------------
                 onEditGoalClick:->
                     @$el.toggle()
                     @$review.toggle()
@@ -56,6 +57,8 @@ define ["underscore",
 
                     AbstractView::onTemplateLoad.call @
 
+                # AJAX FORM
+                # ----------------------------------------------------------------------
                 ajaxForm:-> 
                     $form = @$review.find('form')
                     options =

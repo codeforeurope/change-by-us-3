@@ -68,6 +68,8 @@ define ["underscore",
                     $('.flag-user').addClass('disabled-btn')
                     @$el.unbind "click #flag"
 
+            # Attach Elements
+            # -----------------------------------------------------------------
             addJoined:->
                 if @joinedProjects.length is 0
                     $('.user-following').hide()

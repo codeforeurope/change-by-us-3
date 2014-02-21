@@ -243,8 +243,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       });
       return view.fetch();
     },
-    /* EVENTS ---------------------------------------------*/
-
     onTemplateLoad: function() {
       var $header,
         _this = this;

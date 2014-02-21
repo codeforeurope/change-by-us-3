@@ -83,8 +83,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         });
       }
     },
-    /* EVENTS ---------------------------------------------*/
-
     "delete": function(e) {
       var confirmation,
         _this = this;

@@ -10,8 +10,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     $formName: null,
     initialize: function(options_) {
       var options;
+      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
-      AbstractView.prototype.initialize.call(this, options);
       this.slim = options.slim || this.slim;
       this.userAvatar = options.userAvatar || this.userAvatar;
       this.title = options.title || this.title;
@@ -28,26 +28,30 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         title: this.title,
         userAvatar: this.userAvatar
       };
-      if (this.parent === "#update-form") {
-        url = "partials-project/project-update-form.html";
-        this.editorID = "#editor";
-        this.formName = "project-update";
-        this.$el = $("<div class='update-wrapper thin-pad clearfix'/>");
-      } else if (this.parent === "#add-resource-update") {
-        url = "partials-resource/resource-add-update-form.html";
-        this.editorID = "#add-update";
-        this.formName = "resource-update";
-        this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
-      } else if (this.parent === "#add-thread-form") {
-        url = "partials-project/project-new-thread-form.html";
-        this.editorID = ".wsyiwyg-editor.slim";
-        this.formName = "new-discussion";
-        this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
-      } else {
-        url = "partials-project/project-new-discussion-form.html";
-        this.editorID = "#discussion-editor";
-        this.formName = "new-thread";
-        this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
+      switch (this.parent) {
+        case "#update-form":
+          url = "partials-project/project-update-form.html";
+          this.editorID = "#editor";
+          this.formName = "project-update";
+          this.$el = $("<div class='update-wrapper thin-pad clearfix'/>");
+          break;
+        case "#add-resource-update":
+          url = "partials-resource/resource-add-update-form.html";
+          this.editorID = "#add-update";
+          this.formName = "resource-update";
+          this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
+          break;
+        case "#add-thread-form":
+          url = "partials-project/project-new-thread-form.html";
+          this.editorID = ".wsyiwyg-editor.slim";
+          this.formName = "new-discussion";
+          this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
+          break;
+        default:
+          url = "partials-project/project-new-discussion-form.html";
+          this.editorID = "#discussion-editor";
+          this.formName = "new-thread";
+          this.$el = $("<div class='content-wrapper thin-pad clearfix'/>");
       }
       this.$el.template(this.templateDir + url, {
         data: this.viewData
@@ -133,20 +137,16 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       $editor.wysiwyg({
         fileUploadError: showErrorAlert,
         startUpload: function() {
-          console.log('startUpload', _this.$updateForm);
           $editor.attr("contenteditable", false);
           return _this.$updateForm.find("input").attr("disabled", "disabled");
         },
         uploadSuccess: function() {
-          console.log('uploadSuccess', _this.$updateForm);
           $editor.attr("contenteditable", true);
           return _this.$updateForm.find("input").removeAttr("disabled");
         }
       });
       return window.prettyPrint && prettyPrint();
     },
-    /* FORM HOOKS ---------------------------------------------*/
-
     beforeSubmit: function(arr_, form_, options_) {},
     success: function(response_) {},
     error: function(response_) {},

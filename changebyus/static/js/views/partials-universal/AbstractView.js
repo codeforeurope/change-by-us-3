@@ -26,16 +26,13 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       "click .page": "pageClick"
     },
     onTemplateLoad: function() {
-      this.trigger('ON_TEMPLATE_LOAD');
       this.templateLoaded = true;
+      this.trigger('ON_TEMPLATE_LOAD');
       if (this.delayedCollectionLoad) {
         this.loadData();
       }
       this.delegateEvents();
       return onPageElementsLoad();
-    },
-    changeHash: function(e) {
-      return window.location.hash = $(e.currentTarget).attr("href").substring(1);
     },
     show: function() {
       return this.$el.show();
@@ -50,6 +47,9 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
           return _this.onFetch(r);
         }
       });
+    },
+    changeHash: function(e) {
+      return window.location.hash = $(e.currentTarget).attr("href").substring(1);
     },
     onFetch: function(r) {},
     nextClick: function(e) {
@@ -106,7 +106,7 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       if (parent_ == null) {
         parent_ = null;
       }
-      $parent = parent_ ? parent_ : this.$el;
+      $parent = parent_ || this.$el;
       if (this.$paginationContainer) {
         this.$paginationContainer.remove();
       }

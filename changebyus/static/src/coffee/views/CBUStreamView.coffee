@@ -24,7 +24,9 @@ define ["underscore",
                 @$el = $(@parent)
                 @$el.template @templateDir+"stream.html",
                     {data: @viewData}, => @onTemplateLoad()
-                
+
+            # Attach elements
+            # ----------------------------------------------------------------------
             addAll: -> 
                 @$day = $('<div />')
                 @$day.template @templateDir+"partials-user/stream-day-wrapper.html",
@@ -47,7 +49,8 @@ define ["underscore",
             noResults:-> 
                 @$el.find('.no-results').show()
 
-            ### EVENTS ---------------------------------------------### 
+            # EVENTS
+            # ----------------------------------------------------------------------
             onTemplateLoad: ->
                 @$container = @$el.find('.body-container')
                 @collection.on "reset", @onCollectionLoad, @

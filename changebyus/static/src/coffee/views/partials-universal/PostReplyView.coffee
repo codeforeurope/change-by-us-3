@@ -4,10 +4,11 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
 
             tagName: "li"
 
-            initialize: (options_) ->
-                options = options_
-                AbstractView::initialize.call @, options
-                @model = new PostReplyModel(options.model)
+            initialize: (options_) -> 
+                AbstractView::initialize.call @, options_
+
+                @model = new PostReplyModel(options_.model)
+                
                 @fetch()
             
             onFetch:->

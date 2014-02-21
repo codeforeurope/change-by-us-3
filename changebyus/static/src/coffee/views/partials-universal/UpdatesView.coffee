@@ -22,20 +22,22 @@ define ["underscore",
             initialize: (options_) ->  
                 ProjectSubView::initialize.call(@, options_)
                 
-                @members                   = options_.members || @members 
-                @isMember                  = options_.isMember 
+                @members  = options_.members || @members 
+                @isMember = options_.isMember 
 
             render: ->  
                 @$el = $(@parent)
                 @$el.template @templateDir+"partials-universal/updates.html",
                     {data: @model.attributes}, =>@onTemplateLoad()
 
+            # ATTACH ELEMENTS 
+            # ----------------------------------------------------------------------
             addAll: ->
                 @$members = @$el.find(".team-members ul")
-                length = 0
+                i = 0
                 @members.each (model) => 
-                    if (length++ < 4) then @addMember model
-                if length <= 4 then $('.team-members .pull-right').remove()
+                    if (i++ < 4) then @addMember model
+                if i <= 4 then $('.team-members .pull-right').remove()
 
                 @$day = $('<div />')
                 @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",

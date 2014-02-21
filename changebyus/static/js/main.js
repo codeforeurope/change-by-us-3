@@ -183,8 +183,6 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     Backbone.history.start({
       pushState: true
     });
-    /* TOP NAV AND RESPONSIVE --------------------------------------------------------------------*/
-
     $navTop = $('.nav.pull-left');
     $navTop.hover(function() {
       return $(this).toggleClass('active');
@@ -202,8 +200,6 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
     $(".logged-in .user-avatar").click(function(e) {
       return window.location.href = "/stream/dashboard";
     });
-    /* LOG OUT ----------------------------------------------------------------------------------*/
-
     $("a[href='/logout']").click(function(e) {
       var _this = this;
       e.preventDefault();
@@ -214,8 +210,6 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         return window.location.reload();
       });
     });
-    /* GLOBAL UTILS ----------------------------------------------------------------------------*/
-
     window.popWindow = function(url) {
       var h, left, title, top, w;
       w = 650;
@@ -260,8 +254,6 @@ define(["jquery", "backbone", "main-view", "discover-view", "city-view", "projec
         }
       }
     });
-    /* STICKY FOOTER --------------------------------------------------------------------------*/
-
     $window = $(window);
     $topnav = $(".top-nav");
     $mainContent = $(".main-content");

@@ -3,8 +3,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
   return CBUMainView = AbstractView.extend({
     initialize: function(options_) {
       var options;
+      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
-      AbstractView.prototype.initialize.call(this, options);
       this.collection = options.collection || new ProjectListCollection();
       this.resourceCollection = options.resourceCollection || new ResourceListCollection();
       return this.render();
@@ -12,26 +12,29 @@ define(["underscore", "backbone", "jquery", "template", "form", "resource-projec
     render: function() {
       var _this = this;
       this.$el = $("<div class='projects-main'/>");
-      return this.$el.template(this.templateDir + "main.html", {}, function() {
+      this.$el.template(this.templateDir + "main.html", {}, function() {
         return _this.onTemplateLoad();
       });
+      return $(this.parent).prepend(this.$el);
     },
     onTemplateLoad: function() {
       var bannerImageView, bannerParent;
-      $(this.parent).prepend(this.$el);
       bannerParent = this.$el.find(".body-container-wide");
       bannerImageView = new BannerImageView({
         parent: bannerParent
       });
+      this.addListeners();
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    addListeners: function() {
       this.collection.on("reset", this.addAll, this);
       this.collection.fetch({
         reset: true
       });
       this.resourceCollection.on("reset", this.addAllResources, this);
-      this.resourceCollection.fetch({
+      return this.resourceCollection.fetch({
         reset: true
       });
-      return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addAll: function() {
       var _this = this;

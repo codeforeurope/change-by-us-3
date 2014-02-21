@@ -88,7 +88,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       this.$calendarBTN = $("a[href='#calendar']").parent();
       this.$membersBTN = $("a[href='#members']").parent();
       this.$infoBTN = $("a[href='#info']").parent();
-      console.log('@$discussionBTN <<<<<<< ', this.$discussionBTN);
       projectDiscussionsCollection.on('add remove', function(m_, c_) {
         return _this.updateCount(c_.length);
       });
@@ -177,8 +176,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       console.log('updateCount');
       return this.projectDiscussionView.updateCount(count_);
     },
-    /* GETTER & SETTERS -----------------------------------------------------------------*/
-
     getMemberStatus: function() {
       var id,
         _this = this;

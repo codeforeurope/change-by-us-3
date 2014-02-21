@@ -24,6 +24,13 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return _this.onTemplateLoaded();
       });
     },
+    onTemplateLoaded: function() {
+      this.ajaxForm();
+      $('input[name="visibility"]').change(function() {
+        return $('input[name="private"]').attr('checked', $(this).val() === "private");
+      });
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
     getSocial: function(render_) {
       var _this = this;
       if (render_ == null) {
@@ -44,12 +51,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         }
       });
     },
-    socialClick: function(e) {
-      var url;
-      e.preventDefault();
-      url = $(e.currentTarget).attr("href");
-      return popWindow(url);
-    },
     checkSocial: function() {
       var $facebook, $twitter;
       $twitter = $('.twitter a');
@@ -65,12 +66,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return $twitter.addClass('btn-primary').removeClass('btn-tertiary').text('Connect').attr("href", "/social/twitter/link");
       }
     },
-    onTemplateLoaded: function() {
-      this.ajaxForm();
-      $('input[name="visibility"]').change(function() {
-        return $('input[name="private"]').attr('checked', $(this).val() === "private");
-      });
-      return AbstractView.prototype.onTemplateLoad.call(this);
+    socialClick: function(e) {
+      var url;
+      e.preventDefault();
+      url = $(e.currentTarget).attr("href");
+      return popWindow(url);
     },
     deleteAccount: function(e) {
       var confirmation,

@@ -28,7 +28,8 @@ define ["underscore",
                         data: {account_id:@user.id , project_id:@project.id , name:@project.get("name")}, => @onTemplateLoad()
                     $(@parent).append @$el
                 
-                ### EVENTS ---------------------------------------------###
+                # EVENTS
+                # ----------------------------------------------------------------------
                 onTemplateLoad:->
                     $form = @$el.find('form')
                     options =
@@ -42,7 +43,8 @@ define ["underscore",
                     @$el.html("")
                     @$el.template @templateDir+"partials-universal/stripe-review.html", {data: data_}
 
-                ### GETTER ---------------------------------------------###
+                # GETTER
+                # ----------------------------------------------------------------------
                 getProject:->
                     @project = new ProjectModel({id:@model.id})
                     @project.fetch

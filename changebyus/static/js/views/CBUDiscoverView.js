@@ -2,10 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
   var CBUDiscoverView;
   return CBUDiscoverView = AbstractView.extend({
     initialize: function(options_) {
-      var options;
-      options = options_;
-      AbstractView.prototype.initialize.call(this, options);
-      this.collection = options.collection || new ProjectListCollection();
+      AbstractView.prototype.initialize.call(this, options_);
+      this.collection = options_.collection || new ProjectListCollection();
       return this.render();
     },
     render: function() {
@@ -34,8 +32,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-discover
       });
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
-    /* EVENTS ---------------------------------------------*/
-
     updatePage: function() {
       return this.bannerSearchView.updatePage();
     },

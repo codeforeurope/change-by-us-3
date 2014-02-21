@@ -28,12 +28,13 @@ define ["underscore",
                 "click .share-options .styledCheckbox":"shareOption"
 
             render: -> 
-                @$el = $(@parent)
                 @viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
+                self = @
+                @$el = $(@parent)
                 @$el.template @templateDir+"partials-project/project-add-update.html",
                     {data: @viewData}, => @onTemplateLoad()
 
-                self = @
+                # set global function that gets called from popup window
                 document.windowReload = -> self.getSocial(false)
 
             onTemplateLoad:-> 
@@ -88,8 +89,7 @@ define ["underscore",
                         $inputs.removeAttr("disabled")
 
                     form.error = (error_)=>
-                        $feedback.show()
-                        console.log 'error response_',error_
+                        $feedback.show() 
 
                     @$el.find('input:radio, input:checkbox').screwDefaultButtons
                         image: 'url("/static/img/black-check.png")'
@@ -100,6 +100,9 @@ define ["underscore",
                     @delegateEvents()
 
             checkSocial:(forceClick_=false)->
+                # check to see if user has linked social accounts 
+                # and see if it originated from clicking an unactive label or checkbox
+
                 if @socialInfo.fb_name is ""
                     @$facebook.screwDefaultButtons("disable")
                     @$facebook.parent().click ()=> @socialClick("facebook")
@@ -118,22 +121,33 @@ define ["underscore",
                     if forceClick_ and @linkingSite is "twitter" then @$twitter.screwDefaultButtons("check")
                     @$twitterLabel.removeClass("disabled-btn").unbind "click"
 
+            animateUp:->
+                $("html, body").animate({ scrollTop: 0 }, "slow")
+
+            socialClick:(site_)->
+                @linkingSite = site_
+                popWindow "/social/#{site_}/link"
+
+            # ATTACH ELEMENTS 
+            # -----------------------------------------------------------------
             addAll: ->   
                 @$day = $('<div />')
                 @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
                     {}, => @onDayWrapperLoad()
 
-            onDayWrapperLoad: ->  
+            onDayWrapperLoad: ->
+                @isDataLoaded = true
+
                 if @collection.length > 0
                     model_ = @collection.models[0]
                     m = moment(model_.get("created_at")).format("MMMM D")
                     @newDay(m)
-
-                @isDataLoaded = true
+                
                 ProjectSubView::addAll.call(@) 
                 onPageElementsLoad()
 
-            newDay:(date_)-> 
+            newDay:(date_)->
+                # group updates by days
                 @currentDate = date_
                 @$currentDay = @$day.clone()
                 @$el.append @$currentDay
@@ -143,6 +157,7 @@ define ["underscore",
             addOne: (model_) ->
                 m = moment(model_.get("created_at")).format("MMMM D")
                 if @currentDate isnt m then @newDay(m) 
+
                 view = new UpdateListItemView({model: model_})
                 @$ul.append view.$el 
 
@@ -150,10 +165,3 @@ define ["underscore",
                 data_.twitter_name = @socialInfo.twitter_name
                 data_.slug         = @model.get("slug")
                 modal              = new ProjectUpdateSuccessModalView({model:data_})
-
-            animateUp:->
-                $("html, body").animate({ scrollTop: 0 }, "slow")
-
-            socialClick:(site_)->
-                @linkingSite = site_
-                popWindow "/social/#{site_}/link"

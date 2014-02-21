@@ -10,9 +10,10 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
             $updateForm:null
             $formName:null
 
-            initialize: (options_) ->
+            initialize: (options_) -> 
+                AbstractView::initialize.call @, options_
+
                 options     = options_
-                AbstractView::initialize.call @, options
                 @slim       = options.slim || @slim
                 @userAvatar = options.userAvatar || @userAvatar
                 @title      = options.title || @title
@@ -28,26 +29,30 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
                     title: @title 
                     userAvatar:@userAvatar
 
-                if @parent is "#update-form"
-                    url = "partials-project/project-update-form.html" 
-                    @editorID =  "#editor"
-                    @formName = "project-update"
-                    @$el = $("<div class='update-wrapper thin-pad clearfix'/>")
-                else if @parent is "#add-resource-update"
-                    url = "partials-resource/resource-add-update-form.html" 
-                    @editorID =  "#add-update"
-                    @formName = "resource-update"
-                    @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
-                else if @parent is "#add-thread-form"
-                    url = "partials-project/project-new-thread-form.html" 
-                    @editorID =  ".wsyiwyg-editor.slim"
-                    @formName = "new-discussion"
-                    @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
-                else
-                    url = "partials-project/project-new-discussion-form.html" 
-                    @editorID = "#discussion-editor"
-                    @formName = "new-thread"
-                    @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
+                switch @parent 
+                    when "#update-form"
+                        url       = "partials-project/project-update-form.html" 
+                        @editorID =  "#editor"
+                        @formName = "project-update"
+                        @$el = $("<div class='update-wrapper thin-pad clearfix'/>")
+                        break
+                    when "#add-resource-update"
+                        url       = "partials-resource/resource-add-update-form.html" 
+                        @editorID =  "#add-update"
+                        @formName = "resource-update"
+                        @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
+                        break
+                    when "#add-thread-form"
+                        url       = "partials-project/project-new-thread-form.html" 
+                        @editorID =  ".wsyiwyg-editor.slim"
+                        @formName = "new-discussion"
+                        @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
+                        break
+                    else
+                        url       = "partials-project/project-new-discussion-form.html" 
+                        @editorID = "#discussion-editor"
+                        @formName = "new-thread"
+                        @$el = $("<div class='content-wrapper thin-pad clearfix'/>")
 
                 @$el.template @templateDir+url,
                     {data: @viewData}, => @onTemplateLoad()
@@ -57,8 +62,9 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
                 AbstractView::onTemplateLoad.call @
                 delay 100, =>@ajaxForm()
 
-            ajaxForm: -> 
-                # AJAXIFY THE FORM
+            # Ajax Form
+            # --------------------------------------------------------
+            ajaxForm: ->
                 showErrorAlert = (reason, detail) ->
                     msg = ""
                     if reason is "unsupported-file-type"
@@ -86,14 +92,14 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
                         @error(response_) 
                 
                 @$updateForm.submit => 
-                    obj = @$updateForm.serializeJSON()
+                    obj             = @$updateForm.serializeJSON()
                     obj.description = escape($editor.html())
-                    json_str = JSON.stringify(obj)
-                    options.data = json_str
+                    json_str        = JSON.stringify(obj)
+                    options.data    = json_str
                     $.ajax options
                     false
 
-                $("a[title]").tooltip container: "body"
+                $("a[title]").tooltip({container: "body"})
 
                 $(".dropdown-menu input").click(->
                     false
@@ -121,18 +127,17 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
                 
                 $editor.wysiwyg
                     fileUploadError: showErrorAlert 
-                    startUpload: => 
-                        console.log 'startUpload',@$updateForm
+                    startUpload: =>  
                         $editor.attr("contenteditable", false)
                         @$updateForm.find("input").attr("disabled", "disabled")
-                    uploadSuccess: =>
-                        console.log 'uploadSuccess',@$updateForm
+                    uploadSuccess: => 
                         $editor.attr("contenteditable", true)
                         @$updateForm.find("input").removeAttr("disabled")
 
                 window.prettyPrint and prettyPrint()
 
-            ### FORM HOOKS ---------------------------------------------###
+            # FORM HOOKS 
+            # ----------------------------------------------------------------------
             beforeSubmit:(arr_, form_, options_)->
                 # hook for beforeSubmit
 
@@ -144,5 +149,3 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
             resetForm:->
                 @$updateForm.resetForm()
-
-

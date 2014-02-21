@@ -44,7 +44,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
                     beforeSubmit: =>   
                         if $form.valid()
                             $('input[name="private"]').attr('checked', ($('input[name="visibility"]').val() is "private"))
-                            console.log($('input[name="visibility"]').val() is "private")
                             $zip = $('input[name="zip"]')
                             if @location.name isnt ""
                                 $form.find("input, textarea").attr("disabled", "disabled")

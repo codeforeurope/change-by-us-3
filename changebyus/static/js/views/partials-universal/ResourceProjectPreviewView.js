@@ -9,8 +9,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
     isDiscovered: false,
     initialize: function(options_) {
       var options;
+      AbstractView.prototype.initialize.call(this, options_);
       options = options_;
-      AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
       this.viewData.isProject = options.isProject || this.isProject;
       this.viewData.isOwned = options.isOwned || this.isOwned;
@@ -31,15 +31,17 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "partials-universal/project-resource.html", {
         data: this.viewData
       }, function() {
-        _this.delegateEvents();
-        return _this.$el.find('img').hide().load(function() {
-          _this.$el.find('img').fadeIn('slow');
-          return _this.onTemplateLoad();
-        });
+        return _this.onTemplateLoad;
       });
     },
-    /* EVENTS ---------------------------------------------*/
-
+    onTemplateLoad: function() {
+      var _this = this;
+      this.delegateEvents();
+      return this.$el.find('img').hide().load(function() {
+        _this.$el.find('img').fadeIn('slow');
+        return AbstractView.prototype.onTemplateLoad.call(_this);
+      });
+    },
     onFetch: function(r) {
       return $(this.parent).append(this.render());
     },

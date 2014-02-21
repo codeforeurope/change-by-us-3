@@ -21,52 +21,17 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       });
       return $(this.parent).append(this.$el);
     },
-    buttonCheck: function() {
-      this.resourcesLoaded++;
-      if (this.flaggedProjects.length === 0) {
-        this.$projectsBTN.hide();
-      } else {
-        this.$projectsBTN.show();
-      }
-      if (this.flaggedUsers.length === 0) {
-        this.$usersBTN.hide();
-      } else {
-        this.$usersBTN.show();
-      }
-      if (this.unapprovedResources.length === 0) {
-        this.$resourcesBTN.hide();
-      } else {
-        this.$resourcesBTN.show();
-      }
-      return this.checkHash();
-    },
-    updateView: function(type_) {
-      switch (type_) {
-        case 'project':
-          if (this.flaggedProjects.length === 0) {
-            this.checkHash();
-          }
-          break;
-        case 'resource':
-          if (this.unapprovedResources.length === 0) {
-            this.checkHash();
-          }
-          break;
-        case 'user':
-          if (this.flaggedUsers.length === 0) {
-            this.checkHash();
-          }
-          break;
-      }
-    },
     onTemplateLoad: function() {
-      var _this = this;
       this.$projects = $("#flagged-projects");
       this.$users = $("#flagged-users");
       this.$resources = $("#approve-resources");
       this.$projectsBTN = $("#projects-btn");
       this.$usersBTN = $("#users-btn");
       this.$resourcesBTN = $("#resources-btn");
+      return this.addListeners();
+    },
+    addListeners: function() {
+      var _this = this;
       this.flaggedProjects.on("reset", this.addProjects, this);
       this.flaggedProjects.on("remove", (function() {
         return _this.updateView('project');
@@ -93,6 +58,25 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       });
       this.toggleSubView();
       return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    buttonCheck: function() {
+      this.resourcesLoaded++;
+      if (this.flaggedProjects.length === 0) {
+        this.$projectsBTN.hide();
+      } else {
+        this.$projectsBTN.show();
+      }
+      if (this.flaggedUsers.length === 0) {
+        this.$usersBTN.hide();
+      } else {
+        this.$usersBTN.show();
+      }
+      if (this.unapprovedResources.length === 0) {
+        this.$resourcesBTN.hide();
+      } else {
+        this.$resourcesBTN.show();
+      }
+      return this.checkHash();
     },
     addProjects: function() {
       var _this = this;
@@ -142,6 +126,25 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       view.render();
       return $("#resource-list").append(view.$el);
     },
+    updateView: function(type_) {
+      switch (type_) {
+        case 'project':
+          if (this.flaggedProjects.length === 0) {
+            this.checkHash();
+          }
+          break;
+        case 'resource':
+          if (this.unapprovedResources.length === 0) {
+            this.checkHash();
+          }
+          break;
+        case 'user':
+          if (this.flaggedUsers.length === 0) {
+            this.checkHash();
+          }
+          break;
+      }
+    },
     toggleSubView: function() {
       var btn, v, _i, _j, _len, _len1, _ref, _ref1;
       this.currentView = window.location.hash.substring(1);
@@ -176,7 +179,7 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
     checkHash: function() {
       if (this.resourcesLoaded >= 3) {
         if ((this.flaggedProjects.length === 0) && (this.flaggedUsers.length === 0) && (this.unapprovedResources.length === 0)) {
-          return alert('No items to administer');
+
         } else {
           switch (this.currentView) {
             case "users":

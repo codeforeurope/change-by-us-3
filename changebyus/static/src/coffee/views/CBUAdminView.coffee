@@ -39,27 +39,6 @@ define ["underscore",
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 
-            buttonCheck:-> 
-                @resourcesLoaded++ 
-
-                if @flaggedProjects.length is 0 then @$projectsBTN.hide() else @$projectsBTN.show()
-                if @flaggedUsers.length is 0 then @$usersBTN.hide() else @$usersBTN.show()
-                if @unapprovedResources.length is 0 then @$resourcesBTN.hide() else @$resourcesBTN.show()
-
-                @checkHash()
-
-            updateView:(type_)->
-                switch type_
-                    when 'project'
-                        if @flaggedProjects.length is 0 then @checkHash()
-                        break
-                    when 'resource'
-                        if @unapprovedResources.length is 0 then @checkHash()
-                        break
-                    when 'user'
-                        if @flaggedUsers.length is 0 then @checkHash()
-                        break
-
             onTemplateLoad:->
                 @$projects     = $("#flagged-projects")
                 @$users        = $("#flagged-users")
@@ -69,6 +48,9 @@ define ["underscore",
                 @$usersBTN     = $("#users-btn")
                 @$resourcesBTN = $("#resources-btn")
 
+                @addListeners()
+
+            addListeners:->
                 @flaggedProjects.on "reset", @addProjects, @
                 @flaggedProjects.on "remove", (=>@updateView('project')), @
                 @flaggedProjects.fetch reset: true
@@ -85,6 +67,15 @@ define ["underscore",
                 @toggleSubView()
 
                 AbstractView::onTemplateLoad.call @
+
+            buttonCheck:-> 
+                @resourcesLoaded++ 
+
+                if @flaggedProjects.length is 0 then @$projectsBTN.hide() else @$projectsBTN.show()
+                if @flaggedUsers.length is 0 then @$usersBTN.hide() else @$usersBTN.show()
+                if @unapprovedResources.length is 0 then @$resourcesBTN.hide() else @$resourcesBTN.show()
+
+                @checkHash()
 
             addProjects: ->
                 @buttonCheck()
@@ -119,6 +110,18 @@ define ["underscore",
 
                 $("#resource-list").append view.$el 
 
+            updateView:(type_)->
+                switch type_
+                    when 'project'
+                        if @flaggedProjects.length is 0 then @checkHash()
+                        break
+                    when 'resource'
+                        if @unapprovedResources.length is 0 then @checkHash()
+                        break
+                    when 'user'
+                        if @flaggedUsers.length is 0 then @checkHash()
+                        break
+
             toggleSubView: -> 
                 @currentView = window.location.hash.substring(1) 
 
@@ -149,8 +152,7 @@ define ["underscore",
             checkHash:->
                 if @resourcesLoaded >= 3
                     if (@flaggedProjects.length is 0) and (@flaggedUsers.length is 0) and (@unapprovedResources.length is 0 )
-                        # display some nothing here message
-                        alert 'No items to administer'
+                        # display 'nothing here' message
                     else
                         switch @currentView 
                             when "users"

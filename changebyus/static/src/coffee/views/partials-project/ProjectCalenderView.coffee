@@ -46,7 +46,8 @@ define ["underscore",
                 @$el.find(".preload").remove()
                 ProjectSubView::onTemplateLoad.call @
 
-            ### EVENTS -------------------------------------------------------------------------###
+            # EVENTS
+            # ----------------------------------------------------------------------
             onEmbedCalendar:(e)->
                 e.preventDefault()
                 

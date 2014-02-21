@@ -31,8 +31,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       $(this.parent).append(this.$el);
       return this.$el.show();
     },
-    /* EVENTS ---------------------------------------------*/
-
     onEditGoalClick: function() {
       this.$el.toggle();
       this.$review.toggle();

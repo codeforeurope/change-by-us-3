@@ -20,6 +20,16 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                 @$el.template @templateDir+"partials-user/profile-edit-form.html", 
                     {data:@viewData}, => @onTemplateLoaded()
 
+            onTemplateLoaded:->
+                @ajaxForm()
+
+                $('input[name="visibility"]').change ->
+                    $('input[name="private"]').attr('checked', ($(this).val() is "private"))
+                    
+                AbstractView::onTemplateLoad.call @
+
+            # Check and manage social status
+            # -------------------------------------------------------------------
             getSocial:(render_=true)->
                 $.get "/api/user/socialstatus", (response_)=>
                     try
@@ -29,12 +39,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                          
                     if render_ then @render() else @checkSocial() 
 
-            socialClick:(e)->
-                e.preventDefault()
-                url = $(e.currentTarget).attr("href")
-                popWindow url
-
             checkSocial:->
+                # toggle the state the social network buttons and their links
                 $twitter = $('.twitter a')
                 $facebook = $('.facebook a')
 
@@ -48,13 +54,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                 else
                     $twitter.addClass('btn-primary').removeClass('btn-tertiary').text('Connect').attr("href","/social/twitter/link")
 
-            onTemplateLoaded:->
-                @ajaxForm()
-
-                $('input[name="visibility"]').change ->
-                    $('input[name="private"]').attr('checked', ($(this).val() is "private"))
-                    
-                AbstractView::onTemplateLoad.call @
+            socialClick:(e)->
+                e.preventDefault()
+                url = $(e.currentTarget).attr("href")
+                popWindow url
 
             deleteAccount:(e)->
                 e.preventDefault()
@@ -68,6 +71,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                         if res_.success
                            window.location.href = "/"
 
+            # AJAX FORM
+            # ---------------------------------------------------------
             ajaxForm: ->
                 $('.fileupload').fileupload({uploadtype: 'image'})
 

@@ -3,8 +3,6 @@ define ["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
         ProjectDonationModalView = AbstractModalView.extend
 
             render: ->
-                console.log 'ProjectDonationModalView',@model
-                
                 @viewData = @model.attributes
 
                 @$el = $("<div class='modal-fullscreen dark'/>") 
@@ -20,13 +18,14 @@ define ["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
                 # This identifies your website in the createToken call below
                 Stripe.setPublishableKey @model.get('stripe_account').publishable_key
 
+                # hookup elements for date and credit card formatting
                 $('[data-numeric]').payment('restrictNumeric')
                 $('#charge-card-number').payment('formatCardNumber')
                 $('#charge-cvc').payment('formatCardCVC')
                 $('#charge-cvc').payment('formatCardCVC')
                 $('#charge-expiry-month').payment('formatMonth')
                 $('#charge-expiry-year').payment('formatYear')
-                            
+
                 $form = $("#payment-form")
                 options =
                     type: $form.attr('method')
@@ -47,7 +46,6 @@ define ["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
                         $form.find(".payment-errors").css("display","block").text response.error.message
                         $form.find("button").prop "disabled", false
                     else
-                        
                         # token contains id, last4, and card type
                         token = response.id
                         

@@ -3,7 +3,6 @@ define(["underscore", "backbone", "jquery", "template", "payment", "abstract-mod
   return ProjectDonationModalView = AbstractModalView.extend({
     render: function() {
       var _this = this;
-      console.log('ProjectDonationModalView', this.model);
       this.viewData = this.model.attributes;
       this.$el = $("<div class='modal-fullscreen dark'/>");
       this.$el.template(this.templateDir + "partials-project/project-donation-modal.html", {

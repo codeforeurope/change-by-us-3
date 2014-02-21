@@ -12,17 +12,18 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
       this.$el.template(this.templateDir + "signup.html", {
         data: this.viewData
       }, function() {
-        _this.ajaxForm();
-        _this.addListeners();
-        return onPageElementsLoad();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
     },
     events: {
       "click .btn-info": "infoClick"
     },
-    /* EVENTS ---------------------------------------------*/
-
+    onTemplateLoad: function() {
+      this.ajaxForm();
+      this.addListeners();
+      return onPageElementsLoad();
+    },
     infoClick: function(e) {
       var url;
       e.preventDefault();
@@ -48,8 +49,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return $('.init-signup').show();
       }
     },
-    /* AJAX FORM ---------------------------------------------*/
-
     ajaxForm: function() {
       var $feedback, $form, $signup, $socialFeedback, $socialForm, $socialSignup, $socialSubmit, $submit, options, socialOptions,
         _this = this;
@@ -82,8 +81,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         $.ajax(options);
         return false;
       });
-      /* SOCIAL SIGNUP --------------------------------------------------*/
-
       $socialSignup = $(".social-signup");
       $socialForm = $socialSignup.find("form");
       $socialSubmit = $socialSignup.find("input[type='submit']");
@@ -121,8 +118,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "serial
         return false;
       });
     },
-    /* GETTER & SETTERS -----------------------------------------------------------------*/
-
     getSocialInfo: function() {
       var $socialForm, $socialSignup,
         _this = this;

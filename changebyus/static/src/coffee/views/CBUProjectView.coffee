@@ -99,7 +99,8 @@ define ["underscore",
                     {data:@viewData}, =>
                 @$el.append $notMember
 
-            ### EVENTS ---------------------------------------------###
+            # EVENTS
+            # ----------------------------------------------------------------------
             onTemplateLoad:->
                 # determine if user is a member of the project
                 # if not, display the join button 
@@ -123,7 +124,7 @@ define ["underscore",
 
             onCollectionLoad:->  
                 parent = if @isResource then "#resource-updates" else "#project-updates"
-                config =                                         
+                config =
                     model:@model
                     collection:@updatesCollection
                     members:@projectMembersCollection
@@ -143,7 +144,6 @@ define ["underscore",
                                                     id:@model.get("id"), 
                                                     slim:true, 
                                                     userAvatar:userAvatar
-                                                    
                 else
                     config = 
                         model:@model
@@ -188,11 +188,11 @@ define ["underscore",
                         data: {project_id:id}
                     ).done (res_)=>
                         if res_.success
-                            feedback = 'Following!' # if @isResource then 'Following!' else'Joined!'
+                            feedback = 'Following!'
                             @isMember = true
                             $join.html(feedback).css('background-color','#e6e6e6')
 
-            onDonateClick:->
+            onDonateClick:(e)->
                 projectDonationModalView = new ProjectDonationModalView({model:@model})
             
             toggleSubView: ->
@@ -217,7 +217,8 @@ define ["underscore",
 
                 onPageElementsLoad()
 
-            ### GETTER & SETTERS ----------------------------------------------------------------- ###
+            # GETTER & SETTERS
+            # ----------------------------------------------------------------------
             getMemberStatus:->
                 if window.userID is ""
                     @isMember = false

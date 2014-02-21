@@ -27,17 +27,13 @@ define ["underscore", "backbone", "jquery", "template"],
                 "click .page": "pageClick"
 
             onTemplateLoad:->
-                @trigger 'ON_TEMPLATE_LOAD'
                 @templateLoaded = true
-                if @delayedCollectionLoad then @loadData()
+
+                @trigger 'ON_TEMPLATE_LOAD'
+                @loadData() if @delayedCollectionLoad
                 @delegateEvents()
                 onPageElementsLoad()
-                #override in subview
-
-            changeHash:(e)-> 
-                # hack to override backbone router
-                window.location.hash = $(e.currentTarget).attr("href").substring(1)
-            
+ 
             show: ->
                 @$el.show()
 
@@ -49,16 +45,22 @@ define ["underscore", "backbone", "jquery", "template"],
                     success:(r)=>
                         @onFetch r 
 
+            # EVENTS
+            # ----------------------------------------------
+            changeHash:(e)-> 
+                # hack to override backbone router
+                window.location.hash = $(e.currentTarget).attr("href").substring(1)
+
             onFetch:(r)->
                 #hook 
 
             nextClick:(e)->
                 e.preventDefault()  
-                if $(e.currentTarget).hasClass('disabled') is false then @nextPage()
+                @nextPage() if $(e.currentTarget).hasClass('disabled') is false
 
             prevClick:(e)->
                 e.preventDefault() 
-                if $(e.currentTarget).hasClass('disabled') is false then @prevPage()
+                @prevPage() if $(e.currentTarget).hasClass('disabled') is false
 
             pageClick:(e)->
                 e.preventDefault()
@@ -69,6 +71,8 @@ define ["underscore", "backbone", "jquery", "template"],
                     @checkArrows()
                     @updatePage()
 
+            # PAGINATION HELPERS
+            # ----------------------------------------------
             nextPage:->
                 @index++
                 @checkArrows()
@@ -92,7 +96,7 @@ define ["underscore", "backbone", "jquery", "template"],
 
             ### GETTER & SETTERS ----------------------------------------------------------------- ###
             setPages:(total_, parent_=null)->
-                $parent = if parent_ then parent_ else @$el
+                $parent =  parent_ || @$el
                 
                 if @$paginationContainer then @$paginationContainer.remove()
 

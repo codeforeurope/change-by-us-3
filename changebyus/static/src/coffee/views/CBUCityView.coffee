@@ -45,7 +45,7 @@ define ["underscore",
             render: -> 
                 @viewData = @model.attributes 
                 s = @viewData.image_url_round
-                @viewData.image_url_round= s.substring(s.lastIndexOf("/static/img/"))
+                @viewData.image_url_round = s.substring(s.lastIndexOf("/static/img/"))
 
                 @$el = $("<div class='city-container'/>")
                 @$el.template @templateDir+"city.html", 
@@ -196,7 +196,8 @@ define ["underscore",
                 view = new ResourceProjectPreviewView {model: projectModel, parent:parent_}
                 view.fetch()
 
-            ### EVENTS ---------------------------------------------###
+            # EVENTS
+            # ----------------------------------------------------------------------
             onTemplateLoad:->
                 @name = @model.get('name').split(',')[0]
 

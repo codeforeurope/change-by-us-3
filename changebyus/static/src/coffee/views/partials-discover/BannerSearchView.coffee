@@ -69,6 +69,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 
                 @addListeners()
                 @autoGetGeoLocation()
+
                 AbstractView::onTemplateLoad.call @
 
             addListeners:->
@@ -89,6 +90,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     if e.target is @$searchInput.get(0) then @$searchCatagories.show() else @$searchCatagories.hide()
 
             toggleActive:(dir_)->
+                # allows you to use the keyboard to move up and down the menu
                 $li = @$searchCatagories.find('li')
                 hasActive = (@$searchCatagories.find('li.active').length > 0)
                 if dir_ is "up"
@@ -187,13 +189,15 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         @updatePage()
                         @setPages size, $(".projects")
 
+                        # reset title and numbering
                         t = if @byProjectResources is 'project' then "Projects" else if @byProjectResources is 'resource' then "Resources" else "Resources & Projects"
                         $('.projects h4').html(size+" "+t)
+                        
                         onPageElementsLoad()
-
                         @trigger "ON_RESULTS", size
 
-            ### EVENTS ----------------------------------------------------------------- ###
+            # EVENTS 
+            # -----------------------------------------------------------------
             onInputFocus:->
                 @updateSubmit()
                 @category = ""
@@ -221,11 +225,13 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             onCategoriesClick:(e)->
                 @category = $(e.currentTarget).html()
+                
                 @$searchInput.val @category
                 @$searchCatagories.hide()
 
             onPillSelection:(e)->
                 $this = $(e.currentTarget)
+
                 $this.toggleClass('active')
                 $this.siblings().toggleClass('active')
 
@@ -238,11 +244,14 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         break
  
             onToggleVisibility:(e)->
-                @toggleModify true
                 e.preventDefault()
+                @toggleModify true
 
             onToggleClick:(e)->
+                # strip active
                 $('.type-toggle a').removeClass('active')
+
+                # attach active
                 $this = $(e.currentTarget)
                 $this.addClass('active')
 

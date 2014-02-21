@@ -22,6 +22,8 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
                 @ajaxForm() 
                 onPageElementsLoad()
 
+            # Events
+            # ----------------------------------------------------------
             popUp:(e)->
                 e.preventDefault()
                 url = $(e.currentTarget).attr("href")
@@ -31,6 +33,8 @@ define ["underscore", "backbone", "jquery", "template", "validate", "abstract-vi
                 e.preventDefault()
                 forgotPasswordModalView = new ForgotPasswordModalView()
 
+            # Ajax form
+            # ----------------------------------------------------------
             ajaxForm: -> 
                 $submit   = $("input[type='submit']")
                 $form     = $("form")

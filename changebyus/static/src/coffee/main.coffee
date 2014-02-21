@@ -90,6 +90,11 @@ define ["jquery",
      CBUFundraisingView,
      SlickNav) ->
         $(document).ready ->
+
+            # Unlike most backbone apps, this project is not a single page app.
+            # Routes are determined by relative path and not hash because of flask's routing.
+            # Every page starts with main.js and the appropriate class is then loaded for each page.
+
             config = {parent:".main-content"}
 
             CBURouter = Backbone.Router.extend
@@ -127,6 +132,7 @@ define ["jquery",
                     else
                         window.location.href = "/login"
 
+                # pass the project id as will as the stripe id
                 stripeEdit: (id_, sid_) ->
                     config.model = {id:id_, sid:sid_}
                     window.CBUAppView =  new CBUStripeEdit(config)
@@ -184,13 +190,13 @@ define ["jquery",
                     window.CBUAppView = new CBUAdminView(config)
 
                 default: ->
-                    # added in dev tool
                     window.CBUAppView = new CBUMainView(config)
 
             CBUAppRouter = new CBURouter()
             Backbone.history.start pushState: true
 
-            ### TOP NAV AND RESPONSIVE --------------------------------------------------------------------###
+            # TOP NAV AND RESPONSIVE 
+            # --------------------------------------------------------------------
             $navTop = $('.nav.pull-left')
             $navTop.hover ->
                 $(this).toggleClass('active')
@@ -210,7 +216,8 @@ define ["jquery",
             $(".logged-in .user-avatar").click (e)->
                 window.location.href = "/stream/dashboard"
 
-            ### LOG OUT ----------------------------------------------------------------------------------###
+            # LOG OUT 
+            # ----------------------------------------------------------------------------------
             $("a[href='/logout']").click (e)->
                 e.preventDefault()
                 $.ajax(
@@ -219,7 +226,8 @@ define ["jquery",
                 ).done (response)=>
                     window.location.reload()
 
-            ### GLOBAL UTILS ----------------------------------------------------------------------------###
+            # GLOBAL UTILS 
+            # ----------------------------------------------------------------------------
             window.popWindow = (url) ->
                 w     = 650
                 h     = 650
@@ -229,12 +237,14 @@ define ["jquery",
                 window.open url, title, "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=#{w}, height=#{h}, top=#{top}, left=+#{left}"
 
             window.delay = (time, fn) ->
+                # reversed standard setTimeout to make it easier to format calls in coffeescript
                 setTimeout fn, time
 
             window.randomInt = (num_) ->
                 Math.floor Math.random()*num_
 
             window.arrayToListString = (arr_) ->
+                # used to convert an array to readable comma seperated string
                 for str,i in arr_
                     arr_[i] = capitalize(str)
 
@@ -249,12 +259,15 @@ define ["jquery",
                     txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
 
             $(document).bind 'keydown', (e)->
+                # used for responsive debugging
+                # adds a 'debug' class to the body tag which switches background colors
                 if location.host in ["localhost:5000", "localtunnel.com:5000"]
                     c = if e.keyCode then e.keyCode else e.which
                     k = String.fromCharCode(c).toLowerCase()
                     if k is 'd' then $('body').toggleClass('debug')
 
-            ### STICKY FOOTER --------------------------------------------------------------------------###
+            # STICKY FOOTER 
+            # --------------------------------------------------------------------------
             $window      = $(window)
             $topnav      = $(".top-nav")
             $mainContent = $(".main-content")
@@ -263,6 +276,8 @@ define ["jquery",
             debounce     = null
 
             window.positionFooter = ->
+                # this places a fixed position footer if the content does not fill the whole area
+                # or switches to a relative position depending on browser size
                 if debounce then clearTimeout debounce
                 debounce = delay 10, ->
                     topNavHeight      = $topnav.height()

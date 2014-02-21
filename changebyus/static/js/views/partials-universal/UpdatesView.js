@@ -23,16 +23,16 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     addAll: function() {
-      var length,
+      var i,
         _this = this;
       this.$members = this.$el.find(".team-members ul");
-      length = 0;
+      i = 0;
       this.members.each(function(model) {
-        if (length++ < 4) {
+        if (i++ < 4) {
           return _this.addMember(model);
         }
       });
-      if (length <= 4) {
+      if (i <= 4) {
         $('.team-members .pull-right').remove();
       }
       this.$day = $('<div />');

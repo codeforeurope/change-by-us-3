@@ -56,6 +56,8 @@ define ["underscore",
 
                 AbstractView::onTemplateLoad.call @
 
+            # AJAX FORM
+            # ----------------------------------------------------------------------------
             ajaxForm: ->
                 $('.fileupload').fileupload({uploadtype: 'image'})
 

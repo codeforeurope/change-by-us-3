@@ -36,8 +36,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.$el.find(".preload").remove();
       return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
-    /* EVENTS -------------------------------------------------------------------------*/
-
     onEmbedCalendar: function(e) {
       e.preventDefault();
       return this.projectEmbedCalendarModalView = new ProjectEmbedCalendarModalView({

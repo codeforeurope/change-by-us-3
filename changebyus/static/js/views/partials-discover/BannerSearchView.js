@@ -247,8 +247,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         }
       });
     },
-    /* EVENTS -----------------------------------------------------------------*/
-
     onInputFocus: function() {
       this.updateSubmit();
       return this.category = "";
@@ -299,8 +297,8 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
     },
     onToggleVisibility: function(e) {
-      this.toggleModify(true);
-      return e.preventDefault();
+      e.preventDefault();
+      return this.toggleModify(true);
     },
     onToggleClick: function(e) {
       var $this;

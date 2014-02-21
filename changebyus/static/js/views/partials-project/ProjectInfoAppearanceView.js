@@ -51,7 +51,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
           var $zip;
           if ($form.valid()) {
             $('input[name="private"]').attr('checked', $('input[name="visibility"]').val() === "private");
-            console.log($('input[name="visibility"]').val() === "private");
             $zip = $('input[name="zip"]');
             if (_this.location.name !== "") {
               $form.find("input, textarea").attr("disabled", "disabled");

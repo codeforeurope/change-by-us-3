@@ -11,16 +11,19 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
             render: -> 
                 @$el = $("<div class='signup'/>")
                 @$el.template @templateDir+"signup.html",
-                    data: @viewData, =>
-                        @ajaxForm()
-                        @addListeners()
-                        onPageElementsLoad()
-                $(@parent).append @$el 
+                    data: @viewData, => @onTemplateLoad()
+                $(@parent).append @$el
 
             events:
                 "click .btn-info":"infoClick"
 
-            ### EVENTS ---------------------------------------------###
+            onTemplateLoad:->
+                @ajaxForm()
+                @addListeners()
+                onPageElementsLoad()
+
+            # EVENTS 
+            # ----------------------------------------------------------------------
             infoClick:(e)->
                 e.preventDefault()
                 url = $(e.currentTarget).attr("href")
@@ -41,7 +44,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                     $('.social-signup').hide()
                     $('.init-signup').show()
 
-            ### AJAX FORM ---------------------------------------------###
+            # AJAX FORM 
+            # ----------------------------------------------------------------------
             ajaxForm: ->
                 $signup   = $(".init-signup")
                 $form     = $signup.find("form") 
@@ -59,7 +63,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
 
                     success: (response_) =>
                         $form.find("input, textarea").removeAttr("disabled")
-                        #if response.success
+
                         if response_.success
                             window.location.href = "/stream/dashboard"
                         else
@@ -71,11 +75,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                     $.ajax options
                     false
 
-                ### SOCIAL SIGNUP --------------------------------------------------###
+                # SOCIAL SIGNUP 
+                # ----------------------------------------------------------------------
                 $socialSignup   = $(".social-signup")
                 $socialForm     = $socialSignup.find("form") 
                 $socialSubmit   = $socialSignup.find("input[type='submit']")
                 $socialFeedback = $socialSignup.find(".login-feedback")
+
                 $socialSignup.hide()
 
                 socialOptions =
@@ -104,7 +110,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                     false
 
 
-            ### GETTER & SETTERS -----------------------------------------------------------------###
+            # GETTER & SETTERS
+            # ----------------------------------------------------------------------
             getSocialInfo:->
                 unless @socialInfo
                     $socialSignup   = $(".social-signup")
@@ -121,8 +128,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "serial
                         $socialForm.find("input, textarea").removeAttr("disabled")
 
             setSocialInfo:(@socialInfo)-> 
-                img         = if (@socialInfo.fb_image isnt "") then @socialInfo.fb_image else @socialInfo.twitter_image
-                name        = if (@socialInfo.fb_name isnt "") then  @socialInfo.fb_name else @socialInfo.twitter_name
+                img  = if (@socialInfo.fb_image isnt "") then @socialInfo.fb_image else @socialInfo.twitter_image
+                name = if (@socialInfo.fb_name isnt "") then  @socialInfo.fb_name else @socialInfo.twitter_name
 
                 $socialAvatar = $('.social-avatar')
                 $socialSignup = $(".social-signup")

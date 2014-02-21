@@ -16,10 +16,8 @@ define ["underscore",
         CBUDiscoverView = AbstractView.extend
 
             initialize: (options_) ->
-                options = options_
-                # this is added later
-                AbstractView::initialize.call @, options
-                @collection  = options.collection or new ProjectListCollection()
+                AbstractView::initialize.call @, options_
+                @collection  = options_.collection or new ProjectListCollection()
                 @render()
 
             render: -> 
@@ -40,7 +38,8 @@ define ["underscore",
                 AbstractView::onTemplateLoad.call @
 
 
-            ### EVENTS ---------------------------------------------###
+            # EVENTS
+            # ----------------------------------------------------------------------
             updatePage:->
                 @bannerSearchView.updatePage()
 

@@ -10,8 +10,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             isDiscovered:false
 
             initialize: (options_) ->
-                options              = options_
-                AbstractView::initialize.call @, options
+                AbstractView::initialize.call @, options_
+
+                options                = options_
                 @viewData              = @model.attributes
                 @viewData.isProject    = options.isProject || @isProject
                 @viewData.isOwned      = options.isOwned || @isOwned
@@ -29,13 +30,18 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             render: ->
                 @$el = $("<li class='project-preview'/>")
                 @$el.template @templateDir+"partials-universal/project-resource.html",
-                    {data: @viewData}, =>
-                        @delegateEvents()
-                        @$el.find('img').hide().load =>
-                            @$el.find('img').fadeIn('slow')
-                            @onTemplateLoad()
-                            
-            ### EVENTS ---------------------------------------------###
+                    {data: @viewData}, => @onTemplateLoad
+
+            onTemplateLoad:->
+                @delegateEvents()
+
+                # fade in image on load 
+                @$el.find('img').hide().load =>
+                    @$el.find('img').fadeIn('slow')
+                    AbstractView::onTemplateLoad.call @
+                    
+            # EVENTS 
+            # ----------------------------------------------------------------------
             onFetch:(r)-> 
                 $(@parent).append @render()  
 

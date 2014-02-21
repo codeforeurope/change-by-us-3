@@ -88,8 +88,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }, function() {});
       return this.$el.append($notMember);
     },
-    /* EVENTS ---------------------------------------------*/
-
     onTemplateLoad: function() {
       this.getMemberStatus();
       return AbstractView.prototype.onTemplateLoad.call(this);
@@ -196,7 +194,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         });
       }
     },
-    onDonateClick: function() {
+    onDonateClick: function(e) {
       var projectDonationModalView;
       return projectDonationModalView = new ProjectDonationModalView({
         model: this.model
@@ -230,8 +228,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
       return onPageElementsLoad();
     },
-    /* GETTER & SETTERS -----------------------------------------------------------------*/
-
     getMemberStatus: function() {
       var id,
         _this = this;

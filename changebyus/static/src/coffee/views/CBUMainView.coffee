@@ -22,8 +22,9 @@ define ["underscore",
         CBUMainView = AbstractView.extend
 
             initialize: (options_) ->
-                options             = options_
-                AbstractView::initialize.call @, options
+                AbstractView::initialize.call @, options_
+
+                options             = options_ 
                 @collection         = options.collection or new ProjectListCollection()
                 @resourceCollection = options.resourceCollection or new ResourceListCollection()
                 @render()
@@ -32,20 +33,22 @@ define ["underscore",
                 @$el = $("<div class='projects-main'/>")
                 @$el.template @templateDir+"main.html",
                     {}, => @onTemplateLoad()
+                $(@parent).prepend @$el
 
             onTemplateLoad:->
-                $(@parent).prepend @$el
-                
                 bannerParent = @$el.find(".body-container-wide")
                 bannerImageView = new BannerImageView({parent:bannerParent})
                 
+                @addListeners()
+
+                AbstractView::onTemplateLoad.call @
+
+            addListeners:->
                 @collection.on "reset", @addAll, @
                 @collection.fetch reset: true
 
                 @resourceCollection.on "reset", @addAllResources, @
                 @resourceCollection.fetch reset: true
-
-                AbstractView::onTemplateLoad.call @
 
             addAll: ->  
                 @collection.each (projectModel_) => 

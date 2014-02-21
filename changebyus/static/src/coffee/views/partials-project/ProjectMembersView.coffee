@@ -38,7 +38,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                 @$el.template @templateDir+templateURL, 
                     {data:@viewData}, => @onTemplateLoad() 
 
-            ### EVENTS ---------------------------------------------###
+            # EVENTS
+            # ----------------------------------------------------------------------
             onTemplateLoad:-> 
                 @$teamList   = @$el.find("#team-members ul")
                 @$memberList = @$el.find("#project-members ul")
@@ -57,7 +58,8 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                 @collection.on('change', =>@addAll()) 
                 @collection.on('remove', =>@addAll())
 
-            # override in subview
+            # ATTACH TEAM MEMBERS
+            # ----------------------------------------------------------------------
             addAll: (sort_="alpha") -> 
                 @team = []
                 @members = []
@@ -95,6 +97,7 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                 @$teamList.html('')
                 @$memberList.html('')
 
+                # toggle visibility if no members or teams are there
                 if @team.length is 0 
                     @$teamList.parent().parent().hide()
                 else

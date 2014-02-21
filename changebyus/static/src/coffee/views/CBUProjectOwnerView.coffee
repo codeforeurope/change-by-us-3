@@ -104,14 +104,12 @@ define ["underscore",
                 @$membersBTN     = $("a[href='#members']").parent()
                 @$infoBTN        = $("a[href='#info']").parent()
 
-                console.log '@$discussionBTN <<<<<<< ',@$discussionBTN
-  
-                # GET COLLECTION STARTED ---------------------------------------#
+                # ##GET COLLECTION STARTED  
                 projectDiscussionsCollection.on 'add remove', (m_,c_)=>@updateCount c_.length
                 projectDiscussionsCollection.on 'reset', (c_)=>@updateCount c_.length
                 @projectDiscussionsView.loadData()
 
-                # ADD EVENT LISTENERS ------------------------------------------#
+                # ##ADD EVENT LISTENERS  
                 @projectDiscussionsView.on 'DISCUSSION_CLICK', (arg_)=> 
                     window.location.hash = "discussion/"+arg_.model.id
 
@@ -124,8 +122,7 @@ define ["underscore",
 
                 @delegateEvents() 
 
-            toggleSubView: ->  
-
+            toggleSubView: ->
                 view = window.location.hash.substring(1)
                 slug = @model.get('slug')
 
@@ -192,7 +189,8 @@ define ["underscore",
                 @projectDiscussionView.updateCount count_
 
 
-            ### GETTER & SETTERS ----------------------------------------------------------------- ###
+            # GETTER & SETTERS
+            # -----------------------------------------------------------------
             getMemberStatus:-> 
                 id = @model.get("id")
                 $.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  

@@ -20,6 +20,8 @@ define ["underscore",
                 AbstractModalView::onTemplateLoad.call @
                 @ajaxForm()
 
+            # AJAX FORM
+            # -------------------------------------------------------
             ajaxForm:->
                 self    = @
                 $form   = $("form[name=forgot_password_form]") 

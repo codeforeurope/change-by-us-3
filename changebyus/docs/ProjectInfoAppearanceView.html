@@ -382,7 +382,7 @@
                 <span class="hljs-property">@render</span>()
 
             <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
-                <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div /&gt;"</span>)
+                <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='project-info-appearance'/&gt;"</span>)
                 <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-project/project-info-appearance.html"</span>,
                     <span class="hljs-attribute">data</span>: <span class="hljs-property">@viewData</span>,<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onTemplateLoad</span>()
                 $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
@@ -487,11 +487,25 @@
                     <span class="hljs-built_in">console</span>.log(datum)
                 )</span>
 
-                @<span class="hljs-title">$el</span>.<span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-string">'input:radio'</span>)</span>.<span class="hljs-title">screwDefaultButtons</span>
-                    <span class="hljs-title">image</span>: '<span class="hljs-title">url</span><span class="hljs-params">(<span class="hljs-string">"/static/img/dot-check.png"</span>)</span>'
-                    <span class="hljs-title">width</span>: 25
-                    <span class="hljs-title">height</span>: 25
 </span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>customize the look of the radio buttons</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-property">@$el</span>.find(<span class="hljs-string">'input:radio'</span>).screwDefaultButtons
+                    <span class="hljs-attribute">image</span>: <span class="hljs-string">'url("/static/img/dot-check.png")'</span>
+                    <span class="hljs-attribute">width</span>: <span class="hljs-number">25</span>
+                    <span class="hljs-attribute">height</span>: <span class="hljs-number">25</span></pre></div></div>
             
         </li>
         

@@ -427,13 +427,7 @@
                 <span class="hljs-property">@ownedProjects</span> = <span class="hljs-keyword">new</span> ProjectListCollection()
                 <span class="hljs-property">@ownedProjects</span>.url = <span class="hljs-string">"/api/project/user/<span class="hljs-subst">#{<span class="hljs-property">@model</span>.id}</span>/owned-projects"</span>
                 <span class="hljs-property">@ownedProjects</span>.<span class="hljs-literal">on</span> <span class="hljs-string">"reset"</span>, <span class="hljs-property">@addOwned</span>, @
-                <span class="hljs-property">@ownedProjects</span>.fetch <span class="hljs-attribute">reset</span>: <span class="hljs-literal">true</span>
-
-            <span class="hljs-attribute">flagUser</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span>
-                e.preventDefault()
-                $.post <span class="hljs-string">"/api/user/<span class="hljs-subst">#{<span class="hljs-property">@model</span>.id}</span>/flag"</span>, <span class="hljs-function"><span class="hljs-params">(res_)</span>=&gt;</span>
-                    $(<span class="hljs-string">'.flag-user'</span>).addClass(<span class="hljs-string">'disabled-btn'</span>)
-                    <span class="hljs-property">@$el</span>.unbind <span class="hljs-string">"click #flag"</span></pre></div></div>
+                <span class="hljs-property">@ownedProjects</span>.fetch <span class="hljs-attribute">reset</span>: <span class="hljs-literal">true</span></pre></div></div>
             
         </li>
         
@@ -465,6 +459,25 @@
                 view.render()
 
                 <span class="hljs-property">@$el</span>.find(parent_).append view.$el</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <h2 id="events">Events</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">flagUser</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span>
+                e.preventDefault()
+                $.post <span class="hljs-string">"/api/user/<span class="hljs-subst">#{<span class="hljs-property">@model</span>.id}</span>/flag"</span>, <span class="hljs-function"><span class="hljs-params">(res_)</span>=&gt;</span>
+                    $(<span class="hljs-string">'.flag-user'</span>).addClass(<span class="hljs-string">'disabled-btn'</span>)
+                    <span class="hljs-property">@$el</span>.unbind <span class="hljs-string">"click #flag"</span></pre></div></div>
             
         </li>
         

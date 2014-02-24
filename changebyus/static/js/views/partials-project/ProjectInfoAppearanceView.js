@@ -17,7 +17,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
     },
     render: function() {
       var _this = this;
-      this.$el = $("<div />");
+      this.$el = $("<div class='project-info-appearance'/>");
       this.$el.template(this.templateDir + "partials-project/project-info-appearance.html", {
         data: this.viewData
       }, function() {

@@ -64,6 +64,9 @@ define ["underscore",
 
                 AbstractView::onTemplateLoad.call @
 
+            # Attach Elements
+            # --------------------------------------------
+
             addReplies:->
                 @$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
 

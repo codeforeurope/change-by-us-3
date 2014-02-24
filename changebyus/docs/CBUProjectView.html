@@ -416,6 +416,7 @@
                 <span class="hljs-property">@collection</span>  = options.collection <span class="hljs-keyword">or</span> <span class="hljs-property">@collection</span>
                 <span class="hljs-property">@isOwner</span>     = options.isOwner || <span class="hljs-property">@isOwner</span>
                 <span class="hljs-property">@isResource</span>  = options.isResource || <span class="hljs-property">@isResource</span>
+                
                 <span class="hljs-property">@model</span>.fetch 
                     <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@render</span>()
 
@@ -426,25 +427,23 @@
                 <span class="hljs-string">"click  a[href^='#']"</span>:<span class="hljs-string">"changeHash"</span>
 
             <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
-                <span class="hljs-keyword">if</span> <span class="hljs-property">@model</span>.get(<span class="hljs-string">'active'</span>)
-                    <span class="hljs-property">@viewData</span> = <span class="hljs-property">@model</span>.attributes
+                <span class="hljs-property">@viewData</span> = <span class="hljs-property">@model</span>.attributes
 
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@model</span>.get(<span class="hljs-string">'active'</span>)
                     <span class="hljs-keyword">if</span> <span class="hljs-property">@isResource</span>
                         className   = <span class="hljs-string">"resource-container"</span>
                         templateURL = <span class="hljs-string">"resource.html"</span>
                     <span class="hljs-keyword">else</span>
                         className   = <span class="hljs-string">"project-container"</span>
                         templateURL = <span class="hljs-string">"project.html"</span>
+                <span class="hljs-keyword">else</span>
+                    className   = <span class="hljs-string">"not-found"</span>
+                    templateURL = <span class="hljs-string">"partials-project/not-found.html"</span>
 
-                    <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='<span class="hljs-subst">#{className}</span>'/&gt;"</span>)
-                    <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+templateURL, 
-                        {},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onTemplateLoad</span>()
-                    $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
-                <span class="hljs-keyword">else</span> 
-                    <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='not-found'/&gt;"</span>)
-                    <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-project/not-found.html"</span>,
-                        {},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onTemplateLoad</span>()
-                    $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
+                <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='<span class="hljs-subst">#{className}</span>'/&gt;"</span>)
+                <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+templateURL, 
+                    {},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onTemplateLoad</span>()
+                $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
 
             <span class="hljs-attribute">addHeaderView</span>:<span class="hljs-function"> -&gt;</span> 
                 <span class="hljs-keyword">if</span> <span class="hljs-property">@isResource</span>
@@ -459,13 +458,34 @@
                     {<span class="hljs-attribute">data</span>:<span class="hljs-property">@viewData</span>},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onHeaderLoaded</span>()
                 <span class="hljs-property">@$el</span>.prepend <span class="hljs-property">@$header</span>
 
-            <span class="hljs-attribute">notMember</span>:<span class="hljs-function">-&gt;</span>
-                <span class="hljs-built_in">console</span>.log <span class="hljs-string">'notMember'</span>
+            <span class="hljs-attribute">notMember</span>:<span class="hljs-function">-&gt;</span> 
                 $(<span class="hljs-string">'.tabs-pane'</span>).remove()
                 $notMember = $(<span class="hljs-string">"&lt;div class='body-container'/&gt;"</span>)
                 $notMember.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-project/project-not-member.html"</span>,
                     {<span class="hljs-attribute">data</span>:<span class="hljs-property">@viewData</span>},<span class="hljs-function"> =&gt;</span>
-                <span class="hljs-property">@$el</span>.append $notMember</pre></div></div>
+                <span class="hljs-property">@$el</span>.append $notMember
+            
+            <span class="hljs-attribute">toggleSubView</span>:<span class="hljs-function"> -&gt;</span>
+                view = <span class="hljs-built_in">window</span>.location.hash.substring(<span class="hljs-number">1</span>)
+                
+                <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> [<span class="hljs-property">@updatesView</span>, <span class="hljs-property">@projectMembersView</span>, <span class="hljs-property">@projectCalenderView</span>]
+                    v.hide()
+
+                <span class="hljs-keyword">for</span> btn <span class="hljs-keyword">in</span> [<span class="hljs-property">@updatesBTN</span>, <span class="hljs-property">@membersBTN</span>, <span class="hljs-property">@calendarBTN</span>]
+                    btn.removeClass <span class="hljs-string">"active"</span>
+
+                <span class="hljs-keyword">switch</span> view 
+                    <span class="hljs-keyword">when</span> <span class="hljs-string">"members"</span>
+                        <span class="hljs-property">@projectMembersView</span>.show()
+                        <span class="hljs-property">@membersBTN</span>.addClass <span class="hljs-string">"active"</span>
+                    <span class="hljs-keyword">when</span> <span class="hljs-string">"calendar"</span>
+                        <span class="hljs-property">@projectCalenderView</span>.show()
+                        <span class="hljs-property">@calendarBTN</span>.addClass <span class="hljs-string">"active"</span>
+                    <span class="hljs-keyword">else</span> 
+                        <span class="hljs-property">@updatesView</span>.show()
+                        <span class="hljs-property">@updatesBTN</span>.addClass <span class="hljs-string">"active"</span>
+
+                onPageElementsLoad()</pre></div></div>
             
         </li>
         
@@ -585,29 +605,7 @@ if not, display the join button </p>
                             $join.html(feedback).css(<span class="hljs-string">'background-color'</span>,<span class="hljs-string">'#e6e6e6'</span>)
 
             <span class="hljs-attribute">onDonateClick</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span>
-                projectDonationModalView = <span class="hljs-keyword">new</span> ProjectDonationModalView({<span class="hljs-attribute">model</span>:<span class="hljs-property">@model</span>})
-            
-            <span class="hljs-attribute">toggleSubView</span>:<span class="hljs-function"> -&gt;</span>
-                view = <span class="hljs-built_in">window</span>.location.hash.substring(<span class="hljs-number">1</span>)
-                
-                <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> [<span class="hljs-property">@updatesView</span>, <span class="hljs-property">@projectMembersView</span>, <span class="hljs-property">@projectCalenderView</span>]
-                    v.hide()
-
-                <span class="hljs-keyword">for</span> btn <span class="hljs-keyword">in</span> [<span class="hljs-property">@updatesBTN</span>, <span class="hljs-property">@membersBTN</span>, <span class="hljs-property">@calendarBTN</span>]
-                    btn.removeClass <span class="hljs-string">"active"</span>
-
-                <span class="hljs-keyword">switch</span> view 
-                    <span class="hljs-keyword">when</span> <span class="hljs-string">"members"</span>
-                        <span class="hljs-property">@projectMembersView</span>.show()
-                        <span class="hljs-property">@membersBTN</span>.addClass <span class="hljs-string">"active"</span>
-                    <span class="hljs-keyword">when</span> <span class="hljs-string">"calendar"</span>
-                        <span class="hljs-property">@projectCalenderView</span>.show()
-                        <span class="hljs-property">@calendarBTN</span>.addClass <span class="hljs-string">"active"</span>
-                    <span class="hljs-keyword">else</span> 
-                        <span class="hljs-property">@updatesView</span>.show()
-                        <span class="hljs-property">@updatesBTN</span>.addClass <span class="hljs-string">"active"</span>
-
-                onPageElementsLoad()</pre></div></div>
+                projectDonationModalView = <span class="hljs-keyword">new</span> ProjectDonationModalView({<span class="hljs-attribute">model</span>:<span class="hljs-property">@model</span>})</pre></div></div>
             
         </li>
         

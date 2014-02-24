@@ -474,11 +474,39 @@
                     .removeClass(<span class="hljs-string">'sort-deactive'</span>)
                     .addClass(<span class="hljs-string">'ul'</span>)
 
-                <span class="hljs-keyword">if</span> sort_ <span class="hljs-keyword">is</span> <span class="hljs-string">"alpha"</span>
-                    sortBy = <span class="hljs-property">@collection</span>.sortBy <span class="hljs-function"><span class="hljs-params">(model)</span>-&gt;</span>
+                <span class="hljs-keyword">if</span> sort_ <span class="hljs-keyword">is</span> <span class="hljs-string">"alpha"</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>sort by name</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    sortBy = <span class="hljs-property">@collection</span>.sortBy <span class="hljs-function"><span class="hljs-params">(model)</span>-&gt;</span>
                         model.get(<span class="hljs-string">'last_name'</span>)
-                <span class="hljs-keyword">else</span>
-                    sortBy = <span class="hljs-property">@collection</span>.sortBy <span class="hljs-function"><span class="hljs-params">(model)</span>-&gt;</span>
+                <span class="hljs-keyword">else</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>sort by date</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                    sortBy = <span class="hljs-property">@collection</span>.sortBy <span class="hljs-function"><span class="hljs-params">(model)</span>-&gt;</span>
                         model.get(<span class="hljs-string">'created_at'</span>)
                     sortBy.reverse()
 
@@ -498,11 +526,11 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>attach members to the page</p>
 
@@ -514,11 +542,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <p>toggle visibility if no members or teams are there</p>
 

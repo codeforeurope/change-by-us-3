@@ -18,22 +18,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       "click .change-city a": "changeCity"
     }),
     fetch: function() {
-      var _this = this;
-      return $.getJSON("/api/project/cities", function(res_) {
-        var city, _i, _len, _ref, _results;
-        _ref = res_.data.cities;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          city = _ref[_i];
-          if (_this.model.id === city.slug) {
-            _this.model = new CityModel(city);
-            _this.render();
-            break;
-          } else {
-            _results.push(void 0);
-          }
-        }
-        return _results;
+      var scope,
+        _this = this;
+      scope = this;
+      return $.getJSON("/api/project/cities", function(r_) {
+        return _this.onFetch(r_);
       });
     },
     render: function() {
@@ -273,6 +262,22 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       this.search("project");
       this.search("resource");
       return this.delegateEvents();
+    },
+    onFetch: function(res_) {
+      var city, _i, _len, _ref, _results;
+      _ref = res_.data.cities;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        city = _ref[_i];
+        if (this.model.id === city.slug) {
+          this.model = new CityModel(city);
+          this.render();
+          break;
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
     },
     onProjectsLoad: function(projects_) {
       var k, v;

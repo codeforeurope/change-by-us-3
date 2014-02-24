@@ -368,8 +368,40 @@
             
             <div class="content"><div class='highlight'><pre>define [<span class="hljs-string">"underscore"</span>, <span class="hljs-string">"backbone"</span>, <span class="hljs-string">"jquery"</span>, <span class="hljs-string">"template"</span>], 
     <span class="hljs-function"><span class="hljs-params">(_, Backbone, $, temp)</span> -&gt;</span>
-        AbstractView = Backbone.View.extend
+        AbstractView = Backbone.View.extend</pre></div></div>
             
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="abstractview-class-">AbstractView class </h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <ul>
+<li>Parent class for all view classes in this project.</li>
+<li>Contains base methods for showing, hiding, loading and pagination.</li>
+<li>To extend a method and call <code>super()</code> be sure to use <code>AbstractView::methodName.call(scope_, arguments_)</code>.</li>
+<li>This project also makes extensive use of the template.js plugin to load HTML partials in the <code>render()</code> method.</li>
+</ul>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            
             <span class="hljs-attribute">parent</span>: <span class="hljs-string">"body"</span>
             <span class="hljs-attribute">templateDir</span>: <span class="hljs-string">"/static/templates/"</span>
             <span class="hljs-attribute">viewData</span>: {}
@@ -382,14 +414,31 @@
             <span class="hljs-attribute">perPage</span>:<span class="hljs-number">12</span>
             <span class="hljs-attribute">pages</span>:<span class="hljs-number">0</span>
 
-            <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
+            <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span> 
+
                 options      = options_ <span class="hljs-keyword">or</span> {}
                 <span class="hljs-property">@id</span>          = options.id <span class="hljs-keyword">or</span> <span class="hljs-property">@id</span>
                 <span class="hljs-property">@templateDir</span> = options.templateDir <span class="hljs-keyword">or</span> <span class="hljs-property">@templateDir</span>
                 <span class="hljs-property">@parent</span>      = options.parent <span class="hljs-keyword">or</span> <span class="hljs-property">@parent</span>
                 <span class="hljs-property">@viewData</span>    = options.viewData <span class="hljs-keyword">or</span> <span class="hljs-property">@viewData</span>
 
-            <span class="hljs-attribute">events</span>:
+            <span class="hljs-attribute">events</span>:</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>If you want to include pagination actions within your extended class, be sure to use this when declaring events
+<code>_.extend {}, AbstractView.prototype.events, {&quot;action .selector&quot;:&quot;methodName&quot;}</code></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                
                 <span class="hljs-string">"click .next-arrow"</span>: <span class="hljs-string">"nextClick"</span>
                 <span class="hljs-string">"click .prev-arrow"</span>: <span class="hljs-string">"prevClick"</span>
                 <span class="hljs-string">"click .page"</span>: <span class="hljs-string">"pageClick"</span>
@@ -416,11 +465,11 @@
         </li>
         
         
-        <li id="section-2">
+        <li id="section-5">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <h2 id="events">EVENTS</h2>
 
@@ -431,11 +480,11 @@
         </li>
         
         
-        <li id="section-3">
+        <li id="section-6">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-3">&#182;</a>
+                <a class="pilcrow" href="#section-6">&#182;</a>
               </div>
               <p>hack to override backbone router</p>
 
@@ -448,11 +497,11 @@
         </li>
         
         
-        <li id="section-4">
+        <li id="section-7">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-4">&#182;</a>
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p>hook </p>
 
@@ -479,11 +528,11 @@
         </li>
         
         
-        <li id="section-5">
+        <li id="section-8">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
+                <a class="pilcrow" href="#section-8">&#182;</a>
               </div>
               <h2 id="pagination-helpers">PAGINATION HELPERS</h2>
 
@@ -504,11 +553,11 @@
         </li>
         
         
-        <li id="section-6">
+        <li id="section-9">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-6">&#182;</a>
+                <a class="pilcrow" href="#section-9">&#182;</a>
               </div>
               <p>override in subview</p>
 
@@ -526,13 +575,13 @@
         </li>
         
         
-        <li id="section-7">
+        <li id="section-10">
             <div class="annotation">
               
               <div class="pilwrap ">
-                <a class="pilcrow" href="#section-7">&#182;</a>
+                <a class="pilcrow" href="#section-10">&#182;</a>
               </div>
-              <h2 id="getter-setters-">GETTER &amp; SETTERS ————————————————————————————————-</h2>
+              <h2 id="getter-setters-">GETTER &amp; SETTERS </h2>
 
             </div>
             

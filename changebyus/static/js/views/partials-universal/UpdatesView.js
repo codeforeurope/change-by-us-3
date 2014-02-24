@@ -25,8 +25,8 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
     addAll: function() {
       var i,
         _this = this;
-      this.$members = this.$el.find(".team-members ul");
       i = 0;
+      this.$members = this.$el.find(".team-members ul");
       this.members.each(function(model) {
         if (i++ < 4) {
           return _this.addMember(model);
@@ -35,7 +35,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       if (i <= 4) {
         $('.team-members .pull-right').remove();
       }
-      this.$day = $('<div />');
+      this.$day = $("<div class='entries-day-wrapper'/>");
       return this.$day.template(this.templateDir + "partials-universal/entries-day-wrapper.html", {}, function() {
         return _this.onDayWrapperLoad();
       });

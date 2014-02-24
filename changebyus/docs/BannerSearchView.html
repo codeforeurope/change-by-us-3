@@ -453,6 +453,7 @@
                 
                 <span class="hljs-property">@$searchRange</span>      = $(<span class="hljs-string">'#search-range'</span>).dropkick()
                 <span class="hljs-property">@$resultsModify</span>    = $(<span class="hljs-string">'.results-modify'</span>)
+                <span class="hljs-property">@$filterWithin</span>     = $(<span class="hljs-string">'.filter-within'</span>)
                 <span class="hljs-property">@$modifyInput</span>      = <span class="hljs-property">@$resultsModify</span>.find(<span class="hljs-string">'input'</span>)
                 <span class="hljs-property">@$projectList</span>      = $(<span class="hljs-string">"#projects-list"</span>)
                 <span class="hljs-property">@$searchCatagories</span> = $(<span class="hljs-string">'.search-catagories'</span>)
@@ -578,7 +579,7 @@
 
             <span class="hljs-attribute">toggleModify</span>:<span class="hljs-function"><span class="hljs-params">(showSorting_)</span>-&gt;</span>
                 <span class="hljs-property">@$resultsModify</span>.toggle(!showSorting_)
-                $(<span class="hljs-string">'.filter-within'</span>).toggle(showSorting_)
+                <span class="hljs-property">@$filterWithin</span>.toggle(showSorting_)
 
             <span class="hljs-attribute">sendForm</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span>
                 <span class="hljs-keyword">if</span> e 

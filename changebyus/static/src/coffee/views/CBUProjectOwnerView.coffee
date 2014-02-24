@@ -184,8 +184,7 @@ define ["underscore",
 
                 onPageElementsLoad()
 
-            updateCount:(count_)->
-                console.log 'updateCount'
+            updateCount:(count_)-> 
                 @projectDiscussionView.updateCount count_
 
 

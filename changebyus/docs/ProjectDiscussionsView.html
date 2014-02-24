@@ -397,9 +397,22 @@
                 <span class="hljs-property">@collection</span>.<span class="hljs-literal">on</span> <span class="hljs-string">'add'</span>, <span class="hljs-property">@updateCount</span>, @
                 <span class="hljs-property">@collection</span>.<span class="hljs-literal">on</span> <span class="hljs-string">'remove'</span>, <span class="hljs-function"><span class="hljs-params">(obj_)</span>=&gt;</span>
                     <span class="hljs-property">@addAll</span>()
-                    <span class="hljs-property">@deleteDiscussion</span>(obj_.id)
-                
-            <span class="hljs-attribute">addAll</span>:<span class="hljs-function"> -&gt;</span> 
+                    <span class="hljs-property">@deleteDiscussion</span>(obj_.id)</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="attach-elements">Attach Elements</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">addAll</span>:<span class="hljs-function"> -&gt;</span> 
                 <span class="hljs-keyword">if</span> <span class="hljs-property">@collection</span>.models.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span>
                     <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-project/project-zero-discussions.html"</span>, 
                         {},<span class="hljs-function"> =&gt;</span> <span class="hljs-attribute">AbstractView</span>::onTemplateLoad.call @
@@ -424,9 +437,6 @@
 
                 <span class="hljs-attribute">ProjectSubView</span>::addAll.call(@) 
 
-            <span class="hljs-attribute">updateCount</span>:<span class="hljs-function">-&gt;</span>
-                <span class="hljs-property">@$el</span>.find(<span class="hljs-string">".admin-title"</span>).html <span class="hljs-string">"All Discussions (<span class="hljs-subst">#{<span class="hljs-property">@collection</span>.models.length}</span>)"</span>
-
             <span class="hljs-attribute">newDay</span>:<span class="hljs-function"><span class="hljs-params">(date_)</span>-&gt;</span>
                 <span class="hljs-property">@currentDate</span> = date_
                 <span class="hljs-property">@$currentDay</span> = <span class="hljs-property">@$day</span>.clone()
@@ -446,6 +456,9 @@
                 <span class="hljs-property">@$ul</span>.append projectDiscussionListItemView.$el
 
                 onPageElementsLoad()
+
+            <span class="hljs-attribute">updateCount</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@$el</span>.find(<span class="hljs-string">".admin-title"</span>).html <span class="hljs-string">"All Discussions (<span class="hljs-subst">#{<span class="hljs-property">@collection</span>.models.length}</span>)"</span>
 
             <span class="hljs-attribute">show</span>:<span class="hljs-function">-&gt;</span>
                 $(<span class="hljs-string">".day-wrapper"</span>).remove()

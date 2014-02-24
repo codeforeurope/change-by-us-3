@@ -378,21 +378,14 @@
                 
                 <span class="hljs-property">@user</span> = <span class="hljs-keyword">new</span> UserModel(<span class="hljs-attribute">id</span>:<span class="hljs-property">@model</span>.get(<span class="hljs-string">"user"</span>).id)
                 <span class="hljs-property">@user</span>.fetch
-                    <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span><span class="hljs-property">@render</span>()
+                    <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span><span class="hljs-property">@onFetch</span>()
 
             <span class="hljs-attribute">events</span>: 
                 <span class="hljs-string">"click .description"</span>: <span class="hljs-string">"viewDescription"</span>,
                 <span class="hljs-string">"click .user-avatar"</span>: <span class="hljs-string">"viewDescription"</span>,
                 <span class="hljs-string">"click .delete-x"</span>: <span class="hljs-string">"delete"</span> 
 
-            <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span> 
-                m =  moment(<span class="hljs-property">@model</span>.get(<span class="hljs-string">"created_at"</span>)).format(<span class="hljs-string">"MMMM D hh:mm a"</span>)
-                <span class="hljs-property">@model</span>.set(<span class="hljs-string">"format_date"</span>, m)
-
-                <span class="hljs-property">@viewData</span>                       = <span class="hljs-property">@model</span>.attributes
-                <span class="hljs-property">@viewData</span>.image_url_round_small = <span class="hljs-property">@user</span>.get(<span class="hljs-string">"image_url_round_small"</span>)
-                <span class="hljs-property">@viewData</span>.display_name          = <span class="hljs-property">@user</span>.get(<span class="hljs-string">"display_name"</span>)
-                
+            <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
                 <span class="hljs-property">@$el</span> = $(<span class="hljs-property">@el</span>)
                 <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-project/project-discussion-list-item.html"</span>,
                     {<span class="hljs-attribute">data</span>: <span class="hljs-property">@viewData</span>},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onTemplateLoad</span>()
@@ -401,7 +394,17 @@
                 <span class="hljs-property">@trigger</span> <span class="hljs-string">"click"</span>, <span class="hljs-property">@model</span>
 
             <span class="hljs-attribute">delete</span>:<span class="hljs-function">-&gt;</span>
-                <span class="hljs-property">@model</span>.collection.remove <span class="hljs-property">@model</span></pre></div></div>
+                <span class="hljs-property">@model</span>.collection.remove <span class="hljs-property">@model</span>
+
+            <span class="hljs-attribute">onFetch</span>:<span class="hljs-function">-&gt;</span>
+                m =  moment(<span class="hljs-property">@model</span>.get(<span class="hljs-string">"created_at"</span>)).format(<span class="hljs-string">"MMMM D hh:mm a"</span>)
+                <span class="hljs-property">@model</span>.set(<span class="hljs-string">"format_date"</span>, m)
+
+                <span class="hljs-property">@viewData</span>                       = <span class="hljs-property">@model</span>.attributes
+                <span class="hljs-property">@viewData</span>.image_url_round_small = <span class="hljs-property">@user</span>.get(<span class="hljs-string">"image_url_round_small"</span>)
+                <span class="hljs-property">@viewData</span>.display_name          = <span class="hljs-property">@user</span>.get(<span class="hljs-string">"display_name"</span>)
+
+                <span class="hljs-property">@render</span>()</pre></div></div>
             
         </li>
         

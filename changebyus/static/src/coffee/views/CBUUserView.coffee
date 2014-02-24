@@ -61,12 +61,6 @@ define ["underscore",
                 @ownedProjects.on "reset", @addOwned, @
                 @ownedProjects.fetch reset: true
 
-            flagUser:(e)->
-                e.preventDefault()
-                $.post "/api/user/#{@model.id}/flag", (res_)=>
-                    $('.flag-user').addClass('disabled-btn')
-                    @$el.unbind "click #flag"
-
             # Attach Elements
             # -----------------------------------------------------------------
             addJoined:->
@@ -86,3 +80,11 @@ define ["underscore",
                 view.render()
 
                 @$el.find(parent_).append view.$el
+
+            # Events
+            # ------------------------------------------------------------------
+            flagUser:(e)->
+                e.preventDefault()
+                $.post "/api/user/#{@model.id}/flag", (res_)=>
+                    $('.flag-user').addClass('disabled-btn')
+                    @$el.unbind "click #flag"

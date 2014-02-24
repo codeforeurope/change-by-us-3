@@ -75,6 +75,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }
       this.$searchRange = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
+      this.$filterWithin = $('.filter-within');
       this.$modifyInput = this.$resultsModify.find('input');
       this.$projectList = $("#projects-list");
       this.$searchCatagories = $('.search-catagories');
@@ -195,7 +196,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     toggleModify: function(showSorting_) {
       this.$resultsModify.toggle(!showSorting_);
-      return $('.filter-within').toggle(showSorting_);
+      return this.$filterWithin.toggle(showSorting_);
     },
     sendForm: function(e) {
       var dataObj, modifyInputVal,

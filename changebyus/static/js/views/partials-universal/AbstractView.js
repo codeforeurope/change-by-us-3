@@ -99,8 +99,6 @@ define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $
       }
       return $("#page-" + (this.index + 1)).parent().addClass('disabled');
     },
-    /* GETTER & SETTERS -----------------------------------------------------------------*/
-
     setPages: function(total_, parent_) {
       var $li, $parent, i, _i, _ref;
       if (parent_ == null) {

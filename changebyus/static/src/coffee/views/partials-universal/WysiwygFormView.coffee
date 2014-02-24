@@ -91,7 +91,8 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
                     error: (response_) =>
                         @error(response_) 
                 
-                @$updateForm.submit => 
+                @$updateForm.submit =>
+                    # Jsonify and stringify form
                     obj             = @$updateForm.serializeJSON()
                     obj.description = escape($editor.html())
                     json_str        = JSON.stringify(obj)

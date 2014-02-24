@@ -50,6 +50,9 @@ define ["underscore",
                 @resourceCollection.on "reset", @addAllResources, @
                 @resourceCollection.fetch reset: true
 
+            # Attach Elements
+            # -------------------------------------------
+
             addAll: ->  
                 @collection.each (projectModel_) => 
                     @addProject projectModel_

@@ -34,17 +34,13 @@ define ["underscore",
             events:
                 _.extend {}, AbstractView.prototype.events, {"click .change-city a":"changeCity"}
                 
-            fetch:->
-                $.getJSON "/api/project/cities", (res_)=> 
-                    for city in res_.data.cities
-                        if @model.id is city.slug 
-                            @model = new CityModel(city)
-                            @render()
-                            break
+            fetch:-> 
+                scope = @
+                $.getJSON "/api/project/cities", (r_)=> @onFetch(r_)
 
-            render: -> 
-                @viewData = @model.attributes 
-                s = @viewData.image_url_round
+            render: ->  
+                @viewData                 = @model.attributes 
+                s                         = @viewData.image_url_round
                 @viewData.image_url_round = s.substring(s.lastIndexOf("/static/img/"))
 
                 @$el = $("<div class='city-container'/>")
@@ -226,6 +222,13 @@ define ["underscore",
                 @search "resource"
 
                 @delegateEvents()
+
+            onFetch:(res_)->
+                for city in res_.data.cities
+                    if @model.id is city.slug 
+                        @model = new CityModel(city)
+                        @render()
+                        break
                     
             onProjectsLoad:(projects_)-> 
                 for k,v of projects_

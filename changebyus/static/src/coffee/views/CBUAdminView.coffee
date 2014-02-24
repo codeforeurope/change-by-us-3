@@ -77,6 +77,8 @@ define ["underscore",
 
                 @checkHash()
 
+            # Attach Elements
+            # ---------------------------------------------
             addProjects: ->
                 @buttonCheck()
                 @flaggedProjects.each (projectModel_) =>
@@ -110,18 +112,9 @@ define ["underscore",
 
                 $("#resource-list").append view.$el 
 
-            updateView:(type_)->
-                switch type_
-                    when 'project'
-                        if @flaggedProjects.length is 0 then @checkHash()
-                        break
-                    when 'resource'
-                        if @unapprovedResources.length is 0 then @checkHash()
-                        break
-                    when 'user'
-                        if @flaggedUsers.length is 0 then @checkHash()
-                        break
 
+            # Toggle Display
+            # ----------------------------------------------------------
             toggleSubView: -> 
                 @currentView = window.location.hash.substring(1) 
 
@@ -149,6 +142,17 @@ define ["underscore",
                 @buttonCheck()
                 onPageElementsLoad()
 
+            updateView:(type_)->
+                switch type_
+                    when 'project'
+                        if @flaggedProjects.length is 0 then @checkHash()
+                        break
+                    when 'resource'
+                        if @unapprovedResources.length is 0 then @checkHash()
+                        break
+                    when 'user'
+                        if @flaggedUsers.length is 0 then @checkHash()
+                        break
             checkHash:->
                 if @resourcesLoaded >= 3
                     if (@flaggedProjects.length is 0) and (@flaggedUsers.length is 0) and (@unapprovedResources.length is 0 )

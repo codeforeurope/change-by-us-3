@@ -126,25 +126,6 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       view.render();
       return $("#resource-list").append(view.$el);
     },
-    updateView: function(type_) {
-      switch (type_) {
-        case 'project':
-          if (this.flaggedProjects.length === 0) {
-            this.checkHash();
-          }
-          break;
-        case 'resource':
-          if (this.unapprovedResources.length === 0) {
-            this.checkHash();
-          }
-          break;
-        case 'user':
-          if (this.flaggedUsers.length === 0) {
-            this.checkHash();
-          }
-          break;
-      }
-    },
     toggleSubView: function() {
       var btn, v, _i, _j, _len, _len1, _ref, _ref1;
       this.currentView = window.location.hash.substring(1);
@@ -175,6 +156,25 @@ define(["underscore", "backbone", "jquery", "template", "resource-project-view",
       this.checkHash();
       this.buttonCheck();
       return onPageElementsLoad();
+    },
+    updateView: function(type_) {
+      switch (type_) {
+        case 'project':
+          if (this.flaggedProjects.length === 0) {
+            this.checkHash();
+          }
+          break;
+        case 'resource':
+          if (this.unapprovedResources.length === 0) {
+            this.checkHash();
+          }
+          break;
+        case 'user':
+          if (this.flaggedUsers.length === 0) {
+            this.checkHash();
+          }
+          break;
+      }
     },
     checkHash: function() {
       if (this.resourcesLoaded >= 3) {

@@ -2,6 +2,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
     (_, Backbone, $, temp, AbstractView) ->
         ProjectSubView = AbstractView.extend
 
+            # ProjectSubView class 
+            # ----------------------------------------------
+
+            # * Extends Abstract view
+            # * Contains additional methods for loading collections and attaching results
+
             isDataLoaded: false
         
             initialize: (options_) -> 

@@ -417,22 +417,7 @@
                             <span class="hljs-attribute">data</span>: dataObj
                         ).done <span class="hljs-function"><span class="hljs-params">(response_)</span>=&gt;</span>
                             <span class="hljs-keyword">if</span> (response_.success)
-                                <span class="hljs-property">@model</span>.set(<span class="hljs-string">'roles'</span>, [value_])
-
-            <span class="hljs-attribute">removeUser</span>:<span class="hljs-function">-&gt;</span>
-                confirmation = confirm(<span class="hljs-string">"Do you really want to remove this user?"</span>)
-                <span class="hljs-keyword">if</span> confirmation
-                    dataObj = { <span class="hljs-attribute">project_id</span>:<span class="hljs-property">@projectID</span>, <span class="hljs-attribute">user_id</span>:<span class="hljs-property">@model</span>.id}
-                    $.ajax(
-                        <span class="hljs-attribute">type</span>: <span class="hljs-string">"POST"</span>
-                        <span class="hljs-attribute">url</span>: <span class="hljs-string">"/api/project/remove-member"</span>
-                        <span class="hljs-attribute">data</span>: JSON.stringify(dataObj) 
-                        <span class="hljs-attribute">dataType</span>: <span class="hljs-string">"json"</span> 
-                        <span class="hljs-attribute">contentType</span>: <span class="hljs-string">"application/json; charset=utf-8"</span>
-                    ).done <span class="hljs-function"><span class="hljs-params">(response_)</span>=&gt;</span>
-                        <span class="hljs-keyword">if</span> (response_.success)
-                            <span class="hljs-property">@model</span>.collection.remove <span class="hljs-property">@model</span>
-                            <span class="hljs-property">@$el</span>.remove()</pre></div></div>
+                                <span class="hljs-property">@model</span>.set(<span class="hljs-string">'roles'</span>, [value_])</pre></div></div>
             
         </li>
         
@@ -447,7 +432,23 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">delete</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span> 
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">removeUser</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span>
+                e.preventDefault()
+                confirmation = confirm(<span class="hljs-string">"Do you really want to remove this user?"</span>)
+                <span class="hljs-keyword">if</span> confirmation
+                    dataObj = { <span class="hljs-attribute">project_id</span>:<span class="hljs-property">@projectID</span>, <span class="hljs-attribute">user_id</span>:<span class="hljs-property">@model</span>.id}
+                    $.ajax(
+                        <span class="hljs-attribute">type</span>: <span class="hljs-string">"POST"</span>
+                        <span class="hljs-attribute">url</span>: <span class="hljs-string">"/api/project/remove-member"</span>
+                        <span class="hljs-attribute">data</span>: JSON.stringify(dataObj) 
+                        <span class="hljs-attribute">dataType</span>: <span class="hljs-string">"json"</span> 
+                        <span class="hljs-attribute">contentType</span>: <span class="hljs-string">"application/json; charset=utf-8"</span>
+                    ).done <span class="hljs-function"><span class="hljs-params">(response_)</span>=&gt;</span>
+                        <span class="hljs-keyword">if</span> (response_.success)
+                            <span class="hljs-property">@model</span>.collection.remove <span class="hljs-property">@model</span>
+                            <span class="hljs-property">@$el</span>.remove() 
+
+            <span class="hljs-attribute">delete</span>:<span class="hljs-function"><span class="hljs-params">(e)</span>-&gt;</span> 
                 e.preventDefault()
                 confirmation = confirm(<span class="hljs-string">"Are you sure you want to delete <span class="hljs-subst">#{<span class="hljs-property">@model</span>.get(<span class="hljs-string">'display_name'</span>)}</span>: <span class="hljs-subst">#{<span class="hljs-property">@model</span>.get(<span class="hljs-string">'first_name'</span>)}</span> <span class="hljs-subst">#{<span class="hljs-property">@model</span>.get(<span class="hljs-string">'last_name'</span>)}</span>?"</span>)
                 <span class="hljs-keyword">if</span> confirmation

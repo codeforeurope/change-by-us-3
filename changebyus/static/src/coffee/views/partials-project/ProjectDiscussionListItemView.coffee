@@ -10,21 +10,14 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
                 
                 @user = new UserModel(id:@model.get("user").id)
                 @user.fetch
-                    success: =>@render()
+                    success: =>@onFetch()
 
             events: 
                 "click .description": "viewDescription",
                 "click .user-avatar": "viewDescription",
                 "click .delete-x": "delete" 
 
-            render: -> 
-                m =  moment(@model.get("created_at")).format("MMMM D hh:mm a")
-                @model.set("format_date", m)
-
-                @viewData                       = @model.attributes
-                @viewData.image_url_round_small = @user.get("image_url_round_small")
-                @viewData.display_name          = @user.get("display_name")
-                
+            render: ->
                 @$el = $(@el)
                 @$el.template @templateDir+"partials-project/project-discussion-list-item.html",
                     {data: @viewData}, => @onTemplateLoad()
@@ -34,3 +27,13 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
 
             delete:->
                 @model.collection.remove @model
+
+            onFetch:->
+                m =  moment(@model.get("created_at")).format("MMMM D hh:mm a")
+                @model.set("format_date", m)
+
+                @viewData                       = @model.attributes
+                @viewData.image_url_round_small = @user.get("image_url_round_small")
+                @viewData.display_name          = @user.get("display_name")
+
+                @render()

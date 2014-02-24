@@ -51,7 +51,10 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                             if (response_.success)
                                 @model.set('roles', [value_])
 
-            removeUser:->
+            # EVENTS
+            # ----------------------------------------------------------------------
+            removeUser:(e)->
+                e.preventDefault()
                 confirmation = confirm("Do you really want to remove this user?")
                 if confirmation
                     dataObj = { project_id:@projectID, user_id:@model.id}
@@ -66,8 +69,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                             @model.collection.remove @model
                             @$el.remove() 
 
-            # EVENTS
-            # ----------------------------------------------------------------------
             delete:(e)-> 
                 e.preventDefault()
                 confirmation = confirm("Are you sure you want to delete #{@model.get('display_name')}: #{@model.get('first_name')} #{@model.get('last_name')}?")

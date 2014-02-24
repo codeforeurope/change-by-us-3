@@ -419,6 +419,10 @@
                 title = <span class="hljs-keyword">if</span> <span class="hljs-property">@model</span>? <span class="hljs-keyword">then</span> <span class="hljs-property">@model</span>.get(<span class="hljs-string">"title"</span>) <span class="hljs-keyword">else</span> <span class="hljs-string">""</span>
                 <span class="hljs-property">@$el</span>.find(<span class="hljs-string">".admin-title"</span>).html <span class="hljs-string">"All Discussions (<span class="hljs-subst">#{<span class="hljs-property">@count</span>}</span>): <span class="hljs-subst">#{title}</span>"</span>
             
+            <span class="hljs-attribute">addDiscussion</span>:<span class="hljs-function"><span class="hljs-params">(model_)</span>-&gt;</span>
+                projectDiscussionThreadItemView = <span class="hljs-keyword">new</span> ProjectDiscussionThreadItemView({<span class="hljs-attribute">model</span>:model_})
+                <span class="hljs-property">@$ul</span>.append projectDiscussionThreadItemView.$el
+                
             <span class="hljs-attribute">onSuccess</span>:<span class="hljs-function">-&gt;</span>  
                 <span class="hljs-property">@$ul</span>.html(<span class="hljs-string">''</span>)
                 <span class="hljs-property">@$form</span>.html(<span class="hljs-string">''</span>)
@@ -466,11 +470,7 @@
                     <span class="hljs-keyword">if</span> e.success
                         $(<span class="hljs-string">"#new-thread-editor"</span>).html(<span class="hljs-string">""</span>)
                         model = <span class="hljs-keyword">new</span> ProjectDiscussionModel(e.data)
-                        <span class="hljs-property">@addDiscussion</span> model
-
-            <span class="hljs-attribute">addDiscussion</span>:<span class="hljs-function"><span class="hljs-params">(model_)</span>-&gt;</span>
-                projectDiscussionThreadItemView = <span class="hljs-keyword">new</span> ProjectDiscussionThreadItemView({<span class="hljs-attribute">model</span>:model_})
-                <span class="hljs-property">@$ul</span>.append projectDiscussionThreadItemView.$el</pre></div></div>
+                        <span class="hljs-property">@addDiscussion</span> model</pre></div></div>
             
         </li>
         

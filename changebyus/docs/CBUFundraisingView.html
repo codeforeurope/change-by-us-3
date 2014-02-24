@@ -381,27 +381,27 @@
      UserModel,
      ProjectModel)<span class="hljs-function"> -&gt;</span>
 
-            CBUFundraisingView = AbstractView.extend
+        CBUFundraisingView = AbstractView.extend
 
-                <span class="hljs-attribute">$review</span>:<span class="hljs-literal">null</span>
-                <span class="hljs-attribute">stripe</span>:{}
+            <span class="hljs-attribute">$review</span>:<span class="hljs-literal">null</span>
+            <span class="hljs-attribute">stripe</span>:{}
 
-                <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
-                    <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
+            <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options_
 
-                    <span class="hljs-property">@model</span> = <span class="hljs-keyword">new</span> ProjectModel({<span class="hljs-attribute">id</span>:<span class="hljs-property">@model</span>.id})
-                    <span class="hljs-property">@model</span>.fetch
-                        <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onFetch</span>()
+                <span class="hljs-property">@model</span> = <span class="hljs-keyword">new</span> ProjectModel({<span class="hljs-attribute">id</span>:<span class="hljs-property">@model</span>.id})
+                <span class="hljs-property">@model</span>.fetch
+                    <span class="hljs-attribute">success</span>:<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onFetch</span>()
 
-                <span class="hljs-attribute">events</span>:
-                    <span class="hljs-string">"click #edit-goal"</span>:<span class="hljs-string">"onEditGoalClick"</span>
+            <span class="hljs-attribute">events</span>:
+                <span class="hljs-string">"click #edit-goal"</span>:<span class="hljs-string">"onEditGoalClick"</span>
 
-                <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
-                    <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='body-container'/&gt;"</span>) <span class="hljs-keyword">if</span> <span class="hljs-property">@$el</span>.html() <span class="hljs-keyword">is</span> <span class="hljs-string">""</span>
-                    <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-universal/stripe-review.html"</span>,
-                        <span class="hljs-attribute">data</span>:<span class="hljs-property">@stripe</span>,<span class="hljs-function">  =&gt;</span><span class="hljs-property">@onTemplateLoad</span>()
-                    $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
-                    <span class="hljs-property">@$el</span>.show()</pre></div></div>
+            <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>
+                <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='body-container'/&gt;"</span>) <span class="hljs-keyword">if</span> <span class="hljs-property">@$el</span>.html() <span class="hljs-keyword">is</span> <span class="hljs-string">""</span>
+                <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-universal/stripe-review.html"</span>,
+                    <span class="hljs-attribute">data</span>:<span class="hljs-property">@stripe</span>,<span class="hljs-function">  =&gt;</span><span class="hljs-property">@onTemplateLoad</span>()
+                $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
+                <span class="hljs-property">@$el</span>.show()</pre></div></div>
             
         </li>
         
@@ -416,25 +416,25 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="hljs-attribute">onEditGoalClick</span>:<span class="hljs-function">-&gt;</span>
-                    <span class="hljs-property">@$el</span>.toggle()
-                    <span class="hljs-property">@$review</span>.toggle()
-                    <span class="hljs-literal">false</span>
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">onEditGoalClick</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@$el</span>.toggle()
+                <span class="hljs-property">@$review</span>.toggle()
+                <span class="hljs-literal">false</span>
 
-                <span class="hljs-attribute">onFetch</span>:<span class="hljs-function">-&gt;</span>
-                    <span class="hljs-property">@stripe</span> = <span class="hljs-property">@model</span>.get(<span class="hljs-string">"stripe_account"</span>)
-                    <span class="hljs-property">@stripe</span>.project_id = <span class="hljs-property">@model</span>.id
-                    <span class="hljs-property">@stripe</span>.account_id = <span class="hljs-property">@stripe</span>.id
-                    <span class="hljs-property">@render</span>()
+            <span class="hljs-attribute">onFetch</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@stripe</span> = <span class="hljs-property">@model</span>.get(<span class="hljs-string">"stripe_account"</span>)
+                <span class="hljs-property">@stripe</span>.project_id = <span class="hljs-property">@model</span>.id
+                <span class="hljs-property">@stripe</span>.account_id = <span class="hljs-property">@stripe</span>.id
+                <span class="hljs-property">@render</span>()
 
-                <span class="hljs-attribute">onTemplateLoad</span>:<span class="hljs-function">-&gt;</span> 
-                    <span class="hljs-property">@$review</span> = $(<span class="hljs-string">"&lt;div class='body-container'/&gt;"</span>) <span class="hljs-keyword">if</span> <span class="hljs-property">@$review</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">null</span>
-                    <span class="hljs-property">@$review</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-universal/stripe-form.html"</span>,
-                        <span class="hljs-attribute">data</span>:<span class="hljs-property">@stripe</span>,<span class="hljs-function">  =&gt;</span><span class="hljs-property">@ajaxForm</span>()
-                    $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$review</span>
-                    <span class="hljs-property">@$review</span>.hide()
+            <span class="hljs-attribute">onTemplateLoad</span>:<span class="hljs-function">-&gt;</span> 
+                <span class="hljs-property">@$review</span> = $(<span class="hljs-string">"&lt;div class='body-container'/&gt;"</span>) <span class="hljs-keyword">if</span> <span class="hljs-property">@$review</span> <span class="hljs-keyword">is</span> <span class="hljs-literal">null</span>
+                <span class="hljs-property">@$review</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-universal/stripe-form.html"</span>,
+                    <span class="hljs-attribute">data</span>:<span class="hljs-property">@stripe</span>,<span class="hljs-function">  =&gt;</span><span class="hljs-property">@ajaxForm</span>()
+                $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$review</span>
+                <span class="hljs-property">@$review</span>.hide()
 
-                    <span class="hljs-attribute">AbstractView</span>::onTemplateLoad.call @</pre></div></div>
+                <span class="hljs-attribute">AbstractView</span>::onTemplateLoad.call @</pre></div></div>
             
         </li>
         
@@ -449,16 +449,16 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre>                <span class="hljs-attribute">ajaxForm</span>:<span class="hljs-function">-&gt;</span> 
-                    $form = <span class="hljs-property">@$review</span>.find(<span class="hljs-string">'form'</span>)
-                    options =
-                        <span class="hljs-attribute">success</span>: <span class="hljs-function"><span class="hljs-params">(response_)</span> =&gt;</span>
-                            <span class="hljs-keyword">if</span> response_.success
-                                <span class="hljs-property">@stripe</span>.description = response_.data.description
-                                <span class="hljs-property">@stripe</span>.goal = response_.data.funding
-                                <span class="hljs-property">@render</span>()
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">ajaxForm</span>:<span class="hljs-function">-&gt;</span> 
+                $form = <span class="hljs-property">@$review</span>.find(<span class="hljs-string">'form'</span>)
+                options =
+                    <span class="hljs-attribute">success</span>: <span class="hljs-function"><span class="hljs-params">(response_)</span> =&gt;</span>
+                        <span class="hljs-keyword">if</span> response_.success
+                            <span class="hljs-property">@stripe</span>.description = response_.data.description
+                            <span class="hljs-property">@stripe</span>.goal = response_.data.funding
+                            <span class="hljs-property">@render</span>()
 
-                    $form.ajaxForm options</pre></div></div>
+                $form.ajaxForm options</pre></div></div>
             
         </li>
         

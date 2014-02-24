@@ -73,9 +73,11 @@ define ["underscore", "backbone", "jquery", "template", "views/partials-project/
                     .addClass('ul')
 
                 if sort_ is "alpha"
+                    # sort by name
                     sortBy = @collection.sortBy (model)->
                         model.get('last_name')
                 else
+                    # sort by date
                     sortBy = @collection.sortBy (model)->
                         model.get('created_at')
                     sortBy.reverse()

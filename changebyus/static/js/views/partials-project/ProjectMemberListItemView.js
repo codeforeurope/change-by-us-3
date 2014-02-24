@@ -60,9 +60,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
         }
       });
     },
-    removeUser: function() {
+    removeUser: function(e) {
       var confirmation, dataObj,
         _this = this;
+      e.preventDefault();
       confirmation = confirm("Do you really want to remove this user?");
       if (confirmation) {
         dataObj = {

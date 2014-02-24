@@ -1,6 +1,14 @@
 define ["underscore", "backbone", "jquery", "template"], 
     (_, Backbone, $, temp) ->
         AbstractView = Backbone.View.extend
+
+            # AbstractView class 
+            # ----------------------------------------------
+
+            # * Parent class for all view classes in this project.
+            # * Contains base methods for showing, hiding, loading and pagination.
+            # * To extend a method and call `super()` be sure to use `AbstractView::methodName.call(scope_, arguments_)`.
+            # * This project also makes extensive use of the template.js plugin to load HTML partials in the `render()` method.
             
             parent: "body"
             templateDir: "/static/templates/"
@@ -14,7 +22,8 @@ define ["underscore", "backbone", "jquery", "template"],
             perPage:12
             pages:0
 
-            initialize: (options_) ->
+            initialize: (options_) -> 
+
                 options      = options_ or {}
                 @id          = options.id or @id
                 @templateDir = options.templateDir or @templateDir
@@ -22,6 +31,9 @@ define ["underscore", "backbone", "jquery", "template"],
                 @viewData    = options.viewData or @viewData
 
             events:
+                # If you want to include pagination actions within your extended class, be sure to use this when declaring events
+                # `_.extend {}, AbstractView.prototype.events, {"action .selector":"methodName"}`
+                
                 "click .next-arrow": "nextClick"
                 "click .prev-arrow": "prevClick"
                 "click .page": "pageClick"
@@ -94,7 +106,8 @@ define ["underscore", "backbone", "jquery", "template"],
                 
                 $("#page-"+(@index+1)).parent().addClass('disabled')
 
-            ### GETTER & SETTERS ----------------------------------------------------------------- ###
+            # GETTER & SETTERS 
+            # -----------------------------------------------------------------
             setPages:(total_, parent_=null)->
                 $parent =  parent_ || @$el
                 

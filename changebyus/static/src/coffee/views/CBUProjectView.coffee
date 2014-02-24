@@ -48,6 +48,7 @@ define ["underscore",
                 @collection  = options.collection or @collection
                 @isOwner     = options.isOwner || @isOwner
                 @isResource  = options.isResource || @isResource
+                
                 @model.fetch 
                     success: => @render()
 
@@ -58,25 +59,23 @@ define ["underscore",
                 "click  a[href^='#']":"changeHash"
 
             render: ->
-                if @model.get('active')
-                    @viewData = @model.attributes
+                @viewData = @model.attributes
 
+                if @model.get('active')
                     if @isResource
                         className   = "resource-container"
                         templateURL = "resource.html"
                     else
                         className   = "project-container"
                         templateURL = "project.html"
+                else
+                    className   = "not-found"
+                    templateURL = "partials-project/not-found.html"
 
-                    @$el = $("<div class='#{className}'/>")
-                    @$el.template @templateDir+templateURL, 
-                        {}, => @onTemplateLoad()
-                    $(@parent).append @$el
-                else 
-                    @$el = $("<div class='not-found'/>")
-                    @$el.template @templateDir+"partials-project/not-found.html",
-                        {}, => @onTemplateLoad()
-                    $(@parent).append @$el
+                @$el = $("<div class='#{className}'/>")
+                @$el.template @templateDir+templateURL, 
+                    {}, => @onTemplateLoad()
+                $(@parent).append @$el
 
             addHeaderView: -> 
                 if @isResource
@@ -91,14 +90,35 @@ define ["underscore",
                     {data:@viewData}, => @onHeaderLoaded()
                 @$el.prepend @$header
 
-            notMember:->
-                console.log 'notMember'
+            notMember:-> 
                 $('.tabs-pane').remove()
                 $notMember = $("<div class='body-container'/>")
                 $notMember.template @templateDir+"partials-project/project-not-member.html",
                     {data:@viewData}, =>
                 @$el.append $notMember
+            
+            toggleSubView: ->
+                view = window.location.hash.substring(1)
+                
+                for v in [@updatesView, @projectMembersView, @projectCalenderView]
+                    v.hide()
 
+                for btn in [@updatesBTN, @membersBTN, @calendarBTN]
+                    btn.removeClass "active"
+
+                switch view 
+                    when "members"
+                        @projectMembersView.show()
+                        @membersBTN.addClass "active"
+                    when "calendar"
+                        @projectCalenderView.show()
+                        @calendarBTN.addClass "active"
+                    else 
+                        @updatesView.show()
+                        @updatesBTN.addClass "active"
+
+                onPageElementsLoad()
+                
             # EVENTS
             # ----------------------------------------------------------------------
             onTemplateLoad:->
@@ -194,28 +214,7 @@ define ["underscore",
 
             onDonateClick:(e)->
                 projectDonationModalView = new ProjectDonationModalView({model:@model})
-            
-            toggleSubView: ->
-                view = window.location.hash.substring(1)
-                
-                for v in [@updatesView, @projectMembersView, @projectCalenderView]
-                    v.hide()
 
-                for btn in [@updatesBTN, @membersBTN, @calendarBTN]
-                    btn.removeClass "active"
-
-                switch view 
-                    when "members"
-                        @projectMembersView.show()
-                        @membersBTN.addClass "active"
-                    when "calendar"
-                        @projectCalenderView.show()
-                        @calendarBTN.addClass "active"
-                    else 
-                        @updatesView.show()
-                        @updatesBTN.addClass "active"
-
-                onPageElementsLoad()
 
             # GETTER & SETTERS
             # ----------------------------------------------------------------------

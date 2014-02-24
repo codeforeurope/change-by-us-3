@@ -33,13 +33,13 @@ define ["underscore",
             # ATTACH ELEMENTS 
             # ----------------------------------------------------------------------
             addAll: ->
-                @$members = @$el.find(".team-members ul")
                 i = 0
+                @$members = @$el.find(".team-members ul")
                 @members.each (model) => 
                     if (i++ < 4) then @addMember model
                 if i <= 4 then $('.team-members .pull-right').remove()
 
-                @$day = $('<div />')
+                @$day = $("<div class='entries-day-wrapper'/>")
                 @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
                     {}, =>@onDayWrapperLoad()
 

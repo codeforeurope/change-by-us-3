@@ -31,6 +31,8 @@ define ["underscore",
                     @addAll()
                     @deleteDiscussion(obj_.id)
                 
+            # Attach Elements
+            # ------------------------------
             addAll: -> 
                 if @collection.models.length is 0
                     @$el.template @templateDir+"partials-project/project-zero-discussions.html", 
@@ -56,9 +58,6 @@ define ["underscore",
 
                 ProjectSubView::addAll.call(@) 
 
-            updateCount:->
-                @$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
-
             newDay:(date_)->
                 @currentDate = date_
                 @$currentDay = @$day.clone()
@@ -78,6 +77,9 @@ define ["underscore",
                 @$ul.append projectDiscussionListItemView.$el
 
                 onPageElementsLoad()
+
+            updateCount:->
+                @$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
 
             show:->
                 $(".day-wrapper").remove()

@@ -11,7 +11,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       return this.user.fetch({
         success: function() {
-          return _this.render();
+          return _this.onFetch();
         }
       });
     },
@@ -21,13 +21,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       "click .delete-x": "delete"
     },
     render: function() {
-      var m,
-        _this = this;
-      m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
-      this.model.set("format_date", m);
-      this.viewData = this.model.attributes;
-      this.viewData.image_url_round_small = this.user.get("image_url_round_small");
-      this.viewData.display_name = this.user.get("display_name");
+      var _this = this;
       this.$el = $(this.el);
       return this.$el.template(this.templateDir + "partials-project/project-discussion-list-item.html", {
         data: this.viewData
@@ -40,6 +34,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     "delete": function() {
       return this.model.collection.remove(this.model);
+    },
+    onFetch: function() {
+      var m;
+      m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
+      this.model.set("format_date", m);
+      this.viewData = this.model.attributes;
+      this.viewData.image_url_round_small = this.user.get("image_url_round_small");
+      this.viewData.display_name = this.user.get("display_name");
+      return this.render();
     }
   });
 });

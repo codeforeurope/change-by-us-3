@@ -51,6 +51,13 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       title = this.model != null ? this.model.get("title") : "";
       return this.$el.find(".admin-title").html("All Discussions (" + this.count + "): " + title);
     },
+    addDiscussion: function(model_) {
+      var projectDiscussionThreadItemView;
+      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({
+        model: model_
+      });
+      return this.$ul.append(projectDiscussionThreadItemView.$el);
+    },
     onSuccess: function() {
       var dataObj, model, response, userAvatar, _i, _len, _ref,
         _this = this;
@@ -82,13 +89,6 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
           return _this.addDiscussion(model);
         }
       };
-    },
-    addDiscussion: function(model_) {
-      var projectDiscussionThreadItemView;
-      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({
-        model: model_
-      });
-      return this.$ul.append(projectDiscussionThreadItemView.$el);
     }
   });
 });

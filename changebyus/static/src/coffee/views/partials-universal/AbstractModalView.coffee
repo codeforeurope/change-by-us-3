@@ -5,6 +5,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             parent:'body'
             
             initialize: (options_) ->
+                # AbstractModalView class 
+                # ----------------------------------------------
+
+                # * Parent class for all Modal view classes
+                # * Contains on-load fade-in and a fadeOut method for closing
+
                 AbstractView::initialize.call @, options_
                 $('body').css('overflow', 'hidden')
                 @render()

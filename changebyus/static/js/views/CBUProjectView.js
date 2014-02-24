@@ -37,8 +37,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     render: function() {
       var className, templateURL,
         _this = this;
+      this.viewData = this.model.attributes;
       if (this.model.get('active')) {
-        this.viewData = this.model.attributes;
         if (this.isResource) {
           className = "resource-container";
           templateURL = "resource.html";
@@ -46,18 +46,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           className = "project-container";
           templateURL = "project.html";
         }
-        this.$el = $("<div class='" + className + "'/>");
-        this.$el.template(this.templateDir + templateURL, {}, function() {
-          return _this.onTemplateLoad();
-        });
-        return $(this.parent).append(this.$el);
       } else {
-        this.$el = $("<div class='not-found'/>");
-        this.$el.template(this.templateDir + "partials-project/not-found.html", {}, function() {
-          return _this.onTemplateLoad();
-        });
-        return $(this.parent).append(this.$el);
+        className = "not-found";
+        templateURL = "partials-project/not-found.html";
       }
+      this.$el = $("<div class='" + className + "'/>");
+      this.$el.template(this.templateDir + templateURL, {}, function() {
+        return _this.onTemplateLoad();
+      });
+      return $(this.parent).append(this.$el);
     },
     addHeaderView: function() {
       var className, templateURL,
@@ -80,13 +77,40 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
     notMember: function() {
       var $notMember,
         _this = this;
-      console.log('notMember');
       $('.tabs-pane').remove();
       $notMember = $("<div class='body-container'/>");
       $notMember.template(this.templateDir + "partials-project/project-not-member.html", {
         data: this.viewData
       }, function() {});
       return this.$el.append($notMember);
+    },
+    toggleSubView: function() {
+      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
+      view = window.location.hash.substring(1);
+      _ref = [this.updatesView, this.projectMembersView, this.projectCalenderView];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        v = _ref[_i];
+        v.hide();
+      }
+      _ref1 = [this.updatesBTN, this.membersBTN, this.calendarBTN];
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        btn = _ref1[_j];
+        btn.removeClass("active");
+      }
+      switch (view) {
+        case "members":
+          this.projectMembersView.show();
+          this.membersBTN.addClass("active");
+          break;
+        case "calendar":
+          this.projectCalenderView.show();
+          this.calendarBTN.addClass("active");
+          break;
+        default:
+          this.updatesView.show();
+          this.updatesBTN.addClass("active");
+      }
+      return onPageElementsLoad();
     },
     onTemplateLoad: function() {
       this.getMemberStatus();
@@ -199,34 +223,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       return projectDonationModalView = new ProjectDonationModalView({
         model: this.model
       });
-    },
-    toggleSubView: function() {
-      var btn, v, view, _i, _j, _len, _len1, _ref, _ref1;
-      view = window.location.hash.substring(1);
-      _ref = [this.updatesView, this.projectMembersView, this.projectCalenderView];
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        v = _ref[_i];
-        v.hide();
-      }
-      _ref1 = [this.updatesBTN, this.membersBTN, this.calendarBTN];
-      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-        btn = _ref1[_j];
-        btn.removeClass("active");
-      }
-      switch (view) {
-        case "members":
-          this.projectMembersView.show();
-          this.membersBTN.addClass("active");
-          break;
-        case "calendar":
-          this.projectCalenderView.show();
-          this.calendarBTN.addClass("active");
-          break;
-        default:
-          this.updatesView.show();
-          this.updatesBTN.addClass("active");
-      }
-      return onPageElementsLoad();
     },
     getMemberStatus: function() {
       var id,

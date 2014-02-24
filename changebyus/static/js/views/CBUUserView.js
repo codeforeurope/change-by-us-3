@@ -58,14 +58,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
         reset: true
       });
     },
-    flagUser: function(e) {
-      var _this = this;
-      e.preventDefault();
-      return $.post("/api/user/" + this.model.id + "/flag", function(res_) {
-        $('.flag-user').addClass('disabled-btn');
-        return _this.$el.unbind("click #flag");
-      });
-    },
     addJoined: function() {
       var _this = this;
       if (this.joinedProjects.length === 0) {
@@ -93,6 +85,14 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       view.render();
       return this.$el.find(parent_).append(view.$el);
+    },
+    flagUser: function(e) {
+      var _this = this;
+      e.preventDefault();
+      return $.post("/api/user/" + this.model.id + "/flag", function(res_) {
+        $('.flag-user').addClass('disabled-btn');
+        return _this.$el.unbind("click #flag");
+      });
     }
   });
 });

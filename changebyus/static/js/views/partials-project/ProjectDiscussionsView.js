@@ -47,9 +47,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       this.updateCount();
       return ProjectSubView.prototype.addAll.call(this);
     },
-    updateCount: function() {
-      return this.$el.find(".admin-title").html("All Discussions (" + this.collection.models.length + ")");
-    },
     newDay: function(date_) {
       this.currentDate = date_;
       this.$currentDay = this.$day.clone();
@@ -73,6 +70,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
       this.$ul.append(projectDiscussionListItemView.$el);
       return onPageElementsLoad();
+    },
+    updateCount: function() {
+      return this.$el.find(".admin-title").html("All Discussions (" + this.collection.models.length + ")");
     },
     show: function() {
       $(".day-wrapper").remove();

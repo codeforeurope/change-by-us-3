@@ -14,7 +14,7 @@ require.config
         "dropkick": "ext/jquery/jquery.dropkick-min"
         "slicknav": "ext/jquery/jquery.slicknav.min"
         "hogan": "ext/hogan/hogan-2.0.0.amd"
-        "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg"
+        "wysiwyg": "ext/bootstrap/bootstrap-wysiwyg" 
         "autocomp": "ext/bootstrap/typeahead.min"
         "prettify": "ext/google/prettify"
         "template": "ext/jquery/template"

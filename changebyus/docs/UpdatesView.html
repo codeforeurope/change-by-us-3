@@ -412,13 +412,13 @@
             </div>
             
             <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">addAll</span>:<span class="hljs-function"> -&gt;</span>
-                <span class="hljs-property">@$members</span> = <span class="hljs-property">@$el</span>.find(<span class="hljs-string">".team-members ul"</span>)
                 i = <span class="hljs-number">0</span>
+                <span class="hljs-property">@$members</span> = <span class="hljs-property">@$el</span>.find(<span class="hljs-string">".team-members ul"</span>)
                 <span class="hljs-property">@members</span>.each <span class="hljs-function"><span class="hljs-params">(model)</span> =&gt;</span> 
                     <span class="hljs-keyword">if</span> (i++ &lt; <span class="hljs-number">4</span>) <span class="hljs-keyword">then</span> <span class="hljs-property">@addMember</span> model
                 <span class="hljs-keyword">if</span> i &lt;= <span class="hljs-number">4</span> <span class="hljs-keyword">then</span> $(<span class="hljs-string">'.team-members .pull-right'</span>).remove()
 
-                <span class="hljs-property">@$day</span> = $(<span class="hljs-string">'&lt;div /&gt;'</span>)
+                <span class="hljs-property">@$day</span> = $(<span class="hljs-string">"&lt;div class='entries-day-wrapper'/&gt;"</span>)
                 <span class="hljs-property">@$day</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-universal/entries-day-wrapper.html"</span>,
                     {},<span class="hljs-function"> =&gt;</span><span class="hljs-property">@onDayWrapperLoad</span>()
 

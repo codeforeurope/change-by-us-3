@@ -14,7 +14,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
                 @render()
 
             render: ->
-                @$el = $("<div />")
+                @$el = $("<div class='project-info-appearance'/>")
                 @$el.template @templateDir+"partials-project/project-info-appearance.html",
                     data: @viewData, => @onTemplateLoad()
                 $(@parent).append @$el
@@ -95,6 +95,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "dropki
                     console.log(datum)
                 )
 
+                # customize the look of the radio buttons
                 @$el.find('input:radio').screwDefaultButtons
                     image: 'url("/static/img/dot-check.png")'
                     width: 25

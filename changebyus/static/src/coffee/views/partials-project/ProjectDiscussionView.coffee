@@ -51,6 +51,10 @@ define ["underscore",
                 title = if @model? then @model.get("title") else ""
                 @$el.find(".admin-title").html "All Discussions (#{@count}): #{title}"
             
+            addDiscussion:(model_)->
+                projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})
+                @$ul.append projectDiscussionThreadItemView.$el
+                
             onSuccess:->  
                 @$ul.html('')
                 @$form.html('')
@@ -75,7 +79,3 @@ define ["underscore",
                         $("#new-thread-editor").html("")
                         model = new ProjectDiscussionModel(e.data)
                         @addDiscussion model
-
-            addDiscussion:(model_)->
-                projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})
-                @$ul.append projectDiscussionThreadItemView.$el

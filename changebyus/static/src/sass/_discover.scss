@@ -232,33 +232,6 @@
     float: right;
 }
 
-/*
-.discover-header-right {
-    width: 23%;
-    height: auto;
-    margin-left: 2%;
-    .btn-large {
-        width: 100%;
-        line-height: 20px;
-        margin: auto;
-        padding: 20px 0;
-    }
-    .cities {
-        @include box-skin;
-        margin-top: 10px;
-        min-height: 210px;
-        padding-top: 3px;
-        li {
-            padding: 4px 12px;
-            line-height: 17px;
-            // &:last-child{border-top: 1px solid $grayBorder;  }
-            a {
-                color: inherit;
-            }
-        }
-    }
-}*/
-
 .search-box {
     //float: left;
     border: 1px solid #dcdcdc;

@@ -99,6 +99,8 @@ define ["underscore",
                 $('a[href=#follow]').html "Follow (#{@joinedProjects.length})"
                 $('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
 
+            # ATTACH TO PAGE
+            # ----------------------------------------------------------------------
             addJoined:->
                 if @joinedProjects.length > 0 then @$followView.find('.updates-container').remove()
 
@@ -118,7 +120,6 @@ define ["underscore",
                 @delegateEvents()
 
             updatePage:->
-
                 if @currentView is "follow"
                     $ul = @$followView.find(".projects")
                     $ul.html("")

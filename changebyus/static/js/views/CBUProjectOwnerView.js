@@ -173,7 +173,6 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       return onPageElementsLoad();
     },
     updateCount: function(count_) {
-      console.log('updateCount');
       return this.projectDiscussionView.updateCount(count_);
     },
     getMemberStatus: function() {

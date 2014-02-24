@@ -465,55 +465,67 @@
 
             updateCount:-&gt;
                 $('a[href=#follow]').html "Follow (#{@joinedProjects.length})"
-                $('a[href=#manage]').html "Manage (#{@ownedProjects.length})"
+                $('a[href=#manage]').html "Manage (#{@ownedProjects.length})"</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="attach-to-page">ATTACH TO PAGE</h2>
 
-            addJoined:-&gt;
-                if @joinedProjects.length &gt; 0 then @$followView.find('.updates-container').remove()
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">addJoined</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@joinedProjects</span>.length &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$followView</span>.find(<span class="hljs-string">'.updates-container'</span>).remove()
 
-                @updateCount() 
-                @updateProjects(@joinedProjects.models, @$followView.find(".projects"), false, true)
-                @setPages @joinedProjects.length, @$followView
+                <span class="hljs-property">@updateCount</span>() 
+                <span class="hljs-property">@updateProjects</span>(<span class="hljs-property">@joinedProjects</span>.models, <span class="hljs-property">@$followView</span>.find(<span class="hljs-string">".projects"</span>), <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>)
+                <span class="hljs-property">@setPages</span> <span class="hljs-property">@joinedProjects</span>.length, <span class="hljs-property">@$followView</span>
 
-                @delegateEvents()
+                <span class="hljs-property">@delegateEvents</span>()
 
-            addOwned:-&gt;
-                if @ownedProjects.length &gt; 0 then @$manageView.find('.updates-container').remove()
+            <span class="hljs-attribute">addOwned</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@ownedProjects</span>.length &gt; <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$manageView</span>.find(<span class="hljs-string">'.updates-container'</span>).remove()
 
-                @updateCount() 
-                @updateProjects(@ownedProjects.models, @$manageView.find(".projects"), true, false)
-                @setPages @ownedProjects.length, @$manageView
+                <span class="hljs-property">@updateCount</span>() 
+                <span class="hljs-property">@updateProjects</span>(<span class="hljs-property">@ownedProjects</span>.models, <span class="hljs-property">@$manageView</span>.find(<span class="hljs-string">".projects"</span>), <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>)
+                <span class="hljs-property">@setPages</span> <span class="hljs-property">@ownedProjects</span>.length, <span class="hljs-property">@$manageView</span>
 
-                @delegateEvents()
+                <span class="hljs-property">@delegateEvents</span>()
 
-            updatePage:-&gt;
+            <span class="hljs-attribute">updatePage</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@currentView</span> <span class="hljs-keyword">is</span> <span class="hljs-string">"follow"</span>
+                    $ul = <span class="hljs-property">@$followView</span>.find(<span class="hljs-string">".projects"</span>)
+                    $ul.html(<span class="hljs-string">""</span>)
+                    <span class="hljs-property">@updateProjects</span>(<span class="hljs-property">@joinedProjects</span>.models, $ul, <span class="hljs-literal">false</span>, <span class="hljs-literal">true</span>)
+                <span class="hljs-keyword">else</span>
+                    $ul = <span class="hljs-property">@$manageView</span>.find(<span class="hljs-string">".projects"</span>)
+                    $ul.html(<span class="hljs-string">""</span>)
+                    <span class="hljs-property">@updateProjects</span>(<span class="hljs-property">@ownedProjects</span>.models, $ul, <span class="hljs-literal">true</span>, <span class="hljs-literal">false</span>)
 
-                if @currentView is "follow"
-                    $ul = @$followView.find(".projects")
-                    $ul.html("")
-                    @updateProjects(@joinedProjects.models, $ul, false, true)
-                else
-                    $ul = @$manageView.find(".projects")
-                    $ul.html("")
-                    @updateProjects(@ownedProjects.models, $ul, true, false)
+                $(<span class="hljs-string">"html, body"</span>).animate({ <span class="hljs-attribute">scrollTop</span>: <span class="hljs-number">0</span> }, <span class="hljs-string">"slow"</span>)
 
-                $("html, body").animate({ scrollTop: 0 }, "slow")
-
-            updateProjects:(results_, parent_, isOwned_=false, isFollowed_=false)-&gt; 
-                s = @index*@perPage
-                e = (@index+1)*@perPage-1
-                for i in [s..e]
-                    if i &lt; results_.length
+            <span class="hljs-attribute">updateProjects</span>:<span class="hljs-function"><span class="hljs-params">(results_, parent_, isOwned_=<span class="hljs-literal">false</span>, isFollowed_=<span class="hljs-literal">false</span>)</span>-&gt;</span> 
+                s = <span class="hljs-property">@index</span>*<span class="hljs-property">@perPage</span>
+                e = (<span class="hljs-property">@index</span>+<span class="hljs-number">1</span>)*<span class="hljs-property">@perPage</span>-<span class="hljs-number">1</span>
+                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [s..e]
+                    <span class="hljs-keyword">if</span> i &lt; results_.length
                         projectModel = results_[i]
-                        @addOne(projectModel, parent_, isOwned_, isFollowed_)
+                        <span class="hljs-property">@addOne</span>(projectModel, parent_, isOwned_, isFollowed_)
 
-            addOne: (projectModel_, parent_, isOwned_=false, isFollowed_=false) -&gt;
-                view = new ResourceProjectPreviewView
-                    model: projectModel_
-                    isOwned: isOwned_
-                    isFollowed: isFollowed_
-                    isProject: true
-                    isResource: false
-                    parent:parent_
+            <span class="hljs-attribute">addOne</span>: <span class="hljs-function"><span class="hljs-params">(projectModel_, parent_, isOwned_=<span class="hljs-literal">false</span>, isFollowed_=<span class="hljs-literal">false</span>)</span> -&gt;</span>
+                view = <span class="hljs-keyword">new</span> ResourceProjectPreviewView
+                    <span class="hljs-attribute">model</span>: projectModel_
+                    <span class="hljs-attribute">isOwned</span>: isOwned_
+                    <span class="hljs-attribute">isFollowed</span>: isFollowed_
+                    <span class="hljs-attribute">isProject</span>: <span class="hljs-literal">true</span>
+                    <span class="hljs-attribute">isResource</span>: <span class="hljs-literal">false</span>
+                    <span class="hljs-attribute">parent</span>:parent_
                 view.fetch()</pre></div></div>
             
         </li>

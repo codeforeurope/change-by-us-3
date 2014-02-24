@@ -58,6 +58,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 
                 @$searchRange      = $('#search-range').dropkick()
                 @$resultsModify    = $('.results-modify')
+                @$filterWithin     = $('.filter-within')
                 @$modifyInput      = @$resultsModify.find('input')
                 @$projectList      = $("#projects-list")
                 @$searchCatagories = $('.search-catagories')
@@ -144,7 +145,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             toggleModify:(showSorting_)->
                 @$resultsModify.toggle(!showSorting_)
-                $('.filter-within').toggle(showSorting_)
+                @$filterWithin.toggle(showSorting_)
 
             sendForm:(e)->
                 if e 

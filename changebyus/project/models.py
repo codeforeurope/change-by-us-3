@@ -38,12 +38,18 @@ import os
 project_images = [ 
     
     ImageManipulator(dict_name = "image_url_large_rect",
-                     converter = lambda x: generate_thumbnail(x, [1020, 430], blurs = 5),
+                     converter = lambda x: generate_thumbnail(x, 
+                                                             [1020, 430], 
+                                                             blurs=8,
+                                                             brightness=0.8),
                      prefix = "1020.430",
                      extension = ".jpg"),
 
     ImageManipulator(dict_name = "image_url_medium_rect",
-                     converter = lambda x: generate_thumbnail(x, [1020, 170], blurs = 5),
+                     converter = lambda x: generate_thumbnail(x, 
+                                                             [1020, 170], 
+                                                             blurs=8,
+                                                             brightness=0.8),
                      prefix = "1020.170",
                      extension = ".jpg"),
 

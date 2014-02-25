@@ -72,7 +72,7 @@ def generate_ellipse_png( filepath, size, blurs = 0 ):
         return None
 
 
-def generate_thumbnail( filepath, size, blurs = 0 ):
+def generate_thumbnail( filepath, size, blurs=0, brightness=1.0 ):
     """Creates a resized image of the original image
 
         Args:
@@ -92,9 +92,11 @@ def generate_thumbnail( filepath, size, blurs = 0 ):
 
         img = Image.open(filepath)
 
-        # filter
-        for i in range(blurs):
-            img = img.filter(ImageFilter.BLUR)
+        if blurs:
+            img = img.filter(ImageFilter.GaussianBlur(radius=blurs))
+            
+        if brightness and brightness != 1.0:
+            img = img.point(lambda p: p * brightness)
 
         path, image = os.path.split(filepath)
         base, extension = os.path.splitext(image)

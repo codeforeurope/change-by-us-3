@@ -60,7 +60,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     addReplies: function() {
       var reply, viewData, _i, _len, _ref,
         _this = this;
-      this.$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>');
+      this.$repliesHolder = $('<ul class="content-wrapper bordered-item np top-caret hide"/>');
       _ref = this.model.get('responses');
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         reply = _ref[_i];

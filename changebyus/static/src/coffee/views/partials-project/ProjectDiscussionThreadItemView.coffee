@@ -47,7 +47,7 @@ define ["underscore",
             # EVENTS
             # ----------------------------------------------------------------------
             onTemplateLoad:->
-                @$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
+                @$repliesHolder = $('<ul class="content-wrapper bordered-item np top-caret hide"/>')
                 AbstractView::onTemplateLoad.call(@)
 
             onReplyToggle:->

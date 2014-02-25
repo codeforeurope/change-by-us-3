@@ -6,6 +6,7 @@
 @import "compass/css3/transform";
 @import "compass/typography/text/ellipsis";
 
+
 /*** HEADER *****/
 .header-icon {
     position: absolute;
@@ -396,6 +397,22 @@
     &.thin-pad {
         padding: 20px;
     }
+}
+
+.top-caret{
+    &:before{
+        content: " ";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        top: -9px;
+        left: 20px;
+        position: relative;
+        background: $white;
+        border-top: 1px solid $grayBorder;
+        border-left: 1px solid $grayBorder;
+        @include transform( rotate(45deg) );
+    } 
 }
 
 .admin-title {

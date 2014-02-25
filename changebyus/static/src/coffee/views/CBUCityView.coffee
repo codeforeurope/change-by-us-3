@@ -39,9 +39,7 @@ define ["underscore",
                 $.getJSON "/api/project/cities", (r_)=> @onFetch(r_)
 
             render: ->  
-                @viewData                 = @model.attributes 
-                s                         = @viewData.image_url_round
-                @viewData.image_url_round = s.substring(s.lastIndexOf("/static/img/"))
+                @viewData = @model.attributes 
 
                 @$el = $("<div class='city-container'/>")
                 @$el.template @templateDir+"city.html", 

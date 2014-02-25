@@ -97,7 +97,7 @@ class CreateProjectCity(Command):
                             quote=v['quote'],
                             image_name=v['image_name'],
                             website=v['website'],
-                            geo_location=[float(v['lon']), float(v['lat'])],
+                            geo_location=[float(v['lat']), float(v['lon'])],
                             slug=k)
                             
             c.save()

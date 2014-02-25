@@ -7,7 +7,7 @@ from changebyus.extensions import db
 from changebyus.helpers.crypt import (handle_decryption, handle_initial_encryption, 
                                       handle_update_encryption)
 from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
-                                           generate_ellipse_png)
+                                           generate_ellipse_png, gen_image_urls)
 from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, 
                                       LocationEnabledEntityMixin)
 from changebyus.helpers.stringtools import slugify
@@ -46,31 +46,6 @@ user_images = [
 ]
 
 
-def gen_image_urls(image_url):
-
-    """
-        Helper that will take a root image name, and given our image manipulators
-        and preferred remote storage container will generate image names and urls
-
-        Args:
-            Base image name
-        Returns:
-            a dict of multiple {image_name : image_url}
-    """
-
-    images = {}
-
-    root_image = image_url if image_url is not None else app.settings['DEFAULT_USER_IMAGE']
-
-    for manipulator in user_images:
-        base, extension = os.path.splitext(root_image)
-        name = manipulator.prefix + "." + base + manipulator.extension
-        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
-
-    return images
-
-
-
 # Python 3 allows ENUM's, eventually move to that
 class Roles:
     ADMIN = "ADMIN"
@@ -96,10 +71,11 @@ class UserNotifications(db.EmbeddedDocument):
     # response to an update I created
     responds_to_my_update = db.BooleanField(default = True)
     # response to a update I commented on
+    # TODO merge this w/ responds to my update
     responds_to_my_comment = db.BooleanField(default = True)
     # someone flags my account or project as inappropriate
     flags_me = db.BooleanField(default = True)
-
+    # TODO add posts to FB/Twitter
 
     # someone posts a discussion on a project I own or organize
     posts_discussion = db.BooleanField(default = True)
@@ -203,7 +179,7 @@ class User(db.Document, UserMixin, EntityMixin, HasActiveEntityMixin,
                               depth=depth, 
                               **kwargs)
   
-        image_urls = gen_image_urls(self.image_name)
+        image_urls = gen_image_urls(self.image_name, user_images)
 
         for image, url in image_urls.iteritems():
             resp[image] = url

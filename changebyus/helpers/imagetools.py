@@ -14,6 +14,7 @@
 import os
 from PIL import Image, ImageOps, ImageDraw, ImageFilter
 from flask import current_app as app
+from flask.ext.cdn import url_for
 from flask.ext.cdn_rackspace import upload_rackspace_image
 
 class NamedImage():
@@ -29,6 +30,36 @@ class ImageManipulator():
         self.converter = converter
         self.prefix = prefix
         self.extension = extension
+        
+
+def gen_image_urls(filename, format_list):
+
+    """
+        Helper that will take a root image name, and given our image manipulators
+        and preferred remote storage container will generate image names and urls.
+
+        Example: happycat.jpg will have the imges 
+        250.250.happycat.png
+        300.300.happycat.jpg
+        etc
+
+        Args:
+            filename = Base image name
+            format_list = list of ImageManipulator objects for resultant derivatives
+        Returns:
+            a dict of multiple {image_name : image_url}
+    """
+
+    images = {}
+
+    root_image = filename if filename is not None else app.settings['DEFAULT_PROJECT_IMAGE']
+
+    for manipulator in format_list:
+        base, extension = os.path.splitext(root_image)
+        name = manipulator.prefix + "." + base + manipulator.extension
+        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
+
+    return images
 
 
 def generate_ellipse_png( filepath, size, blurs = 0 ):

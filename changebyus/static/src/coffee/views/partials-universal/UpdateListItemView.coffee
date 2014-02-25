@@ -69,7 +69,7 @@ define ["underscore",
             # --------------------------------------------
 
             addReplies:->
-                @$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
+                @$repliesHolder = $('<ul class="content-wrapper bordered-item np top-caret hide"/>')
 
                 @addReply(reply) for reply in @model.get('responses') 
 

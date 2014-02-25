@@ -4,7 +4,7 @@
     </div>
     <div class="reply-right">
         <form method="post" enctype="multipart/form-data" class="form-edit-create" name="project-update" action="/api/post/add/discussion">
-            <input type="text" maxlength="30" name="description" placeholder="Reply" class="input-xxlarge pull-left">
+            <input type="text" maxlength="30" name="description" placeholder="What is your reply?" class="input-xxlarge pull-left">
             <input type="submit" class="btn btn-medium btn-primary pull-right" value="Reply">
             <input type="hidden" name="title" value="title">
             <input type="hidden" name="project_id" value="<%= data.project.id %>">

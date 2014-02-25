@@ -31,10 +31,11 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       var m,
         _this = this;
       m = moment(this.model.get('created_at')).format("MMMM D hh:mm a");
-      this.model.set('created_at', m);
+      this.model.set('format_date', m);
       this.viewData = this.model.attributes;
       this.viewData.image_url_round_small = this.user.get("image_url_round_small");
       this.viewData.display_name = this.user.get("display_name");
+      console.log('@viewData', this.viewData);
       return $(this.el).template(this.templateDir + "partials-project/project-thread-list-item.html", {
         data: this.viewData
       }, function() {

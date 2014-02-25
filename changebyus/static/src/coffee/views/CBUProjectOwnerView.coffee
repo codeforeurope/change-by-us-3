@@ -79,7 +79,7 @@ define ["underscore",
                     isOwner:@memberData.owner
                     isOrganizer:@memberData.organizer
                     view:"admin"
- 
+
                 projectDiscussionsCollection    = new ProjectDiscussionsCollection()
                 projectMembersCollection        = new ProjectMembersCollection()
                 updatesCollection               = new UpdatesCollection()
@@ -104,12 +104,14 @@ define ["underscore",
                 @$membersBTN     = $("a[href='#members']").parent()
                 @$infoBTN        = $("a[href='#info']").parent()
 
-                # ##GET COLLECTION STARTED  
+                # GET COLLECTION STARTED  
+                # ----------------------
                 projectDiscussionsCollection.on 'add remove', (m_,c_)=>@updateCount c_.length
                 projectDiscussionsCollection.on 'reset', (c_)=>@updateCount c_.length
                 @projectDiscussionsView.loadData()
 
-                # ##ADD EVENT LISTENERS  
+                # ADD EVENT LISTENERS  
+                # ----------------------
                 @projectDiscussionsView.on 'DISCUSSION_CLICK', (arg_)=> 
                     window.location.hash = "discussion/"+arg_.model.id
 

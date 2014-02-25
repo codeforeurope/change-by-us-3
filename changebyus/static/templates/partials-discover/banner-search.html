@@ -14,15 +14,10 @@
 
         <select name="city" class="default" id="city">
                 <option>Featured Cities</option>
-                <option value="akron">Akron, OH</option>
-                <option value="charlotte">Charlotte, NC</option>
-                <option value="detroit">Detroit, MI</option>
-                <option value="macon">Macon, GA</option>
-                <option value="miami">Miami, FL</option>
-                <option value="newyork">New York, NY</option>
-                <option value="philadelphia">Philadelphia, PA</option>
-                <option value="sanjose">San Jose, CA</option>
-                <option value="stpaul">St. Paul, MN</option>
+
+                <% _.each(data.cities, function(city) { %>
+                <option value="<%= city.get('slug') %>"><%= city.get('name') %></option> 
+                <% }); %>
         </select>
     </div>
 

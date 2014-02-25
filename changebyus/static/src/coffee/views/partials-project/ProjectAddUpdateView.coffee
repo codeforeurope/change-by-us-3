@@ -3,7 +3,7 @@ define ["underscore",
         "jquery", 
         "template", 
         "abstract-view", 
-        "views/partials-project/ProjectSubView",
+        "project-sub-view",
         "views/partials-universal/WysiwygFormView",
         "views/partials-universal/UpdateListItemView",
         "views/partials-project/ProjectUpdateSuccessModalView"],
@@ -136,23 +136,13 @@ define ["underscore",
                     {}, => @onDayWrapperLoad()
 
             onDayWrapperLoad: ->
-                @isDataLoaded = true
-
-                if @collection.length > 0
-                    model_ = @collection.models[0]
-                    m = moment(model_.get("created_at")).format("MMMM D")
-                    @newDay(m)
-                
+                ProjectSubView::onDayWrapperLoad.call(@)
                 ProjectSubView::addAll.call(@) 
+
                 onPageElementsLoad()
 
-            newDay:(date_)->
-                # group updates by days
-                @currentDate = date_
-                @$currentDay = @$day.clone()
-                @$el.append @$currentDay
-                @$currentDay.find('h4').html(date_)
-                @$ul = @$currentDay.find('.bordered-item') 
+            # use parent method 
+            # newDay:(date_)->
                     
             addOne: (model_) ->
                 m = moment(model_.get("created_at")).format("MMMM D")

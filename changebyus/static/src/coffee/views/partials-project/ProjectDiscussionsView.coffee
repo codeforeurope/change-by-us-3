@@ -3,7 +3,7 @@ define ["underscore",
         "jquery", 
         "template", 
         "abstract-view",
-        "views/partials-project/ProjectSubView",
+        "project-sub-view",
         "views/partials-project/ProjectDiscussionListItemView"],
     (_, 
      Backbone, 
@@ -32,7 +32,13 @@ define ["underscore",
                     @deleteDiscussion(obj_.id)
                 
             # Attach Elements
-            # ------------------------------
+            # ------------------------------ 
+            onDayWrapperLoad:->
+                ProjectSubView::onDayWrapperLoad.call(@) 
+                ProjectSubView::addAll.call(@) 
+                    
+                @updateCount()
+
             addAll: -> 
                 if @collection.models.length is 0
                     @$el.template @templateDir+"partials-project/project-zero-discussions.html", 
@@ -40,30 +46,7 @@ define ["underscore",
                 else
                     @$el.template @templateDir+"partials-project/project-all-discussions.html",
                         {}, => @loadDayTemplate()
-
-            loadDayTemplate:->
-                @$day = $('<div class="day-wrapper"/>')
-                @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
-                    {}, => @onDayWrapperLoad()
-
-            onDayWrapperLoad:->
-                @isDataLoaded = true
-
-                if @collection.length > 0
-                    model_ = @collection.models[0]
-                    m = moment(model_.get("created_at")).format("MMMM D")
-                    @newDay(m)
-                    
-                @updateCount()
-
-                ProjectSubView::addAll.call(@) 
-
-            newDay:(date_)->
-                @currentDate = date_
-                @$currentDay = @$day.clone()
-                @$el.append @$currentDay
-                @$currentDay.find('h4').html(date_)
-                @$ul = @$currentDay.find('.bordered-item') 
+                        # user super loadDayTemplate() method
 
             addOne:(model_)->
                 m = moment(model_.get("created_at")).format("MMMM D")

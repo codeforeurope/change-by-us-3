@@ -55,8 +55,9 @@ define ["underscore",
             onTemplateLoad:-> 
                 if @isStream
                     projectName   = @model.get("project").name
+                    projectSlug   = @model.get("project").slug
                     $projectTitle = $("<div/>").addClass("project-name-corner")
-                    $projectTitle.html(projectName)
+                    $projectTitle.html("<a href='/project/#{projectSlug}'>#{projectName}</a>")
                     @$el.append $projectTitle
 
                 @$el.find('img').load -> onPageElementsLoad()

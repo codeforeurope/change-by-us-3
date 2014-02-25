@@ -3,17 +3,19 @@ define ["underscore",
         "jquery", 
         "template", 
         "abstract-view", 
+        "project-sub-view",
         "collection/StreamCollection", 
         "views/partials-universal/UpdateListItemView"], 
     (_, 
      Backbone, 
      $, 
      temp, 
-     AbstractView, 
+     AbstractView,
+     ProjectSubView,
      StreamCollection, 
      UpdateListItemView) ->
         
-        CBUStreamView = AbstractView.extend
+        CBUStreamView = ProjectSubView.extend
 
             initialize: (options_) ->
                 AbstractView::initialize.call @, options_

@@ -5,6 +5,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
     editorID: "#editor",
     slim: false,
     userAvatar: "",
+    userName: "",
     title: "",
     $updateForm: null,
     $formName: null,
@@ -14,6 +15,7 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
       AbstractView.prototype.initialize.call(this, options);
       this.slim = options.slim || this.slim;
       this.userAvatar = options.userAvatar || this.userAvatar;
+      this.userName = options.userName || this.userName;
       this.title = options.title || this.title;
       return this.render();
     },
@@ -26,7 +28,8 @@ define(["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
         editorID: this.editorID,
         slim: this.slim,
         title: this.title,
-        userAvatar: this.userAvatar
+        userAvatar: this.userAvatar,
+        userName: this.userName
       };
       switch (this.parent) {
         case "#update-form":

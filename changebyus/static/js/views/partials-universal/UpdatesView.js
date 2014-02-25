@@ -1,6 +1,6 @@
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-define(["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, ProjectSubView, UpdateListItemView) {
+define(["underscore", "backbone", "jquery", "template", "project-sub-view", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, ProjectSubView, UpdateListItemView) {
   var UpdatesView;
   return UpdatesView = ProjectSubView.extend({
     members: null,
@@ -41,13 +41,7 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
       });
     },
     onDayWrapperLoad: function() {
-      var m, model_;
-      if (this.collection.length > 0) {
-        model_ = this.collection.models[0];
-        m = moment(model_.get("created_at")).format("MMMM D");
-        this.newDay(m);
-      }
-      this.isDataLoaded = true;
+      ProjectSubView.prototype.onDayWrapperLoad.call(this);
       ProjectSubView.prototype.addAll.call(this);
       return onPageElementsLoad();
     },
@@ -79,13 +73,6 @@ define(["underscore", "backbone", "jquery", "template", "views/partials-project/
         });
         return this.$members.append($member);
       }
-    },
-    newDay: function(date_) {
-      this.currentDate = date_;
-      this.$currentDay = this.$day.clone();
-      this.$el.append(this.$currentDay);
-      this.$currentDay.find('h4').html(date_);
-      return this.$ul = this.$currentDay.find('.bordered-item');
     }
   });
 });

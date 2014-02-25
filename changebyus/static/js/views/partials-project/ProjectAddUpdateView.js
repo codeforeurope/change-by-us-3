@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-universal/UpdateListItemView", "views/partials-project/ProjectUpdateSuccessModalView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, WysiwygFormView, UpdateListItemView, ProjectUpdateSuccessModalView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "project-sub-view", "views/partials-universal/WysiwygFormView", "views/partials-universal/UpdateListItemView", "views/partials-project/ProjectUpdateSuccessModalView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, WysiwygFormView, UpdateListItemView, ProjectUpdateSuccessModalView) {
   var ProjectAddUpdateView;
   return ProjectAddUpdateView = ProjectSubView.extend({
     parent: "#project-update",
@@ -156,22 +156,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       });
     },
     onDayWrapperLoad: function() {
-      var m, model_;
-      this.isDataLoaded = true;
-      if (this.collection.length > 0) {
-        model_ = this.collection.models[0];
-        m = moment(model_.get("created_at")).format("MMMM D");
-        this.newDay(m);
-      }
+      ProjectSubView.prototype.onDayWrapperLoad.call(this);
       ProjectSubView.prototype.addAll.call(this);
       return onPageElementsLoad();
-    },
-    newDay: function(date_) {
-      this.currentDate = date_;
-      this.$currentDay = this.$day.clone();
-      this.$el.append(this.$currentDay);
-      this.$currentDay.find('h4').html(date_);
-      return this.$ul = this.$currentDay.find('.bordered-item');
     },
     addOne: function(model_) {
       var m, view;

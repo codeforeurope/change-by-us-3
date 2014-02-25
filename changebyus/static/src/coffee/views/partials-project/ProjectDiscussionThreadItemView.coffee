@@ -35,12 +35,12 @@ define ["underscore",
 
             render: ->
                 m = moment(@model.get('created_at')).format("MMMM D hh:mm a")
-                @model.set('created_at',m)
+                @model.set('format_date',m)
 
                 @viewData                       = @model.attributes
                 @viewData.image_url_round_small = @user.get("image_url_round_small")
                 @viewData.display_name          = @user.get("display_name")
-
+                console.log '@viewData',@viewData
                 $(@el).template @templateDir+"partials-project/project-thread-list-item.html",
                     {data: @viewData}, => @onTemplateLoad()
 

@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectSubView", "views/partials-project/ProjectDiscussionListItemView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectDiscussionListItemView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "project-sub-view", "views/partials-project/ProjectDiscussionListItemView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, ProjectDiscussionListItemView) {
   var ProjectDiscussionsView;
   return ProjectDiscussionsView = ProjectSubView.extend({
     parent: "#project-discussions",
@@ -17,6 +17,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         return _this.deleteDiscussion(obj_.id);
       });
     },
+    onDayWrapperLoad: function() {
+      ProjectSubView.prototype.onDayWrapperLoad.call(this);
+      ProjectSubView.prototype.addAll.call(this);
+      return this.updateCount();
+    },
     addAll: function() {
       var _this = this;
       if (this.collection.models.length === 0) {
@@ -28,31 +33,6 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           return _this.loadDayTemplate();
         });
       }
-    },
-    loadDayTemplate: function() {
-      var _this = this;
-      this.$day = $('<div class="day-wrapper"/>');
-      return this.$day.template(this.templateDir + "partials-universal/entries-day-wrapper.html", {}, function() {
-        return _this.onDayWrapperLoad();
-      });
-    },
-    onDayWrapperLoad: function() {
-      var m, model_;
-      this.isDataLoaded = true;
-      if (this.collection.length > 0) {
-        model_ = this.collection.models[0];
-        m = moment(model_.get("created_at")).format("MMMM D");
-        this.newDay(m);
-      }
-      this.updateCount();
-      return ProjectSubView.prototype.addAll.call(this);
-    },
-    newDay: function(date_) {
-      this.currentDate = date_;
-      this.$currentDay = this.$day.clone();
-      this.$el.append(this.$currentDay);
-      this.$currentDay.find('h4').html(date_);
-      return this.$ul = this.$currentDay.find('.bordered-item');
     },
     addOne: function(model_) {
       var config, m, projectDiscussionListItemView,

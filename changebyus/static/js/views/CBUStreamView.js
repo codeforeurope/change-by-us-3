@@ -1,6 +1,6 @@
-define(["underscore", "backbone", "jquery", "template", "abstract-view", "collection/StreamCollection", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, AbstractView, StreamCollection, UpdateListItemView) {
+define(["underscore", "backbone", "jquery", "template", "abstract-view", "project-sub-view", "collection/StreamCollection", "views/partials-universal/UpdateListItemView"], function(_, Backbone, $, temp, AbstractView, ProjectSubView, StreamCollection, UpdateListItemView) {
   var CBUStreamView;
-  return CBUStreamView = AbstractView.extend({
+  return CBUStreamView = ProjectSubView.extend({
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
       this.collection = new StreamCollection();

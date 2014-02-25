@@ -1,5 +1,5 @@
-define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view","autocomp", "model/ProjectModel", "resource-project-view"], 
-    (_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) ->
+define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view","autocomp", "model/ProjectModel", "collection/CityCollection", "resource-project-view"], 
+    (_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, CityCollection, ResourceProjectPreviewView) ->
         BannerSearchView = AbstractView.extend
 
             byProjectResources:"all"
@@ -8,12 +8,19 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
             category:""
             projects:null
             ajax:null 
+            cities:null
+            sortedCities:null
             hasInitUserSend:false
 
             initialize: (options_) ->
                 AbstractView::initialize.call @, options_
                 @showResources = (window.location.hash.substring(1) is "resources")
-                @render()
+                @fetch()
+
+            fetch:-> 
+                @cities = new CityCollection() 
+                @cities.on 'reset',@onFetch, @
+                @cities.fetch reset:true
 
             events:
                 "click .search-catagories li":"onCategoriesClick"
@@ -27,6 +34,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 "keydown #search-near":"onInputEnter" 
                 
             render: -> 
+                @viewData.cities = @sortedCities
                 @$el = $(".banner-search")
                 @$el.template @templateDir+"partials-discover/banner-search.html",
                     {data: @viewData}, => @onTemplateLoad()
@@ -158,7 +166,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 modifyInputVal = @$searchNear.val()
 
                 # package up query variables
-                dataObj = {
+                dataObj = 
                     s: if @category is "" then @$searchInput.val() else ""
                     cat: @category
                     loc: @locationObj.name
@@ -166,7 +174,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     type: @byProjectResources  
                     lat: @locationObj.lat
                     lon: @locationObj.lon
-                }
 
                 # abort previous calls
                 if @ajax then @ajax.abort()
@@ -199,6 +206,11 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             # EVENTS 
             # -----------------------------------------------------------------
+            onFetch:(res_)->  
+                @sortedCities = @cities.sortBy (model)->
+                    model.get('name') 
+                @render()
+
             onInputFocus:->
                 @updateSubmit()
                 @category = ""

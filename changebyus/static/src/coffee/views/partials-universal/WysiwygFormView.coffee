@@ -6,6 +6,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
             editorID:"#editor" #default ID, but doublecheck that form ID is correct
             slim:false
             userAvatar:""
+            userName:""
             title:""
             $updateForm:null
             $formName:null
@@ -16,6 +17,7 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
 
                 @slim       = options.slim || @slim
                 @userAvatar = options.userAvatar || @userAvatar
+                @userName   = options.userName || @userName
                 @title      = options.title || @title
 
                 @render()
@@ -23,11 +25,12 @@ define ["underscore", "backbone", "jquery", "bootstrap", "template", "form", "pr
             render: ->
                 @viewData =
                     project_id: window.projectID
-                    response_to_id: @id 
+                    response_to_id: @id
                     editorID: @editorID
                     slim: @slim
                     title: @title 
                     userAvatar:@userAvatar
+                    userName:@userName
 
                 switch @parent 
                     when "#update-form"

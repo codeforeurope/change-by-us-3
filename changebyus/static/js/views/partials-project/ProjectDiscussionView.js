@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "views/partials-project/ProjectSubView", "views/partials-universal/WysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, ProjectSubView, WysiwygFormView, ProjectDiscussionThreadItemView) {
+define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussionModel", "abstract-view", "project-sub-view", "views/partials-universal/WysiwygFormView", "views/partials-project/ProjectDiscussionThreadItemView"], function(_, Backbone, $, temp, ProjectDiscussionModel, AbstractView, ProjectSubView, WysiwygFormView, ProjectDiscussionThreadItemView) {
   var ProjectDiscussionView;
   return ProjectDiscussionView = ProjectSubView.extend({
     $ul: null,
@@ -22,13 +22,41 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
     },
     onTemplateLoad: function() {
-      this.templateLoaded = true;
-      this.$ul = this.$el.find('.bordered-item');
       this.$form = this.$el.find(this.$threadFormID);
+      return this.loadDayTemplate();
+    },
+    onDayWrapperLoad: function() {
       if (this.delayedDataLoad) {
         this.onSuccess();
       }
-      return ProjectSubView.prototype.onTemplateLoad.call(this);
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
+    addAll: function() {
+      var model, response, _i, _len, _ref, _results;
+      this.$el.find('.day-wrapper').remove();
+      this.currentDate = '';
+      _ref = this.model.get("responses");
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        response = _ref[_i];
+        model = new ProjectDiscussionModel({
+          id: response.id
+        });
+        _results.push(this.addOne(model));
+      }
+      return _results;
+    },
+    addOne: function(model_) {
+      var m, projectDiscussionThreadItemView;
+      m = moment(model_.get("created_at")).format("MMMM D");
+      if (this.currentDate !== m) {
+        this.newDay(m);
+      }
+      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({
+        model: model_
+      });
+      this.$ul.append(projectDiscussionThreadItemView.$el);
+      return onPageElementsLoad();
     },
     updateDiscussion: function(id_) {
       var _this = this;
@@ -37,6 +65,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       });
       return this.model.fetch({
         success: function() {
+          _this.isDataLoaded = true;
           if (_this.templateLoaded === false) {
             return _this.delayedDataLoad = true;
           } else {
@@ -49,40 +78,28 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       var title;
       this.count = count;
       title = this.model != null ? this.model.get("title") : "";
-      return this.$el.find(".admin-title").html("All Discussions (" + this.count + "): " + title);
-    },
-    addDiscussion: function(model_) {
-      var projectDiscussionThreadItemView;
-      projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({
-        model: model_
-      });
-      return this.$ul.append(projectDiscussionThreadItemView.$el);
+      this.$el.find(".admin-title").text("All Discussions (" + this.count + "):   ");
+      return this.$el.find(".discussion-title").text(title);
     },
     onSuccess: function() {
-      var dataObj, model, response, userAvatar, _i, _len, _ref,
+      var dataObj, userAvatar, userName,
         _this = this;
-      this.$ul.html('');
-      this.$form.html('');
+      this.addAll();
+      this.$form.html('').detach().appendTo(this.$el);
       this.updateCount(this.count);
-      this.addDiscussion(this.model);
-      _ref = this.model.get("responses");
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        response = _ref[_i];
-        model = new ProjectDiscussionModel({
-          id: response.id
-        });
-        this.addDiscussion(model);
-      }
       userAvatar = $('.profile-nav-header img').attr('src');
+      userName = $('.profile-nav-header span').text();
       dataObj = {
         parent: this.$threadFormID,
         id: this.model.get("id"),
         slim: true,
         userAvatar: userAvatar,
+        userName: userName,
         title: this.model.get("title")
       };
       this.wysiwygFormView = new WysiwygFormView(dataObj);
       return this.wysiwygFormView.success = function(e) {
+        var model;
         if (e.success) {
           $("#new-thread-editor").html("");
           model = new ProjectDiscussionModel(e.data);

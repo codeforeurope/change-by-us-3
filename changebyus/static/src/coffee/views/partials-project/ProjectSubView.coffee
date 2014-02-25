@@ -34,13 +34,38 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 @$el.find('.no-results').show()
             
             # override in subview
-            addOne: (model_) ->
-                
-            # override in subview
             addAll: ->  
                 if @collection.length is 0 then @noResults() 
 
-                @collection.each (model_) =>  
-                    @addOne model_
+                @collection.each (model_) => @addOne model_
 
                 @isDataLoaded = true
+
+            # override in subview
+            addOne: (model_) ->
+            
+            # Attach elements
+            # ----------------------------------------------------------------------
+            loadDayTemplate:->
+                @$day = $('<div class="day-wrapper"/>')
+                @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
+                    {}, => @onDayWrapperLoad()
+
+            onDayWrapperLoad: ->
+                @isDataLoaded = true
+                
+                if @collection
+                    if @collection.length > 0
+                        model_ = @collection.models[0]
+                        m = moment(model_.get("created_at")).format("MMMM D")
+                        @newDay(m)
+
+            newDay:(date_)->
+                console.log 'newDay !!!!'
+                @currentDate = date_
+                @$currentDay = @$day.clone()
+                @$el.append @$currentDay
+                @$currentDay.find('h4').html(date_)
+                @$ul = @$currentDay.find('.bordered-item')
+
+                console.log 'new Day ', @$ul,@$currentDay

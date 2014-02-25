@@ -43,11 +43,12 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       });
     },
     onTemplateLoad: function() {
-      var $projectTitle, projectName;
+      var $projectTitle, projectName, projectSlug;
       if (this.isStream) {
         projectName = this.model.get("project").name;
+        projectSlug = this.model.get("project").slug;
         $projectTitle = $("<div/>").addClass("project-name-corner");
-        $projectTitle.html(projectName);
+        $projectTitle.html("<a href='/project/" + projectSlug + "'>" + projectName + "</a>");
         this.$el.append($projectTitle);
       }
       this.$el.find('img').load(function() {

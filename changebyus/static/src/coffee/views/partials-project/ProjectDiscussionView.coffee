@@ -2,16 +2,18 @@ define ["underscore",
         "backbone", 
         "jquery", 
         "template", 
-        "model/ProjectDiscussionModel", 
-        "views/partials-project/ProjectSubView", 
+        "model/ProjectDiscussionModel",
+        "abstract-view",
+        "project-sub-view", 
         "views/partials-universal/WysiwygFormView", 
         "views/partials-project/ProjectDiscussionThreadItemView"], 
     (_, 
      Backbone, 
      $, 
      temp, 
-     ProjectDiscussionModel, 
-     ProjectSubView, 
+     ProjectDiscussionModel,
+     AbstractView,
+     ProjectSubView,
      WysiwygFormView, 
      ProjectDiscussionThreadItemView) ->
         ProjectDiscussionView = ProjectSubView.extend
@@ -34,44 +36,61 @@ define ["underscore",
                     {data: @viewData}, => @onTemplateLoad()
 
             onTemplateLoad:->
-                @templateLoaded = true
-                @$ul = @$el.find('.bordered-item')
                 @$form = @$el.find(@$threadFormID)
-                if @delayedDataLoad then @onSuccess()
+                
+                # user super loadDayTemplate() method
+                @loadDayTemplate()
 
-                ProjectSubView::onTemplateLoad.call @
+            onDayWrapperLoad:->
+                if @delayedDataLoad then @onSuccess()
+                AbstractView::onTemplateLoad.call @
+
+            addAll:()-> 
+                @$el.find('.day-wrapper').remove()
+                @currentDate = ''
+                
+                # add discussions
+                for response in @model.get("responses")
+                    model = new ProjectDiscussionModel({id:response.id})
+                    @addOne model
+
+            addOne:(model_)->
+                m = moment(model_.get("created_at")).format("MMMM D")
+                if @currentDate isnt m then @newDay(m)
+
+                projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_}) 
+                @$ul.append projectDiscussionThreadItemView.$el
+
+                onPageElementsLoad()
 
             updateDiscussion:(id_)-> 
                 @model = new ProjectDiscussionModel({id:id_})
                 @model.fetch
                     success:=>
-                        if (@templateLoaded is false) then @delayedDataLoad = true else @onSuccess()
+                        @isDataLoaded = true
+                        if (@templateLoaded is false) then (@delayedDataLoad = true) else @onSuccess()
 
             updateCount:(@count)-> 
                 title = if @model? then @model.get("title") else ""
-                @$el.find(".admin-title").html "All Discussions (#{@count}): #{title}"
-            
-            addDiscussion:(model_)->
-                projectDiscussionThreadItemView = new ProjectDiscussionThreadItemView({model:model_})
-                @$ul.append projectDiscussionThreadItemView.$el
-                
-            onSuccess:->  
-                @$ul.html('')
-                @$form.html('')
-                @updateCount(@count)
+                @$el.find(".admin-title").text "All Discussions (#{@count}):   "
+                @$el.find(".discussion-title").text title
 
+            onSuccess:-> 
                 # add discussions
-                @addDiscussion @model
-                for response in @model.get("responses")
-                    model = new ProjectDiscussionModel({id:response.id})
-                    @addDiscussion model
+                @addAll()
+                @$form.html('').detach().appendTo(@$el)
+                @updateCount(@count)
 
                 # create Wysiwyg Form
                 userAvatar = $('.profile-nav-header img').attr('src')
+                userName = $('.profile-nav-header span').text()
+
                 dataObj = 
                     parent:@$threadFormID
                     id:@model.get("id")
-                    slim:true, userAvatar:userAvatar
+                    slim:true
+                    userAvatar:userAvatar
+                    userName:userName
                     title:@model.get("title")
                 @wysiwygFormView = new WysiwygFormView(dataObj)
                 @wysiwygFormView.success = (e)=>

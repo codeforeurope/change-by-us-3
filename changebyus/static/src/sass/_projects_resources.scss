@@ -398,9 +398,12 @@
     }
 }
 
-h2.admin-title {
+.admin-title {
     margin: 0 0 16px;
     @include font-styling("asap", 32px, $gray20, "normal", "regular");
+}
+.discussion-title{
+    @include font-styling("asap", 24px, $gray20, "normal", "regular");
 }
 
 .content-left,
@@ -452,6 +455,9 @@ h2.admin-title {
     }
     input[type=submit] {
         margin-left: 16px;
+    }
+    .post-title{
+        
     }
     .tr {
         float: right;
@@ -842,6 +848,9 @@ h2.admin-title {
     font-size: 14px;
     @include box-border;
     @include border-bottom-left-radius(4px);
+    a{
+        color: inherit;
+    }
 }
 
 .stream-wrapper {

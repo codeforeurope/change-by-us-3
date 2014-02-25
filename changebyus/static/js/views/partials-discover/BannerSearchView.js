@@ -1,4 +1,4 @@
-define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, ResourceProjectPreviewView) {
+define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-view", "autocomp", "model/ProjectModel", "collection/CityCollection", "resource-project-view"], function(_, Backbone, $, temp, dropkick, AbstractView, autocomp, ProjectModel, CityCollection, ResourceProjectPreviewView) {
   var BannerSearchView;
   return BannerSearchView = AbstractView.extend({
     byProjectResources: "all",
@@ -11,11 +11,20 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     category: "",
     projects: null,
     ajax: null,
+    cities: null,
+    sortedCities: null,
     hasInitUserSend: false,
     initialize: function(options_) {
       AbstractView.prototype.initialize.call(this, options_);
       this.showResources = window.location.hash.substring(1) === "resources";
-      return this.render();
+      return this.fetch();
+    },
+    fetch: function() {
+      this.cities = new CityCollection();
+      this.cities.on('reset', this.onFetch, this);
+      return this.cities.fetch({
+        reset: true
+      });
     },
     events: {
       "click .search-catagories li": "onCategoriesClick",
@@ -30,6 +39,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     render: function() {
       var _this = this;
+      this.viewData.cities = this.sortedCities;
       this.$el = $(".banner-search");
       this.$el.template(this.templateDir + "partials-discover/banner-search.html", {
         data: this.viewData
@@ -247,6 +257,12 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
           return _this.trigger("ON_RESULTS", size);
         }
       });
+    },
+    onFetch: function(res_) {
+      this.sortedCities = this.cities.sortBy(function(model) {
+        return model.get('name');
+      });
+      return this.render();
     },
     onInputFocus: function() {
       this.updateSubmit();

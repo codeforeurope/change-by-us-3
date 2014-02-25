@@ -2,7 +2,7 @@ define ["underscore",
         "backbone", 
         "jquery", 
         "template", 
-        "views/partials-project/ProjectSubView", 
+        "project-sub-view", 
         "views/partials-universal/UpdateListItemView"], 
     (_, 
      Backbone, 
@@ -44,13 +44,9 @@ define ["underscore",
                     {}, =>@onDayWrapperLoad()
 
             onDayWrapperLoad: ->  
-                if @collection.length > 0
-                    model_ = @collection.models[0]
-                    m = moment(model_.get("created_at")).format("MMMM D")
-                    @newDay(m)
-
-                @isDataLoaded = true
+                ProjectSubView::onDayWrapperLoad.call(@)
                 ProjectSubView::addAll.call(@) 
+
                 onPageElementsLoad()
 
             addOne: (model_) -> 
@@ -70,9 +66,5 @@ define ["underscore",
                     $member.template @templateDir+"partials-universal/member-avatar.html", {data: model_.attributes}
                     @$members.append $member 
 
-            newDay:(date_)-> 
-                @currentDate = date_
-                @$currentDay = @$day.clone()
-                @$el.append @$currentDay
-                @$currentDay.find('h4').html(date_)
-                @$ul = @$currentDay.find('.bordered-item')  
+            # use parent method 
+            # newDay:(date_)->

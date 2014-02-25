@@ -1,4 +1,4 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectMemberListItemView"],
+define ["underscore", "backbone", "jquery", "template", "project-sub-view", "views/partials-project/ProjectMemberListItemView"],
     (_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView) ->
         ProjectMembersView = ProjectSubView.extend
         

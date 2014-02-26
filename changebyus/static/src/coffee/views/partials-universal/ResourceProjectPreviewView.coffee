@@ -29,7 +29,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             render: ->
                 @$el = $("<li class='project-preview'/>")
                 @$el.template @templateDir+"partials-universal/project-resource.html",
-                    {data: @viewData}, => @onTemplateLoad
+                    {data: @viewData}, => @onTemplateLoad()
 
             onTemplateLoad:->
                 @delegateEvents()
@@ -44,7 +44,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
             onFetch:(r)-> 
                 $(@parent).append @render()  
 
-            close:(e)-> 
+            close:(e)->
                 confirmation = confirm("Do you really want to leave this project?")
                 if confirmation
                     $closeX = $(".close-x")

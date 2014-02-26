@@ -21,16 +21,18 @@ define ["underscore",
             model:UpdateModel
             isStream:false
             isMember:false
+            isOwnerOrganizer:false
             $repliesHolder: null
             $postRight: null
             $replyForm: null 
 
             initialize: (options_) ->
-                options   = options_
+                options           = options_
                 AbstractView::initialize.call @, options
-                @viewData = @model.attributes
-                @isMember = options.isMember
-                @isStream = options.isStream || @isStream
+                @viewData         = @model.attributes
+                @isMember         = options.isMember || @isMember
+                @isOwnerOrganizer = options.isOwnerOrganizer || @isOwnerOrganizer
+                @isStream         = options.isStream || @isStream
 
                 @el  = if @isStream then $('<div/>').addClass('content-wrapper') else $('<li/>')
                 @$el = $(@el)
@@ -76,7 +78,7 @@ define ["underscore",
                 viewData = @model.attributes
                 viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
             
-                if @isMember
+                if @isMember or @isOwnerOrganizer
                     @$replyForm = $('<li class="post-reply-form"/>')
                     @$replyForm.template @templateDir+"partials-universal/post-reply-form.html",
                         {data:viewData}, => @onFormLoaded()

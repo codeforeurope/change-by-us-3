@@ -21,7 +21,7 @@ define ["underscore", "backbone", "jquery", "template", "moment", "abstract-view
                 @viewData.image_url_round_small = @user.get("image_url_round_small")
                 @viewData.display_name          = @user.get("display_name")
                 @viewData.format_date           = moment(@model.get("created_at")).format("MMMM D hh:mm a")
-
+                console.log '@viewData.display_name',@viewData.display_name
                 $reply = $("<div class='post-reply clearfix'/>")
                 $reply.template @templateDir+"partials-universal/post-reply-view.html", 
                     {data:@viewData}, => @onTemplateLoad()

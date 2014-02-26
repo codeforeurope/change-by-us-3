@@ -148,6 +148,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         isResource: this.isResource,
         parent: parent
       };
+      console.log('@isOwnerOrganizer ------------------ ', this.isOwnerOrganizer);
       this.updatesView = new UpdatesView(config);
       if (this.isResource) {
         this.updatesView.show();

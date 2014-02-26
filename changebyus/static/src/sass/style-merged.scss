@@ -2256,7 +2256,7 @@ button.btn.btn-mini, input[type="submit"].btn.btn-mini {
 
     .nav {
         &.user {
-            height: $loggedInHeight+1;
+            height: $loggedInHeight;
         }
     }
 

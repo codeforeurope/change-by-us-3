@@ -8,10 +8,12 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
     currentData: "",
     isResource: false,
     isMember: false,
+    isOwnerOrganizer: false,
     initialize: function(options_) {
       ProjectSubView.prototype.initialize.call(this, options_);
       this.members = options_.members || this.members;
-      return this.isMember = options_.isMember;
+      this.isMember = options_.isMember || this.isMember;
+      return this.isOwnerOrganizer = options_.isOwnerOrganizer || this.isOwnerOrganizer;
     },
     render: function() {
       var _this = this;
@@ -51,9 +53,11 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
       if (this.currentDate !== m) {
         this.newDay(m);
       }
+      console.log('isOwnerOrganizer ------ ', this.isOwnerOrganizer);
       view = new UpdateListItemView({
         model: model_,
-        isMember: this.isMember
+        isMember: this.isMember,
+        isOwnerOrganizer: this.isOwnerOrganizer
       });
       return this.$ul.append(view.$el);
     },

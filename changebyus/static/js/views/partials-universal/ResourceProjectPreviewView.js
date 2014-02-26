@@ -31,7 +31,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return this.$el.template(this.templateDir + "partials-universal/project-resource.html", {
         data: this.viewData
       }, function() {
-        return _this.onTemplateLoad;
+        return _this.onTemplateLoad();
       });
     },
     onTemplateLoad: function() {

@@ -4,6 +4,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
     model: UpdateModel,
     isStream: false,
     isMember: false,
+    isOwnerOrganizer: false,
     $repliesHolder: null,
     $postRight: null,
     $replyForm: null,
@@ -13,7 +14,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
-      this.isMember = options.isMember;
+      this.isMember = options.isMember || this.isMember;
+      this.isOwnerOrganizer = options.isOwnerOrganizer || this.isOwnerOrganizer;
       this.isStream = options.isStream || this.isStream;
       this.el = this.isStream ? $('<div/>').addClass('content-wrapper') : $('<li/>');
       this.$el = $(this.el);
@@ -68,7 +70,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       }
       viewData = this.model.attributes;
       viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
-      if (this.isMember) {
+      if (this.isMember || this.isOwnerOrganizer) {
         this.$replyForm = $('<li class="post-reply-form"/>');
         this.$replyForm.template(this.templateDir + "partials-universal/post-reply-form.html", {
           data: viewData

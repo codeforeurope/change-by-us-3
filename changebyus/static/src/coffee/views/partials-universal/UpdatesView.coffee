@@ -18,12 +18,14 @@ define ["underscore",
             currentData:"" 
             isResource:false
             isMember:false
+            isOwnerOrganizer:false
 
             initialize: (options_) ->  
                 ProjectSubView::initialize.call(@, options_)
                 
-                @members  = options_.members || @members 
-                @isMember = options_.isMember 
+                @members          = options_.members || @members 
+                @isMember         = options_.isMember || @isMember
+                @isOwnerOrganizer = options_.isOwnerOrganizer || @isOwnerOrganizer
 
             render: ->  
                 @$el = $(@parent)
@@ -53,7 +55,8 @@ define ["underscore",
                 m = moment(model_.get("created_at")).format("MMMM D")
                 if @currentDate isnt m then @newDay(m)
 
-                view = new UpdateListItemView({model: model_, isMember:@isMember})
+                console.log 'isOwnerOrganizer ------ ',@isOwnerOrganizer
+                view = new UpdateListItemView({model: model_, isMember:@isMember, isOwnerOrganizer:@isOwnerOrganizer})
                 @$ul.append view.$el
 
             addMember: (model_) ->

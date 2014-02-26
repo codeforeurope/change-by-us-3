@@ -153,6 +153,7 @@ define ["underscore",
                     isResource:@isResource
                     parent:parent
 
+                console.log '@isOwnerOrganizer ------------------ ',@isOwnerOrganizer
                 @updatesView = new UpdatesView config
 
                 if @isResource

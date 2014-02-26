@@ -48,11 +48,12 @@ define ["underscore",
             addAll:()-> 
                 @$el.find('.day-wrapper').remove()
                 @currentDate = ''
-                
-                # add discussions
+
+                # add discussions 
                 for response in @model.get("responses")
-                    model = new ProjectDiscussionModel({id:response.id})
+                    model = new ProjectDiscussionModel(response)
                     @addOne model
+              
 
             addOne:(model_)->
                 m = moment(model_.get("created_at")).format("MMMM D")
@@ -97,4 +98,4 @@ define ["underscore",
                     if e.success
                         $("#new-thread-editor").html("")
                         model = new ProjectDiscussionModel(e.data)
-                        @addDiscussion model
+                        @addOne model

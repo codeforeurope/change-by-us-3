@@ -40,7 +40,7 @@ define ["underscore",
                 @viewData                       = @model.attributes
                 @viewData.image_url_round_small = @user.get("image_url_round_small")
                 @viewData.display_name          = @user.get("display_name")
-                console.log '@viewData',@viewData
+ 
                 $(@el).template @templateDir+"partials-project/project-thread-list-item.html",
                     {data: @viewData}, => @onTemplateLoad()
 

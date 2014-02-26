@@ -39,9 +39,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         response = _ref[_i];
-        model = new ProjectDiscussionModel({
-          id: response.id
-        });
+        model = new ProjectDiscussionModel(response);
         _results.push(this.addOne(model));
       }
       return _results;
@@ -103,7 +101,7 @@ define(["underscore", "backbone", "jquery", "template", "model/ProjectDiscussion
         if (e.success) {
           $("#new-thread-editor").html("");
           model = new ProjectDiscussionModel(e.data);
-          return _this.addDiscussion(model);
+          return _this.addOne(model);
         }
       };
     }

@@ -31,16 +31,15 @@ define ["underscore",
             render: ->
                 @$el = $("<div class='body-container'/>") if @$el.html() is ""
                 @$el.template @templateDir+"partials-universal/stripe-review.html",
-                    data:@stripe,  =>@onTemplateLoad()
+                    {data:@stripe}, => @onTemplateLoad()
                 $(@parent).append @$el
                 @$el.show()
 
             # EVENTS 
             # ----------------------------------------------------------------------
-            onEditGoalClick:->
-                @$el.toggle()
+            onEditGoalClick:(e)-> 
+                @$el.toggle() 
                 @$review.toggle()
-                false
 
             onFetch:->
                 @stripe = @model.get("stripe_account")
@@ -49,12 +48,12 @@ define ["underscore",
                 @render()
 
             onTemplateLoad:-> 
-                @$review = $("<div class='body-container'/>") if @$review is null
+                @$review = $("<div class='body-container'/>")
                 @$review.template @templateDir+"partials-universal/stripe-form.html",
                     data:@stripe,  =>@ajaxForm()
                 $(@parent).append @$review
                 @$review.hide()
-
+                console.log 'onTemplateLoad onTemplateLoad onTemplateLoad onTemplateLoad onTemplateLoad'
                 AbstractView::onTemplateLoad.call @
 
             # AJAX FORM

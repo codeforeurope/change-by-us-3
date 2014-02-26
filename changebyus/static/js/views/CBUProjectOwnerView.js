@@ -113,11 +113,13 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       view = window.location.hash.substring(1);
       slug = this.model.get('slug');
       stripeAccount = this.model.get("stripe_account");
-      if (stripeAccount && view === "fundraising") {
-        window.location.hash = "";
-        window.location.href = "/project/" + slug + "/fundraising";
-        return;
-      }
+      /*
+      if stripeAccount and view is "fundraising"
+          window.location.hash = ""
+          window.location.href = "/project/#{slug}/fundraising"
+          return
+      */
+
       views = [this.projectDiscussionsView, this.projectDiscussionView, this.projectNewDiscussionView, this.projectAddUpdateView, this.projectCalenderView, this.projectMembersView, this.projectInfoAppearanceView];
       if (!this.isResource) {
         views.push(this.projectFundraisingView);

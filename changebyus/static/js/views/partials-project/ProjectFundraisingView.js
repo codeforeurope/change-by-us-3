@@ -2,6 +2,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
   var ProjectFundraisingView;
   return ProjectFundraisingView = AbstractView.extend({
     parent: "#project-fundraising",
+    reviewDiv: "#review-fundraising",
+    setupDiv: "#setup-fundraising",
     name: "My Project",
     initialize: function(options_) {
       var options;
@@ -12,27 +14,38 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
     },
     events: {
       "click #get-started": "linkStripe",
-      "click #does-it-work": "slideToggle"
+      "click #does-it-work": "slideToggle",
+      "click #edit-goal": "onEditGoalClick"
     },
     render: function() {
-      var stripeAccount,
-        _this = this;
-      this.$el = $(this.parent);
-      stripeAccount = this.model.get("stripe_account");
-      if (stripeAccount) {
+      var _this = this;
+      this.$el = $(this.reviewDiv);
+      this.stripe = this.model.get("stripe_account");
+      if (this.stripe) {
         return this.$el.template(this.templateDir + "partials-universal/stripe-review.html", {
-          data: stripeAccount
+          data: this.stripe
         }, function() {
           return _this.onTemplateLoad();
         });
       } else {
         return this.$el.template(this.templateDir + "partials-project/project-fundraising-get-started.html", {}, function() {
-          _this.getStarted();
-          return _this.delegateEvents();
+          return _this.getStarted();
         });
       }
     },
+    onTemplateLoad: function() {
+      var _this = this;
+      this.$setup = $(this.setupDiv);
+      this.$setup.template(this.templateDir + "partials-universal/stripe-form.html", {
+        data: this.stripe
+      }, function() {
+        return _this.ajaxForm();
+      });
+      this.$setup.hide();
+      return AbstractView.prototype.onTemplateLoad.call(this);
+    },
     getStarted: function() {
+      this.delegateEvents();
       this.$how = $('.fundraising-left .content-wrapper');
       return this.$how.slideToggle(1);
     },
@@ -54,8 +67,28 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-view"]
         return popWindow(response_);
       });
     },
+    onEditGoalClick: function(e) {
+      this.$el.toggle();
+      return this.$setup.toggle();
+    },
     slideToggle: function() {
       return this.$how.slideToggle();
+    },
+    ajaxForm: function() {
+      var $form, options,
+        _this = this;
+      console.log('ajaxForm');
+      $form = this.$el.find('form');
+      options = {
+        success: function(response_) {
+          if (response_.success) {
+            _this.stripe.description = response_.data.description;
+            _this.stripe.goal = response_.data.funding;
+            return _this.render();
+          }
+        }
+      };
+      return $form.ajaxForm(options);
     }
   });
 });

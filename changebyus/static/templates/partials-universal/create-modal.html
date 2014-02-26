@@ -8,14 +8,24 @@
                     We will be in touch when we have finished reviewing your application.
                 </p>
             <% } else { %>
-                <h1>Success!</h1>
-                <p class="modal-feedback">
-                    Your Project:<br>
-                    <%= data.data.name %> has been created.<br>
-                </p>
-                <div class="modal-links">
-                    <a href="/project/<%= data.data.slug %>" class="btn btn-large btn-secondary">Share Invite Link</a>
-                    <a href="/project/<%= data.data.slug %>" class="btn btn-large btn-tertiary">View Project</a>
+                <div id="init-success">
+                    <h1>Success!</h1>
+                    <p class="modal-feedback">
+                        Your Project:<br><%= data.data.name %> has been created.<br>
+                    </p>
+                    <div class="modal-links">
+                        <a href="javascript:void(0);" class="btn btn-large btn-secondary" id="share-url">Share Invite Link</a>
+                        <a href="/project/<%= data.data.slug %>" class="btn btn-large btn-tertiary">View Project</a>
+                    </div>
+                </div>
+                <div id="share-success" class="hide">
+                    <h1>Share</h1>
+                    <p class="modal-feedback">Get the word out about your project. Copy the link below to your project and email it to your friends and family. You can even create an Update and post it to your Facebook and Twitter!</p>
+                    <div class="modal-links">
+                        <input type="text" class="input-xxlarge" value="http://changeby.us/project/<%= data.data.slug %>">
+                        <a class="btn btn-large btn-secondary" id="copy-url" data-clipboard-text="http://changeby.us/project/<%= data.data.slug %>" title="Click to copy me.">Copy</a>
+                    </div>
+                </div>
                 </div>
              <% } %>
         <% } else { %>

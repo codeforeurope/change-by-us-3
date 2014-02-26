@@ -19,7 +19,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
 
             fetch:-> 
                 @cities = new CityCollection() 
-                @cities.on 'reset',@onFetch, @
+                @cities.on 'reset', @onFetch, @
                 @cities.fetch reset:true
 
             events:

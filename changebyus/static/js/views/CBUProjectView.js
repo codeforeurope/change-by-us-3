@@ -136,10 +136,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
       }
     },
     onCollectionLoad: function() {
-      var config, parent,
+      var configA, configB, parent,
         _this = this;
+      this.projectMembersCollection.off("reset", this.onCollectionLoad, this);
       parent = this.isResource ? "#resource-updates" : "#project-updates";
-      config = {
+      configA = {
         model: this.model,
         collection: this.updatesCollection,
         members: this.projectMembersCollection,
@@ -148,8 +149,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
         isResource: this.isResource,
         parent: parent
       };
-      console.log('@isOwnerOrganizer ------------------ ', this.isOwnerOrganizer);
-      this.updatesView = new UpdatesView(config);
+      this.updatesView = new UpdatesView(configA);
       if (this.isResource) {
         this.updatesView.show();
         this.updatesView.on('ON_TEMPLATE_LOAD', function() {
@@ -163,7 +163,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           });
         });
       } else {
-        config = {
+        configB = {
           model: this.model,
           collection: this.projectMembersCollection,
           isDataLoaded: true,
@@ -171,8 +171,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "views/
           isOwnerOrganizer: this.isOwnerOrganizer,
           isOwner: this.isOwner
         };
-        this.projectMembersView = new ProjectMembersView(config);
-        this.projectCalenderView = new ProjectCalenderView(config);
+        this.projectMembersView = new ProjectMembersView(configB);
+        this.projectCalenderView = new ProjectCalenderView(configB);
         this.updatesBTN = $("a[href='#updates']").parent();
         this.membersBTN = $("a[href='#members']").parent();
         this.calendarBTN = $("a[href='#calendar']").parent();

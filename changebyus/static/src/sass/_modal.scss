@@ -1,5 +1,7 @@
 @import "compass/css3/box-shadow";
 
+@import "variables";
+
 /*******************************************
  * Modal
  *******************************************/
@@ -149,6 +151,15 @@
     &.scaled-fade {
         @include opacity(0);
         @include scale(2);
+    }
+}
+
+#share-success{
+    .input-xxlarge{
+        float: left;
+        width: 340px;
+        height: 60px;
+        color: $gray20;
     }
 }
 

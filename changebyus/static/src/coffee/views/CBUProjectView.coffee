@@ -140,11 +140,13 @@ define ["underscore",
                     @projectMembersCollection    = new ProjectMembersCollection()
                     @projectMembersCollection.id = id
                     @projectMembersCollection.on "reset", @onCollectionLoad, @
-                    @projectMembersCollection.fetch {reset: true}
+                    @projectMembersCollection.fetch reset:true
 
-            onCollectionLoad:->  
+            onCollectionLoad:->
+                @projectMembersCollection.off "reset", @onCollectionLoad, @
+ 
                 parent = if @isResource then "#resource-updates" else "#project-updates"
-                config =
+                configA =
                     model:@model
                     collection:@updatesCollection
                     members:@projectMembersCollection
@@ -153,8 +155,7 @@ define ["underscore",
                     isResource:@isResource
                     parent:parent
 
-                console.log '@isOwnerOrganizer ------------------ ',@isOwnerOrganizer
-                @updatesView = new UpdatesView config
+                @updatesView = new UpdatesView configA
 
                 if @isResource
                     @updatesView.show()
@@ -166,7 +167,7 @@ define ["underscore",
                                                     slim:true, 
                                                     userAvatar:userAvatar
                 else
-                    config = 
+                    configB = 
                         model:@model
                         collection:@projectMembersCollection
                         isDataLoaded:true
@@ -174,8 +175,8 @@ define ["underscore",
                         isOwnerOrganizer:@isOwnerOrganizer
                         isOwner:@isOwner
 
-                    @projectMembersView  = new ProjectMembersView config
-                    @projectCalenderView = new ProjectCalenderView config
+                    @projectMembersView  = new ProjectMembersView configB
+                    @projectCalenderView = new ProjectCalenderView configB
                     
                     @updatesBTN  = $("a[href='#updates']").parent()
                     @membersBTN  = $("a[href='#members']").parent()

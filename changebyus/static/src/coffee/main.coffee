@@ -21,6 +21,7 @@ require.config
         "form": "ext/jquery/jquery.form.min"
         "validate": "ext/jquery/jquery.validate.min"
         "payment": "ext/jquery/jquery.payment"
+        "zeroclipboard": "ext/zeroclipboard/ZeroClipboard.min"
         "main-view": "views/CBUMainView"
         "discover-view": "views/CBUDiscoverView"
         "city-view": "views/CBUCityView"

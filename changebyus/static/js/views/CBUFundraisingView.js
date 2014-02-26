@@ -31,10 +31,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       $(this.parent).append(this.$el);
       return this.$el.show();
     },
-    onEditGoalClick: function() {
+    onEditGoalClick: function(e) {
       this.$el.toggle();
-      this.$review.toggle();
-      return false;
+      return this.$review.toggle();
     },
     onFetch: function() {
       this.stripe = this.model.get("stripe_account");
@@ -44,9 +43,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
     },
     onTemplateLoad: function() {
       var _this = this;
-      if (this.$review === null) {
-        this.$review = $("<div class='body-container'/>");
-      }
+      this.$review = $("<div class='body-container'/>");
       this.$review.template(this.templateDir + "partials-universal/stripe-form.html", {
         data: this.stripe
       }, function() {
@@ -54,6 +51,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       });
       $(this.parent).append(this.$review);
       this.$review.hide();
+      console.log('onTemplateLoad onTemplateLoad onTemplateLoad onTemplateLoad onTemplateLoad');
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     ajaxForm: function() {

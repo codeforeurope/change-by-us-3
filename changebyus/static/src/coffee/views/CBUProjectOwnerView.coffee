@@ -130,10 +130,12 @@ define ["underscore",
 
                 stripeAccount = @model.get("stripe_account")
                  
+                ###
                 if stripeAccount and view is "fundraising"
                     window.location.hash = ""
                     window.location.href = "/project/#{slug}/fundraising"
                     return
+                ###
 
                 views = [@projectDiscussionsView, @projectDiscussionView, @projectNewDiscussionView, @projectAddUpdateView, @projectCalenderView, @projectMembersView, @projectInfoAppearanceView]
                 unless @isResource then views.push @projectFundraisingView

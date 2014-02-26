@@ -101,8 +101,8 @@ define ["underscore",
 
             # ATTACH TO PAGE
             # ----------------------------------------------------------------------
-            addJoined:->
-                if @joinedProjects.length > 0 then @$followView.find('.updates-container').remove()
+            addJoined:-> 
+                if @joinedProjects.length is 0 then @$followView.find('.no-results').show()
 
                 @updateCount() 
                 @updateProjects(@joinedProjects.models, @$followView.find(".projects"), false, true)
@@ -111,7 +111,7 @@ define ["underscore",
                 @delegateEvents()
 
             addOwned:->
-                if @ownedProjects.length > 0 then @$manageView.find('.updates-container').remove()
+                if @ownedProjects.length is 0 then @$manageView.find('.no-results').show()
 
                 @updateCount() 
                 @updateProjects(@ownedProjects.models, @$manageView.find(".projects"), true, false)

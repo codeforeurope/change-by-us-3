@@ -101,8 +101,8 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       return $('a[href=#manage]').html("Manage (" + this.ownedProjects.length + ")");
     },
     addJoined: function() {
-      if (this.joinedProjects.length > 0) {
-        this.$followView.find('.updates-container').remove();
+      if (this.joinedProjects.length === 0) {
+        this.$followView.find('.no-results').show();
       }
       this.updateCount();
       this.updateProjects(this.joinedProjects.models, this.$followView.find(".projects"), false, true);
@@ -110,8 +110,8 @@ define(["underscore", "backbone", "bootstrap-fileupload", "button", "jquery", "t
       return this.delegateEvents();
     },
     addOwned: function() {
-      if (this.ownedProjects.length > 0) {
-        this.$manageView.find('.updates-container').remove();
+      if (this.ownedProjects.length === 0) {
+        this.$manageView.find('.no-results').show();
       }
       this.updateCount();
       this.updateProjects(this.ownedProjects.models, this.$manageView.find(".projects"), true, false);

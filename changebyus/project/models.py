@@ -5,8 +5,8 @@
 """
 from changebyus.extensions import db
 from changebyus.helpers.crypt import handle_decryption
-from changebyus.helpers.imagetools import (ImageManipulator, generate_thumbnail, 
-    generate_ellipse_png)
+from changebyus.helpers.imagetools import (gen_image_urls, generate_thumbnail, 
+                                           generate_ellipse_png, ImageManipulator)
 from changebyus.helpers.mixin import (EntityMixin, HasActiveEntityMixin, FlaggableEntityMixin, 
                                       LocationEnabledEntityMixin)
 from changebyus.helpers.stringtools import slugify
@@ -65,36 +65,15 @@ project_images = [
 
 ]
 
-
-# TODO this should not be here, we need a cleaner solution to this
-def gen_image_urls(image_url):
-
-    """
-        Helper that will take a root image name, and given our image manipulators
-        and preferred remote storage container will generate image names and urls.
-
-        Example: happycat.jpg will have the imges 
-        250.250.happycat.png
-        300.300.happycat.jpg
-        etc
-
-        Args:
-            Base image name
-        Returns:
-            a dict of multiple {image_name : image_url}
-    """
-
-    images = {}
-
-    root_image = image_url if image_url is not None else app.settings['DEFAULT_PROJECT_IMAGE']
-
-    for manipulator in project_images:
-        base, extension = os.path.splitext(root_image)
-        name = manipulator.prefix + "." + base + manipulator.extension
-        images [ manipulator.dict_name ] = url_for( 'static', filename = name )
-
-    return images
-
+"""
+    This list is mainly for consistency as we don't do processing on city images.
+"""
+project_city_images = [
+    ImageManipulator(dict_name = "image_url_round",
+                     converter = lambda x: generate_ellipse_png(x, [250, 250]),
+                     prefix = "",
+                     extension = ".png")
+]
 
 
 # Python 3 allows ENUM's, eventually move to that
@@ -177,7 +156,7 @@ class Project(db.Document, EntityMixin, HasActiveEntityMixin, FlaggableEntityMix
                       depth=depth, 
                       **kwargs)
                               
-        image_urls = gen_image_urls(self.image_name)
+        image_urls = gen_image_urls(self.image_name, project_images)
 
         for image, url in image_urls.iteritems():
             resp[image] = url
@@ -241,7 +220,7 @@ class ProjectCity(db.Document, EntityMixin, HasActiveEntityMixin, LocationEnable
                       depth=depth, 
                       **kwargs)
                               
-        image_urls = gen_image_urls(self.image_name)
+        image_urls = gen_image_urls(self.image_name, project_city_images)
 
         for image, url in image_urls.iteritems():
             resp[image] = url

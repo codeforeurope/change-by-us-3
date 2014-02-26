@@ -32,6 +32,10 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       "click .pill-selection": "onPillSelection",
       "click .search-inputs .btn": "sendForm",
       "click .geo-pin": "onGeoClick",
+      "click #all": "onToggleClick",
+      "click #projects": "onToggleClick",
+      "click #resources": "onToggleClick",
+      "click .filter-within .close-x": "toggleModify",
       "focus #search-input": "onInputFocus",
       "focus #search-near": "onNearFocus",
       "keydown #search-input": "onInputEnter",
@@ -109,18 +113,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         change: function(v, l) {
           return window.location.href = "/city/" + v;
         }
-      });
-      this.$all.click(function(e) {
-        return _this.onToggleClick(e);
-      });
-      this.$projects.click(function(e) {
-        return _this.onToggleClick(e);
-      });
-      this.$resources.click(function(e) {
-        return _this.onToggleClick(e);
-      });
-      $('.filter-within .close-x').click(function() {
-        return _this.toggleModify(false);
       });
       return $('body').click(function(e) {
         if (e.target === _this.$searchInput.get(0)) {
@@ -204,9 +196,11 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
         }, this.sendForm);
       }
     },
-    toggleModify: function(showSorting_) {
-      this.$resultsModify.toggle(!showSorting_);
-      return this.$filterWithin.toggle(showSorting_);
+    toggleModify: function(e) {
+      var showSorting;
+      showSorting = e ? false : true;
+      this.$resultsModify.toggle(!showSorting);
+      return this.$filterWithin.toggle(showSorting);
     },
     sendForm: function(e) {
       var dataObj, modifyInputVal,
@@ -315,7 +309,7 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
     },
     onToggleVisibility: function(e) {
       e.preventDefault();
-      return this.toggleModify(true);
+      return this.toggleModify();
     },
     onToggleClick: function(e) {
       var $this;

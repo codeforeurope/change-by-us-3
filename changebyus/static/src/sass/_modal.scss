@@ -25,9 +25,28 @@
     .modal-innerwrapper {
         width: 505px;
         margin: 48px auto;
+
+        ol{ 
+            li{
+                list-style-type: decimal;
+                margin-bottom: 18px;
+                font-size: 14px;
+                line-height: 22px;
+            }
+        }
+
+        p{
+            font-size: 16px;
+            margin-top: 0; 
+        }
+ 
     }
     form{
         text-align: left;
+        margin-top: 8px;
+        .input-xxlarge{
+            width: 100%;
+        }
     }
     span, p {
         a {
@@ -195,7 +214,8 @@
 }
 
 .modal-btns {
-    width: 490px;
+    //width: 490px;
+    width: 100%;
     text-align: right;
     margin: auto;
 }

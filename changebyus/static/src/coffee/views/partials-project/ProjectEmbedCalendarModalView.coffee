@@ -7,6 +7,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
                 @viewData.id   = @model.id
                 @viewData.slug = @model.slug
 
+            events:
+                _.extend {}, AbstractModalView.prototype.events, {"click #modal-does-it-work":"slideToggle"}
+
             render: ->
                 @$el = $("<div class='modal-fullscreen dark'/>") 
                 @$el.template @templateDir+"partials-project/project-embed-calendar.html",
@@ -15,6 +18,9 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
 
             onTemplateLoad: ->
                 $form = @$el.find('form') 
+                @$how = @$el.find('.content-wrapper')
+
+                @$how.hide()
 
                 options =
                     type: $form.attr('method')
@@ -32,3 +38,11 @@ define ["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
                     false
 
                 AbstractModalView::onTemplateLoad.call @
+
+            
+            slideToggle:(e)-> 
+                isExpanded = @$how.is(":visible")
+                mt = if isExpanded then -185 else -335
+                @$el.find(".embed-modal").css("margin-top", mt)
+                @$how.slideToggle()
+                @$el.find("form").toggle()

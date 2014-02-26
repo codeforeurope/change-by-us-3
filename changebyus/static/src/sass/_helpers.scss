@@ -71,6 +71,10 @@
     position: fixed;
 }
 
+a.highlight{
+    text-decoration: none !important;
+}
+
 .highlight {
     @include highlight;
 }

@@ -423,6 +423,17 @@
     @include font-styling("asap", 24px, $gray20, "normal", "regular");
 }
 
+#project-calendar{
+    ol{ 
+        li{
+            list-style-type: decimal;
+            margin-bottom: 24px;
+            font-size: 18px;
+            line-height: 30px;
+        }
+    }
+}
+
 .content-left,
 .content-right,
 .post-right,

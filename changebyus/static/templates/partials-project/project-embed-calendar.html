@@ -5,9 +5,24 @@
         <h1>
             Embed Calendar
         </h1>
-        <p>
-            <a href="https://support.google.com/calendar/answer/41207?hl=en&ref_topic=1672470">More Info</a>
-        </p>
+        <span class="tl">
+            <a class="highlight" id="modal-does-it-work" href="javascript:void(0);">How Does It Work?</a>
+            <div class="content-wrapper">
+                <p> 
+                    <strong>From Google:</strong><br> 
+                    Here's how to embed your calendar on your website:<br>
+                 </p>
+                <ol>
+                    <li>
+                 In the calendar list on the left, click the down-arrow next to the calendar you want to embed, and select <strong>Calendar settings</strong>. (Alternatively, click the <strong>Settings</strong> link at the bottom of the calendar list, then click the name of the calendar.)</li>
+                    <li>Copy the iframe code displayed in the <strong>Embed This Calendar</strong> section.</li>
+                    <li>Paste this code into your website to embed your calendar.</li>
+                </ol>
+                <p>
+                    To allow everyone to see your calendar, you'll need to make it public. Click <a href="https://support.google.com/calendar/answer/41207?hl=en&ref_topic=1672470" target="_blank" class="highlight">here</a> to learn more about how to customize your calendar.
+                </p>
+            </div> 
+        </span>
         <form method="post" enctype="multipart/form-data" class="form-edit-create" name="createproject" action="/api/project/edit">
             <textarea rows="3" name="gcal_code" id="project_description" placeholder="Embed" class="input-xxlarge" value="<%= data.gcal_code %>" />
             <input type="hidden" name="project_id" value="<%= data.id %>">

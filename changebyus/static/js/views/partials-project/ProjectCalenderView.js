@@ -21,7 +21,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
     },
     events: {
       "click #embed-calendar": "onEmbedCalendar",
-      "click #delete-calendar": "onDeleteCalendar"
+      "click #delete-calendar": "onDeleteCalendar",
+      "click #google-does-it-work": "slideToggle"
     },
     render: function() {
       var _this = this;
@@ -34,6 +35,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
     },
     onTemplateLoad: function() {
       this.$el.find(".preload").remove();
+      this.$how = $('.content-left .content-wrapper');
+      this.$how.slideToggle(1);
       return ProjectSubView.prototype.onTemplateLoad.call(this);
     },
     onEmbedCalendar: function(e) {
@@ -51,6 +54,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
           return window.location.reload();
         }
       });
+    },
+    slideToggle: function(e) {
+      return this.$how.slideToggle();
     }
   });
 });

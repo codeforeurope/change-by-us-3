@@ -36,6 +36,7 @@ define ["underscore",
             events:
                 "click #embed-calendar":"onEmbedCalendar"
                 "click #delete-calendar":"onDeleteCalendar"
+                "click #google-does-it-work":"slideToggle"
                 
             render: ->  
                 @$el = $(@parent)
@@ -44,6 +45,9 @@ define ["underscore",
                     
             onTemplateLoad:->
                 @$el.find(".preload").remove()
+                @$how = $('.content-left .content-wrapper')
+                @$how.slideToggle(1)
+
                 ProjectSubView::onTemplateLoad.call @
 
             # EVENTS
@@ -59,3 +63,6 @@ define ["underscore",
                 url = "/api/project/#{@model.id}/delete_calendar"
                 $.get url, (response_) ->
                     if response_.success then window.location.reload() 
+
+            slideToggle:(e)-> 
+                @$how.slideToggle()

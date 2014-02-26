@@ -28,6 +28,10 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 "click .pill-selection":"onPillSelection"
                 "click .search-inputs .btn":"sendForm"
                 "click .geo-pin":"onGeoClick"
+                "click #all":"onToggleClick"
+                "click #projects":"onToggleClick"
+                "click #resources":"onToggleClick"
+                "click .filter-within .close-x": "toggleModify"
                 "focus #search-input":"onInputFocus"
                 "focus #search-near":"onNearFocus"
                 "keydown #search-input":"onInputEnter"
@@ -89,12 +93,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                     window.location.href = "/city/"+v
                 })
 
-                @$all.click (e)=> @onToggleClick(e)
-                @$projects.click (e)=> @onToggleClick(e)
-                @$resources.click (e)=> @onToggleClick(e)
-
-                $('.filter-within .close-x').click =>@toggleModify false
-
                 $('body').click (e)=>
                     if e.target is @$searchInput.get(0) then @$searchCatagories.show() else @$searchCatagories.hide()
 
@@ -151,9 +149,12 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         @handleGetCurrentPosition(loc_)
                     , @sendForm
 
-            toggleModify:(showSorting_)->
-                @$resultsModify.toggle(!showSorting_)
-                @$filterWithin.toggle(showSorting_)
+            # EVENTS 
+            # -----------------------------------------------------------------
+            toggleModify:(e)->
+                showSorting = if e then false else true
+                @$resultsModify.toggle(!showSorting)
+                @$filterWithin.toggle(showSorting)
 
             sendForm:(e)->
                 if e 
@@ -204,8 +205,6 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                         onPageElementsLoad()
                         @trigger "ON_RESULTS", size
 
-            # EVENTS 
-            # -----------------------------------------------------------------
             onFetch:(res_)->  
                 @sortedCities = @cities.sortBy (model)->
                     model.get('name') 
@@ -258,7 +257,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
  
             onToggleVisibility:(e)->
                 e.preventDefault()
-                @toggleModify true
+                @toggleModify()
 
             onToggleClick:(e)->
                 # strip active

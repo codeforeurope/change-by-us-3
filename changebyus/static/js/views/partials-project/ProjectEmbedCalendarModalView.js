@@ -6,6 +6,9 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
       this.viewData.id = this.model.id;
       return this.viewData.slug = this.model.slug;
     },
+    events: _.extend({}, AbstractModalView.prototype.events, {
+      "click #modal-does-it-work": "slideToggle"
+    }),
     render: function() {
       var _this = this;
       this.$el = $("<div class='modal-fullscreen dark'/>");
@@ -19,6 +22,8 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
     onTemplateLoad: function() {
       var $form, options;
       $form = this.$el.find('form');
+      this.$how = this.$el.find('.content-wrapper');
+      this.$how.hide();
       options = {
         type: $form.attr('method'),
         url: $form.attr('action'),
@@ -39,6 +44,14 @@ define(["underscore", "backbone", "jquery", "template", "form", "abstract-modal-
         return false;
       });
       return AbstractModalView.prototype.onTemplateLoad.call(this);
+    },
+    slideToggle: function(e) {
+      var isExpanded, mt;
+      isExpanded = this.$how.is(":visible");
+      mt = isExpanded ? -185 : -335;
+      this.$el.find(".embed-modal").css("margin-top", mt);
+      this.$how.slideToggle();
+      return this.$el.find("form").toggle();
     }
   });
 });

@@ -26,11 +26,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "resour
       });
     },
     render: function() {
-      var s,
-        _this = this;
+      var _this = this;
       this.viewData = this.model.attributes;
-      s = this.viewData.image_url_round;
-      this.viewData.image_url_round = s.substring(s.lastIndexOf("/static/img/"));
       this.$el = $("<div class='city-container'/>");
       this.$el.template(this.templateDir + "city.html", {
         data: this.viewData

@@ -36,13 +36,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 AbstractView::onTemplateLoad.call @
 
             addDropKick:->
-                dataObj = 
-                    project_id:@projectID
-                    user_id:@model.id
-                    user_role:value_
-
                 $("#"+@viewData.sid).dropkick
                     change: (value_, label_) =>
+                        dataObj = 
+                            project_id:@projectID
+                            user_id:@model.id
+                            user_role:value_
                         $.ajax(
                             type: "POST"
                             url: "/api/project/change-user-role"

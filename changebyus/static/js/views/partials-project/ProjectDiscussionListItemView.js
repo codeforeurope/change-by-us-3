@@ -33,7 +33,11 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "model/
       return this.trigger("click", this.model);
     },
     "delete": function() {
-      return this.model.collection.remove(this.model);
+      var confirmation;
+      confirmation = confirm("Do you really want to delete this post?");
+      if (confirmation) {
+        return this.model.collection.remove(this.model);
+      }
     },
     onFetch: function() {
       var m;

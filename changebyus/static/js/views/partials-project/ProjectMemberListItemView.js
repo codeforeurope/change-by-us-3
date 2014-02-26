@@ -39,15 +39,15 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       return AbstractView.prototype.onTemplateLoad.call(this);
     },
     addDropKick: function() {
-      var dataObj,
-        _this = this;
-      dataObj = {
-        project_id: this.projectID,
-        user_id: this.model.id,
-        user_role: value_
-      };
+      var _this = this;
       return $("#" + this.viewData.sid).dropkick({
         change: function(value_, label_) {
+          var dataObj;
+          dataObj = {
+            project_id: _this.projectID,
+            user_id: _this.model.id,
+            user_role: value_
+          };
           return $.ajax({
             type: "POST",
             url: "/api/project/change-user-role",

@@ -26,7 +26,8 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/
                 @trigger "click", @model
 
             delete:->
-                @model.collection.remove @model
+                confirmation = confirm("Do you really want to delete this post?")
+                if confirmation then @model.collection.remove @model
 
             onFetch:->
                 m =  moment(@model.get("created_at")).format("MMMM D hh:mm a")

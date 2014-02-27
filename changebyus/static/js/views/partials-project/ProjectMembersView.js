@@ -25,7 +25,8 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
     },
     events: {
       "click #alpha": "sortClick",
-      "click #created": "sortClick"
+      "click #created": "sortClick",
+      "click #how-do-roles": "slideToggle"
     },
     render: function() {
       var templateURL,
@@ -40,6 +41,18 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
       }, function() {
         return _this.onTemplateLoad();
       });
+    },
+    toggleHeader: function() {
+      console.log('toggleHeader @view', this.view);
+      if (!(this.view === "public")) {
+        if (this.collection.length === 1) {
+          return this.$el.find(".no-results ").show();
+        } else {
+          this.$el.find(".results ").show();
+          this.$how = $('.results .content-wrapper');
+          return this.$how.hide();
+        }
+      }
     },
     onTemplateLoad: function() {
       this.$teamList = this.$el.find("#team-members ul");
@@ -59,9 +72,13 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
       this.collection.on('change', function() {
         return _this.addAll();
       });
-      return this.collection.on('remove', function() {
+      this.collection.on('remove', function() {
         return _this.addAll();
       });
+      return this.toggleHeader();
+    },
+    slideToggle: function() {
+      return this.$how.slideToggle();
     },
     addAll: function(sort_) {
       var model, sortBy, _i, _j, _len, _len1, _ref, _ref1,

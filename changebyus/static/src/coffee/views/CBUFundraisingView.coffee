@@ -52,8 +52,8 @@ define ["underscore",
                 @$review.template @templateDir+"partials-universal/stripe-form.html",
                     data:@stripe,  =>@ajaxForm()
                 $(@parent).append @$review
-                @$review.hide()
-                console.log 'onTemplateLoad onTemplateLoad onTemplateLoad onTemplateLoad onTemplateLoad'
+                @$review.hide() 
+                
                 AbstractView::onTemplateLoad.call @
 
             # AJAX FORM

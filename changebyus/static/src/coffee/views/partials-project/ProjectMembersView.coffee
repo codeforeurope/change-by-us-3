@@ -26,6 +26,7 @@ define ["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
             events:
                 "click #alpha":"sortClick" 
                 "click #created":"sortClick" 
+                "click #how-do-roles":"slideToggle"
 
             render: -> 
                 @$el = $(@parent)
@@ -35,8 +36,18 @@ define ["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
                 
                 templateURL = "partials-project/"
                 templateURL += if (@view is "public") then "project-members.html" else "project-members-admin.html"
-                @$el.template @templateDir+templateURL, 
-                    {data:@viewData}, => @onTemplateLoad() 
+                @$el.template @templateDir+templateURL,
+                    {data:@viewData}, => @onTemplateLoad()
+
+            toggleHeader:->
+                console.log 'toggleHeader @view',@view
+                unless (@view is "public")
+                    if @collection.length is 1
+                        @$el.find(".no-results ").show()
+                    else
+                        @$el.find(".results ").show()
+                        @$how = $('.results .content-wrapper')
+                        @$how.hide()
 
             # EVENTS
             # ----------------------------------------------------------------------
@@ -55,8 +66,13 @@ define ["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
             onCollectionLoad:->
                 ProjectSubView::onCollectionLoad.call(@)
 
-                @collection.on('change', =>@addAll()) 
+                @collection.on('change', =>@addAll())
                 @collection.on('remove', =>@addAll())
+
+                @toggleHeader()
+
+            slideToggle:->
+                @$how.slideToggle()
 
             # ATTACH TEAM MEMBERS
             # ----------------------------------------------------------------------

@@ -383,6 +383,7 @@
     }
     p {
         @include font-styling("asap", 20px, $gray20, "normal", "regular");
+        margin-top: 0;
         margin-bottom: 28px;
     }
     ul.bordered-item {
@@ -457,6 +458,11 @@
     vertical-align: middle;
 }
 
+.results {
+    .content-right{
+        text-align: right;
+    }
+}
 .no-results {
     h3 {
         font-weight: normal;

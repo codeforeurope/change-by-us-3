@@ -151,7 +151,7 @@
             float: right;
         }
         .member-title {
-            width: 100%;
+            width: calc(100% - 45px);
             &:after {
                 clear: both;
             }
@@ -159,6 +159,7 @@
         .member-description {
             margin-top: 16px;
             height: auto;
+            width: calc(100% - 45px);
         }
         .member-roles {
             margin-top: 16px;
@@ -197,9 +198,20 @@
                 width: 100%;
             }
         }
-        .content-right {
-            display: none;
-        }
+        .no-results{
+            .content-right {
+                display: none;
+            }
+        } 
+        .results{
+            .content-right {
+                 margin-top: 24px;
+                 width: 100%;
+                 a{
+                    width: 100%;
+                 }
+            }
+        } 
         .content-wrapper {
             >.pull-left {
                 width: 100%;

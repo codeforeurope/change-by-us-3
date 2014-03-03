@@ -28,9 +28,11 @@ define ["underscore",
                 "click .share-options .styledCheckbox":"shareOption"
 
             render: -> 
+                console.log @
+                self                            = @ 
                 @viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
-                self = @
-                @$el = $(@parent)
+                @viewData.slug                  = @model.get('slug')
+                @$el                            = $(@parent)
                 @$el.template @templateDir+"partials-project/project-add-update.html",
                     {data: @viewData}, => @onTemplateLoad()
 
@@ -130,8 +132,10 @@ define ["underscore",
 
             # ATTACH ELEMENTS 
             # -----------------------------------------------------------------
-            addAll: ->   
-                @$day = $('<div />')
+            addAll: -> 
+                $('.entries-day-wrapper').remove()
+
+                @$day = $('<div class="entries-day-wrapper"/>')
                 @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
                     {}, => @onDayWrapperLoad()
 
@@ -148,10 +152,32 @@ define ["underscore",
                 m = moment(model_.get("created_at")).format("MMMM D")
                 if @currentDate isnt m then @newDay(m) 
 
-                view = new UpdateListItemView({model: model_})
+                view = new UpdateListItemView({model: model_, isAdmin: true})
                 @$ul.append view.$el 
 
             addModal:(data_)-> 
                 data_.twitter_name = @socialInfo.twitter_name
                 data_.slug         = @model.get("slug")
                 modal              = new ProjectUpdateSuccessModalView({model:data_})
+
+            # EVENTS
+            # -----------------------------------------------------------------
+            onCollectionLoad:->  
+                ProjectSubView::onCollectionLoad.call(@)
+                console.log 'onCollectionLoad'
+                console.log 'onCollectionLoad',@collection
+                @collection.on 'remove', (obj_)=>
+                    @addAll()
+                    @deleteUpdate(obj_.id)
+
+            deleteUpdate:(id_)->
+                $feedback = $("#discussions-feedback")
+                $.ajax(
+                    type: "POST"
+                    url: "/api/post/delete"
+                    data: { post_id:id_ }
+                ).done (res_)=> 
+                    if res_.success
+                        $feedback.hide()
+                    else
+                        $feedback.show().html(res_.msg)

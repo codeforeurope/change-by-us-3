@@ -30,7 +30,7 @@ define ["underscore",
             render: ->  
                 @$el = $(@parent)
                 @$el.template @templateDir+"partials-universal/updates.html",
-                    {data: @model.attributes}, =>@onTemplateLoad()
+                    {data: @model.attributes}, =>@onTemplateLoad()                
 
             # ATTACH ELEMENTS 
             # ----------------------------------------------------------------------
@@ -55,7 +55,6 @@ define ["underscore",
                 m = moment(model_.get("created_at")).format("MMMM D")
                 if @currentDate isnt m then @newDay(m)
 
-                console.log 'isOwnerOrganizer ------ ',@isOwnerOrganizer
                 view = new UpdateListItemView({model: model_, isMember:@isMember, isOwnerOrganizer:@isOwnerOrganizer})
                 @$ul.append view.$el
 
@@ -71,3 +70,4 @@ define ["underscore",
 
             # use parent method 
             # newDay:(date_)->
+

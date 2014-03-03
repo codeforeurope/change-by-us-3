@@ -14,6 +14,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       options = options_;
       AbstractView.prototype.initialize.call(this, options);
       this.viewData = this.model.attributes;
+      this.viewData.isAdmin = options.isAdmin || false;
       this.isMember = options.isMember || this.isMember;
       this.isOwnerOrganizer = options.isOwnerOrganizer || this.isOwnerOrganizer;
       this.isStream = options.isStream || this.isStream;
@@ -29,7 +30,8 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       });
     },
     events: {
-      "click .reply-toggle:first": "onReplyToggleClick"
+      "click .reply-toggle:first": "onReplyToggleClick",
+      "click .delete-x": "delete"
     },
     render: function() {
       var m,
@@ -38,6 +40,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       this.viewData.display_name = this.user.get("display_name");
       m = moment(this.model.get("created_at")).format("MMMM D hh:mm a");
       this.model.set("format_date", m);
+      console.log('@viewData', this.viewData);
       return this.$el.template(this.templateDir + "partials-universal/update-list-item.html", {
         data: this.viewData
       }, function() {
@@ -120,6 +123,13 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
         $.ajax(options);
         return false;
       });
+    },
+    "delete": function() {
+      var confirmation;
+      confirmation = confirm("Do you really want to delete this post?");
+      if (confirmation) {
+        return this.model.collection.remove(this.model);
+      }
     }
   });
 });

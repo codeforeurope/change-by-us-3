@@ -53,7 +53,6 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
       if (this.currentDate !== m) {
         this.newDay(m);
       }
-      console.log('isOwnerOrganizer ------ ', this.isOwnerOrganizer);
       view = new UpdateListItemView({
         model: model_,
         isMember: this.isMember,

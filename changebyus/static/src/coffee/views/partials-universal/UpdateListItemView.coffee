@@ -18,7 +18,7 @@ define ["underscore",
      PostReplyView) ->
         UpdateListItemView = AbstractView.extend
             
-            model:UpdateModel
+            model:UpdateModel 
             isStream:false
             isMember:false
             isOwnerOrganizer:false
@@ -30,6 +30,7 @@ define ["underscore",
                 options           = options_
                 AbstractView::initialize.call @, options
                 @viewData         = @model.attributes
+                @viewData.isAdmin = options.isAdmin || false
                 @isMember         = options.isMember || @isMember
                 @isOwnerOrganizer = options.isOwnerOrganizer || @isOwnerOrganizer
                 @isStream         = options.isStream || @isStream
@@ -43,6 +44,7 @@ define ["underscore",
 
             events:
                 "click .reply-toggle:first":"onReplyToggleClick"
+                "click .delete-x": "delete" 
 
             render: ->
                 @viewData.image_url_round_small = @user.get("image_url_round_small")
@@ -50,7 +52,7 @@ define ["underscore",
                 
                 m = moment(@model.get("created_at")).format("MMMM D hh:mm a")
                 @model.set("format_date", m)
-
+                console.log '@viewData',@viewData
                 @$el.template @templateDir+"partials-universal/update-list-item.html",
                     {data:@viewData}, => @onTemplateLoad()
 
@@ -69,7 +71,6 @@ define ["underscore",
 
             # Attach Elements
             # --------------------------------------------
-
             addReplies:->
                 @$repliesHolder = $('<ul class="content-wrapper bordered-item np top-caret hide"/>')
 
@@ -119,3 +120,7 @@ define ["underscore",
                     options.data = json_str
                     $.ajax options
                     false
+
+            delete:->
+                confirmation = confirm("Do you really want to delete this post?")
+                if confirmation then @model.collection.remove @model

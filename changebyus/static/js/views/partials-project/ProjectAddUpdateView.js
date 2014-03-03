@@ -11,8 +11,10 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
     render: function() {
       var self,
         _this = this;
-      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+      console.log(this);
       self = this;
+      this.viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+      this.viewData.slug = this.model.get('slug');
       this.$el = $(this.parent);
       this.$el.template(this.templateDir + "partials-project/project-add-update.html", {
         data: this.viewData
@@ -150,7 +152,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
     },
     addAll: function() {
       var _this = this;
-      this.$day = $('<div />');
+      $('.entries-day-wrapper').remove();
+      this.$day = $('<div class="entries-day-wrapper"/>');
       return this.$day.template(this.templateDir + "partials-universal/entries-day-wrapper.html", {}, function() {
         return _this.onDayWrapperLoad();
       });
@@ -167,7 +170,8 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
         this.newDay(m);
       }
       view = new UpdateListItemView({
-        model: model_
+        model: model_,
+        isAdmin: true
       });
       return this.$ul.append(view.$el);
     },
@@ -177,6 +181,34 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view", "projec
       data_.slug = this.model.get("slug");
       return modal = new ProjectUpdateSuccessModalView({
         model: data_
+      });
+    },
+    onCollectionLoad: function() {
+      var _this = this;
+      ProjectSubView.prototype.onCollectionLoad.call(this);
+      console.log('onCollectionLoad');
+      console.log('onCollectionLoad', this.collection);
+      return this.collection.on('remove', function(obj_) {
+        _this.addAll();
+        return _this.deleteUpdate(obj_.id);
+      });
+    },
+    deleteUpdate: function(id_) {
+      var $feedback,
+        _this = this;
+      $feedback = $("#discussions-feedback");
+      return $.ajax({
+        type: "POST",
+        url: "/api/post/delete",
+        data: {
+          post_id: id_
+        }
+      }).done(function(res_) {
+        if (res_.success) {
+          return $feedback.hide();
+        } else {
+          return $feedback.show().html(res_.msg);
+        }
       });
     }
   });

@@ -40,7 +40,7 @@ class ProjectTests(BaseTestCase):
         self.project.createProject(self)
 
         # test the slug
-        slug = self.GET('/api/project/slug/{0}'.format(self.project.data['slug']))
+        slug = self.GET('/api/project/{0}'.format(self.project.data['slug']))
         self.assertTrue( slug['data']['slug'] == self.project.data['slug'] )
 
         #### edit the project

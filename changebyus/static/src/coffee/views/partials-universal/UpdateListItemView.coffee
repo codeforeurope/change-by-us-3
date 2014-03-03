@@ -74,9 +74,10 @@ define ["underscore",
                 @$repliesHolder = $('<ul class="content-wrapper bordered-item np top-caret hide"/>')
 
                 @addReply(reply) for reply in @model.get('responses') 
-
-                viewData = @model.attributes
+                
+                viewData                       = @model.attributes
                 viewData.image_url_round_small = $('.profile-nav-header img').attr('src')
+                viewData.display_name          = $('.profile-nav-header span').text()
             
                 if @isMember or @isOwnerOrganizer
                     @$replyForm = $('<li class="post-reply-form"/>')

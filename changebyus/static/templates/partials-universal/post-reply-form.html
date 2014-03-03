@@ -3,6 +3,9 @@
         <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avatar">
     </div>
     <div class="reply-right">
+        <div class="reply-title">
+            <%= data.display_name %>
+        </div>
         <form method="post" enctype="multipart/form-data" class="form-edit-create" name="project-update" action="/api/post/add/discussion">
             <input type="text" maxlength="30" name="description" placeholder="What is your reply?" class="input-xxlarge pull-left">
             <input type="submit" class="btn btn-medium btn-primary pull-right" value="Reply">

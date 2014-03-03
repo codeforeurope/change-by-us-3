@@ -70,6 +70,7 @@ define(["underscore", "backbone", "jquery", "template", "moment", "abstract-view
       }
       viewData = this.model.attributes;
       viewData.image_url_round_small = $('.profile-nav-header img').attr('src');
+      viewData.display_name = $('.profile-nav-header span').text();
       if (this.isMember || this.isOwnerOrganizer) {
         this.$replyForm = $('<li class="post-reply-form"/>');
         this.$replyForm.template(this.templateDir + "partials-universal/post-reply-form.html", {

@@ -130,6 +130,8 @@ class CreateProjectPostForm(Form):
 
 @post_api.route('/add/<post_type>', methods = ['POST'])
 @login_required
+@project_exists
+@project_member
 def api_add_project_post(post_type):
     """Method for adding posts to a given project
 

@@ -92,7 +92,7 @@ define ["underscore",
                 @projectNewDiscussionView    = new ProjectNewDiscussionView(config) 
                 @projectAddUpdateView        = new ProjectAddUpdateView({collection: updatesCollection, model:@model})
                 @projectCalenderView         = new ProjectCalenderView(config) 
-                @projectMembersView          = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id})
+                @projectMembersView          = new ProjectMembersView({collection: projectMembersCollection, view:"admin", projectID:@model.id, model:@model})
                 @projectInfoAppearanceView   = new ProjectInfoAppearanceView(config)
                 unless @isResource
                     @projectFundraisingView      = new ProjectFundraisingView(config) 

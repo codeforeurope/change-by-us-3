@@ -76,7 +76,8 @@ define(["underscore", "backbone", "jquery", "template", "project-view", "abstrac
       this.projectMembersView = new ProjectMembersView({
         collection: projectMembersCollection,
         view: "admin",
-        projectID: this.model.id
+        projectID: this.model.id,
+        model: this.model
       });
       this.projectInfoAppearanceView = new ProjectInfoAppearanceView(config);
       if (!this.isResource) {

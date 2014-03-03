@@ -3,7 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view", "
   return CreateModalView = AbstractModalView.extend({
     events: _.extend({}, AbstractModalView.prototype.events, {
       "click #copy-url": "copyUrl",
-      "click #share-url": "shareUrl"
+      "click #share-url": "onShareUrlClick"
     }),
     render: function() {
       var _this = this;
@@ -40,9 +40,9 @@ define(["underscore", "backbone", "jquery", "template", "abstract-modal-view", "
       };
       return AbstractModalView.prototype.onTemplateLoad.call(this);
     },
-    shareUrl: function(e) {
-      this.$initSuccess.toggle();
-      return this.$shareSuccess.toggle();
+    onShareUrlClick: function(e) {
+      this.$initSuccess.hide();
+      return this.$shareSuccess.show();
     }
   });
 });

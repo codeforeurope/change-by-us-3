@@ -13,17 +13,16 @@ define ["underscore", "backbone", "jquery", "template"],
             parent: "body"
             templateDir: "/static/templates/"
             viewData: {}
+            results:[]
             templateLoaded: false
             delayedCollectionLoad: false
             $paginationContainer: null
             id: 0
-            results:[]
             index:0
             perPage:12
             pages:0
 
-            initialize: (options_) -> 
-
+            initialize: (options_) ->
                 options      = options_ or {}
                 @id          = options.id or @id
                 @templateDir = options.templateDir or @templateDir

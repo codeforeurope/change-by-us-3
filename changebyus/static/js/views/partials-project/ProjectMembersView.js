@@ -1,6 +1,6 @@
 var __indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i < l; i++) { if (i in this && this[i] === item) return i; } return -1; };
 
-define(["underscore", "backbone", "jquery", "template", "project-sub-view", "views/partials-project/ProjectMemberListItemView"], function(_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView) {
+define(["underscore", "backbone", "jquery", "template", "project-sub-view", "views/partials-project/ProjectMemberListItemView", "views/partials-universal/CreateModalView"], function(_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView, CreateModalView) {
   var ProjectMembersView;
   return ProjectMembersView = ProjectSubView.extend({
     parent: "#project-members",
@@ -26,7 +26,8 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
     events: {
       "click #alpha": "sortClick",
       "click #created": "sortClick",
-      "click #how-do-roles": "slideToggle"
+      "click #how-do-roles": "slideToggle",
+      "click #invite-members": "onInviteClick"
     },
     render: function() {
       var templateURL,
@@ -77,8 +78,20 @@ define(["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
       });
       return this.toggleHeader();
     },
-    slideToggle: function() {
+    slideToggle: function(e) {
       return this.$how.slideToggle();
+    },
+    onInviteClick: function(e) {
+      var config, modal;
+      config = {};
+      config.viewData = {
+        showShare: true,
+        success: true,
+        data: {
+          slug: this.model.get('slug')
+        }
+      };
+      return modal = new CreateModalView(config);
     },
     addAll: function(sort_) {
       var model, sortBy, _i, _j, _len, _len1, _ref, _ref1,

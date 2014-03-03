@@ -4,7 +4,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view", "
             events:
                 _.extend {}, AbstractModalView.prototype.events, {
                     "click #copy-url":"copyUrl",
-                    "click #share-url":"shareUrl"
+                    "click #share-url":"onShareUrlClick"
                 }
 
             render: ->
@@ -13,7 +13,7 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view", "
                     {data: @viewData}, => @onTemplateLoad()
                 $(@parent).append @$el
 
-            onTemplateLoad:-> 
+            onTemplateLoad:->
                 @$initSuccess  = $("#init-success")
                 @$shareSuccess = $("#share-success")
                 $copyUrl       = $("#copy-url") 
@@ -31,6 +31,6 @@ define ["underscore", "backbone", "jquery", "template", "abstract-modal-view", "
 
                 AbstractModalView::onTemplateLoad.call @
 
-            shareUrl:(e)->
-                @$initSuccess.toggle()
-                @$shareSuccess.toggle()
+            onShareUrlClick:(e)->
+                @$initSuccess.hide()
+                @$shareSuccess.show()

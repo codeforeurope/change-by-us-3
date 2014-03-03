@@ -1,5 +1,12 @@
-define ["underscore", "backbone", "jquery", "template", "project-sub-view", "views/partials-project/ProjectMemberListItemView"],
-    (_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView) ->
+define ["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "project-sub-view", 
+        "views/partials-project/ProjectMemberListItemView",
+        "views/partials-universal/CreateModalView"
+        ],
+    (_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView, CreateModalView) ->
         ProjectMembersView = ProjectSubView.extend
         
             parent: "#project-members"
@@ -12,7 +19,7 @@ define ["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
             isOwnerOrganizer:false
             view:"public"
 
-            initialize: (options_) ->
+            initialize: (options_) -> 
                 options           = options_
                 @isDataLoaded     = options.isDataLoaded || @isDataLoaded
                 @view             = options.view || @view
@@ -27,10 +34,10 @@ define ["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
                 "click #alpha":"sortClick" 
                 "click #created":"sortClick" 
                 "click #how-do-roles":"slideToggle"
+                "click #invite-members":"onInviteClick"
 
             render: -> 
-                @$el = $(@parent)
-                
+                @$el = $(@parent) 
                 @viewData = if @model then @model.attributes else {}
                 @viewData.isOwnerOrganizer = @isOwnerOrganizer
                 
@@ -71,8 +78,19 @@ define ["underscore", "backbone", "jquery", "template", "project-sub-view", "vie
 
                 @toggleHeader()
 
-            slideToggle:->
+            slideToggle:(e)->
                 @$how.slideToggle()
+
+            onInviteClick:(e)->
+                config = {}
+                config.viewData = {
+                    showShare:true,
+                    success:true,
+                    data:{
+                        slug: @model.get('slug')
+                    }
+                }
+                modal = new CreateModalView(config)
 
             # ATTACH TEAM MEMBERS
             # ----------------------------------------------------------------------

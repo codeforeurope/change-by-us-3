@@ -10,12 +10,12 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
 
                 # * Parent class for all Modal view classes
                 # * Contains on-load fade-in and a fadeOut method for closing
-
+                @options = options_
                 AbstractView::initialize.call @, options_
                 $('body').css('overflow', 'hidden')
                 @render()
- 
-            events: 
+
+            events:
                 "click .close-x": "fadeOut" 
 
             onTemplateLoad:-> 
@@ -30,7 +30,9 @@ define ["underscore", "backbone", "jquery", "template", "abstract-view"],
                 $('body').css('overflow', 'auto')
                 $('#page-wrapper').removeClass('blur')
                 $('.success-modal, .embed-modal, .donate-modal').addClass('scaled-fade')
-                $('.modal-fullscreen').fadeOut 500, => @$el.remove()
+                $('.modal-fullscreen').fadeOut 500, => 
+                    @undelegateEvents();
+                    @$el.remove()
 
             backClick:(e)->
                 if $(e.target).hasClass('modal-fullscreen') then @fadeOut()

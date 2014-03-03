@@ -3,6 +3,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
   return AbstractModalView = AbstractView.extend({
     parent: 'body',
     initialize: function(options_) {
+      this.options = options_;
       AbstractView.prototype.initialize.call(this, options_);
       $('body').css('overflow', 'hidden');
       return this.render();
@@ -27,6 +28,7 @@ define(["underscore", "backbone", "jquery", "template", "abstract-view"], functi
       $('#page-wrapper').removeClass('blur');
       $('.success-modal, .embed-modal, .donate-modal').addClass('scaled-fade');
       return $('.modal-fullscreen').fadeOut(500, function() {
+        _this.undelegateEvents();
         return _this.$el.remove();
       });
     },

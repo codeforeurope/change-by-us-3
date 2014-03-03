@@ -3,6 +3,9 @@
     :copyright: (c) 2013 Local Projects, all rights reserved
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
+import logging
+import socket
+import yaml
 
 from flask import request, render_template, current_app, g
 from flask.ext.cdn import CDN
@@ -14,13 +17,11 @@ from flask.ext.security import (Security, MongoEngineUserDatastore,
 from flask_mail import Mail
 from flask.ext.uploads import UploadSet, configure_uploads, IMAGES
 from logging.handlers import RotatingFileHandler, SMTPHandler
+
 from .extensions import db, login_manager
 from .helpers.configtools import get_shared_config, Flask
 from .helpers.encryption import assemble_key
 from .helpers.flasktools import jsonify_response, ReturnStructure
-import logging
-import socket
-import yaml
 
 # needed for our own context
 import changebyus
@@ -162,18 +163,18 @@ def configure_blueprints(app, blueprints):
     # Load application's functionalities, many of which require
     #    the app context so that they can reference the main app.settings
     with app.app_context():
-        from .facebook.facebook import facebook_view
-        from .frontend.views import frontend_view
-        from .frontend.api import frontend_api
-        from .post.api import post_api
-        from .project.api import project_api
-        from .project.views import project_view
-        from .project.api import resource_api
-        from .stripe.views import stripe_view
-        from .stream.views import stream_view
-        from .stream.api import stream_api
-        from .twitter.twitter import twitter_view
-        from .user.api import user_api
+        from .modules.facebook.facebook import facebook_view
+        from .modules.frontend.views import frontend_view
+        from .modules.frontend.api import frontend_api
+        from .modules.post.api import post_api
+        from .modules.project.api import project_api
+        from .modules.project.views import project_view
+        from .modules.project.api import resource_api
+        from .modules.stripe.views import stripe_view
+        from .modules.stream.views import stream_view
+        from .modules.stream.api import stream_api
+        from .modules.twitter.twitter import twitter_view
+        from .modules.user.api import user_api
         
         BLUEPRINTS = (
             facebook_view,
@@ -211,7 +212,7 @@ def configure_csrf(app):
 def configure_security(app):
     """Configures Flask-Security with our app
     """
-    from .user.models import Role, User
+    from .modules.user.models import Role, User
 
     user_datastore = MongoEngineUserDatastore(db, User, Role)
     security = Security(app, user_datastore)

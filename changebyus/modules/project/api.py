@@ -109,11 +109,13 @@ def api_search_projects():
     
     if (cat != ""):
         addl_filters.update({"category": cat})
-    
+
     if (search_type == 'resource'):
-        addl_filters.update({"resource": True, "approved": True})
+        addl_filters.update({"resource": True})
     if (search_type == 'project'):
         addl_filters.update({"resource": False})
+
+    addl_filters.update({"approved": True})
 
     search_data = search(db = _get_db(),
                          collection = "project", 

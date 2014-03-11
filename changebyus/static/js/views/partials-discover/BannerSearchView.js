@@ -84,9 +84,6 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       }).bind('typeahead:selected', function(obj, datum) {
         return _this.locationObj = datum;
       });
-      if (this.showResources) {
-        $('#sort-by-pr .pill-selection').last().trigger('click');
-      }
       this.$searchRange = $('#search-range').dropkick();
       this.$resultsModify = $('.results-modify');
       this.$filterWithin = $('.filter-within');
@@ -100,7 +97,10 @@ define(["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
       this.$submitButton = $('.go a');
       this.addListeners();
       this.autoGetGeoLocation();
-      return AbstractView.prototype.onTemplateLoad.call(this);
+      AbstractView.prototype.onTemplateLoad.call(this);
+      if (this.showResources) {
+        return $('.type-toggle a').last().trigger('click');
+      }
     },
     addListeners: function() {
       var _this = this;

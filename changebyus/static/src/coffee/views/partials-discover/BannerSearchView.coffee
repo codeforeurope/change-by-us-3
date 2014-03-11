@@ -63,11 +63,7 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                             zips
                 ).bind('typeahead:selected', (obj, datum)=>
                     @locationObj = datum
-                )
-
-                # deeplink resource select
-                if @showResources then $('#sort-by-pr .pill-selection').last().trigger('click')
-                
+                ) 
                 @$searchRange      = $('#search-range').dropkick()
                 @$resultsModify    = $('.results-modify')
                 @$filterWithin     = $('.filter-within')
@@ -84,6 +80,9 @@ define ["underscore", "backbone", "jquery", "template", "dropkick", "abstract-vi
                 @autoGetGeoLocation()
 
                 AbstractView::onTemplateLoad.call @
+
+                # deeplink resource select
+                if @showResources then $('.type-toggle a').last().trigger('click')
 
             addListeners:->
                 @$addOwn = $('#add-own').dropkick({change: (v,l)->

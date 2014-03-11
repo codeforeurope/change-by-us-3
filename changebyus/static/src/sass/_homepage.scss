@@ -99,11 +99,17 @@
         font-size: 22px;
         font-weight: bold;
     }
+
+    &.gray{
+        a {
+            color: $gray45;
+        }
+    }
 }
 
 .homepage-footer {
     width: 100%;
-    background-color: #737373;
+    background-color: $gray45;
     margin-top: 50px;
     text-align: center;
     h2 {
@@ -221,7 +227,12 @@
     a {
         line-height: 60px;
     }
+    .pull-right{
+        a{
+            font-weight: bold;
+        }
+    }
     &.index {
         margin-top: 0;
-    }
+    } 
 }

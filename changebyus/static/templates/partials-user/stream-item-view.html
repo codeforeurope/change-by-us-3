@@ -1,0 +1,13 @@
+<div class="clearfix">
+    <div class="user-avatar"> 
+        <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avater">
+    </div>
+    <div class="update-content">
+        <div class="post-title">
+            <%= data.title %>
+        </div>
+        <div class="post-content">
+            <%= unescape(data.description) %>
+        </div>
+    </div>
+</div>

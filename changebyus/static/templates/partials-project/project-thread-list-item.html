@@ -1,17 +1,22 @@
-<div class="content-wrapper clearfix">
-	<div class="user-avatar">
-		<img src="http://lorempixel.com/70/70/" class="circle">
-		<img src="<%= data.user_avatar %>"  class="circle">
-	</div>
-	<div class="update-content">
-		<div class="post-title"><%= data.title %></div>
-		<div class="post-content"><%= unescape(data.description) %></div> 
-		<div class="post-footer">
-			<div class="reply-toggle">
-				<span class="reply">Reply</span>
-				* 
-				<span class="jq-date"><%= data.format_date %></span> 
-			</div>
-		</div>
-	</div>
+<div class="discussion clearfix">
+    <div class="user-avatar">
+        <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avatar"> 
+    </div>
+    <div class="update-content">
+        <div class="post-title">
+            <%= data.display_name %>
+        </div>
+        <div class="post-content">
+            <%= unescape(data.description) %>
+        </div>
+        <div class="post-footer">
+            <div class="reply-toggle">
+                <span class="reply">Reply</span>
+                *
+                <span class="jq-date">
+                    <%= data.format_date %>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>

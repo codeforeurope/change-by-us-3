@@ -1,55 +1,76 @@
-define ["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], 
-(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) ->
-  
-  CBUMainView = Backbone.View.extend(
-    parent: "body"
-    templateDir: "/static"
-    viewData: {}
-    collection: {}
-    
-    initialize: (options) ->
-      @templateDir = options.templateDir or @templateDir
-      @parent      = options.parent or @parent
-      @viewData    = options.viewData or @viewData
-      @collection  = options.collection or new ProjectListCollection()
-      @render()
+define ["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "form", 
+        "resource-project-view", 
+        "views/partials-homepage/BannerImageView", 
+        "collection/ProjectListCollection", 
+        "collection/ResourceListCollection", 
+        "abstract-view"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     form, 
+     ResourceProjectPreviewView, 
+     BannerImageView, 
+     ProjectListCollection, 
+     ResourceListCollection, 
+     AbstractView) ->
 
-    render: ->
-      self = this
-      @$el = $("<div class='projects-main'/>")
-      @$el.template @templateDir + "/templates/main.html", {}, ->
-        $(self.parent).prepend self.$el
-        bannerParent = self.$el.find(".body-container-wide")
-        bannerImageView = new BannerImageView(parent: bannerParent)
-        self.collection.on "reset", self.addAll, self
-        self.collection.fetch reset: true
-        self.ajaxForm()
+        CBUMainView = AbstractView.extend
 
-    ajaxForm: ->
-      
-      # AJAXIFY THE SIGNUP FORM
-      $signup = $("form[name=signup]")
-      $signup.ajaxForm (response) ->
-        console.log response
+            initialize: (options_) ->
+                options             = options_ 
+                AbstractView::initialize.call @, options_
+                
+                @collection         = options.collection or new ProjectListCollection()
+                @resourceCollection = options.resourceCollection or new ResourceListCollection()
+                @render()
 
-      
-      # AJAXIFY THE SIGNIN FORM
-      $signin = $("form[name=signin]")
-      $signin.ajaxForm (response) ->
-        console.log response
+            render: -> 
+                @$el = $("<div class='projects-main'/>")
+                @$el.template @templateDir+"main.html",
+                    {}, => @onTemplateLoad()
+                $(@parent).prepend @$el
 
+            onTemplateLoad:->
+                bannerParent = @$el.find(".body-container-wide")
+                bannerImageView = new BannerImageView({parent:bannerParent})
+                
+                @addListeners()
 
-    addOne: (projectModel) ->
-      view = new ProjectPartialsView(model: projectModel)
-      @$el.find("#project-list").append view.$el
+                AbstractView::onTemplateLoad.call @
 
-    addAll: ->
-      self = this
-      i = 0
-      @collection.each (projectModel) ->
-        #while i++ < 3 then self.addOne projectModel
-        self.addOne projectModel
+            addListeners:->
+                @collection.on "reset", @addAll, @
+                @collection.fetch reset: true
 
-  )
-  CBUMainView
+                @resourceCollection.on "reset", @addAllResources, @
+                @resourceCollection.fetch reset: true
 
+            # Attach Elements
+            # -------------------------------------------
+
+            addAll: ->  
+                @collection.each (projectModel_) => 
+                    @addProject projectModel_
+                onPageElementsLoad() 
+
+            addProject: (projectModel_) ->
+                view = new ResourceProjectPreviewView(model: projectModel_)
+                view.render()
+                
+                @$el.find("#project-list").append view.$el
+
+            addAllResources: ->
+                @resourceCollection.each (projectModel_) => 
+                    @addResource projectModel_
+                onPageElementsLoad() 
+
+            addResource: (projectModel_) ->
+                view = new ResourceProjectPreviewView(model: projectModel_)
+                view.render()
+
+                @$el.find("#resource-list").append view.$el

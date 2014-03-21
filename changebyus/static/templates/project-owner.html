@@ -1,26 +1,15 @@
-<div class="body-container"> 
-	<div id="project-discussion" class="">
-		 
+<div class="body-container admin"> 
+	<div id="project-discussion" class=""> </div>
+	<div id="project-discussions" class=""> </div>
+	<div id="project-new-discussion" class=""> </div>
+	<div id="project-update" class=""> </div>
+	<% if (!data.isResource){ %>
+	<div id="project-fundraising" class=""> 
+		<div id="review-fundraising" class=""> </div>
+		<div id="setup-fundraising" class=""> </div>
 	</div>
-	<div id="project-discussions" class="">
-		 
-	</div>
-	<div id="project-new-discussion" class="">
-		 
-	</div>
-	<div id="project-update" class="">
-		 
-	</div>
-	<div id="project-fundraising" class="">
-		 
-	</div>
-	<div id="project-calendar" class="">
-		 
-	</div>
-	<div id="project-members" class="">
-		 
-	</div>
-	<div id="project-info" class="">
-		 
-	</div>
+	<% } %>
+	<div id="project-calendar" class=""> </div>
+	<div id="project-members" class=""> </div>
+	<div id="project-info" class=""> </div>
 </div>

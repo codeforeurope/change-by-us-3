@@ -18,12 +18,19 @@ define(["underscore", "backbone"], function(_, Backbone) {
       },
       active: false,
       password: "",
-      id: "",
+      id: -1,
       public_email: false,
       first_name: "",
       display_name: "",
-      roles: [],
+      roles: ["MEMBER"],
       created_at: "2000-01-01 00:00:00.000000"
+    },
+    parse: function(resp_) {
+      if (resp_.data) {
+        return resp_.data;
+      } else {
+        return resp_;
+      }
     }
   });
 });

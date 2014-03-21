@@ -1,23 +1,40 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-	ProjectDiscussionListItemView = AbstractView.extend
-		
-		tagName: "li"
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "model/UserModel"], 
+    (_, Backbone, $, temp, AbstractView, UserModel) ->
+        ProjectDiscussionListItemView = AbstractView.extend
+            
+            tagName: "li"
+            user:null
 
-		initialize: (options) ->
-			AbstractView::initialize.call @, options
-			@render()
+            initialize: (options_) ->
+                AbstractView::initialize.call @, options_
+                
+                @user = new UserModel(id:@model.get("user").id)
+                @user.fetch
+                    success: =>@onFetch()
 
-		render: ->
-			m = moment(@model.attributes.created_at).format("MMMM D hh:mm a")
-			@model.attributes.format_date = m
+            events: 
+                "click .description": "viewDescription",
+                "click .user-avatar": "viewDescription",
+                "click .delete-x": "delete" 
 
-			@$el = $(@el)
-			@$el.template @templateDir + "/templates/partials-project/project-discussion-list-item.html",
-				{data: @model.attributes}, =>
-					@$el.find('.user-avatar, .description').click =>
-						@trigger "click", @model
-					@$el.find('.delete').click =>
-						@trigger "delete", @model
-					console.log @$el.find('.delete')
-			@
+            render: ->
+                @$el = $(@el)
+                @$el.template @templateDir+"partials-project/project-discussion-list-item.html",
+                    {data: @viewData}, => @onTemplateLoad()
 
+            viewDescription: ->
+                @trigger "click", @model
+
+            delete:->
+                confirmation = confirm("Do you really want to delete this post?")
+                if confirmation then @model.collection.remove @model
+
+            onFetch:->
+                m =  moment(@model.get("created_at")).format("MMMM D hh:mm a")
+                @model.set("format_date", m)
+
+                @viewData                       = @model.attributes
+                @viewData.image_url_round_small = @user.get("image_url_round_small")
+                @viewData.display_name          = @user.get("display_name")
+
+                @render()

@@ -1,14 +1,19 @@
 # -*- coding: utf-8 -*-
 """
-=================
-Encryption Module
-=================
-A module supporting basic 2-way encryption functionality using the AES algorithm.  
-----------------------------------------------------------------------------------
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
 
-It is assumed that keys are assembled via bitwise XOR from a local and remote key, 
-though this is not strictly necessary.  Also, it is assumed that any string that is 
-saved (key or encrypted text) is base-64 encoded.
+"""
+.. module: encryption
+
+    :synopsis: A module supporting basic 2-way encryption functionality 
+    using the AES algorithm.  
+
+    It is assumed that keys are assembled via bitwise XOR from a local 
+    and remote key, though this is not strictly necessary.  Also, it is 
+    assumed that any string that is saved (key or encrypted text) is 
+    base-64 encoded.
 """
 
 from base64 import b64encode, b64decode
@@ -21,14 +26,12 @@ PAD = u'\u0000'
 
 def pad_string(s, blocksize = BLOCKSIZE, pad = PAD):
     """
-    ABOUT
         Right-pad string out to appropriate size.
     """
     return s + (blocksize - len(s) % blocksize) * pad
 
 def aes_encrypt(s, key, iv, mode = AES.MODE_CBC):
     """
-    ABOUT
         Returns base-64-encoded, AES encrypted string.
     """
 
@@ -40,7 +43,6 @@ def aes_encrypt(s, key, iv, mode = AES.MODE_CBC):
     
 def aes_decrypt(s, key, iv, mode = AES.MODE_CBC, pad = PAD):
     """
-    ABOUT
         Accepts base-64-encoded, AES encrypted string and returns 
         decoded, decrypted string.
     """
@@ -53,7 +55,6 @@ def aes_decrypt(s, key, iv, mode = AES.MODE_CBC, pad = PAD):
     
 def string_xor(s1, s2):
     """
-    ABOUT
         Perform bitwise XOR on 2 strings.
     """
     o1 = [ord(c) for c in s1]
@@ -65,7 +66,6 @@ def string_xor(s1, s2):
     
 def assemble_key(local_key, remote_key_url):
     """
-    ABOUT
         Takes a base64-encoded key and an url to a file containing another 
         base64-encoded key and performs a bitwise xor operation on them to 
         create the final key.

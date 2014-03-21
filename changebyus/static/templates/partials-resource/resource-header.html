@@ -1,0 +1,34 @@
+<div class="body-container">
+    <div class="feature-image content-wrapper">
+
+        <div style="background-image:url(<%= data.image_url_round %>);background-position: center;" class="preview circle">
+            <div class="content"></div>
+        </div>
+
+        <div class="header-icon flag-project">
+            <a href="javascript:void(0)" id="flag"> Flag Resource</a>
+        </div>
+
+        <h1 class="overlay-title">
+            <%= data.name %>
+        </h1>
+        <p class="overlay-description">
+            <%= data.description %>
+        </p>
+        <div class="project-footer">
+            
+            <% var classes = "btn btn-large btn-secondary pull-right" %>
+            <% if(data.isMember){  classes += " invisible" }%>
+
+            <a href="javascript:void(0)" class="<%= classes %>">Follow</a>
+
+            <div class="project-location">
+                <%= data.location %>
+                <br>
+                <% if (data.website){ %>
+                <a href="<%= data.website %>" target="_blank"><%= data.website %></a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>

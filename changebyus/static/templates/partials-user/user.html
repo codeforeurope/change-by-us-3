@@ -1,31 +1,58 @@
 <div class="body-container">
-	<div class="user-header">
-		<div class="user-avatar">
-			<img src="/static/img/user_profile_temp.png">
-			<!-- <img src="<%= data.data.avatar_url %>"> -->
-		</div>
-		<div class="user-info">
-			<span style="font-size: 42px; font-weight: normal"><%= data.data.display_name %></span><span><img src="/static/img/profile_email.png"></span>
-			<br>
-			<span style="color:#323232"><i>aka </i></span><span><%= data.data.first_name %> <%= data.data.last_name %></span>
-			<span><%= data.data.user_description %></span>
-			<br>
-			<span><%= data.data.user_location %></span>
-			<strong>
-				<span><%= data.data.user_website %></span>
-			</strong>
-		</div>
-	</div>
-	<hr>
-	<div class="user-projects">
-		<h2><%= data.data.first_name %> <%= data.data.last_name %>'s Projects</h2>
-		<ul id="project-list"></ul>
-	</div>
+    <div class="user-header clearfix">
+        <div class="header-icon flag-user"> 
+            <a href="javascript:void(0)" id="flag"> Flag User</a>
+        </div>
+        <div class="edit invisible">
+            <a href="/stream/dashboard#profile" class="btn btn-large btn-secondary">Edit Profile</a>
+        </div>
+        <div class="user-avatar">
+            <% if (data.image_url_round_medium){ %>
+                <img src="<%= data.image_url_round_medium %>" class="circle" alt="User Avatar">
+            <% } %>
+        </div>
+        <div class="user-info">
+            <h1>
+                <%= data.display_name %> 
+                <% if (data.public_email){ %>
+                    <a href="mailto:<%= data.email %>">
+                        <img src="/static/img/profile_email.png" alt="Email">
+                    </a>
+                <% }else{ %>
+                    <img src="/static/img/profile_email_deactive.png" alt="Email">
+                <% } %> 
+            </h1>
 
-	<hr>
+            <p>
+                <span>
+                    <em>aka</em> <%= data.first_name %> <%= data.last_name %>
+                </span>
+                <br>
+                <br>
+                Tempor cray proident, stumptown hella nulla fingerstache irony tonx. Mcsweeney's accusamus gentrify aliquip. Thundercats eiusmod single-origin coffee gastropub
+                    <%= data.user_description %>
+            </p>
+            <br> 
+            <span>Brooklyn<%= data.user_location %></span>
+            <br>
+            <% if (data.website){ %>
+            <strong>
+                <a href="<%= data.website %>" target="_blank"><%= data.website %></a>
+            </strong>
+            <% } %>
+        </div>
+    </div>
+    
+    <div class="user-projects clearfix">
+        <hr>
+        <h2>
+            <%= data.first_name %> <%= data.last_name %>'s Projects</h2>
+        <ul id="project-list"></ul>
+    </div>
 
-	<div class="user-following">
-		<h2>Following</h2>
-		<ul id="following-list"></ul>
-	</div>
+    <div class="user-following clearfix">
+        <hr>
+        <h2>Following</h2>
+        <ul id="following-list"></ul>
+    </div>
 </div>

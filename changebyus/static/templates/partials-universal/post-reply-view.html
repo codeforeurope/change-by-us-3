@@ -1,0 +1,14 @@
+<div class="user-avatar">
+    <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avatar">
+</div>
+<div class="reply-right">
+    <div class="reply-title">
+    	<%= data.display_name %>
+    </div>
+    <div class="reply-content">
+    	<%= unescape(data.description) %>
+    </div>
+    <div class="reply-date jq-date">
+    	<%= data.format_date %>
+    </div>
+</div>

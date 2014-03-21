@@ -1,7 +1,7 @@
 define(["underscore", "backbone"], function(_, Backbone) {
   var ProjectDiscussionModel;
   return ProjectDiscussionModel = Backbone.Model.extend({
-    urlRoot: "",
+    urlRoot: "/api/post",
     "default": {
       description: "",
       title: "",
@@ -18,6 +18,13 @@ define(["underscore", "backbone"], function(_, Backbone) {
       },
       "public": false,
       responses: []
+    },
+    parse: function(resp_) {
+      if (resp_.data) {
+        return resp_.data;
+      } else {
+        return resp_;
+      }
     }
   });
 });

@@ -4,8 +4,9 @@
     :license: Affero GNU GPL v3, see LICENSE for more details.
 """
 
-from ..extensions import db
+from changebyus.extensions import db
 from flask import current_app as app
+from flask_mongoutils import object_to_dict
 from itertools import groupby
 from mongoengine import Document, EmbeddedDocument
 from mongoengine.queryset import QuerySet
@@ -18,13 +19,12 @@ import datetime
 
 
 """
-====================
-Common Model Objects
-====================
+.. module:: mixin
 
-Timestamps and other auto-content to be mixed in with a MongoDB object, 
-and the pre_save routine that will populate them
+    :synopsis: Common Model Objects
 
+    Timestamps and other auto-content to be mixed in with a MongoDB object, 
+    and the pre_save routine that will populate them
 """
 
 class EntityMixin(object):
@@ -41,40 +41,47 @@ class EntityMixin(object):
         document.updated_at = datetime.datetime.utcnow() 
         
     def as_dict(self, exclude_nulls=True, recursive=False, depth=1, **kwargs ):
-        resp = encode_model(self, 
-                            exclude_nulls=exclude_nulls, 
-                            recursive=recursive, 
-                            depth=depth, 
-                            **kwargs)
+        resp = object_to_dict(self, app=app,
+                              exclude_nulls=exclude_nulls, 
+                              recursive=recursive, 
+                              depth=depth, 
+                              **kwargs)
         return resp
 
 
-class HasActiveEntityMixin(EntityMixin):
+class HasActiveEntityMixin(object):
     active = db.BooleanField(default=True)
     
     def is_active(self):
-        return active
+        return self.active
 
 
-class FlaggableMixin(object):
+class FlaggableEntityMixin(object):
     flags = db.IntField(default=0)
 
     def is_flagged(self):
-        return flags > 0
+        return self.flags > 0
+        
+class LocationEnabledEntityMixin(object):
+    location = db.StringField()
+
+    # Geo JSON Field
+    geo_location = db.PointField()    
 
 
 def encode_model(obj=None, exclude_nulls=True, recursive=False, depth=1, **kwargs):
     """Take a Mongo (or other) object and return a JSON
      
-    :param obj: object to encode
-    :param exclude_nulls: if a value is None, don't include it in the return set
-    :param recursive: Descend into the referenced documents and return those objects.
-        Keep in mind that recursive can be problematic since there's no depth!
-    :param depth: recursion-depth. If 0, this is unlimited!
+        Args:
+            obj: object to encode
+            exclude_nulls: if a value is None, don't include it in the return set
+            recursive: Descend into the referenced documents and return those objects.
+                Keep in mind that recursive can be problematic since there's no depth!
+            depth: recursion-depth. If 0, this is unlimited!
     
-    kwargs:
-        current_depth: for internal recursion
-        use_derefs: whether to use deref_only and deref_exclude properties to filter dereferenced values
+        KWargs:
+            current_depth: for internal recursion
+            use_derefs: whether to use deref_only and deref_exclude properties to filter dereferenced values
     """
     if (  kwargs.get('current_depth') is not None and
           kwargs.get('current_depth') > 0 and
@@ -211,11 +218,17 @@ def lazy_load_model_classes(collection):
     if classname in globals().keys():
         return classname
     
+    MODEL_MAPPING = {'ProjectPost': 'post'}
     model_path = u"changebyus.%s.models" % (collection)
     # import all release models into (global) namespace
     try:
         exec("from %s import %s" % (model_path, classname)) in globals()
-    except Exception:
+    except ImportError as exc:
+        # Look to see if there's a model mapping somewhere?
+        if MODEL_MAPPING.get(classname):
+            exec("from %s import %s" % ('changebyus.%s.models' % MODEL_MAPPING.get(classname),
+                                        classname)) in globals()
+    except Exception as exc:
         app.logger.error("Exception lazy loading %s" % collection, exc_info=True)
 
     if classname not in globals().keys():

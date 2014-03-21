@@ -1,13 +1,13 @@
-define ["underscore", "backbone", "model/ProjectCalendarModel"], (_, Backbone, ProjectCalendarModel) ->
-  ProjectCalendarCollection = Backbone.Collection.extend
-    initialize: (options) ->
-      @id = options.id
+define ["underscore", "backbone", "model/ProjectCalendarModel"], 
+    (_, Backbone, ProjectCalendarModel) ->
+        ProjectCalendarCollection = Backbone.Collection.extend
+            model: ProjectCalendarModel
 
-    model: ProjectCalendarModel
-    url: ->
-      "/api/project/" + @id + "/calendar"
+            initialize: (options_) ->
+                @id = options_.id
+            
+            url: ->
+                "/api/project/#{@id}/calendar"
 
-    parse: (response) ->
-      (if (response.msg is "OK") then response.data else {})
-  
-  ProjectCalendarCollection 
+            parse: (response_) ->
+                if response_.success then response_.data else {}

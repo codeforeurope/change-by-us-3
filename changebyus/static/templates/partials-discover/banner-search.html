@@ -1,25 +1,80 @@
-<div class="discover-header-right">
-
-    <a class="btn" href="/create">Create a Project</a>
-</div>
 <div class="search-box">
-  <div class="title">
-    <p>I am looking for...</p>
-  </div>
-  <div class="search-forms">
-    <p class="input-label"> Search for Anything </p>
-    <input class="search-projects" id="search-input" placeholder="e.g. bees" type="text" />
-  </div>
-  <div class="search-forms">
-    <p class="input-label"> Near... </p>
-    <input class="search-projects" id="search-input" placeholder="e.g. 10018" type="text" />
-  </div>
-  <div class="search-forms">
-      <a class="btn" href="/create">Go</a>
-  </div>
+    <div class="title">
+        <h2>I am looking for...</h2>
+        <div class="type-toggle">
+            <a href="javascript:void(0);" id="all" class="active">All</a> / <a href="javascript:void(0);" id="projects">Projects</a> / <a href="javascript:void(0);" id="resources">Resources</a> 
+        </div>
+    </div>
+    <div class="discover-nav">
+        <select name="add-own" class="default" id="add-own">
+                <option>Add my own</option>
+                <option value="project">Project</option>
+                <option value="resource">Resources</option>
+        </select>
+
+        <select name="city" class="default" id="city">
+                <option>Featured Cities</option>
+
+                <% _.each(data.cities, function(city) { %>
+                <option value="<%= city.get('slug') %>"><%= city.get('name') %></option> 
+                <% }); %>
+        </select>
+    </div>
+
+    <div class="search-inputs clearfix">
+        <div class="search-forms">
+            <h3 class="input-label">About:</h3>
+            <input class="search-projects category" id="search-input" placeholder="e.g. bees" type="text">
+            <div class="search-catagories">
+                <ul>
+                    <li>Most Active</li>
+                    <li>Most Popular</li>
+                </ul>
+                <h3 class="input-label">By Category</h3>
+                <ul>
+                    <li>Animals</li>
+                    <li>Community</li>
+                    <li>Education</li>
+                    <li>Environment</li>
+                    <li>Food</li>
+                    <li>Health</li>
+                    <li>Politics</li>
+                    <li>Religion</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="search-forms">
+            <h3 class="input-label">Near:</h3>
+            <input class="search-projects zip" id="search-near" placeholder="e.g. 10018" type="text">
+            <div class="geo-pin"></div>
+            <div class="results-modify">
+                <a href="javascript:void(0)" id="modify">Modify</a>
+            </div>
+            <div class="filter-within hide">
+                <h3 class="input-label">Expand Radius:</h3>
+                <select name="range" class="default" id="search-range">
+                    <option value="2" selected>2 Miles</option>
+                    <option value="5">5 Miles</option>
+                    <option value="10">10 Miles</option>
+                    <option value="25">25 Miles</option>
+                    <option value="50">50 Miles</option>
+                </select>
+                <div class="close-x"></div>
+            </div>
+        </div>
+        
+        <div class="search-toggles">
+            <h3 class="input-label">Sort View:</h3>
+            <div id="sort-by-pd" class="pill-toggle">
+                <div class="pill-selection active">Popular</div>
+                <div class="pill-selection">Distance</div>
+            </div>
+        </div>
+
+        <div class="go">
+            <a class="btn btn-primary btn-large" href="javascript:void(0)">Go</a>
+        </div>
+         
+    </div>
 </div>
-
-
-<div class="search-box-geo">
-</div>
-

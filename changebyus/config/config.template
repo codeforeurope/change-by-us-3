@@ -33,8 +33,8 @@ SECURITY_PASSWORD_HASH: {{ SECURITY_PASSWORD_HASH }}
 # a salt for the passwords
 # example: customwebsitesalt
 SECURITY_PASSWORD_SALT: {{ SECURITY_PASSWORD_SALT }}
-# set to 'signup.html'
-SECURITY_LOGIN_USER_TEMPLATE: {{ SECURITY_LOGIN_USER_TEMPLATE }}
+SECURITY_LOGOUT_URL: {{SECURITY_LOGOUT_URL}}
+SECURITY_LOGIN_URL: {{SECURITY_LOGIN_URL}}
 
 # to allow flask security to send emails you will need to get an email account
 # and configure it with these settings
@@ -115,3 +115,57 @@ ENCRYPTION:
     REMOTE_KEY_URL: {{ ENCRYPTION_REMOTE_KEY_URL }}
     # example: '53535999333'
     IV: '{{ ENCRYPTION_IV }}'
+
+
+
+# the facebook app will need to be made public (no sandbox mode) and have
+# publish_stream permissions
+FACEBOOK:
+    CONSUMER_KEY: {{ FACEBOOK_CONSUMER_KEY }}
+    CONSUMER_SECRET: {{ FACEBOOK_CONSUMER_SECRET }}
+
+# You need to create a twitter application so users can sign in through twitter and
+# post to twitter through cbu. Take those credentials and put them here.
+# the twitter app will need to have read and write permission
+TWITTER:
+    CONSUMER_KEY: {{ TWITTER_CONSUMER_KEY }}
+    CONSUMER_SECRET: {{ TWITTER_CONSUMER_SECRET }}
+
+# bitly is used to shorten urls when we post to social media
+# you need an account login/api here
+BITLY:
+    LOGIN: {{ BITLY_LOGIN }}
+    API_KEY: {{ BITLY_API_KEY }}
+
+GEONAMES:
+    SEARCH_URL: {{ GEONAMES_SEARCH_URL }}
+    POSTALCODE_SEARCH_URL: {{ GEONAMES_POSTALCODE_SEARCH_URL }}
+    COORDINATE_SEARCH_URL: {{ GEONAMES_COORDINATE_SEARCH_URL }}
+    COUNTRY: {{ GEONAMES_COUNTRY }}
+    USERNAME: {{ GEONAMES_USERNAME }}
+    MAXROWS: {{ GEONAMES_MAXROWS }}
+
+STRIPE:
+    # stripe connect master account client_id
+    CLIENT_ID: {{ STRIPE_CLIENT_ID }}
+    # stripe connect master account api_secret
+    API_SECRET: {{ STRIPE_API_SECRET }}
+    # stripe connect master account api_public
+    API_PUBLIC: {{ STRIPE_API_PUBLIC }}
+
+    # stripe makes call backs through this hook, and we customize it for security
+    # for obscurity, turns into "https://host.com/stripe/HOOK_URL"
+    # Example '/hook-ABXXGF'
+    HOOK_URL: {{ STRIPE_HOOK_URL }}
+
+    # should we act on test data or drop it
+    # Example: False
+    SKIP_TESTS: {{ STRIPE_SKIP_TESTS }}
+
+    # webhooks are callbacks that allow the stripe server to notify us of charges.
+    # unfortunately it's a little slow and has had some issues, so with USE_WEBHOOKS
+    # set to False, we rely on the local information from our charges generated
+    # in the stripe UI
+    # Example: False
+    USE_WEBHOOKS: {{ STRIPE_USE_WEBHOOKS }}
+

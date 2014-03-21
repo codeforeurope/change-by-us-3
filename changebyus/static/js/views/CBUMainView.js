@@ -1,61 +1,70 @@
-define(["underscore", "backbone", "jquery", "template", "form", "views/partials-project/ProjectPartialsView", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, form, ProjectPartialsView, BannerImageView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "form", "resource-project-view", "views/partials-homepage/BannerImageView", "collection/ProjectListCollection", "collection/ResourceListCollection", "abstract-view"], function(_, Backbone, $, temp, form, ResourceProjectPreviewView, BannerImageView, ProjectListCollection, ResourceListCollection, AbstractView) {
   var CBUMainView;
-  CBUMainView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
-    collection: {},
-    initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+  return CBUMainView = AbstractView.extend({
+    initialize: function(options_) {
+      var options;
+      options = options_;
+      AbstractView.prototype.initialize.call(this, options_);
       this.collection = options.collection || new ProjectListCollection();
+      this.resourceCollection = options.resourceCollection || new ResourceListCollection();
       return this.render();
     },
     render: function() {
-      var self;
-      self = this;
+      var _this = this;
       this.$el = $("<div class='projects-main'/>");
-      return this.$el.template(this.templateDir + "/templates/main.html", {}, function() {
-        var bannerImageView, bannerParent;
-        $(self.parent).prepend(self.$el);
-        bannerParent = self.$el.find(".body-container-wide");
-        bannerImageView = new BannerImageView({
-          parent: bannerParent
-        });
-        self.collection.on("reset", self.addAll, self);
-        self.collection.fetch({
-          reset: true
-        });
-        return self.ajaxForm();
+      this.$el.template(this.templateDir + "main.html", {}, function() {
+        return _this.onTemplateLoad();
       });
+      return $(this.parent).prepend(this.$el);
     },
-    ajaxForm: function() {
-      var $signin, $signup;
-      $signup = $("form[name=signup]");
-      $signup.ajaxForm(function(response) {
-        return console.log(response);
+    onTemplateLoad: function() {
+      var bannerImageView, bannerParent;
+      bannerParent = this.$el.find(".body-container-wide");
+      bannerImageView = new BannerImageView({
+        parent: bannerParent
       });
-      $signin = $("form[name=signin]");
-      return $signin.ajaxForm(function(response) {
-        return console.log(response);
-      });
+      this.addListeners();
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
-    addOne: function(projectModel) {
-      var view;
-      view = new ProjectPartialsView({
-        model: projectModel
+    addListeners: function() {
+      this.collection.on("reset", this.addAll, this);
+      this.collection.fetch({
+        reset: true
       });
-      return this.$el.find("#project-list").append(view.$el);
+      this.resourceCollection.on("reset", this.addAllResources, this);
+      return this.resourceCollection.fetch({
+        reset: true
+      });
     },
     addAll: function() {
-      var i, self;
-      self = this;
-      i = 0;
-      return this.collection.each(function(projectModel) {
-        return self.addOne(projectModel);
+      var _this = this;
+      this.collection.each(function(projectModel_) {
+        return _this.addProject(projectModel_);
       });
+      return onPageElementsLoad();
+    },
+    addProject: function(projectModel_) {
+      var view;
+      view = new ResourceProjectPreviewView({
+        model: projectModel_
+      });
+      view.render();
+      return this.$el.find("#project-list").append(view.$el);
+    },
+    addAllResources: function() {
+      var _this = this;
+      this.resourceCollection.each(function(projectModel_) {
+        return _this.addResource(projectModel_);
+      });
+      return onPageElementsLoad();
+    },
+    addResource: function(projectModel_) {
+      var view;
+      view = new ResourceProjectPreviewView({
+        model: projectModel_
+      });
+      view.render();
+      return this.$el.find("#resource-list").append(view.$el);
     }
   });
-  return CBUMainView;
 });

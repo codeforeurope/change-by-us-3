@@ -1,49 +1,82 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"views/partials-project/ProjectSubView",
-		"views/partials-project/ProjectDiscussionListItemView"],
-	(_, Backbone, $, temp, ProjectSubView, ProjectDiscussionListItemView) ->
-		ProjectDiscussionsView = ProjectSubView.extend
+        "backbone", 
+        "jquery", 
+        "template", 
+        "abstract-view",
+        "project-sub-view",
+        "views/partials-project/ProjectDiscussionListItemView"],
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView,
+     ProjectSubView, 
+     ProjectDiscussionListItemView) ->
 
-			parent: "#project-discussions"
-			$ul:null
+        ProjectDiscussionsView = ProjectSubView.extend
 
-			render: ->  
-				@$el = $(@parent)
+            parent: "#project-discussions"
+            $ul:null
+            currentData:""
 
-			addAll: ->
-				console.log 'ProjectDiscussionsView addAll',@collection
-				
-				if @collection.models.length is 0
-					@$el.template @templateDir+"/templates/partials-project/project-zero-discussions.html", 
-						{}, =>
-				else
-					@$el.template @templateDir+"/templates/partials-project/project-all-discussions.html",
-						{}, => 
-							@$ul = @$el.find('.bordered-item')
-							for model in @collection.models
-								@addOne model
+            render: ->
+                @$el = $(@parent)
+                @templateLoaded = true
 
-				@isDataLoaded = true
+            onCollectionLoad:->  
+                ProjectSubView::onCollectionLoad.call(@)
 
-			addOne:(model_)->  
-				config = {model:model_}
-				projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
-				projectDiscussionListItemView.on 'click', =>
-					@trigger 'discussionClick', config
-				projectDiscussionListItemView.on 'delete', =>
-					# @trigger 'deleteDiscussion', config
-					console.log 'config',config.model.attributes.id
-					@deleteDiscussion config.model.attributes.id
-				@$ul.append projectDiscussionListItemView.$el
+                @collection.on 'add', @updateCount, @
+                @collection.on 'remove', (obj_)=>
+                    @addAll()
+                    @deleteDiscussion(obj_.id)
+                
+            # Attach Elements
+            # ------------------------------ 
+            onDayWrapperLoad:->
+                ProjectSubView::onDayWrapperLoad.call(@) 
+                ProjectSubView::addAll.call(@) 
+                    
+                @updateCount()
 
+            addAll: -> 
+                if @collection.models.length is 0
+                    @$el.template @templateDir+"partials-project/project-zero-discussions.html", 
+                        {}, => AbstractView::onTemplateLoad.call @
+                else
+                    @$el.template @templateDir+"partials-project/project-all-discussions.html",
+                        {}, => @loadDayTemplate()
+                        # user super loadDayTemplate() method
 
-			deleteDiscussion:(id_)->
-				$.ajax(
-					type: "POST"
-					url: "/api/post/delete"
-					data: { post_id:id_ }
-				).done (response)=> 
-					console.log 'deleteDiscussion',response
+            addOne:(model_)->
+                m = moment(model_.get("created_at")).format("MMMM D")
+                if @currentDate isnt m then @newDay(m)
+
+                config = {model:model_}
+                projectDiscussionListItemView = new ProjectDiscussionListItemView(config) 
+                projectDiscussionListItemView.on 'click', =>
+                    @trigger 'DISCUSSION_CLICK', config
+
+                @$ul.append projectDiscussionListItemView.$el
+
+                onPageElementsLoad()
+
+            updateCount:->
+                @$el.find(".admin-title").html "All Discussions (#{@collection.models.length})"
+
+            show:->
+                $(".day-wrapper").remove()
+                ProjectSubView::show.call(@)
+                @loadData()
+
+            deleteDiscussion:(id_)->
+                $feedback = $("#discussions-feedback")
+                $.ajax(
+                    type: "POST"
+                    url: "/api/post/delete"
+                    data: { post_id:id_ }
+                ).done (res_)=> 
+                    if res_.success
+                        $feedback.hide()
+                    else
+                        $feedback.show().html(res_.msg)

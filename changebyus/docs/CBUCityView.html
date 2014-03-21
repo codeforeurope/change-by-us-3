@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>CBUCityView.coffee</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+      <ul id="jump_to">
+        <li>
+          <a class="large" href="javascript:void(0);">Jump To &hellip;</a>
+          <a class="small" href="javascript:void(0);">+</a>
+          <div id="jump_wrapper">
+          <div id="jump_page">
+            
+              
+              <a class="source" href="FlaggedProjectCollection.html">
+                FlaggedProjectCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="FlaggedUserCollection.html">
+                FlaggedUserCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectCalendarCollection.html">
+                ProjectCalendarCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionsCollection.html">
+                ProjectDiscussionsCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectListCollection.html">
+                ProjectListCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectMembersCollection.html">
+                ProjectMembersCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="ResourceListCollection.html">
+                ResourceListCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="StreamCollection.html">
+                StreamCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="UnapprovedResourcesCollection.html">
+                UnapprovedResourcesCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="UpdatesCollection.html">
+                UpdatesCollection.coffee
+              </a>
+            
+              
+              <a class="source" href="main.html">
+                main.coffee
+              </a>
+            
+              
+              <a class="source" href="CityModel.html">
+                CityModel.coffee
+              </a>
+            
+              
+              <a class="source" href="PostReplyModel.html">
+                PostReplyModel.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectCalendarModel.html">
+                ProjectCalendarModel.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionCommentModel.html">
+                ProjectDiscussionCommentModel.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionModel.html">
+                ProjectDiscussionModel.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectMemberModel.html">
+                ProjectMemberModel.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectModel.html">
+                ProjectModel.coffee
+              </a>
+            
+              
+              <a class="source" href="ResourceModel.html">
+                ResourceModel.coffee
+              </a>
+            
+              
+              <a class="source" href="UpdateModel.html">
+                UpdateModel.coffee
+              </a>
+            
+              
+              <a class="source" href="UserModel.html">
+                UserModel.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUAdminView.html">
+                CBUAdminView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUCityView.html">
+                CBUCityView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUDashboardView.html">
+                CBUDashboardView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUDiscoverView.html">
+                CBUDiscoverView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUFundraisingView.html">
+                CBUFundraisingView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBULoginView.html">
+                CBULoginView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUMainView.html">
+                CBUMainView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUProjectOwnerView.html">
+                CBUProjectOwnerView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUProjectView.html">
+                CBUProjectView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUSignupView.html">
+                CBUSignupView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUStreamView.html">
+                CBUStreamView.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUStripeEdit.html">
+                CBUStripeEdit.coffee
+              </a>
+            
+              
+              <a class="source" href="CBUUserView.html">
+                CBUUserView.coffee
+              </a>
+            
+              
+              <a class="source" href="BannerSearchView.html">
+                BannerSearchView.coffee
+              </a>
+            
+              
+              <a class="source" href="BannerImageView.html">
+                BannerImageView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectAddUpdateView.html">
+                ProjectAddUpdateView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectCalenderView.html">
+                ProjectCalenderView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionCommentView.html">
+                ProjectDiscussionCommentView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionListItemView.html">
+                ProjectDiscussionListItemView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionPreviewView.html">
+                ProjectDiscussionPreviewView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionThreadItemView.html">
+                ProjectDiscussionThreadItemView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionView.html">
+                ProjectDiscussionView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDiscussionsView.html">
+                ProjectDiscussionsView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectDonationModalView.html">
+                ProjectDonationModalView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectEmbedCalendarModalView.html">
+                ProjectEmbedCalendarModalView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectFundraisingView.html">
+                ProjectFundraisingView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectInfoAppearanceView.html">
+                ProjectInfoAppearanceView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectMemberListItemView.html">
+                ProjectMemberListItemView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectMembersView.html">
+                ProjectMembersView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectNewDiscussionView.html">
+                ProjectNewDiscussionView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectSubView.html">
+                ProjectSubView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProjectUpdateSuccessModalView.html">
+                ProjectUpdateSuccessModalView.coffee
+              </a>
+            
+              
+              <a class="source" href="AbstractModalView.html">
+                AbstractModalView.coffee
+              </a>
+            
+              
+              <a class="source" href="AbstractView.html">
+                AbstractView.coffee
+              </a>
+            
+              
+              <a class="source" href="CreateModalView.html">
+                CreateModalView.coffee
+              </a>
+            
+              
+              <a class="source" href="CreateView.html">
+                CreateView.coffee
+              </a>
+            
+              
+              <a class="source" href="ForgotPasswordModalView.html">
+                ForgotPasswordModalView.coffee
+              </a>
+            
+              
+              <a class="source" href="PostReplyView.html">
+                PostReplyView.coffee
+              </a>
+            
+              
+              <a class="source" href="ResourceProjectPreviewView.html">
+                ResourceProjectPreviewView.coffee
+              </a>
+            
+              
+              <a class="source" href="UpdateListItemView.html">
+                UpdateListItemView.coffee
+              </a>
+            
+              
+              <a class="source" href="UpdatesView.html">
+                UpdatesView.coffee
+              </a>
+            
+              
+              <a class="source" href="WysiwygFormView.html">
+                WysiwygFormView.coffee
+              </a>
+            
+              
+              <a class="source" href="ProfileEditView.html">
+                ProfileEditView.coffee
+              </a>
+            
+              
+              <a class="source" href="UserStreamItemView.html">
+                UserStreamItemView.coffee
+              </a>
+            
+          </div>
+        </li>
+      </ul>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>CBUCityView.coffee</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>define [<span class="hljs-string">"underscore"</span>, 
+        <span class="hljs-string">"backbone"</span>, 
+        <span class="hljs-string">"jquery"</span>, 
+        <span class="hljs-string">"template"</span>, 
+        <span class="hljs-string">"abstract-view"</span>, 
+        <span class="hljs-string">"resource-project-view"</span>,
+        <span class="hljs-string">"model/ProjectModel"</span>,
+        <span class="hljs-string">"model/CityModel"</span>], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView, 
+     ResourceProjectPreviewView,
+     ProjectModel,
+     CityModel)<span class="hljs-function"> -&gt;</span>
+        
+        CBUCityView = AbstractView.extend
+
+            <span class="hljs-attribute">bothLoaded</span>:<span class="hljs-number">0</span>
+            <span class="hljs-attribute">delayClear</span>:<span class="hljs-literal">null</span>
+            <span class="hljs-attribute">view</span>:<span class="hljs-string">""</span>
+            <span class="hljs-attribute">name</span>:<span class="hljs-string">""</span>
+            <span class="hljs-attribute">projects</span>:[]
+            <span class="hljs-attribute">resources</span>:[]
+            <span class="hljs-attribute">both</span>:[]
+
+            <span class="hljs-attribute">initialize</span>: <span class="hljs-function"><span class="hljs-params">(options_)</span> -&gt;</span>
+                options = options_
+                <span class="hljs-attribute">AbstractView</span>::initialize.call @, options
+
+                <span class="hljs-property">@fetch</span>()
+
+            <span class="hljs-attribute">events</span>:
+                _.extend {}, AbstractView.prototype.events, {<span class="hljs-string">"click .change-city a"</span>:<span class="hljs-string">"changeCity"</span>}
+                
+            <span class="hljs-attribute">fetch</span>:<span class="hljs-function">-&gt;</span> 
+                scope = @
+                $.getJSON <span class="hljs-string">"/api/project/cities"</span>, <span class="hljs-function"><span class="hljs-params">(r_)</span>=&gt;</span> <span class="hljs-property">@onFetch</span>(r_)
+
+            <span class="hljs-attribute">render</span>:<span class="hljs-function"> -&gt;</span>  
+                <span class="hljs-property">@viewData</span>                 = <span class="hljs-property">@model</span>.attributes 
+                s                         = <span class="hljs-property">@viewData</span>.image_url_round
+                <span class="hljs-property">@viewData</span>.image_url_round = s.substring(s.lastIndexOf(<span class="hljs-string">"/static/img/"</span>))
+
+                <span class="hljs-property">@$el</span> = $(<span class="hljs-string">"&lt;div class='city-container'/&gt;"</span>)
+                <span class="hljs-property">@$el</span>.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"city.html"</span>, 
+                    {<span class="hljs-attribute">data</span>:<span class="hljs-property">@viewData</span>},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onTemplateLoad</span>()
+                $(<span class="hljs-property">@parent</span>).append <span class="hljs-property">@$el</span>
+
+            <span class="hljs-attribute">search</span>:<span class="hljs-function"><span class="hljs-params">(type_)</span>-&gt;</span>
+                dataObj = {
+                    <span class="hljs-attribute">s</span>: <span class="hljs-string">""</span>
+                    <span class="hljs-attribute">cat</span>: <span class="hljs-string">""</span>
+                    <span class="hljs-attribute">loc</span>: <span class="hljs-string">""</span>
+                    <span class="hljs-attribute">d</span>: <span class="hljs-string">"25"</span>
+                    <span class="hljs-attribute">type</span>: type_
+                    <span class="hljs-attribute">lon</span>: <span class="hljs-property">@model</span>.get(<span class="hljs-string">"geo_location"</span>).coordinates[<span class="hljs-number">0</span>]
+                    <span class="hljs-attribute">lat</span>: <span class="hljs-property">@model</span>.get(<span class="hljs-string">"geo_location"</span>).coordinates[<span class="hljs-number">1</span>]
+                }
+
+                $.ajax(
+                    <span class="hljs-attribute">type</span>: <span class="hljs-string">"POST"</span>
+                    <span class="hljs-attribute">url</span>: <span class="hljs-string">"/api/project/search"</span>
+                    <span class="hljs-attribute">data</span>: JSON.stringify(dataObj)
+                    <span class="hljs-attribute">dataType</span>: <span class="hljs-string">"json"</span>
+                    <span class="hljs-attribute">contentType</span>: <span class="hljs-string">"application/json; charset=utf-8"</span>
+                ).done <span class="hljs-function"><span class="hljs-params">(response_)</span>=&gt;</span>
+                    <span class="hljs-keyword">if</span> response_.success 
+                        <span class="hljs-keyword">if</span> type_ <span class="hljs-keyword">is</span> <span class="hljs-string">"project"</span>
+                            <span class="hljs-property">@onProjectsLoad</span> response_.data
+                        <span class="hljs-keyword">else</span>
+                            <span class="hljs-property">@onResourcesLoad</span> response_.data
+
+            <span class="hljs-attribute">addHashListener</span>:<span class="hljs-function">-&gt;</span>
+                $<span class="hljs-function"><span class="hljs-params">(<span class="hljs-built_in">window</span>)</span>.<span class="hljs-title">bind</span> "<span class="hljs-title">hashchange</span>", <span class="hljs-params">(e)</span> =&gt;</span> <span class="hljs-property">@toggleSubView</span>()
+                <span class="hljs-property">@toggleSubView</span>()
+                
+            <span class="hljs-attribute">toggleSubView</span>:<span class="hljs-function"> -&gt;</span>
+                <span class="hljs-property">@view</span> = <span class="hljs-built_in">window</span>.location.hash.substring(<span class="hljs-number">1</span>)
+                <span class="hljs-property">@index</span> = <span class="hljs-number">0</span>
+
+                <span class="hljs-keyword">switch</span> <span class="hljs-property">@view</span> 
+                    <span class="hljs-keyword">when</span> <span class="hljs-string">"projects"</span>
+                        <span class="hljs-property">@showOnlyProjects</span>()
+                        <span class="hljs-property">@updatePage</span>()
+                    <span class="hljs-keyword">when</span> <span class="hljs-string">"resources"</span>
+                        <span class="hljs-property">@showOnlyResources</span>()
+                        <span class="hljs-property">@updatePage</span>()
+                    <span class="hljs-keyword">else</span> 
+                        <span class="hljs-property">@showBoth</span>()
+
+            <span class="hljs-attribute">loadCityHeader</span>:<span class="hljs-function">-&gt;</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>loop to ensure that a new background is pulled</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                <span class="hljs-keyword">if</span> <span class="hljs-property">@both</span>.length <span class="hljs-keyword">is</span> <span class="hljs-number">1</span>
+                    model = <span class="hljs-property">@both</span>[ <span class="hljs-number">0</span> ]
+                    imgURL = model.get <span class="hljs-string">"image_url_large_rect"</span>
+                <span class="hljs-keyword">else</span>
+                    <span class="hljs-keyword">loop</span>
+                        model = <span class="hljs-property">@both</span>[ <span class="hljs-built_in">window</span>.randomInt(<span class="hljs-property">@both</span>.length) ]
+                        imgURL = model.get <span class="hljs-string">"image_url_large_rect"</span>
+                        <span class="hljs-built_in">console</span>.log <span class="hljs-string">'imgURL'</span>, imgURL, <span class="hljs-keyword">new</span> Date()
+                        <span class="hljs-keyword">break</span> <span class="hljs-keyword">unless</span> <span class="hljs-property">@lastImgURL</span> <span class="hljs-keyword">is</span> imgURL 
+
+                <span class="hljs-property">@lastImgURL</span> = imgURL</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>preload image to memory to ensure smooth fading</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                $img = $(<span class="hljs-string">'&lt;img&gt;'</span>).attr(<span class="hljs-string">'src'</span>, imgURL)
+                $img.load<span class="hljs-function"> =&gt;</span>
+                    <span class="hljs-keyword">if</span> <span class="hljs-property">@$lastFeatured</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$lastFeatured</span>.fadeOut <span class="hljs-string">'slow'</span>,<span class="hljs-function"> -&gt;</span> $(<span class="hljs-keyword">this</span>).remove()
+                    <span class="hljs-property">@$lastFeatured</span> = $(<span class="hljs-string">"&lt;div&gt;"</span>).addClass(<span class="hljs-string">"feature-rotating-image"</span>)
+                    <span class="hljs-property">@$featureImage</span>.prepend <span class="hljs-property">@$lastFeatured</span>
+                    <span class="hljs-property">@$lastFeatured</span>.hide().css(<span class="hljs-string">"background-image"</span>, <span class="hljs-string">"url(<span class="hljs-subst">#{imgURL}</span>)"</span>).fadeIn()
+
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@delayClear</span> <span class="hljs-keyword">then</span> clearInterval <span class="hljs-property">@delayClear</span>
+                <span class="hljs-property">@delayClear</span> = delay <span class="hljs-number">10000</span>,<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@loadCityHeader</span>()
+
+            <span class="hljs-attribute">showOnlyProjects</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">"ul.projects"</span>).html <span class="hljs-string">""</span>
+                <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">"h2"</span>).html <span class="hljs-string">"Projects"</span>
+
+                <span class="hljs-property">@$projectsView</span>.show()
+                <span class="hljs-property">@$moreProjects</span>.hide()
+                <span class="hljs-property">@$resourcesView</span>.hide() 
+                <span class="hljs-property">@$hr</span>.hide()
+
+                <span class="hljs-property">@setPages</span>(<span class="hljs-property">@projects</span>.length, <span class="hljs-property">@$projectsView</span>.parent())
+
+            <span class="hljs-attribute">showOnlyResources</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">"ul.resources"</span>).html <span class="hljs-string">""</span>
+                <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">"h2"</span>).html <span class="hljs-string">"Resources"</span>
+
+                <span class="hljs-property">@$resourcesView</span>.show()
+                <span class="hljs-property">@$moreResources</span>.hide()
+                <span class="hljs-property">@$projectsView</span>.hide() 
+                <span class="hljs-property">@$hr</span>.hide()
+
+                <span class="hljs-property">@setPages</span>(<span class="hljs-property">@resources</span>.length, <span class="hljs-property">@$resourcesView</span>.parent())
+                
+            <span class="hljs-attribute">showBoth</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">"ul.projects"</span>).html <span class="hljs-string">""</span>
+                <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">"ul.resources"</span>).html <span class="hljs-string">""</span>
+
+                <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">"h2"</span>).html <span class="hljs-string">"Featured Projects"</span>
+                <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">"h2"</span>).html <span class="hljs-string">"Featured Resources"</span>
+
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@$paginationContainer</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$paginationContainer</span>.remove()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>projects</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                count = <span class="hljs-number">0</span>
+                <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-property">@projects</span>
+                    <span class="hljs-keyword">if</span> count++ &lt; <span class="hljs-number">3</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@addOne</span> v._id, <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">"ul.projects"</span>)
+                
+                <span class="hljs-keyword">if</span> count &lt; <span class="hljs-number">3</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$moreProjects</span>.hide() <span class="hljs-keyword">else</span> <span class="hljs-property">@$moreProjects</span>.show()
+                <span class="hljs-keyword">if</span> count <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$projectsView</span>.hide() <span class="hljs-keyword">else</span> <span class="hljs-property">@$projectsView</span>.show()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>resources</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>                count = <span class="hljs-number">0</span>
+                <span class="hljs-keyword">for</span> v <span class="hljs-keyword">in</span> <span class="hljs-property">@resources</span>
+                    <span class="hljs-keyword">if</span> count++ &lt; <span class="hljs-number">3</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@addOne</span> v._id, <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">"ul.resources"</span>)
+
+                <span class="hljs-keyword">if</span> count &lt; <span class="hljs-number">3</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$moreResources</span>.hide() <span class="hljs-keyword">else</span> <span class="hljs-property">@$moreResources</span>.show()
+                <span class="hljs-keyword">if</span> count <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@$resourcesView</span>.hide() <span class="hljs-keyword">else</span> <span class="hljs-property">@$resourcesView</span>.show() 
+
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@projects</span>.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">or</span> <span class="hljs-property">@resources</span>.length <span class="hljs-keyword">is</span> <span class="hljs-number">0</span> <span class="hljs-keyword">then</span> $(<span class="hljs-string">'.city-container hr'</span>).hide()
+
+            <span class="hljs-attribute">updatePage</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-keyword">if</span> <span class="hljs-property">@view</span> <span class="hljs-keyword">is</span> <span class="hljs-string">"projects"</span>
+                    list = <span class="hljs-property">@projects</span>
+                    view = <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">"ul.projects"</span>)
+                <span class="hljs-keyword">else</span> 
+                    list = <span class="hljs-property">@resources</span>
+                    view = <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">"ul.resources"</span>)
+
+                view.html <span class="hljs-string">""</span>
+
+                s = <span class="hljs-property">@index</span>*<span class="hljs-property">@perPage</span>
+                e = (<span class="hljs-property">@index</span>+<span class="hljs-number">1</span>)*<span class="hljs-property">@perPage</span>-<span class="hljs-number">1</span>
+                <span class="hljs-keyword">for</span> i <span class="hljs-keyword">in</span> [s..e]
+                    <span class="hljs-keyword">if</span> i &lt; list.length <span class="hljs-keyword">then</span> <span class="hljs-property">@addOne</span> list[i]._id, view
+
+                $(<span class="hljs-string">"html, body"</span>).animate({ <span class="hljs-attribute">scrollTop</span>: <span class="hljs-number">0</span> }, <span class="hljs-string">"slow"</span>)
+
+            <span class="hljs-attribute">addOne</span>: <span class="hljs-function"><span class="hljs-params">(id_, parent_)</span> -&gt;</span> 
+                projectModel = <span class="hljs-keyword">new</span> ProjectModel {<span class="hljs-attribute">id</span>:id_}
+                projectModel.bind <span class="hljs-string">"change"</span>,<span class="hljs-function"> =&gt;</span>
+                    <span class="hljs-property">@both</span>.push projectModel
+
+                    <span class="hljs-keyword">if</span> <span class="hljs-property">@delayClear</span> <span class="hljs-keyword">then</span> clearInterval <span class="hljs-property">@delayClear</span>
+                    <span class="hljs-property">@delayClear</span> = delay <span class="hljs-number">2000</span>,<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@loadCityHeader</span>()
+
+                view = <span class="hljs-keyword">new</span> ResourceProjectPreviewView {<span class="hljs-attribute">model</span>: projectModel, <span class="hljs-attribute">parent</span>:parent_}
+                view.fetch()</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h2 id="events">EVENTS</h2>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>            <span class="hljs-attribute">onTemplateLoad</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-property">@name</span> = <span class="hljs-property">@model</span>.get(<span class="hljs-string">'name'</span>).split(<span class="hljs-string">','</span>)[<span class="hljs-number">0</span>]
+
+                <span class="hljs-property">@$projectsView</span>  = <span class="hljs-property">@$el</span>.find(<span class="hljs-string">'#featured-projects'</span>)
+                <span class="hljs-property">@$resourcesView</span> = <span class="hljs-property">@$el</span>.find(<span class="hljs-string">'#featured-resources'</span>)
+                <span class="hljs-property">@$moreProjects</span>  = <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">'.sub-link'</span>)
+                <span class="hljs-property">@$moreResources</span> = <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">'.sub-link'</span>)
+                <span class="hljs-property">@$hr</span>            = $(<span class="hljs-string">'.city-container hr'</span>)
+
+                <span class="hljs-property">@$projectsView</span>.find(<span class="hljs-string">'.sub-link a'</span>).html <span class="hljs-string">"See More Projects in "</span>+<span class="hljs-property">@name</span>
+                <span class="hljs-property">@$resourcesView</span>.find(<span class="hljs-string">'.sub-link a'</span>).html <span class="hljs-string">"See More Resources in "</span>+<span class="hljs-property">@name</span>
+
+                $header = $(<span class="hljs-string">"&lt;div class='city-header'/&gt;"</span>)
+                $header.template <span class="hljs-property">@templateDir</span>+<span class="hljs-string">"partials-city/city-header.html"</span>,
+                    {<span class="hljs-attribute">data</span>:<span class="hljs-property">@viewData</span>},<span class="hljs-function"> =&gt;</span> <span class="hljs-property">@onHeaderLoaded</span>()
+                <span class="hljs-property">@$el</span>.prepend $header
+
+                <span class="hljs-attribute">AbstractView</span>::onTemplateLoad.call @
+
+            <span class="hljs-attribute">onHeaderLoaded</span>:<span class="hljs-function">-&gt;</span>
+                id = <span class="hljs-property">@model</span>.get(<span class="hljs-string">"id"</span>)
+                config = {<span class="hljs-attribute">id</span>:id}
+                <span class="hljs-property">@$featureImage</span> = $(<span class="hljs-string">".feature-image"</span>)
+
+                <span class="hljs-property">@search</span> <span class="hljs-string">"project"</span>
+                <span class="hljs-property">@search</span> <span class="hljs-string">"resource"</span>
+
+                <span class="hljs-property">@delegateEvents</span>()
+
+            <span class="hljs-attribute">onFetch</span>:<span class="hljs-function"><span class="hljs-params">(res_)</span>-&gt;</span>
+                <span class="hljs-keyword">for</span> city <span class="hljs-keyword">in</span> res_.data.cities
+                    <span class="hljs-keyword">if</span> <span class="hljs-property">@model</span>.id <span class="hljs-keyword">is</span> city.slug 
+                        <span class="hljs-property">@model</span> = <span class="hljs-keyword">new</span> CityModel(city)
+                        <span class="hljs-property">@render</span>()
+                        <span class="hljs-keyword">break</span>
+                    
+            <span class="hljs-attribute">onProjectsLoad</span>:<span class="hljs-function"><span class="hljs-params">(projects_)</span>-&gt;</span> 
+                <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">of</span> projects_
+                    <span class="hljs-property">@projects</span>.push v
+
+                <span class="hljs-property">@onBothLoaded</span>()
+
+            <span class="hljs-attribute">onResourcesLoad</span>:<span class="hljs-function"><span class="hljs-params">(resources_)</span>-&gt;</span> 
+                <span class="hljs-keyword">for</span> k,v <span class="hljs-keyword">of</span> resources_
+                    <span class="hljs-property">@resources</span>.push v
+
+                <span class="hljs-property">@onBothLoaded</span>()
+
+            <span class="hljs-attribute">onBothLoaded</span>:<span class="hljs-function">-&gt;</span>
+                <span class="hljs-keyword">if</span> ++<span class="hljs-property">@bothLoaded</span> <span class="hljs-keyword">is</span> <span class="hljs-number">2</span> <span class="hljs-keyword">then</span> <span class="hljs-property">@addHashListener</span>()</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

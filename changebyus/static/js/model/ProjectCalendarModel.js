@@ -1,4 +1,12 @@
 define(["underscore", "backbone"], function(_, Backbone) {
   var ProjectCalendarModel;
-  return ProjectCalendarModel = Backbone.Model.extend();
+  return ProjectCalendarModel = Backbone.Model.extend({
+    parse: function(resp_) {
+      if (resp_.data) {
+        return resp_.data;
+      } else {
+        return resp_;
+      }
+    }
+  });
 });

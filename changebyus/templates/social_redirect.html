@@ -2,7 +2,11 @@
   <head>
     <script>
     {% if url %}
-    window.opener.location.href = "/{{ url }}";
+      {% if (url == 'reload') %} 
+        window.opener.document.windowReload();
+      {% else %}
+        window.opener.location.href = "/{{ url }}";
+      {% endif %}
     {% else %}
     window.opener.location.reload();
     {% endif %}

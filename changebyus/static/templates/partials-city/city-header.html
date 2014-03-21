@@ -1,0 +1,22 @@
+<div class="body-container">
+    <div class="feature-image">
+        
+        <div style="background-image:url(<%= data.image_url_round %>);background-position: center;" class="preview circle">
+            <div class="content"></div>
+        </div>
+
+        <h1 class="overlay-title">
+            <%= data.name %>
+        </h1>
+   
+        <!-- <p class="overlay-description">
+            <%= data.quote %>
+        </p> -->
+        
+        <% if (data.website){ %>
+        <div class="project-footer">
+            <a href="<%= data.website %>" target="_blank"><%= data.website %></a>
+        </div>
+        <% } %>
+    </div>
+</div>

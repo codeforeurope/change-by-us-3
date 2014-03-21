@@ -1,0 +1,76 @@
+<div class="body-container">
+    <form method="post" enctype="multipart/form-data" class="form-edit-create" name="createresource" action="/api/project/create">
+
+        <h1>Create a Resource</h1>
+        <p>
+            Are you part of an organizatin, service, or program that can help community organizers? By signing up below, you'll be able to post updates and news about your organization as well as answer questions and address comments from CBU organizations.
+        </p>
+        <p class="sub-text">
+            Apply below and once we have verified that you are an employee, direct affiliate or the organization, service or program, we will get in touch with you via email.
+        </p>
+
+        <div id="feedback" class="alert alert-error hide"></div> 
+
+        <div class="content-wrapper create clearfix">
+
+            <div class="form-container">
+                <div class="form-left">
+
+                    <label for="name">Resources Name*</label>
+                    <input type="text" maxlength="30" name="name" id="resource_name" placeholder="My awesome resource" class="input-xxlarge" required>
+
+                    <label for="name">Contact Email</label>
+                    <input type="text" maxlength="30" name="email" id="resource_email" placeholder="email@domain.com" class="input-xxlarge" required>
+                    <span>IMPORTANT: Please provide an organization-affiliated email address.</span>
+
+                    <label for="description">Description*</label>
+                    <textarea rows="8" name="description" maxlength="600" id="resource_description" placeholder="Resource Description" class="input-xxlarge" required></textarea>
+
+                    <label for="category">Category</label>
+                    <select name="category" id="project-category">
+                        <option value="Animals">Animals</option>
+                        <option value="Community">Community</option>
+                        <option value="Education">Education</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Food">Food</option>
+                        <option value="Health">Health</option>
+                        <option value="Politics">Politics</option>
+                        <option value="Religion">Religion</option>
+                    </select>
+
+                    <label for="zip">Resource Location</label>
+                    <input type="text" name="zip" id="resource_location" placeholder="Enter Zip Code of Location" class="input-xxlarge">
+                    <br>
+                </div>
+
+                <div class="form-right">
+                    <div class="project-image"> 
+                        <label>Resource Thumbnail</label>
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div>
+                                <span class="btn btn-file btn-medium btn-primary"> 
+                                    <span class="fileupload-exists">Edit Thumbnail</span>
+                                    <span class="fileupload-new">Upload</span>
+                                    <input id="resource_image" name="photo" type="file">
+                                </span>  
+                            </div> 
+                            <div class="fileupload-preview thumbnail circle"></div> 
+                            <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="javascript:void(0)">Remove</a>
+                        </div>
+                        <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-footer">
+            <input type="hidden" name="location" value="">
+            <input type="hidden" name="lat" value="">
+            <input type="hidden" name="lon" value="">
+            <input type="hidden" name="resource" value="true">
+            <input type="submit" class="btn btn-large btn-secondary" value="Save">
+            <input type="submit" class="btn btn-large btn-tertiary" value="Cancel">
+        </div>
+
+
+    </form>
+</div>

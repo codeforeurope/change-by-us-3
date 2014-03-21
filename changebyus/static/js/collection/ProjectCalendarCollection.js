@@ -1,20 +1,19 @@
 define(["underscore", "backbone", "model/ProjectCalendarModel"], function(_, Backbone, ProjectCalendarModel) {
   var ProjectCalendarCollection;
-  ProjectCalendarCollection = Backbone.Collection.extend({
-    initialize: function(options) {
-      return this.id = options.id;
-    },
+  return ProjectCalendarCollection = Backbone.Collection.extend({
     model: ProjectCalendarModel,
+    initialize: function(options_) {
+      return this.id = options_.id;
+    },
     url: function() {
       return "/api/project/" + this.id + "/calendar";
     },
-    parse: function(response) {
-      if (response.msg === "OK") {
-        return response.data;
+    parse: function(response_) {
+      if (response_.success) {
+        return response_.data;
       } else {
         return {};
       }
     }
   });
-  return ProjectCalendarCollection;
 });

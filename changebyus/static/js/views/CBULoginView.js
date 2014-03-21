@@ -1,55 +1,76 @@
-define(["underscore", "backbone", "jquery", "template"], function(_, Backbone, $, temp) {
+define(["underscore", "backbone", "jquery", "template", "validate", "abstract-view", "views/partials-universal/ForgotPasswordModalView"], function(_, Backbone, $, temp, valid, AbstractView, ForgotPasswordModalView) {
   var CBUDLoginView;
-  return CBUDLoginView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
-    initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
+  return CBUDLoginView = AbstractView.extend({
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
       return this.render();
+    },
+    events: {
+      "click .btn-info": "popUp",
+      "click #forgot-password": "forgotPassword"
     },
     render: function() {
       var _this = this;
       this.$el = $("<div class='login'/>");
-      this.$el.template(this.templateDir + "/templates/login.html", {
+      this.$el.template(this.templateDir + "login.html", {
         data: this.viewData
       }, function() {
-        _this.ajaxForm();
-        return _this.addListeners();
+        return _this.onTemplateLoad();
       });
       return $(this.parent).append(this.$el);
     },
-    addListeners: function() {
-      return $(".btn-info").click(function(e) {
-        var url;
-        e.preventDefault();
-        url = $(this).attr("href");
-        return popWindow(url);
-      });
+    onTemplateLoad: function() {
+      AbstractView.prototype.onTemplateLoad.call(this);
+      this.ajaxForm();
+      return onPageElementsLoad();
+    },
+    popUp: function(e) {
+      var url;
+      e.preventDefault();
+      url = $(e.currentTarget).attr("href");
+      return popWindow(url);
+    },
+    forgotPassword: function(e) {
+      var forgotPasswordModalView;
+      e.preventDefault();
+      return forgotPasswordModalView = new ForgotPasswordModalView();
     },
     ajaxForm: function() {
-      var $feedback, $login, $submit, options,
+      var $feedback, $form, $submit, options,
         _this = this;
       $submit = $("input[type='submit']");
-      $login = $("form[name='signin']");
-      $feedback = $("#login-feedback");
+      $form = $("form");
+      $feedback = $(".login-feedback");
       options = {
-        beforeSubmit: function() {
-          $submit.prop("disabled", true);
-          return $feedback.removeClass("alert").html("");
-        },
-        success: function(response) {
-          $submit.prop("disabled", false);
-          if (response.msg.toLowerCase() === "ok") {
-            return window.location.href = "/";
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        beforeSend: function() {
+          if ($form.valid()) {
+            $form.find("input, textarea").attr("disabled", "disabled");
+            $feedback.removeClass("alert").removeClass("alert-danger").html("");
+            return true;
           } else {
-            return $feedback.addClass("alert").html(response.msg);
+            return false;
+          }
+        },
+        success: function(response_) {
+          $form.find("input, textarea").removeAttr("disabled");
+          if (response_.success) {
+            return window.location.href = "/stream/dashboard";
+          } else {
+            return $feedback.addClass("alert").addClass("alert-danger").html(response_.msg);
           }
         }
       };
-      return $login.ajaxForm(options);
+      return $form.submit(function() {
+        var json_str;
+        json_str = JSON.stringify($form.serializeJSON());
+        options.data = json_str;
+        $.ajax(options);
+        return false;
+      });
     }
   });
 });

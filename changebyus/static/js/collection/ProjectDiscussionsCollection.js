@@ -2,9 +2,15 @@ define(["underscore", "backbone", "model/ProjectDiscussionModel"], function(_, B
   var ProjectDiscussionsCollection;
   return ProjectDiscussionsCollection = Backbone.Collection.extend({
     model: ProjectDiscussionModel,
-    url: "/api/post/project/" + window.projectID + "/list_discussions",
-    parse: function(response) {
-      return response.data;
+    url: function() {
+      return "/api/post/project/" + this.id + "/discussions?sort=created_at&order=desc&";
+    },
+    parse: function(response_) {
+      if (response_.success) {
+        return response_.data;
+      } else {
+        return {};
+      }
     }
   });
 });

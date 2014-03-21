@@ -42,8 +42,7 @@ changebyus/.sass-cache
 changebyus/node_modules
 Design
 changebyus/static/css/_style-merged.css
-docs/cbu_beta_090413.psd
-docs/cbu_beta_090413_a-assets/Upload a .jpg
-docs/cbu_beta_090413_a.psd
-docs/cbu_beta_090413_b.psd
+docs/*
+ 
 unresolved
+start.sh

@@ -1,8 +1,60 @@
-
-<div class="calendar">
-    <h2>Calendar</h2>
+<% if (data.view == "public"){ %> 
+<div class="project-resource-section-header calendar clearfix">
+    <div class="pull-left">
+        <h2>Calendar</h2>
+    </div>
 </div>
-
-<div class="content-wrapper">
-    <h3 class="preload">Nothing here yet.</h3>
+<% } %> 
+<div class="content-wrapper no-results clearfix">
+    <% if (data.gcal_code){ %> 
+        <%= data.gcal_code %> 
+        <% if (data.isOwner || data.isOrganizer){ %> 
+            <br>
+            <span class="pull-right">
+                <a href="javascript:void(0)" class="warning" id="delete-calendar">Delete calendar</a>
+            </span>
+            <span>
+                <a href="javascript:void(0)" class="highlight" id="embed-calendar">Embed new calendar</a>
+            </span>
+            
+        <% } %> 
+    <% }else{ %> 
+        <% if (data.view == "admin"){ %> 
+            <div class="content-left">
+                <h2 class="admin-title">Plan Event</h2>
+                <br>
+                <p>
+                    Chances are you already have an existing means of keeping track of your project schedule. Now you can do it all in the same place.<br> 
+                    <br>
+                    <a class="highlight" id="google-does-it-work" href="javascript:void(0);">How Does It Work?</a>
+                </p>
+                <div class="content-wrapper">
+                    <p> 
+                        <strong>From Google:</strong><br> 
+                        Here's how to embed your calendar on your website:<br>
+                     </p>
+                    <ol>
+                        <li>
+                     In the calendar list on the left, click the down-arrow next to the calendar you want to embed, and select <strong>Calendar settings</strong>. (Alternatively, click the <strong>Settings</strong> link at the bottom of the calendar list, then click the name of the calendar.)</li>
+                        <li>Copy the iframe code displayed in the <strong>Embed This Calendar</strong> section.</li>
+                        <li>Paste this code into your website to embed your calendar.</li>
+                    </ol>
+                    <p>
+                        To allow everyone to see your calendar, you'll need to make it public. Click <a href="https://support.google.com/calendar/answer/41207?hl=en&ref_topic=1672470" target="_blank" class="highlight">here</a> to learn more about how to customize your calendar.
+                    </p>
+                </div> 
+                <a href="javascript:void(0)" class="btn btn-large btn-secondary" id="embed-calendar">Embed Google Calendar</a>
+            </div>
+            <div class="content-right">
+                <img src="/static/img/icon_embed_cal.png" class="large-icon" alt="Calendar Icon">
+            </div>
+        <% }else{ %> 
+            <h3>
+               <em>Nothing here yet.</em>
+            </h3>
+            <% if (data.isOwner || data.isOrganizer){ %> 
+                <span>Why don't you <a href="javascript:void(0)" class="highlight" id="embed-calendar">link your project's google calendar</a>?</span>
+             <% } %> 
+        <% } %> 
+    <% } %> 
 </div>

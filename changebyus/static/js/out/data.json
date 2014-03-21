@@ -1,0 +1,28 @@
+{
+    "project": {},
+    "files": {
+        "ext/jquery/template.js": {
+            "name": "ext/jquery/template.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {},
+    "classes": {},
+    "classitems": [
+        {
+            "file": "ext/jquery/template.js",
+            "line": 13,
+            "description": "Fetches the Underscore.js template at the given path,\nprocesses it with the provided obj, and appends the\nresulting html to the matched DOM elements.\n\nTemplates will only be fetched once from the server,\nafter which the preprocessed template will be cached\nin the DOM.",
+            "class": ""
+        }
+    ],
+    "warnings": [
+        {
+            "message": "Missing item type\nFetches the Underscore.js template at the given path,\nprocesses it with the provided obj, and appends the\nresulting html to the matched DOM elements.\n\nTemplates will only be fetched once from the server,\nafter which the preprocessed template will be cached\nin the DOM.",
+            "line": " ext/jquery/template.js:13"
+        }
+    ]
+}

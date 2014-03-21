@@ -1,61 +1,162 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-project/ProjectSubView", "views/partials-project/ProjectMemberListItemView"],
-	(_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView) ->
-		ProjectMembersView = ProjectSubView.extend
-		
-			parent: "#project-members"
-			team:[]
-			members:[]
-			$teamList: null
-			$memberList: null
+define ["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "project-sub-view", 
+        "views/partials-project/ProjectMemberListItemView",
+        "views/partials-universal/CreateModalView"
+        ],
+    (_, Backbone, $, temp, ProjectSubView, ProjectMemberListItemView, CreateModalView) ->
+        ProjectMembersView = ProjectSubView.extend
+        
+            parent: "#project-members"
+            team:[]
+            members:[]
+            $teamList: null
+            $memberList: null
+            projectID:0
+            isOwner:false
+            isOwnerOrganizer:false
+            view:"public"
 
+            initialize: (options_) -> 
+                options           = options_
+                @isDataLoaded     = options.isDataLoaded || @isDataLoaded
+                @view             = options.view || @view
+                @projectID        = options.projectID || @projectID
+                @model            = options.model || @model
+                @isOwner          = options.isOwner || @isOwner
+                @isOwnerOrganizer = options.isOwnerOrganizer || @isOwnerOrganizer
 
-			render: ->  
-				@$el = $(@parent)
-				@$el.template @templateDir + "/templates/partials-project/project-members.html", 
-					{}, =>
-						@$el.find(".preload").remove()
-						@$teamList = @$el.find("#team-members ul")
-						@$memberList = @$el.find("#project-members ul")
+                ProjectSubView::initialize.call(@, options) 
 
-			# override in subview
-			addAll: -> 
-				console.log 'ProjectMembersView ',@
-				if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
+            events:
+                "click #alpha":"sortClick" 
+                "click #created":"sortClick" 
+                "click #how-do-roles":"slideToggle"
+                "click #invite-members":"onInviteClick"
 
-				# temp
-				@collection.models[0].attributes.roles = ["Project Owner"]
-				@collection.models[0].attributes.description = "Lorem ipsum"
+            render: -> 
+                @$el = $(@parent) 
+                @viewData = if @model then @model.attributes else {}
+                @viewData.isOwnerOrganizer = @isOwnerOrganizer
+                
+                templateURL = "partials-project/"
+                templateURL += if (@view is "public") then "project-members.html" else "project-members-admin.html"
+                @$el.template @templateDir+templateURL,
+                    {data:@viewData}, => @onTemplateLoad()
 
-				@collection.models[1].attributes.roles = ["Organizer"]
-				@collection.models[1].attributes.description = "Tempor cray proident, stumptown hella"
-				@collection.models[1].attributes.email = "mattlohmann@localprojects.net"
-				
-				@collection.models[2].attributes.roles = ["Member"]
-				@collection.models[2].attributes.description = "Master cleanse plaid assumenda"
+            toggleHeader:->
+                console.log 'toggleHeader @view',@view
+                unless (@view is "public")
+                    if @collection.length is 1
+                        @$el.find(".no-results ").show()
+                    else
+                        @$el.find(".results ").show()
+                        @$how = $('.results .content-wrapper')
+                        @$how.hide()
 
-				@collection.each (model) => 
-					if "Project Owner" in model.attributes.roles or "Organizer" in model.attributes.roles
-						@team.push model
-					else
-						@members.push model
-					console.log 'ProjectMembersView model.roles',model
+            # EVENTS
+            # ----------------------------------------------------------------------
+            onTemplateLoad:-> 
+                @$teamList   = @$el.find("#team-members ul")
+                @$memberList = @$el.find("#project-members ul")
 
-				@addTeam(model) for model in @team
-				@addMember(model) for model in @members
+                if (@view is "public") and (@collection.length > 0) then @onCollectionLoad()
 
-				if @members.length > 0 then @$memberList.parent().show()
+                ProjectSubView::onTemplateLoad.call @
+            
+            sortClick:(e)->  
+                @addAll $(e.currentTarget).attr("id")
+                false
 
-				@isDataLoaded = true
+            onCollectionLoad:->
+                ProjectSubView::onCollectionLoad.call(@)
 
+                @collection.on('change', =>@addAll())
+                @collection.on('remove', =>@addAll())
 
-			addTeam: (model_) -> 
-				#to do 
-				console.log 'addTeam model_',model_
-				view = new ProjectMemberListItemView({model:model_})
-				@$teamList.append view.el
+                @toggleHeader()
 
-			addMember: (model_) -> 
-				#to do 
-				console.log 'addMember model_',model_
-				view = new ProjectMemberListItemView({model:model_})
-				@$memberList.append view.el
+            slideToggle:(e)->
+                @$how.slideToggle()
+
+            onInviteClick:(e)->
+                config = {}
+                config.viewData = {
+                    showShare:true,
+                    success:true,
+                    data:{
+                        slug: @model.get('slug')
+                    }
+                }
+                modal = new CreateModalView(config)
+
+            # ATTACH TEAM MEMBERS
+            # ----------------------------------------------------------------------
+            addAll: (sort_="alpha") -> 
+                @team = []
+                @members = []
+
+                # sort all the member by last name or date joined
+                $("#"+sort_)
+                    .addClass('sort-deactive')
+                    .removeClass('ul')
+                    .siblings()
+                    .removeClass('sort-deactive')
+                    .addClass('ul')
+
+                if sort_ is "alpha"
+                    # sort by name
+                    sortBy = @collection.sortBy (model)->
+                        model.get('last_name')
+                else
+                    # sort by date
+                    sortBy = @collection.sortBy (model)->
+                        model.get('created_at')
+                    sortBy.reverse()
+
+                $.each sortBy, (k, model) => 
+                    if model.get("active")
+                        roles = model.get("roles")
+                        ownerID = if @model then @model.get('owner').id else -1
+                         
+                        if roles.length is 0 
+                            model.set("roles", ["Owner"]) 
+
+                        if ("MEMBER" in roles) or ("Member" in roles)
+                            @members.push model
+                        else
+                            @team.push model
+
+                # attach members to the page
+                @$teamList.html('')
+                @$memberList.html('')
+
+                # toggle visibility if no members or teams are there
+                if @team.length is 0 
+                    @$teamList.parent().parent().hide()
+                else
+                    @$teamList.parent().parent().show()
+                    @$teamList.parent().parent().find('h4').html(@team.length+' Person Team')
+
+                if @members.length is 0
+                    @$memberList.parent().parent().hide()
+                else
+                    @$memberList.parent().parent().show()
+                    @$memberList.parent().parent().find('h4').html(@members.length+' Members')
+
+                @addTeam(model) for model in @team
+                @addMember(model) for model in @members
+                ProjectSubView::addAll.call(@)
+
+                @isDataLoaded = true
+                @delegateEvents()
+
+            addTeam: (model_) ->  
+                view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
+                @$teamList.append view.$el
+
+            addMember: (model_) ->  
+                view = new ProjectMemberListItemView({model:model_, view:@view, projectID:@projectID})
+                @$memberList.append view.$el

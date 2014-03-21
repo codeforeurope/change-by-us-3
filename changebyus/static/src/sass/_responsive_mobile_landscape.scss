@@ -1,0 +1,373 @@
+/**** affects all sizes from 0 to 760px **/
+
+@media only screen and (max-width: 760px) {
+    body.debug {
+        background: red;
+    }
+    /*******************************************
+     * Header/Nav
+     *******************************************/
+    .nav.user {
+        width: 100px;
+        span {
+            display: none;
+        }
+    } 
+    .nav-pills {
+        z-index: 1;
+        >li {
+            font-size: 14px;
+        }
+        &.pull-right {
+            display: none;
+        }
+    }
+    .slicknav_menu {
+        display: block;
+    }
+    .resp-append,
+    .resp-append-last {
+        display: none;
+    }
+    .header-links {
+        padding: 0;
+    }
+    .profile-nav-menu {
+        display: none;
+    }
+    .user-header {
+        .user-avatar {
+            display: none;
+        }
+    }
+    .admin {
+        .user-avatar {
+            display: none;
+        }
+    }
+    .user-info {
+        width: 100%;
+        padding: 0 2%;
+    }
+    .feature-image {
+        display: none;
+    }
+    .header-image {
+        height: 400px;
+        .overlay-text {
+            top: 55px;
+            .btn-large {
+                margin-top: 46px;
+                padding: 20px 40px;
+                font-size: 28px;
+            }
+            h1 {
+                font-size: 40px;
+                padding: 0 4px 4px;
+            }
+        }
+    }
+    .topnav {
+        height: 90px;
+    }
+    .pagination .prev-arrow a,
+    .pagination .next-arrow a {
+        padding: 0 15px;
+    }
+    /*******************************************
+     * Homepage
+     *******************************************/
+    .content,
+    .homepage-block-info {
+        h2 {
+            padding-top: 0px;
+        }
+    }
+    .homepage-block-info {
+        padding: 28px 0;
+    }
+    .homepage-tool-icon {
+        margin: 0 auto 48px;
+    }
+    .homepage-tools {
+        margin-bottom: 64px;
+    }
+    .content,
+    .homepage-block-info {
+        h2 {
+            font-size: 36px;
+            padding: 15px;
+        }
+    }
+    .homepage-block-info {
+        h2, h3 {
+            width: 75%;
+            margin-right: auto;
+            margin-left: auto;
+        }
+    }
+    .homepage-tools {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 48px;
+        text-align: center;
+        p {
+            line-height: 1.4;
+            width: 75%;
+            margin: 14px auto auto;
+        }
+    }
+    .created-by {
+        margin-bottom: 20px;
+    }
+    /*******************************************
+     * Dashboard / Discover
+     *******************************************/
+    .dashboard-header {
+        padding: 0;
+        .btn.btn-large {
+            width: 100%;
+        }
+    }
+    .dashboard-header-right {
+        width: 100%;
+    }
+    .discover-header-right {
+        margin-top: 16px;
+        margin-left: 0;
+        height: auto;
+
+        .cities li {
+            line-height: 30px;
+        }
+    }
+    /*******************************************
+     * Project
+     *******************************************/
+    .project-member {
+        .mail-icon {
+            width: 30px;
+            margin-right: 15px;
+            float: right;
+        }
+        .member-title {
+            width: calc(100% - 45px);
+            &:after {
+                clear: both;
+            }
+        }
+        .member-description {
+            margin-top: 16px;
+            height: auto;
+            width: calc(100% - 45px);
+        }
+        .member-roles {
+            margin-top: 16px;
+        }
+        .member-description,
+        .member-roles {
+            width: 100%;
+        }
+    }
+
+
+    .donation-header{
+        .stripe-overlay{
+            width:100%%;
+            .progress {
+                width:100%%;
+            }
+        }
+        .donation-description{
+            width:100%%;
+        }
+        .donate-btn{
+            width:100%%;
+            text-align: left;
+            margin-top: 24px;
+            .btn-large{
+                top:0;
+            }
+        }
+    }
+
+    .admin {
+        .content-left {
+            width: 100%;
+            a {
+                width: 100%;
+            }
+        }
+        .no-results{
+            .content-right {
+                display: none;
+            }
+        } 
+        .results{
+            .content-right {
+                 margin-top: 24px;
+                 width: 100%;
+                 a{
+                    width: 100%;
+                 }
+            }
+        } 
+        .content-wrapper {
+            >.pull-left {
+                width: 100%;
+                padding-top: 8px;
+                overflow: hidden;
+            }
+        }
+    }
+    .delete-x {
+        margin-top: 0;
+        top: 0;
+        right: 0;
+    }
+    .btn-group+.btn-group {
+        margin-left: 0;
+    }
+    .btn-group {
+        float: left;
+        white-space: normal;
+        >.btn {
+            float: left;
+        }
+    }
+    .discussion {
+        .description {
+            width: 92%;
+        }
+        .date {
+            float: none;
+            margin: 0 0 12px;
+        }
+    }
+    /*******************************************
+     * Forms
+     *******************************************/ 
+    .form-right,
+    .form-left {
+        float: none;
+        width: 100%;
+        .input-xxlarge {
+            width: 100%;
+        }
+    }
+    .form-right {
+        margin-top: 30px;
+    }
+    .dk_container {
+        width: 100%;
+    }
+    .input-xxlarge {
+        width: 100%;
+    }
+    .password-title,
+    .notify-wrapper,
+    .notify-row {
+        width: 100%;
+    }
+    .form-footer {
+        text-align: center;
+        .pull-left,
+        .pull-right {
+            float: none;
+        }
+        .pull-right {
+            margin-top: 16px;
+        }
+    }
+    select[name=category] {
+        width: 100%;
+    }
+    .login,
+    .signup {
+        h1 {
+            padding: 30px;
+        }
+        input[type="submit"],
+        input[type="button"] {
+            width: 100%;
+            margin: auto;
+        }
+        input[type="submit"] {
+            margin-bottom: 16px;
+        }
+    }
+    .justified-btns {
+        .btn {
+            margin: auto;
+            width: 100%;
+            &:first-child {
+                margin-bottom: 16px;
+            }
+        }
+    }
+    /*
+    .search-box,
+    .discover-header-right {
+        float: none;
+        width: 100%;
+    }
+    */
+    .search-box {
+        p {
+            margin-top: 22px;
+        }
+        .title{
+            width: 100%;
+        }
+        .discover-nav{
+            width: 100%;
+        }
+    }
+    .search-inputs {
+        >div {
+            height: auto;
+            z-index: auto;
+        }
+        .search-forms { 
+            width: 100%;
+            &:first-child {
+                z-index: 2;
+            }
+        }
+        .go {
+            width: 17%;
+        }
+    }
+    .search-toggles{
+        width: 80%;
+    }
+    .update-content {
+        width: 100%;
+    }
+    .reply-right {
+        width: 80%;
+    }
+    .stream-wrapper {
+        .content-wrapper {
+            padding: 3%;
+        }
+        .user-avatar{
+            display: none;
+        }
+    }
+    /*******************************************
+     * Footer
+     *******************************************/
+    .footer-btns {
+        .btn.btn-xlarge {
+            width: 100%;
+            margin: 0;
+            &:first-child {
+                margin-bottom: 16px;
+            }
+        }
+    }
+    .footer-nav li {
+        margin-left: 10px;
+    }
+}

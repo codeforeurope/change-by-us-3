@@ -1,39 +1,71 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view"], (_, Backbone, $, temp, AbstractView) ->
-	ProjectSubView = AbstractView.extend
+define ["underscore", "backbone", "jquery", "template", "abstract-view"], 
+    (_, Backbone, $, temp, AbstractView) ->
+        ProjectSubView = AbstractView.extend
 
-		isDataLoaded: false
-	
-		initialize: (options) ->
-			console.log 'ProjectSubView options',options
-			AbstractView::initialize.call(@, options)
-			@render()
+            # ProjectSubView class 
+            # ----------------------------------------------
 
-		show: ->
-			console.log @,'ProjectSubView show',@isDataLoaded
-			@$el.show()
-			unless @isDataLoaded
-				if @collection
-					@collection.on "reset", @addAll, @
-					@collection.fetch {reset: true}
+            # * Extends Abstract view
+            # * Contains additional methods for loading collections and attaching results
 
-		loadData: ->
+            isDataLoaded: false
+        
+            initialize: (options_) -> 
+                AbstractView::initialize.call(@, options_)
+                @render()
 
-		# override in subview
-		noResults:->
-		
-		# override in subview
-		addOne: (model) ->
-			
-		# override in subview
-		addAll: -> 
-			if @collection.models.length is 0 then @noResults() else @$el.find(".preload").remove()
+            show: -> 
+                @$el.show()
+                 
+                if @collection and @isDataLoaded is false
+                    if @templateLoaded then @loadData() else @delayedCollectionLoad = true
 
-			console.log 'ProjectSubView addAll @collection.',@collection.models
-			@collection.each (model) => 
-				console.log 'ProjectSubView >>>>',@
-				@addOne model
+            loadData: -> 
+                if @collection
+                    @collection.on "reset", @onCollectionLoad, @
+                    @collection.fetch {reset: true}
 
-			@isDataLoaded = true
+            onCollectionLoad:->  
+                @$el.find(".preload").remove()
+                @addAll()
 
-			
+            # override in subview
+            noResults:-> 
+                @$el.find('.no-results').show()
+            
+            # override in subview
+            addAll: ->  
+                if @collection.length is 0 then @noResults() 
 
+                @collection.each (model_) => @addOne model_
+
+                @isDataLoaded = true
+
+            # override in subview
+            addOne: (model_) ->
+            
+            # Attach elements
+            # ----------------------------------------------------------------------
+            loadDayTemplate:->
+                @$day = $('<div class="day-wrapper"/>')
+                @$day.template @templateDir+"partials-universal/entries-day-wrapper.html",
+                    {}, => @onDayWrapperLoad()
+
+            onDayWrapperLoad: ->
+                @isDataLoaded = true
+                
+                if @collection
+                    if @collection.length > 0
+                        model_ = @collection.models[0]
+                        m = moment(model_.get("created_at")).format("MMMM D")
+                        @newDay(m)
+
+            newDay:(date_)->
+                console.log 'newDay !!!!'
+                @currentDate = date_
+                @$currentDay = @$day.clone()
+                @$el.append @$currentDay
+                @$currentDay.find('h4').html(date_)
+                @$ul = @$currentDay.find('.bordered-item')
+
+                console.log 'new Day ', @$ul,@$currentDay

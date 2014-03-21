@@ -1,47 +1,62 @@
-define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "views/partials-project/ProjectPartialsView", "collection/ProjectListCollection"], function(_, Backbone, $, temp, BannerSearchView, ProjectPartialsView, ProjectListCollection) {
+define(["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "collection/ProjectListCollection", "abstract-view"], function(_, Backbone, $, temp, BannerSearchView, ProjectListCollection, AbstractView) {
   var CBUDiscoverView;
-  return CBUDiscoverView = Backbone.View.extend({
-    parent: "body",
-    templateDir: "/static",
-    viewData: {},
-    bannerSearchView: null,
-    initialize: function(options) {
-      this.templateDir = options.templateDir || this.templateDir;
-      this.parent = options.parent || this.parent;
-      this.viewData = options.viewData || this.viewData;
-      this.collection = options.collection || new ProjectListCollection();
+  return CBUDiscoverView = AbstractView.extend({
+    initialize: function(options_) {
+      AbstractView.prototype.initialize.call(this, options_);
+      this.collection = options_.collection || new ProjectListCollection();
       return this.render();
     },
     render: function() {
       var _this = this;
       this.$el = $("<div class='discover'/>");
-      return this.$el.template(this.templateDir + "/templates/discover.html", {
+      return this.$el.template(this.templateDir + "discover.html", {
         data: this.viewData
       }, function() {
-        var bannerSearchView, searchParent;
-        $(_this.parent).append(_this.$el);
-        searchParent = _this.$el.find(".content");
-        bannerSearchView = new BannerSearchView({
-          parent: searchParent
-        });
-        _this.collection.on("reset", _this.addAll, _this);
-        return _this.collection.fetch({
-          reset: true
-        });
+        return _this.onTemplateLoad();
       });
     },
-    addOne: function(projectModel) {
-      var view;
-      view = new ProjectPartialsView({
-        model: projectModel
+    onTemplateLoad: function() {
+      var searchParent,
+        _this = this;
+      $(this.parent).append(this.$el);
+      searchParent = this.$el.find(".content");
+      this.bannerSearchView = new BannerSearchView({
+        parent: searchParent
       });
-      return this.$el.find("#project-list").append(view.el);
+      this.bannerSearchView.on("ON_RESULTS", function(s) {
+        return _this.onResults(s);
+      });
+      this.collection.on("reset", this.addAll, this);
+      this.collection.fetch({
+        reset: true
+      });
+      return AbstractView.prototype.onTemplateLoad.call(this);
     },
-    addAll: function() {
+    updatePage: function() {
+      return this.bannerSearchView.updatePage();
+    },
+    nextPage: function(e) {
+      return this.bannerSearchView.nextPage(e);
+    },
+    prevClick: function(e) {
+      return this.bannerSearchView.prevClick(e);
+    },
+    pageClick: function(e) {
+      return this.bannerSearchView.pageClick(e);
+    },
+    checkArrows: function() {
+      return this.bannerSearchView.checkArrows();
+    },
+    onResults: function(size_) {
       var _this = this;
-      return this.collection.each(function(projectModel) {
-        return _this.addOne(projectModel);
-      });
+      this.$el.find(".preload").remove();
+      if (size_ > 0) {
+        return this.$el.find("#no-result").hide();
+      } else {
+        return this.$el.find("#no-result").show().template(this.templateDir + "partials-discover/no-results.html", {
+          data: {}
+        }, function() {});
+      }
     }
   });
 });

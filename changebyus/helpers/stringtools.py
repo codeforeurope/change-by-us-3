@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+    :copyright: (c) 2013 Local Projects, all rights reserved
+    :license: Affero GNU GPL v3, see LICENSE for more details.
+"""
+
 import string
 import hashlib
 import random
@@ -5,25 +11,30 @@ import random
 import re
 from unidecode import unidecode
 
-bool_strings = ['true', '1', 't', 'y']
+"""
+.. module:: stringtools
+
+    :synopsis: Set of string tools
+
+"""
+
+bool_strings = ['true', '1', 't', 'y', 'on']
 
 def string_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    """
-    ABOUT
-        Routine that generates a random string of a certain size
-    INPUT
-        size, base characters
-    OUTPUT
-        random string
+    """Routine that generates a random string of a certain size
+    
+        Args:
+            size: the size of the string to generate
+            chars: set of base characters to work from
+    
+        Returns:
+            random string
     """
     return ''.join(random.choice(chars) for x in range(size))
 
 
 def hash_string(s):
-    """
-    ABOUT
-        Needs to be documented.
-        I believe this is not used and can be removed.
+    """Needs documentation
     """
     sha1 = hashlib.sha1()
     sha1.update(s)

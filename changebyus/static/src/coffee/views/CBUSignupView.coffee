@@ -1,50 +1,141 @@
-define ["underscore", "backbone", "jquery", "template"], (_, Backbone, $, temp) ->
-	
-	# to do
-	# if (success){}
-	# if (failure){} 
-	CBUSignupView = Backbone.View.extend
-		parent: "body"
-		templateDir: "/static"
-		viewData: {}
-		initialize: (options) ->
-			@templateDir = options.templateDir or @templateDir
-			@parent = options.parent or @parent
-			@viewData = options.viewData or @viewData
-			@render()
+define ["underscore", "backbone", "jquery", "template", "abstract-view", "serializeJSON"], 
+    (_, Backbone, $, temp, AbstractView, serialize) ->
+        CBUSignupView = AbstractView.extend
 
-		render: -> 
-			@$el = $("<div class='signup'/>")
-			@$el.template @templateDir + "/templates/signup.html",
-				data: @viewData, =>
-					@ajaxForm()
-					@addListeners()
+            socialInfo:null
 
-			$(@parent).append @$el
+            initialize: (options_) ->
+                AbstractView::initialize.call @, options_
+                @render()
 
-		addListeners: ->
-			$(".btn-info").click (e) ->
-				e.preventDefault()
-				url = $(this).attr("href")
-				popWindow url
+            render: -> 
+                @$el = $("<div class='signup'/>")
+                @$el.template @templateDir+"signup.html",
+                    data: @viewData, => @onTemplateLoad()
+                $(@parent).append @$el
 
-		ajaxForm: ->
-			$signin = $("form[name='signin']")
-			$submit = $("input[type='submit']")
-			$feedback = $("#login-feedback")
+            events:
+                "click .btn-info":"infoClick"
 
-			console.log 'ajaxForm',$signin
-			options =
-				beforeSubmit: =>
-					console.log 'beforeSubmit'
-					$submit.prop "disabled", true
-					$feedback.removeClass("alert").html ""
+            onTemplateLoad:->
+                @ajaxForm()
+                @addListeners()
+                onPageElementsLoad()
 
-				success: (response) =>
-					$submit.prop "disabled", false
-					if response.msg.toLowerCase() is "ok"
-						window.location.href = "/"
-					else
-						$feedback.addClass("alert").html response.msg
+            # EVENTS 
+            # ----------------------------------------------------------------------
+            infoClick:(e)->
+                e.preventDefault()
+                url = $(e.currentTarget).attr("href")
+                popWindow url
 
-			$signin.ajaxForm options
+            addListeners: ->
+                $(window).bind "hashchange", (e) => @toggleSubView()
+                @toggleSubView()
+
+            toggleSubView:->
+                view = window.location.hash.substring(1)
+
+                if view is "facebook" or view is "twitter"
+                    $('.social-signup').show()
+                    $('.init-signup').hide()
+                    @getSocialInfo()
+                else
+                    $('.social-signup').hide()
+                    $('.init-signup').show()
+
+            # AJAX FORM 
+            # ----------------------------------------------------------------------
+            ajaxForm: ->
+                $signup   = $(".init-signup")
+                $form     = $signup.find("form") 
+                $submit   = $signup.find("input[type='submit']")
+                $feedback = $signup.find(".login-feedback")
+
+                options =
+                    type: $form.attr('method')
+                    url: $form.attr('action')
+                    dataType: "json" 
+                    contentType: "application/json; charset=utf-8"
+                    beforeSend: => 
+                        $form.find("input, textarea").attr("disabled", "disabled")
+                        $feedback.removeClass("alert").removeClass("alert-danger").html ""
+
+                    success: (response_) =>
+                        $form.find("input, textarea").removeAttr("disabled")
+
+                        if response_.success
+                            window.location.href = "/stream/dashboard"
+                        else
+                            $feedback.addClass("alert").addClass("alert-danger").html response_.msg
+ 
+                $form.submit -> 
+                    json_str = JSON.stringify($form.serializeJSON())
+                    options.data = json_str
+                    $.ajax options
+                    false
+
+                # SOCIAL SIGNUP 
+                # ----------------------------------------------------------------------
+                $socialSignup   = $(".social-signup")
+                $socialForm     = $socialSignup.find("form") 
+                $socialSubmit   = $socialSignup.find("input[type='submit']")
+                $socialFeedback = $socialSignup.find(".login-feedback")
+
+                $socialSignup.hide()
+
+                socialOptions =
+                    type: $socialForm.attr('method')
+                    url: $socialForm.attr('action')
+                    dataType: "json" 
+                    contentType: "application/json; charset=utf-8"
+                    beforeSend: => 
+                        $socialForm.find("input, textarea").attr("disabled", "disabled")
+                        $socialFeedback.removeClass("alert").html ""
+
+                    success: (response) =>
+                        $socialForm.find("input, textarea").removeAttr("disabled")
+
+                        if response.success
+                            window.location.href = "/"
+                        else
+                            $socialFeedback.addClass("alert").html response.msg
+
+                $socialForm.submit ->
+                    obj = $socialForm.serializeJSON()
+                    if obj.public_email is "on" then obj.public_email=true else obj.public_email=false
+                    json_str = JSON.stringify(obj)
+                    socialOptions.data = json_str
+                    $.ajax socialOptions
+                    false
+
+
+            # GETTER & SETTERS
+            # ----------------------------------------------------------------------
+            getSocialInfo:->
+                unless @socialInfo
+                    $socialSignup   = $(".social-signup")
+                    $socialForm     = $socialSignup.find("form")
+                    $socialForm.find("input, textarea").attr("disabled", "disabled")
+
+                    if @ajax then @ajax.abort()
+                    @ajax = $.ajax(
+                        type: "GET"
+                        url: "/api/user/socialinfo"
+                    ).done (response_)=>
+                        if response_.msg.toLowerCase() is "ok"
+                            @setSocialInfo(response_.data)
+                        $socialForm.find("input, textarea").removeAttr("disabled")
+
+            setSocialInfo:(@socialInfo)-> 
+                img  = if (@socialInfo.fb_image isnt "") then @socialInfo.fb_image else @socialInfo.twitter_image
+                name = if (@socialInfo.fb_name isnt "") then  @socialInfo.fb_name else @socialInfo.twitter_name
+
+                $socialAvatar = $('.social-avatar')
+                $socialSignup = $(".social-signup")
+
+                $socialAvatar.find('img').attr('src',img)
+                $socialAvatar.find('span').html name
+                $socialSignup.find('input[name="id"]').val @socialInfo.id
+                $socialSignup.find('input[name="email"]').val @socialInfo.email if @socialInfo.email isnt "None"
+                $socialSignup.find('input[name="display_name"]').val @socialInfo.display_name

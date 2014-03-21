@@ -1,0 +1,26 @@
+<div class="clearfix">
+    <div class="user-avatar"> 
+        <img src="<%= data.image_url_round_small %>" class="circle" alt="User Avater">
+    </div>
+    <div class="update-content">
+        <div class="post-title">
+            <%= data.display_name %>
+        </div>
+        <div class="post-content">
+            <%= unescape(data.description) %>
+        </div>
+        <div class="post-footer">
+            <div class="reply-toggle">
+                <% if(data.responses.length>0) { %>
+                    <span class="reply"><%= data.responses.length %> Replies</span>
+                <% } else { %>
+                    <span class="reply">Reply</span>
+                <% } %>
+                    <span class="reply hide">Hide Reply</span> * <span class="jq-date"><%= data.format_date %></span>
+            </div>
+        </div>
+    </div>
+    <% if(data.isAdmin) { %>
+        <div class="delete-x"></div>
+    <% } %>
+</div>

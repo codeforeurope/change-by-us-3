@@ -1,0 +1,66 @@
+<% var type = (data.resource) ? "resource" : "project"; %>
+<% var discoverClass = (data.isDiscovered) ? "discover" : ""; %>
+
+<% if(data.isAdmin){ %>
+<div class="admin-project-square">
+<% } %>
+
+    <div class="project-square" id="<%= data.slug %>">
+        
+        <div class="project-dashboard-image">
+            <img src="<%= data.image_url_small_square %>" alt="Icon">
+
+            <% if (data.stripe_account){ 
+                var percentage = (data.stripe_account.current_amount/data.stripe_account.goal)*100 %>
+                <div class="stripe-overlay">
+                    <div class="progress progress-info" style="margin-top: 10px"> 
+                        <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: <%= percentage %>;"></div>
+                    </div> 
+                    <div class="goal">$<%= data.stripe_account.current_amount %> Donated towards $<%= data.stripe_account.goal %></div>
+                </div>
+            <% } %>
+        </div> 
+        <div class="project-name"><%= data.name %></div>
+        <div class="project-description"><%= data.description %></div>
+        <div class="project-bottom">
+            <span class="category <%= discoverClass %>"><%= data.category %></span> 
+            <% if(data.isDiscovered){ %>
+            <span class="location"><%= data.location %></span>
+            <% } %>
+        </div>
+        
+        <% if(data.resource ){ %>
+            <div class="side-tab">Resource</div>
+        <% } %>
+         
+        <% if(data.isProject){ %>
+            <div class="hover-overlay"></div>
+            <div class="hover-btn">
+                <% if(data.isOwned){ %> 
+                    <a href="/<%= type %>/<%= data.slug %>/admin" class="btn btn-medium btn-primary btn-3d">Manage</a>
+                <% } %>
+                <% if(data.isFollowed){ %> 
+                    <a href="/<%= type %>/<%= data.slug %>" class="btn btn-medium btn-primary btn-3d">View</a>
+                    <div class="close-x"></div>
+                <% } %>
+            </div> 
+        <% }else{ %>
+            <a href="/<%= type %>/<%= data.slug %>">
+                <div class="hover-overlay"></div>
+            </a>
+        <% } %> 
+    </div>
+
+<% if(data.isAdmin){ %>
+    <div class="admin-btns">
+        <% if(data.resource && data.flags == 0){ %>
+        <a href="javascript:void(0)" class="btn btn-medium btn-tertiary approve">Approve</a>
+        <a href="javascript:void(0)" class="btn btn-medium btn-warning reject">Reject</a>
+        <% }else{ %>
+        <a href="javascript:void(0)" class="btn btn-medium btn-tertiary unflag">Unflag</a>
+        <a href="javascript:void(0)" class="btn btn-medium btn-warning delete-project">Delete</a>
+        <% } %>
+    </div>
+</div>
+<% } %>
+

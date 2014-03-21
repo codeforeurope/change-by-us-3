@@ -1,0 +1,93 @@
+<div class="body-container">
+    <form method="post" enctype="multipart/form-data" class="form-edit-create" name="createproject" action="/api/project/create">
+
+        <h1>Create a Project</h1>
+        <p>
+            It's quick and easy, and you'll be up and running in no time.
+            <br>
+            <a href="">
+                <span class="highlight">Learn more</span>
+            </a>
+            about creating a project, or
+            <a href="">
+                <span class="highlight">join up with other projects</span>
+            </a>that might be similar to yours.
+        </p>
+
+        <div id="feedback" class="alert alert-error hide">An error occured. Ensure you are logged into your Twitter or Facebook account.</div> 
+
+        <div class="content-wrapper create clearfix">
+
+            <div class="form-container">
+                <div class="form-left">
+
+                    <label for="name">PROJECT NAME*</label>
+                    <input type="text" maxlength="30" name="name" id="project_name" placeholder="My awesome project" class="input-xxlarge" required>
+
+                    <label for="description">DESCRIPTION*</label>
+                    <textarea rows="8" name="description" maxlength="600" id="project_description" placeholder="Project Description" class="input-xxlarge" required></textarea>
+
+                    <label for="category">Category</label>
+                    <select name="category" id="project-category">
+                        <option value="Animals">Animals</option>
+                        <option value="Community">Community</option>
+                        <option value="Education">Education</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Food">Food</option>
+                        <option value="Health">Health</option>
+                        <option value="Politics">Politics</option>
+                        <option value="Religion">Religion</option>
+                    </select>
+
+                    <label for="zip">PROJECT LOCATION*</label>
+                    <input type="text" name="zip" id="project_location" placeholder="Enter Zip Code of Location" class="input-xxlarge" required>
+
+                    <label for="website">WEBSITE</label> <span class="sub-text">(Optional)</span>
+                    <input type="url" name="website" id="website" placeholder="http://mypersonalsite.com" class="input-xxlarge" value="">
+
+                    <div class="public-visibility">
+                        <label for="name">Project Visibility</label>                        
+                        
+                        <input type="radio" name="visibility" value="public" checked>
+                        <img src="/static/img/icon-unlock.png">
+                        <span>Public</span>  
+                        <div class="clearfix"></div>
+
+                        <input type="radio" name="visibility" value="private">
+                        <img src="/static/img/icon-lock.png">
+                        <span>Private</span> 
+
+                        <input type="checkbox" name="private" class="hide">
+                    </div>
+                </div>
+
+                <div class="form-right">
+                    <div class="project-image"> 
+                        <label>Project Thumbnail</label>
+                        <div class="fileupload fileupload-new" data-provides="fileupload">
+                            <div>
+                                <span class="btn btn-file btn-medium btn-primary"> 
+                                    <span class="fileupload-exists">Edit Thumbnail</span>
+                                    <span class="fileupload-new">Upload</span>
+                                    <input id="project_image" name="photo" type="file">
+                                </span>  
+                            </div> 
+                            <div class="fileupload-preview thumbnail circle"></div> 
+                            <a class="btn btn-file btn-medium btn-primary fileupload-exists" data-dismiss="fileupload" href="javascript:void(0)">Remove</a>
+                        </div>
+                        <span class="sub-text">Upload a .jpg, .gif, or .png that is 200px by 200px and no larger than ##MB.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-footer">
+            <input type="hidden" name="location" value="">
+            <input type="hidden" name="lat" value="">
+            <input type="hidden" name="lon" value=""> 
+            <input type="submit" class="btn btn-large btn-secondary" value="Save">
+            <input type="submit" class="btn btn-large btn-tertiary" value="Cancel">
+        </div>
+
+
+    </form>
+</div>

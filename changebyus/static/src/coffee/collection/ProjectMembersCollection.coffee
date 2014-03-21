@@ -1,15 +1,11 @@
-define ["underscore", "backbone", "model/UserModel", ], (_, Backbone, UserModel) ->
-  ProjectMembersCollection = Backbone.Collection.extend 
+define ["underscore", "backbone", "model/UserModel"], 
+    (_, Backbone, UserModel) ->
+        ProjectMembersCollection = Backbone.Collection.extend 
+            model: UserModel
+            order: 'name'
 
-    model: UserModel
-    
-    initialize: (options) ->
-      @id = options.id
+            url: ->
+                "/api/project/#{@id}/users"
 
-    url: ->
-      "/api/project/" + @id + "/users"
-
-    parse: (response) ->
-      #console.log 'ProjectMembersCollection response',response
-      if (response.msg is "OK") then response.data else {}
-
+            parse: (response_) -> 
+                if response_.success then response_.data else {}

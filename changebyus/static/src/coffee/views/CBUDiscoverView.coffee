@@ -1,35 +1,65 @@
-define ["underscore", "backbone", "jquery", "template", "views/partials-discover/BannerSearchView", "views/partials-project/ProjectPartialsView", "collection/ProjectListCollection"], 
-  (_, Backbone, $, temp, BannerSearchView, ProjectPartialsView, ProjectListCollection) ->
-    CBUDiscoverView = Backbone.View.extend
-      parent: "body"
-      templateDir: "/static"
-      viewData: {}
-      bannerSearchView: null 
+define ["underscore", 
+        "backbone", 
+        "jquery",  
+        "template", 
+        "views/partials-discover/BannerSearchView", 
+        "collection/ProjectListCollection", 
+        "abstract-view"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     BannerSearchView, 
+     ProjectListCollection, 
+     AbstractView) ->
         
-      initialize: (options) ->
-        # this is added later
-        @templateDir = options.templateDir or @templateDir
-        @parent      = options.parent or @parent
-        @viewData    = options.viewData or @viewData
-        @collection  = options.collection or new ProjectListCollection()
-        @render()
+        CBUDiscoverView = AbstractView.extend
 
-      render: -> 
-        @$el = $("<div class='discover'/>")
-        @$el.template @templateDir + "/templates/discover.html",
-          data: @viewData
-        , =>
-          $(@parent).append @$el
-          searchParent = @$el.find(".content")
-          bannerSearchView = new BannerSearchView({parent:searchParent})
-          @collection.on "reset", @addAll, @
-          @collection.fetch reset: true
+            initialize: (options_) ->
+                AbstractView::initialize.call @, options_
+                @collection  = options_.collection or new ProjectListCollection()
+                @render()
+
+            render: -> 
+                @$el = $("<div class='discover'/>")
+                @$el.template @templateDir+"discover.html",
+                    {data: @viewData}, => @onTemplateLoad()
+
+            onTemplateLoad:->
+                $(@parent).append @$el
+                searchParent = @$el.find(".content")
+                
+                @bannerSearchView = new BannerSearchView({parent:searchParent})
+                @bannerSearchView.on "ON_RESULTS", (s)=> @onResults(s)
+
+                @collection.on "reset", @addAll, @
+                @collection.fetch reset: true
+
+                AbstractView::onTemplateLoad.call @
 
 
-      addOne: (projectModel) ->
-        view = new ProjectPartialsView({model:projectModel})
-        @$el.find("#project-list").append view.el
+            # EVENTS
+            # ----------------------------------------------------------------------
+            updatePage:->
+                @bannerSearchView.updatePage()
 
-      addAll: -> 
-        @collection.each (projectModel) =>
-          @addOne projectModel
+            nextPage:(e)->
+                @bannerSearchView.nextPage(e)
+
+            prevClick:(e)->
+                @bannerSearchView.prevClick(e)
+
+            pageClick:(e)->
+                @bannerSearchView.pageClick(e)
+
+            checkArrows:->
+                @bannerSearchView.checkArrows()
+                
+            onResults:(size_)->
+                @$el.find(".preload").remove()
+
+                if size_ > 0
+                    @$el.find("#no-result").hide()
+                else
+                    @$el.find("#no-result").show().template @templateDir+"partials-discover/no-results.html",
+                        data: {}, =>

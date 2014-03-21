@@ -50,34 +50,35 @@
     </div>
   </div>
 
-<p id="error-message">{{error}}</p>
-<a class="btn btn-large" href="/"> Return to ChangeBy.Us </a>
+  <div class="body-container">
+      <div class="page-error content-wrapper">
+          <h1>
+              <em>Looks like something went wrong.</em>
+          </h1> 
+          <p id="error-message">{{error}}</p>
+          <a class="btn btn-large btn-secondary" href="/"> Return to ChangeBy.Us </a>
+      </div>
+  </div>
 
-    <!-- ========= -->
-    <!-- Libraries -->
-    <!-- ========= -->
-    {% if project %}
-    <script type="text/javascript">
-      window.projectID = "{{ project.id }}"; 
-    </script>
-    {% endif %}
+  {% if index == true %}
+  <div class="footer-nav index clearfix">
+   {% else %}
+  <div class="footer-nav clearfix">
+  {% endif %}
+    <div class="body-container">
+      <div class="pull-left">
+        <a href="/">Change By Us</a>
+      </div>
+      <div class="pull-right">
+        <ul>
+          <li class="resp-append"><a href="/policies">Policies</a></li>
+          <li class="resp-append"><a href="/about">About</a></li>
+          <li class="resp-append"><a href="/help">Help &amp; FAQ</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-    <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/json2/20121008/json2.js" type="text/javascript"></script>
-    <script src="https://js.stripe.com/v1/" type="text/javascript" ></script>
-
-    <script src="/static/js/ext/jquery/jquery.js"></script>
-    <script src="/static/js/ext/jquery/jquery-form.js"></script>
-    <script src="/static/js/ext/jquery/jquery.tinysort.js"></script>
-    <script src="/static/js/ext/jquery/select-post.js"></script>
-    
-    <!-- 
-    <script src="/static/js/ext/bootstrap/bootstrap.min.js"></script>
-    <script src="/static/js/ext/bootstrap/bootstrap-fileupload.js"></script>
-    <script src="/static/js/ext/bootstrap/bootstrap-dropdown.js"></script>
-   -->
-
-    <script src="/static/js/ext/require/require.js" data-main="/static/js/main"></script>  
 
 </body>
 </html>

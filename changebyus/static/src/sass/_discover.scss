@@ -1,0 +1,277 @@
+@import "compass/css3/box-sizing";
+
+/********************************************************   
+ DISCOVER 
+ ********************************************************/
+.search-inputs {
+    clear: both;
+    margin-bottom: 12px;
+    >div {
+        float: left;
+        height: 94px;
+        z-index: 1;
+    }
+    input {
+        width: 100%;
+        margin-right: 10px;
+        background-repeat: no-repeat;
+        padding: 29px 10px;
+        z-index: 1;
+        @include box-sizing(border-box);
+        &.category {
+            padding-left: 36px;
+            background-image: url("../img/icon_search.jpg");
+            background-position: 10px center;
+        }
+    }
+    .go {
+        width: 10%;
+    }
+    .btn {
+        margin-top: 37px;
+        padding: 20px 0;
+        width: 100%;
+    }
+}
+
+.type-toggle {
+    a {
+        color: $black;
+        &.active {
+            font-weight: bold;
+        }
+    }
+}
+
+.search-forms {
+    width: 27%;
+    margin-right: 3%;
+}
+
+.geo-pin {
+    background-image: url("../img/location-marker.jpg");
+    position: absolute;
+    cursor: pointer;
+    right: 10px;
+    width: 17px;
+    height: 23px;
+    top: 55px;
+    z-index: 1;
+    &.active {
+        background-image: url("../img/location-marker-active.jpg");
+    }
+}
+
+.results-modify { 
+    a {
+        text-decoration: underline;
+        color: $black;
+        font-size: 14px;
+    }
+}
+
+.search-catagories {
+    display: none;
+    width: 100%;
+    overflow: hidden;
+    z-index: 1;
+    @include box-skin;
+    @include border-radius(8px);
+    @include box-shadow(rgba(0, 0, 0, 0.2) 0 5px 10px);
+    li {
+        padding: 10px 20px;
+        cursor: pointer;
+        &:hover {
+            background-color: $primaryColor;
+        }
+        &.active {
+            background-color: $primaryColor;
+        }
+    }
+    h3 {
+        margin-left: 10px;
+    }
+}
+
+.search-filters {
+    span {
+        float: left;
+    }
+}
+
+.search-toggles {
+    float: left;
+    width: 27%;
+    // margin-top: 37px;
+    margin-right: 3%;
+}
+
+.discover-nav {
+    float: right;
+    width: 40%;
+    margin-top: 17px;
+
+    .dk_container{
+        float: left;
+        width: 49%;
+        &:first-child{
+            margin-right: 2%;
+        }
+    }
+    .dk_toggle { 
+        background-color: $gray80;
+        padding: 13px;
+    }
+    .dk_open .dk_label{
+        color: $graySubtext;
+    }
+    .dk_label{
+        text-shadow: none;
+    }
+    .dk_options{ 
+        height: auto;
+        a {
+            color:  $black;
+            background-color: $gray80;
+            text-shadow: inherit;
+            &:hover{
+                background-color: $primaryColor;
+            }
+        }
+    }
+    .dk_options_inner{
+        max-height: none;
+        //overflow: visible;
+        border-bottom-width: 1px;
+        li:first-child{
+            display: none;
+        }
+        li:last-child{
+            //overflow: hidden;
+            //@include border-bottom-radius(5px);
+        }
+    }
+
+    .dk_option_current{
+        a{
+            background-color: $primaryHoverColor;
+        } 
+    }
+}
+
+.filter-within {
+    float: left;
+    width: 100%;
+
+    h3{
+        margin-top: 0;
+        float: left;
+        margin-right: 15px;
+    }
+    select {
+        width: 120px;
+    }
+    .dk_container {
+        float: left;
+        width: 80px;
+        margin-bottom: 0;
+    }
+    .dk_toggle {
+        padding: 6px 10px;
+        margin-top: -5px;
+    }
+    .dk_options{
+        margin-top: -5px;
+    }
+    .dk_options_inner{
+        border-bottom-width: 1px;
+    }
+
+    .close-x{
+        top:-2px;
+        right: 8px;
+    }
+}
+
+.pill-toggle {
+    @include box-skin;
+    float: left;
+    margin-right: 10px;
+    width: 100%;
+}
+
+.pill-selection {
+    color: $gray80;
+    float: left;
+    width: 50%;
+    text-align: center;
+    padding: 19px 10px;
+    cursor: pointer;
+    @include transition-property(color, background);
+    @include transition-duration(0.4s);
+    &.active {
+        background: $gray80;
+        color: $black;
+    }
+    &:first-child {
+        border-right: 1px solid $grayBorder;
+    }
+}
+
+.banner-search {
+    width: 100%;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    h3 {
+        text-align: left;
+    }
+}
+
+.discover-header-right,
+.dashboard-header-right {
+    float: right;
+}
+
+.search-box {
+    //float: left;
+    border: 1px solid #dcdcdc;
+    width: 100%;
+    height: auto;
+    padding-bottom: 30px;
+    background-color: $white;
+    border-radius: 4px;
+    >div {
+        padding: 0 15px;
+    }
+    .input-label {
+        font-size: 14px;
+        color: #8a8a8a;
+    }
+    .title {
+        float: left;
+        margin-top: 10px;
+        margin-bottom: 20px;
+        width: 60%;
+        h2 {
+            margin-top: 0;
+            font-weight: normal;
+            font-size: 40px;
+        }
+    }
+    .search-filters {
+        border-top: 1px solid $grayBorder;
+        padding-bottom: 16px;
+        input[type="search"] {
+            margin-bottom: 0;
+        }
+    }
+}
+
+.search-box-geo {
+    width: 760px;
+    height: 90px;
+    border: 1px solid #dcdcdc;
+    border-top: none;
+    background-color: #fafafa;
+    border-radius: 4px;
+}

@@ -1,47 +1,55 @@
 define ["underscore", 
-		"backbone", 
-		"jquery", 
-		"template", 
-		"moment", 
-		"abstract-view", 
-		"model/ProjectUpdateModel", 
-		"views/partials-project/ProjectPostReplyView"], 
-	(_, 
-	 Backbone, 
-	 $, 
-	 temp, 
-	 moment, 
-	 AbstractView, 
-	 ProjectUpdateModel, 
-	 ProjectPostReplyView) ->
-		ProjectDiscussionThreadItemView = AbstractView.extend
-			
-			model:ProjectUpdateModel
-			$repliesHolder: null
-			$postRight: null
-			$replyForm: null
-			tagName: "li"
+        "backbone", 
+        "jquery", 
+        "template", 
+        "moment", 
+        "abstract-view", 
+        "model/UserModel",
+        "model/UpdateModel"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     moment, 
+     AbstractView, 
+     UserModel,
+     UpdateModel ) ->
+        ProjectDiscussionThreadItemView = AbstractView.extend
+            
+            model:UpdateModel
+            $repliesHolder: null
+            tagName: "li" 
 
-			initialize: (options_, forceLoad_) ->
-				AbstractView::initialize.call(@, options_)
-				if forceLoad_ then @loadModel() else @render()
+            initialize: (options_) ->
+                AbstractView::initialize.call(@, options_)
+                @model.fetch
+                    success: =>@loadUser()
 
-			loadModel:->
-				console.log 'loadModel',@model
-	 
-			render: ->
-				m = moment(@model.attributes.created_at).format("MMMM D hh:mm a")
-				@model.attributes.format_date = m
+            events:
+                "click .reply-toggle:first":"onReplyToggle"
 
-				$(@el).template(@templateDir+"/templates/partials-project/project-thread-list-item.html",
-					{data: @model.attributes}, => @onTemplateLoad()
-				)
-				@ 
+            loadUser:->
+                @user = new UserModel(id:@model.get("user").id)
+                @user.fetch
+                    success: =>@render()
 
-			onTemplateLoad:-> 
-				self = @ 
-				@$repliesHolder = $('<ul class="content-wrapper bordered-item np hide"/>')
-				@$postRight     = @$el.find('.update-content')
-				$replyToggle    = @$el.find('.reply-toggle').first()
-				$replyToggle.click ->
-					# scroll to replybox
+            render: ->
+                m = moment(@model.get('created_at')).format("MMMM D hh:mm a")
+                @model.set('format_date',m)
+
+                @viewData                       = @model.attributes
+                @viewData.image_url_round_small = @user.get("image_url_round_small")
+                @viewData.display_name          = @user.get("display_name")
+ 
+                $(@el).template @templateDir+"partials-project/project-thread-list-item.html",
+                    {data: @viewData}, => @onTemplateLoad()
+
+            # EVENTS
+            # ----------------------------------------------------------------------
+            onTemplateLoad:->
+                @$repliesHolder = $('<ul class="content-wrapper bordered-item np top-caret hide"/>')
+                AbstractView::onTemplateLoad.call(@)
+
+            onReplyToggle:->
+                top = $("#add-thread-form").offset().top
+                $("html, body").animate({ scrollTop: top }, "slow")

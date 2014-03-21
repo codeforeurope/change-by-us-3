@@ -1,111 +1,236 @@
-define ["underscore", "backbone", "jquery", "template", "abstract-view", "views/partials-project/ProjectCalenderView", "views/partials-project/ProjectMembersView", "views/partials-project/ProjectUpdatesView", "model/ProjectModel", "collection/ProjectCalendarCollection", "collection/ProjectMembersCollection", "collection/ProjectUpdatesCollection"], 
-	(_, Backbone, $, temp, AbstractView, ProjectCalenderView, ProjectMembersView, ProjectUpdatesView, ProjectModel, ProjectCalendarCollection, ProjectMembersCollection, ProjectUpdatesCollection) ->
-		CBUProjectView = AbstractView.extend
-			projectCalenderView: null
-			projectMembersView: null
-			projectUpdatesView: null
-			updatesBTN: null
-			membersBTN: null
-			calendarBTN: null
-			$header:null
+define ["underscore", 
+        "backbone", 
+        "jquery", 
+        "template", 
+        "abstract-view", 
+        "views/partials-project/ProjectCalenderView", 
+        "views/partials-project/ProjectMembersView", 
+        "views/partials-project/ProjectDonationModalView", 
+        "views/partials-universal/UpdatesView",
+        "views/partials-universal/WysiwygFormView",
+        "model/ProjectModel", 
+        "collection/ProjectCalendarCollection", 
+        "collection/ProjectMembersCollection", 
+        "collection/UpdatesCollection"], 
+    (_, 
+     Backbone, 
+     $, 
+     temp, 
+     AbstractView, 
+     ProjectCalenderView,
+     ProjectMembersView, 
+     ProjectDonationModalView, 
+     UpdatesView, 
+     WysiwygFormView, 
+     ProjectModel, 
+     ProjectCalendarCollection, 
+     ProjectMembersCollection, 
+     UpdatesCollection) ->
+        
+        CBUProjectView = AbstractView.extend
+            isOwner:false
+            isMember:false
+            isResource:false
+            projectCalenderView: null
+            projectMembersView: null
+            updatesView: null
+            updatesBTN: null
+            membersBTN: null
+            calendarBTN: null
+            memberData: null
+            $header:null
 
-			initialize: (options) ->
-				console.log 'CBUProjectView options',options
-				@templateDir = options.templateDir or @templateDir
-				@parent      = options.parent or @parent
-				@model       = new ProjectModel(options.model)
-				@collection  = options.collection or @collection
-				@model.fetch 
-					success: =>@render()
+            initialize: (options_) -> 
+                options      = options_
+                @templateDir = options.templateDir or @templateDir
+                @parent      = options.parent or @parent
+                @model       = new ProjectModel(options.model)
+                @collection  = options.collection or @collection
+                @isOwner     = options.isOwner || @isOwner
+                @isResource  = options.isResource || @isResource
+                
+                @model.fetch 
+                    success: => @render()
 
-			render: -> 
-				console.log 'CBUProjectView',@model
-				@$el = $("<div class='project-container'/>")
-				@$el.template(@templateDir+"/templates/project.html", {}
-					, => @addSubViews())
-				$(@parent).append @$el
+            events:
+                "click #flag":"flagProject"
+                "click .follow":"joinProject"
+                "click .donation-header .btn":"onDonateClick"
+                "click  a[href^='#']":"changeHash"
 
-			addSubViews: ->  
-				@$header = $("<div class='project-header'/>")
-				@$header.template @templateDir+"/templates/partials-project/project-header.html",
-					{data:@model.attributes}, =>
-						@$el.prepend @$header
+            render: ->
+                @viewData = @model.attributes
 
-						id = @model.get("id")
-						config = {id:id}
-						projectUpdatesCollection  = new ProjectUpdatesCollection(config)
-						projectMembersCollection   = new ProjectMembersCollection(config)
-						projectCalendarCollection = new ProjectCalendarCollection(config)
+                if @model.get('active')
+                    if @isResource
+                        className   = "resource-container"
+                        templateURL = "resource.html"
+                    else
+                        className   = "project-container"
+                        templateURL = "project.html"
+                else
+                    className   = "not-found"
+                    templateURL = "partials-project/not-found.html"
 
-						@projectUpdatesView   = new ProjectUpdatesView({collection: projectUpdatesCollection})
-						@projectMembersView   = new ProjectMembersView({collection: projectMembersCollection})
-						@projectCalenderView  = new ProjectCalenderView({collection: projectCalendarCollection})
-						
-						@updatesBTN  = $("a[href='#updates']").parent()
-						@membersBTN  = $("a[href='#members']").parent()
-						@calendarBTN = $("a[href='#calendar']").parent()
-						
-						hash = window.location.hash.substring(1)
-						@toggleSubView (if (hash is "") then "updates" else hash)
-						$(window).bind "hashchange", (e) =>
-							hash = window.location.hash.substring(1)
-							@toggleSubView hash
+                @$el = $("<div class='#{className}'/>")
+                @$el.template @templateDir+templateURL, 
+                    {}, => @onTemplateLoad()
+                $(@parent).append @$el
 
-						# temp hack because somewhere this event default is prevented
-						$("a[href^='#']").click (e) -> 
-							window.location.hash = $(this).attr("href").substring(1)
+            addHeaderView: -> 
+                if @isResource
+                    className   = "resource-header"
+                    templateURL = "partials-resource/resource-header.html"
+                else
+                    className   = "project-header"
+                    templateURL = "partials-project/project-header.html"
 
-						@joingBTN() 
+                @$header = $("<div class='#{className}'/>")
+                @$header.template @templateDir+templateURL, 
+                    {data:@viewData}, => @onHeaderLoaded()
+                @$el.prepend @$header
 
-			joingBTN:->
-				id = @model.get("id")
+            notMember:-> 
+                $('.tabs-pane').remove()
+                $notMember = $("<div class='body-container'/>")
+                $notMember.template @templateDir+"partials-project/project-not-member.html",
+                    {data:@viewData}, =>
+                @$el.append $notMember
+            
+            toggleSubView: ->
+                view = window.location.hash.substring(1)
+                
+                for v in [@updatesView, @projectMembersView, @projectCalenderView]
+                    v.hide()
 
-				joined = false
-				$join = $(".project-footer .btn")
-				$join.click (e) =>
-					e.preventDefault()
-					if joined then return
-					$.ajax(
-						type: "POST"
-						url: "/api/project/join"
-						data: { project_id:id }
-					).done (response)=>
-						if response.msg.toLowerCase() is "ok"
-							joined = true
-							$join.html('Joined')
-							$join.css('background-color','#e6e6e6')
-				$join.addClass('invisible')
+                for btn in [@updatesBTN, @membersBTN, @calendarBTN]
+                    btn.removeClass "active"
 
-				# determine if user is a member of the project
-				# if not, display the join button
+                switch view 
+                    when "members"
+                        @projectMembersView.show()
+                        @membersBTN.addClass "active"
+                    when "calendar"
+                        @projectCalenderView.show()
+                        @calendarBTN.addClass "active"
+                    else 
+                        @updatesView.show()
+                        @updatesBTN.addClass "active"
 
-				$.ajax(
-					type: "GET"
-					url: "/api/project/am_i_a_member/"+id
-				).done (response)=> 
-					console.log 'response.data.member',response,$join
+                onPageElementsLoad()
+                
+            # EVENTS
+            # ----------------------------------------------------------------------
+            onTemplateLoad:->
+                # determine if user is a member of the project
+                # if not, display the join button 
+                @getMemberStatus()
+                AbstractView::onTemplateLoad.call @
 
-					try if response.data.member is false then $join.removeClass('invisible')
-					catch e then console.log e
+            onHeaderLoaded:->
+                id = @model.get("id")
+                config = {id:id}
+ 
+                if @isMember is false and @model.get("private")
+                    @notMember()
+                else
+                    @updatesCollection           = new UpdatesCollection()
+                    @updatesCollection.id        = id
+                    
+                    @projectMembersCollection    = new ProjectMembersCollection()
+                    @projectMembersCollection.id = id
+                    @projectMembersCollection.on "reset", @onCollectionLoad, @
+                    @projectMembersCollection.fetch reset:true
+
+            onCollectionLoad:->
+                @projectMembersCollection.off "reset", @onCollectionLoad, @
+ 
+                parent = if @isResource then "#resource-updates" else "#project-updates"
+                configA =
+                    model:@model
+                    collection:@updatesCollection
+                    members:@projectMembersCollection
+                    isMember:@isMember
+                    isOwnerOrganizer:@isOwnerOrganizer
+                    isResource:@isResource
+                    parent:parent
+
+                @updatesView = new UpdatesView configA
+
+                if @isResource
+                    @updatesView.show()
+                    @updatesView.on 'ON_TEMPLATE_LOAD', =>
+                        userAvatar = $('.profile-nav-header img').attr('src')
+                        @wysiwygFormView = new WysiwygFormView
+                                                    parent:"#add-resource-update", 
+                                                    id:@model.get("id"), 
+                                                    slim:true, 
+                                                    userAvatar:userAvatar
+                else
+                    configB = 
+                        model:@model
+                        collection:@projectMembersCollection
+                        isDataLoaded:true
+                        isMember:@isMember
+                        isOwnerOrganizer:@isOwnerOrganizer
+                        isOwner:@isOwner
+
+                    @projectMembersView  = new ProjectMembersView configB
+                    @projectCalenderView = new ProjectCalenderView configB
+                    
+                    @updatesBTN  = $("a[href='#updates']").parent()
+                    @membersBTN  = $("a[href='#members']").parent()
+                    @calendarBTN = $("a[href='#calendar']").parent()
+                    
+                    $(window).bind "hashchange", (e) => @toggleSubView()
+                    @toggleSubView()
+
+                @delegateEvents()
+
+            flagProject:(e)-> 
+                e.preventDefault()
+
+                $.post "/api/project/#{@model.id}/flag", (res_)=>
+                    $('.flag-project').addClass('disabled-btn')
+                    @$el.unbind "click #flag"
+
+            joinProject:(e)-> 
+                e.preventDefault()
+                if @isMember then return
+                 
+                if window.userID is ""
+                    window.location.href = "/login"
+                else
+                    id    = @model.get("id")
+                    $join = $(".project-footer .btn")
+
+                    $.ajax(
+                        type: "POST"
+                        url: "/api/project/join"
+                        data: {project_id:id}
+                    ).done (res_)=>
+                        if res_.success
+                            feedback = 'Following!'
+                            @isMember = true
+                            $join.html(feedback).css('background-color','#e6e6e6')
+
+            onDonateClick:(e)->
+                projectDonationModalView = new ProjectDonationModalView({model:@model})
 
 
-			toggleSubView: (view) ->
-				@projectUpdatesView.hide()
-				@projectMembersView.hide()
-				@projectCalenderView.hide()
-
-				@updatesBTN.removeClass "active"
-				@membersBTN.removeClass "active"
-				@calendarBTN.removeClass "active"
-				console.log 'toggleSubView',@projectUpdatesView,@updatesBTN
-
-				switch view 
-					when "members"
-						@projectMembersView.show()
-						@membersBTN.addClass "active"
-					when "calendar"
-						@projectCalenderView.show()
-						@calendarBTN.addClass "active"
-					else 
-						@projectUpdatesView.show()
-						@updatesBTN.addClass "active"
+            # GETTER & SETTERS
+            # ----------------------------------------------------------------------
+            getMemberStatus:->
+                if window.userID is ""
+                    @isMember = false
+                    @addHeaderView()
+                else
+                    id = @model.get("id")
+                    $.get "/api/project/#{id}/user/#{window.userID}", (res_)=>  
+                        if res_.success
+                            @memberData                = res_.data
+                            @isMember                  = if true in [@memberData.member, @memberData.organizer, @memberData.owner] then true else false
+                            @isOwnerOrganizer          = if true in [@memberData.organizer, @memberData.owner] then true else false
+                            @viewData.isMember         = @isMember
+                            @viewData.isOwnerOrganizer = @isOwnerOrganizer
+                            @addHeaderView()

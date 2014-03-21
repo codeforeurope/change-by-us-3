@@ -1,63 +1,58 @@
 @import "mixins-and-functions";
 @import "compass/css3/text-shadow";
 
-.user {
-    
-
-}
-
 .user-header {
     margin-top: 50px;
-    width: 1000px;
-    height: 300px;
+    width: 100%;
+    .edit {
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .user-avatar {
+        margin: 2%;
+        width: 25%;
+        img {
+            max-width: 100%;
+        }
+    }
 }
 
 .user-info {
     float: left;
-    width: 700px;
-    border: none;
-    height: 300px;
-    margin-bottom: 10px;
-
+    font-size: 20px;
+    margin: 35px 0 10px;
+    width: 71%;
+    em {
+        color: $gray59;
+    }
+    a {
+        color: $black;
+    }
+    h1 {
+        font-size: 68px;
+        font-weight: normal;
+        margin: 0;
+        line-height: 68px;
+        margin: 0 0 14px;
+    }
     h2 {
         font-size: 42px;
         font-weight: normal;
     }
-
-    span {
-        font-size: 18px;
-    }
 }
-
 
 .user-image {
     height: 400px;
     width: 400px;
 }
 
-.user-projects {
-    width: 1000px;
-
+.user-projects, .user-following {
     h2 {
         font-size: 42px;
         font-weight: normal;
     }
-
     span {
         font-size: 18px;
     }
-}
-
-.user-following {
-    width: 1000px;
-
-    h2 {
-        font-size: 42px;
-        font-weight: normal;
-    }
-
-    span {
-        font-size: 18px;
-    }
-
 }

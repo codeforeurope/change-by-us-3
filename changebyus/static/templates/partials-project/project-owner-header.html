@@ -1,18 +1,43 @@
-<%= console.log("POH",data) %>
+<% var type = (data.isResource) ? "resource" : "project"; %>
+
 <div class="project">
     <div class="body-container">
-        <div class="feature-image slim" style="background-image:url(/static/img/group-slim-header.jpg);">
-            <h1 class="overlay-title"><%= data.data.name %></h1> 
+        <div class="feature-image slim" style="background-image:url(<%= data.image_url_medium_rect %>);">
+            <h1 class="overlay-title">
+                <%= data.name %>
+            </h1>
+            <div class="header-icon public-view">
+                <a href="/<%= type %>/<%= data.slug %>"> Public View</a>
+            </div>
         </div>
 
         <div class="owner-tabs-pane">
-            <ul class="tabs">
-                <li><a href="#discussions" data-toggle="tab"><span>Discuss</span></a></li>
-                <li><a href="#updates" data-toggle="tab"><span>Updates</span></a></li>
-                <li><a href="#fundraising" data-toggle="tab"><span>Fundraising</span></a></li>
-                <li><a href="#calendar" data-toggle="tab"><span>Calendar</span></a></li>
-                <li><a href="#members" data-toggle="tab"><span>Members</span></a></li>
-                <li><a href="#info" data-toggle="tab"><span>Info &amp; Appearance</span></a></li>
+            <div class="view-project">
+                <div class="project-icon"></div>
+                <a href="javascript:void(0)">View Project</a>
+                <div class="menu-toggle"></div>
+            </div>
+            <ul class="tabs"> 
+                <li>
+                    <a href="#discussions" data-toggle="tab">Discuss</a>
+                </li>
+                <li>
+                    <a href="#updates" data-toggle="tab">Updates</a>
+                </li>
+                <% if (!data.isResource){ %>
+                <li>
+                    <a href="#fundraising" data-toggle="tab">Fundraising</a>
+                </li>
+                <% } %>
+                <li>
+                    <a href="#calendar" data-toggle="tab">Calendar</a>
+                </li>
+                <li>
+                    <a href="#members" data-toggle="tab">Members</a>
+                </li>
+                <li>
+                    <a href="#info" data-toggle="tab">Info &amp; Appearance</a>
+                </li>
             </ul>
         </div>
     </div>

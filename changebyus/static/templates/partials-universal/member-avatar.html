@@ -1,0 +1,29 @@
+<div class="member-avatar">
+    <a href="/user/<%= data.id %>">
+        <div class="circle">        
+            <img src="<%= data.image_url_round_small %>" alt="User Avatar">
+        </div>
+     </a>
+    <div class="member-popup">
+        <div class="hover-padding"></div>
+        <div class="popup-arrow"></div>
+        <div class="mail-icon">
+            <% if (data.public_email && data.email != ""){ %>
+            <a href="mailto:<%= data.email %>">
+                <img src="/static/img/mail_icon.png" alt="Email">
+            </a>
+            <% }else{ %>
+            <img src="/static/img/mail_icon_deactive.png" alt="Email">
+            <% } %>
+        </div>
+        <div class="member-info">
+            <strong>
+                <%= data.display_name %>
+            </strong>
+            <br>
+            <span>
+                <%= arrayToListString(data.roles) %>
+            </span>
+        </div>
+    </div>
+</div>

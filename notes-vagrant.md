@@ -56,3 +56,19 @@ Remember to include the following modules in your `modules` folder:
 
  - https://github.com/puppetlabs/puppetlabs-mongodb
  - https://github.com/puppetlabs/puppetlabs-stdlib (the first one depends on this one)
+
+
+Troubleshooting
+--------------
+
+ - `ERROR:root:Could not find any typelib for GnomeKeyring` 
+
+See: 
+
+> This is just a warning you can ignore. Python-keyring tries to do "from gi.repository import GnomeKeyring" to check which backends are available.
+
+Source: https://bugs.launchpad.net/ubuntu/+source/python-keyring/+bug/1197988
+
+
+
+ 

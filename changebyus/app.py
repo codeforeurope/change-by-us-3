@@ -269,9 +269,10 @@ def configure_encryption(app=None):
     app tokens, we use a combination of a local and remote key to
     encrypt/decrypt the data.
     """
-    key = assemble_key(app.config.get('ENCRYPTION').get('LOCAL_KEY'),
-                       app.config.get('ENCRYPTION').get('REMOTE_KEY_URL'))
-    app.config['ENCRYPTION']['KEY'] = key    
+    if (app.config.get('ENCRYPTION').get('ENABLED')==True):
+        key = assemble_key(app.config.get('ENCRYPTION').get('LOCAL_KEY'),
+                           app.config.get('ENCRYPTION').get('REMOTE_KEY_URL'))
+        app.config['ENCRYPTION']['KEY'] = key
     
 
 def configure_error_handlers(app=None):

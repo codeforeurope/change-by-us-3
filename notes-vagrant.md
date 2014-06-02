@@ -27,10 +27,11 @@ Once in the `/vagrant` folder, run:
     sudo apt-get update
 
     sudo apt-get install pip
+    sudo apt-get install git
     sudo pip-install virtualenvwrapper
     sudo apt-get install build-essential
     sudo apt-get install python-dev
-    sudo pip -r requirements.txt
+    sudo pip install -r requirements.txt
     
     
 This is my complete manifest file (called `site.pp` that made my deployment work (on a Vagrant setup). I only wanted to install Mongo and it's what I achieved.  

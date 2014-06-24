@@ -1,4 +1,7 @@
 
+# Virtualenv
+venv
+
 # Eclipse and IDE files
 .metadata
 .project
